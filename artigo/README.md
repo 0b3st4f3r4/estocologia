@@ -8,6 +8,8 @@ Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob inc
 
 O artigo percorre as velhas fronteiras que a disciplina herda, apresenta a arquitetura com que o projeto pretende operá-la (um hipergrafo tipado, auditado por agentes especializados e por quatro invariantes) e relata os primeiros resultados. Num posto de saúde simulado, a mesma demanda média produz uma espera média de 9,3 ou de 20,7 minutos, conforme o mundo varie ou não. Em dados reais, a mesma lógica mostra que a escala padrão de uma central bancária, que promete cumprir a meta todo dia, falha em 26 de cada 100. O programa passou nos quatro horizontes do seu plano, mas não de primeira: o terceiro, a busca de estruturas causais invariantes entre áreas, exigiu sete rodadas, e o quarto, a calibração contínua fora do tempo, três tentativas no fluxo mais difícil. O artigo trata as falhas do caminho como resultado e termina com os horizontes que se abrem e as objeções que a disciplina precisa enfrentar.
 
+Esta versão aprofunda cada passo com o material do curso que sustenta a disciplina, dezessete módulos centrais, vinte e cinco especiais e oito bancas. Entram a forma exata das contas que antes eram só nomeadas (Bayes em chances, a identidade de Meng, a porta dos fundos, o critério de Kelly, a decomposição de Murphy) e os casos que as tornam concretas, da mamografia ao navio de Bernoulli. Entram também três objeções novas, entre elas a de que o auditor do programa é parte interessada.
+
 ## 1. Introdução: decidir sem saber
 
 Toda decisão que importa é tomada antes de sabermos o que vai acontecer. O médico prescreve sem conhecer a resposta daquele paciente, o juiz condena sem ter visto o crime, o gestor contrata pessoal para uma demanda que ainda não chegou. Em todos esses casos, alguém precisa transformar informação incompleta em uma ação concreta, e responder pelas consequências.
@@ -18,15 +20,41 @@ Há séculos existem ferramentas para isso: a probabilidade, a estatística, a t
 
 O "ou arte" da definição é deliberado. Julgar sob incerteza tem uma parte que se formaliza (a coerência das crenças, a atualização pela evidência, a margem de erro) e uma parte que não se formaliza por completo (decidir qual modelo vale a pena levar a sério, quando parar de coletar dados, quem paga se o erro acontecer). Uma disciplina honesta sobre incerteza precisa ser honesta também sobre os limites do próprio formalismo.
 
+A disciplina tem um corpo de ensino, o curso *Pensamento Crítico e Modelos Estocásticos*, e este artigo se apoia nele. O curso é um arco, não um catálogo. Depois de um nivelamento (M0), a lógica da crença (M1 a M3) sustenta a leitura do acaso, da seleção e da informação (M4 a M6). Essa leitura sustenta a dinâmica do tempo, da memória e das caudas (M7 a M9) e a mecânica estocástica e a inferência ativa (M10 e M11). Daí se passa a aprender, intervir e decidir (M12 a M14), e tudo converge na crítica de modelos (M15). Vinte e cinco módulos especiais levam o mesmo raciocínio à prática de dados, à operação de modelos, à governança e à comunicação, e oito bancas o põem à prova. Cada conceito chega ligado ao anterior por uma ponte declarada, e uma pergunta reflexiva fecha o percurso: quando um modelo é bom o bastante?
+
 ## 2. Velhas fronteiras
 
 A Estocologia não inventa seus problemas; herda-os. Três fronteiras antigas organizam essa herança, e cada uma delas separou pessoas que deveriam estar conversando.
 
 **A fronteira entre disciplinas.** A filosofia perguntou se a indução se justifica. David Hume mostrou que qualquer defesa dela pressupõe que o futuro se parecerá com o passado, o que é circular. Karl Popper respondeu trocando a confirmação pela refutação; Duhem, Quine e Lakatos lembraram que nenhuma hipótese é testada sozinha. Em paralelo, a matemática construiu a probabilidade (Pascal e Fermat, Bernoulli, Bayes, Laplace, Kolmogorov) e a estatística construiu a inferência (Fisher, Neyman, a escola bayesiana). Uma terceira linhagem, a dos processos estocásticos (Markov, Langevin), estudou como o acaso se acumula no tempo. As três tradições raramente se citam.
 
+Vista de perto, essa fronteira tem textura. Peirce obteve as três formas de inferência permutando as mesmas três proposições, regra, caso e resultado. Só a dedução preserva a verdade; a indução e a abdução ampliam o conhecimento e por isso podem falhar. A abdução, a inferência para a melhor explicação, escolhe a hipótese que torna os dados menos surpreendentes, mas só entre as hipóteses consideradas. É a precursora da máxima verossimilhança e herda o mesmo limite.
+
+Popper enfrentou um problema que a fama do falsificacionismo esconde: "esta moeda é honesta" é compatível com qualquer sequência finita de lançamentos. Para testá-la, ele propôs uma convenção que trata como refutadoras as observações suficientemente improváveis, e toda convenção desse tipo erra a uma taxa fixada de antemão, que não cai com mais dados. Duhem e Quine completam o quadro: uma previsão frustrada refuta a teoria junto com as suas hipóteses auxiliares, nunca sozinha. Em 1846, a anomalia na órbita de Urano não derrubou Newton, porque Le Verrier postulou um planeta oculto e Netuno foi achado. A mesma manobra com o planeta Vulcano, para explicar Mercúrio, fracassou. Lakatos chamou o primeiro ajuste de progressivo e o segundo de degenerativo.
+
+A linhagem de Langevin também tem uma lição própria. Em 1827, Robert Brown viu grãos de pólen se agitarem na água e pensou numa atividade da matéria viva; Einstein (1905) explicou o movimento pelos choques das moléculas, e Langevin (1908) escreveu a equação. Num sistema com dois estados estáveis, o tempo médio até o salto de um para o outro segue a fórmula de Kramers e cresce exponencialmente com a altura da barreira:
+
+$$
+\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}
+$$
+
+Esse tempo não tem memória: quem esperou muito não está mais perto do salto. Olhado só nos saltos, porém, o ruído parece um empurrão. Em 591 saltos simulados no curso, o ruído logo antes do salto apontou no sentido dele em 99% dos casos, sem nenhuma força externa. Procurar a causa de um salto é um erro de seleção; procurar a causa de uma mudança na frequência dos saltos, não.
+
 **A fronteira entre risco e incerteza.** Em 1921, Frank Knight separou o risco, em que as probabilidades são conhecidas, da incerteza propriamente dita, em que nem a lista de possibilidades está disponível. Boa parte da teoria da decisão do século XX (von Neumann e Morgenstern, Savage) trabalhou do lado confortável dessa linha. O peru de Russell, alimentado pontualmente por mil dias, mostra o lado desconfortável: cada dia de dados torna o modelo dele mais confiante e, ao mesmo tempo, mais errado, porque o abate nunca esteve no seu espaço de hipóteses.
 
+O peru pode ser simulado, e a simulação mostra que o problema não é falta de dados. Bertrand Russell contou a história com uma galinha; Taleb a recontou com o peru. Um animal que raciocina pela regra de sucessão de Laplace estima, depois de s sucessos em n dias,
+
+$$
+P(\text{sucesso amanhã}\mid s,n)=\frac{s+1}{n+2}
+$$
+
+e, na véspera do centésimo primeiro dia, está 99% confiante. A regra não é neutra, porque deriva de uma priori uniforme sobre a taxa: com sete sucessos em dez, a priori uniforme dá 0,667, uma uniforme sobre θ² dá 0,692 e uma uniforme sobre √θ dá 0,652. Até a ignorância tem forma. E quando o mundo muda devagar o modelo fixo falha em silêncio. Se o viés de uma moeda sobe de 0,2 para 0,6 e o modelo supõe uma moeda fixa, o intervalo de 95% encolhe de 0,140 para 0,035 e cobre a verdade em só 11% do tempo. Esquecer o passado, com um desconto de 0,99 por passo, restaura a cobertura para 99%, ao preço de intervalos três vezes mais largos.
+
 **A fronteira entre a norma e o comportamento.** Kahneman e Tversky catalogaram como as pessoas se afastam das regras da probabilidade: ignoram a taxa-base, julgam a conjunção mais provável que suas partes. Herbert Simon e, depois, Gerd Gigerenzer responderam que um atalho só é erro relativo a um ambiente; quando a mesma informação é dada em frequências naturais ("8 em cada 10") em vez de porcentagens condicionais, muitos dos "vieses" desaparecem. O debate ficou parado entre dois campos, cada um com razão sobre metade do problema.
+
+O curso propõe uma saída para esse impasse: um critério em vez de um lado. Um desvio é erro quando a informação certa estava disponível e a regra de combinação foi violada; é adaptação candidata quando a norma supõe uma informação que o ambiente não fornece de modo confiável. Num rastreamento com prevalência de 1%, quem ignora a taxa-base tem escore de Brier de 0,083, contra 0,009 de quem a usa. Num ambulatório de referência, onde a prevalência real é de 33%, quem insiste em 1% tem 0,28, contra 0,084 de quem a ignora. A mesma heurística é erro num ambiente e acerto no outro.
+
+O veredito de "viés" depende também do modelo de quem julga. Lichtenstein e colegas (1978) viram que as pessoas superestimam as causas de morte raras e subestimam as comuns; Erev, Wallsten e Budescu (1994) mostraram que julgamentos ruidosos parecem subconfiantes ou superconfiantes conforme o eixo em que se condiciona. Numa simulação do curso, juízes sem viés nenhum, cada um com um sinal ruidoso, reproduzem a inclinação de 0,72 de Lichtenstein num eixo e são perfeitamente calibrados no outro. O caso mais célebre é o da mão quente. Por três décadas, o estudo de Gilovich, Vallone e Tversky (1985) foi o exemplo canônico de ilusão de padrão, até que Miller e Sanjurjo (2018) mostraram que o teste era viciado contra a mão quente: em três lances de uma moeda honesta, a proporção média de cara depois de cara é 5/12, não 1/2. Corrigida, a diferença nos dados de Cornell passa de +3 para +13 pontos. Acusar uma ilusão exige um modelo nulo correto.
 
 | Ano | Marco | Fronteira que deixou |
 | --- | --- | --- |
@@ -54,6 +82,8 @@ O primeiro gesto da Estocologia é separar três coisas que o senso comum mistur
 
 A separação tem uma consequência forte: **uma falácia não é um erro de aritmética, é um desalinhamento entre camadas.** A falácia do promotor acontece quando o Agente lê a verossimilhança do Modelo, P(evidência | inocente), como se fosse a resposta sobre o Mundo, P(inocente | evidência). O paradoxo da inspeção acontece quando o Agente impõe um Modelo estável a um Mundo que oscila. Nos dois casos as contas podem estar certas; o que está errado é a ponte.
 
+A tese tem uma versão operacional: cada viés do catálogo clássico corresponde a um modelo de acaso ignorado. A negligência da taxa-base é a verossimilhança tomada pela posterior. A disponibilidade e a sobrevivência são uma amostra filtrada tomada pela população. A ilusão de padrão é a hipótese nula de acaso esquecida. A falácia do apostador atribui memória a um processo sem memória. A negligência de eventos raros modela como gaussiana uma cauda pesada. O excesso de confiança é má calibração, e o raciocínio motivado é escolher o modelo pelo resultado desejado. A palavra "viés" ganha assim três sentidos que a disciplina separa para depois reunir: o viés estatístico de um estimador, o viés do processo que produziu os dados e o viés cognitivo de quem raciocina. Nos três, o erro não é ruído que se cancela com mais dados; é uma distorção que se acumula.
+
 Cada camada tem o seu tipo de incerteza, e confundi-los é um erro clássico. A incerteza **aleatória** pertence ao Mundo: é o acaso do próximo lançamento de uma moeda conhecida, e nenhuma quantidade de dados a elimina. A incerteza **epistêmica** pertence ao Modelo: é a nossa ignorância sobre o viés da moeda, e encolhe com cada lançamento. A lei da variância total separa as duas com precisão:
 
 $$
@@ -77,6 +107,78 @@ $$
 
 Em palavras: quando o sistema reage de forma não linear, a variabilidade do Mundo não se cancela na média; ela cobra um preço proporcional à sua variância. Planejar pelo caso médio é ignorar essa conta. A seção 5 mostra quanto ela custa num posto de saúde.
 
+### 3.1 Crença e evidência
+
+Por que graus de crença devem obedecer às regras da probabilidade? Dois argumentos independentes respondem. Cox (1946) mostrou que qualquer medida de plausibilidade consistente, que acompanhe o senso comum, obedece, depois de uma reescala, às regras da soma e do produto. Ramsey e de Finetti mediram a crença pelo preço de uma aposta. Quem declara 60% para chuva e 50% para não chuva aceita pagar 1,10 por dois bilhetes dos quais só um paga 1, e perde 0,10 com certeza. Um conjunto de preços admite esse "livro holandês" se e somente se violar os axiomas.
+
+A coerência, porém, é barata. No laboratório do curso, o agente que comete a falácia da conjunção perde 0,05 por rodada para o apostador holandês e 0,60 para quem conhece o mundo; torná-lo coerente reduz a perda só para 0,55. O erro mais visível não era o mais caro. Quem pune o desacordo com o Mundo é a calibração, não a coerência. E quando a informação é incompleta, o princípio da máxima entropia de Jaynes (1957) manda escolher, entre as distribuições compatíveis com o que se sabe, a de maior entropia. Um dado de seis faces com média 4,5 recebe então cerca de 5% na face 1 e 35% na face 6; qualquer outra escolha supõe algo que não foi declarado.
+
+A falácia do promotor, que a seção anterior só nomeou, tem uma forma exata. Escrita em chances, a regra de Bayes separa o que a evidência diz do que já se sabia:
+
+$$
+\frac{P(H\mid E)}{P(\neg H\mid E)}=\frac{P(E\mid H)}{P(E\mid \neg H)}\times\frac{P(H)}{P(\neg H)}
+$$
+
+Num rastreamento de mamografia, a doença atinge 1% das mulheres, o exame detecta 90% dos casos e dá positivo em 9% das saudáveis. Em frequências naturais a conta fica visível: de 10 000 mulheres, 100 estão doentes e 90 delas dão positivo; das 9 900 saudáveis, 891 também dão positivo. Das 981 positivas, só 90 estão doentes, cerca de uma em dez. Quando Gigerenzer e colegas fizeram essa pergunta a 160 ginecologistas, só 21% escolheram "cerca de 1 em 10". A mesma troca levou ao tribunal o "1 em 73 milhões" do caso Sally Clark, obtido multiplicando 1/8 543 por si mesmo, como se as duas mortes fossem independentes, e lido como a chance de inocência. Uma evidência é forte quando a razão de verossimilhança está longe de 1, não quando P(E | H) é alta.
+
+Turing e Good mediram essa força em decibans, dez vezes o logaritmo decimal da razão, uma escala em que evidências independentes se somam. A independência é a condição que mais se esquece: dois exames positivos com uma causa comum de erro dão 51% pela soma ingênua e 30% na população simulada. O valor esperado do peso da evidência é a divergência de Kullback-Leibler, que nunca é negativa para a hipótese verdadeira:
+
+$$
+D(P_1\,\|\,P_0)=\sum_x P_1(x)\log\frac{P_1(x)}{P_0(x)}\ \ge 0
+$$
+
+Ela diz quantas observações bastam: para separar uma moeda de 60% de uma honesta com chances de 100 para 1, são precisos cerca de 229 lances. É com essa régua que os 2,2 bits dos incêndios dinamarqueses (seção 6) se revelam pouco. A evidência também engana pouco. Royall mostrou que, se a hipótese nula é verdadeira, a chance de a razão de verossimilhança alguma vez chegar a k é no máximo 1/k, qualquer que seja o tamanho da amostra:
+
+$$
+P_{H_0}\Big(\sup_n \mathrm{RV}_n \ge k\Big)\le \frac{1}{k}
+$$
+
+Em simulação, só 0,85% dos caminhos sob a nula chegaram a 20 decibans, contra um limite de 1%.
+
+### 3.2 O filtro antes do dado
+
+Os dados quase nunca chegam crus: passaram por telas institucionais, mecânicas ou comportamentais. Meng (2018) mostrou que o erro de qualquer média amostral é o produto exato de três fatores, qualidade, quantidade e dificuldade:
+
+$$
+\bar Y_n - \bar Y_N = \rho_{R,Y}\times\sqrt{\tfrac{1-f}{f}}\times\sigma_Y
+$$
+
+Aqui ρ é a correlação entre entrar na amostra e a resposta, e f é a fração da população amostrada. Numa amostra sorteada, ρ é minúsculo, da ordem de 1/√N. Quando a entrada depende do que se mede, o tamanho não salva. Em 1936, a *Literary Digest* recebeu 2,38 milhões de cédulas e previu a vitória de Landon com 57%; Roosevelt teve 60,8%, e Gallup acertou o vencedor com cerca de 50 mil entrevistas. Numa simulação na escala de 1936, uma correlação de −0,21 basta para que 2,4 milhões de cédulas errem por 18 pontos e valham o mesmo que uma amostra aleatória de cerca de 7 pessoas. Mais dados enviesados dão mais certeza sobre a resposta errada: é o peru outra vez, agora numa urna.
+
+O filtro também fabrica relações. Berkson (1946) mostrou que duas doenças independentes aparecem associadas entre internados, porque cada uma aumenta a chance de internação: olhar só os selecionados é condicionar num colisor. Numa simulação do curso, talento e simpatia têm correlação +0,002 na população e −0,669 entre os que passam de um limiar. O caso inverso é o paradoxo de Simpson. Charig e colegas (1986) compararam duas cirurgias de cálculo renal. A cirurgia aberta vence nos cálculos pequenos (93% contra 87%) e nos grandes (73% contra 69%), mas perde no total (78% contra 83%), porque os casos difíceis iam para ela. Ponderando os estratos pela população inteira, ela tem 83,3% e a outra, 77,9%. Condicionar num confundidor fecha um caminho espúrio; condicionar num colisor abre um. "Controlar por tudo" não é neutro, e quem decide qual conta fazer é o grafo, não a tabela.
+
+### 3.3 Da associação à intervenção
+
+Pearl distingue três degraus de pergunta. A associação pergunta P(y | x): quem toma o remédio tem menos infarto? A intervenção pergunta P(y | do(x)): se eu tomar, meu risco cai? O contrafactual pergunta se eu teria infartado sem tomar. Cada degrau pede mais do modelo que o anterior, e a ponte entre os dois primeiros é um grafo causal, que os dados sozinhos não fornecem. Quando um conjunto Z bloqueia todos os caminhos que entram no tratamento por trás, sem conter nenhum descendente dele, vale o critério da porta dos fundos:
+
+$$
+P(y \mid do(x)) = \sum_z P(y \mid x, z)\,P(z)
+$$
+
+O caso clássico é o da terapia hormonal. Em 1991, a coorte do Nurses' Health Study, com cerca de 48 mil mulheres, relatou risco relativo de 0,56 de doença coronariana grave entre as usuárias de estrogênio. Em 2002, o ensaio sorteado da Women's Health Initiative, com 16 608 mulheres, encontrou razão de riscos de 1,29. As usuárias da coorte tinham outros hábitos, outra renda e outro acesso a médicos. A comparação não é perfeita (estrogênio isolado num caso, combinado com progestina no outro), mas a lição ficou. Ajustar "tudo o que foi medido" também não resolve: ajustar um mediador apaga o efeito, ajustar um colisor fabrica associação e ajustar um instrumento amplifica o viés que sobra.
+
+A linguagem dos resultados potenciais, de Neyman e Rubin, dá a mesma lição numa linha. Cada pessoa tem dois desfechos possíveis, Y(1) com o tratamento e Y(0) sem ele, e só um é observado. A diferença ingênua entre tratados e não tratados se decompõe exatamente assim:
+
+$$
+\mathbb{E}[Y\mid D{=}1]-\mathbb{E}[Y\mid D{=}0] = \underbrace{\mathbb{E}[Y(1)-Y(0)\mid D{=}1]}_{\text{efeito nos tratados}} + \underbrace{\mathbb{E}[Y(0)\mid D{=}1]-\mathbb{E}[Y(0)\mid D{=}0]}_{\text{viés de seleção}}
+$$
+
+Sortear o tratamento zera o segundo termo. É exatamente o que a seção 6 encontra nos dados de LaLonde.
+
+### 3.4 Quando a média deixa de existir
+
+Jensen não é um truque isolado; é a raiz comum de várias patologias. A positividade da divergência de Kullback-Leibler é um caso dela, e a quebra de ergodicidade também. Numa dinâmica multiplicativa,
+
+$$
+X_{t+1} = X_t M_t, \qquad \mathbb{E}[M] > 1 \;\text{ e }\; \mathbb{E}[\ln M] < 0,
+$$
+
+a média do conjunto cresce enquanto quase toda trajetória decai (seção 7).
+
+No limite, a média deixa de existir. Numa distribuição de Pareto, com P(X > x) = x^(−α), o momento de ordem k existe se e somente se k < α. Com α = 1,1, a média existe e vale 11, mas a média de um milhão de observações tem mediana 8,3, fica abaixo de 11 em 91% das amostras, e o intervalo de 95% usual contém o valor verdadeiro em só 26% delas. A razão é que a fração da média que vem de valores acima de um nível m é m^(1−α): em mediana, 28% da média ficam acima do maior valor que a amostra de um milhão viu. Para um erro típico de 1% seriam necessárias cerca de 10²² observações. O κ de Taleb mede essa distância até o regime em que a lei dos grandes números funciona na prática. Uma conferência própria do curso mostrou que a fórmula publicada de "quantos dados" superestima o número por fatores de cerca de 3 e 8, o que muda a conta, mas não a mensagem.
+
+Quando a cauda manda, a gaussiana falha justamente onde importa. Pelo teorema de Fisher, Tippett e Gnedenko, o máximo normalizado de uma amostra só pode tender a uma de três famílias, Gumbel, Fréchet ou Weibull. Num exemplo do curso com 50 anos de retornos de cauda pesada, a perda de 1 em 100 anos vale 17,4%. Uma gaussiana ajustada aos retornos diários dá 3,9% e subestima a perda em todas as repetições; a distribuição de extremos acerta em mediana, com intervalo de 11% a 53%.
+
 ## 4. Arquitetura: uma máquina epistemológica auditável
 
 Uma disciplina só vira prática quando ganha instrumentos. O projeto propõe operar a Estocologia como uma **máquina epistemológica auditável**: um sistema em que cada alegação empírica vira um pedaço de código executável, e em que nenhuma conclusão é aceita sem passar por testes automáticos. A ideia não é um buscador de textos que resume a literatura, mas um ambiente em que as hipóteses são simuladas e atacadas.
@@ -91,7 +193,9 @@ Uma disciplina só vira prática quando ganha instrumentos. O projeto propõe op
 - **Morfonomia**: se a estrutura encontrada sobrevive quando o ambiente muda.
 - **Crisonomia**: se a informação vale o seu custo e se as previsões estão calibradas.
 
-**Os agentes.** O trabalho é dividido entre agentes especializados, oito faixas coordenadas por um orquestrador. Eles não conversam em linguagem livre, que é ambígua e alucina; trocam **fichas** estruturadas, em YAML, cada uma abrindo com as mesmas perguntas: qual processo gera os dados, onde há não linearidade, qual é a unidade independente, qual é a física do ruído, em que degrau da escada causal estamos.
+Cada lente é mais que uma pergunta: tem uma grandeza que mede e um hábito crítico, e atravessa os conceitos sem acrescentar objetos. A Fluxonomia lê como corrente tudo o que circula entre as camadas, a probabilidade que sai de um estado e entra em outro, a informação que passa por um canal. A sua lei de base é contábil: a probabilidade de um estado varia pelo que entra menos o que sai, ∂ₜp = −∂ₓJ, e o hábito é perguntar se a conta fecha. Uma versão dessa contabilidade é a desigualdade do processamento de dados: se Z é obtido de Y, então I(X; Z) ≤ I(X; Y). Reprocessar, resumir ou copiar um dado nunca cria informação, e três jornais que publicam a mesma pesquisa valem um. A Crononomia mede tempos de mistura, de relaxação e de escape, e pergunta de que tempo se fala: o do processo, o do observador ou o da simulação. A Escalonomia mede o expoente de cauda, o tamanho efetivo, o horizonte e a capacidade do modelo. A Morfonomia reescreve o mesmo modelo em duas formas, porque duas representações podem dar as mesmas previsões e ainda assim autorizar conclusões diferentes sob intervenção, e só o que se conserva entre ambientes serve fora deles. A Crisonomia mede perda, escore próprio e valor da informação, e cobra de cada número o histórico de acertos na frequência que ele prometeu.
+
+**Os agentes.** O trabalho é dividido entre agentes especializados, oito faixas coordenadas por um orquestrador. Eles não conversam em linguagem livre, que é ambígua e alucina; trocam **fichas** estruturadas, em YAML. Uma ficha não é um resumo: é uma lista fechada de perguntas que se faz a um texto, a um número ou a um modelo. Todas herdam quatro perguntas de partida. Qual é o processo gerador, escrito de modo simulável, e em que camada a alegação pode errar? O resultado é função não linear de algo que varia, o que tornaria o caso médio enganoso? Qual é a unidade de fato independente, e a margem foi calculada com ela? E, se o número veio de dados, de que verossimilhança veio, e o que o p-valor diz e não diz? Cada módulo acrescenta as suas. A ficha da evidência pede a taxa-base, as duas verossimilhanças e a posterior calculada de dois modos, em chances e numa árvore de 10 000 casos, que precisam coincidir; a do processo pergunta qual é a física do ruído; a do grafo causal começa pelo degrau da escada em que a afirmação está; a da crítica de modelos fecha a série e diz em que item cada ficha anterior entra.
 
 | Agente | Papel | Garantia que entrega |
 | --- | --- | --- |
@@ -105,7 +209,27 @@ Uma disciplina só vira prática quando ganha instrumentos. O projeto propõe op
 | F8 Decisão | Converte o resultado em ação | Frequências naturais e cláusula de saída |
 | M15 Orquestrador | Coordena e faz a banca adversarial | Ataque ao modelo antes da aprovação |
 
+Cada linha da tabela esconde um ofício. O agente de dados (F2) começa por uma decisão que ninguém vê: o que é uma linha. Uma linha por pessoa, por dia ou por evento muda a média, a variância e a margem, e por isso o grão é declarado e provado com uma contagem. É a unidade independente vista do lado da tabela: quando 225 mil voos valem o mesmo que 364 dias (seção 6), o que falhou foi o grão. O mesmo agente caça o valor sentinela, o ausente gravado como 0, −1 ou 9999 que entra na soma como se fosse dado, e exige que a ingestão seja idempotente, porque todo dado chega mais de uma vez e rodar a carga duas vezes tem de dar o mesmo número.
+
+O agente de fronteira (F4) sabe que, quando a posterior não tem forma fechada, o computador devolve uma amostra, não uma resposta. O diagnóstico de convergência mede se várias cadeias concordam entre si, não se o modelo está certo. O teste mais forte é a calibração por simulação: sorteia-se um parâmetro da priori, simulam-se dados com ele e roda-se o amostrador. Se o algoritmo é honesto, a posição do valor verdadeiro entre as L amostras da posterior é uniforme:
+
+$$
+\operatorname{rank}\big(\tilde\theta;\,\theta^{(1)},\dots,\theta^{(L)}\big)\sim \operatorname{Uniforme}\{0,\dots,L\}
+$$
+
+Para modelos de caixa-preta, a predição conforme dá uma cobertura garantida sem supor a forma da distribuição, P(Y ∈ C(X)) ≥ 1 − α; foi uma versão adaptativa dela que o H3 usou sob deriva.
+
+O agente de governança (F5) parte de que dado pessoal não é um tipo de arquivo: é a combinação de campos que decide, e CEP, data de nascimento e sexo, juntos, identificam quase qualquer pessoa. Antes de tudo pergunta com que fundamento legal e para que fim o dado é tratado, e lembra que quem consente não é amostra aleatória, de modo que a inferência herda esse viés de seleção. Agregar não basta. A privacidade diferencial limita quanto a presença de uma pessoa pode mudar qualquer resposta. Para bases D e D′ que diferem em uma pessoa,
+
+$$
+\Pr[M(D)\in S]\ \le\ e^{\varepsilon}\,\Pr[M(D')\in S]
+$$
+
+e o ε é o orçamento, gasto a cada consulta. A medida mais barata continua sendo não coletar.
+
 **O ciclo.** Uma pergunta percorre seis estágios: tradução e elicitação (F7); auditoria dos dados, da causalidade e da ética (F2, F5, F6); simulação contra um modelo nulo (F1, F4, F3); passagem pelas cinco lentes; banca adversarial, que devolve o trabalho ao estágio que falhou; e, só então, a decisão comunicada (F8).
+
+A banca adversarial não lê relatórios: ataca o artefato ao vivo. Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento temporal, contrato de dados violado sem tratamento e ausência de um responsável humano nomeado. Depois, cada faixa recebe o seu ataque. A de dados recebe um lote com registros corrompidos e precisa isolá-los. O modelo em operação recebe ao vivo um lote com deriva forte. O instrumento de inferência recebe um conjunto de dados patológico, para ver se a sua incerteza denuncia a inadequação. A auditoria de justiça tem de inverter a métrica escolhida e mostrar quem passaria a pagar. O documento de decisão enfrenta uma crise que viola a própria cláusula de saída. Um trabalho completo com uma faixa fraca declarada vale mais que um trabalho uniforme sem lacuna admitida.
 
 **Os quatro invariantes.** Nada entra no grafo sem passar por quatro portões, que funcionam como travas de banco de dados:
 
@@ -115,6 +239,26 @@ Uma disciplina só vira prática quando ganha instrumentos. O projeto propõe op
 4. **Φ4, escopo ecológico**: a decisão é julgada pelo ambiente em que vai operar, e sai com termo de escopo e uma cláusula objetiva de quando abandoná-la.
 
 Para não explodir em custo nem em falsas descobertas, a pesquisa passa por um funil. Primeiro corta-se o que, mesmo com resposta perfeita, não mudaria nenhuma decisão (valor esperado da informação). Depois corta-se o que não é identificável com os dados disponíveis. Depois, o que não supera o modelo nulo. Só o que sobra recebe inferência cara. Toda tentativa fica registrada, inclusive as que falharam, para que o relatório final declare quantas especificações foram tentadas.
+
+Cada corte do funil tem uma conta por trás. O primeiro é o valor da informação. Se proteger custa C e não proteger custa L quando o evento ocorre, protege-se quando p > C/L, e uma informação vale pelo quanto pode mover a probabilidade para o outro lado desse limiar, não pelos bits que carrega. O valor de saber o estado do mundo antes de agir tem um teto,
+
+$$
+\mathrm{EVPI} = \mathbb{E}_\theta\big[\max_a U(a,\theta)\big] - \max_a \mathbb{E}_\theta\big[U(a,\theta)\big]
+$$
+
+e o valor de qualquer exame real fica entre zero e ele. Num exemplo do curso, uma doença tem prevalência de 0,3 e trata-se quando a chance passa de 0,10. Dois exames carregam a mesma informação, 0,319 bit. O exame sensível vale 0,419; o específico vale zero, porque mesmo o seu resultado negativo deixa a chance acima do limiar e não muda a ação.
+
+O segundo corte é a identificabilidade: um parâmetro é identificável quando valores diferentes geram dados diferentes. No início de uma epidemia, os casos crescem como exp((β − γ)t), e os dados determinam a diferença β − γ, não a razão R₀ = β/γ. Com 25 dias de casos simulados, em que a verdade é R₀ = 2, os valores compatíveis vão de 1,38 a 5,90, e o tamanho final previsto da epidemia vai de 50% a 100% da população. Com 45 dias, R₀ fica entre 2,00 e 2,24, mas aí a curva já dobrou. Tomar a duração da infecção de outros estudos estreita R₀ para 1,81 a 2,11. Isso não é defeito, desde que se declare que a margem da conclusão passou a ser a da fonte.
+
+O terceiro corte, o modelo nulo, é a defesa contra o jardim dos caminhos que se bifurcam. Simmons, Nelson e Simonsohn (2011) simularam quatro liberdades comuns num experimento sem efeito (quando parar de coletar, quais variáveis usar, quais casos excluir, quais comparações relatar) e viram a taxa de falsos positivos subir de 5% para 60,7%. Ioannidis (2005) mostrou que o valor preditivo de um achado significativo depende do poder 1 − β e das chances R de uma hipótese da área ser verdadeira:
+
+$$
+\text{VPP}=\frac{(1-\beta)R}{R-\beta R+\alpha}
+$$
+
+A Open Science Collaboration (2015) replicou 100 estudos de psicologia: 97% dos originais tinham p < 0,05, contra 36% das replicações. Nem a validação cruzada escapa. Num mundo de puro ruído, com 50 casos e 50 preditores sem relação com nada, sortear 500 modelos e ficar com o de menor erro de validação produz um vencedor que parece melhor que prever zero em 73% das repetições e não é melhor em nenhuma diante de dados novos. Por isso a regra de Mayo é a do funil: um resultado só é evidência se o procedimento provavelmente teria dado errado caso a afirmação fosse falsa. Numa simulação, o mesmo "p = 0,04" tem severidade 0,96 quando vem de um teste pré-registrado e 0,42 quando vem do jardim.
+
+O avesso também vale: um ajuste só é evidência se o modelo podia ter falhado. Se um semiplano separa perfeitamente 50 pontos, isso teria chance de 2 × 10⁻¹² caso os rótulos fossem acaso, cerca de 39 bits de evidência. Uma tabela que guarda cada rótulo também os separa e não traz bit nenhum, porque separaria qualquer coisa. É a falseabilidade de Popper em forma de conta, que a teoria de Vapnik e Chervonenkis mede pela capacidade da família de modelos.
 
 ## 5. Um primeiro experimento: a fila do posto de saúde
 
@@ -128,11 +272,21 @@ O sistema fez o que os invariantes exigem. Traduziu a alegação em um processo 
 
 Se a demanda é constante, a promessa se cumpre: 9,3 minutos. Se os dias alternam entre calmos (5 pacientes por hora) e de surto (11), a espera média mais que dobra, para 20,7 minutos, e um em cada quatro pacientes espera mais de meia hora. Nada mudou na média; mudou a variabilidade, e a fila é uma função convexa da demanda. É a desigualdade de Jensen cobrando a sua conta. O último mundo mostra o outro lado: reforçar a equipe só nos dias de surto derruba a espera para 2,5 minutos.
 
+Vale olhar de onde vem a promessa. Ela sai da fórmula clássica de uma fila com um atendente,
+
+$$
+W(\lambda)=\frac{\lambda}{\mu(\mu-\lambda)}
+$$
+
+que, com λ = 8 e μ = 12 por hora, dá 10 minutos de espera no longo prazo. A mesma fórmula, aplicada a dias que alternam entre 5 e 11 pacientes por hora, daria uma média de 29,3 minutos, e a simulação dá 20,7. A diferença tem três causas que ensinam algo. Um dia de 10 horas não é o longo prazo da fórmula: nos dias de surto, a espera fica em 28,2 minutos, não nos 55 que ela prevê. Além disso, 70% dos pacientes chegam nos dias de surto, de modo que a média por paciente pesa mais os dias ruins. E a fórmula não está errada: responde à espera de longo prazo com demanda constante, quando o gestor perguntava quantos esperam demais nos dias ruins. Jensen nem precisa de curvatura para morder. Numa prova com média 6,2 e nota mínima 6, o "aluno médio" passa, mas 45% reprovam.
+
 O experimento produziu três resultados que vão além do exemplo didático.
 
 1. **O modelo nulo arbitra a margem de erro (Φ2).** Quem trata cada paciente como observação independente obtém uma margem de ±0,07 minuto; quem trata o dia como unidade obtém ±0,51, sete vezes maior. Qual está certa? Em vez de discutir a convenção, o sistema repartiu ao acaso 4 000 dias simulados em duas metades e mediu a diferença entre elas. O desvio observado foi 0,216; a margem por dia previa 0,227 e a margem por paciente previa 0,047. A pseudorreplicação deixou de ser uma questão de gosto: foi refutada pelos dados.
 2. **O teste severo (Φ3).** A diferença entre o mundo constante e o mundo com surtos, 11,4 minutos, fica a 53 desvios do que o acaso produziria. Em 2 000 repartições aleatórias, o modelo nulo nunca passou de 0,81 minuto.
 3. **A armadilha da mediana.** No mundo com surtos, a mediana da espera é 9,3 minutos, o mesmo número que a alegação promete como média. Um gestor que olhe "o paciente típico" verá a promessa cumprida. Toda a diferença está na cauda, e é por isso que a arquitetura proíbe reportar uma média sozinha: exige mediana, quantis e a curva acumulada.
+
+A pseudorreplicação tem uma teoria por trás. Em 1913, Markov contou vogais e consoantes nas 20 000 primeiras letras do *Ievguêni Oniéguin* e mostrou que a lei dos grandes números sobrevive à dependência. Mas a dependência muda quanto a amostra vale. Como as letras tendem a alternar, um bloco de 100 delas vale cerca de 330 letras independentes; numa cadeia "pegajosa", em que cada estado tende a se repetir, 100 observações valem bem menos que 100. O tamanho efetivo de uma amostra é uma propriedade do processo, não da contagem, e é por isso que os pacientes de um mesmo dia, que compartilham a mesma demanda, não contam como observações independentes.
 
 Tudo isso passou pelos quatro portões e reproduziu, com a mesma contagem de pacientes (161 867 e 160 220), os seis números que o material do curso já publicava. O resultado é pequeno, mas o seu valor está no método: qualquer pessoa pode rodar o código de novo e obter os mesmos números, com o mesmo hash.
 
@@ -153,6 +307,8 @@ O Lab 0 supunha uma demanda que alterna entre 5 e 11 por hora. No H0 real, a dem
 
 No mundo que a alegação descreve, nenhum dia fica abaixo da meta. Nas chegadas reais, cerca de um em cada quatro fica. A demanda não é Poisson: entre dias, o desvio é de cerca de 2 900 chamadas, onde Poisson preveria 180. E a desigualdade de Jensen aparece dentro da própria fórmula: aplicado à taxa real de cada dia, o Erlang C da alegação dá em média 57%, não 82%, porque o nível de serviço é côncavo na carga. A unidade independente, de novo, é o dia: o modelo nulo de metades deu desvio de 0,0474, contra 0,0470 previsto pelo dia e 0,0033 pela chamada.
 
+É o caso de manual da checagem preditiva, de Box a Gelman e Shalizi: simular réplicas do modelo ajustado e ver em que estatística os dados reais caem fora delas. Num exemplo do curso, um modelo Poisson passa na média, falha na variância (nenhuma réplica chega perto) e subestima em 42 vezes a chance de um dia de pico. Um modelo pode servir para dimensionar a equipe média e ser perigoso para o plantão de pico; a pergunta certa não é se ele é verdadeiro, mas para que decisão é bom o bastante.
+
 ![Dias abaixo da meta por regra de escala na central bancária (H0 real, h0-real/README.md)](figuras/central-regras-de-escala.png)
 
 *Dias abaixo da meta por regra de escala na central bancária (H0 real, h0-real/README.md).*
@@ -165,11 +321,17 @@ A decisão (Φ4) compara regras de escala de custo parecido. Acrescentar 12 aten
 
 **O experimento de LaLonde.** Comparar participantes de um programa de treinamento com trabalhadores de uma pesquisa nacional dá um efeito negativo no emprego (−10,7 pontos). O experimento sorteado mostra +11,1. O ajuste por escore de propensão chega a +9,6, perto do valor certo, mas o teste severo mostra que acertou sem merecer: um tratamento inócuo daria +9,0 dentro da mesma faixa. Um placebo, usando o emprego de 1975 como desfecho, revela que a seleção ainda está lá.
 
+A decomposição da seção 3.3 explica o sinal trocado. A comparação com a pesquisa nacional soma ao efeito do programa um termo de seleção, a diferença entre o que os participantes e os não participantes teriam ganhado sem o programa, e esse termo é grande e negativo, porque quem procura um programa de treinamento estava em pior situação. O sorteio zera esse termo, e o escore de propensão tenta estimá-lo pelas variáveis observadas. O placebo com o emprego de 1975, anterior ao programa, é uma estimativa direta dele, e ela não deu zero.
+
 **Os incêndios dinamarqueses.** Uma resseguradora vê 36 meses sem sinistro numa faixa alta de perdas e conclui que o risco é desprezível. A janela limpa vale apenas 2,2 bits de evidência, e a regra de sucessão de Laplace dá 1 chance em 38 por mês, não zero. Com a alavancagem que a alegação justificaria, a resseguradora é arruinada em agosto de 1989. Mas o orquestrador reprovou o projeto: no cofre, nenhum previsor venceu a frequência histórica simples, porque os sinistros cresciam 4,6% ao ano. A alegação perde, mas o modelo não ganha o direito de decidir.
+
+O curso tem um análogo exato. Uma estratégia que vende seguro ganha 1% por semana e perde 50% com chance de 0,4%. Um histórico de 250 semanas não mostra nenhuma perda em 37% das vezes, e quem estima a chance pela frequência observada conclui que ela é zero e alavanca. Entre 10 000 investidores simulados, 35,8% dos que apostam pelo critério de Kelly com a probabilidade estimada se arruínam, embora essa regra tenha a maior riqueza média; com a regra de sucessão de Laplace, ninguém se arruína.
 
 ### H2: o portão que custou sete rodadas
 
 O H2 testou se o método transfere entre áreas. Doze domínios reais (educação, logística, agronomia, clima, crédito, saúde, direito, entre outros) foram plugados pelo mesmo pacote padronizado; dez desses pacotes foram escritos por agentes que só leram o contrato e dois exemplos. O portão escolhido pelo plano era exigente: a Predição Causal Invariante (ICP), que procura as causas cuja relação com o resultado não muda de um ambiente para outro, deveria encontrar um conjunto não vazio em pelo menos três áreas distintas.
+
+O ICP parte de uma afirmação formal. Se S é o conjunto das causas diretas de Y, a distribuição P(Y | X_S, E = e) é a mesma em todo ambiente e que intervém nas outras variáveis sem intervir na equação de Y. Uma relação causal sobrevive à troca de ambiente; uma correlação de conveniência, não. O método devolve a interseção de todos os conjuntos que passam no teste de invariância, e a sua garantia é assimétrica: com probabilidade de pelo menos 1 − α, o conjunto devolvido só contém causas diretas, mas nada garante que contenha todas. Abster-se, devolvendo o conjunto vazio, é resultado, não falha. É também uma resposta à crítica de Lucas (seção 7): só o que é invariante entre regimes merece uso quando o regime muda.
 
 Na primeira rodada, encontrou em uma, o direito. Nos outros domínios, ou rejeitou todos os conjuntos, porque os ambientes de conveniência (ano, região, aeroporto) agem direto no resultado, ou aceitou tantos que a interseção ficou vazia. O diagnóstico foi que o ICP padrão, com amostras grandes, rejeita qualquer desvio do modelo linear gaussiano. Seguiram-se seis rodadas, cada uma com a mudança declarada e registrada com hash antes de rodar: bases em que o ambiente é uma intervenção documentada, um teste de invariância não paramétrico, uma regra que descarta conjuntos sem poder de teste, câmaras físicas com o grafo causal conhecido, deleções de genes em levedura e, por fim, um ensaio clínico de cardiologia.
 
@@ -189,6 +351,24 @@ O H3 rodou seis fluxos reais (energia, a central bancária, a bolsa, voos, ciclo
 - **Goodhart sob controle.** Na central, quem não é atendido liga de novo, e a previsão passa a medir o próprio efeito. Um previsor ingênuo acerta o que observa com 1% de erro e, ainda assim, superestima a demanda verdadeira em 29%: a métrica aprova um modelo errado sobre o mundo. Usando choques sorteados na escala como instrumento, o erro cai para 1,7%. Esse laço, porém, é declarado sobre chegadas reais, não medido, e o estimador teve quatro versões antes de passar.
 - **Calibração fora do tempo: passou na terceira tentativa.** Nos voos, os atrasos do último trimestre ficaram 2,7 pontos acima do previsto, para uma tolerância de 2. Nas prisões, o erro de calibração foi 0,036, para uma tolerância de 0,03, com só 1 488 casos. A lição de desenho é precisa: o disjuntor comparava o modelo com o reserva, não com a calibração, e por isso não viu a deriva da média. Com uma recalibração contínua do intercepto, declarada antes, os voos passaram num cofre novo, o mesmo trimestre em 2023 (ECE 0,008). As prisões não: com dados de Toronto de 2020 e 2021, o modelo acerta a média, mas é pouco confiante nos extremos (ECE 0,067), um erro de inclinação que a correção do intercepto não alcança. A correção, uma recalibração contínua que ajusta também a inclinação, entrou como especificação nova e foi testada num cofre que ninguém tinha visto: 24 466 paradas de trânsito em Rhode Island, de 2013 a 2015. Passou com folga (ECE 0,0048), com duas ressalvas: a pergunta mudou, de liberação depois da prisão para prisão numa parada, e a habilidade é pequena (+0,019), porque o evento é raro. A calibração é boa; a resolução, não. E, num modelo cego à cor, a taxa de falsos positivos contra motoristas negros foi quase o dobro da dos brancos em 2013 e 2014.
 
+A frase "a calibração é boa; a resolução, não" tem uma conta precisa, a decomposição de Murphy (1973) do escore de Brier:
+
+$$
+BS = \underbrace{\text{REL}}_{\text{erro de calibração}} - \underbrace{\text{RES}}_{\text{resolução}} + \underbrace{\text{UNC}}_{\text{incerteza dos eventos}}
+$$
+
+O climatologista, que diz sempre a taxa histórica, é perfeitamente calibrado e não tem resolução nenhuma: é calibrado e inútil. A assimetria prática é que a calibração se conserta depois, com um histórico e uma regressão, e a resolução não. Num exemplo do curso com 4 000 eventos, recalibrar um previsor confiante demais leva o seu Brier de 0,1956 a 0,1851, quase o do perito honesto (0,1846); um previsor ruidoso melhora pouco, de 0,2154 a 0,2089, porque a informação perdida não volta. Foi o que o H3 encontrou: a recalibração contínua consertou a calibração dos voos e das paradas de trânsito, mas não podia criar a resolução que os dados não tinham. O Brier pertence a uma família especial, a das regras próprias, em que quem acredita em q minimiza a penalidade declarando q. A taxa de acerto não é própria: quem acredita em 70% fica indiferente entre declarar 51% e 99%.
+
+A lição do disjuntor também tem uma teoria. Um modelo em uso piora por três razões, e cada uma pede uma resposta diferente. Na deriva de dado, o mundo mudou; na deriva de conceito, mudou a relação entre o atributo e o desfecho; na performatividade, o próprio modelo mudou o mundo que previa. Há ainda uma quarta situação, que não é piora: a métrica cai porque a população atendida mudou. Sem separar as quatro, o relatório manda retreinar o que não estava errado. Por isso o vigia olha as distribuições de entrada antes que o erro apareça, todo alarme tem limiar, janela e histerese, e todo incidente fecha com cronologia, causa-raiz e um responsável nomeado.
+
+O desequilíbrio contra os motoristas negros não exige intenção para aparecer. Quando as taxas-base diferem entre grupos, o mesmo limiar produz taxas de erro diferentes, e a identidade de Chouldechova (2017) mostra por quê:
+
+$$
+\text{FPR}=\frac{p}{1-p}\cdot\frac{1-\text{VPP}}{\text{VPP}}\cdot(1-\text{FNR})
+$$
+
+Com valor preditivo e falsos negativos iguais entre grupos, prevalências p diferentes forçam taxas de falso positivo diferentes. Igualar as taxas de aprovação, igualar as taxas de erro e igualar a calibração por grupo são exigências incompatíveis quando as prevalências diferem e o preditor não é perfeito. Dizer "quero justiça" ainda não é uma decisão: é preciso declarar que igualdade se escolheu, quanto ela custa em acurácia, para onde o erro migrou e quem passa a pagá-lo.
+
 O que as falhas têm em comum é que foram previstas como possibilidade e registradas como resultado. O sistema declarou quantas especificações tentou em cada etapa e manteve as prioris "de literatura" marcadas como não conferidas, já que nenhum especialista humano foi consultado. Os 21 pareceres de risco foram lidos e assinados por sil, quatro deles sobre decisões que envolvem pessoas, e a escala ficou abaixo da meta: o hipergrafo do H3 tem 454 178 nós, 45% do milhão previsto.
 
 ## 7. Novos horizontes
@@ -199,25 +379,75 @@ Se as velhas fronteiras separavam disciplinas, os novos horizontes da Estocologi
 
 **Agentes artificiais com disciplina epistêmica.** Modelos de linguagem escrevem com fluidez e erram com confiança; são, num sentido preciso, agentes da camada L3 com atalhos próprios. A arquitetura não tenta torná-los infalíveis. Cerca-os de portões: eles não fazem contas de cabeça, não conversam em linguagem livre, não aprovam o próprio trabalho. A pergunta deixa de ser "a IA está certa?" e passa a ser "o que a IA afirmou sobreviveu a quais testes?".
 
+Avaliar um agente desses é, por si, um problema estocológico. Um sistema que devolve texto não acerta ou erra como uma conta; o que se pode ter é uma rubrica, um critério explícito que outra pessoa consegue aplicar, com o desacordo entre avaliadores medido e descontado do acaso:
+
+$$
+\kappa=\frac{p_o-p_e}{1-p_e}
+$$
+
+Uma rubrica em que avaliadores treinados discordam metade das vezes mede o avaliador, não o sistema. Há dois riscos próprios: a contaminação, quando os casos de teste já apareceram no treino, e a troca silenciosa do modelo pelo fornecedor, que obriga toda avaliação a registrar versão e data.
+
 **O tempo e a ruína.** A Crononomia leva a sério uma ideia que a economia clássica deixou de lado: a média entre muitas pessoas não é a média ao longo da vida de uma. Num jogo multiplicativo, o valor esperado pode crescer enquanto quase todas as trajetórias individuais encolhem. Para quem decide uma única vez, com um único patrimônio, a pergunta certa é a taxa de crescimento no tempo, e evitar a ruína vem antes de maximizar o esperado. No Dow Jones, isso deixou de ser teoria: com alavancagem de 3 vezes, a riqueza média chegou a 19 vezes o capital inicial, e a mediana, a 2,1 (seção 6).
+
+O exemplo canônico é a moeda de Peters. Aposta-se toda a riqueza; cara aumenta 50%, coroa tira 40%. A esperança cresce 5% por rodada, mas o que se acumula numa trajetória é o logaritmo:
+
+$$
+\ln \mathbb{E}[M] \approx +0{,}049, \qquad \mathbb{E}[\ln M] = \tfrac12\ln 1{,}5 + \tfrac12 \ln 0{,}6 \approx -0{,}053
+$$
+
+Terminam acima do ponto de partida 37,7% das trajetórias em 10 rodadas, 13,6% em 100 e 0,01% em 1 000; nesse ponto, a esperança vale 1,55 × 10²¹ e a mediana, 10⁻²³. Os fatores são independentes e idênticos; o que não é ergódico é o produto. Peters chama um observável de ergódico quando a sua média temporal iguala a esperança, uma versão operacional da hipótese de Boltzmann que o teorema de Birkhoff (1931) delimitou. Há uma consequência até para quem simula: a média de N trajetórias acompanha a esperança só por um tempo que cresce como ln N, cerca de 12 rodadas com 10 trajetórias e 112 com um milhão.
+
+Se a trajetória vive o logaritmo, a pergunta passa a ser quanto expor, e a resposta é o critério de Kelly (1956):
+
+$$
+f^* = \arg\max_f \; \mathbb{E}[\ln(1 + fR)]
+$$
+
+Numa aposta paga de igual para igual com chance 0,6, a fração ótima é 0,2 da riqueza. Apostar tudo levaria a esperança, em 100 rodadas, a 8,3 × 10⁷ vezes o capital, com chance de sobreviver de 0,6¹⁰⁰, cerca de 10⁻²². O dobro da fração ótima, 0,4, já empobrece com a mesma vantagem. Breiman (1961) provou que a estratégia de Kelly acaba à frente de qualquer outra essencialmente diferente, mas só no limite, e a incerteza sobre o parâmetro pesa: com a probabilidade estimada em 25 rodadas, o Kelly cheio tem taxa de crescimento negativa em 16% das estimativas, enquanto meio Kelly garante 75% do crescimento com um quarto da variância. A incerteza epistêmica é um argumento para apostar menos.
+
+A mesma conta explica contratos que a esperança declara inúteis. No navio de Bernoulli, retomado por Peters e Adamou, um armador com riqueza de 100 000 paga 1 800 para cobrir uma perda de 34 000 que ocorre com chance de 5%. Em esperança, ele perde 100 por mês e a seguradora ganha 100. Em crescimento temporal, os dois ganham: o armador passa de 1,94% para 2,18% ao mês, e a seguradora, que detém muitas trajetórias independentes, de zero para +0,007%. Juntar e repartir faz o mesmo. Na moeda de Peters, três jogadores que repartem a riqueza a cada rodada crescem 1,6% por rodada, quando cada um sozinho decairia. A cooperação não muda a média de conjunto; muda quanto dela cada trajetória recebe. A pergunta que decide o caso é quem detém as trajetórias: uma seguradora ou um Estado têm muitas, uma pessoa ou uma empresa têm uma.
 
 **A previsão que muda o que prevê.** Quando um modelo é publicado, as pessoas reagem a ele. Uma previsão de fila longa faz pacientes desistirem; uma métrica vira meta e deixa de medir (lei de Goodhart). A arquitetura exige rodar o modelo com e sem a ação, para separar o que se aprendeu sobre o mundo do que se deformou nele. No H3, um previsor que acertava o que observava com 1% de erro superestimava a demanda real em 29%; foi preciso um pequeno experimento embutido na operação para desfazer o laço.
 
+Goodhart tem um irmão na economia. Em 1976, Lucas mostrou que os parâmetros de um modelo estimado sob uma política dependem das regras que os agentes esperam, e por isso mudam quando a política muda. A curva de Phillips, lida como um cardápio entre inflação e desemprego, desfaz-se quando se tenta usá-la: num exemplo do curso, a curva antiga promete 4,59% de desemprego e o regime novo entrega 5,88%. Só a relação estrutural, entre o desemprego e a inflação não esperada, permanece. Simon (1954) e Grunberg e Modigliani (1954) mostraram que pode existir uma previsão pública que já leva em conta a reação e se confirma, e Perdomo e colegas (2020) chamaram de performativamente estável o modelo que é ótimo para a distribuição que ele mesmo induz. Num aplicativo de duas rotas, o previsor ingênuo, que manda todos para a rota mais rápida de ontem, erra sempre que mais de 2/7 dos motoristas o seguem; com metade deles, quem usa o aplicativo leva 41,0 minutos e quem não usa, 36,8. O previsor que divide os usuários para igualar os tempos erra por 0,3 minuto, e todos levam 35,0.
+
+Quando cada sucesso aumenta a chance do próximo, o acaso do começo vira destino, e a história só nos dá um mundo. Na urna de Pólya, cada urna converge, mas cada uma para um lugar diferente. Salganik, Dodds e Watts (2006) testaram isso com 14 341 participantes que baixavam músicas em oito mundos paralelos: a influência social aumentou a desigualdade e a imprevisibilidade do sucesso. Num mercado simulado, mérito desigual e vantagem cumulativa produzem o mesmo índice de Gini (0,63 contra 0,64); só a repetição dos mundos os separa, e com vantagem cumulativa a imprevisibilidade entre mundos é oito vezes maior. Como não podemos repetir a história, a lei do arco-seno alimenta o viés retrospectivo: em 41% dos jogos justos de mil rodadas, alguém lidera em 90% do tempo ou mais, e o líder parece ter merecido.
+
+A inferência ativa dá ao laço entre previsão e ação uma forma exata. Um agente que minimiza a energia livre variacional,
+
+$$
+F[q] = D\big(q \,\|\, p(s \mid o)\big) - \ln p(o) \;\ge\; -\ln p(o)
+$$
+
+pode baixar a surpresa de três modos: mudando a crença, mudando o mundo ou deixando de olhar. Um termostato que "acredita" em 22 °C numa sala a 18 °C termina com o mesmo F quando aprende que a sala está fria e quando a aquece até 22 °C. O número que ele minimiza não distingue aprender de deformar. Só um contrafactual de fora separa os dois casos, e é por isso que a arquitetura exige rodar o modelo com e sem a ação.
+
 **A comunicação como parte da ciência.** Um resultado mal comunicado é um resultado que falhou na camada do Agente. Por isso a saída do sistema não é um p-valor, mas frequências naturais ("25 em cada 100 pacientes esperam mais de meia hora"), visualizações que mostram resultados possíveis em vez de médias, e uma cláusula explícita que diz quando a recomendação deixa de valer.
+
+As regras são simples e raramente seguidas. "30% de chance" não diz 30% de quê; "de cada 100 pessoas como você, 30" diz. Denominadores fixos, risco absoluto antes do relativo e a classe de referência explícita: um aumento relativo de 30% sobre uma taxa-base de 1% é outra notícia. Barras de erro estáticas levam o leitor a reduzir o intervalo à média; os gráficos de resultados hipotéticos, que mostram desfechos simulados um após o outro, fazem o leitor sentir a variação. A recomendação declara o ponto em que a ação muda (agir se p > C/L), e quem apresenta o número declara o próprio interesse. Contra Goodhart, o plano leva uma métrica companheira, uma auditoria fora do laço e um prazo de validade para a própria meta.
+
+Uma parte da comunicação corre no sentido inverso, do especialista para o modelo. Quando um parâmetro não vem dos dados, vem de alguém, e pedir bem é um método. O protocolo de Sheffield não pede ao especialista uma média. Pede a mediana, os quartis e os extremos plausíveis, ajusta uma distribuição a esses quantis e a devolve para que ele a confirme, controlando a âncora dada pelo entrevistador, a ordem dos cenários e o excesso de confiança. Antes de adotar uma priori informativa, convém medir a calibração do especialista em previsões já resolvidas. Foi esse passo que a pesquisa não deu, e as suas prioris "de literatura" ficaram marcadas como não conferidas.
 
 Os quatro horizontes do plano já foram percorridos, e a seção 6 mostra o que passou e o que não passou. Os próximos passos saem das ressalvas: testes de invariância que respeitem medidas repetidas da mesma pessoa; previsores de eventos raros com mais resolução, e não só boa calibração; a auditoria de quem paga pelo erro, que nos dois fluxos de prisões mostrou o mesmo desequilíbrio; e dados reais de saúde, para fechar o círculo que o Lab 0 abriu.
 
 ## 8. Limites e objeções
 
-Uma disciplina que exige teste severo das alegações alheias precisa aplicá-lo a si mesma. Quatro objeções merecem resposta direta.
+Uma disciplina que exige teste severo das alegações alheias precisa aplicá-lo a si mesma. Sete objeções merecem resposta direta.
 
 **"Isso é só estatística com outro nome."** Em parte, sim: quase todas as ferramentas têm dono há décadas. O que a Estocologia acrescenta é a organização: a separação em camadas, a tipagem da incerteza e a exigência de que cada alegação passe pelos mesmos portões. A hipótese que o programa precisa demonstrar, e ainda não demonstrou, é que essa organização pega erros que a prática estatística comum deixa passar.
+
+A documentação do curso dá a resposta mais curta ao comparar o campo com os vizinhos: a Estocologia não busca teoremas novos, usa-os para julgar argumentos e pressupostos, e pergunta o que um modelo autoriza concluir, não como otimizá-lo.
 
 **"Os dados reais são antigos e de bases públicas."** É verdade, e foi escolha: chamadas de 2003, empregos de 1978, incêndios de 1980 a 1990. São bases conhecidas, verificáveis por hash e com desfecho já sabido, o que permite auditar o método, mas não substitui uma operação de verdade. Várias peças continuam supostas: prioris de literatura citadas de memória, sem especialista consultado; tempos de atendimento e custos de decisão; o laço performativo do H3. E os dois últimos portões só passaram depois de várias rodadas, com mudanças declaradas no caminho. A arquitetura registra tudo isso como pendência declarada, que é exatamente o que ela exige de qualquer alegação.
 
 **"Formalizar o julgamento é eliminar o julgamento."** A arquitetura não decide o que vale a pena perguntar, nem quanto um erro custa para quem o sofre. Esses valores entram pela elicitação e pela razão custo/perda, que são declarados, não calculados. A ambição é tornar o julgamento visível e contável, não substituí-lo; por isso a definição diz "ciência (ou arte)".
 
 **"O aparato é pesado demais."** Oito agentes, cinco lentes e quatro invariantes são muito para uma pergunta simples. O plano reconhece o risco e responde com o funil: a maior parte das hipóteses deve ser descartada barato, antes de qualquer simulação cara. Se o custo de usar a máquina for maior que o valor das decisões que ela melhora, a própria Crisonomia mandaria desligar a máquina.
+
+**"Bayes resolve o problema de Hume."** Não resolve, e a disciplina não deve vender isso. A atualização bayesiana é a regra coerente dentro de um espaço de hipóteses, mas o problema da indução se desloca para a escolha da priori e do espaço, como a regra de sucessão de Laplace mostrou na seção 2. O próprio teorema de Cox depende de hipóteses técnicas, como mostra o contraexemplo de Halpern (1999). E nem toda informação é bem-vinda. Good (1967) provou que informação gratuita nunca piora a decisão de quem tem preferências sobre estados do mundo, mas quem tem preferências sobre as próprias observações pode pagar para não saber: entre pessoas com risco de doença de Huntington, menos de 10% faz o exame genético antes dos sintomas.
+
+**"A ergodicidade virou doutrina."** A Crononomia se apoia no programa de Ole Peters, que é contestado, e a disciplina o ensina como debate. Peters propôs que a aversão a perdas talvez não seja viés, e sim uma resposta racional a uma dinâmica multiplicativa. Os números mostram em que escala isso vale. Tversky e Kahneman estimaram que perdas pesam cerca de 2,25 vezes os ganhos, e, pelo critério do crescimento, uma razão dessa ordem só se justifica quando 56% da riqueza estão em jogo. A tese explica a recusa de arriscar meio patrimônio, mas não a aversão medida em laboratório com apostas pequenas, em que qualquer utilidade côncava e suave é quase neutra; o teorema de calibração de Rabin vale também para o logaritmo. Num experimento em Copenhague (Meder e colegas, 2021), a aversão ao risco dos participantes aumentou quando o jogo passou de aditivo a multiplicativo; Doctor, Wakker e Wang (2020) respondem que a utilidade esperada nunca supôs ergodicidade. O debate fica mais preciso, sem vencedor. Algo parecido vale para as caudas: Taleb pede que se suponha cauda pesada até prova em contrário, e Clauset, Shalizi e Newman (2009) pedem prova antes de declarar uma lei de potência. A questão é de quem é o ônus da prova, e a resposta depende de quanto custa errar.
+
+**"O auditor é parte interessada."** Os 21 pareceres de risco foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado, e o escopo, nesse caso, é uma concessão do auditado. A arquitetura responde em parte com o responsável humano nomeado, porque a pergunta de uma auditoria não é técnica: quem decidiu usar, quem aprovou, quem olha o placar, quem desliga. Mas nomear um responsável não torna a auditoria independente. O que o programa pode fazer, e ainda não fez, é registrar o que a auditoria não pôde olhar e quais grupos afetados foram ouvidos, ou declarar que nenhum foi.
 
 ## 9. Conclusão
 
@@ -236,6 +466,7 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - [AGENTS.md](https://docs.google.com/document/d/1hniAsjLqgNVGqR1wZ1845GVkS5lZTEjhlH7MaI3U2Xk/edit): contrato dos agentes e invariantes Φ1 a Φ4.
 - [Estocologia: Fundamentação, Três Camadas e Inferência sob Incerteza](https://docs.google.com/document/d/1L5ittj7-RiSacEvNrkR4IS6yrQUyhusFpcDIWazINLI/edit): camadas, taxonomia da incerteza, módulos M0 a M5.
 - Resultados: repositório do projeto, 0b3st4f3r4/estocologia (h0-lab0, h0-real, h1-real, h2 a h2g e h3, cada uma com README.md e saídas); bases reais com SHA-256 em [dados-reais/FONTES.md](../dados-reais/FONTES.md).
+- Curso *Pensamento Crítico e Modelos Estocásticos*: repositório público 0b3st4f3r4/pensamento-critico-modelos-estocasticos, com os roteiros M0 a M16, os módulos especiais ME01 a ME25, as bancas MB01 a MB08, os laboratórios e a documentacao.md. Os números atribuídos ao curso ou a simulações do curso vêm desses roteiros e laboratórios.
 
 **Bases e métodos usados na pesquisa** (conferidos em fonte autoritativa; ver [referencias/CONFERENCIA.md](../referencias/CONFERENCIA.md))
 
@@ -265,3 +496,49 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Pearl, J. *Causality*, 2000.
 - Gigerenzer, G. *Calculated Risks*, 2002.
 - Meng, X.-L. "Statistical Paradises and Paradoxes in Big Data", 2018.
+
+
+**Obras citadas a partir dos módulos do curso** (referências como os módulos as dão, sem conferência bibliográfica nesta versão)
+
+- Berkson, J. "Limitations of the application of fourfold table analysis to hospital data", *Biometrics Bulletin* 2(3), 1946.
+- Birkhoff, G. D. "Proof of the ergodic theorem", *PNAS* 17(12), 1931.
+- Breiman, L. "Optimal gambling systems for favorable games", *4th Berkeley Symposium*, 1961.
+- Charig, C. R. et al. Comparação de tratamentos de cálculo renal, *BMJ* 292, 1986.
+- Chouldechova, A. "Fair prediction with disparate impact", *Big Data*, 2017.
+- Clauset, A.; Shalizi, C. R.; Newman, M. E. J. "Power-law distributions in empirical data", 2009.
+- Cox, R. T. "Probability, frequency and reasonable expectation", *American Journal of Physics* 14, 1946.
+- Doctor, J. N.; Wakker, P. P.; Wang, T. V. "Economists' views on the ergodicity problem", *Nature Physics* 16, 2020.
+- Dwork, C.; Roth, A. *The Algorithmic Foundations of Differential Privacy*, 2014.
+- Erev, I.; Wallsten, T.; Budescu, D. *Psychological Review* 101(3), 1994.
+- Gigerenzer, G. et al. "Helping doctors and patients make sense of health statistics", *Psychological Science in the Public Interest* 8, 2007.
+- Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3), 1985.
+- Good, I. J. "On the principle of total evidence", *BJPS* 17(4), 1967.
+- Halpern, J. Y. *Journal of Artificial Intelligence Research* 10, 1999.
+- Hullman, J.; Resnick, P.; Adar, E. "Hypothetical outcome plots outperform error bars", *PLOS ONE* 10(11), 2015.
+- Ioannidis, J. P. A. "Why most published research findings are false", *PLoS Medicine* 2(8), 2005.
+- Jaynes, E. T. "Information theory and statistical mechanics", *Physical Review* 106, 1957.
+- Kelly, J. L. "A new interpretation of information rate", *Bell System Technical Journal* 35(4), 1956.
+- Kramers, H. A. *Physica* 7(4), 1940.
+- Lucas, R. E. "Econometric policy evaluation: a critique", *Carnegie-Rochester Conference Series on Public Policy* 1, 1976.
+- Meder, D. et al. "Ergodicity-breaking reveals time optimal decision making in humans", *PLoS Computational Biology* 17(9), 2021.
+- Meng, X.-L. "Statistical paradises and paradoxes in big data (I)", *Annals of Applied Statistics* 12(2), 2018.
+- Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6), 2018.
+- Murphy, A. H. "A new vector partition of the probability score", *Journal of Applied Meteorology* 12, 1973.
+- O'Hagan, A. et al. *Uncertain Judgements: Eliciting Experts' Probabilities*, Wiley, 2006.
+- Open Science Collaboration. "Estimating the reproducibility of psychological science", *Science* 349, 2015.
+- Pearl, J.; Glymour, M.; Jewell, N. *Causal Inference in Statistics: A Primer*, Wiley, 2016.
+- Peirce, C. S. "Deduction, induction, and hypothesis", *Popular Science Monthly* 13, 1878.
+- Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. "Performative prediction", 2020.
+- Peters, O. "The ergodicity problem in economics", *Nature Physics* 15, 2019.
+- Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015.
+- Rabin, M. "Risk aversion and expected-utility theory: a calibration theorem", *Econometrica* 68(5), 2000.
+- Rossouw, J. E. et al. (Women's Health Initiative), *JAMA* 288(3), 2002.
+- Royall, R. *Statistical Evidence: A Likelihood Paradigm*, 1997.
+- Rubin, D. B. *Journal of Educational Psychology* 66(5), 1974.
+- Salganik, M.; Dodds, P.; Watts, D. *Science* 311, 2006.
+- Simmons, J.; Nelson, L.; Simonsohn, U. "False-positive psychology", *Psychological Science* 22(11), 2011.
+- Stampfer, M. J. et al. (Nurses' Health Study), *NEJM* 325(11), 1991.
+- Talts, S. et al. "Validating Bayesian inference algorithms with simulation-based calibration", arXiv:1804.06788.
+- Taleb, N. N. "How much data do you need?", *International Journal of Forecasting* 35(2), 2019.
+- Tversky, A.; Kahneman, D. *Journal of Risk and Uncertainty* 5(4), 1992.
+- Vapnik, V.; Chervonenkis, A. *Theory of Probability and Its Applications* 16(2), 1971.
