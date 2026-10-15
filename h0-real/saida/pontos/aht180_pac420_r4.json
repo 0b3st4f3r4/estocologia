@@ -1,0 +1,146 @@
+{
+ "aht_s": 180.0,
+ "paciencia_s": 420.0,
+ "indices": [
+  0,
+  4
+ ],
+ "base": false,
+ "replicas": 4,
+ "dias_cofre": 81,
+ "desenho": {
+  "extra_atendentes_por_igual": 9,
+  "rotulo_R3_no_h0": "R3_perfil_medio_mais_9_atendentes",
+  "agente_horas_dia_R0": 1707.0,
+  "agente_horas_dia_R2": 1829.8868312757204,
+  "agente_horas_dia_R3": 1833.75,
+  "escala_pico_R0": 176,
+  "escala_pico_R2": 216,
+  "soma_atendentes_dia_R0": 3454,
+  "soma_atendentes_dia_R2": 3712.8,
+  "cv_residual_treino": 0.05984663730268494,
+  "fator_R2": 1.076699450367121
+ },
+ "regras": {
+  "R0_alegacao_perfil_medio": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.35802469135802467,
+    0.35802469135802467,
+    0.345679012345679,
+    0.345679012345679
+   ],
+   "nivel_servico_por_replica": [
+    0.756923859206388,
+    0.758033107968135,
+    0.7557166801634683,
+    0.75625830994934
+   ],
+   "espera_media_s_por_replica": [
+    13.973780850719038,
+    14.12259089275537,
+    14.134899881699484,
+    13.990256207900401
+   ],
+   "frac_media": 0.3518518518518518,
+   "frac_min": 0.345679012345679,
+   "frac_max": 0.35802469135802467,
+   "nivel_servico_medio": 0.7567329893218327,
+   "espera_media_s": 14.055381958268573,
+   "desistencia_media": 0.03343094973539991,
+   "pior_dia_sl_medio": 0.0761675487887337,
+   "p90_s_medio": 48.300160886600935,
+   "agente_horas_dia": 1707.0,
+   "chamadas": 2654950
+  },
+  "R1_perfil_do_dia_da_semana": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.30864197530864196,
+    0.2839506172839506,
+    0.345679012345679,
+    0.30864197530864196
+   ],
+   "nivel_servico_por_replica": [
+    0.8009096216501252,
+    0.8037062844874668,
+    0.8007834422493832,
+    0.8043360515263941
+   ],
+   "espera_media_s_por_replica": [
+    11.405946248592818,
+    11.102999730802141,
+    11.177723221949215,
+    11.065712763651552
+   ],
+   "frac_media": 0.3117283950617284,
+   "frac_min": 0.2839506172839506,
+   "frac_max": 0.345679012345679,
+   "nivel_servico_medio": 0.8024338499783423,
+   "espera_media_s": 11.188095491248932,
+   "desistencia_media": 0.02670050283432833,
+   "pior_dia_sl_medio": 0.0878605236773998,
+   "p90_s_medio": 36.70212273930634,
+   "agente_horas_dia": 1704.9557613168727,
+   "chamadas": 2654950
+  },
+  "R2_dia_da_semana_mais_margem_p90": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.09876543209876543,
+    0.08641975308641975,
+    0.09876543209876543,
+    0.08641975308641975
+   ],
+   "nivel_servico_por_replica": [
+    0.925477315956986,
+    0.925844931166312,
+    0.926597487711633,
+    0.9281805683722857
+   ],
+   "espera_media_s_por_replica": [
+    4.52503956029275,
+    4.515597406781364,
+    4.32608193822279,
+    4.347895119165143
+   ],
+   "frac_media": 0.09259259259259259,
+   "frac_min": 0.08641975308641975,
+   "frac_max": 0.09876543209876543,
+   "nivel_servico_medio": 0.9265250758018042,
+   "espera_media_s": 4.428653506115512,
+   "desistencia_media": 0.01058287350044257,
+   "pior_dia_sl_medio": 0.12913567581431137,
+   "p90_s_medio": 13.447260566778294,
+   "agente_horas_dia": 1829.8868312757204,
+   "chamadas": 2654950
+  },
+  "R3_perfil_medio_mais_extra_atendentes": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.19753086419753085,
+    0.18518518518518517,
+    0.2345679012345679,
+    0.20987654320987653
+   ],
+   "nivel_servico_por_replica": [
+    0.875783724740579,
+    0.8766078457221417,
+    0.8762967287519539,
+    0.8764861861805308
+   ],
+   "espera_media_s_por_replica": [
+    6.994167291316505,
+    6.985550311157075,
+    6.992713154360174,
+    7.065180966298561
+   ],
+   "frac_media": 0.2067901234567901,
+   "frac_min": 0.18518518518518517,
+   "frac_max": 0.2345679012345679,
+   "nivel_servico_medio": 0.8762936213488014,
+   "espera_media_s": 7.009402930783079,
+   "desistencia_media": 0.01670850675153958,
+   "pior_dia_sl_medio": 0.15651449089510133,
+   "p90_s_medio": 25.567642990034077,
+   "agente_horas_dia": 1833.75,
+   "chamadas": 2654950
+  }
+ }
+}

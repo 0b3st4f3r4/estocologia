@@ -1,0 +1,175 @@
+{
+ "caso": "ri",
+ "titulo": "Prisão do motorista em paradas de trânsito de Rhode Island (Stanford Open Policing, 2005-2015)",
+ "fonte": "h3/saida/prisoes_ri/resultados.json",
+ "n_treino": 59166,
+ "eventos_treino": 1842,
+ "taxa_treino": 0.03113274515769192,
+ "n_cofre": 24466,
+ "eventos_cofre": 553,
+ "taxa_cofre": 0.022602795716504538,
+ "evento": "prisão do motorista numa parada da polícia estadual de Rhode Island (parada)",
+ "dados_lidos": "replay do H3d em saida/h3_ri/prisoes_ri/diario.parquet (o diario.parquet publicado está fora do Git)",
+ "taxas_do_ranking_no_desenvolvimento": [
+  0.005070993914807302,
+  0.005409060175794456,
+  0.009634888438133874,
+  0.011661314855501098,
+  0.01504394861392833,
+  0.022304832713754646,
+  0.030758830488423188,
+  0.03989181879648411,
+  0.05644752408315024,
+  0.11509210748690214
+ ],
+ "caminhos": {
+  "C": {
+   "brier": 0.022103568223804892,
+   "REL": 1.780947324666469e-05,
+   "RES": 6.444325236094157e-06,
+   "UNC": 0.022091909342302502,
+   "identidade_brier_menos_rel_mais_res_menos_unc": 2.937334918177992e-07,
+   "brier_da_previsao_constante_na_caixa": 0.02210327449031307,
+   "identidade_com_previsao_constante_na_caixa": -3.469446951953614e-18,
+   "res_menos_rel": -1.1365148010570533e-05,
+   "brier_climatologia": 0.022103568223804892,
+   "habilidade": 0.0,
+   "auc": 0.4963628324466426,
+   "bate_o_UNC": false,
+   "res_menos_rel_ic90": [
+    -2.213708886313898e-05,
+    -2.992113282209754e-06
+   ],
+   "habilidade_ic90": [
+    0.0,
+    0.0
+   ],
+   "auc_ic90": [
+    0.47750071926344123,
+    0.5150308136934374
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": false,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  },
+  "L": {
+   "brier": 0.021691811119829506,
+   "REL": 7.385950010248167e-05,
+   "RES": 0.00034850224462216274,
+   "UNC": 0.022091909342302502,
+   "identidade_brier_menos_rel_mais_res_menos_unc": -0.00012545547795331582,
+   "brier_da_previsao_constante_na_caixa": 0.02181726659778282,
+   "identidade_com_previsao_constante_na_caixa": 0.0,
+   "res_menos_rel": 0.00027464274451968106,
+   "brier_climatologia": 0.022103568223804892,
+   "habilidade": 0.01862853543854226,
+   "auc": 0.7249922847960989,
+   "bate_o_UNC": true,
+   "res_menos_rel_ic90": [
+    0.00017083495329206554,
+    0.0003792712541084757
+   ],
+   "habilidade_ic90": [
+    0.011363627912463658,
+    0.025767775933558144
+   ],
+   "auc_ic90": [
+    0.7073350528196994,
+    0.7420609082254837
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": true,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  },
+  "R": {
+   "brier": 0.021706761066586575,
+   "REL": 3.758422543758171e-05,
+   "RES": 0.00034923972463631194,
+   "UNC": 0.022091909342302502,
+   "identidade_brier_menos_rel_mais_res_menos_unc": -7.349277651719568e-05,
+   "brier_da_previsao_constante_na_caixa": 0.02178025384310377,
+   "identidade_com_previsao_constante_na_caixa": 0.0,
+   "res_menos_rel": 0.00031165549919873024,
+   "brier_climatologia": 0.022103568223804892,
+   "habilidade": 0.017952176463118197,
+   "auc": 0.7299532686640064,
+   "bate_o_UNC": true,
+   "res_menos_rel_ic90": [
+    0.00020567857332985204,
+    0.0004066524695553487
+   ],
+   "habilidade_ic90": [
+    0.01290875687652709,
+    0.022828787707102404
+   ],
+   "auc_ic90": [
+    0.7132780413734247,
+    0.7458446430315722
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": true,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  }
+ },
+ "vencem": [],
+ "bootstrap": {
+  "reamostragens": 2000,
+  "semente": 2027,
+  "caixas": 10
+ },
+ "disponivel": true,
+ "conferencia": {
+  "hash_especificacao_do_replay": "577de4d8111705a9babcc337f7e855df2629eba9f3403b0e7a45f8b9588c1062",
+  "hash_especificacao_publicado": "577de4d8111705a9babcc337f7e855df2629eba9f3403b0e7a45f8b9588c1062",
+  "hash_publicado": "577de4d8111705a9babcc337f7e855df2629eba9f3403b0e7a45f8b9588c1062",
+  "hash_bate": true,
+  "n_cofre": 24466,
+  "n_cofre_publicado": 24466,
+  "perda_modelo": 0.021691811119829506,
+  "perda_modelo_publicada": 0.021691811119829506,
+  "perda_reserva": 0.022103568223804892,
+  "perda_reserva_publicada": 0.022103568223804892,
+  "habilidade_modelo_vs_reserva": 0.01862853543854226,
+  "habilidade_oficial_vs_reserva_publicada": 0.016785043614138018,
+  "max_diferenca_absoluta": 0.0,
+  "bate_dentro_de_1e-9": true,
+  "fracao_oficial_reserva": 0.12470367039973841
+ },
+ "oficial_h3_informativo": {
+  "informativo": true,
+  "fora_do_criterio": true,
+  "brier": 0.02173255886714025,
+  "REL": 5.273650449771573e-05,
+  "RES": 0.0002830178981438767,
+  "UNC": 0.022091909342302502,
+  "identidade_brier_menos_rel_mais_res_menos_unc": -0.0001290690815160915,
+  "brier_da_previsao_constante_na_caixa": 0.02186162794865634,
+  "identidade_com_previsao_constante_na_caixa": -3.469446951953614e-18,
+  "res_menos_rel": 0.00023028139364616096,
+  "brier_climatologia": 0.022103568223804892,
+  "habilidade": 0.016785043614138018,
+  "auc": 0.7110153828423696,
+  "bate_o_UNC": true,
+  "res_menos_rel_ic90": [
+   0.00013932204647466883,
+   0.00033080315371171367
+  ],
+  "habilidade_ic90": [
+   0.009992132818545685,
+   0.02376414269100126
+  ],
+  "auc_ic90": [
+   0.6933935383192675,
+   0.7282829160904988
+  ]
+ }
+}

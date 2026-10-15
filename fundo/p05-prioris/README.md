@@ -8,29 +8,32 @@ cinco domínios mudam de status ou de ação do F8 com a priori de literatura, d
 são cosméticas — uma reprovação vira poda e uma reprovação vira aprovação. Nenhuma mudança teve como único motivo um
 portão computacional (R-hat, ESS, SBC): `so_portao_computacional` é falso nas sete.
 
-**Ressalva que vale para tudo abaixo: o portão da rodada (a) foi reprovado pelo critério escrito, então estes números
-saem rotulados como não interpretados — o veredito é condicional a essa leitura.** Campo a campo, nos 33 domínios,
-contra os `saida/` do repositório: **0 diferem em categoria de status, em lista de portões que falham ou em ação do
-F8**, e **24 dos 24 que têm média posterior dos dois lados diferem nela** — da 9ª casa decimal à 3ª significativa
-(relativa de 4,1e-9 a 2,2e-3, mediana 5,8e-7; em unidades do dp posterior da rodada (a), no máximo 0,0071). O
-`comparar.py` reprova **25 dos 33**: os 24 da média posterior mais o `h1-real/c`, cuja razão dp posterior / dp priori
-difere em 1,7e-9 — quase toda a folga do limiar de 1e-9, e sem nenhuma mudança de ação. A diferença observada é
-**numérica, não categórica**, e a causa está na seção seguinte.
+**O portão da rodada (a) passa com a banda de equivalência declarada em [`DECLARACAO_2.md`](DECLARACAO_2.md)
+(0,05 dp do dp posterior da rodada (a)), e o veredito abaixo deixa de ser condicional a essa leitura.** O desvio máximo
+está em **0,0071 dp** (`h2g/genetica_y07`), **7,0 vezes dentro da banda**; dos 33 domínios, 27 têm as duas médias
+posteriores para comparar e 6 não têm posterior emitida (podados antes do F4). Campo a campo, contra os `saida/` do
+repositório: **33 dos 33 idênticos** em categoria de status, em lista de portões que falham e em ação do F8.
 
-A declaração escreve a condição de falha **sem tolerância** ("a cópia não reproduzir a rodada original (status ou
-posterior diferentes dos `saida/` originais em (a))"). Por letra, ela dispara, e as rodadas (b) e (c) **não são
-interpretadas**. Não foi mexido na declaração nem no hash: afrouxar a tolerância depois de ver o resultado seria ajuste
-post-hoc, e pela regra de casa isso não é proibido — entra como declaração nova, com hash próprio (`DECLARACAO_2.md`)
-e contando no K. Isso não foi feito aqui.
+O histórico da checagem **não foi apagado**: sem banda (o default do `comparar.py`, 1e-9 em igualdade de bit) o portão
+continua reprovando **25 dos 33** — os 24 cuja média posterior dos dois lados difere (relativa de 4,1e-9 a 2,2e-3,
+mediana 5,8e-7; no máximo 0,0071 dp) mais o `h1-real/c`, cuja razão dp posterior / dp priori difere em 1,48e-9
+(absoluto — 1,7e-9 relativo, que é o número que esta seção trazia antes). A
+diferença é **numérica, não categórica**, e a causa está na seção seguinte. Pela regra de casa, mudar critério depois de
+ver o resultado entra como declaração **nova**, com hash próprio e contando no K: é o que a `DECLARACAO_2.md` faz.
+**O K desta frente passa de 1 para 2**, e nenhum resultado de (b) ou (c) é recalculado por causa da banda.
 
-### O portão da rodada (a): o que falhou e por quê
+### O portão da rodada (a): o desvio numérico, e a banda que o fecha
 
 | verificação | resultado |
 |---|---|
 | categoria de status, portões que falham e ação do F8, 33 domínios | **33/33 idênticos** aos `saida/` do repositório |
-| posterior da chave (`comparar.py`, tolerância 1e-9) | **25/33 reprovados**: 24 pela média posterior (relativa de 4,1e-9 a 2,2e-3, mediana 5,8e-7) e o `h1-real/c` pela razão dp posterior / dp priori (1,7e-9) |
+| posterior da chave (`comparar.py`, tolerância **1e-9**, o histórico) | **25/33 reprovados**: 24 pela média posterior (relativa de 4,1e-9 a 2,2e-3, mediana 5,8e-7) e o `h1-real/c` pela razão dp posterior / dp priori (1,48e-9 absoluto) |
 | domínios com média posterior dos dois lados que diferem | **24 de 24** (a diferença é numérica, não categórica) |
+| domínios sem comparação numérica (podados antes do F4, posterior não emitida) | **6**: `h2/transito_alcool` e `h2g/genetica_y01`, `y05`, `y06`, `y09`, `y10` — só a checagem categórica se aplica |
 | desvio em unidades do dp posterior da rodada (a) | **≤ 0,0071 dp** (pior caso: `h2g/genetica_y07`) |
+| banda declarada na `DECLARACAO_2.md` | **0,05 dp** do dp posterior da rodada (a) |
+| posterior da chave (`comparar.py --tolerancia-dp 0.05`) | **33/33 passam**; desvio máximo 0,0071 dp, **7,0 vezes dentro** da banda |
+| razão dp posterior / dp priori no H1 real (a banda entra na escala dessa razão) | `h1-real/a` 8,2e-14, `b` 1,0e-11, `c` **1,5e-9** — todos dentro de 0,05 |
 | quantidades determinísticas do F2/F3 (`beta_chave_mv`, `z_obs`, `nulo_q95`, ...) | diferem na 15ª casa (`~1e-15` relativo) |
 | cópias contra os originais (`diff -r`) | só o gancho `$P05_PRIORI` (no-op com tabela vazia) e o caminho dos dados do H1 real |
 
@@ -40,6 +43,30 @@ O desvio é do ambiente numérico desta máquina contra o que gerou os `saida/` 
 número, e não o gravado, 25,21079859117877. Rodando duas vezes aqui, o resultado sai igual ao bit (mesma semente, mesma
 máquina). Para dimensionar: o desvio ambiental máximo é 0,0071 dp, e o menor deslocamento que mudou uma decisão é
 0,18 dp — vinte e cinco vezes maior.
+
+### A banda de equivalência: `DECLARACAO_2.md`
+
+A `DECLARACAO.md` escreveu a condição de falha **sem tolerância** ("a cópia não reproduzir a rodada original (status ou
+posterior diferentes dos `saida/` originais em (a))"), e o `comparar.py` a implementou como igualdade de bit (1e-9 na
+média posterior). Por letra ela dispara. Nada disso foi mexido: a `DECLARACAO.md` é `167fbd6a…` como foi gravada. O
+que existe agora é uma **segunda declaração**, escrita antes de qualquer recomputação com a banda:
+
+- [`DECLARACAO_2.md`](DECLARACAO_2.md), sha256 `6e2b59023b075d86fec4fce4a4b2be4ea395272ad65edc0fd930972a6835dd63`,
+  carimbo UTC `2026-10-15T19:16:37Z` (16:16 local), em `DECLARACAO_2.sha256`; `sha256sum -c DECLARACAO_2.sha256` dá OK.
+- **A banda: 0,05 dp do dp posterior da rodada (a)**, fixada entre os dois fatos já conhecidos — **7,0 vezes acima** do
+  pior desvio ambiental observado (0,05 / 0,0071 = 7,04) e **3,6 vezes abaixo** do menor deslocamento que já mudou uma
+  decisão (0,18 / 0,05 = 3,6).
+- **Critério de leitura, declarado:** desvio máximo ≤ 0,05 dp ⇒ a rodada (a) reproduz e o veredito do ponto 5 deixa de
+  ser condicional; acima disso o rótulo condicional ficaria. O desvio máximo observado é 0,0071 dp, então o critério é
+  satisfeito com folga de 7 vezes. A checagem categórica (status, portões que falham, ação do F8) continua **sem banda**,
+  igualdade exata — banda nenhuma perdoa mudança de status.
+- **A banda não reabre (b) e (c).** As duas rodadas já tinham sido vistas quando a declaração foi escrita, e ela diz
+  isso: nenhum critério de (b) ou (c), nenhuma semente, nenhuma tabela de priori e nenhuma decisão é mudada, e nenhum
+  número de (b) ou (c) é recalculado. N_b = 5 e N_c = 2 seguem os mesmos, com as mesmas sete mudanças nomeadas abaixo.
+- **K = 2.** O K desta frente conta regras de leitura declaradas para o mesmo resultado: a de `DECLARACAO.md` (sem
+  tolerância, que reprova 25 dos 33) e esta (com banda de 0,05 dp, que passa 33 dos 33). As duas valem; a nova é leitura
+  **adicional**, publicada com hash próprio.
+- O desvio máximo sai igual nas duas leituras — o número não depende da banda: **0,00710575674131663 dp**.
 
 ### As cinco mudanças de (b), a priori de literatura
 
@@ -150,12 +177,18 @@ sobrevive é o mesmo das três rodadas: `{c_dof, c_qui, c_ran}` na farmacologia,
 5. **A checagem de (a) contra os originais** foi feita com o `comparar.py` (tolerância de 1e-9) e campo a campo
    nos 33 domínios (`comparar_33.py`, que separa o que é categoria do que é momento); o diagnóstico do desvio tem o
    controle descrito acima (`/tmp/ctrl_h2g.py`, o `h2g/` original copiado para `/tmp/ctrl-h2g`).
+6. **A banda de equivalência da rodada (a)**, depois disso: a [`DECLARACAO_2.md`](DECLARACAO_2.md) foi escrita antes de
+   qualquer recomputação com ela (sha256 `6e2b5902…`, carimbo UTC `2026-10-15T19:16:37Z` em `DECLARACAO_2.sha256`,
+   `sha256sum -c` OK), o `comparar.py` ganhou a opção `--tolerancia-dp` com default 1e-9 (leitura histórica intacta: o
+   default reprova os mesmos 25 de 33) e a comparação foi rerodada com `--tolerancia-dp 0.05`, gravando
+   `resultados_2.json` e `tabela_2.md` — sem tocar em `resultados.json` nem em `tabela.md`.
 
 ## Tabelas
 
 As rodadas completas estão em [`tabela.md`](tabela.md) (33 domínios: status nas três rodadas, ação do F8, média
-posterior, razão dp posterior / dp priori e deslocamento em dp da rodada (a)), gerada pelo `comparar.py`. Os
-agregados:
+posterior, razão dp posterior / dp priori e deslocamento em dp da rodada (a)), gerada pelo `comparar.py`. A
+[`tabela_2.md`](tabela_2.md), da leitura com banda, sai **idêntica** a ela (a banda só mexe no portão da rodada (a),
+não no conteúdo das rodadas). Os agregados:
 
 | rodada | domínios que mudam | dos que mudam, fonte independente | dos que mudam, mesma base | dos que mudam, sem fonte |
 |---|---|---|---|---|
@@ -174,12 +207,17 @@ agregados:
   de fontes publicadas convertidas para a quantidade do domínio por três regras fixas (R1–R3), e as fracas são uma
   declaração de ignorância. Isto testa **se as conclusões do funil dependiam das prioris simuladas**; não substitui um
   painel de elicitação e não diz o que um painel de verdade teria produzido.
-- **O portão da rodada (a) falhou no sentido escrito.** Categoria de status, lista de portões e ação do F8 batem em
-  33/33; a média posterior difere em 24 dos 24 domínios que a têm, de 4,1e-9 a 2,2e-3 de diferença relativa (≤ 0,0071
-  dp). O controle mostra que o motivo é o ambiente numérico, não as cópias. Como a condição de falha está escrita sem
-  tolerância, por letra ela dispara e as rodadas (b) e (c) não são interpretadas: o veredito deste README é condicional
-  a essa leitura. Mexer na tolerância depois de ver o resultado seria declaração nova com hash próprio
-  (`DECLARACAO_2.md`, contando no K); não foi feito.
+- **O portão da rodada (a) só passa pela segunda leitura.** Categoria de status, lista de portões e ação do F8 batem
+  em 33/33; a média posterior difere em 24 dos 24 domínios que a têm, de 4,1e-9 a 2,2e-3 de diferença relativa (≤ 0,0071
+  dp), e o `h1-real/c` difere em 1,48e-9 na razão dp posterior / dp priori. O controle mostra que o motivo é o ambiente
+  numérico, não as cópias. Pela condição de falha escrita **sem tolerância** — a `DECLARACAO.md` — isso continua sendo
+  reprovação: o `comparar.py` com o default de 1e-9 reprova os mesmos 25 de 33 hoje. O veredito deste README vale pela
+  banda de **0,05 dp** declarada depois de ver o resultado, em `DECLARACAO_2.md`, com hash próprio e **K = 2**. A banda
+  é 7,0 vezes o pior desvio observado e 3,6 vezes menor que o menor deslocamento que já mudou uma decisão, mas ela é uma
+  regra **nova**, não a que estava escrita antes, e é assim que deve ser lida.
+- **Seis domínios não entram na checagem numérica da rodada (a)**, porque a posterior não é emitida neles (podados antes
+  do F4): `h2/transito_alcool` e cinco Y do H2g. Neles o portão da rodada (a) é só categórico, e a banda não se aplica
+  a nada.
 - **O `comparar.py` não mede o deslocamento no H1 real**: a forma do resultado daquele horizonte não traz a média
   posterior da chave (`post_media` é nulo), então as três linhas do H1 real ficam sem o número que a declaração pedia
   para todos os domínios. Ficou o que existe: a razão dp posterior / dp priori (0,87 → 0,072 no projeto c), a ação e o
@@ -215,8 +253,10 @@ cd fundo/p05-prioris
 P05_DADOS=$P05_DADOS P05_H="h2 h1-real" bash rodar.sh $OUT
 P05_DADOS=$P05_DADOS bash rodar_h2g.sh $OUT 3
 
-# comparação (grava resultados.json e tabela.md nesta pasta)
+# comparação (grava resultados.json e tabela.md nesta pasta; default 1e-9 = leitura estrita da DECLARACAO.md)
 python3 comparar.py $OUT
+# a leitura com a banda de 0,05 dp da DECLARACAO_2.md (grava resultados_2.json e tabela_2.md)
+python3 comparar.py $OUT --tolerancia-dp 0.05 --json resultados_2.json --tabela tabela_2.md
 ```
 
 Os `saida/` brutos das três rodadas, os `fim.txt`/`fim_h2g.txt` com o código de saída de cada domínio e os

@@ -436,6 +436,15 @@ class ProjetoB(Projeto):
             "chave": ["pessoa"], "particao": "periodo",
             "grao": "uma linha por pessoa; rendas anuais em US$ correntes; y = 1 se re78 > 0",
             "proveniencia": "linhas reais têm sintetico = 0 e origem = a própria pessoa; reamostragens/perturbações têm sintetico = 1",
+            "ausencia": {
+                "mecanismo": "MCAR",
+                "colunas": [],
+                "sensibilidade": {"feito": False, "metodos": []},
+                "nota": "nenhuma coluna admite nulo e nenhuma célula falta nas duas fontes (NSW e CPS). Renda zero em re74/re75 é valor "
+                        "OBSERVADO ('sem renda no ano'), não ausente: entra no desenho com indicador próprio (r74 == 0). A distinção "
+                        "entre MAR e MNAR, que só importaria com célula vazia, não é testável nos dados observados (Cap. 3) e fica "
+                        "declarada como premissa, não como fato",
+            },
         }
 
     def gerar_lote(self, periodo, rng, cenario="mundo", n=None):

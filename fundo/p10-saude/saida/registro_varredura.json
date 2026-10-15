@@ -1,0 +1,91 @@
+{
+ "registro": [
+  {
+   "agente": "agent-f2-data",
+   "dominio": "saude_sepse_alerta",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "fr",
+    "temp",
+    "pas",
+    "pad",
+    "spo2",
+    "fc",
+    "idade",
+    "sexo",
+    "tempo_hospital_uti"
+   ],
+   "ambientes": [
+    "A_MICU",
+    "A_SICU",
+    "A_outros"
+   ],
+   "arquivos": 3,
+   "bytes_varridos": 131639,
+   "bytes_tabela": 423536,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "fr",
+    "temp",
+    "pas",
+    "pad",
+    "spo2",
+    "fc",
+    "idade",
+    "sexo",
+    "tempo_hospital_uti"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "saude_sepse_alerta",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "fr",
+    "temp",
+    "pas",
+    "pad",
+    "spo2",
+    "fc",
+    "idade",
+    "sexo",
+    "tempo_hospital_uti"
+   ],
+   "ambientes": [
+    "B_MICU",
+    "B_SICU",
+    "B_outros"
+   ],
+   "arquivos": 3,
+   "bytes_varridos": 291897,
+   "bytes_tabela": 423536,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "fr",
+    "temp",
+    "pas",
+    "pad",
+    "spo2",
+    "fc",
+    "idade",
+    "sexo",
+    "tempo_hospital_uti"
+   ],
+   "toca_cofre": true
+  }
+ ],
+ "gasto_por_agente": {
+  "agent-f2-data": 131639,
+  "agent-f3-lifecycle": 291897
+ },
+ "orcamento_por_agente": 400000000
+}

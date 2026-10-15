@@ -101,6 +101,8 @@ decisao:
 termo_escopo:
   vale_para: células T humanas primárias sob CD3/CD28 (± ICAM2) e os reagentes listados, na escala log das intensidades
   nao_vale_para: inibição direta de MEK por U0126 (excluída), outros tipos celulares, tempos de estímulo diferentes, níveis absolutos de proteína
+pergunta_do_decisor: >-
+  Quem decide: o laboratório que escolhe o inibidor e a condição de estímulo (células T humanas primárias). Ação que a decisão muda: usar a inibição de Mek como alavanca para baixar Erk numa condição de estímulo nova. A pergunta do decisor é: inibir Mek baixa Erk numa condição de estímulo nova pela mesma lei das condições observadas?
 tentativas_de_especificacao: 3
 historico_especificacoes:
   - K: 1

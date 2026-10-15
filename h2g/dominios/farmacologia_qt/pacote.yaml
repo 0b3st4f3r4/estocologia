@@ -82,6 +82,8 @@ decisao:
 termo_escopo:
   vale_para: voluntários saudáveis, dose única oral, as quatro drogas do ensaio, 0 a 24 h
   nao_vale_para: pacientes, doses repetidas, outras drogas, metabólitos ativos em concentração alta
+pergunta_do_decisor: >-
+  Quem decide: o ensaio clínico que decide a dose pela concentração de dofetilida (decisão inventada no F1). Ação que a decisão muda: usar a concentração de dofetilida como alavanca de dose para o QTc. A pergunta do decisor é: a lei do QTcF nas concentrações das drogas do ensaio prevê o braço nunca visto?
 tentativas_de_especificacao: 1
 historico_especificacoes:
   - K: 1

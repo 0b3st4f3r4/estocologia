@@ -66,6 +66,8 @@ decisao:
 termo_escopo:
   vale_para: jardim de infância em escolas públicas dos EUA, turmas de 13 a 17 contra 22 a 25, professores do próprio sistema
   nao_vale_para: séries posteriores sem reavaliação, redução em escala estadual que exija contratar professores menos experientes, outros países
+pergunta_do_decisor: >-
+  Quem decide: a secretaria de educação que define o tamanho da turma do jardim de infância. Ação que a decisão muda: reduzir as turmas de jardim de infância para ~15 alunos. A pergunta do decisor é: a turma pequena melhora a nota pela mesma lei em todas as séries?
 tentativas_de_especificacao: 1
 tem_titulares: true
 quase_ids: [menina, etnia, almoco_gratuito]

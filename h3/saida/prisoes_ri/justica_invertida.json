@@ -1,0 +1,1680 @@
+{
+ "fluxo": "prisoes_ri",
+ "nota_de_serializacao": "estas são as três únicas taxas do H3 gravadas como null, e não como NaN, quando o denominador é 0: o caso é o recorte de 5 paradas de 2012 em prisoes_ri, sem nenhuma prisão. É representação, não critério",
+ "declaracao": {
+  "escopo": "Bloco G do plano: auditoria de justiça, sem modelo novo",
+  "fluxo": "prisoes_ri",
+  "pergunta": "P(prisão do motorista na parada); o desfecho de interesse é a prisão",
+  "fatia": "só o cofre, t_emissao ≥ corte (como em avaliar_h3d)",
+  "transformacao_do_diario": "p = 1 − oficial (a não prisão); y = 1 − prisão",
+  "convencao_de_sinal": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+  "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+  "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+  "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte; empate se os intervalos de Wilson de 95% das duas taxas-base se sobrepõem",
+  "quem_paga": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem",
+  "empate": "intervalos de Wilson de 95% sobrepostos",
+  "limiares_declarados": [
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.25,
+   0.3,
+   0.35,
+   0.4,
+   0.45,
+   0.5,
+   0.55,
+   0.6,
+   0.65,
+   0.7,
+   0.75,
+   0.8,
+   0.85,
+   0.9,
+   0.95
+  ],
+  "limiar_declarado_do_fluxo": 0.9,
+  "o_que_nao_muda": "este código não entra em h3/portoes.py nem em h3/avaliar_h3c.py ou h3/avaliar_h3d.py: f6_trilema só devolve a chave nova quando recebe por_limiar, e o padrão é o de antes"
+ },
+ "declaracao_sha256": "a48c8899cee9d1a962102cd31aa7974af1c6306c88d318e816e900fa1a289251",
+ "governanca_sha256": "a44d14010b6c2235df7d5a7acee1ed8339b093da0ac56b528b9f14e37f28729b",
+ "declarada_em_utc": "2026-10-15T19:19:38Z",
+ "declaracao_2": {
+  "escopo": "Bloco G do plano: auditoria de justiça, sem modelo novo",
+  "fluxo": "prisoes_ri",
+  "pergunta": "P(prisão do motorista na parada); o desfecho de interesse é a prisão",
+  "fatia": "só o cofre, t_emissao ≥ corte (como em avaliar_h3d)",
+  "transformacao_do_diario": "p = 1 − oficial (a não prisão); y = 1 − prisão",
+  "convencao_de_sinal": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+  "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+  "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+  "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte, pela estimativa pontual; o empate dos intervalos de Wilson de 95% sai no campo taxa_base_empata_95",
+  "quem_paga": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem",
+  "empate": "intervalos de Wilson de 95% sobrepostos",
+  "limiares_declarados": [
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.25,
+   0.3,
+   0.35,
+   0.4,
+   0.45,
+   0.5,
+   0.55,
+   0.6,
+   0.65,
+   0.7,
+   0.75,
+   0.8,
+   0.85,
+   0.9,
+   0.95
+  ],
+  "limiar_declarado_do_fluxo": 0.9,
+  "o_que_nao_muda": "este código não entra em h3/portoes.py nem em h3/avaliar_h3c.py ou h3/avaliar_h3d.py: f6_trilema só devolve a chave nova quando recebe por_limiar, e o padrão é o de antes",
+  "declaracao_anterior_sha256": "a48c8899cee9d1a962102cd31aa7974af1c6306c88d318e816e900fa1a289251",
+  "por_que_da_segunda_declaracao": "a v1 deixava Toronto 2001 e 2002 sem a taxa de falso negativo do grupo menos favorecido, porque as taxas-base (21% e 19%) têm intervalos de Wilson que se cruzam; a v2 nomeia o grupo pelo ponto e declara o empate",
+  "o_que_nao_muda_na_v2": "a métrica escolhida, a métrica invertida, a regra do pagador, os limiares declarados e o recorte de cada fluxo são os da v1",
+  "resultados_seguem": "declaracao_2"
+ },
+ "declaracao_2_sha256": "7fb1cfbfd57edd956a9de8f4f4debbdd40ebb20b0f6f8732113cb35b23436b17",
+ "declaracao_2_em_utc": "2026-10-15T19:31:36Z",
+ "K": 2,
+ "resultados_seguem": "declaracao_2",
+ "status": "rodada depois da declaração",
+ "rodada_em_utc": "2026-10-15T19:54:40Z",
+ "governanca_sha256_na_rodada": "81f231e78228fa6c932f609c97da96abc2d7bac7936c877c95d5a3c7da11ff70",
+ "entrada": {
+  "n_previsto_no_recorte": 24466,
+  "anos": [
+   "2012",
+   "2013",
+   "2014",
+   "2015"
+  ],
+  "limiar_do_fluxo": 0.9,
+  "limiares_varridos": [
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.25,
+   0.3,
+   0.35,
+   0.4,
+   0.45,
+   0.5,
+   0.55,
+   0.6,
+   0.65,
+   0.7,
+   0.75,
+   0.8,
+   0.85,
+   0.9,
+   0.95
+  ],
+  "corte": 1356998400
+ },
+ "resultados_por_ano": {
+  "2012": {
+   "n": 5,
+   "grupos": [
+    "Black",
+    "White"
+   ],
+   "grupo_menos_favorecido": "Black",
+   "taxa_base_empata_95": true,
+   "taxa_base": {
+    "Black": [
+     0.0,
+     0.0,
+     0.6576280471103807
+    ],
+    "White": [
+     0.0,
+     0.0,
+     0.5615060804490177
+    ]
+   },
+   "regras": {
+    "convencao": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+    "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+    "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+    "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte, pela estimativa pontual; o empate dos intervalos de Wilson de 95% sai no campo taxa_base_empata_95",
+    "grupo_menos_favorecido_na_declaracao_1": "maior taxa-base do desfecho de interesse no recorte; empate se os intervalos de Wilson de 95% das duas taxas-base se sobrepõem",
+    "regra_aplicada": "declaracao_2",
+    "pagador": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem"
+   },
+   "resumo": {
+    "limiares_em_que_o_pagador_troca": [],
+    "fracao_dos_limiares_com_troca": 0.0,
+    "pagadores_sob_a_metrica_escolhida": [
+     "empate"
+    ],
+    "pagadores_sob_a_metrica_invertida": [
+     "indeterminado"
+    ],
+    "fnr_do_grupo_menos_favorecido_min": null,
+    "fnr_do_grupo_menos_favorecido_max": null
+   },
+   "por_limiar": [
+    {
+     "limiar": 0.05,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.1,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.15,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.2,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.25,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.3,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.35,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.4,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.45,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.5,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.55,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.6,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.65,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.7,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.75,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.8,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.85,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.9,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.95,
+     "fnr_grupo_menos_favorecido": null,
+     "fnr_por_grupo": {
+      "Black": null,
+      "White": null
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "indeterminado",
+     "troca_de_pagador": false
+    }
+   ],
+   "no_limiar_declarado": {
+    "limiar": 0.9,
+    "n": 5,
+    "grupos": {
+     "Black": {
+      "n": 2,
+      "taxa_base": [
+       0.0,
+       0.0,
+       0.6576280471103807
+      ],
+      "fpr_do_flag": [
+       0.0,
+       0.0,
+       0.6576280471103807
+      ],
+      "fnr_do_flag": [
+       null,
+       null,
+       null
+      ]
+     },
+     "White": {
+      "n": 3,
+      "taxa_base": [
+       0.0,
+       0.0,
+       0.5615060804490177
+      ],
+      "fpr_do_flag": [
+       0.0,
+       0.0,
+       0.5615060804490177
+      ],
+      "fnr_do_flag": [
+       null,
+       null,
+       null
+      ]
+     }
+    },
+    "grupo_menos_favorecido": "Black",
+    "taxa_base_empata_95": true,
+    "fnr_grupo_menos_favorecido": null,
+    "fnr_outro_grupo": null,
+    "paga_metrica_escolhida": "empate",
+    "paga_metrica_invertida": "indeterminado",
+    "troca_de_pagador": false,
+    "pessoas_no_erro_do_flag": {
+     "Black": {
+      "falso_positivo_do_flag": 0,
+      "falso_negativo_do_flag": 0
+     },
+     "White": {
+      "falso_positivo_do_flag": 0,
+      "falso_negativo_do_flag": 0
+     }
+    }
+   }
+  },
+  "2013": {
+   "n": 6148,
+   "grupos": [
+    "Black",
+    "White"
+   ],
+   "grupo_menos_favorecido": "Black",
+   "taxa_base_empata_95": false,
+   "taxa_base": {
+    "Black": [
+     0.03492333901192504,
+     0.025846465043181048,
+     0.04703396302116989
+    ],
+    "White": [
+     0.013671089666264576,
+     0.010798770709297606,
+     0.017294047672066718
+    ]
+   },
+   "regras": {
+    "convencao": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+    "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+    "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+    "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte, pela estimativa pontual; o empate dos intervalos de Wilson de 95% sai no campo taxa_base_empata_95",
+    "grupo_menos_favorecido_na_declaracao_1": "maior taxa-base do desfecho de interesse no recorte; empate se os intervalos de Wilson de 95% das duas taxas-base se sobrepõem",
+    "regra_aplicada": "declaracao_2",
+    "pagador": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem"
+   },
+   "resumo": {
+    "limiares_em_que_o_pagador_troca": [],
+    "fracao_dos_limiares_com_troca": 0.0,
+    "pagadores_sob_a_metrica_escolhida": [
+     "Black",
+     "empate"
+    ],
+    "pagadores_sob_a_metrica_invertida": [
+     "empate"
+    ],
+    "fnr_do_grupo_menos_favorecido_min": 0.6829268292682927,
+    "fnr_do_grupo_menos_favorecido_max": 1.0
+   },
+   "por_limiar": [
+    {
+     "limiar": 0.05,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.1,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.15,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.2,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.25,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.3,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.35,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.4,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.45,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.5,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.55,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.6,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.65,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.7,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.00176522506619594,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.75,
+     "fnr_grupo_menos_favorecido": 0.975609756097561,
+     "fnr_por_grupo": {
+      "Black": 0.975609756097561,
+      "White": 0.9852941176470589
+     },
+     "fpr_por_grupo": {
+      "Black": 0.00353045013239188,
+      "White": 0.00040766408479412964
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.8,
+     "fnr_grupo_menos_favorecido": 0.975609756097561,
+     "fnr_por_grupo": {
+      "Black": 0.975609756097561,
+      "White": 0.9558823529411765
+     },
+     "fpr_por_grupo": {
+      "Black": 0.00529567519858782,
+      "White": 0.0016306563391765185
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.85,
+     "fnr_grupo_menos_favorecido": 0.975609756097561,
+     "fnr_por_grupo": {
+      "Black": 0.975609756097561,
+      "White": 0.9558823529411765
+     },
+     "fpr_por_grupo": {
+      "Black": 0.009708737864077669,
+      "White": 0.004688136975132491
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.9,
+     "fnr_grupo_menos_favorecido": 0.926829268292683,
+     "fnr_por_grupo": {
+      "Black": 0.926829268292683,
+      "White": 0.8970588235294118
+     },
+     "fpr_por_grupo": {
+      "Black": 0.018534863195057368,
+      "White": 0.0110069302894415
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.95,
+     "fnr_grupo_menos_favorecido": 0.6829268292682927,
+     "fnr_por_grupo": {
+      "Black": 0.6829268292682927,
+      "White": 0.8529411764705882
+     },
+     "fpr_por_grupo": {
+      "Black": 0.14916151809355693,
+      "White": 0.060334284549531186
+     },
+     "paga_metrica_escolhida": "Black",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    }
+   ],
+   "no_limiar_declarado": {
+    "limiar": 0.9,
+    "n": 6148,
+    "grupos": {
+     "Black": {
+      "n": 1174,
+      "taxa_base": [
+       0.03492333901192504,
+       0.025846465043181048,
+       0.04703396302116989
+      ],
+      "fpr_do_flag": [
+       0.018534863195057368,
+       0.012154397597833965,
+       0.02816924995341679
+      ],
+      "fnr_do_flag": [
+       0.926829268292683,
+       0.8057225998278872,
+       0.9748026267474359
+      ]
+     },
+     "White": {
+      "n": 4974,
+      "taxa_base": [
+       0.013671089666264576,
+       0.010798770709297606,
+       0.017294047672066718
+      ],
+      "fpr_do_flag": [
+       0.0110069302894415,
+       0.008446111408046558,
+       0.014332953399258018
+      ],
+      "fnr_do_flag": [
+       0.8970588235294118,
+       0.8024187647817829,
+       0.9492348732218252
+      ]
+     }
+    },
+    "grupo_menos_favorecido": "Black",
+    "taxa_base_empata_95": false,
+    "fnr_grupo_menos_favorecido": 0.926829268292683,
+    "fnr_outro_grupo": 0.8970588235294118,
+    "paga_metrica_escolhida": "empate",
+    "paga_metrica_invertida": "empate",
+    "troca_de_pagador": false,
+    "pessoas_no_erro_do_flag": {
+     "Black": {
+      "falso_positivo_do_flag": 21,
+      "falso_negativo_do_flag": 38
+     },
+     "White": {
+      "falso_positivo_do_flag": 54,
+      "falso_negativo_do_flag": 61
+     }
+    }
+   }
+  },
+  "2014": {
+   "n": 7261,
+   "grupos": [
+    "Black",
+    "White"
+   ],
+   "grupo_menos_favorecido": "Black",
+   "taxa_base_empata_95": false,
+   "taxa_base": {
+    "Black": [
+     0.03840579710144928,
+     0.029481155848790845,
+     0.049893246539459375
+    ],
+    "White": [
+     0.014623363373575922,
+     0.011856893964886947,
+     0.018023536461651633
+    ]
+   },
+   "regras": {
+    "convencao": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+    "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+    "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+    "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte, pela estimativa pontual; o empate dos intervalos de Wilson de 95% sai no campo taxa_base_empata_95",
+    "grupo_menos_favorecido_na_declaracao_1": "maior taxa-base do desfecho de interesse no recorte; empate se os intervalos de Wilson de 95% das duas taxas-base se sobrepõem",
+    "regra_aplicada": "declaracao_2",
+    "pagador": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem"
+   },
+   "resumo": {
+    "limiares_em_que_o_pagador_troca": [],
+    "fracao_dos_limiares_com_troca": 0.0,
+    "pagadores_sob_a_metrica_escolhida": [
+     "Black",
+     "empate"
+    ],
+    "pagadores_sob_a_metrica_invertida": [
+     "empate"
+    ],
+    "fnr_do_grupo_menos_favorecido_min": 0.6792452830188679,
+    "fnr_do_grupo_menos_favorecido_max": 1.0
+   },
+   "por_limiar": [
+    {
+     "limiar": 0.05,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.1,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.15,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.2,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.25,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.3,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.35,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.4,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.45,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.5,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.55,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.6,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.65,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.7,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.75,
+     "fnr_grupo_menos_favorecido": 0.9811320754716981,
+     "fnr_por_grupo": {
+      "Black": 0.9811320754716981,
+      "White": 0.9883720930232558
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0015071590052750565,
+      "White": 0.0003451251078515962
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.8,
+     "fnr_grupo_menos_favorecido": 0.9811320754716981,
+     "fnr_por_grupo": {
+      "Black": 0.9811320754716981,
+      "White": 0.9069767441860465
+     },
+     "fpr_por_grupo": {
+      "Black": 0.00452147701582517,
+      "White": 0.003278688524590164
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.85,
+     "fnr_grupo_menos_favorecido": 0.9433962264150944,
+     "fnr_por_grupo": {
+      "Black": 0.9433962264150944,
+      "White": 0.9069767441860465
+     },
+     "fpr_por_grupo": {
+      "Black": 0.011303692539562924,
+      "White": 0.00724762726488352
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.9,
+     "fnr_grupo_menos_favorecido": 0.9056603773584906,
+     "fnr_por_grupo": {
+      "Black": 0.9056603773584906,
+      "White": 0.8255813953488372
+     },
+     "fpr_por_grupo": {
+      "Black": 0.024868123587038434,
+      "White": 0.012942191544434857
+     },
+     "paga_metrica_escolhida": "Black",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.95,
+     "fnr_grupo_menos_favorecido": 0.6792452830188679,
+     "fnr_por_grupo": {
+      "Black": 0.6792452830188679,
+      "White": 0.7325581395348837
+     },
+     "fpr_por_grupo": {
+      "Black": 0.1356443104747551,
+      "White": 0.06850733390854184
+     },
+     "paga_metrica_escolhida": "Black",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    }
+   ],
+   "no_limiar_declarado": {
+    "limiar": 0.9,
+    "n": 7261,
+    "grupos": {
+     "Black": {
+      "n": 1380,
+      "taxa_base": [
+       0.03840579710144928,
+       0.029481155848790845,
+       0.049893246539459375
+      ],
+      "fpr_do_flag": [
+       0.024868123587038434,
+       0.017761423498881844,
+       0.03471784976699743
+      ],
+      "fnr_do_flag": [
+       0.9056603773584906,
+       0.7974602432629856,
+       0.9590279625581031
+      ]
+     },
+     "White": {
+      "n": 5881,
+      "taxa_base": [
+       0.014623363373575922,
+       0.011856893964886947,
+       0.018023536461651633
+      ],
+      "fpr_do_flag": [
+       0.012942191544434857,
+       0.010337903288806245,
+       0.01619180912823925
+      ],
+      "fnr_do_flag": [
+       0.8255813953488372,
+       0.7319660077476104,
+       0.8913532563794753
+      ]
+     }
+    },
+    "grupo_menos_favorecido": "Black",
+    "taxa_base_empata_95": false,
+    "fnr_grupo_menos_favorecido": 0.9056603773584906,
+    "fnr_outro_grupo": 0.8255813953488372,
+    "paga_metrica_escolhida": "Black",
+    "paga_metrica_invertida": "empate",
+    "troca_de_pagador": false,
+    "pessoas_no_erro_do_flag": {
+     "Black": {
+      "falso_positivo_do_flag": 33,
+      "falso_negativo_do_flag": 48
+     },
+     "White": {
+      "falso_positivo_do_flag": 75,
+      "falso_negativo_do_flag": 71
+     }
+    }
+   }
+  },
+  "2015": {
+   "n": 6572,
+   "grupos": [
+    "Black",
+    "White"
+   ],
+   "grupo_menos_favorecido": "Black",
+   "taxa_base_empata_95": false,
+   "taxa_base": {
+    "Black": [
+     0.02952029520295203,
+     0.0217529930745589,
+     0.039947796774677385
+    ],
+    "White": [
+     0.01667625071880391,
+     0.01354010401374608,
+     0.02052367604807384
+    ]
+   },
+   "regras": {
+    "convencao": "y = 1 é o desfecho NÃO adverso; o desfecho de interesse é y = 0; o flag é p < limiar",
+    "metrica_escolhida": "taxa de falso positivo do flag: P(marcado | não sofre o desfecho de interesse)",
+    "metrica_invertida": "taxa de falso negativo do flag: P(não marcado | sofre o desfecho de interesse)",
+    "grupo_menos_favorecido": "maior taxa-base do desfecho de interesse no recorte, pela estimativa pontual; o empate dos intervalos de Wilson de 95% sai no campo taxa_base_empata_95",
+    "grupo_menos_favorecido_na_declaracao_1": "maior taxa-base do desfecho de interesse no recorte; empate se os intervalos de Wilson de 95% das duas taxas-base se sobrepõem",
+    "regra_aplicada": "declaracao_2",
+    "pagador": "maior taxa sob a métrica; empate se os intervalos de Wilson de 95% se sobrepõem"
+   },
+   "resumo": {
+    "limiares_em_que_o_pagador_troca": [],
+    "fracao_dos_limiares_com_troca": 0.0,
+    "pagadores_sob_a_metrica_escolhida": [
+     "Black",
+     "empate"
+    ],
+    "pagadores_sob_a_metrica_invertida": [
+     "empate"
+    ],
+    "fnr_do_grupo_menos_favorecido_min": 0.675,
+    "fnr_do_grupo_menos_favorecido_max": 1.0
+   },
+   "por_limiar": [
+    {
+     "limiar": 0.05,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.1,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.15,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.2,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.25,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.3,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.35,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.4,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.45,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.5,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.55,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.6,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.65,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.7,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 1.0
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0,
+      "White": 0.0
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.75,
+     "fnr_grupo_menos_favorecido": 1.0,
+     "fnr_por_grupo": {
+      "Black": 1.0,
+      "White": 0.9770114942528736
+     },
+     "fpr_por_grupo": {
+      "Black": 0.001520912547528517,
+      "White": 0.0009746588693957114
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.8,
+     "fnr_grupo_menos_favorecido": 0.975,
+     "fnr_por_grupo": {
+      "Black": 0.975,
+      "White": 0.9655172413793104
+     },
+     "fpr_por_grupo": {
+      "Black": 0.0022813688212927757,
+      "White": 0.003313840155945419
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.85,
+     "fnr_grupo_menos_favorecido": 0.925,
+     "fnr_por_grupo": {
+      "Black": 0.925,
+      "White": 0.9195402298850575
+     },
+     "fpr_por_grupo": {
+      "Black": 0.006083650190114068,
+      "White": 0.008771929824561403
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.9,
+     "fnr_grupo_menos_favorecido": 0.85,
+     "fnr_por_grupo": {
+      "Black": 0.85,
+      "White": 0.896551724137931
+     },
+     "fpr_por_grupo": {
+      "Black": 0.018250950570342206,
+      "White": 0.017348927875243666
+     },
+     "paga_metrica_escolhida": "empate",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    },
+    {
+     "limiar": 0.95,
+     "fnr_grupo_menos_favorecido": 0.675,
+     "fnr_por_grupo": {
+      "Black": 0.675,
+      "White": 0.8045977011494253
+     },
+     "fpr_por_grupo": {
+      "Black": 0.1300380228136882,
+      "White": 0.0723196881091618
+     },
+     "paga_metrica_escolhida": "Black",
+     "paga_metrica_invertida": "empate",
+     "troca_de_pagador": false
+    }
+   ],
+   "no_limiar_declarado": {
+    "limiar": 0.9,
+    "n": 6572,
+    "grupos": {
+     "Black": {
+      "n": 1355,
+      "taxa_base": [
+       0.02952029520295203,
+       0.0217529930745589,
+       0.039947796774677385
+      ],
+      "fpr_do_flag": [
+       0.018250950570342206,
+       0.012294778627282857,
+       0.02701365689674065
+      ],
+      "fnr_do_flag": [
+       0.85,
+       0.7092737396097997,
+       0.9293890829149256
+      ]
+     },
+     "White": {
+      "n": 5217,
+      "taxa_base": [
+       0.01667625071880391,
+       0.01354010401374608,
+       0.02052367604807384
+      ],
+      "fpr_do_flag": [
+       0.017348927875243666,
+       0.014120210998822602,
+       0.02129997025491924
+      ],
+      "fnr_do_flag": [
+       0.896551724137931,
+       0.8149483835215049,
+       0.9446155167180331
+      ]
+     }
+    },
+    "grupo_menos_favorecido": "Black",
+    "taxa_base_empata_95": false,
+    "fnr_grupo_menos_favorecido": 0.85,
+    "fnr_outro_grupo": 0.896551724137931,
+    "paga_metrica_escolhida": "empate",
+    "paga_metrica_invertida": "empate",
+    "troca_de_pagador": false,
+    "pessoas_no_erro_do_flag": {
+     "Black": {
+      "falso_positivo_do_flag": 24,
+      "falso_negativo_do_flag": 34
+     },
+     "White": {
+      "falso_positivo_do_flag": 89,
+      "falso_negativo_do_flag": 78
+     }
+    }
+   }
+  }
+ },
+ "resultados_por_ano_no_cofre": "idêntico a resultados_por_ano: a fatia publicada já é o cofre"
+}

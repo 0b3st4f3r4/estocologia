@@ -1,0 +1,16 @@
+# Ambiente das frentes de fundo (fundo/). Versões conferidas na máquina em 2026-10-15, uma a uma, com
+# python3 -c "import <mod>; print(<mod>.__version__)" — nenhuma foi escrita de memória.
+# detalhes, uso de cada pacote e as duas ausências: fundo/AMBIENTE.md
+numpy==2.4.6
+pandas==3.0.5
+scipy==1.18.0
+pyarrow==26.0.0
+rdata==1.1.0
+duckdb==1.5.5
+PyYAML==6.0.3
+pytest==9.1.1
+hypothesis==6.165.7
+
+# Ausentes nesta máquina, e por isso fora da lista acima — instalar só se a frente do uso for rodada aqui:
+#   python3 -m pip install statsmodels   # p01, fundo/p01-tese/gabarito/gerar_casos.py (nenhum arquivo do p02 o importa)
+#   python3 -m pip install pyreadr       # um passo do p08, fundo/p08-calibracao/preparar_dados.py

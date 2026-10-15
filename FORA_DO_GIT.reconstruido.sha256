@@ -1,0 +1,29 @@
+# Derivados reconstruídos nesta máquina em 2026-10-15: o CSV do h2e gravado às 17:52:20Z e o parquet do h2f às
+# 17:53:21Z (14:52 e 14:53 em hora local, −03). Estas são as somas do arquivo que está no lugar; as de referência
+# continuam no FORA_DO_GIT.sha256
+# e nos SHA256SUMS de cada pasta de dados-reais/, e nenhum deles foi reescrito.
+#
+# Pilha do escritor que gravou os dois:
+#   parquet-cpp-arrow 26.0.0   metadados do Parquet (é o "created_by" de kemmeren2014_obs_int.parquet, conferido)
+#   pandas 3.0.5               escrita do CSV do h2e e do Parquet do h2f
+#   rdata 1.1.0                leitura do h2f/Kemmeren.RData, antes de virar Parquet
+#
+# Motivo do desvio: o byte do derivado depende de quem escreve, não do dado. As origens conferem — MD5
+# 476664d024f88e8b7640998bb5e9ee33 do zip lt_interventions_standard_v1 e sha256 08e95f39… do Kemmeren.RData — e o
+# conteúdo dos dois derivados foi conferido campo a campo:
+#   - h2e: os 59 CSVs do zip na ordem do zip, com a coluna `experiment` acrescentada com o nome do arquivo sem
+#     extensão; forma 68 000 × 47, `uniform_reference` com 10 000 linhas e os outros 58 ambientes com 1 000, como a
+#     FONTES.md do h2e descreve. O arquivo presente tem a80bc1a6…; as oito variantes de serialização gravadas em
+#     /tmp/h2e-build/ (lt_zip_stem, que é o presente, lt_zip_full, lt_sorted_stem, lt_sorted_full, raw_zip_stem,
+#     raw_zip_full, raw_sorted_stem, raw_sorted_full) deram oito somas diferentes e nenhuma reproduz o 99b75516… de
+#     referência.
+#   - h2f: 1741 linhas × 6175 colunas, as cinco colunas de metadados na ordem documentada mais os 6170 genes, float64
+#     sem transformação; blocos observacional (262 × 6170) e intervencional (1479 × 6170) idênticos bit a bit ao
+#     RData. O Parquet grava a versão do escritor nos próprios metadados, e é isso que muda o arquivo. A conferência
+#     completa está em dados-reais/h2f/CONVERSAO.md.
+#
+# Conferência, a partir da raiz do repositório:
+#   sha256sum -c FORA_DO_GIT.reconstruido.sha256
+#
+a80bc1a6e8531510f1244d45768265f19de5e81e72947006e8c1226a91457275  dados-reais/h2e/causal_chamber_lt_interventions_standard_v1.csv
+f152937f6ab6974de5f65857a94a941926af07cad04da89c318bea4b9a2138e2  dados-reais/h2f/kemmeren2014_obs_int.parquet

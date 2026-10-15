@@ -102,6 +102,8 @@ decisao:
 termo_escopo:
   vale_para: estados dos EUA entre 1983 e 1997, uso do cinto entre ~30% e ~90%, mortalidade total por milha
   nao_vale_para: outros países, uso acima de 90%, frotas com airbag universal, mortes só de ocupantes (não separadas aqui)
+pergunta_do_decisor: >-
+  Quem decide: o estado que escolhe entre fiscalização primária e secundária do uso do cinto. Ação que a decisão muda: passar da fiscalização secundária para a primária (≈ +10 pontos de uso). A pergunta do decisor é: o uso do cinto baixa a mortalidade pela mesma lei sob fiscalização primária?
 tentativas_de_especificacao: 3
 historico_especificacoes:
   - K: 1

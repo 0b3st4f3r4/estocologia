@@ -1,0 +1,53 @@
+{
+ "fonte": "/home/silvano-neto/Documents/estocologia/fundo/p10-saude/saida/diario.json",
+ "B": 2000,
+ "semente": 20261015,
+ "caixas": 10,
+ "previsores": {
+  "icp_invariante": {
+   "n": 2000,
+   "p_medio": 0.0837907066212811,
+   "y_medio": 0.047,
+   "citl": 0.0367907066212811,
+   "ece": 0.036790706621281116,
+   "nula_media": 0.015546821889034793,
+   "q50": 0.015274423972768666,
+   "q95": 0.022241858675743777,
+   "q99": 0.025244277262501214,
+   "valor_p": 0.0,
+   "passa_0_03": false,
+   "passa_T95": false,
+   "passa_T95mais": false
+  },
+  "modelo_ajustado": {
+   "n": 2000,
+   "p_medio": 0.08006036764268316,
+   "y_medio": 0.047,
+   "citl": 0.033060367642683164,
+   "ece": 0.03306036764268315,
+   "nula_media": 0.015054267119018885,
+   "q50": 0.014852730878552756,
+   "q95": 0.021556789675135773,
+   "q99": 0.02429219640583601,
+   "valor_p": 0.0,
+   "passa_0_03": false,
+   "passa_T95": false,
+   "passa_T95mais": false
+  },
+  "todos_os_candidatos": {
+   "n": 2000,
+   "p_medio": 0.08030583836247862,
+   "y_medio": 0.047,
+   "citl": 0.03330583836247862,
+   "ece": 0.033305838362478635,
+   "nula_media": 0.01513496572248808,
+   "q50": 0.014929203702213453,
+   "q95": 0.021244285164401994,
+   "q99": 0.02401299065699102,
+   "valor_p": 0.0,
+   "passa_0_03": false,
+   "passa_T95": false,
+   "passa_T95mais": false
+  }
+ }
+}

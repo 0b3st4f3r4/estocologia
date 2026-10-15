@@ -1,0 +1,210 @@
+# Formulário SHELF do domínio h2g/educacao_star_turmas — em branco.
+# Regras, critérios e limiares estão em fundo/p12-shelf/protocolo.md; não se repete nada aqui.
+# Quem preenche é gente. Nenhum campo abaixo foi preenchido por quem escreveu o protocolo.
+# Nenhum número do domínio (priori do pacote, quartis de literatura do p05, saída do funil) entra na mesa
+# antes de o especialista escrever os cinco quantis: os quartis de partida ficam em prioris_elicitadas.yaml.
+# Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
+
+protocolo: fundo/p12-shelf/protocolo.md
+protocolo_sha256: ""              # preencher no congelamento
+declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
+
+dominio: h2g/educacao_star_turmas
+horizonte: h2g
+area: "Educação"
+pacote: h2g/dominios/educacao_star_turmas/pacote.yaml
+familia: "gaussiana"
+escala: natural
+chave: turma_pequena
+quantidade: "efeito da turma pequena no escore padronizado (desvios-padrão das turmas regulares)"
+unidade_independente: "a escola da série (≈ 79 escolas); o sorteio é dentro da escola e os alunos dividem professor e prédio"
+desfecho: "soma das notas SAT de leitura e matemática, padronizada pelas turmas regulares da mesma série"
+decisao_em_jogo: "reduzir as turmas das séries iniciais para ~15 alunos"
+acao_na_rodada_a: "manter"
+status_na_rodada_a: "aprovado"
+K_de_hoje: "3"
+K_de_hoje_fonte: h2g/saida/educacao_star_turmas/resultados.json
+
+facilitador: ""
+
+pre_teste:
+  itens: 20
+  semente_do_sorteio: ""
+  pool: ""                        # de onde vieram os 20 itens já resolvidos
+  fora_do_cofre_do_dominio: ""    # sim / nao (se nao, o dominio fica marcado como contaminado)
+  gabarito_com: ""
+
+especialistas:
+  E1:
+    nome: ""
+    codigo: "E1"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
+      excesso_de_confianca_ok: ""  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+  E2:
+    nome: ""
+    codigo: "E2"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
+      excesso_de_confianca_ok: ""  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+  E3:
+    nome: ""
+    codigo: "E3"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
+      excesso_de_confianca_ok: ""  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+
+consenso:
+  regra: "mediana ponto a ponto dos quartis dos especialistas aprovados no pré-teste"
+  aprovados_no_pre_teste: []      # códigos, ex.: [E1, E3]
+  quartis:
+    q05: null
+    q25: null
+    q50: null
+    q75: null
+    q95: null
+  ajuste:
+    metodo: ""                    # normal_minimos_quadrados_nos_quantis / beta_nos_quartis
+    media: null
+    dp: null
+    a: null
+    b: null
+    erro_max_quartis: null
+    razao_largura_90_elicitada_sobre_implicada: null
+  devolucao_do_grupo_em: ""
+  observacoes: ""

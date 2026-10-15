@@ -90,6 +90,8 @@ decisao:
 termo_escopo:
   vale_para: séries iniciais (jardim a 3ª) de escolas públicas dos EUA, turmas de 13 a 17 contra 22 a 25
   nao_vale_para: séries posteriores, redução em escala estadual com professores menos experientes, outros países
+pergunta_do_decisor: >-
+  Quem decide: a secretaria de educação que define o tamanho das turmas. Ação que a decisão muda: reduzir as turmas das séries iniciais para ~15 alunos. A pergunta do decisor é: a turma pequena melhora a nota da 3ª série pela lei aprendida do jardim à 2ª série?
 tentativas_de_especificacao: 3
 historico_especificacoes:
   - K: 1

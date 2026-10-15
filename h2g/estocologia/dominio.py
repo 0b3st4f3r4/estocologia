@@ -2,7 +2,8 @@
 
 Um domínio é uma pasta `dominios/<nome>/` com dois arquivos:
 - `pacote.yaml`: pergunta substantiva, alegação, glossário de 10 termos, fontes, unidade independente,
-  ambientes (e quais ficam no cofre), DAG declarado, conjunto de ajuste, elicitação SHELF, decisão e escopo;
+  ambientes (e quais ficam no cofre), DAG declarado, conjunto de ajuste, elicitação SHELF, decisão, a pergunta do
+  decisor (contra o erro de tipo III: a pergunta que o modelo responde é a que o decisor fez) e escopo;
 - `preparo.py`: `preparar(dados: Path) -> DataFrame` com as colunas `y`, `ambiente`, `unidade` e os
   candidatos declarados. Nada de modelagem aqui: só tradução de nomes, tipos e recortes.
 
@@ -23,7 +24,7 @@ from scipy import optimize, stats
 CABECALHO = ("processo_gerador", "nao_linearidade", "unidade_e_margem", "fisica_do_ruido", "escada_causal")
 OBRIGATORIOS = ("nome", "area", "titulo", "pergunta", "alegacao", "glossario", "fontes", "arquivos", "familia", "desfecho",
                 "chave", "candidatos", "icp_candidatos", "ajuste", "dag", "ambientes", "unidade", "cabecalho", "shelf",
-                "decisao", "termo_escopo")
+                "decisao", "termo_escopo", "pergunta_do_decisor")
 
 
 class PacoteInvalido(ValueError):
@@ -41,6 +42,45 @@ class Pacote:
             return self.meta[k]
         except KeyError as e:
             raise AttributeError(k) from e
+
+
+MECANISMOS_DA_AUSENCIA = ("MCAR", "MAR", "MNAR", "NAO_DECLARADO")
+
+ETIQUETA_QUEM = "Quem decide:"
+ETIQUETA_ACAO = "Ação que a decisão muda:"
+# Quem decide não pode ser um lugar-comum: o erro de tipo III é responder à pergunta errada, e o pacote não pode
+# escapulir dele com um sujeito vazio.
+GENERICOS_DO_DECISOR = ("o decisor", "os decisores", "o usuário", "o cliente", "o modelo", "os dados", "a decisão",
+                        "quem decide", "alguém", "ninguém")
+
+
+def _nucleo(txt: str) -> str:
+    return txt.strip().strip(".").strip().lower()
+
+
+def _checar_pergunta_do_decisor(meta: dict) -> list[str]:
+    """Erro de tipo III (livro, seção 14.6): a pergunta que o modelo responde tem de ser a que o decisor fez.
+
+    O texto tem de nomear quem decide (não um lugar-comum), copiar literalmente a ação de `decisao.acao` — a ação
+    que a decisão muda — e terminar em pergunta. Texto genérico é recusado."""
+    t = meta.get("pergunta_do_decisor")
+    if not isinstance(t, str) or len(t.strip()) < 60:
+        return ["pergunta_do_decisor ausente, não textual ou com menos de 60 caracteres"]
+    if ETIQUETA_QUEM not in t or ETIQUETA_ACAO not in t or t.index(ETIQUETA_QUEM) > t.index(ETIQUETA_ACAO):
+        return [f"pergunta_do_decisor sem as etiquetas '{ETIQUETA_QUEM}' e '{ETIQUETA_ACAO}', nessa ordem"]
+    erros = []
+    quem = t[t.index(ETIQUETA_QUEM) + len(ETIQUETA_QUEM): t.index(ETIQUETA_ACAO)]
+    nucleo = _nucleo(quem)
+    if not 3 <= len(nucleo) <= 120:
+        erros.append(f"pergunta_do_decisor não nomeia quem decide (trecho de {len(nucleo)} caracteres)")
+    elif any(nucleo == g or nucleo.startswith(g + " ") for g in GENERICOS_DO_DECISOR):
+        erros.append(f"pergunta_do_decisor nomeia quem decide com uma expressão genérica: '{nucleo}'")
+    acao = str((meta.get("decisao") or {}).get("acao", ""))
+    if not acao or acao not in t[t.index(ETIQUETA_ACAO) + len(ETIQUETA_ACAO):]:
+        erros.append("pergunta_do_decisor não copia a ação do campo decisao (qual ação a decisão muda)")
+    if not t.rstrip().endswith("?"):
+        erros.append("pergunta_do_decisor não termina em pergunta ('?')")
+    return erros
 
 
 def validar(meta: dict) -> list[str]:
@@ -82,6 +122,7 @@ def validar(meta: dict) -> list[str]:
     for v in ("y", meta["chave"]):
         if v not in nos_dag:
             erros.append(f"DAG não tem o nó {v}")
+    erros.extend(_checar_pergunta_do_decisor(meta))
     return erros
 
 
@@ -111,6 +152,34 @@ def checar_tabela(p: Pacote, df: pd.DataFrame) -> list[str]:
         erros.append(f"ambientes do cofre ausentes: {sorted(cofre - amb)}")
     if len(amb - cofre) < 2:
         erros.append("menos de 2 ambientes de treino: ICP impossível")
+    ausentes = {c: int(df[c].isna().sum()) for c in df.columns if bool(df[c].isna().any())}
+    erros.extend(_checar_ausencia_da_tabela(p, ausentes))
+    return erros
+
+
+def _checar_ausencia_da_tabela(p: Pacote, ausentes: dict[str, int]) -> list[str]:
+    """F2: por que o dado está ausente? Conta ausentes por coluna e recusa o que o pacote não declarou.
+
+    Declarado em ../../h1-real/DECLARACAO_F2_AUSENCIA.md (K = 3 do H2g), antes de escrever esta função.
+    `NAO_DECLARADO` (ou bloco `ausencia` ausente) com coluna de valor ausente é recusa; coluna com ausente fora
+    de `ausencia.colunas` é recusa; `MAR`/`MNAR` com coluna ausente exigem `sensibilidade.feito`. Sem coluna
+    ausente a regra não diz nada."""
+    aus = p.meta.get("ausencia") or {}
+    mecanismo = aus.get("mecanismo", "NAO_DECLARADO")
+    erros = []
+    if mecanismo not in MECANISMOS_DA_AUSENCIA:
+        erros.append(f"ausencia.mecanismo inválido: {mecanismo!r}")
+    if not ausentes:
+        return erros
+    com_falta = sorted(ausentes)
+    nomeadas = set(map(str, aus.get("colunas") or []))
+    if mecanismo == "NAO_DECLARADO":
+        erros.append(f"ausência NAO_DECLARADO em coluna com valor ausente: {com_falta}")
+    fora = [c for c in com_falta if c not in nomeadas]
+    if fora:
+        erros.append(f"coluna com valor ausente fora de ausencia.colunas: {fora}")
+    if mecanismo in ("MAR", "MNAR") and not (aus.get("sensibilidade") or {}).get("feito"):
+        erros.append(f"ausência {mecanismo} em {com_falta} sem análise de sensibilidade (sensibilidade.feito)")
     return erros
 
 

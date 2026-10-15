@@ -87,5 +87,7 @@ decisao:
 termo_escopo:
   vale_para: demanda agregada de Victoria, clima de Melbourne, parque de ar-condicionado e solar de telhado de 2012–2014, resolução diária
   nao_vale_para: picos de meia hora, outros estados do NEM, anos com outra penetração de solar ou de ar-condicionado, temperaturas fora do intervalo observado
+pergunta_do_decisor: >-
+  Quem decide: o operador da rede de Victoria que contrata a resposta da demanda. Ação que a decisão muda: contratar um programa de resposta da demanda acionado por previsão de graus-dia de resfriamento. A pergunta do decisor é: os graus-dia de resfriamento preveem a carga pela mesma lei?
 tentativas_de_especificacao: 1
 tem_titulares: false

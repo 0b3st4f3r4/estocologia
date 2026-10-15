@@ -96,6 +96,8 @@ decisao:
 termo_escopo:
   vale_para: famílias não idosas dos EUA nos anos 1970, planos com teto de desembolso, gasto médico coberto (sem odontologia e psicoterapia)
   nao_vale_para: idosos (Medicare), planos sem teto de desembolso, sistemas de saúde de outros países, desfechos de saúde (só gasto)
+pergunta_do_decisor: >-
+  Quem decide: o plano de saúde que fixa a coparticipação (RAND Health Insurance Experiment). Ação que a decisão muda: trocar o cuidado gratuito por coparticipação de 25%. A pergunta do decisor é: o gasto médico cai com a coparticipação pela mesma lei num regime de 50% que não entrou no ajuste?
 tentativas_de_especificacao: 3
 historico_especificacoes:
   - K: 1

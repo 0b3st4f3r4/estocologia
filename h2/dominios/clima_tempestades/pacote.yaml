@@ -83,5 +83,7 @@ decisao:
 termo_escopo:
   vale_para: ciclones do Atlântico Norte no best track do NHC, 1975–2024, pontos de 6 h com pressão central registrada
   nao_vale_para: outras bacias (Pacífico, Índico), ventos de rajada, tempestades sem pressão medida, extrapolação para déficits acima de ~110 hPa
+pergunta_do_decisor: >-
+  Quem decide: o centro de alerta que aciona o aviso de intensidade pela pressão central. Ação que a decisão muda: acionar alertas de intensidade a partir da pressão central medida (boias e aviões) quando não há medida de vento. A pergunta do decisor é: a pressão central dá o vento pela mesma lei em todo o best track?
 tentativas_de_especificacao: 1
 tem_titulares: false

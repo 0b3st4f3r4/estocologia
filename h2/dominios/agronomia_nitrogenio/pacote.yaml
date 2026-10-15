@@ -75,5 +75,7 @@ decisao:
 termo_escopo:
   vale_para: milho de sequeiro em Molissolos da Pampa argentina, doses de 0 a ~130 kg N/ha, safras parecidas com 1999 e 2001
   nao_vale_para: doses acima de 130 kg, outros cultivos, solos com outro regime hídrico, safras de seca extrema, outras fontes de N
+pergunta_do_decisor: >-
+  Quem decide: o produtor que decide a dose de nitrogênio por lote. Ação que a decisão muda: aplicar a dose cheia de nitrogênio (~125 kg/ha) em todo o lote, inclusive nas baixadas. A pergunta do decisor é: a dose cheia compensa em todo o lote, inclusive nas baixadas?
 tentativas_de_especificacao: 1
 tem_titulares: false

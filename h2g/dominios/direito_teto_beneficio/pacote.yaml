@@ -96,6 +96,8 @@ decisao:
 termo_escopo:
   vale_para: indenização por acidente de trabalho em estados dos EUA no início dos anos 1980, mudanças moderadas do teto
   nao_vale_para: doenças ocupacionais de longa latência, cortes grandes, outros países, duração total sem benefício
+pergunta_do_decisor: >-
+  Quem decide: o legislador estadual que fixa o teto do benefício (Kentucky 1980, Michigan 1982). Ação que a decisão muda: cortar o benefício semanal em 10% para encurtar os afastamentos. A pergunta do decisor é: o corte de 10% no benefício semanal encurta o afastamento do trabalhador acidentado?
 tentativas_de_especificacao: 3
 historico_especificacoes:
   - K: 1

@@ -86,6 +86,8 @@ decisao:
 termo_escopo:
   vale_para: levedura BY4742 nas condições de cultivo do Deleteome; deleções de gene único
   nao_vale_para: deleções múltiplas, outras linhagens ou condições, expressão absoluta
+pergunta_do_decisor: >-
+  Quem decide: o laboratório que escolhe a deleção de x1 no Deleteome. Ação que a decisão muda: usar a deleção de x1 como alavanca para baixar a expressão de Y. A pergunta do decisor é: a lei da expressão do gene Y nº 5 nas deleções observadas vale para as deleções em cromossomos nunca vistos?
 tentativas_de_especificacao: 1
 historico_especificacoes:
   - K: 1

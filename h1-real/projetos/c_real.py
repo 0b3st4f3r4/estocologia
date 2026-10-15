@@ -336,6 +336,13 @@ class ProjetoC(Projeto):
             "chave": ["sinistro"], "particao": "periodo",
             "grao": "uma linha por sinistro real (> 1 M DKK); a unidade independente é o mês, agregado na leitura. "
                     "Linhas com origem ≠ 'real' são perturbações sintéticas declaradas (banca) ou reamostras de linhas reais",
+            "ausencia": {
+                "mecanismo": "MCAR",
+                "colunas": [],
+                "sensibilidade": {"feito": False, "metodos": []},
+                "nota": "registro completo da Copenhagen Re (> 1 M DKK, 1980–90): nenhuma coluna admite nulo e nenhuma célula falta. "
+                        "Mês sem sinistro na camada é zero observado, não dado ausente; nenhum mês é descartado",
+            },
         }
 
     @staticmethod

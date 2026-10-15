@@ -86,6 +86,8 @@ decisao:
 termo_escopo:
   vale_para: triagem de currículos para vagas administrativas, de vendas e atendimento anunciadas em jornal em Boston e Chicago, 2001–2002
   nao_vale_para: etapas posteriores (entrevista, contratação, salário), recrutamento por indicação ou plataformas digitais, outros países, raça sinalizada por outros meios que não o nome
+pergunta_do_decisor: >-
+  Quem decide: o recrutador que faz a triagem de currículos (Boston e Chicago, 2001–2002). Ação que a decisão muda: adotar triagem anônima de currículos (sem nome) na primeira etapa de seleção. A pergunta do decisor é: o nome afro-americano baixa o retorno pela mesma lei entre as vagas anunciadas?
 tentativas_de_especificacao: 1
 tem_titulares: false
 grupo_justica: afro

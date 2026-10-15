@@ -51,10 +51,48 @@ def portao1(res, reproducao: bool):
     return ok, f"pytest (Hypothesis): {(t.stdout.strip().splitlines() or ['?'])[-1]}; reprodução: {det}"
 
 
+MECANISMOS_DA_AUSENCIA = ("MCAR", "MAR", "MNAR", "NAO_DECLARADO")
+
+
+def checar_ausencia(contrato: dict) -> list[str]:
+    """F2/M4: o contrato tem de classificar o mecanismo da ausência, e não só limitar a nulidade.
+
+    Declarado em DECLARACAO_F2_AUSENCIA.md (K = 2 do H1 real), antes de escrever esta função. Recusa: contrato sem
+    o campo; mecanismo fora de {MCAR, MAR, MNAR, NAO_DECLARADO}; colunas que não sejam lista de nomes do próprio
+    contrato; sensibilidade que não seja {feito: bool, metodos: [...]} ou incoerente; e MAR/MNAR sem análise de
+    sensibilidade declarada."""
+    aus = contrato.get("ausencia")
+    if not isinstance(aus, dict):
+        return ["contrato sem o campo ausencia (mecanismo da ausência não declarado)"]
+    falhas = []
+    mec = aus.get("mecanismo")
+    if mec not in MECANISMOS_DA_AUSENCIA:
+        falhas.append(f"ausencia.mecanismo inválido: {mec!r}")
+    cols = aus.get("colunas")
+    if not isinstance(cols, list) or not all(isinstance(c, str) for c in cols):
+        falhas.append("ausencia.colunas tem de ser lista de nomes de coluna")
+    else:
+        fora = [c for c in cols if c not in contrato.get("colunas", {})]
+        if fora:
+            falhas.append(f"ausencia.colunas cita coluna fora do contrato: {fora}")
+    s = aus.get("sensibilidade")
+    if not isinstance(s, dict) or not isinstance(s.get("feito"), bool) or not isinstance(s.get("metodos"), list):
+        falhas.append("ausencia.sensibilidade tem de ser {feito: bool, metodos: [...]}")
+    else:
+        if s["feito"] and not s["metodos"]:
+            falhas.append("ausencia.sensibilidade.feito = True sem nenhum método declarado")
+        if not s["feito"] and s["metodos"]:
+            falhas.append("ausencia.sensibilidade.metodos preenchido com feito = False")
+        if mec in ("MAR", "MNAR") and not s["feito"]:
+            falhas.append(f"ausencia.mecanismo {mec} exige análise de sensibilidade (sensibilidade.feito = True)")
+    return falhas
+
+
 def portao2(res):
     falhas = []
     for nome, r in res.items():
         contrato = yaml.safe_load((SAIDA / nome / "datacontract.yaml").read_text())
+        falhas.extend(f"{nome}: {f}" for f in checar_ausencia(contrato))
         arqs = sorted((SAIDA / "loja" / nome).glob("periodo=*/*.parquet"))
         rel = duckdb.sql(f"SELECT * FROM read_parquet({[str(a) for a in arqs]})")
         cols = rel.columns
@@ -76,7 +114,7 @@ def portao2(res):
             falhas.append(f"{nome}: quarentena/idempotência falhou na banca")
         if any("*" in v["colunas"] for v in r["varredura"]):
             falhas.append(f"{nome}: consulta sem projeção")
-    return not falhas, "contratos, chaves, faixas, quarentena e projeção ok" if not falhas else "; ".join(falhas)
+    return not falhas, "contratos (com o mecanismo da ausência), chaves, faixas, quarentena e projeção ok" if not falhas else "; ".join(falhas)
 
 
 def portao3(res):

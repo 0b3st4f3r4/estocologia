@@ -1,0 +1,31 @@
+{
+ "G1 simulabilidade e reprodução": {
+  "ok": true,
+  "detalhe": "pytest: 23 passed in 21.62s; reprodução limpa idêntica: {'saude_sepse_alerta': True}"
+ },
+ "G2 funil completo e pré-registro": {
+  "ok": true,
+  "detalhe": "saude_sepse_alerta: aprovado no F4: decisão emitida (K=1)"
+ },
+ "G3 ICP entre ambientes": {
+  "ok": false,
+  "detalhe": "Ŝ ≠ ∅ em 0 domínio(s), 0 área(s): [] | saude_sepse_alerta: Ŝ=∅, aceitos=0/512 (todos rejeitados); habilidade fora do ambiente: invariante -0.000, todos +0.008, modelo +0.006"
+ },
+ "G4 contenção de varredura": {
+  "ok": true,
+  "detalhe": "2 leituras; SELECT *: 0; projeção fora do pedido: 0; cofre fora do F3: 0; agentes acima do orçamento: nenhum; banca recusada: {'select_estrela': True, 'cofre_antes_do_preregistro': True, 'agente_errado_abre_cofre': True, 'cofre_sem_hash': True, 'estouro_de_orcamento': True}; bytes varridos 0.4 MB, gasto por agente (MB) {'agent-f2-data': 0.1, 'agent-f3-lifecycle': 0.3}"
+ },
+ "Trilha do barramento": {
+  "ok": true,
+  "detalhe": "11 fichas, quebras: nenhuma"
+ },
+ "G5 informativo": "M15 aprovou 1/1 que chegaram ao F4: {'saude_sepse_alerta': True}; pareceres de risco sem assinatura de sil: 1",
+ "varredura_por_dominio": {
+  "saude_sepse_alerta": {
+   "varrido": 423536,
+   "tabela": 423536,
+   "leituras": 2
+  }
+ },
+ "saida_do_H2": false
+}

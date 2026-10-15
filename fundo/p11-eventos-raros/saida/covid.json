@@ -1,0 +1,183 @@
+{
+ "caso": "covid",
+ "titulo": "Painel país-mês de vacinação e mortes por COVID-19 (Our World in Data, 2021-2022)",
+ "fonte": "fundo/p09-escala-dados/saida_saude/saude_covid_vacina_paises/resultados.json",
+ "n_treino": 2927,
+ "eventos_treino": 293,
+ "taxa_treino": 0.1001024940211821,
+ "n_cofre": 240,
+ "eventos_cofre": 52,
+ "taxa_cofre": 0.21666666666666667,
+ "evento": "mortes por milhão no mês seguinte acima de T = q90 do treino = 4.610117 (país-mês)",
+ "dados_lidos": "armazem do p09 (parte.parquet); o CSV bruto não está no repositório",
+ "binarizacao_declarada": "T = quantil 0,90 amostral de y no treino; y_raro = 1 se y > T",
+ "taxas_do_ranking_no_desenvolvimento": [
+  0.0,
+  0.0,
+  0.0,
+  0.027303754266211604,
+  0.023972602739726026,
+  0.030716723549488054,
+  0.07849829351535836,
+  0.09246575342465753,
+  0.22866894197952217,
+  0.5187713310580204
+ ],
+ "caminhos": {
+  "C": {
+   "brier": 0.18330942856674856,
+   "REL": 0.024281650788970773,
+   "RES": 0.010694444444444446,
+   "UNC": 0.16972222222222222,
+   "identidade_brier_menos_rel_mais_res_menos_unc": 2.7755575615628914e-17,
+   "brier_da_previsao_constante_na_caixa": 0.18330942856674856,
+   "identidade_com_previsao_constante_na_caixa": 2.7755575615628914e-17,
+   "res_menos_rel": -0.013587206344526327,
+   "brier_climatologia": 0.18330942856674856,
+   "habilidade": 0.0,
+   "auc": 0.5,
+   "bate_o_UNC": false,
+   "res_menos_rel_ic90": [
+    -0.02637294994814019,
+    -0.005609636401847061
+   ],
+   "habilidade_ic90": [
+    0.0,
+    0.0
+   ],
+   "auc_ic90": [
+    0.5,
+    0.5
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": false,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  },
+  "L": {
+   "brier": 0.1871319961823155,
+   "REL": 0.05866363725246384,
+   "RES": 0.04055555555555556,
+   "UNC": 0.16972222222222222,
+   "identidade_brier_menos_rel_mais_res_menos_unc": -0.000698307736815007,
+   "brier_da_previsao_constante_na_caixa": 0.18783030391913053,
+   "identidade_com_previsao_constante_na_caixa": 2.7755575615628914e-17,
+   "res_menos_rel": -0.01810808169690828,
+   "brier_climatologia": 0.18330942856674856,
+   "habilidade": -0.020853087838714313,
+   "auc": 0.7685147299509002,
+   "bate_o_UNC": false,
+   "res_menos_rel_ic90": [
+    -0.03340543867940798,
+    -0.006553816585761937
+   ],
+   "habilidade_ic90": [
+    -0.04640967746315715,
+    0.008006863383218701
+   ],
+   "auc_ic90": [
+    0.7166472373952812,
+    0.8202521652334152
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": false,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  },
+  "R": {
+   "brier": 0.1905014268115834,
+   "REL": 0.048156840381170296,
+   "RES": 0.02597222222222222,
+   "UNC": 0.16972222222222222,
+   "identidade_brier_menos_rel_mais_res_menos_unc": -0.001405413569586872,
+   "brier_da_previsao_constante_na_caixa": 0.19190684038117028,
+   "identidade_com_previsao_constante_na_caixa": 0.0,
+   "res_menos_rel": -0.022184618158948077,
+   "brier_climatologia": 0.18330942856674856,
+   "habilidade": -0.039234197068134025,
+   "auc": 0.7554725859247136,
+   "bate_o_UNC": false,
+   "res_menos_rel_ic90": [
+    -0.03730287192129156,
+    -0.009930128150842632
+   ],
+   "habilidade_ic90": [
+    -0.06041295079502777,
+    -0.016491852358359246
+   ],
+   "auc_ic90": [
+    0.703714241821911,
+    0.8054477660492948
+   ],
+   "criterio": {
+    "res_maior_que_rel_com_ic90_acima_de_zero": false,
+    "habilidade_maior_igual_a_0_05": false,
+    "vence": false,
+    "leitura_estrita_ic90_da_habilidade_acima_de_0_05": false
+   }
+  }
+ },
+ "vencem": [],
+ "bootstrap": {
+  "reamostragens": 2000,
+  "semente": 2027,
+  "caixas": 10
+ },
+ "disponivel": true,
+ "conferencia": {
+  "linhas_no_armazem": 3167,
+  "n_treino": 2927,
+  "n_cofre": 240,
+  "publicado_filtro2": {
+   "n_linhas": 2927,
+   "n_unidades": 122
+  },
+  "ambientes": [
+   "Africa",
+   "Asia",
+   "Europe",
+   "North_America",
+   "Oceania",
+   "South_America"
+  ],
+  "limiar_T_do_treino": 4.610116926832605,
+  "desenho": [
+   "intercepto",
+   "vacinados",
+   "idade_mediana",
+   "idosos",
+   "pib_log",
+   "leitos",
+   "diabetes",
+   "mes=2021-03",
+   "mes=2021-04",
+   "mes=2021-05",
+   "mes=2021-06",
+   "mes=2021-07",
+   "mes=2021-08",
+   "mes=2021-09",
+   "mes=2021-10",
+   "mes=2021-11",
+   "mes=2021-12",
+   "mes=2022-01",
+   "mes=2022-02",
+   "mes=2022-03",
+   "mes=2022-04",
+   "mes=2022-05",
+   "mes=2022-06",
+   "mes=2022-07",
+   "mes=2022-08",
+   "mes=2022-09",
+   "mes=2022-10",
+   "mes=2022-11",
+   "mes=2022-12",
+   "mes=2021-01"
+  ],
+  "publicado_f3": "podado no F3: a chave não vence o nulo de permutação",
+  "bate": true
+ }
+}

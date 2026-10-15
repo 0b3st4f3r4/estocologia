@@ -1,0 +1,146 @@
+{
+ "aht_s": 300.0,
+ "paciencia_s": 120.0,
+ "indices": [
+  2,
+  1
+ ],
+ "base": false,
+ "replicas": 4,
+ "dias_cofre": 81,
+ "desenho": {
+  "extra_atendentes_por_igual": 15,
+  "rotulo_R3_no_h0": "R3_perfil_medio_mais_15_atendentes",
+  "agente_horas_dia_R0": 2819.5,
+  "agente_horas_dia_R2": 3022.671810699588,
+  "agente_horas_dia_R3": 3030.75,
+  "escala_pico_R0": 292,
+  "escala_pico_R2": 358,
+  "soma_atendentes_dia_R0": 5704,
+  "soma_atendentes_dia_R2": 6132.2,
+  "cv_residual_treino": 0.05984663730268494,
+  "fator_R2": 1.076699450367121
+ },
+ "regras": {
+  "R0_alegacao_perfil_medio": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.1111111111111111,
+    0.1111111111111111,
+    0.12345679012345678,
+    0.09876543209876543
+   ],
+   "nivel_servico_por_replica": [
+    0.9166447579050453,
+    0.917486205013277,
+    0.9145027213318518,
+    0.9159083975216106
+   ],
+   "espera_media_s_por_replica": [
+    4.691564417238909,
+    4.646478556966269,
+    4.819104254688746,
+    4.7331505625248065
+   ],
+   "frac_media": 0.1111111111111111,
+   "frac_min": 0.09876543209876543,
+   "frac_max": 0.12345679012345678,
+   "nivel_servico_medio": 0.9161355204429462,
+   "espera_media_s": 4.722574447854682,
+   "desistencia_media": 0.039373340364225316,
+   "pior_dia_sl_medio": 0.3668772878826739,
+   "p90_s_medio": 18.002027056679324,
+   "agente_horas_dia": 2819.5,
+   "chamadas": 2654950
+  },
+  "R1_perfil_do_dia_da_semana": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.06172839506172839,
+    0.06172839506172839,
+    0.04938271604938271,
+    0.06172839506172839
+   ],
+   "nivel_servico_por_replica": [
+    0.9375558861748808,
+    0.9392342605322134,
+    0.9399265522891204,
+    0.9381061790240871
+   ],
+   "espera_media_s_por_replica": [
+    3.9570994814617566,
+    3.9107588295090667,
+    3.8776867752257527,
+    3.9537022498157253
+   ],
+   "frac_media": 0.05864197530864197,
+   "frac_min": 0.04938271604938271,
+   "frac_max": 0.06172839506172839,
+   "nivel_servico_medio": 0.9387057195050754,
+   "espera_media_s": 3.924811834003075,
+   "desistencia_media": 0.03264487090152357,
+   "pior_dia_sl_medio": 0.3560528340600154,
+   "p90_s_medio": 14.934435576207346,
+   "agente_horas_dia": 2814.5267489711932,
+   "chamadas": 2654950
+  },
+  "R2_dia_da_semana_mais_margem_p90": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.012345679012345678,
+    0.012345679012345678,
+    0.012345679012345678,
+    0.012345679012345678
+   ],
+   "nivel_servico_por_replica": [
+    0.978362304374847,
+    0.9776775457164918,
+    0.9773781050490593,
+    0.9761633929075877
+   ],
+   "espera_media_s_por_replica": [
+    1.5098220649011598,
+    1.5248998183941354,
+    1.5379359429906336,
+    1.5489638310393485
+   ],
+   "frac_media": 0.012345679012345678,
+   "frac_min": 0.012345679012345678,
+   "frac_max": 0.012345679012345678,
+   "nivel_servico_medio": 0.9773953370119965,
+   "espera_media_s": 1.530405414331319,
+   "desistencia_media": 0.01273216068099211,
+   "pior_dia_sl_medio": 0.5460199584975168,
+   "p90_s_medio": 3.8928139561783808,
+   "agente_horas_dia": 3022.671810699588,
+   "chamadas": 2654950
+  },
+  "R3_perfil_medio_mais_extra_atendentes": {
+   "frac_dias_abaixo_meta_por_replica": [
+    0.037037037037037035,
+    0.037037037037037035,
+    0.04938271604938271,
+    0.037037037037037035
+   ],
+   "nivel_servico_por_replica": [
+    0.9626893161829789,
+    0.9618584154127197,
+    0.961994387841579,
+    0.9620135972428859
+   ],
+   "espera_media_s_por_replica": [
+    2.3533724325859096,
+    2.3586978772253255,
+    2.38692922748449,
+    2.3358220518737096
+   ],
+   "frac_media": 0.040123456790123455,
+   "frac_min": 0.037037037037037035,
+   "frac_max": 0.04938271604938271,
+   "nivel_servico_medio": 0.962138929170041,
+   "espera_media_s": 2.3587053972923586,
+   "desistencia_media": 0.019587186199363452,
+   "pior_dia_sl_medio": 0.5218004616568351,
+   "p90_s_medio": 9.273192921686698,
+   "agente_horas_dia": 3030.75,
+   "chamadas": 2654950
+  }
+ }
+}

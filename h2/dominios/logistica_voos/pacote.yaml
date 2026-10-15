@@ -70,6 +70,8 @@ decisao:
 termo_escopo:
   vale_para: partidas dos três aeroportos de Nova York, padrão de grade e clima de 2013
   nao_vale_para: aeroportos sem congestionamento, grades redesenhadas em massa (o congestionamento muda), cancelamentos
+pergunta_do_decisor: >-
+  Quem decide: a companhia aérea que remarca os voos da tarde para a manhã. Ação que a decisão muda: mover voos da tarde para a manhã na grade. A pergunta do decisor é: a hora programada prevê o atraso pela mesma lei nos três aeroportos de Nova York?
 tentativas_de_especificacao: 2
 historico_especificacoes:
   - "K=1 (2026-10-14): ajuste incluía a temperatura, descendente da hora no próprio DAG; o Filtro 2 barrou (porta dos fundos inválida). Corrigido antes de qualquer leitura do cofre." 

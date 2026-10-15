@@ -70,5 +70,7 @@ decisao:
 termo_escopo:
   vale_para: comparação entre países de 1952 a 2007 com renda entre ~US$ 250 e ~US$ 110 mil PPC, no mesmo período e continente
   nao_vale_para: efeito de crescimento dentro de um país ao longo do tempo, desigualdade interna, choques epidêmicos e guerras, anos depois de 2007
+pergunta_do_decisor: >-
+  Quem decide: o formulador que escolhe entre crescimento da renda e programas de saúde diretos. Ação que a decisão muda: priorizar crescimento da renda (em vez de programas de saúde diretos) como via para aumentar a expectativa de vida. A pergunta do decisor é: a renda sobe a expectativa de vida pela mesma curva entre países?
 tentativas_de_especificacao: 1
 tem_titulares: false

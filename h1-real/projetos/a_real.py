@@ -214,6 +214,14 @@ class ProjetoA(Projeto):
             },
             "chave": ["ano", "dia"], "particao": "periodo",
             "grao": "uma linha por pregão; 'ano' ≥ 3000 marca lote sintético (reamostrado ou perturbado), com 'data' real de origem",
+            "ausencia": {
+                "mecanismo": "MCAR",
+                "colunas": [],
+                "sensibilidade": {"feito": False, "metodos": []},
+                "nota": "a ausência é de LINHA, não de célula: não há pregão nos feriados nem nos 135 dias corridos de jul–dez/1914 "
+                        "(fechamento da bolsa). O motivo é do calendário da bolsa, não do valor do retorno; o caso de 1914 já está "
+                        "declarado como limite em 'fisica_do_ruido' e nenhum pregão é imputado nem descartado",
+            },
         }
 
     def _linhas(self, periodo, idx, origem, anos=None, retornos=None):

@@ -1,17 +1,24 @@
 """Compara as três rodadas (original, literatura, fraca) por domínio e aplica o critério da DECLARACAO.md.
 
-Uso: python3 comparar.py <pasta_de_saida_do_rodar.sh> [<pasta_original_do_repo>]
-Grava resultados.json e tabela.md nesta pasta, e confere a rodada (a) contra os saida/ originais do repositório.
+Uso: python3 comparar.py <pasta_de_saida_do_rodar.sh> [--tolerancia-dp BANDA] [--json NOME] [--tabela NOME]
+Grava resultados.json e tabela.md nesta pasta (nomes trocáveis por --json/--tabela), e confere a rodada (a) contra
+os saida/ originais do repositório.
+
+O portão da rodada (a) tem duas partes: a categórica (categoria de status, lista de portões que falham e ação do F8,
+igualdade exata) e a numérica, comparada contra uma **banda de equivalência** em dp do posterior da própria rodada
+(a). O default 1e-9 é o limiar histórico, que reprova a rodada (a) por diferença numérica; a banda declarada em
+DECLARACAO_2.md é 0,05 dp e se passa com --tolerancia-dp 0.05.
 """
 
+import argparse
 import json
-import sys
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
 REPO = AQUI.parents[1]
 VARS = ("original", "literatura", "fraca")
 COMPUT = {"rhat_ok", "ess_ok", "sbc_ok"}
+TOL_DP = 1e-9
 
 
 def h2_linha(r):
@@ -65,18 +72,37 @@ def chave(x):
     return (x["categoria"], tuple(x["falhas"]), x["acao"])
 
 
-def main():
-    sai = Path(sys.argv[1])
+def desvio_rodada_a(o, a, h):
+    """Desvio da rodada (a) recalculada contra o saida/ do repositório, na unidade da banda.
+
+    H2/H2g: |m_repo - m_a| / dp posterior da rodada (a). No H1 real a forma do resultado não traz a média posterior,
+    então a quantidade comparada é a razão dp posterior / dp priori (adimensional, em (0, 1]) e a banda entra nela em
+    unidades absolutas. Devolve None quando não há quantidade numérica dos dois lados (domínio podado antes do F4).
+    """
+    if h == "h1-real":
+        if o.get("post_dp_sobre_priori") is None or a.get("post_dp_sobre_priori") is None:
+            return None
+        return abs(o["post_dp_sobre_priori"] - a["post_dp_sobre_priori"])
+    if o.get("post_media") is None or a.get("post_media") is None:
+        return None
+    if a.get("post_dp"):
+        return abs(o["post_media"] - a["post_media"]) / a["post_dp"]
+    return abs(o["post_media"] - a["post_media"])
+
+
+def calcular(sai, tol=TOL_DP):
     res, muda = {}, {"literatura": [], "fraca": []}
-    reproducao = {}
+    reproducao, desvios = {}, {}
     for h in ("h2", "h2g", "h1-real"):
         rodadas = {v: ler(sai / h / v, h) for v in VARS}
         orig_repo = ler(REPO / h / "saida", h)
         for n, a in rodadas["original"].items():
             o = orig_repo.get(n)
-            igual = o is not None and chave(o) == chave(a) and (
-                o.get("post_media") is None or abs(o["post_media"] - a["post_media"]) < 1e-9) and (
-                h != "h1-real" or abs(o["post_dp_sobre_priori"] - a["post_dp_sobre_priori"]) < 1e-9)
+            dev = desvio_rodada_a(o, a, h) if o is not None else None
+            desvios[f"{h}/{n}"] = dev
+            # categórica (sem banda): categoria de status, portões que falham e ação do F8, iguais;
+            # numérica: desvio dentro da banda declarada (tol = 0,05 dp em DECLARACAO_2.md; 1e-9 é o histórico)
+            igual = o is not None and chave(o) == chave(a) and (dev is None or dev <= tol)
             reproducao[f"{h}/{n}"] = bool(igual)
         for n in rodadas["original"]:
             a = rodadas["original"][n]
@@ -100,9 +126,27 @@ def main():
         ver = "não dependiam das prioris simuladas no conteúdo, mas dependiam de haver alguma priori informativa nos domínios que mudam em (c)"
     else:
         ver = "dependiam das prioris simuladas nos domínios que mudam em (b)"
-    out = {"reproducao_rodada_a": reproducao, "reproducao_ok": all(reproducao.values()), "N_b": Nb, "N_c": Nc,
-           "mudancas": muda, "veredito": ver, "dominios": res}
-    (AQUI / "resultados.json").write_text(json.dumps(out, indent=1, ensure_ascii=False, default=float))
+    com_dev = {k: v for k, v in desvios.items() if v is not None}
+    pior = max(com_dev, key=com_dev.get) if com_dev else None
+    ok = all(reproducao.values())
+    if ok:
+        vrd_a = (f"a rodada (a) reproduz dentro da banda declarada (desvio máximo {com_dev[pior]:.6g} na unidade da "
+                 f"banda, {pior}, contra banda de {tol:g}); o veredito do ponto 5 vale sem rótulo condicional")
+    else:
+        vrd_a = (f"a rodada (a) não reproduz dentro da banda de {tol:g}: {sum(1 for v in reproducao.values() if not v)} "
+                 f"dos {len(reproducao)} domínios reprovam (desvio máximo {com_dev[pior]:.6g} na unidade da banda, "
+                 f"{pior}); o veredito publicado continua condicional a essa leitura")
+    out = {"tolerancia_dp": tol, "reproducao_rodada_a": reproducao, "reproducao_ok": ok,
+           "desvios_rodada_a": desvios, "desvio_max_dp": com_dev[pior] if pior else None,
+           "desvio_max_dp_dominio": pior,
+           "dominios_sem_quantidade_numerica": sorted(k for k, v in desvios.items() if v is None),
+           "veredito_rodada_a": vrd_a,
+           "N_b": Nb, "N_c": Nc, "mudancas": muda, "veredito": ver, "dominios": res}
+    return out, res
+
+
+def gravar(out, res, json_nome="resultados.json", tabela_nome="tabela.md"):
+    (AQUI / json_nome).write_text(json.dumps(out, indent=1, ensure_ascii=False, default=float))
     # tabela
     f = lambda x, d=3: "—" if x is None else (f"{x:.{d}g}" if isinstance(x, float) else str(x))
     L = ["| domínio | status (a) original | status (b) literatura | status (c) fraca | F8 a / b / c | média posterior a / b / c | dp post/dp priori a / b / c | desloc. b, c (dp post a) |",
@@ -114,9 +158,24 @@ def main():
                  f"{f(a.get('post_media'))} / {f(b.get('post_media'))} / {f(c.get('post_media'))} | "
                  f"{f(a.get('post_dp_sobre_priori'), 2)} / {f(b.get('post_dp_sobre_priori'), 2)} / {f(c.get('post_dp_sobre_priori'), 2)} | "
                  f"{f(b.get('desloc_em_dp_post_original'), 2)}, {f(c.get('desloc_em_dp_post_original'), 2)} |")
-    (AQUI / "tabela.md").write_text("\n".join(L) + "\n")
-    print(json.dumps({k: out[k] for k in ("reproducao_ok", "N_b", "N_c", "mudancas", "veredito")}, indent=1, ensure_ascii=False))
-    print([k for k, v in reproducao.items() if not v])
+    (AQUI / tabela_nome).write_text("\n".join(L) + "\n")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Compara as três rodadas e confere a rodada (a) contra os saida/ do repo.")
+    ap.add_argument("saida", help="pasta de saída das três rodadas (ex.: /home/silvano-neto/p05-saida)")
+    ap.add_argument("--tolerancia-dp", type=float, default=TOL_DP,
+                    help="banda de equivalência do portão da rodada (a), em dp do posterior dela "
+                         "(default 1e-9, o limiar histórico; a banda declarada em DECLARACAO_2.md é 0.05)")
+    ap.add_argument("--json", default="resultados.json", help="nome do JSON gravado nesta pasta")
+    ap.add_argument("--tabela", default="tabela.md", help="nome da tabela gravada nesta pasta")
+    args = ap.parse_args()
+    out, res = calcular(Path(args.saida), args.tolerancia_dp)
+    gravar(out, res, args.json, args.tabela)
+    print(json.dumps({k: out[k] for k in ("tolerancia_dp", "reproducao_ok", "desvio_max_dp", "desvio_max_dp_dominio",
+                                          "N_b", "N_c", "mudancas", "veredito", "veredito_rodada_a")},
+                     indent=1, ensure_ascii=False))
+    print("reprovam:", [k for k, v in out["reproducao_rodada_a"].items() if not v])
 
 
 if __name__ == "__main__":

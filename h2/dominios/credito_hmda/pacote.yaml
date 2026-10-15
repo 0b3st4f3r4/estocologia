@@ -116,6 +116,8 @@ decisao:
 termo_escopo:
   vale_para: pedidos de financiamento imobiliário convencional na região metropolitana de Boston em 1990, requerentes negros e brancos
   nao_vale_para: outros mercados e anos, subscrição automatizada moderna, requerentes hispânicos e asiáticos (fora desta base), a decisão da seguradora
+pergunta_do_decisor: >-
+  Quem decide: o banco que decide aprovar ou negar financiamento imobiliário em Boston em 1990. Ação que a decisão muda: exigir segunda revisão independente de todo pedido negado de requerente negro. A pergunta do decisor é: a segunda revisão independente reverte o excesso de negações de requerentes negros?
 tentativas_de_especificacao: 1
 tem_titulares: true
 quase_ids: [afro, solteiro, autonomo, condominio]

@@ -82,6 +82,8 @@ decisao:
 termo_escopo:
   vale_para: mulheres casadas de Bangladesh no fim dos anos 1980, nos distritos amostrados pela pesquisa
   nao_vale_para: Bangladesh atual (prevalência acima de 60%), mulheres não casadas, outros países, efeito de ter o segundo ou terceiro filho
+pergunta_do_decisor: >-
+  Quem decide: o serviço de saúde que decide onde ofertar contraceptivos (Bangladesh, 1988–89). Ação que a decisão muda: integrar a oferta de contraceptivos ao atendimento pós-parto em vez de visitas uniformes a todas as casadas. A pergunta do decisor é: focar quem já tem filhos aumenta a oferta pela mesma lei?
 tentativas_de_especificacao: 1
 tem_titulares: true
 quase_ids: [tem_filhos, filhos_3mais, urbano, idade]

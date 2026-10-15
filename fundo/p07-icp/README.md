@@ -19,7 +19,8 @@ STAR há 80 escolas com até 403 alunos. **Nas duas áreas que dependem de linha
 
 **Consequência para o portão do H2g.** A Física (túnel de luz) não faz parte deste ponto e entra como está, com o
 Ŝ = {blue, green, red}. A réplica da genética rodou (seção própria abaixo): o ICP dos 40 genes Y novos acerta um gene
-na validação estrita por intervenção, e pela regra declarada a Genética **se replica**. Com a Educação fora e a
+na validação estrita por intervenção — com taxa nula por permutação do rótulo do mutante de **p = 0,001**, o piso do
+teste com B = 999 (seção própria abaixo) —, e pela regra declarada a Genética **se replica**. Com a Educação fora e a
 Genética replicada, as áreas são **três: Física, Farmacologia e Genética**. O critério do PLAN pede Ŝ ≠ ∅ em 3 áreas
 distintas, então o **portão do H2g segue de pé com 3 áreas** — sem a Educação e sem o conjunto que a sustentava, e com
 a genética sustentada por um domínio novo, não mais pelo y08 sozinho. Era esse o caso em jogo: se nenhum Y novo tivesse
@@ -88,9 +89,31 @@ x9 = YPL193W}, 2 conjuntos aceitos de 1 024, melhor p = 0,00724 (H2f: 0,0072). A
 inteira: deleção funciona nos três, nenhum fica fora da faixa (quantis 0,0557 / 0,855 / 0,983) e **0 dos 3** genes
 passa na validação estrita.
 
+**Taxa nula da validação estrita (declaração 2).** O número que decide a réplica era 1 gene em 27, sem
+p de acompanhamento. A [DECLARACAO_2.md](DECLARACAO_2.md) (hash em `DECLARACAO_2.sha256`, `dbcb13f8…`), escrita antes de
+rodar, fixa a nula: permutar o rótulo do mutante entre as 1 741 linhas, por par (Y, x) dos 27, B = 999, semente
+20261015, estatística = número de pares que passam o critério estrito inteiro (deleção funcionou **e** Y fora da faixa
+das outras linhas), p = (1 + #{nulo ≥ observado})/(B + 1), α = 0,05. Ela **não muda o critério de réplica**. Fonte:
+`saida/nulo_validacao.json`, 0,5 s.
+
+| estatística | observado | média nula | q95 nulo | máximo nulo | p |
+|---|---|---|---|---|---|
+| pares que passam o critério estrito (**decide**) | 1 | 0,00000 | 0 | 0 (0 de 999 sorteios) | **0,001** |
+| só "a deleção funcionou" (informa) | 26 | 0,01502 | 0 | 1 | 0,001 |
+| só "Y fora da faixa" (informa) | 1 | 0,03003 | 0 | 1 (30 de 999 sorteios) | 0,031 |
+
+O p da linha que decide é o **piso** de 999 sorteios, 1/1 000: nenhum dos 999 sorteios chegou a 1 par, e a contagem
+esperada sob a nula é de 27 · (1/1 741) · (2/1 741) ≈ 1,8e-5. Com α = 0,05, o número que sustenta a réplica sobrevive:
+1 par em 27 não é o que o acaso do rótulo produz. O que o p **não** autoriza é ler isso como efeito medido em uma
+linha: a primeira metade do critério é um fato dos dados — deletar X tira a expressão de X, então o mínimo da coluna X
+está na linha do mutante — e permutar o rótulo **destrói** essa metade, que é de onde vem quase todo o p. A segunda
+metade, sozinha, para em p = 0,031, logo abaixo de α: o "Y no mínimo das 1 741" é marginal por si só. A evidência forte
+é contra "o rótulo caiu ali por acaso"; a evidência sobre o efeito continua sendo a de 1 linha de mutante.
+
 **Veredito pela regra declarada.** Houve Ŝ com gene (10 dos 40 Y novos) e um gene desses — n34, x6 = YIL033C — passa
-na validação estrita. A genética **se replica** e conta como área. Não é o caso "frágil": a coerência fraca sozinha
-não decide nada aqui, e o gene que decide passa pelo critério estrito, não pelo fraco.
+na validação estrita, com p = 0,001 contra o acaso do rótulo. A genética **se replica** e conta como área. Não é o
+caso "frágil": a coerência fraca sozinha não decide nada aqui, e o gene que decide passa pelo critério estrito, não
+pelo fraco.
 
 ## O que foi feito
 
@@ -105,6 +128,11 @@ não decide nada aqui, e o gene que decide passa pelo critério estrito, não pe
 3. **Só então** os dois testes robustos, sobre o mesmo resíduo u = r / ŝ de `p_invariancia_np`.
 4. **A genética veio por último**, com `Kemmeren.RData` e o parquet derivado no lugar: o ICP dos 40 Y novos com o
    teste original do H2g, α = 0,00125 por Y, a validação por intervenção de cada gene dos Ŝ e o y08 como controle.
+5. **A taxa nula do número que decide veio depois, como declaração nova.** [DECLARACAO_2.md](DECLARACAO_2.md)
+   (`dbcb13f8…`, escrita antes de rodar, sem reescrever a primeira) fixa a permutação do rótulo de mutante, B = 999,
+   semente 20261015 e a estatística de contagem, e mantém o critério de réplica; `codigo/nulo_validacao.py` roda isso
+   em 0,5 s sobre `saida/genetica.json` e o parquet, e grava `saida/nulo_validacao.json`. Duas execuções deram o mesmo
+   arquivo, fora o campo `segundos`.
 
 ## Conferência da reprodução
 
@@ -130,8 +158,12 @@ custo muda.
 - **A validação estrita da genética decide com uma linha.** Cada mutante é um ambiente de n = 1, então o critério
   "ΔX funcionou e Y cai fora da faixa de todas as outras linhas" é uma comparação de uma observação contra 1 740. O
   gene que sustenta a réplica (n34, x6 = YIL033C, com Y = YLR354C no mínimo das 1 741) passa nesse critério, e a
-  declaração não fixou taxa nula para ele: 1 gene em 27 é o número, sem p de acompanhamento. `plate` não é validável
-  por intervenção (não é gene deletado).
+  declaração original não fixou taxa nula para ele: 1 gene em 27 é o número. A declaração 2 fixou: p = 0,001, que é o
+  **piso** do teste com B = 999, porque nenhum sorteio chegou a 1 par. O p não compra resolução nem tira o limite: com
+  n = 1 por mutante, o menor p possível aqui vale 1/1 000, e o nulo por permutação do rótulo destrói a metade "a deleção
+  funcionou" — que é fato dos dados, não hipótese —, então quase todo o p vem dela (a metade "Y fora da faixa" sozinha
+  dá 0,031). A nula também é condicional nos 27 pares já obtidos do ICP: ela não carrega a seleção dos 40 Y nem a
+  escolha dos Ŝ. `plate` não é validável por intervenção (não é gene deletado).
 - **O STAR tem grupos que se cruzam.** 446 alunos passam por mais de uma escola, o que liga dois grupos; e os
   blocos de uma escola têm tamanhos diferentes, então a troca é só aproximadamente válida, como a declaração diz.
 - **O teste que decide é o principal.** A permutação entra como informação, não como decisão.
@@ -148,6 +180,7 @@ parquet derivado, com `rdata` 1.1.0 e pandas 3.0.5:
 cd fundo/p07-icp/codigo
 python3 construir_parquet_h2f.py                                    # RData → dados-reais/h2f/kemmeren2014_obs_int.parquet
 ESTOCOLOGIA_DADOS=<repo>/dados-reais/h2b OMP_NUM_THREADS=1 python3 icp_robusto.py farmacologia star genetica
+OMP_NUM_THREADS=1 python3 nulo_validacao.py          # taxa nula do "1 gene em 27", 0,5 s
 ```
 
 Numa máquina dividida com outros trabalhos, a primeira execução levou 419,4 s (farmacologia) e 2 333,1 s (STAR),

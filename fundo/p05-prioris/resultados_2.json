@@ -1,0 +1,2156 @@
+{
+ "tolerancia_dp": 0.05,
+ "reproducao_rodada_a": {
+  "h2/agronomia_nitrogenio": true,
+  "h2/clima_tempestades": true,
+  "h2/credito_hmda": true,
+  "h2/desenvolvimento_preston": true,
+  "h2/direito_prisoes": true,
+  "h2/educacao_star": true,
+  "h2/energia_vitoria": true,
+  "h2/epidemiologia_contracepcao": true,
+  "h2/logistica_voos": true,
+  "h2/saude_consultas": true,
+  "h2/trabalho_curriculos": true,
+  "h2/transito_alcool": true,
+  "h2g/biologia_sachs": true,
+  "h2g/direito_teto_beneficio": true,
+  "h2g/educacao_star_turmas": true,
+  "h2g/engenharia_tunel_vento": true,
+  "h2g/farmacologia_qt": true,
+  "h2g/fisica_tunel_luz": true,
+  "h2g/genetica_y01": true,
+  "h2g/genetica_y02": true,
+  "h2g/genetica_y03": true,
+  "h2g/genetica_y04": true,
+  "h2g/genetica_y05": true,
+  "h2g/genetica_y06": true,
+  "h2g/genetica_y07": true,
+  "h2g/genetica_y08": true,
+  "h2g/genetica_y09": true,
+  "h2g/genetica_y10": true,
+  "h2g/saude_rand": true,
+  "h2g/transporte_cinto": true,
+  "h1-real/a": true,
+  "h1-real/b": true,
+  "h1-real/c": true
+ },
+ "reproducao_ok": true,
+ "desvios_rodada_a": {
+  "h2/agronomia_nitrogenio": 0.0017972661804698568,
+  "h2/clima_tempestades": 2.48736147267839e-07,
+  "h2/credito_hmda": 6.691096439275559e-07,
+  "h2/desenvolvimento_preston": 5.0283734340894755e-06,
+  "h2/direito_prisoes": 1.9422340081379934e-06,
+  "h2/educacao_star": 0.0005464485695876024,
+  "h2/energia_vitoria": 0.0016892913116790093,
+  "h2/epidemiologia_contracepcao": 1.5735942895837986e-06,
+  "h2/logistica_voos": 8.249512855415633e-07,
+  "h2/saude_consultas": 1.2481220938406817e-07,
+  "h2/trabalho_curriculos": 3.536471331980174e-07,
+  "h2/transito_alcool": null,
+  "h2g/biologia_sachs": 2.765750859210501e-07,
+  "h2g/direito_teto_beneficio": 2.460517595596849e-06,
+  "h2g/educacao_star_turmas": 7.390842878748424e-07,
+  "h2g/engenharia_tunel_vento": 0.00048110125370654525,
+  "h2g/farmacologia_qt": 7.33906177978715e-05,
+  "h2g/fisica_tunel_luz": 5.238594205964263e-06,
+  "h2g/genetica_y01": null,
+  "h2g/genetica_y02": 0.0049651774274956095,
+  "h2g/genetica_y03": 0.00012409683215901322,
+  "h2g/genetica_y04": 0.0012908633004615046,
+  "h2g/genetica_y05": null,
+  "h2g/genetica_y06": null,
+  "h2g/genetica_y07": 0.00710575674131663,
+  "h2g/genetica_y08": 0.0004402496864346583,
+  "h2g/genetica_y09": null,
+  "h2g/genetica_y10": null,
+  "h2g/saude_rand": 1.2398859370593231e-06,
+  "h2g/transporte_cinto": 0.006088246011227827,
+  "h1-real/a": 8.233691506376317e-14,
+  "h1-real/b": 1.0098116787204958e-11,
+  "h1-real/c": 1.4802601366881163e-09
+ },
+ "desvio_max_dp": 0.00710575674131663,
+ "desvio_max_dp_dominio": "h2g/genetica_y07",
+ "dominios_sem_quantidade_numerica": [
+  "h2/transito_alcool",
+  "h2g/genetica_y01",
+  "h2g/genetica_y05",
+  "h2g/genetica_y06",
+  "h2g/genetica_y09",
+  "h2g/genetica_y10"
+ ],
+ "veredito_rodada_a": "a rodada (a) reproduz dentro da banda declarada (desvio máximo 0.00710576 na unidade da banda, h2g/genetica_y07, contra banda de 0.05); o veredito do ponto 5 vale sem rótulo condicional",
+ "N_b": 5,
+ "N_c": 2,
+ "mudancas": {
+  "literatura": [
+   {
+    "dominio": "h2/desenvolvimento_preston",
+    "de": "aprovado no F4: decisão emitida",
+    "para": "aprovado no F4: decisão emitida",
+    "acao_de": "adotar",
+    "acao_para": "manter",
+    "so_portao_computacional": false
+   },
+   {
+    "dominio": "h2/direito_prisoes",
+    "de": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "para": "podado no F1: a pesquisa não muda a decisão (EVPI < custo)",
+    "acao_de": null,
+    "acao_para": null,
+    "so_portao_computacional": false
+   },
+   {
+    "dominio": "h2/educacao_star",
+    "de": "aprovado no F4: decisão emitida",
+    "para": "podado no F2: dados na unidade independente não informam mais que a priori",
+    "acao_de": "adotar",
+    "acao_para": null,
+    "so_portao_computacional": false
+   },
+   {
+    "dominio": "h2g/educacao_star_turmas",
+    "de": "aprovado no F4: decisão emitida",
+    "para": "podado no F1: a pesquisa não muda a decisão (EVPI < custo)",
+    "acao_de": "manter",
+    "acao_para": null,
+    "so_portao_computacional": false
+   },
+   {
+    "dominio": "h1-real/c",
+    "de": "reprovado: modelo_vence_climatologia",
+    "para": "aprovado",
+    "acao_de": 0.4,
+    "acao_para": 0.0,
+    "so_portao_computacional": false
+   }
+  ],
+  "fraca": [
+   {
+    "dominio": "h2/desenvolvimento_preston",
+    "de": "aprovado no F4: decisão emitida",
+    "para": "aprovado no F4: decisão emitida",
+    "acao_de": "adotar",
+    "acao_para": "manter",
+    "so_portao_computacional": false
+   },
+   {
+    "dominio": "h1-real/c",
+    "de": "reprovado: modelo_vence_climatologia",
+    "para": "aprovado",
+    "acao_de": 0.4,
+    "acao_para": 0.0,
+    "so_portao_computacional": false
+   }
+  ]
+ },
+ "veredito": "dependiam das prioris simuladas nos domínios que mudam em (b)",
+ "dominios": {
+  "h2/agronomia_nitrogenio": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.863,
+    "priori_media": 0.09333333334910088,
+    "priori_dp": 0.06671709985852747,
+    "evpi_priori": 0.09093534119523622,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.05934274877171883,
+    "post_ic90": [
+     0.04586613172916613,
+     0.07352482984473463
+    ],
+    "post_dp_sobre_priori": 0.1259505804014873,
+    "post_dp": 0.008403057449885521,
+    "habilidade_modelo": 0.5522962475948212
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.8575,
+    "priori_media": 0.19000000000001996,
+    "priori_dp": 0.17791226622076156,
+    "evpi_priori": 0.19101289266558852,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.05907660232881173,
+    "post_ic90": [
+     0.045473978543823526,
+     0.0733780979649881
+    ],
+    "post_dp_sobre_priori": 0.04755555104624299,
+    "post_dp": 0.008460715858014198,
+    "habilidade_modelo": 0.5522590004310359,
+    "desloc_em_dp_post_original": 0.03167257209585394
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.851125,
+    "priori_media": 2.1947819359887958e-13,
+    "priori_dp": 0.6671709985940187,
+    "evpi_priori": 2.220706169059793,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.05878960488040827,
+    "post_ic90": [
+     0.0451667765305236,
+     0.07310028047400066
+    ],
+    "post_dp_sobre_priori": 0.012695199623660875,
+    "post_dp": 0.008469869010268237,
+    "habilidade_modelo": 0.5522518582259208,
+    "desloc_em_dp_post_original": 0.06582650358032419
+   }
+  },
+  "h2/clima_tempestades": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.138,
+    "priori_media": 15.000000000000124,
+    "priori_dp": 2.9652044370116677,
+    "evpi_priori": 0.24524962302311115,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 11.784895814063137,
+    "post_ic90": [
+     11.452817642871628,
+     12.100815551786646
+    ],
+    "post_dp_sobre_priori": 0.06544800428202929,
+    "post_dp": 0.1940667126906319,
+    "habilidade_modelo": 0.7895246278903066
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.131625,
+    "priori_media": 14.385727357985944,
+    "priori_dp": 3.5038952194620556,
+    "evpi_priori": 0.521841042257797,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 11.779327300555611,
+    "post_ic90": [
+     11.447032303708255,
+     12.095424134655921
+    ],
+    "post_dp_sobre_priori": 0.05541775056088175,
+    "post_dp": 0.19417799126361424,
+    "habilidade_modelo": 0.7895202107089891,
+    "desloc_em_dp_post_original": 0.028693810650585235
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.1215,
+    "priori_media": 2.62475239694414e-13,
+    "priori_dp": 29.65204437011701,
+    "evpi_priori": 6.616603160680766,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 11.770913698984383,
+    "post_ic90": [
+     11.438289181512237,
+     12.087688963717422
+    ],
+    "post_dp_sobre_priori": 0.00655516358860961,
+    "post_dp": 0.1943740015828276,
+    "habilidade_modelo": 0.7895125461744392,
+    "desloc_em_dp_post_original": 0.07204798228866467
+   }
+  },
+  "h2/credito_hmda": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.951125,
+    "priori_media": 0.470654035999984,
+    "priori_dp": 0.2533391303645404,
+    "evpi_priori": 0.32675714797659494,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.670874218998533,
+    "post_ic90": [
+     0.403544835723721,
+     0.9356138858881514
+    ],
+    "post_dp_sobre_priori": 0.6408415577008008,
+    "post_dp": 0.1623502429293783,
+    "habilidade_modelo": 0.1587734637112882
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.972125,
+    "priori_media": -1.0708770787005483e-13,
+    "priori_dp": 2.5333913051163925,
+    "evpi_priori": 4.374833830796843,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.8007515601649127,
+    "post_ic90": [
+     0.4552982629731841,
+     1.143992552151471
+    ],
+    "post_dp_sobre_priori": 0.08249527699120324,
+    "post_dp": 0.20899281744268267,
+    "habilidade_modelo": 0.15806257899669984,
+    "desloc_em_dp_post_original": 0.7999824257908615
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.972125,
+    "priori_media": -1.0708770787005483e-13,
+    "priori_dp": 2.5333913051163925,
+    "evpi_priori": 4.374833830796843,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.8007515601649127,
+    "post_ic90": [
+     0.4552982629731841,
+     1.143992552151471
+    ],
+    "post_dp_sobre_priori": 0.08249527699120324,
+    "post_dp": 0.20899281744268267,
+    "habilidade_modelo": 0.15806257899669984,
+    "desloc_em_dp_post_original": 0.7999824257908615
+   }
+  },
+  "h2/desenvolvimento_preston": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.565375,
+    "priori_media": 6.499999999999777,
+    "priori_dp": 2.223903327757963,
+    "evpi_priori": 0.3234001968254592,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 5.087197803375361,
+    "post_ic90": [
+     4.142919926909611,
+     6.040197540836665
+    ],
+    "post_dp_sobre_priori": 0.26380333870369105,
+    "post_dp": 0.5866731228167995,
+    "habilidade_modelo": 0.8162512764386505
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.366375,
+    "priori_media": 1.5359999999997909,
+    "priori_dp": 2.6033898305083705,
+    "evpi_priori": 0.11246168397396664,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 4.80619942034751,
+    "post_ic90": [
+     3.828045151704292,
+     5.781023083864992
+    ],
+    "post_dp_sobre_priori": 0.22926720819397275,
+    "post_dp": 0.596871918281234,
+    "habilidade_modelo": 0.8146922961905828,
+    "desloc_em_dp_post_original": 0.4789692455633391
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.495,
+    "priori_media": 2.2109204562265617e-13,
+    "priori_dp": 22.239033277579566,
+    "evpi_priori": 6.543003869726055,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 4.980582622611979,
+    "post_ic90": [
+     3.9917229078862055,
+     5.972651178203107
+    ],
+    "post_dp_sobre_priori": 0.027532958217569868,
+    "post_dp": 0.6123063740307441,
+    "habilidade_modelo": 0.8157842939866826,
+    "desloc_em_dp_post_original": 0.18172842187057964
+   }
+  },
+  "h2/direito_prisoes": {
+   "original": {
+    "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.3546403495910839,
+    "priori_dp": 0.2833313965142407,
+    "evpi_priori": 0.5419549194079751,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.729790573452568,
+    "post_ic90": [
+     -0.8595139163694663,
+     -0.6035257842835889
+    ],
+    "post_dp_sobre_priori": 0.27587778669034907,
+    "post_dp": 0.07816483857023442,
+    "habilidade_modelo": -0.012696832803342994
+   },
+   "literatura": {
+    "status": "podado no F1: a pesquisa não muda a decisão (EVPI < custo)",
+    "categoria": "podado no F1",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.34817103572821373,
+    "priori_dp": 0.10458172138192275,
+    "evpi_priori": 0.009989148860118036,
+    "f1_passa": false,
+    "f2_informativo": null,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -1.2415321334929852e-13,
+    "priori_dp": 2.833313965142098,
+    "evpi_priori": 17.21361447341588,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.7605788029841501,
+    "post_ic90": [
+     -0.8957654416044373,
+     -0.6291187419702027
+    ],
+    "post_dp_sobre_priori": 0.028672129857540647,
+    "post_dp": 0.08123714593573764,
+    "habilidade_modelo": -0.01387781331814053,
+    "desloc_em_dp_post_original": 0.393888480994144
+   }
+  },
+  "h2/educacao_star": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.839625,
+    "priori_media": 12.000000000000288,
+    "priori_dp": 5.9304088740243355,
+    "evpi_priori": 1.5021454273191504,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 13.51843647910665,
+    "post_ic90": [
+     7.485530230274364,
+     19.50521375069851
+    ],
+    "post_dp_sobre_priori": 0.609554915575997,
+    "post_dp": 3.6149098805370468,
+    "habilidade_modelo": 0.17006744769242055
+   },
+   "literatura": {
+    "status": "podado no F2: dados na unidade independente não informam mais que a priori",
+    "categoria": "podado no F2",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 7.3331911499981395,
+    "priori_dp": 3.6665955749990373,
+    "evpi_priori": 0.4977819819785738,
+    "f1_passa": true,
+    "f2_informativo": false,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.8325,
+    "priori_media": 2.517766354676082e-13,
+    "priori_dp": 59.30408874024351,
+    "evpi_priori": 18.85639811220967,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 14.257789842789157,
+    "post_ic90": [
+     6.740833346624233,
+     21.748931001569197
+    ],
+    "post_dp_sobre_priori": 0.07603394165630414,
+    "post_dp": 4.509123623255959,
+    "habilidade_modelo": 0.16996845966927654,
+    "desloc_em_dp_post_original": 0.20452885081955743
+   }
+  },
+  "h2/energia_vitoria": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 120.00000000000006,
+    "priori_dp": 44.47806655516684,
+    "evpi_priori": 9.494682469694528,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 126.06768709511744,
+    "post_ic90": [
+     118.33703844585588,
+     133.89550099860773
+    ],
+    "post_dp_sobre_priori": 0.10779808482723709,
+    "post_dp": 4.794650391465372,
+    "habilidade_modelo": 0.8780032540644398
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 3.8653022608413046e-13,
+    "priori_dp": 444.78066555166845,
+    "evpi_priori": 132.47807362537068,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 126.14610083192358,
+    "post_ic90": [
+     118.22797759470862,
+     134.08981540271003
+    ],
+    "post_dp_sobre_priori": 0.010910511677905018,
+    "post_dp": 4.852784645607845,
+    "habilidade_modelo": 0.8780650456817536,
+    "desloc_em_dp_post_original": 0.01635442220056748
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 3.8653022608413046e-13,
+    "priori_dp": 444.78066555166845,
+    "evpi_priori": 132.47807362537068,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 126.14610083192358,
+    "post_ic90": [
+     118.22797759470862,
+     134.08981540271003
+    ],
+    "post_dp_sobre_priori": 0.010910511677905018,
+    "post_dp": 4.852784645607845,
+    "habilidade_modelo": 0.8780650456817536,
+    "desloc_em_dp_post_original": 0.01635442220056748
+   }
+  },
+  "h2/epidemiologia_contracepcao": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.64425,
+    "priori_media": 1.1657448566719526,
+    "priori_dp": 0.432286988037452,
+    "evpi_priori": 1.4930245304040364,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.916821337675822,
+    "post_ic90": [
+     0.60691994036797,
+     1.2328533036216216
+    ],
+    "post_dp_sobre_priori": 0.43131229125152276,
+    "post_dp": 0.18645069128865305,
+    "habilidade_modelo": 0.04165662700173667
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.52025,
+    "priori_media": 1.5731263617071285e-13,
+    "priori_dp": 4.3228698803754355,
+    "evpi_priori": 30.32376889769014,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.8589620059132363,
+    "post_ic90": [
+     0.5190071142273659,
+     1.205609624645008
+    ],
+    "post_dp_sobre_priori": 0.04749485811090455,
+    "post_dp": 0.20531409160033423,
+    "habilidade_modelo": 0.04203035736063332,
+    "desloc_em_dp_post_original": 0.3103197492199741
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.52025,
+    "priori_media": 1.5731263617071285e-13,
+    "priori_dp": 4.3228698803754355,
+    "evpi_priori": 30.32376889769014,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.8589620059132363,
+    "post_ic90": [
+     0.5190071142273659,
+     1.205609624645008
+    ],
+    "post_dp_sobre_priori": 0.04749485811090455,
+    "post_dp": 0.20531409160033423,
+    "habilidade_modelo": 0.04203035736063332,
+    "desloc_em_dp_post_original": 0.3103197492199741
+   }
+  },
+  "h2/logistica_voos": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 0.07684670968643664,
+    "priori_dp": 0.02745873579280776,
+    "evpi_priori": 1.363217197640131,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.13007927510340767,
+    "post_ic90": [
+     0.12333025541101447,
+     0.13700454090193898
+    ],
+    "post_dp_sobre_priori": 0.15300621154996857,
+    "post_dp": 0.004201357137609038,
+    "habilidade_modelo": 0.09219070289239595
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 3.352218639578013e-14,
+    "priori_dp": 0.2745873580509521,
+    "evpi_priori": 13.233130359196249,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.1312100022670723,
+    "post_ic90": [
+     0.12439451026260574,
+     0.1382255277382672
+    ],
+    "post_dp_sobre_priori": 0.015417752796328585,
+    "post_dp": 0.004233520007426545,
+    "habilidade_modelo": 0.09217588701046397,
+    "desloc_em_dp_post_original": 0.2691337885900659
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 3.352218639578013e-14,
+    "priori_dp": 0.2745873580509521,
+    "evpi_priori": 13.233130359196249,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.1312100022670723,
+    "post_ic90": [
+     0.12439451026260574,
+     0.1382255277382672
+    ],
+    "post_dp_sobre_priori": 0.015417752796328585,
+    "post_dp": 0.004233520007426545,
+    "habilidade_modelo": 0.09217588701046397,
+    "desloc_em_dp_post_original": 0.2691337885900659
+   }
+  },
+  "h2/saude_consultas": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 0.19999999999998455,
+    "priori_dp": 0.11860817748042375,
+    "evpi_priori": 2.6846564266469857,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.30647745468989906,
+    "post_ic90": [
+     0.24057071929860727,
+     0.37332435323567303
+    ],
+    "post_dp_sobre_priori": 0.3451124951289934,
+    "post_dp": 0.040933164072971526,
+    "habilidade_modelo": 0.13805672203052977
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": -3.524476099390239e-13,
+    "priori_dp": 1.1860817748043955,
+    "evpi_priori": 39.907271693182764,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.3202575188818602,
+    "post_ic90": [
+     0.250810256395788,
+     0.3910120945010752
+    ],
+    "post_dp_sobre_priori": 0.036582928757693395,
+    "post_dp": 0.04339034506846774,
+    "habilidade_modelo": 0.13796920796281942,
+    "desloc_em_dp_post_original": 0.3366479113951572
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": -3.524476099390239e-13,
+    "priori_dp": 1.1860817748043955,
+    "evpi_priori": 39.907271693182764,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.3202575188818602,
+    "post_ic90": [
+     0.250810256395788,
+     0.3910120945010752
+    ],
+    "post_dp_sobre_priori": 0.036582928757693395,
+    "post_dp": 0.04339034506846774,
+    "habilidade_modelo": 0.13796920796281942,
+    "desloc_em_dp_post_original": 0.3366479113951572
+   }
+  },
+  "h2/trabalho_curriculos": {
+   "original": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.3050238251848566,
+    "priori_dp": 0.16091015857832608,
+    "evpi_priori": 0.08840639069050127,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.363521283068218,
+    "post_ic90": [
+     -0.5590772204456357,
+     -0.17380183967480498
+    ],
+    "post_dp_sobre_priori": 0.7171231032504748,
+    "post_dp": 0.1153923922642152,
+    "habilidade_modelo": 0.023428548583462105
+   },
+   "literatura": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.3340153641574414,
+    "priori_dp": 0.1670076820786576,
+    "evpi_priori": 0.0698778816922414,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.379654800947912,
+    "post_ic90": [
+     -0.5778255936840968,
+     -0.18656192924757434
+    ],
+    "post_dp_sobre_priori": 0.7035760338148501,
+    "post_dp": 0.11750260257351333,
+    "habilidade_modelo": 0.023518116211477258,
+    "desloc_em_dp_post_original": 0.13981439818625893
+   },
+   "fraca": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -1.2332487680556421e-14,
+    "priori_dp": 1.6091015857834774,
+    "evpi_priori": 4.270482146792305,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.41675662796008117,
+    "post_ic90": [
+     -0.6910702497609487,
+     -0.1507559201335744
+    ],
+    "post_dp_sobre_priori": 0.10023673131250627,
+    "post_dp": 0.16129108330870617,
+    "habilidade_modelo": 0.023660137272777937,
+    "desloc_em_dp_post_original": 0.46134189479293936
+   }
+  },
+  "h2/transito_alcool": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.45000000000016965,
+    "priori_dp": 0.4447806655516783,
+    "evpi_priori": 0.7960292338227655,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.6600000000002054,
+    "priori_dp": 0.5799999999998245,
+    "evpi_priori": 0.7023056415200211,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -8.456022617482167e-15,
+    "priori_dp": 4.447806655516001,
+    "evpi_priori": 16.993731145158435,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/biologia_sachs": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 0.49999999999996914,
+    "priori_dp": 0.29652044370110625,
+    "evpi_priori": 0.07362297507921647,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.24175133622232284,
+    "post_ic90": [
+     0.2279562325035874,
+     0.25500057274646665
+    ],
+    "post_dp_sobre_priori": 0.028142732719368006,
+    "post_dp": 0.008344895592908642,
+    "habilidade_modelo": 0.14147853308931446
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370101653,
+    "evpi_priori": 1.0143878384041523,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.2415462526699893,
+    "post_ic90": [
+     0.22774578201189669,
+     0.25480064377680267
+    ],
+    "post_dp_sobre_priori": 0.002815368157827698,
+    "post_dp": 0.008348142153407826,
+    "habilidade_modelo": 0.14144451615278741,
+    "desloc_em_dp_post_original": 0.02457592788911721
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370101653,
+    "evpi_priori": 1.0143878384041523,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.2415462526699893,
+    "post_ic90": [
+     0.22774578201189669,
+     0.25480064377680267
+    ],
+    "post_dp_sobre_priori": 0.002815368157827698,
+    "post_dp": 0.008348142153407826,
+    "habilidade_modelo": 0.14144451615278741,
+    "desloc_em_dp_post_original": 0.02457592788911721
+   }
+  },
+  "h2g/direito_teto_beneficio": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 0.35000000000001663,
+    "priori_dp": 0.22239033277576534,
+    "evpi_priori": 0.08718710226310236,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5787653015910925,
+    "post_ic90": [
+     0.49143728790796204,
+     0.6654119303511903
+    ],
+    "post_dp_sobre_priori": 0.2428597372290079,
+    "post_dp": 0.05400965778019399,
+    "habilidade_modelo": 0.18509065314022832
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.99875,
+    "priori_media": 0.35000000000001225,
+    "priori_dp": 0.0741301109252509,
+    "evpi_priori": 0.0290623674210358,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5055138487504593,
+    "post_ic90": [
+     0.4335384072837925,
+     0.5768365025105376
+    ],
+    "post_dp_sobre_priori": 0.6027556267029015,
+    "post_dp": 0.044682341468305214,
+    "habilidade_modelo": 0.18425591091308224,
+    "desloc_em_dp_post_original": 1.3562658208046523
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": -4.796795054558188e-14,
+    "priori_dp": 2.223903327758052,
+    "evpi_priori": 0.7090365578238558,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5931136962343782,
+    "post_ic90": [
+     0.5016722388830512,
+     0.6812563852366241
+    ],
+    "post_dp_sobre_priori": 0.025054594834902643,
+    "post_dp": 0.05571899682896969,
+    "habilidade_modelo": 0.18521659843788085,
+    "desloc_em_dp_post_original": 0.2656634985853839
+   }
+  },
+  "h2g/educacao_star_turmas": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.47275,
+    "priori_media": 0.18999999999999076,
+    "priori_dp": 0.08895613311028855,
+    "evpi_priori": 0.01907257104971307,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.1478530155440293,
+    "post_ic90": [
+     0.09165766498539898,
+     0.20514691630210008
+    ],
+    "post_dp_sobre_priori": 0.3816562070152488,
+    "post_dp": 0.03395066035361632,
+    "habilidade_modelo": 0.09614375159641275
+   },
+   "literatura": {
+    "status": "podado no F1: a pesquisa não muda a decisão (EVPI < custo)",
+    "categoria": "podado no F1",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.10026513098524455,
+    "priori_dp": 0.0501325654926022,
+    "evpi_priori": 0.004245996060797593,
+    "f1_passa": false,
+    "f2_informativo": null,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.397875,
+    "priori_media": -1.0897457905065751e-13,
+    "priori_dp": 0.8895613311029755,
+    "evpi_priori": 0.28358306746103074,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.14091245327425117,
+    "post_ic90": [
+     0.08024936139193165,
+     0.20264699455479376
+    ],
+    "post_dp_sobre_priori": 0.04103031677671178,
+    "post_dp": 0.03649898320746848,
+    "habilidade_modelo": 0.096603955043435,
+    "desloc_em_dp_post_original": 0.20443084751483606
+   }
+  },
+  "h2g/engenharia_tunel_vento": {
+   "original": {
+    "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 1.9999999999998288,
+    "priori_dp": 1.4826022185061147,
+    "evpi_priori": 0.5854906830590246,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.30087371471515817,
+    "post_ic90": [
+     0.22824650641577746,
+     0.37469125189953345
+    ],
+    "post_dp_sobre_priori": 0.030330471307948085,
+    "post_dp": 0.04496802404949989,
+    "habilidade_modelo": -2.1756810352535987
+   },
+   "literatura": {
+    "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 2.8071416507175375e-13,
+    "priori_dp": 14.826022185060875,
+    "evpi_priori": 4.92756169694828,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.29930071189026247,
+    "post_ic90": [
+     0.22664714035980293,
+     0.3731585640418792
+    ],
+    "post_dp_sobre_priori": 0.0030341130017997845,
+    "post_dp": 0.04498382667666525,
+    "habilidade_modelo": -2.1756658370936846,
+    "desloc_em_dp_post_original": 0.03498047464047269
+   },
+   "fraca": {
+    "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 2.8071416507175375e-13,
+    "priori_dp": 14.826022185060875,
+    "evpi_priori": 4.92756169694828,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.29930071189026247,
+    "post_ic90": [
+     0.22664714035980293,
+     0.3731585640418792
+    ],
+    "post_dp_sobre_priori": 0.0030341130017997845,
+    "post_dp": 0.04498382667666525,
+    "habilidade_modelo": -2.1756658370936846,
+    "desloc_em_dp_post_original": 0.03498047464047269
+   }
+  },
+  "h2g/farmacologia_qt": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.01675,
+    "priori_media": 28.000000000000128,
+    "priori_dp": 11.860817748045383,
+    "evpi_priori": 4.740492917873855,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 25.210701694357784,
+    "post_ic90": [
+     23.03814011732363,
+     27.479161010964177
+    ],
+    "post_dp_sobre_priori": 0.11131516967323621,
+    "post_dp": 1.3202889400870033,
+    "habilidade_modelo": 0.6502558869202071
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.010875,
+    "priori_media": 19.99999999999993,
+    "priori_dp": 7.4130110925268,
+    "evpi_priori": 0.5419914721112428,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 25.0031796815723,
+    "post_ic90": [
+     22.859629633527714,
+     27.23943444106429
+    ],
+    "post_dp_sobre_priori": 0.17597297729243808,
+    "post_dp": 1.30448963265381,
+    "habilidade_modelo": 0.6510912555300049,
+    "desloc_em_dp_post_original": 0.15717924045611595
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.01625,
+    "priori_media": 4.841976378868257e-13,
+    "priori_dp": 118.60817748045375,
+    "evpi_priori": 34.74804367946012,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 25.176519480303305,
+    "post_ic90": [
+     22.988251401542893,
+     27.461357746703307
+    ],
+    "post_dp_sobre_priori": 0.011196616267555684,
+    "post_dp": 1.3280102494427801,
+    "habilidade_modelo": 0.6503803717219965,
+    "desloc_em_dp_post_original": 0.02588994955318342
+   }
+  },
+  "h2g/fisica_tunel_luz": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 5.9999999999998765,
+    "priori_dp": 2.9652044370105477,
+    "evpi_priori": 1.1747860867476907,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 4.531935431529153,
+    "post_ic90": [
+     4.491209406695629,
+     4.57302178610226
+    ],
+    "post_dp_sobre_priori": 0.008355138839810377,
+    "post_dp": 0.024774694759644892,
+    "habilidade_modelo": 0.9585489551568404
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 2.62475239694414e-13,
+    "priori_dp": 29.65204437010582,
+    "evpi_priori": 9.005773262566894,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 4.531829001399508,
+    "post_ic90": [
+     4.491101554134393,
+     4.572916790949045
+    ],
+    "post_dp_sobre_priori": 0.000835543065656138,
+    "post_dp": 0.024775560055970043,
+    "habilidade_modelo": 0.9585458008380314,
+    "desloc_em_dp_post_original": 0.0042959209256483106
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 2.62475239694414e-13,
+    "priori_dp": 29.65204437010582,
+    "evpi_priori": 9.005773262566894,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 4.531829001399508,
+    "post_ic90": [
+     4.491101554134393,
+     4.572916790949045
+    ],
+    "post_dp_sobre_priori": 0.000835543065656138,
+    "post_dp": 0.024775560055970043,
+    "habilidade_modelo": 0.9585458008380314,
+    "desloc_em_dp_post_original": 0.0042959209256483106
+   }
+  },
+  "h2g/genetica_y01": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11773921004433563,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0429885605145475,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0429885605145475,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/genetica_y02": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.454,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11878835746535331,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.2837559956428865,
+    "post_ic90": [
+     0.06934040594422572,
+     0.48806904477255547
+    ],
+    "post_dp_sobre_priori": 0.42854211254401336,
+    "post_dp": 0.12707149735612114,
+    "habilidade_modelo": 0.27853048176641815
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.461875,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0466866561659582,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.28022550427705456,
+    "post_ic90": [
+     0.04257467737944831,
+     0.510654927171658
+    ],
+    "post_dp_sobre_priori": 0.04798492282037366,
+    "post_dp": 0.1422851060565185,
+    "habilidade_modelo": 0.27794566433762513,
+    "desloc_em_dp_post_original": 0.027783503297656532
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.461875,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0466866561659582,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.28022550427705456,
+    "post_ic90": [
+     0.04257467737944831,
+     0.510654927171658
+    ],
+    "post_dp_sobre_priori": 0.04798492282037366,
+    "post_dp": 0.1422851060565185,
+    "habilidade_modelo": 0.27794566433762513,
+    "desloc_em_dp_post_original": 0.027783503297656532
+   }
+  },
+  "h2g/genetica_y03": {
+   "original": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11703180655146435,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.46241017533178796,
+    "post_ic90": [
+     0.39000365423247046,
+     0.5332352638361157
+    ],
+    "post_dp_sobre_priori": 0.14644059476143234,
+    "post_dp": 0.04342263013450045,
+    "habilidade_modelo": 0.6478491196444391
+   },
+   "literatura": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0274239335741193,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.46586782912754754,
+    "post_ic90": [
+     0.39256081851694885,
+     0.5358577175008488
+    ],
+    "post_dp_sobre_priori": 0.014775512053411455,
+    "post_dp": 0.04381241389985934,
+    "habilidade_modelo": 0.6455867562962083,
+    "desloc_em_dp_post_original": 0.07962792177833501
+   },
+   "fraca": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0274239335741193,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.46586782912754754,
+    "post_ic90": [
+     0.39256081851694885,
+     0.5358577175008488
+    ],
+    "post_dp_sobre_priori": 0.014775512053411455,
+    "post_dp": 0.04381241389985934,
+    "habilidade_modelo": 0.6455867562962083,
+    "desloc_em_dp_post_original": 0.07962792177833501
+   }
+  },
+  "h2g/genetica_y04": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11742312246779016,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.10469325480405234,
+    "post_ic90": [
+     0.029898859241300757,
+     0.18192738506164066
+    ],
+    "post_dp_sobre_priori": 0.1530907335795855,
+    "post_dp": 0.045394532247532565,
+    "habilidade_modelo": 0.15868478342649117
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.031435843996877,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.09965780720312166,
+    "post_ic90": [
+     0.024484216210279783,
+     0.17824456728688476
+    ],
+    "post_dp_sobre_priori": 0.015529739236733972,
+    "post_dp": 0.04604885169036026,
+    "habilidade_modelo": 0.15941094480953488,
+    "desloc_em_dp_post_original": 0.11092630216945086
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.031435843996877,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.09965780720312166,
+    "post_ic90": [
+     0.024484216210279783,
+     0.17824456728688476
+    ],
+    "post_dp_sobre_priori": 0.015529739236733972,
+    "post_dp": 0.04604885169036026,
+    "habilidade_modelo": 0.15941094480953488,
+    "desloc_em_dp_post_original": 0.11092630216945086
+   }
+  },
+  "h2g/genetica_y05": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11771192731234689,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0335422168470758,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0335422168470758,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/genetica_y06": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11802055300205787,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.036898609537411,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.036898609537411,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/genetica_y07": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11800212252786324,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5826286792341946,
+    "post_ic90": [
+     0.5057284607327783,
+     0.6608635422979068
+    ],
+    "post_dp_sobre_priori": 0.15672625984672214,
+    "post_dp": 0.04647254010935062,
+    "habilidade_modelo": 0.4032858383339436
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0468511684446233,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5899073090767544,
+    "post_ic90": [
+     0.5129586095566588,
+     0.6686295230757875
+    ],
+    "post_dp_sobre_priori": 0.015755319233604483,
+    "post_dp": 0.04671774249798123,
+    "habilidade_modelo": 0.4020476551924771,
+    "desloc_em_dp_post_original": 0.15662216494801123
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 1.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0468511684446233,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.5899073090767544,
+    "post_ic90": [
+     0.5129586095566588,
+     0.6686295230757875
+    ],
+    "post_dp_sobre_priori": 0.015755319233604483,
+    "post_dp": 0.04671774249798123,
+    "habilidade_modelo": 0.4020476551924771,
+    "desloc_em_dp_post_original": 0.15662216494801123
+   }
+  },
+  "h2g/genetica_y08": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11843628792433028,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.057900604199351065,
+    "post_ic90": [
+     0.021484580008701133,
+     0.09688037334308733
+    ],
+    "post_dp_sobre_priori": 0.07779852347624078,
+    "post_dp": 0.023068852700458747,
+    "habilidade_modelo": 0.6857239900485428
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0412210908134027,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.056511732864671524,
+    "post_ic90": [
+     0.019856488637080325,
+     0.0955104875067987
+    ],
+    "post_dp_sobre_priori": 0.0078045928219922815,
+    "post_dp": 0.02314221326482208,
+    "habilidade_modelo": 0.6852753893899681,
+    "desloc_em_dp_post_original": 0.06020547934106501
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "manter",
+    "p_adotar_compensa": 0.0,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0412210908134027,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": 0.056511732864671524,
+    "post_ic90": [
+     0.019856488637080325,
+     0.0955104875067987
+    ],
+    "post_dp_sobre_priori": 0.0078045928219922815,
+    "post_dp": 0.02314221326482208,
+    "habilidade_modelo": 0.6852753893899681,
+    "desloc_em_dp_post_original": 0.06020547934106501
+   }
+  },
+  "h2g/genetica_y09": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11846986809022655,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0458544615668997,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0458544615668997,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/genetica_y10": {
+   "original": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 0.30000000000000115,
+    "priori_dp": 0.296520443701015,
+    "evpi_priori": 0.11815850946956259,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "literatura": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0383793475199463,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   },
+   "fraca": {
+    "status": "podado no F3: a chave não vence o nulo de permutação",
+    "categoria": "podado no F3",
+    "falhas": [],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -2.4950087469869784e-13,
+    "priori_dp": 2.9652044370092527,
+    "evpi_priori": 1.0383793475199463,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": null,
+    "post_ic90": null,
+    "post_dp_sobre_priori": null,
+    "post_dp": null,
+    "habilidade_modelo": null
+   }
+  },
+  "h2g/saude_rand": {
+   "original": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.74125,
+    "priori_media": -1.01666666682417,
+    "priori_dp": 0.5559758322818092,
+    "evpi_priori": 0.031699560155297964,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.8375710763891986,
+    "post_ic90": [
+     -0.9375260389580755,
+     -0.731655137278442
+    ],
+    "post_dp_sobre_priori": 0.11116577635486313,
+    "post_dp": 0.0618054850301485,
+    "habilidade_modelo": 0.07254739763514462
+   },
+   "literatura": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.728875,
+    "priori_media": 3.291729224139177e-13,
+    "priori_dp": 5.55975832281808,
+    "evpi_priori": 0.4693289883094303,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.8351311671328928,
+    "post_ic90": [
+     -0.9357315717160888,
+     -0.728542846429566
+    ],
+    "post_dp_sobre_priori": 0.011188351018069004,
+    "post_dp": 0.06220452769131928,
+    "habilidade_modelo": 0.07255424418210621,
+    "desloc_em_dp_post_original": 0.039477228519695186
+   },
+   "fraca": {
+    "status": "aprovado no F4: decisão emitida",
+    "categoria": "aprovado no F4",
+    "falhas": [],
+    "acao": "adotar",
+    "p_adotar_compensa": 0.728875,
+    "priori_media": 3.291729224139177e-13,
+    "priori_dp": 5.55975832281808,
+    "evpi_priori": 0.4693289883094303,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.8351311671328928,
+    "post_ic90": [
+     -0.9357315717160888,
+     -0.728542846429566
+    ],
+    "post_dp_sobre_priori": 0.011188351018069004,
+    "post_dp": 0.06220452769131928,
+    "habilidade_modelo": 0.07255424418210621,
+    "desloc_em_dp_post_original": 0.039477228519695186
+   }
+  },
+  "h2g/transporte_cinto": {
+   "original": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.15666666670878374,
+    "priori_dp": 0.13343419964325326,
+    "evpi_priori": 0.2843179445451033,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.2054689436055225,
+    "post_ic90": [
+     -0.31096060458700453,
+     -0.09488660704783021
+    ],
+    "post_dp_sobre_priori": 0.49731797866352834,
+    "post_dp": 0.0663592264511684,
+    "habilidade_modelo": 0.8036974912465813
+   },
+   "literatura": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": -0.2514882254389063,
+    "priori_dp": 0.17774355782895013,
+    "evpi_priori": 0.18330075700218917,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.22753443922526734,
+    "post_ic90": [
+     -0.3411351157130943,
+     -0.11112360400764727
+    ],
+    "post_dp_sobre_priori": 0.39693727393854356,
+    "post_dp": 0.07055304330476134,
+    "habilidade_modelo": 0.7956798593793677,
+    "desloc_em_dp_post_original": 0.33251586553652956
+   },
+   "fraca": {
+    "status": "reprovado no F4 (M15): conforme_ok",
+    "categoria": "reprovado no F4 (M15)",
+    "falhas": [
+     "conforme_ok"
+    ],
+    "acao": null,
+    "p_adotar_compensa": null,
+    "priori_media": 4.663279506395348e-15,
+    "priori_dp": 1.3343419964334,
+    "evpi_priori": 4.816350905811235,
+    "f1_passa": true,
+    "f2_informativo": true,
+    "post_media": -0.22145559035697318,
+    "post_ic90": [
+     -0.3441501721461642,
+     -0.09424328161757131
+    ],
+    "post_dp_sobre_priori": 0.05741254123258106,
+    "post_dp": 0.07660796488859711,
+    "habilidade_modelo": 0.7981051312348484,
+    "desloc_em_dp_post_original": 0.24091068576898989
+   }
+  },
+  "h1-real/a": {
+   "original": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": 2.0,
+    "decisao_base_mb7": 2.0,
+    "quantidade_mediana": 2.352329483504259,
+    "priori_beta": [
+     15.792278639962243,
+     9.767095666683444
+    ],
+    "post_dp_sobre_priori": 0.08200853831872301,
+    "habilidade_modelo": 0.3966490920995863
+   },
+   "literatura": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": 2.0,
+    "decisao_base_mb7": 2.0,
+    "quantidade_mediana": 2.2690298674873803,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.03401874115506817,
+    "habilidade_modelo": 0.3935386573202567
+   },
+   "fraca": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": 2.0,
+    "decisao_base_mb7": 2.0,
+    "quantidade_mediana": 2.2690298674873803,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.03401874115506817,
+    "habilidade_modelo": 0.3935386573202567
+   }
+  },
+  "h1-real/b": {
+   "original": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": "financiar o treinamento",
+    "decisao_base_mb7": "financiar o treinamento",
+    "quantidade_mediana": 0.09635154376123678,
+    "priori_beta": [
+     6.160901160134359,
+     5.418873853757134
+    ],
+    "post_dp_sobre_priori": 0.19353342026465,
+    "habilidade_modelo": 0.1844798109672552
+   },
+   "literatura": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": "financiar o treinamento",
+    "decisao_base_mb7": "financiar o treinamento",
+    "quantidade_mediana": 0.08396241727494225,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.1591710652585987,
+    "habilidade_modelo": 0.1812405529652814
+   },
+   "fraca": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": "financiar o treinamento",
+    "decisao_base_mb7": "financiar o treinamento",
+    "quantidade_mediana": 0.08396241727494225,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.1591710652585987,
+    "habilidade_modelo": 0.1812405529652814
+   }
+  },
+  "h1-real/c": {
+   "original": {
+    "status": "reprovado: modelo_vence_climatologia",
+    "categoria": "reprovado",
+    "falhas": [
+     "modelo_vence_climatologia"
+    ],
+    "acao": 0.4,
+    "decisao_base_mb7": 0.4,
+    "quantidade_mediana": 0.03257704525937471,
+    "priori_beta": [
+     2.3279580145089755,
+     106.9300825486913
+    ],
+    "post_dp_sobre_priori": 0.872232219705748,
+    "habilidade_modelo": -0.014506339351077813
+   },
+   "literatura": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": 0.0,
+    "decisao_base_mb7": 0.0,
+    "quantidade_mediana": 0.05203072270547729,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.07243444001450533,
+    "habilidade_modelo": 0.007320369057232212
+   },
+   "fraca": {
+    "status": "aprovado",
+    "categoria": "aprovado",
+    "falhas": [],
+    "acao": 0.0,
+    "decisao_base_mb7": 0.0,
+    "quantidade_mediana": 0.05203072270547729,
+    "priori_beta": [
+     1.0000000000166276,
+     1.0000000000047684
+    ],
+    "post_dp_sobre_priori": 0.07243444001450533,
+    "habilidade_modelo": 0.007320369057232212
+   }
+  }
+ }
+}

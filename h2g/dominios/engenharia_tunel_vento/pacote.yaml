@@ -87,6 +87,8 @@ decisao:
 termo_escopo:
   vale_para: o túnel de vento na configuração padrão, regimes de alvo único
   nao_vale_para: intervenções múltiplas simultâneas, outra câmara, cargas fora de [0, 1]
+pergunta_do_decisor: >-
+  Quem decide: o operador do túnel que escolhe a carga dos ventiladores e a escotilha. Ação que a decisão muda: usar a carga de entrada como alavanca para regular a pressão a jusante. A pergunta do decisor é: a carga de entrada regula a pressão a jusante pela mesma lei em todos os regimes, inclusive com a escotilha reaberta?
 tentativas_de_especificacao: 1
 historico_especificacoes:
   - K: 1

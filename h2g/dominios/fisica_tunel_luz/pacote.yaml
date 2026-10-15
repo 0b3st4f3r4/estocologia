@@ -89,6 +89,8 @@ decisao:
 termo_escopo:
   vale_para: o túnel de luz na configuração padrão, com os parâmetros do sensor de corrente nos valores-base
   nao_vale_para: mudanças no sensor de corrente (osr_c, v_c), outra fonte de luz, outra câmara
+pergunta_do_decisor: >-
+  Quem decide: o operador do túnel de luz que regula a corrente pelo brilho do vermelho. Ação que a decisão muda: usar o brilho do vermelho como alavanca para regular a corrente da fonte. A pergunta do decisor é: o efeito do brilho do vermelho aprendido até 170 prevê a corrente com o vermelho entre 171 e 255?
 tentativas_de_especificacao: 1
 historico_especificacoes:
   - K: 1

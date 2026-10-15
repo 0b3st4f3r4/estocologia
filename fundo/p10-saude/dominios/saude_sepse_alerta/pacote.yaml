@@ -1,0 +1,125 @@
+nome: saude_sepse_alerta
+area: Saúde (terapia intensiva, alerta precoce de sepse)
+titulo: Alerta de sepse na primeira janela de 6 h em dois sistemas hospitalares dos EUA (PhysioNet/CinC 2019)
+pergunta: >-
+  A mesma lei liga a frequência respiratória da primeira janela de 6 h à decisão de sepse registrada em qualquer
+  UTI e em qualquer sistema hospitalar, de modo que a lei ajustada nas UTIs de um sistema preveja o outro
+  sistema, que não entrou no ajuste?
+alegacao: '"Uma FR alta na primeira janela diz a mesma coisa sobre a decisão de sepse em qualquer UTI: o gatilho calibrado num sistema hospitalar vale no outro."'
+glossario:
+  sepse: disfunção de órgão com risco de vida causada por resposta desregulada a infecção (Sepsis-3)
+  sepse_3: "definição consensual de 2016 (Singer et al., JAMA): disfunção de órgão com resposta desregulada, operada por SOFA"
+  sofa: Sequential Organ Failure Assessment, escore de disfunção de órgão (respiração, coagulação, fígado, cardiovascular, neurológico, renal)
+  qsofa: "escore à beira do leito com três itens: PAS ≤ 100 mmHg, FR ≥ 22/min e alteração do estado mental"
+  hemocultura: cultura de sangue colhida antes do antibiótico quando se suspeita de infecção
+  antibiotico_iv: antibiótico intravenoso, o outro registro da suspeita de infecção
+  janela: as 6 primeiras horas registradas da internação na UTI (ICULOS 1 a 6), quando o gatilho é medido
+  alarma: SepsisLabel = 1, o registro de que a decisão de sepse já foi tomada (ou está a até 6 h de ser)
+  micu: unidade de terapia intensiva médica (Unit1 = 1 no arquivo)
+  sicu: unidade de terapia intensiva cirúrgica (Unit2 = 1 no arquivo)
+  fr: frequência respiratória, respirações por minuto (coluna Resp)
+  spo2: saturação periférica de oxigênio (coluna O2Sat)
+  tempo_hospital_uti: horas entre a admissão no hospital e a admissão na UTI (coluna HospAdmTime, com sinal)
+  sistema_hospitalar: Beth Israel Deaconess Medical Center (sistema A) e Emory University Hospital (sistema B)
+fontes:
+  - "PhysioNet/CinC Challenge 2019 (Reynolds et al., Early Prediction of Sepsis from Clinical Data, Crit Care Med 2020, DOI 10.1097/CCM.0000000000004145), dados no espelho aberto https://physionet-open.s3.amazonaws.com/challenge-2019/1.0.0/training/ (ODC-By); manuscrito do desafio no espelho, conferido por busca de texto: três sistemas hospitalares com três prontuários eletrônicos distintos (A = Beth Israel Deaconess, B = Emory, C não identificado), A e B públicos, C sequestrado, rótulo pela definição Sepsis-3 com 'antibióticos IV e hemoculturas dentro de um intervalo de tempo'"
+  - "Singer et al. (2016), The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3), JAMA 315:801, DOI 10.1001/jama.2016.0287 — conferido no Europe PMC (título, revista, ano e resumo): a operacionalização clínica da disfunção de órgão é um aumento de 2 pontos ou mais no SOFA"
+  - "Seymour et al. (2016), Assessment of Clinical Criteria for Sepsis, JAMA, DOI 10.1001/jama.2016.0288 — conferido no Europe PMC: o qSOFA é '1 point each for systolic hypotension [<=100 mm Hg], tachypnea [>=22/min], or altered mentation', com AUROC 0,66 (IC95% 0,64-0,68) para mortalidade intra-hospitalar nas internações de UTI da coorte de validação (n = 7 932 com suspeita de infecção)"
+arquivos: [challenge-2019/1.0.0/training/training_setA, challenge-2019/1.0.0/training/training_setB]
+familia: binomial
+desfecho: decisão de sepse registrada depois da primeira janela (SepsisLabel = 1 em alguma hora com ICULOS ≥ 7), por internação
+chave: fr
+candidatos:
+  fr: {tipo: num, descricao: maior frequência respiratória da janela, respirações por minuto}
+  temp: {tipo: num, descricao: maior temperatura da janela, em graus Celsius}
+  pas: {tipo: num, descricao: menor pressão arterial sistólica da janela, em mmHg}
+  pad: {tipo: num, descricao: menor pressão arterial diastólica da janela, em mmHg}
+  spo2: {tipo: num, descricao: menor saturação periférica de oxigênio da janela, em porcentagem}
+  fc: {tipo: num, descricao: maior frequência cardíaca da janela, em batimentos por minuto}
+  idade: {tipo: num, descricao: idade em anos}
+  sexo: {tipo: num, descricao: Gender como está no arquivo (0 ou 1); constante por internação}
+  tempo_hospital_uti: {tipo: num, descricao: horas entre a admissão hospitalar e a da UTI (HospAdmTime, com sinal)}
+icp_candidatos: [fr, temp, pas, pad, spo2, fc, idade, sexo, tempo_hospital_uti]
+ajuste: [idade, sexo, temp, pas, spo2, tempo_hospital_uti]
+dag:
+  - [idade, fr]
+  - [idade, temp]
+  - [idade, pas]
+  - [idade, spo2]
+  - [idade, y]
+  - [sexo, y]
+  - [tempo_hospital_uti, y]
+  - [tempo_hospital_uti, fr]
+  - [temp, fr]
+  - [temp, y]
+  - [spo2, fr]
+  - [spo2, y]
+  - [pas, y]
+  - [pad, pas]
+  - [fr, y]
+ambientes:
+  descricao: >-
+    Sítio, cruzando sistema hospitalar e tipo de UTI: sistema pela pasta (A = training_setA, B = training_setB);
+    tipo = MICU se Unit1 = 1, SICU se Unit2 = 1, e "outros" se nenhuma das duas (flag ausente ou 0), pelo
+    primeiro valor não ausente da janela. Nível com menos de 200 linhas vira "outros" do seu sistema (regra
+    mecânica). Treino = os três níveis do sistema A (Beth Israel Deaconess); cofre = os três níveis do sistema B
+    (Emory). O tipo de UTI muda a mistura de pacientes e o protocolo local, e o sistema muda o prontuário, a
+    porta de entrada e a prática — o próprio manuscrito do desafio mostra que o que se ajusta num sistema não
+    vale automaticamente no outro. Violações plausíveis declaradas: o tipo de UTI não é sorteado; o rótulo
+    depende de SOFA, que não está todo medido aqui (pai oculto); a FR e o rótulo compartilham a decisão de quem
+    pede hemocultura (confusão por indicação).
+  cofre: [B_MICU, B_SICU, B_outros]
+unidade: >-
+  a internação na UTI (uma linha por internação; linha e unidade coincidem, então não há agrupamento declarado
+  e o EP do F2 não é agrupado)
+cabecalho:
+  processo_gerador: >-
+    Cada internação entra na UTI de um dos dois sistemas hospitalares; na primeira janela de 6 h os monitores
+    registram os sinais vitais; depois, quem suspeita de infecção registra hemocultura e antibiótico IV e o
+    SOFA é calculado, o que marca a decisão de sepse que o rótulo mede.
+  nao_linearidade: >-
+    Logística no gatilho e nas covariáveis; o limiar de suspeita do clínico não é linear (qSOFA usa cortes), e a
+    saturação de O2 e a temperatura têm efeito em U.
+  unidade_e_margem: >-
+    A internação é a unidade e a linha (dezenas de milhares, depois dos recortes); o desfecho é raro e a margem
+    de quem tem 6 h de monitoração completa difere de quem não tem.
+  fisica_do_ruido: >-
+    Desfecho binário raro com dezenas de milhares de linhas; faltantes em bloco nas primeiras horas (o
+    monitoramento começa quando o paciente chega) e nos exames de laboratório, que não entram aqui.
+  escada_causal: >-
+    "Degrau 1 (observacional). Premissas não testáveis: a suspeita de infecção é registrada de forma comparável
+    nos dois sistemas; o SOFA não está todo medido; a FR não é manipulada pelo estudo."
+shelf:
+  quantidade: inclinação da decisão de sepse registrada na FR, em log-razão de chances por respiração por minuto
+  escala: razao_de_chances
+  fonte: >-
+    O qSOFA (Seymour et al. 2016, JAMA, DOI 10.1001/jama.2016.0288, conferido no Europe PMC) adota o limiar de
+    taquipneia ≥ 22/min entre os três critérios e reporta discriminação modesta para desfecho em UTI (AUROC 0,66
+    para mortalidade intra-hospitalar na coorte de validação, IC95% 0,64-0,68); o critério é composto de três
+    itens, então uma distância de 6 respirações por minuto no limiar vale uma razão de chances de cerca de 2, o
+    que dá ~0,11 por minuto, atenuado pela severidade que já está medida no ajuste. Daí a mediana de 1,06 e a
+    cauda até 1,45. taxa_base 0,05: a sepse é rara no conjunto público do desafio; 5% é ordem de grandeza
+    declarada, sem conferir o dado. Nenhum especialista humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  quartis: {q05: 0.84, q25: 0.96, q50: 1.06, q75: 1.18, q95: 1.45}
+  taxa_base: 0.05
+decisao:
+  acao: usar a FR máxima da primeira janela (limiar 22/min) como gatilho do pacote de sepse (hemoculturas, antibiótico e lactato) em toda UTI
+  beneficio_por_unidade: 1.0
+  custo: 0.005
+  custo_pesquisa: 0.0005
+  nota: >-
+    utilidade em casos-equivalentes por unidade de efeito marginal na probabilidade de a decisão ser registrada
+    (θ = β·p̄(1−p̄)); o custo de 0,005 por paciente rastreado representa o pacote extra (hemoculturas, antibiótico,
+    lactato) e o alarme falso (suposição, não medida); o custo da pesquisa de 0,0005 representa uma análise
+    secundária de registro aberto, sem coleta nova
+termo_escopo:
+  vale_para: internações de UTI dos dois sistemas públicos do desafio (Beth Israel Deaconess e Emory), nas 6 primeiras horas registradas
+  nao_vale_para: pronto-socorro, enfermaria, outros limiares de FR, sistemas sem hemocultura e antibiótico IV registrados no mesmo par de campos
+tentativas_de_especificacao: 1
+historico_especificacoes:
+  - K: 1
+    quando: fundo/p10 (2026-10-15, declarado antes de rodar em DECLARACAO.md)
+    o_que: especificação original; funil do H2g sem mudança (teste K = 2 e regra de saturação K = 3 do ICP), decisão com benefício 1,0 e custo 0,005
+tem_titulares: false
+quase_ids: []

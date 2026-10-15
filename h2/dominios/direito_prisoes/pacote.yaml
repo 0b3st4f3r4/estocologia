@@ -89,6 +89,8 @@ decisao:
 termo_escopo:
   vale_para: prisões por porte simples de maconha em Toronto, 1997–2002, decisão de liberar ou deter após a prisão
   nao_vale_para: a decisão de abordar ou prender, outros delitos, outras cidades, período após a legalização (2018), pessoas de outras cores (a base só tem negros e brancos)
+pergunta_do_decisor: >-
+  Quem decide: a polícia que decide liberar com notificação ou deter (Toronto, 1997–2002). Ação que a decisão muda: adotar diretriz de liberação com notificação como padrão para porte simples, com justificativa escrita para deter. A pergunta do decisor é: a diretriz de liberação com notificação reduz a diferença por cor percebida?
 tentativas_de_especificacao: 1
 tem_titulares: true
 quase_ids: [negro, masculino, idade, cidadao, empregado]

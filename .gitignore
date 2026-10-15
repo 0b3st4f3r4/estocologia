@@ -10,6 +10,8 @@ dados-reais/h2f/Kemmeren.RData
 dados-reais/h2f/kemmeren2014_obs_int.parquet
 dados-reais/h2g/ecgcipa/adeg.csv
 dados-reais/h3b/nycflights23_flights.csv
+dados-reais/p10/
+fundo/p11-eventos-raros/saida/h3_ri/
 h1/saida/diario.json
 h2/saida/diario.json
 h2b/saida/diario.json

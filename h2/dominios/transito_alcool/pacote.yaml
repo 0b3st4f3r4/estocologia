@@ -94,5 +94,7 @@ decisao:
 termo_escopo:
   vale_para: estados contíguos dos EUA nos anos 1980, aumentos moderados do imposto real sobre cerveja, mortalidade total no trânsito
   nao_vale_para: outros países, aumentos muito grandes, mortes só de jovens ou noturnas (não modeladas), décadas com outra frota e outras leis
+pergunta_do_decisor: >-
+  Quem decide: o legislador estadual que fixa o imposto sobre a cerveja (EUA, anos 1980). Ação que a decisão muda: aumentar o imposto estadual sobre a cerveja em US$ 1 por caixa (dólares de 1988). A pergunta do decisor é: o imposto baixa as mortes no trânsito pela mesma lei entre os estados?
 tentativas_de_especificacao: 1
 tem_titulares: false

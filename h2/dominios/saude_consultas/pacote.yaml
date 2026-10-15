@@ -103,6 +103,8 @@ decisao:
 termo_escopo:
   vale_para: idosos de 66 anos ou mais com Medicare nos EUA em 1987–88, consultas em consultório
   nao_vale_para: menores de 65, sistemas de saúde de outros países, internações e emergências, o mercado de seguro depois da Parte D e do Medicare Advantage
+pergunta_do_decisor: >-
+  Quem decide: o formulador que decide subsidiar o seguro suplementar dos idosos (EUA, 1987–88). Ação que a decisão muda: subsidiar o seguro suplementar para idosos sem cobertura privada, a fim de ampliar o acesso a consultas. A pergunta do decisor é: o seguro suplementar aumenta as consultas pela mesma lei?
 tentativas_de_especificacao: 1
 tem_titulares: true
 quase_ids: [mulher, afro, casado]
