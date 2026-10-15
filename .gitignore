@@ -34,3 +34,8 @@ fundo/p08-calibracao/saida/replays/voos23e2/diario.parquet
 fundo/p08-calibracao/saida/replays/voos17/diario.parquet
 fundo/p08-calibracao/saida/replays/voospnw14/diario.parquet
 fundo/p08-calibracao/saida/replays/voos23e1/diario.parquet
+
+# Gerados por script dentro das frentes: fora do Git, recriados pelo comando de cada README
+saida/armazem/
+fundo/p03-multiplicidade/copias/
+fundo/p09-escala-dados/saida_base/

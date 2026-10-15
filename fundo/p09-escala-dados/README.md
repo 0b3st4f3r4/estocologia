@@ -190,7 +190,9 @@ OMP_NUM_THREADS=1 python3 escala/lote.py $D/dominios_auto $D $D/saida_perfil --t
 python3 escala/analisar.py $D                                               # escala/analise.json e hipergrafos
 ```
 
-`saida_base/` tem cópias dos `resultados.json` do `h2g/saida` (os originais não foram tocados).
+`saida_base/` tem cópias dos `resultados.json` do `h2g/saida` (os originais não foram tocados). Ela é gerada e
+**não** fica versionada: a partir desta pasta, `mkdir -p saida_base && for d in ../../h2g/saida/*/; do
+n=$(basename "$d"); mkdir -p "saida_base/$n"; cp "$d/resultados.json" "saida_base/$n/"; done` a recria.
 
 **Segunda execução.** Os dois domínios de saúde e a análise do evento raro, rodados de novo numa pasta limpa,
 deram resultados idênticos (fora o tempo). A regra R1 rodada de novo gerou pacotes idênticos. Lote: ver a seção

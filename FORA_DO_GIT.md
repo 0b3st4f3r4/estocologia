@@ -122,3 +122,18 @@ do h3b). Nenhuma soma foi reescrita para fazer essa conferência passar.
   `FONTES.md` e `SHA256SUMS` na pasta; conferem com `sha256sum -c SHA256SUMS` (40 336 de 40 336).
 - `fundo/p11-eventos-raros/saida/h3_ri/` (3,0 MB): o rastro do replay de Rhode Island da frente `p11-eventos-raros`,
   regenerado pelo comando do README da frente.
+
+### O que é gerado dentro da árvore e não é versionado
+
+Quatro coisas saíram do Git em 2026-10-15, porque um comando do próprio repositório as recria:
+
+- `saida/armazem/` do `h2`, do `h2b` ao `h2g` e do `fundo/p10-saude` (27 MB, 591 arquivos): o armazém Parquet de
+  cada execução, escrito pelo `rodar.py` da frente. Recriar: `python3 rodar.py` na pasta do horizonte.
+- `fundo/p03-multiplicidade/copias/` (244 arquivos): as cópias do `h2` e do `h2g` da auditoria do K. Recriar:
+  `python3 preparar_copias.py 38`, passo que já está na receita do README da frente.
+- `fundo/p09-escala-dados/saida_base/` (18 arquivos): cópia dos `resultados.json` do `h2g/saida`, lida por
+  `escala/analisar.py`. Recriar: o comando no README da frente.
+- `dados-reais/h2f/kemmeren2014_obs_int.parquet` (100 MB): derivado do `Kemmeren.RData`, que continua na pasta,
+  e **este fica**: as rodadas e os testes do `h2f` e do `h2g` leem o parquet direto. Se ele faltar, recriar com
+  `python3 fundo/p07-icp/codigo/construir_parquet_h2f.py` (cerca de 2 s; sai com a soma `f152937f…` desta máquina,
+  conforme `dados-reais/h2f/CONVERSAO.md`).
