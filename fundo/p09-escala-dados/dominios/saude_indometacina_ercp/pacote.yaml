@@ -1,0 +1,106 @@
+nome: saude_indometacina_ercp
+area: Saúde (gastroenterologia, ensaio clínico)
+titulo: Indometacina retal sorteada e pancreatite pós-CPRE em 4 centros dos EUA (Elmunzer et al. 2012)
+pergunta: >-
+  A indometacina retal dada logo após a CPRE reduz o risco de pancreatite pós-CPRE com a mesma lei em centros
+  diferentes, de modo que o efeito estimado nos outros centros preveja o centro que não entrou no ajuste?
+alegacao: '"Uma dose de indometacina retal corta a pancreatite pós-CPRE do mesmo jeito em qualquer hospital: o resultado de um centro vale para o outro."'
+glossario:
+  cpre: colangiopancreatografia retrógrada endoscópica, endoscopia das vias biliares e do ducto pancreático
+  pancreatite_pos_cpre: inflamação aguda do pâncreas depois da CPRE, o desfecho (sim ou não)
+  indometacina_retal: anti-inflamatório não esteroide, 100 mg por via retal logo após o procedimento
+  placebo: supositório sem droga, sorteado no mesmo esquema
+  sorteio: alocação aleatória do braço, estratificada por centro no ensaio original
+  disfuncao_do_esfincter_de_oddi: alteração da motilidade do esfíncter, fator de risco conhecido (sod)
+  esfincterotomia_pancreatica: corte do esfíncter pancreático durante o procedimento, fator de risco
+  stent_pancreatico: prótese no ducto pancreático, posta a critério do endoscopista, possivelmente protetora
+  escore_de_risco: soma de fatores de risco do protocolo (risk, 1 a 5,5)
+  centro: hospital do ensaio (Michigan, Indiana, Kentucky, Case Western)
+fontes:
+  - "Elmunzer, Scheiman, Lehman et al. (2012), A randomized trial of rectal indomethacin to prevent post-ERCP pancreatitis, N Engl J Med 366:1414-1422 — números conferidos em https://pmc.ncbi.nlm.nih.gov/articles/PMC3422786 (Yang & Draganov 2012, World J Gastroenterol 18:4082)"
+  - "Elmunzer, Waljee, Elta et al. (2008), A meta-analysis of rectal NSAIDs in the prevention of post-ERCP pancreatitis, Gut 57:1262-1267 — redução de 64% (IC95% 0,22-0,60) em 4 ensaios, conferida na mesma página"
+  - "medicaldata::indo_rct (Higgins), espelho Rdatasets, raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/medicaldata/indo_rct.csv"
+arquivos: [medicaldata_indo_rct.csv]
+familia: binomial
+desfecho: pancreatite pós-CPRE (1 = sim), por paciente
+chave: indometacina
+candidatos:
+  indometacina: {tipo: num, descricao: braço sorteado (1 = indometacina retal, 0 = placebo)}
+  idade: {tipo: num, descricao: idade em anos}
+  risco: {tipo: num, descricao: escore de risco do protocolo}
+  homem: {tipo: num, descricao: sexo masculino}
+  sod: {tipo: num, descricao: disfunção do esfíncter de Oddi}
+  pep_previa: {tipo: num, descricao: pancreatite pós-CPRE anterior}
+  esfincterotomia_pancreatica: {tipo: num, descricao: esfincterotomia pancreática no procedimento}
+  pre_corte: {tipo: num, descricao: pré-corte para entrar na papila}
+  canulacao_dificil: {tipo: num, descricao: canulação difícil}
+  stent_pancreatico: {tipo: num, descricao: stent no ducto pancreático por qualquer motivo}
+  residente: {tipo: num, descricao: um residente participou da CPRE}
+icp_candidatos: [indometacina, idade, risco, homem, sod, pep_previa, esfincterotomia_pancreatica, pre_corte, canulacao_dificil, stent_pancreatico]
+ajuste: [risco, idade, homem]
+dag:
+  - [indometacina, y]
+  - [sod, y]
+  - [pep_previa, y]
+  - [esfincterotomia_pancreatica, y]
+  - [pre_corte, y]
+  - [canulacao_dificil, y]
+  - [stent_pancreatico, y]
+  - [residente, y]
+  - [idade, y]
+  - [homem, y]
+  - [sod, risco]
+  - [pep_previa, risco]
+  - [esfincterotomia_pancreatica, risco]
+  - [pre_corte, risco]
+  - [canulacao_dificil, risco]
+  - [canulacao_dificil, pre_corte]
+  - [sod, esfincterotomia_pancreatica]
+  - [esfincterotomia_pancreatica, stent_pancreatico]
+  - [risco, stent_pancreatico]
+ambientes:
+  descricao: >-
+    Centro do ensaio. Michigan (UM, 164 pacientes) e Indiana (IU, 413) ficam separados; Kentucky (22) e Case
+    Western (3) entram juntos como "outros", por regra declarada antes de rodar. O cofre é Michigan, nunca visto:
+    é o centro de origem do ensaio e recebe a maior fração de pacientes de alto risco encaminhados. O centro muda
+    a mistura de pacientes e de procedimentos (X), e o sorteio garante que a indometacina não depende do centro.
+    Violações plausíveis declaradas: a definição de pancreatite e o limiar de internação podem variar entre centros
+    (o centro age em Y); o treino tem só dois ambientes, um deles com 25 pacientes, então o ICP tem pouco poder.
+  cofre: [UM]
+unidade: o paciente (uma linha por paciente; o sorteio é individual)
+cabecalho:
+  processo_gerador: Pacientes de alto risco submetidos a CPRE em 4 centros são sorteados para indometacina retal ou placebo logo após o procedimento; a pancreatite é avaliada nos dias seguintes.
+  nao_linearidade: Logística no braço e nos fatores de risco; interações entre fatores (por exemplo stent e esfincterotomia) ficam fora.
+  unidade_e_margem: O paciente é a unidade (602 no total, 438 no treino); o desfecho é raro (perto de 1 em 8 no protocolo do ensaio).
+  fisica_do_ruido: Desfecho binário raro; poucas dezenas de eventos por ambiente limitam a resolução de qualquer previsão.
+  escada_causal: "Degrau 2 (braço sorteado). Premissas não testáveis: cegamento mantido; perdas desprezíveis; a definição de pancreatite é a mesma nos centros."
+shelf:
+  quantidade: razão de chances da pancreatite pós-CPRE, indometacina contra placebo
+  escala: razao_de_chances
+  fonte: >-
+    Meta-análise anterior ao ensaio (Elmunzer et al. 2008, Gut): redução de 64% (IC95% 0,22-0,60) com AINE retal
+    em 4 ensaios pequenos; a priori encolhe a mediana para 0,5 pela tendência de efeitos grandes em ensaios
+    pequenos e alarga a cauda até 1,15 (sem efeito). taxa_base 0,12: taxa no placebo suposta no cálculo amostral do
+    ensaio (12,06%), conferida em https://pmc.ncbi.nlm.nih.gov/articles/PMC3422786. Nenhum especialista humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  quartis: {q05: 0.20, q25: 0.36, q50: 0.50, q75: 0.70, q95: 1.15}
+  taxa_base: 0.12
+decisao:
+  acao: dar indometacina retal 100 mg a todo paciente de alto risco depois da CPRE
+  beneficio_por_unidade: -1.0
+  custo: 0.002
+  custo_pesquisa: 0.001
+  nota: >-
+    utilidade em casos de pancreatite evitados por paciente: θ é a variação aproximada da probabilidade
+    (β·p̄(1−p̄)), negativa quando a droga protege, por isso −1; o custo de 0,002 caso-equivalente por paciente
+    representa droga, aplicação e risco de sangramento (suposição, não medida)
+termo_escopo:
+  vale_para: pacientes de alto risco submetidos a CPRE em centros terciários dos EUA entre 2009 e 2011
+  nao_vale_para: pacientes de baixo risco, outras doses ou vias, centros sem stent pancreático de rotina, desfechos além da pancreatite
+tentativas_de_especificacao: 1
+historico_especificacoes:
+  - K: 1
+    quando: fundo/p09 (2026-10-15, declarado antes de rodar em DECLARACAO.md)
+    o_que: especificação original; funil do H2g sem mudança (teste K = 2 e regra de saturação K = 3 do ICP)
+tem_titulares: true
+quase_ids: [homem]

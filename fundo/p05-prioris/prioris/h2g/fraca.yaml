@@ -1,0 +1,162 @@
+biologia_sachs:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272870244
+    q25: -1.9999999999999045
+    q50: 0.0
+    q75: 1.9999999999999045
+    q95: 4.877327272870244
+direito_teto_beneficio:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2224 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -3.657995454651625
+    q25: -1.4999999999994944
+    q50: 0.0
+    q75: 1.4999999999994944
+    q95: 3.657995454651625
+educacao_star_turmas:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.08896 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -1.4631981818603605
+    q25: -0.5999999999996791
+    q50: 0.0
+    q75: 0.5999999999996791
+    q95: 1.4631981818603605
+engenharia_tunel_vento:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 1.483 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -24.386636364360818
+    q25: -10.000000000003459
+    q50: 0.0
+    q75: 10.000000000003459
+    q95: 24.386636364360818
+farmacologia_qt:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 11.86 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -195.09309091482842
+    q25: -80.00000000000382
+    q50: 0.0
+    q75: 80.00000000000382
+    q95: 195.09309091482842
+fisica_tunel_luz:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 2.965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -48.773272728693975
+    q25: -19.999999999995577
+    q50: 0.0
+    q75: 19.999999999995577
+    q95: 48.773272728693975
+genetica_y01:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y02:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y03:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y04:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y05:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y06:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y07:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y08:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y09:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+genetica_y10:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.2965 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -4.877327272868743
+    q25: -1.999999999999289
+    q50: 0.0
+    q75: 1.999999999999289
+    q95: 4.877327272868743
+saude_rand:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.556 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -9.144988642260973
+    q25: -3.7500000023081617
+    q50: 0.0
+    q75: 3.7500000023081617
+    q95: 9.144988642260973
+transporte_cinto:
+  fonte: 'fraca: centro 0 (log-RC 0) e dp = 10 x 0.1334 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -2.1947972724257196
+    q25: -0.89999999984992
+    q50: 0.0
+    q75: 0.89999999984992
+    q95: 2.1947972724257196

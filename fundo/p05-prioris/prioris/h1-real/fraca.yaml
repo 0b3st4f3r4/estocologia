@@ -1,0 +1,21 @@
+a:
+  fonte: 'fraca: Beta(1, 1)'
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75
+b:
+  fonte: 'fraca: Beta(1, 1)'
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75
+c:
+  fonte: 'fraca: Beta(1, 1)'
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75

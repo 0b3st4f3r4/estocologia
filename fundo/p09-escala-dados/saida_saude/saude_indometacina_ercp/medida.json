@@ -1,0 +1,12 @@
+{
+ "dominio": "saude_indometacina_ercp",
+ "semente": 2127,
+ "perfil": false,
+ "status": "podado no F3: a chave não vence o nulo de permutação",
+ "etapa_final": "podado no F3",
+ "bytes_tabela": 9432,
+ "linhas": 602,
+ "segundos_parede": 1.2,
+ "segundos_cpu": 0.272,
+ "rss_pico_kb": 225700
+}

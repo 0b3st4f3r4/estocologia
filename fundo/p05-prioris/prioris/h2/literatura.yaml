@@ -1,0 +1,142 @@
+agronomia_nitrogenio:
+  fonte: 'Correndo et al. (2021), Field Crops Research 273:108299: eficiência agronômica
+    do N no ótimo agronômico de 7 a 31 kg/kg (788 ensaios na Argentina); R2: faixa
+    [0.07, 0.31], mediana 0.19, dp implicado 0.1779 (7 a 31 kg de grão por kg de N,
+    em quintais: /100)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: -0.10263963637222856
+    q25: 0.07
+    q50: 0.19
+    q75: 0.31
+    q95: 0.48263963637222856
+clima_tempestades:
+  fonte: 'Atkinson & Holliday (1977), MWR 105:421, V = 6,7(1010 - p)^0,644, como reproduzido
+    por Knaff & Zehr (CIRA); R2: faixa [12.02, 16.75], mediana 14.39, dp implicado
+    3.504 (derivada de V = 6,7 Δp^0,644 em √Δp, nos déficits de 10 e 100 hPa)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: 8.622332597793875
+    q25: 12.022385946696788
+    q50: 14.385727357985715
+    q75: 16.74906876927464
+    q95: 20.149122118177555
+credito_hmda:
+  fonte: 'SEM FONTE CONFERIDA (procurado; o único número achado é do próprio Fed de
+    Boston (mesma base, que o pacote original excluiu de propósito)); usa a fraca:
+    centro 0 (log-RC 0) e dp = 10 x 0.2533 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: 0.015497789522055388
+    q25: 0.1810926557391533
+    q50: 1.0
+    q75: 5.522035092579372
+    q95: 64.52533108524082
+desenvolvimento_preston:
+  fonte: 'Pritchett & Summers (1996), ''Wealthier is Healthier'', JHR / Banco Mundial:
+    elasticidade-renda da expectativa de vida por IV 0,024 (t = 1,18); R1: e = 1.536,
+    s = 1.302, dp = 2s = 2.603 (elasticidade 0,024, t = 1,18, vezes a expectativa
+    de vida média 64.0 anos)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: -2.746195205080443
+    q25: -0.21995975644268073
+    q50: 1.536
+    q75: 3.291959756442681
+    q95: 5.818195205080443
+direito_prisoes:
+  fonte: 'Kochel, Wilson & Mastrofski (2011), Criminology 49(2):473: efeito da raça
+    na prisão entre 1,32 e 1,52 conforme o método (27 bases); R2: faixa [-0.4187,
+    -0.2776], mediana -0.3482, dp implicado 0.1046 (log da RC inversa de 1,32-1,52;
+    transposição da prisão para a liberação, como no pacote original)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: 0.5944060189976956
+    q25: 0.6578947368421053
+    q50: 0.7059781184061313
+    q75: 0.7575757575757576
+    q95: 0.8384926931067868
+educacao_star:
+  fonte: 'Krueger (1999), NBER w6051: ''about 4 percentile points the first year'';
+    R3: ponto 7.333, dp = |e|/2 = 3.667 (4 pontos de percentil x 0.0251 dp x 73.138
+    pontos); MESMA BASE DE DADOS do domínio (dupla contagem)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: 1.3021781198967624
+    q25: 4.860110016547187
+    q50: 7.333191149998485
+    q75: 9.806272283449783
+    q95: 13.364204180100208
+energia_vitoria:
+  fonte: 'SEM FONTE CONFERIDA (procurado; nenhum MW por grau-dia publicado para Victoria
+    achado); usa a fraca: centro 0 (log-RC 0) e dp = 10 x 44.48 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -731.5990909305515
+    q25: -299.99999999999176
+    q50: 0.0
+    q75: 299.99999999999176
+    q95: 731.5990909305515
+epidemiologia_contracepcao:
+  fonte: 'SEM FONTE CONFERIDA (procurado; nenhuma razão de chances publicada e conferida
+    para Bangladesh 1988-89); usa a fraca: centro 0 (log-RC 0) e dp = 10 x 0.4323
+    (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: 0.0008164962800185097
+    q25: 0.05416439930484864
+    q50: 1.0
+    q75: 18.462311275193684
+    q95: 1224.74532275558
+logistica_voos:
+  fonte: 'SEM FONTE CONFERIDA (procurado; nenhuma razão de chances por hora da grade
+    conferida); usa a fraca: centro 0 (log-RC 0) e dp = 10 x 0.02746 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: 0.6365731057007971
+    q25: 0.8309327960811377
+    q50: 1.0
+    q75: 1.2034667601474158
+    q95: 1.5709114806210824
+saude_consultas:
+  fonte: 'SEM FONTE CONFERIDA (Deb & Trivedi (1997) usa a mesma base e o resumo não
+    dá o coeficiente; nada conferido); usa a fraca: centro 0 (log-RC 0) e dp = 10
+    x 0.1186 (dp original)'
+  painel: priori fracamente informativa declarada; nenhum especialista humano consultado
+  quartis:
+    q05: -1.9509309091477895
+    q25: -0.7999999999998355
+    q50: 0.0
+    q75: 0.7999999999998355
+    q95: 1.9509309091477895
+trabalho_curriculos:
+  fonte: 'Quillian et al. (2017), PNAS, doi 10.1073/pnas.1706255114: ''whites receive
+    on average 36% more callbacks than African Americans''; a meta-análise inclui
+    Bertrand & Mullainathan; R3: ponto -0.334, dp = |e|/2 = 0.167 (razão de taxas
+    1/1,36 com taxa média 0,08: brancos 0.0922, negros 0.0678, log-RC -0.3340)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: 0.5440475892282272
+    q25: 0.6397611765420711
+    q50: 0.7160427807486631
+    q75: 0.8014197839161338
+    q95: 0.9424125278996393
+transito_alcool:
+  fonte: 'Stock & Watson (regressão de efeito fixo de estado das mortes por 10 mil
+    no imposto da cerveja, base Fatalities), -0,66 (0,29), reproduzido em Hanck et
+    al., Introduction to Econometrics with R, 10.3; R1: e = -0.66, s = 0.29, dp =
+    2s = 0.58; MESMA BASE DE DADOS do domínio (dupla contagem)'
+  painel: literatura publicada, conferida online (fundo/p05); nenhum especialista
+    humano consultado
+  quartis:
+    q05: -1.614015103631854
+    q25: -1.0512040551137274
+    q50: -0.66
+    q75: -0.2687959448862727
+    q95: 0.2940151036318538

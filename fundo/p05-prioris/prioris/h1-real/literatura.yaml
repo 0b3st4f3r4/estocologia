@@ -1,0 +1,24 @@
+a:
+  fonte: SEM FONTE CONFERIDA (nenhuma fração de anos positivos de um índice de ações
+    fora do próprio mercado dos EUA conferida); usa a fraca Beta(1, 1)
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75
+b:
+  fonte: SEM FONTE CONFERIDA (o número publicado do emprego dos controles do NSW é
+    da mesma base (LaLonde 1986; MDRC)); usa a fraca Beta(1, 1)
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75
+c:
+  fonte: SEM FONTE CONFERIDA (a frequência mensal da camada 100 xs 50 só existe na
+    própria base dinamarquesa (McNeil 1997)); usa a fraca Beta(1, 1)
+  painel: priori fraca Beta(1, 1) pelos quartis
+  quartis:
+    q25: 0.25
+    q50: 0.5
+    q75: 0.75
