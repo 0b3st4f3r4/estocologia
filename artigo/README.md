@@ -313,7 +313,7 @@ No mundo que a alegação descreve, nenhum dia fica abaixo da meta. Nas chegadas
 
 *Dias abaixo da meta por regra de escala na central bancária (H0 real, h0-real/README.md).*
 
-A decisão (Φ4) compara regras de escala de custo parecido. Acrescentar 12 atendentes por igual leva a 7,4% de dias abaixo da meta; gastar a mesma folga onde está o risco, pelo dia da semana e por uma margem para a variação residual, leva a 3,7%. Ficam supostos o tempo de atendimento e a paciência dos clientes, que a base não traz; a paciência muda o tamanho do efeito (de 1% a 40% dos dias), mas nunca o sentido. O domínio de saúde ficou de fora porque os portais do DATASUS estavam fora do alcance da rede.
+A decisão (Φ4) compara regras de escala de custo parecido. Acrescentar 12 atendentes por igual leva a 7,4% de dias abaixo da meta; gastar a mesma folga onde está o risco, pelo dia da semana e por uma margem para a variação residual, leva a 3,7%. Ficam supostos o tempo de atendimento e a paciência dos clientes, que a base não traz, e a auditoria de fundo varreu a malha inteira (atendimento de 3 a 6 minutos contra paciência de 1 a 10): nenhum ponto troca a regra vencedora, a alocação por risco vence em 20 dos 24 pontos e empata nos quatro de menor paciência, e no pior caso ela segura 14,2% dos dias abaixo da meta contra 37,7% da regra da alegação. O eixo do atendimento quase não move o resultado; a paciência move. O domínio de saúde ficou de fora porque os portais do DATASUS estavam fora do alcance da rede — o que a auditoria contornou pelo espelho aberto da PhysioNet (seção 8).
 
 ### H1 real: três alegações, três destinos
 
@@ -530,9 +530,35 @@ caso de dupla contagem que a declaração previa marcar. O deslocamento grande, 
 andam mais de um desvio-padrão da posterior e não cruzam o limiar do F8. O portão de transferência do H2 continua
 passando, agora com exatamente três áreas. E a rodada de controle, que deveria reproduzir os números publicados, não
 mudou categoria, portão nem ação em nenhum dos 33 domínios: ficou a menos de sete milésimos de desvio-padrão em cada
-posterior, que é ruído do ambiente numérico. Como a declaração escreveu a condição de falha sem tolerância, ela dispara
-pela letra, e o veredito sai rotulado como condicional — afrouxar o limiar depois de ver o resultado é o tipo de
-ajuste que o parágrafo da multiplicidade, nesta mesma seção, denuncia.
+posterior, que é ruído do ambiente numérico. A frente fechou esse ponto com uma segunda declaração, escrita antes da
+recomputação com hash próprio: o desvio passa a ser comparado em unidades do desvio-padrão posterior da própria
+rodada, contra uma banda de equivalência de 0,05 dp, fixada entre o pior ruído já observado e o menor deslocamento
+que já mudou uma decisão, 0,18 dp. O desvio máximo é de 0,0071 dp, em `h2g/genetica_y07`, sete vezes dentro da
+banda, e 33 dos 33 domínios batem campo a campo contra as saídas do repositório: categoria de status, lista de
+portões que falham e ação do F8. O rótulo condicional acabou. A declaração antiga não foi reescrita e segue valendo,
+tanto que sem a banda o mesmo teste reprovaria 25 dos 33 por igualdade de bits — que nenhuma reimplementação em
+ponto flutuante satisfaz; é por isso que a leitura nova conta como K = 2, e não como conserto do critério antigo.
+
+**Eventos raros, saúde e o que depende de gente.** Três frentes entraram depois das dez: duas de máquina, que
+fecharam, e uma de gente, que ficou preparada. A primeira mediu onde o evento é raro, e não só a calibração: pela
+regra declarada, resolução acima da confiabilidade com o IC90 de (RES − REL) inteiro acima de zero e habilidade de
+Brier no cofre de pelo menos +0,05, **nenhum caminho vence nos três casos**. Em Rhode Island a primeira condição
+passa — 553 prisões em 24 466 paradas, RES − REL de +2,74643e-4, com IC90 de +1,708e-4 a +3,793e-4 na logística, e
++3,11655e-4, de +2,057e-4 a +4,067e-4, no escore de ranking — e a segunda reprova: a habilidade fica em +1,9%,
+cerca de 40 vezes abaixo do +5% exigido. No ensaio de indometacina o IC90 de (RES − REL) cruza zero (−0,0082881, de
+−0,02520 a +0,001452) e no painel de covid ele fica inteiro abaixo de zero (−0,0181081, de −0,03339 a −0,006549),
+com AUC de 0,714 e 0,768: a ordenação existe, o nível é que estraga, e no covid a previsão perde para a constante
+do treino. A lição é que, em evento raro, "tem resolução?" e "serve?" são perguntas diferentes. A segunda extensão
+levou o círculo do Lab 0 ao dado aberto: o domínio de alerta de sepse no espelho público do PhysioNet/CinC Challenge
+2019, uma linha por internação e o segundo sistema hospitalar como cofre, passou no F1, no F2 e no F3 — z de 4,981
+contra q95 de 1,970, p = 0,004975 — e caiu no F4, com **0 de 512 subconjuntos aceitos** e Ŝ = ∅. O efeito é preciso
+(β = 0,0388 por respiração por minuto, IC90 de 0,0257 a 0,0523); a regularidade entre hospitais é que não existe, o
+cofre decide metade das vezes do treino (3,9% contra 8,4%) e o portão de calibração do p08 reprova os três braços. A
+alegação do domínio não se sustenta, e o G3 falha: a saída do H2 não fica aprovada por esse critério. A terceira
+extensão não é de máquina: o protocolo do painel de elicitação (SHELF) está pronto, com o pré-teste de 20 previsões
+resolvidas, os seis formulários, as prioris de partida e o critério de K = 2, e **nenhuma entrevista foi feita** — o
+protocolo não está congelado, e quem congela é quem assina; na outra ponta, as 21 linhas da releitura dos pareceres
+estão com arquivo e SHA-256 conferidos, 21 de 21, e data e decisão em branco, esperando sil.
 
 **O que a auditoria muda no resto do texto.** Nenhum número publicado nas seções 5 a 7 caiu por erro de conta: a
 reimplementação independente não achou um. O que a auditoria estreita é o que esses números autorizam. O laço de 0,6
@@ -540,9 +566,13 @@ que o H3 corrigiu é quatro vezes o que se mediu num caso real. A tolerância de
 que o ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de n. As prioris informativas também
 não são neutras: cinco dos 33 domínios mudam de decisão com a de literatura, entre eles o projeto de cauda que o H1
 reprovou. O portão de transferência do H2 depende de qual versão de cada escolha conta, e a área da educação não
-sobrevive à correção de agrupamento — quem sustenta a terceira área agora é a genética replicada, não a educação. E a
-hipótese que dá nome ao programa continua sem demonstração, porque no único teste direto que ela teve os dois braços
-empataram no teto. Um levantamento das referências completou o quadro: as obras antes citadas de memória foram
+sobrevive à correção de agrupamento — quem sustenta a terceira área agora é a genética replicada, não a educação, e
+ela ganhou o valor-p que faltava: o número que a sustenta, 1 gene em 27 na validação por intervenção, foi submetido
+a uma permutação do rótulo do mutante, 999 sorteios, e deu p = 0,001, o piso do teste. O limite declarado fica ao
+lado, porque com cada mutante valendo uma linha só o menor p possível neste desenho é 1/1 000, e a metade do
+critério que é fato dos dados, a deleção que funcionou, é justamente a que a permutação destrói. E a hipótese que
+dá nome ao programa continua sem demonstração, porque no único teste direto que ela teve os dois braços empataram
+no teto. Um levantamento das referências completou o quadro: as obras antes citadas de memória foram
 conferidas uma a uma em fonte autoritativa, com DOI, e três citações mudaram de forma — o artigo de Meyer, Viscusi e
 Durbin, que o texto atribuía a dois autores; o de Baltagi e Levin, que saiu em *Structural Change and Economic
 Dynamics*, e não em *Empirical Economics*; e a obra de Hume de 1748, cujo título só passou a *Enquiry* em 1758.
@@ -555,7 +585,7 @@ Uma disciplina que exige teste severo das alegações alheias precisa aplicá-lo
 
 A documentação do curso dá a resposta mais curta ao comparar o campo com os vizinhos: a Estocologia não busca teoremas novos, usa-os para julgar argumentos e pressupostos, e pergunta o que um modelo autoriza concluir, não como otimizá-lo.
 
-**"Os dados reais são antigos e de bases públicas."** É verdade, e foi escolha: chamadas de 2003, empregos de 1978, incêndios de 1980 a 1990. São bases conhecidas, verificáveis por hash e com desfecho já sabido, o que permite auditar o método, mas não substitui uma operação de verdade. Várias peças continuam supostas: as prioris informativas, que seguem sem especialista consultado e cuja sensibilidade foi medida na seção 8, com veredito condicional; tempos de atendimento e custos de decisão; e o laço performativo do H3, que a medição numa central real põe em cerca de 0,15, e não nos 0,6 declarados (seção 8). E os dois últimos portões só passaram depois de várias rodadas, com mudanças declaradas no caminho. A arquitetura registra tudo isso como pendência declarada, que é exatamente o que ela exige de qualquer alegação.
+**"Os dados reais são antigos e de bases públicas."** É verdade, e foi escolha: chamadas de 2003, empregos de 1978, incêndios de 1980 a 1990. São bases conhecidas, verificáveis por hash e com desfecho já sabido, o que permite auditar o método, mas não substitui uma operação de verdade. Várias peças continuam supostas: o tempo de atendimento e a paciência da central, que a base não traz e cuja malha de 4 × 6 pontos (seção 6) mostra que nenhum ponto troca a regra vencedora, com o pior caso — 5 min de atendimento e 10 min de paciência — deixando 14,2% dos dias abaixo da meta contra 37,7% da regra da alegação; os custos de decisão, que são suposição declarada; e o painel humano de elicitação, pronto e não rodado, que é o que falta para as prioris informativas deixarem de ser suposição. O que a medição já cobriu sai da lista: o laço performativo do H3, que a central real põe em cerca de 0,15 contra os 0,6 declarados (seção 8), e a sensibilidade das prioris, que fechou com veredito firme. O que a auditoria não pôde olhar fica registrado: nenhum dos sete grupos afetados pelas decisões que envolvem pessoas foi ouvido, e não há no repositório registro de consulta, entrevista, painel ou consentimento. E os dois últimos portões só passaram depois de várias rodadas, com mudanças declaradas no caminho. A arquitetura registra tudo isso como pendência declarada, que é exatamente o que ela exige de qualquer alegação.
 
 **"Formalizar o julgamento é eliminar o julgamento."** A arquitetura não decide o que vale a pena perguntar, nem quanto um erro custa para quem o sofre. Esses valores entram pela elicitação e pela razão custo/perda, que são declarados, não calculados. A ambição é tornar o julgamento visível e contável, não substituí-lo; por isso a definição diz "ciência (ou arte)".
 
@@ -565,7 +595,7 @@ A documentação do curso dá a resposta mais curta ao comparar o campo com os v
 
 **"A ergodicidade virou doutrina."** A Crononomia se apoia no programa de Ole Peters, que é contestado, e a disciplina o ensina como debate. Peters propôs que a aversão a perdas talvez não seja viés, e sim uma resposta racional a uma dinâmica multiplicativa. Os números mostram em que escala isso vale. Tversky e Kahneman estimaram que perdas pesam cerca de 2,25 vezes os ganhos, e, pelo critério do crescimento, uma razão dessa ordem só se justifica quando 56% da riqueza estão em jogo. A tese explica a recusa de arriscar meio patrimônio, mas não a aversão medida em laboratório com apostas pequenas, em que qualquer utilidade côncava e suave é quase neutra; o teorema de calibração de Rabin vale também para o logaritmo. Num experimento em Copenhague (Meder e colegas, 2021), a aversão ao risco dos participantes aumentou quando o jogo passou de aditivo a multiplicativo; Doctor, Wakker e Wang (2020) respondem que a utilidade esperada nunca supôs ergodicidade. O debate fica mais preciso, sem vencedor. Algo parecido vale para as caudas: Taleb pede que se suponha cauda pesada até prova em contrário, e Clauset, Shalizi e Newman (2009) pedem prova antes de declarar uma lei de potência. A questão é de quem é o ônus da prova, e a resposta depende de quanto custa errar.
 
-**"O auditor é parte interessada."** Os 21 pareceres de risco foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado, e o escopo, nesse caso, é uma concessão do auditado. A arquitetura responde em parte com o responsável humano nomeado, porque a pergunta de uma auditoria não é técnica: quem decidiu usar, quem aprovou, quem olha o placar, quem desliga. Mas nomear um responsável não torna a auditoria independente. O que o programa pode fazer, e ainda não fez, é registrar o que a auditoria não pôde olhar e quais grupos afetados foram ouvidos, ou declarar que nenhum foi.
+**"O auditor é parte interessada."** Os 21 pareceres de risco foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado, e o escopo, nesse caso, é uma concessão do auditado. A arquitetura responde em parte com o responsável humano nomeado, porque a pergunta de uma auditoria não é técnica: quem decidiu usar, quem aprovou, quem olha o placar, quem desliga. Mas nomear um responsável não torna a auditoria independente. O registro que faltava foi feito: nos sete casos que envolvem pessoas, `governanca/GRUPOS.md` declara que nenhum grupo afetado foi ouvido, e a releitura dos 21 pareceres por inteiro, com data e decisão de confirmar ou retirar a assinatura, está preparada em `governanca/RELEITURA.md` e ainda depende de quem assina.
 
 ## 10. Conclusão
 
@@ -591,6 +621,7 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Shen, H.; Huang, J. Z. Forecasting time series of inhomogeneous Poisson processes with application to call center workforce management. *Annals of Applied Statistics*, 2(2):601–623, 2008.
 - LaLonde, R. J. Evaluating the econometric evaluations of training programs with experimental data. *American Economic Review*, 76(4):604–620, 1986.
 - McNeil, A. J. Estimating the tails of loss severity distributions using extreme value theory. *ASTIN Bulletin*, 27(1):117–137, 1997.
+- Meinshausen, N.; Hauser, A.; Mooij, J. M.; Peters, J.; Versteeg, P.; Bühlmann, P. Methods for causal inference from gene perturbation experiments and validation. *PNAS*, 113(27):7361–7368, 2016. DOI: 10.1073/pnas.1510493113.
 - Peters, J.; Bühlmann, P.; Meinshausen, N. Causal inference by using invariant prediction: identification and confidence intervals. *JRSS B*, 78(5):947–1012, 2016.
 - Heinze-Deml, C.; Peters, J.; Meinshausen, N. Invariant causal prediction for nonlinear models. *Journal of Causal Inference*, 6(2), 2018.
 - Meyer, B. D.; Viscusi, W. K.; Durbin, D. L. Workers' compensation and injury duration: evidence from a natural experiment. *American Economic Review*, 85(3):322–340, 1995.
@@ -598,6 +629,7 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Kemmeren, P. et al. Large-scale genetic perturbations reveal regulatory networks and an abundance of gene-specific repressors. *Cell*, 157(3):740–752, 2014.
 - Johannesen, L. et al. Differentiating drug-induced multichannel block on the electrocardiogram: randomized study of dofetilide, quinidine, ranolazine, and verapamil. *Clinical Pharmacology & Therapeutics*, 96(5):549–558, 2014.
 - Gibbs, I.; Candès, E. Adaptive conformal inference under distribution shift. *NeurIPS 34*, 2021.
+- PhysioNet/Computing in Cardiology Challenge 2019 (sepse precoce), Reynolds et al. Early prediction of sepsis from clinical data. *Critical Care Medicine*, 2020. DOI: 10.1097/CCM.0000000000004145 (dados no espelho aberto do PhysioNet, licença ODC-By).
 
 **Obras clássicas citadas** (conferidas em fonte autoritativa as sete que a conferência registra — Bernoulli, Knight, Savage, Tversky e Kahneman, Mayo, Pearl, Gigerenzer; as demais seguem como as fontes as dão; ver [referencias/CONFERENCIA.md](../referencias/CONFERENCIA.md))
 
@@ -644,7 +676,7 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Meng, X.-L. "Statistical paradises and paradoxes in big data (I)", *Annals of Applied Statistics* 12(2), 2018.
 - Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6), 2018.
 - Murphy, A. H. "A new vector partition of the probability score", *Journal of Applied Meteorology* 12, 1973.
-- O'Hagan, A. et al. *Uncertain Judgements: Eliciting Experts' Probabilities*, Wiley, 2006.
+- O'Hagan, A.; Buck, C. E.; Daneshkhah, A.; Eiser, J. R.; Garthwaite, P. H.; Jenkinson, D. J.; Oakley, J. E.; Rakow, T. *Uncertain Judgements: Eliciting Experts' Probabilities*, Wiley, 2006. DOI: 10.1002/0470033312 (o protocolo SHELF, de Oakley e O'Hagan, é instrumento à parte, não sinônimo do livro).
 - Open Science Collaboration. "Estimating the reproducibility of psychological science", *Science* 349, 2015.
 - Pearl, J.; Glymour, M.; Jewell, N. *Causal Inference in Statistics: A Primer*, Wiley, 2016.
 - Peirce, C. S. "Deduction, induction, and hypothesis", *Popular Science Monthly* 13, 1878.

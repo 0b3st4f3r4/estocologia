@@ -800,6 +800,14 @@ cabecalho:
 
 Cada módulo do curso acrescenta perguntas às cinco do cabeçalho. A ficha da evidência pede a taxa-base, as duas verossimilhanças e a posterior calculada de dois modos, em chances e numa árvore de 10 000 casos, que precisam coincidir. A do grafo causal começa pelo degrau. A da crítica de modelos fecha a série e diz em que item cada ficha anterior entra.
 
+Uma pergunta a mais entrou depois da auditoria de fundo, e ela não é do cabeçalho: todo pacote de domínio passou a
+trazer, obrigatório, o campo `pergunta_do_decisor`, com três partes na ordem — quem decide, qual ação a decisão muda
+(copiada literalmente do campo `decisao.acao` do próprio pacote) e a pergunta que essa decisão usa, terminada em
+interrogação. A forma é validada no código, que recusa texto genérico sem quem decide e ação que não seja a do pacote;
+os 18 domínios do H2g, os 12 do h2 e a ficha do H0, que não tem bloco de decisão e copia a ação do termo de escopo,
+carregam o campo. É o que ataca o erro de tipo III: que a pergunta que o modelo responde seja a que o decisor fez deixa
+de ser suposição e passa a ser uma frase conferível.
+
 **A física do ruído, em detalhe.** O quarto campo do cabeçalho pede três classificações do ruído.
 
 | Pergunta | Opções | Por que importa |
@@ -849,7 +857,7 @@ Nada entra no grafo sem passar por quatro invariantes, que funcionam como travas
 Um sistema que simula tudo o que encontra colapsa por custo e por inflação de falsas descobertas. O plano organiza cada frente como um funil em que a maior parte das hipóteses fracas cai antes de tocar em simulação pesada.
 
 1. **Valor da informação.** Corta-se o que, mesmo com resposta perfeita, não mudaria nenhuma decisão. O log padrão é "podado por Crisonomia: curiosidade sem uso operacional".
-2. **Poda topológica e unidade.** Corta-se, por d-separação (M13), o que fica fora do cobertor de Markov da variável de interesse (M11), inclusive os colisores que, se condicionados, criariam o viés de Berkson. Corta-se também o que os dados não identificam ou cujo tamanho efetivo, contado na unidade independente pelo F2, não permite conclusão.
+2. **Poda topológica e unidade.** Corta-se, por d-separação (M13), o que fica fora do cobertor de Markov da variável de interesse (M11), inclusive os colisores que, se condicionados, criariam o viés de Berkson. Corta-se também o que os dados não identificam ou cujo tamanho efetivo, contado na unidade independente pelo F2, não permite conclusão. O contrato de dados que esse filtro confere ganhou, depois da auditoria, um bloco `ausencia` para o mecanismo da falta: `MCAR`, `MAR`, `MNAR` ou não declarado, com as colunas que a classificação cobre e a análise de sensibilidade exigida quando a ausência pode depender do próprio valor. Ausência sem classificação é recusada; nos três contratos do H1 real e nas 18 tabelas do H2g a regra é vacuosa hoje — nenhuma coluna tem um único valor ausente —, e passa a morder no dia em que aparecer.
 3. **Teste severo contra o nulo.** Se o padrão alegado já aparece no modelo nulo, ou numa referência de um parâmetro só, como a taxa-base (M12), a pesquisa encerra ali. Quando a simulação é cara, o F4 faz esse teste primeiro num emulador barato.
 4. **Inferência pesada, lentes e banca.** Só o que sobra recebe o tratamento caro.
 
@@ -931,11 +939,14 @@ perguntou e o que ele respondeu.
 | 1. Tese central | A arquitetura pega erros que a prática comum deixa passar | Piloto cego de 12 casos, dois braços | Empate no teto: 8 de 8 defeitos nos dois, 0 alarme falso nos 4 casos limpos — a tese não fica sustentada |
 | 2. Independência | As saídas aprovadas não dependem de quem as escreveu | Quatro resultados reimplementados só a partir da especificação | Todos concordam; zero erros no original; várias escolhas que a especificação não fixa coincidem com as do autor, três delas só no STAR (evidência fraca) |
 | 3 e 4. Multiplicidade | O portão do H2 foi tentado poucas vezes, e nada foi ajustado depois | Inventário das tentativas e das aberturas de cofre | K = 38 testes distintos (32 a 72); com Bonferroni o H2g mantém as 4 áreas de então — antes da correção de agrupamento do ponto 7 — e os conjuntos encolhem |
-| 5. Prioris | As prioris de literatura não foram conferidas com especialistas | Três rodadas em 33 domínios: pacote, literatura e fraca | Cinco domínios mudam de status ou ação com a de literatura e dois com a fraca |
+| 5. Prioris | As prioris de literatura não foram conferidas com especialistas; a rodada de controle não tinha tolerância declarada | Três rodadas em 33 domínios (pacote, literatura e fraca) e a banda de equivalência de 0,05 dp da `DECLARACAO_2` | Cinco domínios mudam de status ou ação com a de literatura e dois com a fraca; o veredito deixa de ser condicional — desvio máximo de 0,0071 dp e **33 dos 33** domínios idênticos |
 | 6. Laço performativo | Quem desiste da fila volta a chamar com probabilidade 0,6 | Desenho quase experimental numa central real, 1999 | 0,145 [0,132; 0,157] — quatro vezes menos que o declarado |
-| 7. Linhas dependentes | O ICP supõe linhas independentes, e há 16 instantes por voluntário e 80 escolas | Wald agrupado e permutação em blocos; réplica da Genética com 40 genes novos | A Farmacologia sobrevive intacta, a Educação sai; a Genética se replica em um gene validado |
+| 7. Linhas dependentes | O ICP supõe linhas independentes, e há 16 instantes por voluntário e 80 escolas | Wald agrupado e permutação em blocos; réplica da Genética com 40 genes novos e taxa nula por permutação do rótulo do mutante (B = 999) | A Farmacologia sobrevive intacta, a Educação sai; a Genética se replica em um gene validado, com p = 0,001 da taxa nula |
 | 8. Calibração | A tolerância do ECE pode ser fixa em 0,03 | Nulo simulado com as mesmas previsões e o mesmo n | Nenhum dos seis cofres binários do H3 passa pela regra que depende de n; pela regra secundária, o quadro não muda |
 | 9 e 10. Escala e dados | O funil escala e o grafo mede conhecimento | 329 domínios em lote; dois domínios novos de saúde | Dois podados no teste severo; 327 até o fim; 26 634 nós, dos quais 6 494 de conceito |
+| Evento raro | Um previsor de evento raro serve para decidir quando tem boa calibração | Decomposição de Brier em três cofres: indometacina, COVID e Rhode Island | Nenhum caminho vence nos três: só em Rhode Island RES − REL fica acima de zero (+2,74643e-4 na logística, +3,11655e-4 no ranking), e a habilidade de Brier fica em +0,018629 e +0,017952, abaixo do +0,05 declarado; no COVID a AUC é 0,7685 e a habilidade é −0,020853 |
+| Saúde | O círculo que o Lab 0 abriu se fecha com dado real de saúde, em espelho aberto | PhysioNet/CinC Challenge 2019 (sepse precoce) no espelho do PhysioNet: o funil do H2g rodou de ponta a ponta, sem uma linha mudada, com o cofre no segundo sistema hospitalar | O efeito existe e é preciso (β = 0,0388 em log-razão de chances por respiração por minuto, IC90 0,0257 a 0,0523), mas a invariância não: 0 de 512 subconjuntos aceitos, Ŝ = ∅, e o G3 falha; a habilidade no cofre é +0,00568 e a taxa de decisão registrada é 8,4% nas internações de um sistema e 3,9% nas do outro |
+| Ficha e contrato | A pergunta que o modelo responde é a que o decisor fez; o contrato de dados não diz por que o dado falta | Campo obrigatório `pergunta_do_decisor` no pacote de domínio (18 do H2g, 12 do h2 e a ficha do H0) e bloco `ausencia` (MCAR, MAR, MNAR ou não declarado) no contrato do F2 | Os dois campos entram validados no código; nos três contratos do H1 real e nas 18 tabelas do H2g a regra da ausência é vacuosa hoje — nenhuma coluna tem um único valor ausente — e nenhum número publicado muda |
 
 Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o H3 corrigiu é cerca de
 quatro vezes o que se mediu num caso real (Capítulos 5 e 13). A tolerância de 0,03 do erro de calibração é maior que
@@ -945,12 +956,11 @@ agrupamento, e quem sustenta a terceira área agora é a Genética replicada, n�
 publicado caiu por erro de conta; o que a auditoria estreita é o que esses números autorizam.
 
 O que continua em aberto tem nome. A elicitação com especialistas humanos de verdade, porque a auditoria mediu a
-sensibilidade às prioris e isso não substitui um painel. A tolerância da rodada de controle do ponto 5: a declaração
-escreveu a condição de falha sem tolerância, e ela dispara por diferença numérica de ponto flutuante, de modo que
-aquele veredito sai rotulado como condicional; afrouxar o limiar depois de ver o resultado é exatamente o tipo de
-ajuste que este capítulo denuncia. A taxa nula da validação por intervenção da Genética, que decide com um único gene
-em 27 e portanto não tem p. E o tempo de atendimento e a paciência dos clientes da central (Capítulo 10), que a base
-não traz e que continuam supostos.
+sensibilidade às prioris e isso não substitui um painel — o protocolo e os seis formulários estão escritos em
+`fundo/p12-shelf/`, com o critério de K = 2 pronto, e nenhuma entrevista foi feita. A taxa nula da validação por
+intervenção da Genética, que decide com um único gene em 27: ela saiu em p = 0,001, o piso de 999 sorteios, e o que
+segue aberto ali é a resolução, não o p. E o tempo de atendimento e a paciência dos clientes da central (Capítulo 10),
+que a base não traz e que continuam supostos.
 
 Fica também o limite da seção 9.6, que a auditoria não resolveu: um dos passos que ela mesma propõe é que sil releia
 por inteiro os 21 pareceres assinados, um a um, e confirme ou retire a assinatura registrando que leu o texto integral.
@@ -1037,7 +1047,7 @@ O Lab 0 supunha uma demanda que alterna entre 5 e 11. No H0 real, a demanda é o
 
 R2 e R3 custam quase o mesmo, mas R2 põe a folga onde está o risco. Em frequências naturais: de cada 100 dias, 26 falham com a escala da alegação, nenhum no mundo que ela descreve e cerca de 4 com R2.
 
-**O que ficou suposto.** O tempo de atendimento (exponencial, média de 4 minutos) e a paciência dos clientes (exponencial, média de 3 minutos) não estão na base. A paciência muda o tamanho do efeito, de 1% a 40% dos dias abaixo da meta, mas nunca o sentido. O domínio de saúde ficou de fora porque os portais do DATASUS estavam fora do alcance da rede.
+**O que ficou suposto.** O tempo de atendimento (exponencial, média de 4 minutos) e a paciência dos clientes (exponencial, média de 3 minutos) não estão na base. A auditoria de fundo transformou essas duas suposições numa malha declarada de 4 × 6 pontos — atendimento de 3, 4, 5 e 6 minutos contra paciência de 1, 2, 3, 5, 7 e 10 minutos —, e o resultado é que a decisão não depende da escolha dentro dessa faixa: o R2 é a regra vencedora em 20 dos 24 pontos, e nos outros quatro, todos com 1 minuto de paciência, as quatro regras empatam, sem nenhuma delas deixar mais de 1 dia abaixo da meta. Não há ponto de virada, e a margem mais apertada fora do empate é de 2 dias do cofre, em 6 minutos de atendimento e 2 de paciência. O pior caso é o canto da malha, 5 minutos de atendimento com 10 de paciência: nem a melhor das quatro regras segura a meta, com 14,2% dos dias abaixo dela, contra 37,7% da regra da alegação no mesmo ponto — de cada 100 dias, 38 falham com a escala da alegação e 14 com o R2, que custa 7,2% a mais de agente-horas. A paciência governa o tamanho do efeito e o atendimento quase não: fixada a paciência, a fração do R2 anda no máximo 0,9 ponto percentual em todo o intervalo de atendimento, e a linha da alegação vai de 0,6% a 1,2% dos dias abaixo da meta com 1 minuto de paciência e de 37,7% a 38,6% com 10. O que a malha não mede é a família das distribuições, porque as duas seguem exponenciais com CV 1, nem a dependência entre paciência e atendimento. O domínio de saúde ficou de fora do Lab 0 porque os portais do DATASUS e de dados.gov.br estavam fora do alcance da rede; o círculo se fecha por outro caminho, no ponto 10 da auditoria de fundo (seção 9.7).
 
 ### Resumo
 
@@ -1179,7 +1189,16 @@ conjuntos aceitos e melhor p = 0,00724 contra os 0,0072 publicados, e os mesmos 
 validação estrita.
 
 O limite fica dito sem enfeite: a validação estrita decide sobre uma linha, porque cada mutante é um ambiente de
-n = 1, e a declaração não fixou taxa nula para ela; 1 gene em 27 é o número, sem p-valor de acompanhamento.
+n = 1, e a declaração original não fixou taxa nula para ela; 1 gene em 27 era o número, sem p-valor de acompanhamento.
+A declaração seguinte fixou a nula — permutar o rótulo do mutante entre as 1 741 linhas, por par de gene e candidato,
+B = 999, semente 20261015 — e o resultado foi p = 0,001, o piso de 999 sorteios: nenhum deles chegou a um par.
+
+A leitura tem duas metades, e elas não dizem a mesma coisa. Contra o acaso do rótulo a evidência é forte: o observado
+é 1 par em 27 contra uma média nula de 0, e o p está no piso do teste. Contra ler isso como efeito medido, a evidência
+é nula: quase todo o p vem da metade que é fato dos dados — deletar um gene tira a expressão dele, então o mínimo da
+coluna está na linha do mutante —, e permutar o rótulo destrói exatamente essa metade. A metade que sobra, o alvo fora
+da faixa das outras 1 740 linhas, sozinha dá p = 0,031, marginal. O veredito não muda: a Genética se replica, e o que ela
+replica é um gene num mutante, não um efeito medido com resolução.
 
 ### 12.5 A sétima rodada: os bloqueadores de hERG
 
@@ -1291,6 +1310,30 @@ A auditoria de justiça (F6) foi informativa nos três fluxos de prisões, e o p
 
 Não usar a cor no modelo não dá paridade, porque a cor entra pelos correlatos. A identidade de Chouldechova diz que, com taxas-base diferentes, calibração e taxas de erro iguais são incompatíveis; com taxas-base próximas, a paridade fica possível, mas não automática. Em Toronto, em 2002, as taxas de não liberação eram próximas (21% contra 19%), e a taxa de falso positivo dos negros continuou cerca do dobro.
 
+A auditoria de fundo repetiu a pergunta do Φ4 no avesso, nos três fluxos de prisões (`h3/saida/*/justica_invertida.json`).
+A métrica escolhida é a taxa de falso positivo do flag, P(marcado | não sofre o desfecho de interesse); a invertida é a
+taxa de falso negativo, P(não marcado | sofre o desfecho). O grupo menos favorecido sai da maior taxa-base, o pagador é o
+de maior taxa sob a métrica em vigor, e empate é o que tem intervalos de Wilson de 95% sobrepostos. A varredura de
+limiares vai de 0,05 a 0,95, de 0,05 em 0,05, mais o limiar declarado de cada fluxo: 0,70 em Toronto 1997–2002 e em
+Toronto 2020–2021, e 0,90 em Rhode Island.
+
+Em Toronto 1997–2002 o grupo menos favorecido é o que tem a MENOR taxa de falso negativo. No limiar declarado de 0,70, o
+`Black` perde 0,64 dos casos em 1998 contra 0,70 do `White`, enquanto pela métrica escolhida quem paga é o `Black`
+(0,196 de falso positivo contra 0,105) e pela invertida o `Black` sai e fica o empate ou o `White`. Quem é marcado com
+mais frequência sem sofrer o desfecho é o `Black`; quem é perdido com mais frequência é o `White`. Trocar a métrica
+troca quem paga, e nesse fluxo isso acontece em um a dois limiares do grid, todos acima do limiar declarado: 0,85 em
+1998, 0,50 em 2000 e 0,80 em 2001. Em Toronto 2020–2021 e em Rhode Island os intervalos se sobrepõem em quase toda a
+varredura e a inversão não troca pagador nenhum: os dois fluxos ficam em empate nos quatro semestres e nos três anos do
+cofre, com a taxa de falso negativo do grupo menos favorecido em Rhode Island entre 0,85 e 0,93 no limiar de 0,90.
+
+O registro dos grupos afetados é curto e não é bom. Em sete decisões que envolvem pessoas — os quatro pareceres que este
+capítulo já citava e os três fluxos de prisões —, **nenhum grupo afetado foi ouvido** (`governanca/GRUPOS.md`). Não há
+no repositório consulta, entrevista, painel nem consentimento; o que existe são declarações sobre os dados, como os
+titulares e o atributo protegido, não sobre quem foi escutado. Em Rhode Island a pergunta ainda mudou de "liberação
+depois da prisão" para "prisão numa parada de trânsito", troca confirmada por quem conduz o programa e não pelo grupo que
+passou a ser o alvo da decisão. O outro lado do mesmo registro é que assinar não é escutar: o responsável fica do lado de
+quem decide usar o artefato, não de quem paga o erro.
+
 ### Resumo
 
 - Zero vazamento só vale com um canário que prove que o teste acharia o vazamento.
@@ -1355,7 +1398,7 @@ Uma disciplina que exige teste severo das alegações alheias precisa aplicá-lo
 ### 14.4 O que a auditoria respondeu e o que fica em aberto
 
 A auditoria de fundo testou dez suposições do próprio programa, e a lista completa com os números está na seção 9.7.
-Quatro das lacunas que a primeira edição deste capítulo listava deixaram de ser lacuna.
+Dez das lacunas que a primeira edição deste capítulo listava deixaram de ser lacuna.
 
 - **Testes de invariância que respeitem medidas repetidas.** O teste agrupado por voluntário e por escola foi rodado,
   e ele muda veredito entre áreas: a Farmacologia sobrevive, a Educação não (Capítulo 12).
@@ -1366,26 +1409,34 @@ Quatro das lacunas que a primeira edição deste capítulo listava deixaram de s
 - **Uma auditoria periódica do próprio arcabouço.** É literalmente o que a pasta `fundo/` é, e ela achou coisas que a
   auditoria dos domínios não tinha achado: o laço declarado quatro vezes maior que o medido, a tolerância de
   calibração frouxa nos cofres grandes, o portão do H2 dependendo de qual versão de cada escolha conta.
+- **A tolerância da rodada de controle do ponto 5.** A condição de falha estava escrita sem tolerância e disparava por
+  diferença numérica de ponto flutuante. A banda de equivalência de 0,05 dp foi declarada depois, com hash próprio e
+  K = 2, e o veredito deixou de ser condicional: o desvio máximo é 0,0071 dp e os 33 domínios batem (seção 9.7).
+- **Previsores de eventos raros.** Os três cofres foram medidos e nenhum caminho vence; só em Rhode Island a resolução
+  bate a confiabilidade, e a habilidade de Brier fica em +0,019, longe do +0,05 exigido; no COVID a ordenação é boa
+  (AUC 0,77) e a previsão perde para a constante por deslocamento de nível (seção 9.7).
+- **A auditoria de quem paga pelo erro.** A pergunta do Φ4 foi rodada ao avesso nos três fluxos de prisões: em Toronto
+  1997–2002 trocar a métrica troca quem paga, e nos outros dois fluxos o empate não muda (Capítulo 13).
+- **Um campo no contrato de dados do F2 para o mecanismo da ausência** (MCAR, MAR ou MNAR), com análise de
+  sensibilidade quando a ausência pode depender do próprio valor. O bloco entrou no contrato, com a regra validada no
+  código; nos dados de hoje ele é vacuoso, e é isso que o mantém barato (Capítulo 8).
+- **Uma pergunta explícita na ficha contra o erro de tipo III**: que a pergunta que o modelo responde seja a que o
+  decisor fez virou campo obrigatório do pacote de domínio, com quem decide e qual ação muda, validado contra o
+  próprio texto do pacote (Capítulo 8).
+- **Dados reais de saúde**, para fechar o círculo que o Lab 0 abriu. O primeiro domínio real de saúde entrou, no espelho
+  aberto da PhysioNet, e o que ele deu foi uma alegação que não se sustenta por falta de invariância (seção 9.7).
 
 Ficam em aberto, agora com nome:
 
 - **Elicitação com especialistas humanos de verdade.** A auditoria mediu a sensibilidade às prioris; isso não
-  substitui um painel, e cinco de 33 domínios dependem da escolha.
-- **A tolerância da rodada de controle do ponto 5.** A declaração escreveu a condição de falha sem tolerância e ela
-  dispara por diferença numérica; resolver isso é declaração nova, com hash, não conserto silencioso.
-- **A taxa nula da validação por intervenção.** A réplica da Genética decide com um gene em 27, e esse número não
-  tem p.
-- **Previsores de eventos raros com mais resolução**, e não só boa calibração: os dois domínios de saúde que a
-  auditoria acrescentou foram podados no teste severo por falta de poder, e a resolução do evento raro ficou baixa.
-- **A auditoria de quem paga pelo erro**, que nos fluxos de prisões mostrou o mesmo desequilíbrio em dois lugares e
-  duas décadas.
-- **Um campo no contrato de dados do F2 para o mecanismo da ausência** (MCAR, MAR ou MNAR), com análise de
-  sensibilidade quando a ausência pode depender do próprio valor.
-- **Uma pergunta explícita na ficha contra o erro de tipo III**: a pergunta que o modelo responde é a que o decisor
-  fez?
-- **Dados reais de saúde**, para fechar o círculo que o Lab 0 abriu.
-- **O que a auditoria não pôde olhar**: os 21 pareceres assinados por quem conduz o programa, que sil precisa reler
-  por inteiro para confirmar ou retirar a assinatura.
+  substitui um painel, e cinco de 33 domínios dependem da escolha. O protocolo do painel e os seis formulários estão
+  escritos, com o critério de K = 2 pronto, e ninguém foi eliciado: nenhuma previsão foi corrigida, nada foi assinado.
+- **A resolução da validação por intervenção da Genética.** A taxa nula saiu em p = 0,001, o piso de 999 sorteios, e
+  com um mutante por ambiente o menor p possível ali é 1/1 000: o efeito que sustenta a réplica é o de uma linha.
+- **O que a auditoria não pôde olhar.** Os 21 pareceres assinados por quem conduz o programa precisam ser relidos um a
+  um; as 21 linhas estão prontas, com os 21 SHA-256 conferidos, e nenhuma decisão foi assinada. O registro dos grupos
+  afetados existe e diz que nenhum foi ouvido, nas sete decisões que envolvem pessoas: quem paga o erro continua sem
+  voz no programa.
 
 
 ### Exercícios finais
@@ -1446,9 +1497,12 @@ Todo o código está no repositório 0b3st4f3r4/estocologia, com uma pasta por h
 | h2/ a h2g/ | As sete rodadas do ICP (Cap. 12) | `python3 rodar.py` e `python3 portoes.py --reproducao` em cada pasta |
 | h3/ | Os seis fluxos e as revisões H3b a H3d (Cap. 13) | `python3 rodar.py` e `python3 portoes.py --reproducao` |
 | governanca/ | Registro das assinaturas dos 21 pareceres (Cap. 9) | Leitura |
-| fundo/ | A auditoria de fundo: oito pastas cobrindo os dez pontos supostos (seção 9.7 e Cap. 14) | Leitura; `rodar.sh` em p02 e p05, script próprio nas demais |
+| fundo/ | A auditoria de fundo: os dez pontos supostos (p01 a p09) e as extensões (p10-saude, p11-eventos-raros, p12-shelf) (seção 9.7 e Cap. 14) | Leitura; `rodar.sh` em p02 e p05, script próprio nas demais |
+| fundo/AMBIENTE.md | O que roda e o que não roda nesta máquina, com as versões conferidas uma a uma | Leitura |
 
 Cada `portoes.py` roda o horizonte duas vezes e compara os hashes. Se o seu hash sair diferente do publicado, a reprodução falhou, e esse é o primeiro dado a investigar.
+
+O `fundo/AMBIENTE.md` é a foto do ambiente das frentes, e ela tem duas ausências declaradas. Nesta máquina, Python 3.13.7, estão instaladas as nove dependências que o `fundo/requirements.txt` lista — numpy 2.4.6, pandas 3.0.5, scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7. Falta `statsmodels`, que só o gabarito do p01 usa, e falta `pyreadr`, que só um passo do p08 usa (a conversão dos `.rda` de voos novos); sem eles, essas duas partes não reproduzem aqui, e o arquivo diz como instalá-los.
 
 ## Apêndice C. Respostas selecionadas
 
