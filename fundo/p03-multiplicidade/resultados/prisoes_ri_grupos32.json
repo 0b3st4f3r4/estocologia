@@ -1,0 +1,16 @@
+{
+ "diferenca_maxima_absoluta": {
+  "modelo": 1.304512053934559e-15,
+  "modelo_cru": 1.4988010832439613e-15,
+  "platt_a": 9.71445146547012e-16,
+  "platt_b": 1.3322676295501878e-15
+ },
+ "origem_identica": true,
+ "linhas": 83632,
+ "varreduras_equivalentes_com_32_linhas": {
+  "detencao": 6.36,
+  "liberacao": 6.34,
+  "canario": 6.34
+ },
+ "nota": "rodado com OMP_NUM_THREADS=1; comparado com /mnt/project-files/estocologia/h3/saida/prisoes_ri/diario.parquet (sha256 0c0e05aa..., igual a FORA_DO_GIT.sha256)"
+}
