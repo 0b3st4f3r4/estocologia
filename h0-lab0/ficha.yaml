@@ -87,6 +87,8 @@ termo_de_escopo:  # Φ4
   frequencias_naturais: "De cada 100 pacientes, cerca de 25 esperam mais de meia hora no mundo real, contra 8 no mundo da alegação."
   circuit_breaker: "Se a taxa de chegada observada em um dia passar de 11,5/h, ou a fração > 30 min passar de 35% em 5 dias seguidos, o modelo sai do escopo: voltar ao F7 e reelicitar a demanda."
 
+pergunta_do_decisor: >-
+  Quem decide: o gestor do posto de saúde nos dias de surto (nó L3_gestor da ficha). Ação que a decisão muda: reforçar (μ = 24) nos dias de surto. A pergunta do decisor é: a espera média por paciente é a pergunta que o gestor usa, ou a decisão é sobre a fração acima de 30 min?
 tentativas_de_especificacao: 1   # K do PLAN.md §4; esta é a especificação do notebook, sem buscas
 
 pendencias_para_H1:
