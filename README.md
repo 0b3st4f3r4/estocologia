@@ -17,6 +17,7 @@ A pesquisa foi encerrada em 2026-10-15.
 | `dados-reais/` | Dados, origens (`FONTES.md`) e somas `SHA256SUMS` |
 | `governanca/` | Pareceres de risco F5 assinados |
 | `referencias/` | Conferência das referências bibliográficas |
+| `artigo/` | Artigo "Estocologia": Velhas Fronteiras, Novos Horizontes, com as figuras |
 
 Cada horizonte tem seu `README.md` com resultados, comandos de reprodução e limites declarados.
 Arquivos grandes ficaram fora do Git; veja [FORA_DO_GIT.md](FORA_DO_GIT.md).
