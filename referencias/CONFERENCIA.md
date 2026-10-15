@@ -40,3 +40,29 @@ Método: cada referência, antes citada de memória, foi comparada com uma fonte
   - **#18:** indicar a edição usada do Stock & Watson. Sugestão: 4ª ed., Pearson, 2019, cap. 12.
   - **#24:** não tratar SHELF e o livro *Uncertain Judgements* como a mesma obra.
   - **#2, #3, #5, #7, #19, #22:** completar a referência com volume(número), páginas e DOI conforme a tabela.
+
+## Livro didático: referências acrescentadas (conferência de 2026-10-15)
+
+Referências que o livro didático (Claude Doc "Estocologia: livro didático", Apêndice D) citava de memória. Fontes: API do Crossref via WebFetch, páginas das editoras e catálogos de biblioteca (o Crossref direto por curl foi bloqueado pelo proxy).
+
+| # | referência conferida | situação | fonte da conferência |
+|---|---|---|---|
+| L1 | RUBIN, D. B. Inference and missing data. *Biometrika*, v. 63, n. 3, p. 581–592, 1976. DOI: 10.1093/biomet/63.3.581 | CONFERE | https://academic.oup.com/biomet/article/63/3/581/270932 |
+| L2 | KIMBALL, A. W. Errors of the third kind in statistical consulting. *JASA*, v. 52, n. 278, p. 133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | CORRIGIR no texto: a definição é "a resposta certa ao *problema* errado" (p. 134) | https://api.crossref.org/works/10.1080/01621459.1957.10501374 |
+| L3 | GELMAN, A.; TUERLINCKX, F. Type S error rates for classical and Bayesian single and multiple comparison procedures. *Computational Statistics*, v. 15, n. 3, p. 373–390, 2000. DOI: 10.1007/s001800000040 | CONFERE; o título nomeia só o tipo S | https://link.springer.com/article/10.1007/s001800000040 |
+| L4 | GELMAN, A.; CARLIN, J. Beyond power calculations: assessing type S (sign) and type M (magnitude) errors. *Perspectives on Psychological Science*, v. 9, n. 6, p. 641–651, 2014. DOI: 10.1177/1745691614551642 | CONFERE (título completado) | https://api.crossref.org/works/10.1177/1745691614551642 |
+| L5 | WALKER, W. E. et al. Defining uncertainty: a conceptual basis for uncertainty management in model-based decision support. *Integrated Assessment*, v. 4, n. 1, p. 5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | CONFERE (subtítulo completado) | https://api.crossref.org/works/10.1076/iaij.4.1.5.16466 |
+| L6 | STIRLING, A. Keep it complex. *Nature*, v. 468, n. 7327, p. 1029–1031, 2010. DOI: 10.1038/4681029a | CONFERE | https://www.nature.com/articles/4681029a |
+| L7 | MANDELBROT, B. B. *Fractals and scaling in finance: discontinuity, concentration, risk* (Selecta, v. E). New York: Springer, 1997 | CONFERE | https://link.springer.com/book/9781441931191 |
+| L8 | WALD, A. *Statistical decision functions*. New York: Wiley, 1950 | CONFERE | https://lmbp.uca.fr/biblio/notice.php?num=3825 |
+| L9 | SAVAGE, L. J. The theory of statistical decision. *JASA*, v. 46, n. 253, p. 55–67, 1951. DOI: 10.1080/01621459.1951.10500768 | CONFERE | https://api.crossref.org/works/10.1080/01621459.1951.10500768 |
+| L10 | ROYALL, R. M. *Statistical evidence: a likelihood paradigm*. London: Chapman & Hall, 1997 | CONFERE | https://lib.ecu.edu/catalog-preview/catalog/622988 |
+| L11 | MORENO-TORRES, J. G. et al. A unifying view on dataset shift in classification. *Pattern Recognition*, v. 45, n. 1, p. 521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | CONFERE | https://api.crossref.org/works/10.1016/j.patcog.2011.06.019 |
+| L12 | SWEENEY, L. *Simple demographics often identify people uniquely*. Data Privacy Working Paper 3, Carnegie Mellon University, 2000 | CONFERE como relatório técnico, não artigo; 87% (216 de 248 milhões, censo de 1990) | https://dataprivacylab.org/projects/identifiability |
+| L13 | ELLSBERG, D. Risk, ambiguity, and the Savage axioms. *QJE*, v. 75, n. 4, p. 643–669, 1961. DOI: 10.2307/1884324 | CONFERE | https://academic.oup.com/qje/article-abstract/75/4/643/1913802 |
+| L14 | BAIG, S. S. et al. 22 years of predictive testing for Huntington's disease: the experience of the UK Huntington's Prediction Consortium. *European Journal of Human Genetics*, v. 24, n. 10, p. 1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | NOVA: substitui o "menos de 10%" do livro por 17,4% (Reino Unido, 1994–2014) | https://pmc.ncbi.nlm.nih.gov/articles/PMC5027682 |
+| L15 | HUME, D. *Philosophical essays concerning human understanding*. London: A. Millar, 1748 | CORRIGIR: o título *Enquiry* só vem da edição de 1758 | https://davidhume.org/texts/e/notes |
+
+Clássicos conferidos na mesma rodada: Bernoulli, *Ars Conjectandi* (Basel, 1713, póstumo); Knight (Houghton Mifflin, 1921); Savage, *The Foundations of Statistics* (Wiley, 1954); Tversky & Kahneman, *Science* 185(4157):1124–1131, 1974, DOI 10.1126/science.185.4157.1124; Mayo (University of Chicago Press, 1996); Pearl, *Causality* (Cambridge University Press, 2000); Gigerenzer, *Calculated Risks* (Simon & Schuster, 2002).
+
+Fatos conferidos: Gigerenzer et al. 2007 (*PSPI* 8(2):53–96; 160 ginecologistas, 21% acertam); Miller & Sanjurjo 2018 (*Econometrica* 86(6):2019–2047); Simmons, Nelson & Simonsohn 2011 (*Psychological Science* 22(11):1359–1366; 60,7%); Open Science Collaboration 2015 (*Science* 349(6251):aac4716; 97% e 36%); Charig et al. 1986 (*BMJ* 292(6524):879–882; 78% e 83%); Literary Digest 1936; Stampfer et al. 1991 (*NEJM* 325(11):756–762; RR 0,56) e WHI 2002 (*JAMA* 288(3):321–333; HR 1,29); Netuno (Galle, 1846). Não confirmado: o ano de Vulcano (o livro não o cita).
