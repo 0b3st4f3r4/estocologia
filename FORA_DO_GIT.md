@@ -12,6 +12,15 @@ Conferência, depois de baixar ou regenerar, a partir da raiz:
 sha256sum -c FORA_DO_GIT.sha256
 ```
 
+**Dois derivados não batem com a soma registrada, e o motivo é o escritor, não o dado.** O
+`dados-reais/h2e/causal_chamber_lt_interventions_standard_v1.csv` — a concatenação dos 59 CSVs do zip de origem, com a
+coluna `experiment` acrescentada — e o `dados-reais/h2f/kemmeren2014_obs_int.parquet` foram reconstruídos em
+2026-10-15 a partir das origens, e as origens conferem (MD5 dos dois zips, SHA-256 do `Kemmeren.RData`). Os derivados
+reconstruídos saem com `a80bc1a6…` e `f152937f…` no lugar de `99b75516…` e `0921bda4…`, porque o byte do derivado
+depende de quem escreve — o Parquet, por exemplo, grava a versão do escritor nos metadados. O conteúdo foi conferido
+campo a campo (forma, ambientes, blocos de amostras) e o desvio está relatado em `fundo/p05-prioris/README.md`,
+`fundo/p07-icp/README.md` e `dados-reais/h2f/CONVERSAO.md`.
+
 | Arquivo | Tamanho |
 |---|---|
 | `dados-reais/h2/nycflights13_flights.csv` | 31.7 MB |
