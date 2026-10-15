@@ -1,11 +1,24 @@
-# P01 · Piloto da tese central (README provisório)
+# P01 · Piloto da tese central
 
 ## Resultado
 
-Ainda não há resultado sobre a tese. O que está pronto é a montagem: o banco de 12 casos às cegas, o gabarito fora do
-repositório (só o hash aqui) e a declaração do protocolo (`DECLARACAO.md`, hash em `DECLARACAO.sha256`), escrita
-antes de qualquer parecer. Faltam os pareceres dos braços A e B e a codificação do juiz. Este README não revela
-quais casos têm defeito e não deve ser entregue aos analistas.
+**Empate no teto: o piloto não sustenta a tese, pela regra declarada antes.** Os dois braços apontaram o defeito
+plantado nos 8 casos com defeito e não deram nenhum alarme falso nos 4 casos limpos (juiz cego, `juiz/notas.yaml`).
+Sensibilidade 8/8 nos dois; alarme falso 0/4 nos dois; nenhum par discordante, logo o teste de McNemar não tem o
+que testar. A `DECLARACAO.md` fixou que empate no teto conta como tese não sustentada.
+
+A leitura honesta é que o piloto não discrimina: os dez erros da lista de Makin e Orban de Xivry (2019) são os
+erros que qualquer estatístico competente procura, e um modelo instruído só a "analisar com rigor" achou todos.
+O piloto não refuta a tese, mas mostra que, para esses erros, a arquitetura não acrescenta acerto. Se a tese
+vale, vale para erros que a lista não cobre, e um teste justo disso precisa de casos mais difíceis escolhidos por
+alguém de fora do programa, de analistas humanos e de um juiz humano.
+
+Os vereditos dos dois braços coincidiram nos 12 casos. O braço A deixou de lado uma exigência da arquitetura (os
+testes de propriedades com Hypothesis), e os três papéis são modelos da mesma família, o que pode explicar parte
+da coincidência.
+
+Depois da pontuação, o gabarito, os geradores e o mapa X/Y foram publicados nesta pasta (`gabarito/`, `juiz/`); o
+SHA-256 do gabarito confere com `GABARITO.sha256` (4d5450eb…).
 
 ## O que foi feito
 
