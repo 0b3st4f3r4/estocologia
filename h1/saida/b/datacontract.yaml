@@ -1,0 +1,77 @@
+nome: coorte_vitamina
+versao: '1.0'
+colunas:
+  pessoa:
+    tipo: str
+  periodo:
+    tipo: int
+    min: 1
+    max: 99
+  braco:
+    tipo: int
+    valores:
+    - 0
+    - 1
+  idade:
+    tipo: int
+    min: 18
+    max: 110
+  uf:
+    tipo: str
+    valores:
+    - AC
+    - AL
+    - AM
+    - AP
+    - BA
+    - CE
+    - DF
+    - ES
+    - GO
+    - MA
+    - MG
+    - MS
+    - MT
+    - PA
+    - PB
+    - PE
+    - PI
+    - PR
+    - RJ
+    - RN
+    - RO
+    - RR
+    - RS
+    - SC
+    - SE
+    - SP
+    - TO
+  sexo:
+    tipo: str
+    valores:
+    - F
+    - M
+  z:
+    tipo: int
+    valores:
+    - 0
+    - 1
+  x:
+    tipo: int
+    valores:
+    - 0
+    - 1
+  y:
+    tipo: int
+    valores:
+    - 0
+    - 1
+  w:
+    tipo: int
+    valores:
+    - 0
+    - 1
+chave:
+- pessoa
+particao: periodo
+grao: uma linha por pessoa (seguimento de dez anos)

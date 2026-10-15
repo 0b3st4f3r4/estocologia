@@ -1,0 +1,437 @@
+{
+ "registro": [
+  {
+   "agente": "agent-f2-data",
+   "dominio": "biologia_sachs",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "mek",
+    "raf",
+    "plcg",
+    "pip2",
+    "pip3",
+    "akt",
+    "pka",
+    "pkc",
+    "p38",
+    "jnk"
+   ],
+   "ambientes": [
+    "10_cd3cd28icam2_aktinhib",
+    "11_cd3cd28icam2_g0076",
+    "12_cd3cd28icam2_psit",
+    "1_cd3cd28",
+    "2_cd3cd28icam2",
+    "3_cd3cd28_aktinhib",
+    "4_cd3cd28_g0076",
+    "5_cd3cd28_psitect",
+    "7_cd3cd28_ly",
+    "8_pma",
+    "9_b2camp"
+   ],
+   "arquivos": 11,
+   "bytes_varridos": 481104,
+   "bytes_tabela": 528303,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "mek",
+    "raf",
+    "plcg",
+    "pip2",
+    "pip3",
+    "akt",
+    "pka",
+    "pkc",
+    "p38",
+    "jnk"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "biologia_sachs",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "mek",
+    "raf",
+    "plcg",
+    "pip2",
+    "pip3",
+    "akt",
+    "pka",
+    "pkc",
+    "p38",
+    "jnk"
+   ],
+   "ambientes": [
+    "14_cd3cd28icam2_ly"
+   ],
+   "arquivos": 1,
+   "bytes_varridos": 47199,
+   "bytes_tabela": 528303,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "mek",
+    "raf",
+    "plcg",
+    "pip2",
+    "pip3",
+    "akt",
+    "pka",
+    "pkc",
+    "p38",
+    "jnk"
+   ],
+   "toca_cofre": true
+  },
+  {
+   "agente": "agent-f2-data",
+   "dominio": "direito_teto_beneficio",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "beneficio_log",
+    "salario_log",
+    "alta_renda",
+    "kentucky",
+    "homem",
+    "casado",
+    "idade_log",
+    "internacao",
+    "tipo_lesao",
+    "industria"
+   ],
+   "ambientes": [
+    "ky_antes",
+    "ky_depois",
+    "mi_antes"
+   ],
+   "arquivos": 3,
+   "bytes_varridos": 73765,
+   "bytes_tabela": 83536,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "beneficio_log",
+    "salario_log",
+    "alta_renda",
+    "kentucky",
+    "homem",
+    "casado",
+    "idade_log",
+    "internacao",
+    "tipo_lesao",
+    "industria"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "direito_teto_beneficio",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "beneficio_log",
+    "salario_log",
+    "alta_renda",
+    "kentucky",
+    "homem",
+    "casado",
+    "idade_log",
+    "internacao",
+    "tipo_lesao",
+    "industria"
+   ],
+   "ambientes": [
+    "mi_depois"
+   ],
+   "arquivos": 1,
+   "bytes_varridos": 9771,
+   "bytes_tabela": 83536,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "beneficio_log",
+    "salario_log",
+    "alta_renda",
+    "kentucky",
+    "homem",
+    "casado",
+    "idade_log",
+    "internacao",
+    "tipo_lesao",
+    "industria"
+   ],
+   "toca_cofre": true
+  },
+  {
+   "agente": "agent-f2-data",
+   "dominio": "educacao_star_turmas",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "turma_pequena",
+    "anos_pequena_antes",
+    "serie",
+    "almoco_gratuito",
+    "menina",
+    "etnia",
+    "experiencia_prof",
+    "mestrado_prof",
+    "prof_negro",
+    "tipo_escola"
+   ],
+   "ambientes": [
+    "1_pequena",
+    "1_regular",
+    "2_pequena",
+    "2_regular",
+    "3_regular",
+    "k_pequena",
+    "k_regular"
+   ],
+   "arquivos": 7,
+   "bytes_varridos": 80293,
+   "bytes_tabela": 91969,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "turma_pequena",
+    "anos_pequena_antes",
+    "serie",
+    "almoco_gratuito",
+    "menina",
+    "etnia",
+    "experiencia_prof",
+    "mestrado_prof",
+    "prof_negro",
+    "tipo_escola"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "educacao_star_turmas",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "turma_pequena",
+    "anos_pequena_antes",
+    "serie",
+    "almoco_gratuito",
+    "menina",
+    "etnia",
+    "experiencia_prof",
+    "mestrado_prof",
+    "prof_negro",
+    "tipo_escola"
+   ],
+   "ambientes": [
+    "3_pequena"
+   ],
+   "arquivos": 1,
+   "bytes_varridos": 11676,
+   "bytes_tabela": 91969,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "turma_pequena",
+    "anos_pequena_antes",
+    "serie",
+    "almoco_gratuito",
+    "menina",
+    "etnia",
+    "experiencia_prof",
+    "mestrado_prof",
+    "prof_negro",
+    "tipo_escola"
+   ],
+   "toca_cofre": true
+  },
+  {
+   "agente": "agent-f2-data",
+   "dominio": "saude_rand",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "coparticipacao",
+    "franquia_individual",
+    "pagamento_log",
+    "teto_log",
+    "renda_log",
+    "idade",
+    "mulher",
+    "doencas_cronicas",
+    "limitacao_fisica",
+    "local"
+   ],
+   "ambientes": [
+    "c0",
+    "c100",
+    "c25",
+    "c95"
+   ],
+   "arquivos": 4,
+   "bytes_varridos": 379348,
+   "bytes_tabela": 407711,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "coparticipacao",
+    "franquia_individual",
+    "pagamento_log",
+    "teto_log",
+    "renda_log",
+    "idade",
+    "mulher",
+    "doencas_cronicas",
+    "limitacao_fisica",
+    "local"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "saude_rand",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "coparticipacao",
+    "franquia_individual",
+    "pagamento_log",
+    "teto_log",
+    "renda_log",
+    "idade",
+    "mulher",
+    "doencas_cronicas",
+    "limitacao_fisica",
+    "local"
+   ],
+   "ambientes": [
+    "c50"
+   ],
+   "arquivos": 1,
+   "bytes_varridos": 28363,
+   "bytes_tabela": 407711,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "coparticipacao",
+    "franquia_individual",
+    "pagamento_log",
+    "teto_log",
+    "renda_log",
+    "idade",
+    "mulher",
+    "doencas_cronicas",
+    "limitacao_fisica",
+    "local"
+   ],
+   "toca_cofre": true
+  },
+  {
+   "agente": "agent-f2-data",
+   "dominio": "transporte_cinto",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "uso_cinto",
+    "ano",
+    "renda_log",
+    "idade_media",
+    "vel65",
+    "vel70",
+    "idade21",
+    "alcool008",
+    "trafego_log"
+   ],
+   "ambientes": [
+    "no",
+    "secondary"
+   ],
+   "arquivos": 2,
+   "bytes_varridos": 25153,
+   "bytes_tabela": 28626,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "uso_cinto",
+    "ano",
+    "renda_log",
+    "idade_media",
+    "vel65",
+    "vel70",
+    "idade21",
+    "alcool008",
+    "trafego_log"
+   ],
+   "toca_cofre": false
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "dominio": "transporte_cinto",
+   "colunas": [
+    "y",
+    "unidade",
+    "ambiente",
+    "uso_cinto",
+    "ano",
+    "renda_log",
+    "idade_media",
+    "vel65",
+    "vel70",
+    "idade21",
+    "alcool008",
+    "trafego_log"
+   ],
+   "ambientes": [
+    "primary"
+   ],
+   "arquivos": 1,
+   "bytes_varridos": 3473,
+   "bytes_tabela": 28626,
+   "explain_projecao": [
+    "y",
+    "unidade",
+    "ambiente",
+    "uso_cinto",
+    "ano",
+    "renda_log",
+    "idade_media",
+    "vel65",
+    "vel70",
+    "idade21",
+    "alcool008",
+    "trafego_log"
+   ],
+   "toca_cofre": true
+  }
+ ],
+ "gasto_por_agente": {
+  "agent-f2-data": 1039663,
+  "agent-f3-lifecycle": 100482
+ },
+ "orcamento_por_agente": 400000000
+}

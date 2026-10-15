@@ -1,0 +1,37 @@
+{
+ "biologia_sachs": {
+  "area": "Biologia (sinalização celular)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 95.6
+ },
+ "direito_teto_beneficio": {
+  "area": "Direito (regra de indenização trabalhista)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 69.2
+ },
+ "educacao_star_turmas": {
+  "area": "Educação",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 90.9
+ },
+ "engenharia_tunel_vento": {
+  "area": "Engenharia (aerodinâmica)",
+  "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+  "segundos": 96.5
+ },
+ "fisica_tunel_luz": {
+  "area": "Física (óptica e eletrônica)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 345.8
+ },
+ "saude_rand": {
+  "area": "Saúde (seguro e uso de serviços)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 116.3
+ },
+ "transporte_cinto": {
+  "area": "Transporte (segurança viária)",
+  "status": "reprovado no F4 (M15): conforme_ok",
+  "segundos": 5.9
+ }
+}

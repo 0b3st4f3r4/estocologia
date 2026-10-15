@@ -1,0 +1,111 @@
+{
+ "G1 simulabilidade e reprodução": {
+  "ok": true,
+  "detalhe": "pytest: 26 passed in 31.52s; reprodução limpa idêntica: {'biologia_sachs': True, 'direito_teto_beneficio': True, 'educacao_star_turmas': True, 'engenharia_tunel_vento': True, 'fisica_tunel_luz': True, 'genetica_y01': True, 'genetica_y02': True, 'genetica_y03': True, 'genetica_y04': True, 'genetica_y05': True, 'genetica_y06': True, 'genetica_y07': True, 'genetica_y08': True, 'genetica_y09': True, 'genetica_y10': True, 'saude_rand': True, 'transporte_cinto': True}"
+ },
+ "G2 funil completo e pré-registro": {
+  "ok": true,
+  "detalhe": "biologia_sachs: aprovado no F4: decisão emitida (K=3); direito_teto_beneficio: aprovado no F4: decisão emitida (K=3); educacao_star_turmas: aprovado no F4: decisão emitida (K=3); engenharia_tunel_vento: reprovado no F4 (M15): modelo_vence_climatologia (K=1); fisica_tunel_luz: aprovado no F4: decisão emitida (K=1); genetica_y01: podado no F3: a chave não vence o nulo de permutação (K=1); genetica_y02: aprovado no F4: decisão emitida (K=1); genetica_y03: reprovado no F4 (M15): conforme_ok (K=1); genetica_y04: aprovado no F4: decisão emitida (K=1); genetica_y05: podado no F3: a chave não vence o nulo de permutação (K=1); genetica_y06: podado no F3: a chave não vence o nulo de permutação (K=1); genetica_y07: aprovado no F4: decisão emitida (K=1); genetica_y08: aprovado no F4: decisão emitida (K=1); genetica_y09: podado no F3: a chave não vence o nulo de permutação (K=1); genetica_y10: podado no F3: a chave não vence o nulo de permutação (K=1); saude_rand: aprovado no F4: decisão emitida (K=3); transporte_cinto: reprovado no F4 (M15): conforme_ok (K=3)"
+ },
+ "G3 ICP entre ambientes": {
+  "ok": true,
+  "detalhe": "Ŝ ≠ ∅ em 3 domínio(s), 3 área(s): ['educacao_star_turmas', 'fisica_tunel_luz', 'genetica_y08'] | biologia_sachs: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante -0.000, todos +0.828, modelo +0.141; direito_teto_beneficio: Ŝ=∅, aceitos=578/1024; habilidade fora do ambiente: invariante -0.000, todos +0.185, modelo +0.185; educacao_star_turmas: Ŝ=['anos_pequena_antes', 'turma_pequena'], aceitos=57/1024; habilidade fora do ambiente: invariante +0.002, todos +0.102, modelo +0.096; engenharia_tunel_vento: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.999, modelo -2.176; fisica_tunel_luz: Ŝ=['blue', 'green', 'red'], aceitos=128/1024; habilidade fora do ambiente: invariante +0.959, todos +0.959, modelo +0.959; genetica_y01: não chegou ao F4; genetica_y02: Ŝ=∅, aceitos=194/1024; habilidade fora do ambiente: invariante +0.000, todos +0.277, modelo +0.276; genetica_y03: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.645, modelo +0.648; genetica_y04: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.158, modelo +0.158; genetica_y05: não chegou ao F4; genetica_y06: não chegou ao F4; genetica_y07: Ŝ=∅, aceitos=775/1024; habilidade fora do ambiente: invariante +0.000, todos +0.403, modelo +0.404; genetica_y08: Ŝ=['plate', 'x1', 'x5', 'x9'], aceitos=2/1024; habilidade fora do ambiente: invariante +0.721, todos +0.685, modelo +0.686; genetica_y09: não chegou ao F4; genetica_y10: não chegou ao F4; saude_rand: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.072, modelo +0.072; transporte_cinto: Ŝ=∅, aceitos=496/512; habilidade fora do ambiente: invariante -0.000, todos +0.799, modelo +0.805"
+ },
+ "G4 contenção de varredura": {
+  "ok": true,
+  "detalhe": "29 leituras; SELECT *: 0; projeção fora do pedido: 0; cofre fora do F3: 0; agentes acima do orçamento: nenhum; banca recusada: {'select_estrela': True, 'cofre_antes_do_preregistro': True, 'agente_errado_abre_cofre': True, 'cofre_sem_hash': True, 'estouro_de_orcamento': True}; bytes varridos 5.5 MB, gasto por agente (MB) {'agent-f2-data': 5.1, 'agent-f3-lifecycle': 0.3}"
+ },
+ "Trilha do barramento": {
+  "ok": true,
+  "detalhe": "154 fichas, quebras: nenhuma"
+ },
+ "G5 informativo": "M15 aprovou 9/12 que chegaram ao F4: {'biologia_sachs': True, 'direito_teto_beneficio': True, 'educacao_star_turmas': True, 'engenharia_tunel_vento': False, 'fisica_tunel_luz': True, 'genetica_y02': True, 'genetica_y03': False, 'genetica_y04': True, 'genetica_y07': True, 'genetica_y08': True, 'saude_rand': True, 'transporte_cinto': False}; pareceres de risco sem assinatura de sil: 17",
+ "varredura_por_dominio": {
+  "biologia_sachs": {
+   "varrido": 528303,
+   "tabela": 528303,
+   "leituras": 2
+  },
+  "direito_teto_beneficio": {
+   "varrido": 83536,
+   "tabela": 83536,
+   "leituras": 2
+  },
+  "educacao_star_turmas": {
+   "varrido": 91969,
+   "tabela": 91969,
+   "leituras": 2
+  },
+  "engenharia_tunel_vento": {
+   "varrido": 642306,
+   "tabela": 642306,
+   "leituras": 2
+  },
+  "fisica_tunel_luz": {
+   "varrido": 2118928,
+   "tabela": 2118928,
+   "leituras": 2
+  },
+  "genetica_y01": {
+   "varrido": 136928,
+   "tabela": 172331,
+   "leituras": 1
+  },
+  "genetica_y02": {
+   "varrido": 172739,
+   "tabela": 172739,
+   "leituras": 2
+  },
+  "genetica_y03": {
+   "varrido": 173275,
+   "tabela": 173275,
+   "leituras": 2
+  },
+  "genetica_y04": {
+   "varrido": 172723,
+   "tabela": 172723,
+   "leituras": 2
+  },
+  "genetica_y05": {
+   "varrido": 137560,
+   "tabela": 172931,
+   "leituras": 1
+  },
+  "genetica_y06": {
+   "varrido": 137752,
+   "tabela": 173163,
+   "leituras": 1
+  },
+  "genetica_y07": {
+   "varrido": 172643,
+   "tabela": 172643,
+   "leituras": 2
+  },
+  "genetica_y08": {
+   "varrido": 173315,
+   "tabela": 173315,
+   "leituras": 2
+  },
+  "genetica_y09": {
+   "varrido": 137424,
+   "tabela": 172811,
+   "leituras": 1
+  },
+  "genetica_y10": {
+   "varrido": 137152,
+   "tabela": 172563,
+   "leituras": 1
+  },
+  "saude_rand": {
+   "varrido": 407711,
+   "tabela": 407711,
+   "leituras": 2
+  },
+  "transporte_cinto": {
+   "varrido": 28626,
+   "tabela": 28626,
+   "leituras": 2
+  }
+ },
+ "saida_do_H2": true
+}

@@ -1,0 +1,97 @@
+nome: educacao_star_turmas
+area: Educação
+titulo: Turma pequena sorteada e desempenho do jardim à 3ª série (Project STAR, Tennessee 1985–1989)
+pergunta: >-
+  O ganho de estar numa turma pequena (13–17 alunos) em vez de regular (22–25) segue a mesma lei em todas as séries,
+  de modo que o efeito aprendido no jardim, na 1ª e na 2ª série preveja a turma pequena da 3ª série?
+alegacao: '"Turma pequena rende cerca de 0,2 desvio-padrão em qualquer série: o que vale no jardim vale na 3ª série."'
+glossario:
+  turma_pequena: 13 a 17 alunos, um professor
+  turma_regular: 22 a 25 alunos, um professor e sem auxiliar (o braço com auxiliar fica fora, porque o auxiliar age na nota por outro canal)
+  sorteio_intraescola: alunos e professores sorteados entre os tipos de turma dentro de cada escola, a cada entrada no estudo
+  SAT_Stanford: Stanford Achievement Test; leitura + matemática
+  escore_padronizado: nota menos a média das turmas regulares da mesma série, dividida pelo desvio-padrão delas (como em Krueger 1999)
+  anos_em_turma_pequena: séries anteriores que o aluno passou em turma pequena (exposição acumulada)
+  almoco_gratuito: elegibilidade ao almoço escolar gratuito (renda familiar baixa)
+  tipo_de_escola: rural, suburbana, urbana ou centro antigo
+  atrito: saída de alunos do estudo; quem entra depois do jardim é sorteado na entrada
+  serie: jardim (k), 1ª, 2ª ou 3ª série
+fontes:
+  - "Krueger (1999), Experimental estimates of education production functions, Quarterly Journal of Economics 114:497 — citada de memória, conferir"
+  - "Finn & Achilles (1990), Answers and questions about class size, American Educational Research Journal 27:557 — citada de memória, conferir"
+  - "Word et al. (1990), Student/Teacher Achievement Ratio (STAR) final report — citado de memória, conferir"
+  - dados-reais/h2b/AER_STAR.csv (Rdatasets AER::STAR)
+arquivos: [AER_STAR.csv]
+familia: gaussiana
+desfecho: soma das notas SAT de leitura e matemática, padronizada pelas turmas regulares da mesma série
+chave: turma_pequena
+candidatos:
+  turma_pequena: {tipo: num, descricao: turma pequena sorteada (1) ou regular (0) na série}
+  anos_pequena_antes: {tipo: num, descricao: número de séries anteriores em turma pequena (0 a 3)}
+  serie: {tipo: cat, descricao: série (k, 1, 2, 3)}
+  almoco_gratuito: {tipo: num, descricao: elegível ao almoço gratuito na série}
+  menina: {tipo: num, descricao: sexo feminino}
+  etnia: {tipo: cat, descricao: branca, afro-americana ou outra}
+  experiencia_prof: {tipo: num, descricao: anos de experiência do professor}
+  mestrado_prof: {tipo: num, descricao: professor com pós-graduação}
+  prof_negro: {tipo: num, descricao: professor afro-americano}
+  tipo_escola: {tipo: cat, descricao: rural, suburbana, urbana ou centro antigo}
+icp_candidatos: [turma_pequena, anos_pequena_antes, serie, almoco_gratuito, menina, etnia, experiencia_prof, mestrado_prof, prof_negro, tipo_escola]
+ajuste: [anos_pequena_antes, serie, almoco_gratuito, menina, etnia, tipo_escola]
+dag:
+  - [sorteio, turma_pequena]
+  - [anos_pequena_antes, turma_pequena]
+  - [serie, anos_pequena_antes]
+  - [serie, y]
+  - [turma_pequena, y]
+  - [anos_pequena_antes, y]
+  - [almoco_gratuito, y]
+  - [etnia, almoco_gratuito]
+  - [etnia, y]
+  - [menina, y]
+  - [experiencia_prof, y]
+  - [mestrado_prof, y]
+  - [prof_negro, y]
+  - [tipo_escola, almoco_gratuito]
+  - [tipo_escola, etnia]
+  - [tipo_escola, prof_negro]
+  - [tipo_escola, experiencia_prof]
+  - [tipo_escola, y]
+ambientes:
+  descricao: >-
+    Tipo de turma sorteado × série: k_pequena, k_regular, 1_pequena, 1_regular, 2_pequena, 2_regular, 3_regular
+    no treino e 3_pequena no cofre (turma pequena da 3ª série, nunca vista). Só turma pequena contra regular; o braço
+    regular+auxiliar fica fora porque o auxiliar age na nota por outro canal. O sorteio intervém no tamanho da turma
+    (X); a série muda a idade e o teste, por isso "serie" é candidata e o escore é padronizado pelas regulares da
+    série (estatísticas só do treino: as regulares da 3ª série estão no treino). Violações plausíveis declaradas: o
+    ganho se acumula com a exposição (anos_pequena_antes é candidato para isso) e pode decair; atrito e trocas de
+    turma não aleatórios depois do jardim.
+  cofre: [3_pequena]
+unidade: a escola da série (≈ 79 escolas); o sorteio é dentro da escola e os alunos dividem professor e prédio
+cabecalho:
+  processo_gerador: Alunos e professores sorteados entre turma pequena, regular e regular com auxiliar dentro de cada escola, a cada entrada; nota SAT no fim de cada série; o aluno tende a ficar no mesmo tipo de turma.
+  nao_linearidade: Aditivo no escore padronizado; o efeito pode depender da série e da exposição acumulada (é o que o ICP testa).
+  unidade_e_margem: A escola é a unidade; erro padrão agrupado por escola; o mesmo aluno aparece em até 4 séries (dependência absorvida em parte pela escola).
+  fisica_do_ruido: Ruído de teste e de professor, aproximadamente gaussiano na soma de duas notas padronizadas.
+  escada_causal: "Degrau 2 (sorteio). Premissa não testável: atrito e trocas de turma não distorcem a comparação dentro da escola."
+shelf:
+  quantidade: efeito da turma pequena no escore padronizado (desvios-padrão das turmas regulares)
+  fonte: >-
+    Krueger (1999): 5 a 8 pontos percentuais de percentil, cerca de 0,2 dp, estável depois do jardim; Finn &
+    Achilles (1990): 0,15 a 0,25 dp. Citados de memória, conferir; nenhum especialista humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  quartis: {q05: 0.05, q25: 0.13, q50: 0.19, q75: 0.25, q95: 0.34}
+decisao:
+  acao: reduzir as turmas das séries iniciais para ~15 alunos
+  beneficio_por_unidade: 1.0
+  custo: 0.15
+  custo_pesquisa: 0.005
+  nota: utilidade em dp de nota por aluno; o custo de 0,15 dp-equivalente para contratar professores e salas é uma suposição a elicitar com a secretaria
+termo_escopo:
+  vale_para: séries iniciais (jardim a 3ª) de escolas públicas dos EUA, turmas de 13 a 17 contra 22 a 25
+  nao_vale_para: séries posteriores, redução em escala estadual com professores menos experientes, outros países
+tentativas_de_especificacao: 1
+tem_titulares: true
+quase_ids: [menina, etnia, almoco_gratuito]
+grupo_justica: etnia
+chave_atribuida: dentro_da_unidade   # sorteio dentro da escola; o F3 permuta dentro dela

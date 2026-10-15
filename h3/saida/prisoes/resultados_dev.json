@@ -1,0 +1,131 @@
+{
+ "fluxo": "prisoes",
+ "area": "direito",
+ "tipo": "binario",
+ "fase": "dev",
+ "K": 2,
+ "hash_especificacao": "d46db31bdea786d58c8392ae51eb10484166aa67f0dd4d0886e40aec304d36c7",
+ "preregistro": null,
+ "corte": 978307200,
+ "contagens": {
+  "emitidas": 3246,
+  "escopo": 6,
+  "disjuntor": 0,
+  "reajustes": 988,
+  "reajustes_por_deriva": 1,
+  "rotulo_ja_conhecido": 0,
+  "estado_do_futuro": 0
+ },
+ "decisoes_C_L": {
+  "alteradas": 436,
+  "total": 3246
+ },
+ "limiares_deriva": [
+  {
+   "sensor": "verificacoes",
+   "alto": 0.10538333333333334,
+   "baixo": 0.09383333333333332,
+   "janelas_calibracao": 8
+  },
+  {
+   "sensor": "residuo_padronizado",
+   "alto": 0.4912,
+   "baixo": 0.4870000000000001,
+   "janelas_calibracao": 8
+  }
+ ],
+ "eventos_operacao": [
+  {
+   "sensor": "verificacoes",
+   "evento": "ligou",
+   "t": 974708260,
+   "ks": 0.1183333333333334,
+   "wasserstein": 0.4299999999999998,
+   "tipo": "deriva"
+  }
+ ],
+ "varredura": {
+  "por_tabela": {
+   "detencao": {
+    "leituras": 7480,
+    "bytes_varridos": 2769003,
+    "bytes_tabela": 3871371,
+    "varreduras_equivalentes": 0.7152512636996041
+   },
+   "liberacao": {
+    "leituras": 7480,
+    "bytes_varridos": 1003188,
+    "bytes_tabela": 1402473,
+    "varreduras_equivalentes": 0.715299331965749
+   },
+   "canario": {
+    "leituras": 7480,
+    "bytes_varridos": 1003188,
+    "bytes_tabela": 1402473,
+    "varreduras_equivalentes": 0.715299331965749
+   }
+  },
+  "leituras": 22440,
+  "leituras_com_futuro": 0,
+  "gasto_por_agente": {
+   "agent-f2-data": 4775379
+  },
+  "orcamento_por_agente": 2000000000
+ },
+ "ingestao": {
+  "detencao": {
+   "tabela": "detencao",
+   "linhas": 5226,
+   "bytes_tabela": 3871371,
+   "grupos": 5226,
+   "colunas": [
+    "id",
+    "colour",
+    "year",
+    "age",
+    "sex",
+    "employed",
+    "citizen",
+    "checks",
+    "t_disp"
+   ]
+  },
+  "liberacao": {
+   "tabela": "liberacao",
+   "linhas": 5226,
+   "bytes_tabela": 1402473,
+   "grupos": 5226,
+   "colunas": [
+    "id",
+    "y",
+    "t_disp"
+   ]
+  },
+  "canario": {
+   "tabela": "canario",
+   "linhas": 5226,
+   "bytes_tabela": 1402473,
+   "grupos": 5226,
+   "colunas": [
+    "id",
+    "c",
+    "t_disp"
+   ]
+  }
+ },
+ "segundos": 80.6,
+ "canario_vazado": false,
+ "placar": {
+  "desenvolvimento": {
+   "n": 3246,
+   "perda_modelo": 0.1235310908437568,
+   "perda_reserva": 0.13474947237715326,
+   "perda_oficial": 0.12322542731578084,
+   "habilidade_oficial_vs_reserva": 0.08552200508153018
+  },
+  "cofre": {
+   "n": 0
+  }
+ },
+ "fichas": 5
+}

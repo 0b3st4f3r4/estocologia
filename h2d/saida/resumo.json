@@ -1,0 +1,27 @@
+{
+ "biologia_sachs": {
+  "area": "Biologia (sinalização celular)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 133.0
+ },
+ "direito_teto_beneficio": {
+  "area": "Direito (regra de indenização trabalhista)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 93.1
+ },
+ "educacao_star_turmas": {
+  "area": "Educação",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 109.2
+ },
+ "saude_rand": {
+  "area": "Saúde (seguro e uso de serviços)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 182.7
+ },
+ "transporte_cinto": {
+  "area": "Transporte (segurança viária)",
+  "status": "reprovado no F4 (M15): conforme_ok",
+  "segundos": 6.3
+ }
+}

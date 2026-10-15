@@ -1,0 +1,38 @@
+nome: sinistros_incendio_dinamarca
+versao: '1.0'
+colunas:
+  sinistro:
+    tipo: str
+  periodo:
+    tipo: int
+    min: 1
+    max: 99
+  data:
+    tipo: str
+  mes:
+    tipo: str
+  ano:
+    tipo: int
+    min: 1980
+    max: 1990
+  perda:
+    tipo: float
+    min: 1.0
+    max: 10000.0
+  excesso_camada:
+    tipo: float
+    min: 0.0
+    max: 100.0
+  origem:
+    tipo: str
+    valores:
+    - real
+    - reamostra_real
+    - sintetico_deriva
+    - sintetico_patologico
+chave:
+- sinistro
+particao: periodo
+grao: uma linha por sinistro real (> 1 M DKK); a unidade independente é o mês, agregado
+  na leitura. Linhas com origem ≠ 'real' são perturbações sintéticas declaradas (banca)
+  ou reamostras de linhas reais

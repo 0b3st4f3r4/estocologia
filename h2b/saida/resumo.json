@@ -1,0 +1,27 @@
+{
+ "biologia_sachs": {
+  "area": "Biologia (sinalização celular)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.1
+ },
+ "direito_teto_beneficio": {
+  "area": "Direito (regra de indenização trabalhista)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 40.3
+ },
+ "educacao_star_turmas": {
+  "area": "Educação",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 29.6
+ },
+ "saude_rand": {
+  "area": "Saúde (seguro e uso de serviços)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 37.6
+ },
+ "transporte_cinto": {
+  "area": "Transporte (segurança viária)",
+  "status": "podado no F2: dados na unidade independente não informam mais que a priori",
+  "segundos": 0.4
+ }
+}

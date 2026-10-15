@@ -1,0 +1,958 @@
+{
+ "semente": 2226,
+ "priori": {
+  "a": 2.327958010519786,
+  "b": 106.9300822771374
+ },
+ "f2": {
+  "lotes": [
+   {
+    "lote": "ef569f3bc4ed16c9",
+    "periodo": 1,
+    "idempotente": false,
+    "aceitas": 517,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "47f31d70f34058cd",
+    "periodo": 2,
+    "idempotente": false,
+    "aceitas": 523,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "f7810a365f374ba7",
+    "periodo": 3,
+    "idempotente": false,
+    "aceitas": 674,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "599f1ddde5f027f9",
+    "periodo": 4,
+    "idempotente": false,
+    "aceitas": 453,
+    "quarentena": 0,
+    "motivos": []
+   }
+  ]
+ },
+ "f5": {
+  "k_anonimato": {
+   "quase_identificadores": [
+    "data",
+    "perda"
+   ],
+   "k_bruto": 1,
+   "k_generalizado": 1,
+   "meta_k": 5,
+   "cumpre": true,
+   "aplicavel_a_titulares": false
+  },
+  "privacidade_diferencial": {
+   "estatistica": "fração de meses de 1980–88 com sinistro na camada 100 xs 50",
+   "verdadeira": 0.046296296296296294,
+   "n": 108,
+   "mecanismo": "Laplace sobre a contagem (sensibilidade 1)",
+   "unidade": "mes",
+   "por_epsilon": [
+    {
+     "epsilon": 0.1,
+     "erro_absoluto_medio": 0.09377776577884343,
+     "I_bits": 0.02856203877104707,
+     "H_bits": 3.1497339093973586,
+     "bits_perdidos": 3.1211718706263114
+    },
+    {
+     "epsilon": 0.5,
+     "erro_absoluto_medio": 0.018172454014999354,
+     "I_bits": 0.4203765465477536,
+     "H_bits": 3.1497339093973586,
+     "bits_perdidos": 2.729357362849605
+    },
+    {
+     "epsilon": 1.0,
+     "erro_absoluto_medio": 0.009467002192888032,
+     "I_bits": 0.975350747038423,
+     "H_bits": 3.1497339093973586,
+     "bits_perdidos": 2.174383162358936
+    },
+    {
+     "epsilon": 5.0,
+     "erro_absoluto_medio": 0.0018540304787225345,
+     "I_bits": 2.813878659256903,
+     "H_bits": 3.1497339093973586,
+     "bits_perdidos": 0.3358552501404555
+    }
+   ]
+  },
+  "lgpd": {
+   "aplicavel": false,
+   "motivo": "a base não tem titulares de dados pessoais (séries agregadas ou de sinistros)"
+  },
+  "eu_ai_act_anexo_iv": {
+   "descricao_geral": "A cauda que o ressegurador não viu: camada 100 xs 50 nas perdas de incêndio dinamarquesas (dados reais)",
+   "processo_de_desenvolvimento": "ciclo de 6 estágios, fichas no barramento",
+   "dados_e_governanca": "datacontract.yaml, quarentena, linhagem por hash de lote",
+   "monitoramento": "deriva KS/Wasserstein (F3), circuit breaker (F8)",
+   "supervisao_humana": "responsável humano nomeado assina o parecer"
+  },
+  "trilha_auditoria": {
+   "cadeia_integra": true,
+   "fichas": 33
+  },
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  },
+  "dados_simulados": false,
+  "origem_dos_dados": "dados-reais/danish_fire.csv (CRAN fitdistrplus::danishuni)"
+ },
+ "f6": {
+  "trilema_da_justica": "não se aplica: não há classificador, pessoas nem grupos protegidos nos dados; a decisão (exposição) é do ressegurador. Os 'grupos' declarados são só anos e faixas de tamanho de sinistro, que existem nos dados.",
+  "por_ano": {
+   "1980": {
+    "sinistros": 166,
+    "meses_atingidos": 1,
+    "fracao_do_limite_consumida": 1.0
+   },
+   "1981": {
+    "sinistros": 170,
+    "meses_atingidos": 2,
+    "fracao_do_limite_consumida": 0.06290956999999998
+   },
+   "1982": {
+    "sinistros": 181,
+    "meses_atingidos": 1,
+    "fracao_do_limite_consumida": 0.15707491000000004
+   },
+   "1983": {
+    "sinistros": 153,
+    "meses_atingidos": 0,
+    "fracao_do_limite_consumida": 0.0
+   },
+   "1984": {
+    "sinistros": 163,
+    "meses_atingidos": 0,
+    "fracao_do_limite_consumida": 0.0
+   },
+   "1985": {
+    "sinistros": 207,
+    "meses_atingidos": 1,
+    "fracao_do_limite_consumida": 0.07410635999999997
+   },
+   "1986": {
+    "sinistros": 238,
+    "meses_atingidos": 0,
+    "fracao_do_limite_consumida": 0.0
+   },
+   "1987": {
+    "sinistros": 226,
+    "meses_atingidos": 0,
+    "fracao_do_limite_consumida": 0.0
+   },
+   "1988": {
+    "sinistros": 210,
+    "meses_atingidos": 0,
+    "fracao_do_limite_consumida": 0.0
+   }
+  },
+  "por_faixa_de_sinistro": {
+   "1–10": {
+    "sinistros": 1631,
+    "fatia_da_perda_total": 0.6634584614486024,
+    "fatia_da_perda_da_camada": 0.0
+   },
+   "10–50": {
+    "sinistros": 78,
+    "fatia_da_perda_total": 0.24969673314466428,
+    "fatia_da_perda_da_camada": 0.0
+   },
+   "≥50 (camada)": {
+    "sinistros": 5,
+    "fatia_da_perda_total": 0.08684480540673341,
+    "fatia_da_perda_da_camada": 1.0
+   }
+  },
+  "governanca_real": {
+   "k_bruto_data_perda": 1,
+   "k_ano_faixa": 1,
+   "k_periodo_faixa": 1,
+   "k_so_faixa_1980_88": 5,
+   "leitura": "não há pessoas nos dados; o que se pode reidentificar é um segurado industrial pelo seu grande incêndio (data e valor saem em jornal). Os sinistros da camada só ficam com k ≥ 5 quando agregados em todo o treino; a estatística publicada (contagem de meses atingidos) não traz tamanhos nem datas exatas",
+   "nota_framework": "o agent-f5 conta k-anonimato sobre uma linha por unidade (mês), não por sinistro; o cálculo por sinistro está aqui. O dossiê do F5 marca dados_simulados = True por padrão do framework: aqui os dados são REAIS (só a elicitação é simulada)"
+  },
+  "quem_paga_o_erro": {
+   "faixa_que_absorve_a_inadimplencia": "≥50 (camada)",
+   "leitura": "se o ressegurador vende 3.0 × o capital em limite e é arruinado, quem fica sem receber são as cedentes dos maiores incêndios (faixa ≥ 50 M DKK): os sinistros pequenos nunca dependeram da camada"
+  },
+  "inversao_metrica": {
+   "metrica_original": "meses sem sinistro na camada / lucro de prêmio no triênio (premia vender limite no teto)",
+   "metrica_invertida": "fração arruinada e crescimento mediano do capital (premia Kelly com Laplace ou com o treino inteiro)",
+   "ganham": "as cedentes e os segurados dos maiores incêndios (faixa ≥ 50 M DKK), que passam a ter o sinistro pago em vez de um ressegurador insolvente",
+   "perdem": "os acionistas e subscritores que recebiam prêmio sobre 3 × o capital em limite nos anos limpos, e as cedentes que compravam capacidade barata"
+  },
+  "assimetria_de_poder": "o subscritor recebe bônus sobre os anos sem sinistro e não devolve nada na ruína (opção grátis); a cedente vive a trajetória inteira e só descobre a insolvência quando o grande incêndio chega"
+ },
+ "suf": {
+  "k": 5,
+  "n": 108
+ },
+ "f1": {
+  "modelo_nulo": {
+   "estatistica": "camada sem sinistro nos últimos 36 meses do treino (a evidência da alegação)",
+   "janela": {
+    "meses": 36,
+    "meses_atingidos": 0,
+    "k_sobre_n": 0.0,
+    "laplace": 0.02631578947368421,
+    "kelly_kn": 3.0,
+    "kelly_laplace": 0.6251677185217964
+   },
+   "treino_inteiro": {
+    "meses": 108,
+    "meses_atingidos": 5,
+    "frequencia": 0.046296296296296294,
+    "laplace": 0.05454545454545454
+   },
+   "cauda": {
+    "hill": {
+     "25": {
+      "k": 25,
+      "alpha": 1.9625459073631724,
+      "ic95_assintotico": [
+       1.1932279116768088,
+       2.7318639030495357
+      ]
+     },
+     "50": {
+      "k": 50,
+      "alpha": 1.8108683983823608,
+      "ic95_assintotico": [
+       1.3089212872439857,
+       2.312815509520736
+      ]
+     },
+     "100": {
+      "k": 100,
+      "alpha": 1.4099859684543525,
+      "ic95_assintotico": [
+       1.1336287186372995,
+       1.6863432182714055
+      ]
+     }
+    },
+    "hill_k50_ic95_bootstrap_meses": [
+     1.4125293031447559,
+     2.559406862765007
+    ],
+    "gpd": {
+     "u": 10.0,
+     "n_exc": 83,
+     "xi": 0.4064637172276745,
+     "sigma": 7.387414319903844,
+     "alpha": 2.4602441930625387
+    },
+    "gpd_xi_ic95_bootstrap_meses": [
+     0.019876123655651542,
+     0.7244613048278452
+    ],
+    "gpd_alpha_ic95_bootstrap_meses": [
+     1.3803359728614235,
+     50.31162098428894
+    ],
+    "p_pot_mes": 0.042961531409410614,
+    "p_pot_ic95_bootstrap_meses": [
+     0.011458673029982503,
+     0.0767504189568531
+    ],
+    "n_boot": 300,
+    "n_meses": 108,
+    "n_sinistros": 1714
+   },
+   "nulo_iid_p_pot": {
+    "p_mes": 0.042961531409410614,
+    "maior_sequencia_limpa_observada": 40,
+    "q05_q50_q95": [
+     26.0,
+     43.0,
+     83.0
+    ],
+    "P_sequencia_maior_igual": 0.6085
+   },
+   "severidade": {
+    "p_perigoso_pot": 0.042961531409410614,
+    "P_acusar_se_perigoso": 0.7941939144524393,
+    "P_passar_mesmo_perigoso": 0.2058060855475607,
+    "razao_de_verossimilhanca_desprezivel_vs_perigoso": 4.715280375358756,
+    "bits_de_evidencia": 2.237343557562843,
+    "meses_para_severidade_95": 69,
+    "anos_para_severidade_95": 5.75,
+    "p_critico_decisao": 0.04701031928455893,
+    "meses_para_severidade_95_no_p_critico": 63,
+    "anos_para_severidade_95_no_p_critico": 5.25,
+    "limiar_severo": 0.95,
+    "severo": false
+   },
+   "sensibilidade_retencao_meses_atingidos": {
+    "retencao_20": {
+     "periodo_1": 11,
+     "periodo_2": 3,
+     "periodo_3": 13
+    },
+    "retencao_25": {
+     "periodo_1": 6,
+     "periodo_2": 2,
+     "periodo_3": 10
+    },
+    "retencao_30": {
+     "periodo_1": 5,
+     "periodo_2": 2,
+     "periodo_3": 4
+    },
+    "retencao_40": {
+     "periodo_1": 4,
+     "periodo_2": 2,
+     "periodo_3": 1
+    },
+    "retencao_50": {
+     "periodo_1": 4,
+     "periodo_2": 1,
+     "periodo_3": 0
+    }
+   },
+   "leitura": "sob o p que a própria cauda do treino implica (0.043 por mês), 20.6% das janelas de 36 meses não mostram sinistro na camada; o teste 'nunca tocou' acusaria o perigo com probabilidade 79% (< 95%). Uma janela limpa é 4.7 vezes mais provável no mundo desprezível (2.2 bits); seriam precisos 69 meses (~6 anos) limpos para um teste severo"
+  },
+  "hypothesis": {
+   "ok": true,
+   "saida": "13 passed in 5.87s"
+  },
+  "perfil_lote": {
+   "segundos": 0.013301622000199131,
+   "pico_memoria_mb": 0.19052791595458984
+  },
+  "semente_declarada": true
+ },
+ "f4": {
+  "posterior": {
+   "media": 0.03381997600079344,
+   "q05": 0.0165003464838678,
+   "q50": 0.03257704525937471,
+   "q95": 0.055932042559583894
+  },
+  "diagnostico": {
+   "rhat_quantidade": 1.001125916967164,
+   "ess_bulk_quantidade": 2593.1620259973056,
+   "rhat_max": 1.001125916967164,
+   "ess_min": 2593.1620259973056,
+   "limiar_rhat": 1.01,
+   "cadeias": 4,
+   "amostras_por_cadeia": 3000
+  },
+  "sbc": {
+   "n_sim": 150,
+   "L": 39,
+   "caixas": [
+    20,
+    17,
+    15,
+    22,
+    23,
+    25,
+    15,
+    13
+   ],
+   "chi2": 7.120000000000001,
+   "p_uniformidade": 0.41649346726640923
+  },
+  "conforme": {
+   "alpha": 0.1,
+   "intervalo": [
+    0.5663904656332662,
+    1.672278200541442
+   ],
+   "n_calibracao": 36,
+   "garantia": "cobertura marginal ≥ 90% sob trocabilidade"
+  }
+ },
+ "ppc": {
+  "estatistica": "maior sequência de meses consecutivos com sinistro na camada",
+  "observado": 1,
+  "n_meses": 108,
+  "replicas_q025_q975": [
+   0.0,
+   2.0
+  ],
+  "p_valor": 1.0,
+  "maior_sequencia_limpa": {
+   "observado": 40,
+   "replicas_q025_q975": [
+    23.975,
+    108.0
+   ],
+   "P_replica_maior_igual": 0.7225
+  }
+ },
+ "f3": {
+  "cofre": {
+   "periodo": 4,
+   "aberto_uma_vez": true,
+   "hash_pre_registro": "4420e076e8b77b043a5fde4ce866ef98e68c02eb02fd6780d356d51ca49fafd0",
+   "previsoes": 24
+  },
+  "placar": {
+   "agent-f4-frontier": {
+    "n": 24,
+    "brier": 0.0788886531028316,
+    "brier_clima": 0.07776063100137175,
+    "ln_capital": -0.35990520814671334,
+    "habilidade": -0.014506339351077813,
+    "peso": 0.0
+   },
+   "alegacao-janela-limpa": {
+    "n": 24,
+    "brier": 0.08176666666666665,
+    "brier_clima": 0.07776063100137175,
+    "ln_capital": -2.24321187569213,
+    "habilidade": -0.05151753031973527,
+    "peso": 0.0
+   },
+   "laplace-janela": {
+    "n": 24,
+    "brier": 0.07963988919667593,
+    "brier_clima": 0.07776063100137175,
+    "ln_capital": -0.6736378701992346,
+    "habilidade": -0.02416721895262186,
+    "peso": 0.0
+   },
+   "pot-gpd-treino": {
+    "n": 24,
+    "brier": 0.07801877127947333,
+    "brier_clima": 0.07776063100137175,
+    "ln_capital": -0.07272168710691383,
+    "habilidade": -0.003319678284208205,
+    "peso": 0.0
+   }
+  },
+  "cobertura_conforme_out_of_time": 0.9166666666666666,
+  "deriva": {
+   "ks": 0.07658472039355174,
+   "p_ks": 0.07802526762412083,
+   "wasserstein": 0.022792761615292395,
+   "alarme": false
+  },
+  "politica_ignorancia": {
+   "fora_do_dominio": "recusar",
+   "campo_ausente": "fallback determinístico (ação conservadora)",
+   "confianca_baixa": "devolver intervalo conforme"
+  },
+  "tentativas_de_especificacao": 1,
+  "vazamento_temporal": "nenhum: modelagem leu só períodos [1, 2, 3]"
+ },
+ "lentes": {
+  "Crononomia": {
+   "f_estrela_posterior": 0.46238189570389676,
+   "g_estrela_posterior_mes": 0.001182689068832594,
+   "premio_mes": 0.014378787111111109,
+   "rol_anual": 0.1725454453333333,
+   "barreira_f": 1.0145885528061702,
+   "p_critico": 0.04701031928455893,
+   "ln_E_fator_f_teto_sob_p_janela_0": 0.04223190700636467,
+   "E_ln_fator_f_teto_sob_p_posterior": -7.039276649317135,
+   "replay_real_pos_cofre": {
+    "fim_de_1988": {
+     "Kelly com k/n da janela": {
+      "f": 3.0,
+      "ln_capital_1989_90": -Infinity,
+      "arruinado": true,
+      "capital_final": 0.0
+     },
+     "meio Kelly com k/n": {
+      "f": 1.5,
+      "ln_capital_1989_90": -Infinity,
+      "arruinado": true,
+      "capital_final": 0.0
+     },
+     "Kelly com Laplace": {
+      "f": 0.6251677185217964,
+      "ln_capital_1989_90": -1.6348405687308099,
+      "arruinado": false,
+      "capital_final": 0.19498345528098385
+     },
+     "Kelly com treino inteiro": {
+      "f": 0.02539037232859483,
+      "ln_capital_1989_90": -0.04126683012119877,
+      "arruinado": false,
+      "capital_final": 0.9595730527907936
+     },
+     "Kelly com POT/GPD": {
+      "f": 0.1407441474131155,
+      "ln_capital_1989_90": -0.24550284915303397,
+      "arruinado": false,
+      "capital_final": 0.7823110548674195
+     }
+    },
+    "meses_cofre_atingidos": [
+     "1989-08",
+     "1990-10"
+    ],
+    "fracao_do_limite_nos_meses_atingidos": [
+     1.0,
+     0.94657591
+    ],
+    "janelas_moveis_limpas_36m": {
+     "decisoes": 5,
+     "arruinadas_em_24m_com_f_teto": 5
+    }
+   },
+   "ruina_absorvente": "com f ≥ 1/(1 − π), um sinistro que consome o limite inteiro leva o capital a zero e dali não sai",
+   "ergodico": false,
+   "leitura": "Kelly maximiza a taxa temporal; quem lê a janela limpa como p = 0 vai ao teto e é arruinado pelo primeiro sinistro de limite cheio (agosto de 1989, 152 M DKK)"
+  },
+  "Escalonomia": {
+   "hill_treino": {
+    "25": {
+     "k": 25,
+     "alpha": 1.9625459073631724,
+     "ic95_assintotico": [
+      1.1932279116768088,
+      2.7318639030495357
+     ]
+    },
+    "50": {
+     "k": 50,
+     "alpha": 1.8108683983823608,
+     "ic95_assintotico": [
+      1.3089212872439857,
+      2.312815509520736
+     ]
+    },
+    "100": {
+     "k": 100,
+     "alpha": 1.4099859684543525,
+     "ic95_assintotico": [
+      1.1336287186372995,
+      1.6863432182714055
+     ]
+    }
+   },
+   "hill_k50_ic95_bootstrap_meses": [
+    1.4125293031447559,
+    2.559406862765007
+   ],
+   "gpd_treino": {
+    "u": 10.0,
+    "n_exc": 83,
+    "xi": 0.4064637172276745,
+    "sigma": 7.387414319903844,
+    "alpha": 2.4602441930625387
+   },
+   "gpd_xi_ic95_bootstrap_meses": [
+    0.019876123655651542,
+    0.7244613048278452
+   ],
+   "gpd_alpha_ic95_bootstrap_meses": [
+    1.3803359728614235,
+    50.31162098428894
+   ],
+   "pos_cofre_serie_inteira": {
+    "hill_k50": 1.8654947655778125,
+    "gpd": {
+     "u": 10.0,
+     "n_exc": 109,
+     "xi": 0.49697630118112623,
+     "sigma": 6.9754506314014675,
+     "alpha": 2.0121683823220042
+    }
+   },
+   "excesso_medio_por_limiar": [
+    {
+     "u": 5.0,
+     "excesso_medio": 8.349328427860696,
+     "n": 201
+    },
+    {
+     "u": 10.0,
+     "excesso_medio": 13.001891722891566,
+     "n": 83
+    },
+    {
+     "u": 15.0,
+     "excesso_medio": 16.416010723404256,
+     "n": 47
+    },
+    {
+     "u": 20.0,
+     "excesso_medio": 20.73610889285714,
+     "n": 28
+    },
+    {
+     "u": 30.0,
+     "excesso_medio": 35.636213,
+     "n": 11
+    }
+   ],
+   "severidade_camada": {
+    "P_limite_cheio_dado_atingida": 0.08536199007579391,
+    "E_s": 0.30586448528619087
+   },
+   "leitura": "Hill (k = 50) dá α = 1.81, IC por meses 1.41–2.56; a GPD dá ξ = 0.41 (α = 2.46), IC de ξ 0.02–0.72. Hill é mais pesado no ponto; nove anos não bastam para fixar ξ (o IC quase toca a cauda exponencial), mas o excesso médio cresce com o limiar (assinatura de Pareto) e a série inteira, pós-cofre, empurra ξ para cima"
+  },
+  "Fluxonomia": {
+   "informacao_mutua_janela_limpa_bits": 0.5146756937965011,
+   "laco_performativo": false,
+   "leitura": "uma janela de 36 meses sem sinistro na camada carrega só 0.51 bits sobre 'perigoso vs desprezível'; a regra de Laplace na janela dá p = 0.026, não zero"
+  },
+  "Morfonomia": {
+   "homogeneidade_entre_periodos_qui2_p": 0.06546670460440619,
+   "fisher_periodo1_vs_periodo3_p": 0.11451316595223518,
+   "invariante": true,
+   "meses_atingidos_por_periodo": {
+    "1": 4,
+    "2": 1,
+    "3": 0
+   },
+   "bic_binomial_anual": 19.400269553740866,
+   "bic_beta_binomial_anual": 21.597487210122164,
+   "mdl_prefere": "binomial (p comum)",
+   "tendencia_frequencia_sinistros": {
+    "crescimento_anual": 0.04583387584684928,
+    "razao_verossimilhanca_p": 1.5092874251454535e-06,
+    "leitura": "a contagem mensal de sinistros > 1 M DKK cresce ao longo da década: o mundo não é estacionário"
+   }
+  },
+  "Crisonomia": {
+   "placar": {
+    "agent-f4-frontier": {
+     "n": 24,
+     "brier": 0.0788886531028316,
+     "brier_clima": 0.07776063100137175,
+     "ln_capital": -0.35990520814671334,
+     "habilidade": -0.014506339351077813,
+     "peso": 0.0
+    },
+    "alegacao-janela-limpa": {
+     "n": 24,
+     "brier": 0.08176666666666665,
+     "brier_clima": 0.07776063100137175,
+     "ln_capital": -2.24321187569213,
+     "habilidade": -0.05151753031973527,
+     "peso": 0.0
+    },
+    "laplace-janela": {
+     "n": 24,
+     "brier": 0.07963988919667593,
+     "brier_clima": 0.07776063100137175,
+     "ln_capital": -0.6736378701992346,
+     "habilidade": -0.02416721895262186,
+     "peso": 0.0
+    },
+    "pot-gpd-treino": {
+     "n": 24,
+     "brier": 0.07801877127947333,
+     "brier_clima": 0.07776063100137175,
+     "ln_capital": -0.07272168710691383,
+     "habilidade": -0.003319678284208205,
+     "peso": 0.0
+    }
+   },
+   "evpi_posterior_por_mes": 0.0007004575467196069,
+   "evsi_mais_36_meses": 6.495863998437728e-05,
+   "leitura": "o valor da informação estava em usar a série inteira (e a cauda abaixo da retenção), não em esperar a própria camada"
+  }
+ },
+ "banca": {
+  "MB1_propriedades_ineditas": {
+   "passou": true,
+   "detalhe": "13 passed in 20.57s"
+  },
+  "MB2_lote_corrompido": {
+   "passou": true,
+   "quarentena": 15,
+   "esperado": 15,
+   "reingestao_idempotente": true,
+   "select_estrela_recusado": true,
+   "motivos": [
+    "chave primária duplicada",
+    "origem nulo",
+    "periodo acima do máximo"
+   ]
+  },
+  "MB3_deriva_injetada": {
+   "passou": true,
+   "ks": 0.7461368653421634,
+   "p_ks": 5.564228021421509e-148,
+   "wasserstein": 0.47295340968023347
+  },
+  "MB4_dado_patologico": {
+   "passou": true,
+   "ppc_patologico": {
+    "estatistica": "maior sequência de meses consecutivos com sinistro na camada",
+    "observado": 8,
+    "n_meses": 36,
+    "replicas_q025_q975": [
+     0.0,
+     2.0
+    ],
+    "p_valor": 0.0,
+    "maior_sequencia_limpa": {
+     "observado": 25,
+     "replicas_q025_q975": [
+      9.0,
+      36.0
+     ],
+     "P_replica_maior_igual": 0.3075
+    }
+   },
+   "ppc_mundo": {
+    "estatistica": "maior sequência de meses consecutivos com sinistro na camada",
+    "observado": 1,
+    "n_meses": 108,
+    "replicas_q025_q975": [
+     0.0,
+     2.0
+    ],
+    "p_valor": 1.0,
+    "maior_sequencia_limpa": {
+     "observado": 40,
+     "replicas_q025_q975": [
+      23.975,
+      108.0
+     ],
+     "P_replica_maior_igual": 0.7225
+    }
+   }
+  },
+  "MB5_trilha_adulterada": {
+   "passou": true,
+   "quebras_detectadas": [
+    "linha 20 (auditoria_justica): conteúdo adulterado",
+    "linha 36 (processo_gerador_e_nulo): conteúdo adulterado"
+   ],
+   "responsavel_nomeado": "sil"
+  },
+  "MB6_inversao_metrica": {
+   "passou": true,
+   "inversao": {
+    "metrica_original": "meses sem sinistro na camada / lucro de prêmio no triênio (premia vender limite no teto)",
+    "metrica_invertida": "fração arruinada e crescimento mediano do capital (premia Kelly com Laplace ou com o treino inteiro)",
+    "ganham": "as cedentes e os segurados dos maiores incêndios (faixa ≥ 50 M DKK), que passam a ter o sinistro pago em vez de um ressegurador insolvente",
+    "perdem": "os acionistas e subscritores que recebiam prêmio sobre 3 × o capital em limite nos anos limpos, e as cedentes que compravam capacidade barata"
+   }
+  },
+  "MB7_cenario_atipico": {
+   "passou": true,
+   "quantidade_base": 0.03257704525937471,
+   "quantidade_priori_atipica": 0.05009329242040465,
+   "decisao_base": 0.4,
+   "decisao_priori_atipica": 0.0,
+   "decisao_muda": true,
+   "leitura": "decisão sensível à priori: entra no termo de escopo"
+  },
+  "MB8_disjuntor_violado": {
+   "passou": true,
+   "com_deriva": {
+    "disparou": true,
+    "p_inf_025": 0.34399681566576623,
+    "limiar": 0.04701031928455893,
+    "meses_na_janela": 36,
+    "meses_atingidos": 18,
+    "motivo": "a chance mensal de atingir a camada passou do ponto em que vendê-la compensa: parar e reestimar"
+   },
+   "mundo_normal": {
+    "disparou": false,
+    "p_inf_025": 0.025465396647733195,
+    "limiar": 0.04701031928455893,
+    "meses_na_janela": 24,
+    "meses_atingidos": 2,
+    "motivo": "dentro do escopo"
+   }
+  }
+ },
+ "critica": {
+  "1_checagem_preditiva": {
+   "estatistica": "maior sequência de meses consecutivos com sinistro na camada",
+   "observado": 1,
+   "n_meses": 108,
+   "replicas_q025_q975": [
+    0.0,
+    2.0
+   ],
+   "p_valor": 1.0,
+   "maior_sequencia_limpa": {
+    "observado": 40,
+    "replicas_q025_q975": [
+     23.975,
+     108.0
+    ],
+    "P_replica_maior_igual": 0.7225
+   }
+  },
+  "2_modelo_rival": {
+   "modelo": "POT/GPD (usa a cauda abaixo da retenção) e beta-binomial anual (p heterogêneo entre anos)",
+   "p_pot_treino": 0.042961531409410614,
+   "p_bernoulli_treino": 0.046296296296296294,
+   "p_posterior_priori_plana": 0.05454545454545454,
+   "bic_binomial_anual": 19.400269553740866,
+   "bic_beta_binomial_anual": 21.597487210122164,
+   "mdl_prefere": "binomial (p comum)"
+  },
+  "3_identificado_vs_importado": {
+   "dp_posterior_sobre_dp_priori": 0.8722322182254879,
+   "leitura": "dominado pela priori importada"
+  },
+  "4_performatividade": "nenhuma na chance de incêndio; no mercado, a capacidade barata vendida por quem lê janelas limpas derruba o preço da camada para todos (ciclo de subscrição)",
+  "5_premissas_indecidiveis": [
+   "prêmio = 1,2 × burning cost de 1980–88 (premissa de mercado declarada, não estimada)",
+   "severidade da camada pela GPD do treino com limiar 10 (McNeil 1997); ξ incerto (ver IC por bootstrap de meses)",
+   "meses independentes e p constante, embora a frequência de sinistros cresça na década",
+   "uma camada por risco, sem reinstalação nem retrocessão; valores em DKK de 1985",
+   "a retenção de 50 foi escolhida por quem conhecia a série inteira (declarado no cabeçalho do módulo)"
+  ],
+  "6_tentativas": 1
+ },
+ "portao_m15": {
+  "rhat_ok": true,
+  "ess_ok": true,
+  "sbc_ok": true,
+  "ppc_ok": true,
+  "conforme_ok": true,
+  "modelo_vence_climatologia": false,
+  "hypothesis_ok": true,
+  "trilha_integra": true,
+  "banca": true
+ },
+ "aprovado": false,
+ "log": [
+  "1 · F7: tradução, SHELF e termo de escopo",
+  "2 · F2 + F5 + F6",
+  "3 · F1 + F4 + F3",
+  "4 · lentes",
+  "5 · banca: REPROVADO"
+ ],
+ "varredura": [
+  {
+   "agente": "modelagem",
+   "periodos": [
+    1,
+    2,
+    3
+   ],
+   "colunas": [
+    "sinistro",
+    "mes",
+    "perda"
+   ],
+   "arquivos": 3,
+   "bytes_estimados": 14633
+  },
+  {
+   "agente": "modelagem",
+   "periodos": [
+    1,
+    2,
+    3
+   ],
+   "colunas": [
+    "sinistro",
+    "periodo",
+    "data",
+    "mes",
+    "ano",
+    "perda",
+    "excesso_camada",
+    "origem"
+   ],
+   "arquivos": 3,
+   "bytes_estimados": 39023
+  },
+  {
+   "agente": "modelagem",
+   "periodos": [
+    3
+   ],
+   "colunas": [
+    "sinistro",
+    "mes",
+    "perda"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 5337
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "sinistro",
+    "periodo",
+    "data",
+    "mes",
+    "ano",
+    "perda",
+    "excesso_camada",
+    "origem"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 10580
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "periodos": [
+    3
+   ],
+   "colunas": [
+    "sinistro",
+    "periodo",
+    "data",
+    "mes",
+    "ano",
+    "perda",
+    "excesso_camada",
+    "origem"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 14234
+  },
+  {
+   "agente": "banca",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "sinistro",
+    "periodo",
+    "data",
+    "mes",
+    "ano",
+    "perda",
+    "excesso_camada",
+    "origem"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 10580
+  },
+  {
+   "agente": "banca",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "sinistro",
+    "periodo",
+    "data",
+    "mes",
+    "ano",
+    "perda",
+    "excesso_camada",
+    "origem"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 10580
+  }
+ ]
+}

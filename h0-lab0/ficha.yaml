@@ -1,0 +1,95 @@
+# Ficha epistemológica do subgrafo H0 · Lab 0 (posto de saúde)
+# Barramento de fichas (Arquitetura §3). Emitida por agent-f1-code + agent-f2-data, auditada por agent-m15-orchestrator.
+
+alegacao: >
+  "O posto recebe em média 8 pacientes por hora e atende 12. A espera média é de 10 minutos,
+  então não há por que reforçar o atendimento."
+fonte: roteiros/00-m0-fundamentacao.md (bloco 10) e Lab 0, Parte 11
+
+cabecalho:  # as 5 perguntas obrigatórias do payload (AGENTS.md §IV)
+  processo_gerador: >
+    Mundo (L1): a cada dia sorteia-se a taxa de chegada (5 ou 11 por hora, metade dos dias cada);
+    chegadas de Poisson durante 10 h, atendimento exponencial com μ = 12/h, um atendente, fila FIFO,
+    posto abre vazio; espera pela recursão de Lindley. A alegação falha na camada Modelo (L2):
+    usa W(λ̄) de longo prazo com demanda constante; e o Agente (L3) decide com o caso médio.
+  nao_linearidade: >
+    W(λ) = λ/(μ(μ−λ)) é convexa em λ, logo E[W(Λ)] ≥ W(E[Λ]) (Jensen): 29,3 contra 10,0 min.
+    Dinâmica aditiva dentro do dia, mas com explosão perto de λ → μ. Reportar média, mediana,
+    p90, fração > 30 min e eCDF; a média sozinha é proibida.
+  unidade_e_margem: >
+    A unidade independente é o DIA (os pacientes de um dia compartilham a taxa e a fila).
+    n_efetivo = 2 000 dias, não ~160 000 pacientes. Margem pela razão de somas por dia.
+    O erro padrão por paciente é pseudorreplicação (≈ 7× menor).
+  fisica_do_ruido: >
+    Ruído de chegada Poisson e de serviço exponencial (saltos, não gaussiano). Sem estado absorvente
+    dentro do dia; o horizonte de 10 h fica longe do regime estacionário quando λ = 11 (tempo de
+    relaxação ~ 1/(√μ−√λ)² ≈ 46 h). Agente passivo: a previsão não altera a demanda (sem laço
+    performativo neste H0; ver pendências).
+  escada_causal: >
+    Degrau 2 (intervenção): do(μ_surto = 24) é simulado diretamente no mundo "reforço no surto".
+    Premissa não testável: a demanda não reage ao reforço (sem demanda reprimida).
+
+nos:
+  - id: N_Core
+    camada: core
+    tipo_incerteza: nao_se_aplica
+    definicao_formal: Processo gerador oculto que produz as esperas observadas
+    artefato_simulavel: estocologia/lab0.py::mundo
+  - id: L1_demanda_diaria
+    camada: L1
+    tipo_incerteza: Aleatoria
+    definicao_formal: Λ_d ~ Uniforme{5, 11} por dia, i.i.d.
+    artefato_simulavel: estocologia/lab0.py::executar
+  - id: L1_fila_do_dia
+    camada: L1
+    tipo_incerteza: Aleatoria
+    definicao_formal: M/M/1 transiente de 10 h, espera por Lindley w_i = max(0, w_{i-1} + s_{i-1} − a_i)
+    artefato_simulavel: estocologia/lab0.py::fila_do_dia
+  - id: L2_formula_MM1
+    camada: L2
+    tipo_incerteza: Knightiana_Especificacao
+    definicao_formal: W(λ̄) = λ̄/(μ(μ−λ̄)), estacionária, demanda constante
+    artefato_simulavel: estocologia/lab0.py::W
+  - id: L2_media_por_paciente
+    camada: L2
+    tipo_incerteza: Epistemica
+    definicao_formal: m = Σ_d S_d / Σ_d n_d; ep² = Σ_d (S_d − m n_d)² / (Σ_d n_d)²
+    artefato_simulavel: estocologia/lab0.py::media_por_paciente
+  - id: L2_modelo_nulo
+    camada: L2
+    tipo_incerteza: Epistemica
+    definicao_formal: Diferença entre metades aleatórias de 4 000 dias do mundo da alegação (λ = 8)
+    artefato_simulavel: estocologia/lab0.py::nulo_diferenca
+  - id: L3_gestor
+    camada: L3
+    tipo_incerteza: Knightiana_Especificacao
+    definicao_formal: Decide reforçar ou não com base em um número único de espera
+    artefato_simulavel: estocologia/lab0.py::executar
+
+arestas:
+  - {de: L1_demanda_diaria, para: L1_fila_do_dia, tipo: causal, rotulo: "do(λ) define a fila do dia"}
+  - {de: L1_fila_do_dia, para: N_Core, tipo: tree}
+  - {de: L2_formula_MM1, para: L1_fila_do_dia, tipo: patologia, rotulo: "Falácia da Média: f(E[Λ]) no lugar de E[f(Λ)]"}
+  - {de: L2_formula_MM1, para: L1_fila_do_dia, tipo: patologia, rotulo: "Paradoxo da Inspeção: 70% dos pacientes vivem dias de surto"}
+  - {de: L2_media_por_paciente, para: L1_demanda_diaria, tipo: ponte, rotulo: "Jensen: E[W(Λ)] ≥ W(E[Λ]) (M0 ↔ M8)"}
+  - {de: L3_gestor, para: L2_formula_MM1, tipo: patologia, rotulo: "Decisão pelo caso médio sem a cauda"}
+  - {de: L2_modelo_nulo, para: L2_media_por_paciente, tipo: tree, rotulo: "Teste severo (M5)"}
+
+hiperarestas:
+  - {lente: Crononomia, nos: [L1_fila_do_dia, L2_formula_MM1], nota: "10 h ≠ longo prazo: surto em 28,2 min, não 55"}
+  - {lente: Crisonomia, nos: [L3_gestor, L1_demanda_diaria], nota: "decisão pelo limiar de cauda (> 30 min), não pela média"}
+  - {lente: Escalonomia, nos: [L1_fila_do_dia], nota: "cauda leve (exponencial); média existe, TCL vale por dia"}
+
+termo_de_escopo:  # Φ4
+  vale_para: um atendente, demanda de Poisson com taxa diária em {5, 11}, μ = 12, dia de 10 h, posto abre vazio
+  nao_vale_para: dias com λ ≥ μ, filas que transbordam de um dia para o outro, abandono, demanda que reage ao reforço
+  regra_de_decisao: reforçar (μ = 24) nos dias de surto; a espera média cai para ~2,5 min e a fração > 30 min para ~0,4%
+  frequencias_naturais: "De cada 100 pacientes, cerca de 25 esperam mais de meia hora no mundo real, contra 8 no mundo da alegação."
+  circuit_breaker: "Se a taxa de chegada observada em um dia passar de 11,5/h, ou a fração > 30 min passar de 35% em 5 dias seguidos, o modelo sai do escopo: voltar ao F7 e reelicitar a demanda."
+
+tentativas_de_especificacao: 1   # K do PLAN.md §4; esta é a especificação do notebook, sem buscas
+
+pendencias_para_H1:
+  - Laço performativo (M11): pacientes desistem ou mudam de horário quando a fila cresce.
+  - Partição out-of-time (F3): não há dado real; só mundo simulado.
+  - Elicitação SHELF (F7) da distribuição real da demanda diária, hoje assumida bimodal.

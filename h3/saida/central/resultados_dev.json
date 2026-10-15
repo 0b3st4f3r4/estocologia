@@ -1,0 +1,98 @@
+{
+ "fluxo": "central",
+ "area": "servicos",
+ "tipo": "quantis",
+ "fase": "dev",
+ "K": 2,
+ "hash_especificacao": "5c494b6181fd2c320e43af86c9b82d1de5ee7602d9763d7a1acb3154c426f535",
+ "preregistro": null,
+ "corte": 1062374400,
+ "contagens": {
+  "emitidas": 17238,
+  "escopo": 0,
+  "disjuntor": 0,
+  "reajustes": 0,
+  "reajustes_por_deriva": 0,
+  "rotulo_ja_conhecido": 0,
+  "estado_do_futuro": 0
+ },
+ "decisoes_C_L": {
+  "alteradas": 16979,
+  "total": 17238
+ },
+ "limiares_deriva": [
+  {
+   "sensor": "nivel_do_dia",
+   "alto": 0.693,
+   "baixo": 0.63,
+   "janelas_calibracao": 8
+  },
+  {
+   "sensor": "residuo_padronizado",
+   "alto": 0.284974358974359,
+   "baixo": 0.2740631163708087,
+   "janelas_calibracao": 18
+  }
+ ],
+ "eventos_operacao": [],
+ "varredura": {
+  "por_tabela": {
+   "chamadas": {
+    "leituras": 126,
+    "bytes_varridos": 379884,
+    "bytes_tabela": 494394,
+    "varreduras_equivalentes": 0.7683831114455273
+   },
+   "calendario": {
+    "leituras": 126,
+    "bytes_varridos": 1356,
+    "bytes_tabela": 1356,
+    "varreduras_equivalentes": 1.0
+   }
+  },
+  "leituras": 252,
+  "leituras_com_futuro": 0,
+  "gasto_por_agente": {
+   "agent-f2-data": 381240
+  },
+  "orcamento_por_agente": 2000000000
+ },
+ "ingestao": {
+  "chamadas": {
+   "tabela": "chamadas",
+   "linhas": 27716,
+   "bytes_tabela": 494394,
+   "grupos": 164,
+   "colunas": [
+    "T",
+    "n",
+    "t_disp"
+   ]
+  },
+  "calendario": {
+   "tabela": "calendario",
+   "linhas": 164,
+   "bytes_tabela": 1356,
+   "grupos": 1,
+   "colunas": [
+    "dia",
+    "t_disp"
+   ]
+  }
+ },
+ "segundos": 14.2,
+ "canario_vazado": false,
+ "placar": {
+  "desenvolvimento": {
+   "n": 17069,
+   "perda_modelo": 4.95272992074343,
+   "perda_reserva": 6.056984581627986,
+   "perda_oficial": 4.95272992074343,
+   "habilidade_oficial_vs_reserva": 0.18231095787068297
+  },
+  "cofre": {
+   "n": 0
+  }
+ },
+ "fichas": 4
+}

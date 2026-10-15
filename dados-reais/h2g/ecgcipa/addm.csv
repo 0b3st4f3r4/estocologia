@@ -1,0 +1,301 @@
+STUDYID,USUBJID,PARAM,PARAMCD,AVAL,AVALU
+SCR-004,1001,Height,HEIGHT,180,cm
+SCR-004,1002,Height,HEIGHT,169,cm
+SCR-004,1003,Height,HEIGHT,172.5,cm
+SCR-004,1004,Height,HEIGHT,176,cm
+SCR-004,1005,Height,HEIGHT,176,cm
+SCR-004,1006,Height,HEIGHT,181.5,cm
+SCR-004,1007,Height,HEIGHT,180.5,cm
+SCR-004,1008,Height,HEIGHT,177,cm
+SCR-004,1009,Height,HEIGHT,175,cm
+SCR-004,1010,Height,HEIGHT,156.5,cm
+SCR-004,1011,Height,HEIGHT,165,cm
+SCR-004,1012,Height,HEIGHT,161,cm
+SCR-004,1013,Height,HEIGHT,163,cm
+SCR-004,1014,Height,HEIGHT,169,cm
+SCR-004,1015,Height,HEIGHT,168.5,cm
+SCR-004,1016,Height,HEIGHT,162,cm
+SCR-004,1017,Height,HEIGHT,162,cm
+SCR-004,1018,Height,HEIGHT,166,cm
+SCR-004,1019,Height,HEIGHT,182,cm
+SCR-004,1020,Height,HEIGHT,183,cm
+SCR-004,1021,Height,HEIGHT,173.5,cm
+SCR-004,1022,Height,HEIGHT,175,cm
+SCR-004,1023,Height,HEIGHT,174.5,cm
+SCR-004,1024,Height,HEIGHT,184.5,cm
+SCR-004,1025,Height,HEIGHT,184,cm
+SCR-004,1026,Height,HEIGHT,176,cm
+SCR-004,1027,Height,HEIGHT,187.5,cm
+SCR-004,1028,Height,HEIGHT,167,cm
+SCR-004,1029,Height,HEIGHT,175.5,cm
+SCR-004,1030,Height,HEIGHT,182,cm
+SCR-004,1031,Height,HEIGHT,174,cm
+SCR-004,1032,Height,HEIGHT,161,cm
+SCR-004,1033,Height,HEIGHT,174,cm
+SCR-004,1034,Height,HEIGHT,178.5,cm
+SCR-004,1035,Height,HEIGHT,163.5,cm
+SCR-004,1036,Height,HEIGHT,188,cm
+SCR-004,1037,Height,HEIGHT,180,cm
+SCR-004,1038,Height,HEIGHT,173.5,cm
+SCR-004,1039,Height,HEIGHT,170,cm
+SCR-004,1040,Height,HEIGHT,177,cm
+SCR-004,1041,Height,HEIGHT,162.5,cm
+SCR-004,1042,Height,HEIGHT,160,cm
+SCR-004,1043,Height,HEIGHT,167,cm
+SCR-004,1044,Height,HEIGHT,158,cm
+SCR-004,1045,Height,HEIGHT,166.5,cm
+SCR-004,1046,Height,HEIGHT,180.5,cm
+SCR-004,1047,Height,HEIGHT,170.5,cm
+SCR-004,1048,Height,HEIGHT,165,cm
+SCR-004,1049,Height,HEIGHT,163,cm
+SCR-004,1050,Height,HEIGHT,167.5,cm
+SCR-004,2001,Height,HEIGHT,176.5,cm
+SCR-004,2002,Height,HEIGHT,179,cm
+SCR-004,2003,Height,HEIGHT,157,cm
+SCR-004,2004,Height,HEIGHT,162,cm
+SCR-004,2005,Height,HEIGHT,174,cm
+SCR-004,2006,Height,HEIGHT,161,cm
+SCR-004,2007,Height,HEIGHT,159,cm
+SCR-004,2008,Height,HEIGHT,159,cm
+SCR-004,2009,Height,HEIGHT,160,cm
+SCR-004,2010,Height,HEIGHT,161,cm
+SCR-004,1001,Weight,WEIGHT,84,kg
+SCR-004,1002,Weight,WEIGHT,76.5,kg
+SCR-004,1003,Weight,WEIGHT,59,kg
+SCR-004,1004,Weight,WEIGHT,92.1,kg
+SCR-004,1005,Weight,WEIGHT,82.6,kg
+SCR-004,1006,Weight,WEIGHT,87.6,kg
+SCR-004,1007,Weight,WEIGHT,76.3,kg
+SCR-004,1008,Weight,WEIGHT,80.9,kg
+SCR-004,1009,Weight,WEIGHT,90.5,kg
+SCR-004,1010,Weight,WEIGHT,69.2,kg
+SCR-004,1011,Weight,WEIGHT,68.1,kg
+SCR-004,1012,Weight,WEIGHT,70,kg
+SCR-004,1013,Weight,WEIGHT,56.4,kg
+SCR-004,1014,Weight,WEIGHT,76.5,kg
+SCR-004,1015,Weight,WEIGHT,64.5,kg
+SCR-004,1016,Weight,WEIGHT,70.6,kg
+SCR-004,1017,Weight,WEIGHT,67.3,kg
+SCR-004,1018,Weight,WEIGHT,79.2,kg
+SCR-004,1019,Weight,WEIGHT,99.5,kg
+SCR-004,1020,Weight,WEIGHT,77.5,kg
+SCR-004,1021,Weight,WEIGHT,72.1,kg
+SCR-004,1022,Weight,WEIGHT,82.9,kg
+SCR-004,1023,Weight,WEIGHT,61.6,kg
+SCR-004,1024,Weight,WEIGHT,86.5,kg
+SCR-004,1025,Weight,WEIGHT,92.6,kg
+SCR-004,1026,Weight,WEIGHT,72.4,kg
+SCR-004,1027,Weight,WEIGHT,67,kg
+SCR-004,1028,Weight,WEIGHT,69,kg
+SCR-004,1029,Weight,WEIGHT,82.6,kg
+SCR-004,1030,Weight,WEIGHT,84,kg
+SCR-004,1031,Weight,WEIGHT,82.2,kg
+SCR-004,1032,Weight,WEIGHT,60.8,kg
+SCR-004,1033,Weight,WEIGHT,81.4,kg
+SCR-004,1034,Weight,WEIGHT,95.6,kg
+SCR-004,1035,Weight,WEIGHT,64.2,kg
+SCR-004,1036,Weight,WEIGHT,99.8,kg
+SCR-004,1037,Weight,WEIGHT,86.8,kg
+SCR-004,1038,Weight,WEIGHT,57.2,kg
+SCR-004,1039,Weight,WEIGHT,62.8,kg
+SCR-004,1040,Weight,WEIGHT,90.4,kg
+SCR-004,1041,Weight,WEIGHT,70,kg
+SCR-004,1042,Weight,WEIGHT,68.2,kg
+SCR-004,1043,Weight,WEIGHT,72.4,kg
+SCR-004,1044,Weight,WEIGHT,62.8,kg
+SCR-004,1045,Weight,WEIGHT,81,kg
+SCR-004,1046,Weight,WEIGHT,91.2,kg
+SCR-004,1047,Weight,WEIGHT,78.2,kg
+SCR-004,1048,Weight,WEIGHT,77.8,kg
+SCR-004,1049,Weight,WEIGHT,74.6,kg
+SCR-004,1050,Weight,WEIGHT,78.4,kg
+SCR-004,2001,Weight,WEIGHT,83.5,kg
+SCR-004,2002,Weight,WEIGHT,82.3,kg
+SCR-004,2003,Weight,WEIGHT,59.2,kg
+SCR-004,2004,Weight,WEIGHT,75.1,kg
+SCR-004,2005,Weight,WEIGHT,72,kg
+SCR-004,2006,Weight,WEIGHT,71.7,kg
+SCR-004,2007,Weight,WEIGHT,58.3,kg
+SCR-004,2008,Weight,WEIGHT,64,kg
+SCR-004,2009,Weight,WEIGHT,58,kg
+SCR-004,2010,Weight,WEIGHT,71.2,kg
+SCR-004,1001,Body mass index,BMI,25.9,kg/m2
+SCR-004,1002,Body mass index,BMI,26.8,kg/m2
+SCR-004,1003,Body mass index,BMI,19.8,kg/m2
+SCR-004,1004,Body mass index,BMI,29.7,kg/m2
+SCR-004,1005,Body mass index,BMI,26.7,kg/m2
+SCR-004,1006,Body mass index,BMI,26.6,kg/m2
+SCR-004,1007,Body mass index,BMI,23.4,kg/m2
+SCR-004,1008,Body mass index,BMI,25.8,kg/m2
+SCR-004,1009,Body mass index,BMI,29.6,kg/m2
+SCR-004,1010,Body mass index,BMI,28.3,kg/m2
+SCR-004,1011,Body mass index,BMI,25,kg/m2
+SCR-004,1012,Body mass index,BMI,27,kg/m2
+SCR-004,1013,Body mass index,BMI,21.2,kg/m2
+SCR-004,1014,Body mass index,BMI,26.8,kg/m2
+SCR-004,1015,Body mass index,BMI,22.7,kg/m2
+SCR-004,1016,Body mass index,BMI,26.9,kg/m2
+SCR-004,1017,Body mass index,BMI,25.6,kg/m2
+SCR-004,1018,Body mass index,BMI,28.7,kg/m2
+SCR-004,1019,Body mass index,BMI,30,kg/m2
+SCR-004,1020,Body mass index,BMI,23.1,kg/m2
+SCR-004,1021,Body mass index,BMI,24,kg/m2
+SCR-004,1022,Body mass index,BMI,27.1,kg/m2
+SCR-004,1023,Body mass index,BMI,20.2,kg/m2
+SCR-004,1024,Body mass index,BMI,25.4,kg/m2
+SCR-004,1025,Body mass index,BMI,27.4,kg/m2
+SCR-004,1026,Body mass index,BMI,23.4,kg/m2
+SCR-004,1027,Body mass index,BMI,19.1,kg/m2
+SCR-004,1028,Body mass index,BMI,24.7,kg/m2
+SCR-004,1029,Body mass index,BMI,26.8,kg/m2
+SCR-004,1030,Body mass index,BMI,25.4,kg/m2
+SCR-004,1031,Body mass index,BMI,27.2,kg/m2
+SCR-004,1032,Body mass index,BMI,23.5,kg/m2
+SCR-004,1033,Body mass index,BMI,26.9,kg/m2
+SCR-004,1034,Body mass index,BMI,30,kg/m2
+SCR-004,1035,Body mass index,BMI,24,kg/m2
+SCR-004,1036,Body mass index,BMI,28.2,kg/m2
+SCR-004,1037,Body mass index,BMI,26.8,kg/m2
+SCR-004,1038,Body mass index,BMI,19,kg/m2
+SCR-004,1039,Body mass index,BMI,21.7,kg/m2
+SCR-004,1040,Body mass index,BMI,28.9,kg/m2
+SCR-004,1041,Body mass index,BMI,26.5,kg/m2
+SCR-004,1042,Body mass index,BMI,26.6,kg/m2
+SCR-004,1043,Body mass index,BMI,26,kg/m2
+SCR-004,1044,Body mass index,BMI,25.2,kg/m2
+SCR-004,1045,Body mass index,BMI,29.2,kg/m2
+SCR-004,1046,Body mass index,BMI,28,kg/m2
+SCR-004,1047,Body mass index,BMI,26.9,kg/m2
+SCR-004,1048,Body mass index,BMI,28.6,kg/m2
+SCR-004,1049,Body mass index,BMI,28.1,kg/m2
+SCR-004,1050,Body mass index,BMI,27.9,kg/m2
+SCR-004,2001,Body mass index,BMI,26.8,kg/m2
+SCR-004,2002,Body mass index,BMI,25.7,kg/m2
+SCR-004,2003,Body mass index,BMI,24,kg/m2
+SCR-004,2004,Body mass index,BMI,28.6,kg/m2
+SCR-004,2005,Body mass index,BMI,23.8,kg/m2
+SCR-004,2006,Body mass index,BMI,27.7,kg/m2
+SCR-004,2007,Body mass index,BMI,23.1,kg/m2
+SCR-004,2008,Body mass index,BMI,25.3,kg/m2
+SCR-004,2009,Body mass index,BMI,22.7,kg/m2
+SCR-004,2010,Body mass index,BMI,27.5,kg/m2
+SCR-004,1001,Systolic blood presure,SYSBP,121,mmHg
+SCR-004,1002,Systolic blood presure,SYSBP,110,mmHg
+SCR-004,1003,Systolic blood presure,SYSBP,121,mmHg
+SCR-004,1004,Systolic blood presure,SYSBP,121,mmHg
+SCR-004,1005,Systolic blood presure,SYSBP,119,mmHg
+SCR-004,1006,Systolic blood presure,SYSBP,109,mmHg
+SCR-004,1007,Systolic blood presure,SYSBP,109,mmHg
+SCR-004,1008,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1009,Systolic blood presure,SYSBP,128,mmHg
+SCR-004,1010,Systolic blood presure,SYSBP,115,mmHg
+SCR-004,1011,Systolic blood presure,SYSBP,131,mmHg
+SCR-004,1012,Systolic blood presure,SYSBP,134,mmHg
+SCR-004,1013,Systolic blood presure,SYSBP,117,mmHg
+SCR-004,1014,Systolic blood presure,SYSBP,106,mmHg
+SCR-004,1015,Systolic blood presure,SYSBP,102,mmHg
+SCR-004,1016,Systolic blood presure,SYSBP,102,mmHg
+SCR-004,1017,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1018,Systolic blood presure,SYSBP,123,mmHg
+SCR-004,1019,Systolic blood presure,SYSBP,126,mmHg
+SCR-004,1020,Systolic blood presure,SYSBP,123,mmHg
+SCR-004,1021,Systolic blood presure,SYSBP,114,mmHg
+SCR-004,1022,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1023,Systolic blood presure,SYSBP,127,mmHg
+SCR-004,1024,Systolic blood presure,SYSBP,121,mmHg
+SCR-004,1025,Systolic blood presure,SYSBP,116,mmHg
+SCR-004,1026,Systolic blood presure,SYSBP,126,mmHg
+SCR-004,1027,Systolic blood presure,SYSBP,111,mmHg
+SCR-004,1028,Systolic blood presure,SYSBP,114,mmHg
+SCR-004,1029,Systolic blood presure,SYSBP,125,mmHg
+SCR-004,1030,Systolic blood presure,SYSBP,110,mmHg
+SCR-004,1031,Systolic blood presure,SYSBP,114,mmHg
+SCR-004,1032,Systolic blood presure,SYSBP,101,mmHg
+SCR-004,1033,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1034,Systolic blood presure,SYSBP,114,mmHg
+SCR-004,1035,Systolic blood presure,SYSBP,115,mmHg
+SCR-004,1036,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1037,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1038,Systolic blood presure,SYSBP,106,mmHg
+SCR-004,1039,Systolic blood presure,SYSBP,106,mmHg
+SCR-004,1040,Systolic blood presure,SYSBP,102,mmHg
+SCR-004,1041,Systolic blood presure,SYSBP,140,mmHg
+SCR-004,1042,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1043,Systolic blood presure,SYSBP,112,mmHg
+SCR-004,1044,Systolic blood presure,SYSBP,104,mmHg
+SCR-004,1045,Systolic blood presure,SYSBP,123,mmHg
+SCR-004,1046,Systolic blood presure,SYSBP,108,mmHg
+SCR-004,1047,Systolic blood presure,SYSBP,109,mmHg
+SCR-004,1048,Systolic blood presure,SYSBP,111,mmHg
+SCR-004,1049,Systolic blood presure,SYSBP,119,mmHg
+SCR-004,1050,Systolic blood presure,SYSBP,117,mmHg
+SCR-004,2001,Systolic blood presure,SYSBP,121,mmHg
+SCR-004,2002,Systolic blood presure,SYSBP,111,mmHg
+SCR-004,2003,Systolic blood presure,SYSBP,116,mmHg
+SCR-004,2004,Systolic blood presure,SYSBP,103,mmHg
+SCR-004,2005,Systolic blood presure,SYSBP,110,mmHg
+SCR-004,2006,Systolic blood presure,SYSBP,113,mmHg
+SCR-004,2007,Systolic blood presure,SYSBP,106,mmHg
+SCR-004,2008,Systolic blood presure,SYSBP,105,mmHg
+SCR-004,2009,Systolic blood presure,SYSBP,120,mmHg
+SCR-004,2010,Systolic blood presure,SYSBP,129,mmHg
+SCR-004,1001,Diastolic blood presure,DIABP,77,mmHg
+SCR-004,1002,Diastolic blood presure,DIABP,59,mmHg
+SCR-004,1003,Diastolic blood presure,DIABP,66,mmHg
+SCR-004,1004,Diastolic blood presure,DIABP,72,mmHg
+SCR-004,1005,Diastolic blood presure,DIABP,74,mmHg
+SCR-004,1006,Diastolic blood presure,DIABP,64,mmHg
+SCR-004,1007,Diastolic blood presure,DIABP,58,mmHg
+SCR-004,1008,Diastolic blood presure,DIABP,55,mmHg
+SCR-004,1009,Diastolic blood presure,DIABP,71,mmHg
+SCR-004,1010,Diastolic blood presure,DIABP,56,mmHg
+SCR-004,1011,Diastolic blood presure,DIABP,81,mmHg
+SCR-004,1012,Diastolic blood presure,DIABP,82,mmHg
+SCR-004,1013,Diastolic blood presure,DIABP,65,mmHg
+SCR-004,1014,Diastolic blood presure,DIABP,67,mmHg
+SCR-004,1015,Diastolic blood presure,DIABP,55,mmHg
+SCR-004,1016,Diastolic blood presure,DIABP,56,mmHg
+SCR-004,1017,Diastolic blood presure,DIABP,65,mmHg
+SCR-004,1018,Diastolic blood presure,DIABP,72,mmHg
+SCR-004,1019,Diastolic blood presure,DIABP,80,mmHg
+SCR-004,1020,Diastolic blood presure,DIABP,74,mmHg
+SCR-004,1021,Diastolic blood presure,DIABP,59,mmHg
+SCR-004,1022,Diastolic blood presure,DIABP,63,mmHg
+SCR-004,1023,Diastolic blood presure,DIABP,60,mmHg
+SCR-004,1024,Diastolic blood presure,DIABP,68,mmHg
+SCR-004,1025,Diastolic blood presure,DIABP,61,mmHg
+SCR-004,1026,Diastolic blood presure,DIABP,66,mmHg
+SCR-004,1027,Diastolic blood presure,DIABP,65,mmHg
+SCR-004,1028,Diastolic blood presure,DIABP,73,mmHg
+SCR-004,1029,Diastolic blood presure,DIABP,74,mmHg
+SCR-004,1030,Diastolic blood presure,DIABP,56,mmHg
+SCR-004,1031,Diastolic blood presure,DIABP,56,mmHg
+SCR-004,1032,Diastolic blood presure,DIABP,59,mmHg
+SCR-004,1033,Diastolic blood presure,DIABP,73,mmHg
+SCR-004,1034,Diastolic blood presure,DIABP,80,mmHg
+SCR-004,1035,Diastolic blood presure,DIABP,76,mmHg
+SCR-004,1036,Diastolic blood presure,DIABP,60,mmHg
+SCR-004,1037,Diastolic blood presure,DIABP,62,mmHg
+SCR-004,1038,Diastolic blood presure,DIABP,64,mmHg
+SCR-004,1039,Diastolic blood presure,DIABP,63,mmHg
+SCR-004,1040,Diastolic blood presure,DIABP,67,mmHg
+SCR-004,1041,Diastolic blood presure,DIABP,76,mmHg
+SCR-004,1042,Diastolic blood presure,DIABP,69,mmHg
+SCR-004,1043,Diastolic blood presure,DIABP,64,mmHg
+SCR-004,1044,Diastolic blood presure,DIABP,58,mmHg
+SCR-004,1045,Diastolic blood presure,DIABP,73,mmHg
+SCR-004,1046,Diastolic blood presure,DIABP,57,mmHg
+SCR-004,1047,Diastolic blood presure,DIABP,71,mmHg
+SCR-004,1048,Diastolic blood presure,DIABP,63,mmHg
+SCR-004,1049,Diastolic blood presure,DIABP,66,mmHg
+SCR-004,1050,Diastolic blood presure,DIABP,59,mmHg
+SCR-004,2001,Diastolic blood presure,DIABP,62,mmHg
+SCR-004,2002,Diastolic blood presure,DIABP,64,mmHg
+SCR-004,2003,Diastolic blood presure,DIABP,75,mmHg
+SCR-004,2004,Diastolic blood presure,DIABP,62,mmHg
+SCR-004,2005,Diastolic blood presure,DIABP,61,mmHg
+SCR-004,2006,Diastolic blood presure,DIABP,59,mmHg
+SCR-004,2007,Diastolic blood presure,DIABP,58,mmHg
+SCR-004,2008,Diastolic blood presure,DIABP,56,mmHg
+SCR-004,2009,Diastolic blood presure,DIABP,69,mmHg
+SCR-004,2010,Diastolic blood presure,DIABP,76,mmHg

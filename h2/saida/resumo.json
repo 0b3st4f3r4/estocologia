@@ -1,0 +1,62 @@
+{
+ "agronomia_nitrogenio": {
+  "area": "Agronomia",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 4.3
+ },
+ "clima_tempestades": {
+  "area": "Clima",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 8.7
+ },
+ "credito_hmda": {
+  "area": "Crédito",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 6.5
+ },
+ "desenvolvimento_preston": {
+  "area": "Desenvolvimento",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 4.1
+ },
+ "direito_prisoes": {
+  "area": "Direito",
+  "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+  "segundos": 6.7
+ },
+ "educacao_star": {
+  "area": "Educação",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 6.0
+ },
+ "energia_vitoria": {
+  "area": "Energia",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 6.2
+ },
+ "epidemiologia_contracepcao": {
+  "area": "Epidemiologia",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 4.6
+ },
+ "logistica_voos": {
+  "area": "Logística",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 167.2
+ },
+ "saude_consultas": {
+  "area": "Saúde",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 7.6
+ },
+ "trabalho_curriculos": {
+  "area": "Trabalho",
+  "status": "reprovado no F4 (M15): conforme_ok",
+  "segundos": 7.3
+ },
+ "transito_alcool": {
+  "area": "Saúde pública / transporte",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.1
+ }
+}

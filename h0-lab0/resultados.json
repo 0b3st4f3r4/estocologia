@@ -1,0 +1,116 @@
+{
+ "resultados": {
+  "semente": 1909,
+  "W_8": 10.0,
+  "W_5": 3.571428571428571,
+  "W_11": 55.0,
+  "media_W": 29.285714285714285,
+  "variavel": {
+   "pacientes": 161867,
+   "dias": 2000,
+   "espera_media": 20.689672215925768,
+   "ep_dia": 0.5137761205340572,
+   "ep_paciente": 0.06942530229940608,
+   "frac_acima_30": 0.25401718694977976,
+   "p90": 59.28503061799532,
+   "mediana": 9.320820236090142,
+   "calmos": 3.4175967736879325,
+   "surto": 28.180918612560493,
+   "frac_pacientes_surto": 0.6974862078125869
+  },
+  "alegacao": {
+   "pacientes": 160220,
+   "dias": 2000,
+   "espera_media": 9.26641441642942,
+   "ep_dia": 0.16020568247569364,
+   "ep_paciente": 0.03349428342049239,
+   "frac_acima_30": 0.07979028835351391,
+   "p90": 26.680387936293105,
+   "mediana": 3.75499889513606
+  },
+  "mundos": {
+   "8 todo dia": [
+    9.26641441642942,
+    0.07979028835351391
+   ],
+   "5 ou 11": [
+    20.689672215925768,
+    0.25401718694977976
+   ],
+   "7 ou 9": [
+    10.522611494188654,
+    0.1003481034258093
+   ],
+   "uniforme 5-11": [
+    12.324680015413612,
+    0.12779160984398263
+   ],
+   "5 ou 11, reforço no surto": [
+    2.5381683496795273,
+    0.004491696024157021
+   ]
+  },
+  "teste_severo": {
+   "diferenca_observada": 11.423257799496348,
+   "nulo_dp": 0.21566210256197674,
+   "nulo_max_abs": 0.8068989159751201,
+   "frac_nulo_ge_obs": 0.0,
+   "reps": 2000
+  }
+ },
+ "hash": "8670b487b9c15d7f45a3ca289dfc1ae14372fec475b25d0976a3e18d92f97c90",
+ "conferencia": {
+  "alegacao.espera_media": {
+   "obtido": 9.26641441642942,
+   "publicado": 9.3,
+   "ok": true
+  },
+  "variavel.espera_media": {
+   "obtido": 20.689672215925768,
+   "publicado": 20.7,
+   "ok": true
+  },
+  "alegacao.frac_acima_30": {
+   "obtido": 0.07979028835351391,
+   "publicado": 0.08,
+   "ok": true
+  },
+  "variavel.frac_acima_30": {
+   "obtido": 0.25401718694977976,
+   "publicado": 0.254,
+   "ok": true
+  },
+  "variavel.ep_dia": {
+   "obtido": 0.5137761205340572,
+   "publicado": 0.5,
+   "ok": true
+  },
+  "variavel.ep_paciente": {
+   "obtido": 0.06942530229940608,
+   "publicado": 0.07,
+   "ok": true
+  }
+ },
+ "portoes": {
+  "Φ1 simulabilidade": {
+   "ok": true,
+   "detalhe": "pytest: 6 passed in 2.39s; hash igual nas 2 execuções: True"
+  },
+  "Φ2 margem e unidade": {
+   "ok": true,
+   "detalhe": "ep por dia 0.51 vs por paciente 0.07 (×7.4); dp do nulo 0.216, previsto pelo dia 0.227, pelo paciente 0.047"
+  },
+  "Φ3 camadas e teste severo": {
+   "ok": true,
+   "detalhe": "ficha: válida; diferença 11.4 min = 53 dp do nulo; nulo nunca chegou lá em 2000 repartições (máx |dif| 0.81)"
+  },
+  "Φ4 escopo ecológico": {
+   "ok": true,
+   "detalhe": "campos faltando: nenhum; reforço no surto: 2.5 min, 0.4% > 30 min"
+  },
+  "Conferência com a Fundamentação": {
+   "ok": true,
+   "detalhe": "6/6 números batem"
+  }
+ }
+}

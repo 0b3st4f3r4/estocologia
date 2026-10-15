@@ -1,0 +1,1128 @@
+{
+ "fluxo": "prisoes_ri",
+ "criterios": "CRITERIOS_H3d.md",
+ "criterios_sha256": "0b14e39d30b93976ff13c417ecbb0a78429e02b026aaa7bbdb20198b2a097959",
+ "G1": {
+  "pytest": "8 passed in 3.72s",
+  "pytest_ok": true,
+  "reproducao_limpa_identica": true,
+  "passa": true
+ },
+ "G2_cofre_2013_2015": {
+  "oficial": {
+   "n": 24466,
+   "p_medio": 0.02464498155225595,
+   "y_medio": 0.022602795716504538,
+   "citl": 0.002042185835751411,
+   "ece": 0.004762854395022768,
+   "brier": 0.02173255886714025,
+   "brier_climatologia": 0.022143730653091824,
+   "habilidade_vs_climatologia": 0.018568315899117116,
+   "habilidade_vs_reserva": 0.016785043614138018,
+   "habilidade_modelo_sombra_vs_climatologia": 0.020408464153677475,
+   "murphy": {
+    "REL": 5.2736504497715716e-05,
+    "RES": 0.0002830178981438767,
+    "UNC": 0.022091909342302502
+   },
+   "fracao_oficial_reserva": 0.12470367039973841,
+   "passa_a_absoluto": true,
+   "relativo": {
+    "citl_sobre_ybar": 0.0903510283137324,
+    "ece_sobre_ybar": 0.2107197027642442
+   },
+   "passa_b_relativo": true,
+   "passa": true
+  },
+  "modelo_cru_sombra": {
+   "n": 24466,
+   "citl": 0.013044598537751577,
+   "ece": 0.013044598537751577,
+   "habilidade_vs_climatologia": 0.00355121213465448,
+   "relativo": {
+    "citl_sobre_ybar": 0.5771232329559314,
+    "ece_sobre_ybar": 0.5771232329559314
+   }
+  },
+  "platt_a_b_final": [
+   -0.30153585407467215,
+   1.0703135460119033
+  ]
+ },
+ "G3": {
+  "passa": true,
+  "fluxos": {
+   "prisoes_ri": {
+    "leituras_com_futuro": 0,
+    "estado_do_futuro_na_emissao": 0,
+    "rotulo_ja_conhecido_na_emissao": 0,
+    "contagens_do_motor": {
+     "estado_do_futuro": 0,
+     "rotulo_ja_conhecido": 0
+    },
+    "preregistro_antes_do_cofre": true,
+    "emissoes_no_cofre_depois_da_abertura": true,
+    "canario": {
+     "habilidade_sem_canario": 0.02025436147461024,
+     "ganho_canario_honesto": 0.0,
+     "ganho_canario_vazado": 0.973583608574138,
+     "canario_visto_na_emissao_diferente_de_0_5": 0
+    },
+    "passa": true
+   }
+  },
+  "banca": {
+   "ler_o_futuro": true,
+   "select_estrela": true,
+   "cofre_antes_do_preregistro": true,
+   "agente_errado_abre_cofre": true,
+   "segunda_abertura_do_cofre": true,
+   "voltar_o_relogio": true,
+   "leitura_legitima_funciona": true
+  }
+ },
+ "G5": {
+  "passa": true,
+  "prisoes_ri": {
+   "leituras": 48228,
+   "varreduras_equivalentes_por_tabela": {
+    "detencao": 1.535,
+    "liberacao": 1.532,
+    "canario": 1.532
+   },
+   "select_estrela": 0,
+   "agentes_acima_do_orcamento": [],
+   "passa": true
+  }
+ },
+ "trilha": {
+  "passa": true,
+  "detalhe": "íntegra"
+ },
+ "F6_por_ano_do_cofre": {
+  "2012": {
+   "n": 5,
+   "taxa_base_nao_liberacao": {
+    "Black": 0.0,
+    "White": 0.0
+   },
+   "calibracao": {
+    "Black": {
+     "p_nao_liberacao_media": 0.044259330418873755,
+     "taxa_nao_liberacao": 0.0
+    },
+    "White": {
+     "p_nao_liberacao_media": 0.029093490796273103,
+     "taxa_nao_liberacao": 0.0
+    }
+   },
+   "fpr": {
+    "Black": 0.0,
+    "White": 0.0
+   },
+   "fnr": {
+    "Black": NaN,
+    "White": NaN
+   },
+   "criterios_satisfeitos": {
+    "calibracao_dentro_dos_grupos": true,
+    "equilibrio_classe_negativa_FPR": true,
+    "equilibrio_classe_positiva_FNR": false
+   },
+   "quantos_valem": 2,
+   "taxas_base_diferem": false,
+   "detalhe_wilson": {
+    "Black": {
+     "n": 2,
+     "taxa_base": [
+      0.0,
+      0.0,
+      0.6576280471103807
+     ],
+     "fpr": [
+      0.0,
+      0.0,
+      0.6576280471103807
+     ],
+     "fnr": [
+      NaN,
+      NaN,
+      NaN
+     ],
+     "vpp": [
+      NaN,
+      NaN,
+      NaN
+     ]
+    },
+    "White": {
+     "n": 3,
+     "taxa_base": [
+      0.0,
+      0.0,
+      0.5615060804490177
+     ],
+     "fpr": [
+      0.0,
+      0.0,
+      0.5615060804490177
+     ],
+     "fnr": [
+      NaN,
+      NaN,
+      NaN
+     ],
+     "vpp": [
+      NaN,
+      NaN,
+      NaN
+     ]
+    }
+   }
+  },
+  "2013": {
+   "n": 6148,
+   "taxa_base_nao_liberacao": {
+    "Black": 0.03492333901192504,
+    "White": 0.013671089666264576
+   },
+   "calibracao": {
+    "Black": {
+     "p_nao_liberacao_media": 0.03018865422035344,
+     "taxa_nao_liberacao": 0.034923339011925014
+    },
+    "White": {
+     "p_nao_liberacao_media": 0.021375717556258,
+     "taxa_nao_liberacao": 0.013671089666264624
+    }
+   },
+   "fpr": {
+    "Black": 0.018534863195057368,
+    "White": 0.0110069302894415
+   },
+   "fnr": {
+    "Black": 0.926829268292683,
+    "White": 0.8970588235294118
+   },
+   "criterios_satisfeitos": {
+    "calibracao_dentro_dos_grupos": true,
+    "equilibrio_classe_negativa_FPR": true,
+    "equilibrio_classe_positiva_FNR": true
+   },
+   "quantos_valem": 3,
+   "taxas_base_diferem": false,
+   "detalhe_wilson": {
+    "Black": {
+     "n": 1174,
+     "taxa_base": [
+      0.03492333901192504,
+      0.025846465043181048,
+      0.04703396302116989
+     ],
+     "fpr": [
+      0.018534863195057368,
+      0.012154397597833965,
+      0.02816924995341679
+     ],
+     "fnr": [
+      0.926829268292683,
+      0.8057225998278872,
+      0.9748026267474359
+     ],
+     "vpp": [
+      0.125,
+      0.04344255039315584,
+      0.3100428814785757
+     ]
+    },
+    "White": {
+     "n": 4974,
+     "taxa_base": [
+      0.013671089666264576,
+      0.010798770709297606,
+      0.017294047672066718
+     ],
+     "fpr": [
+      0.0110069302894415,
+      0.008446111408046558,
+      0.014332953399258018
+     ],
+     "fnr": [
+      0.8970588235294118,
+      0.8024187647817829,
+      0.9492348732218252
+     ],
+     "vpp": [
+      0.11475409836065574,
+      0.0567113064337431,
+      0.2184453830989026
+     ]
+    }
+   }
+  },
+  "2014": {
+   "n": 7261,
+   "taxa_base_nao_liberacao": {
+    "Black": 0.03840579710144928,
+    "White": 0.014623363373575922
+   },
+   "calibracao": {
+    "Black": {
+     "p_nao_liberacao_media": 0.028404966923854746,
+     "taxa_nao_liberacao": 0.03840579710144931
+    },
+    "White": {
+     "p_nao_liberacao_media": 0.021164971419886713,
+     "taxa_nao_liberacao": 0.014623363373575948
+    }
+   },
+   "fpr": {
+    "Black": 0.024868123587038434,
+    "White": 0.012942191544434857
+   },
+   "fnr": {
+    "Black": 0.9056603773584906,
+    "White": 0.8255813953488372
+   },
+   "criterios_satisfeitos": {
+    "calibracao_dentro_dos_grupos": true,
+    "equilibrio_classe_negativa_FPR": true,
+    "equilibrio_classe_positiva_FNR": false
+   },
+   "quantos_valem": 2,
+   "taxas_base_diferem": false,
+   "detalhe_wilson": {
+    "Black": {
+     "n": 1380,
+     "taxa_base": [
+      0.03840579710144928,
+      0.029481155848790845,
+      0.049893246539459375
+     ],
+     "fpr": [
+      0.024868123587038434,
+      0.017761423498881844,
+      0.03471784976699743
+     ],
+     "fnr": [
+      0.9056603773584906,
+      0.7974602432629856,
+      0.9590279625581031
+     ],
+     "vpp": [
+      0.13157894736842105,
+      0.05753782875731436,
+      0.2732717005149887
+     ]
+    },
+    "White": {
+     "n": 5881,
+     "taxa_base": [
+      0.014623363373575922,
+      0.011856893964886947,
+      0.018023536461651633
+     ],
+     "fpr": [
+      0.012942191544434857,
+      0.010337903288806245,
+      0.01619180912823925
+     ],
+     "fnr": [
+      0.8255813953488372,
+      0.7319660077476104,
+      0.8913532563794753
+     ],
+     "vpp": [
+      0.16666666666666666,
+      0.10368397504925966,
+      0.25694073723186084
+     ]
+    }
+   }
+  },
+  "2015": {
+   "n": 6572,
+   "taxa_base_nao_liberacao": {
+    "Black": 0.02952029520295203,
+    "White": 0.01667625071880391
+   },
+   "calibracao": {
+    "Black": {
+     "p_nao_liberacao_media": 0.029548887200947727,
+     "taxa_nao_liberacao": 0.029520295202952074
+    },
+    "White": {
+     "p_nao_liberacao_media": 0.023940641690220033,
+     "taxa_nao_liberacao": 0.016676250718803964
+    }
+   },
+   "fpr": {
+    "Black": 0.018250950570342206,
+    "White": 0.017348927875243666
+   },
+   "fnr": {
+    "Black": 0.85,
+    "White": 0.896551724137931
+   },
+   "criterios_satisfeitos": {
+    "calibracao_dentro_dos_grupos": true,
+    "equilibrio_classe_negativa_FPR": true,
+    "equilibrio_classe_positiva_FNR": true
+   },
+   "quantos_valem": 3,
+   "taxas_base_diferem": false,
+   "detalhe_wilson": {
+    "Black": {
+     "n": 1355,
+     "taxa_base": [
+      0.02952029520295203,
+      0.0217529930745589,
+      0.039947796774677385
+     ],
+     "fpr": [
+      0.018250950570342206,
+      0.012294778627282857,
+      0.02701365689674065
+     ],
+     "fnr": [
+      0.85,
+      0.7092737396097997,
+      0.9293890829149256
+     ],
+     "vpp": [
+      0.2,
+      0.09504978102401235,
+      0.37306047381027446
+     ]
+    },
+    "White": {
+     "n": 5217,
+     "taxa_base": [
+      0.01667625071880391,
+      0.01354010401374608,
+      0.02052367604807384
+     ],
+     "fpr": [
+      0.017348927875243666,
+      0.014120210998822602,
+      0.02129997025491924
+     ],
+     "fnr": [
+      0.896551724137931,
+      0.8149483835215049,
+      0.9446155167180331
+     ],
+     "vpp": [
+      0.09183673469387756,
+      0.04906865909068409,
+      0.16539772792601637
+     ]
+    }
+   }
+  }
+ },
+ "F5_por_ano": {
+  "eps_por_publicacao": 0.5,
+  "orcamento_eps": 2.0,
+  "eps_gasto_por_coorte": {
+   "2005": 2.0,
+   "2006": 2.0,
+   "2007": 2.0,
+   "2008": 2.0,
+   "2009": 2.0,
+   "2010": 2.0,
+   "2011": 2.0,
+   "2012": 2.0,
+   "2013": 1.5,
+   "2014": 1.0,
+   "2015": 0.5
+  },
+  "orcamento_respeitado": true,
+  "publicacoes": [
+   {
+    "publicacao": 2005,
+    "coortes": [
+     2005
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 1,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": -17.160880171420292,
+      "erro_absoluto": 17.160880171420292,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "Black",
+      "n": 1,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": -1.9088074553195475,
+      "erro_absoluto": 1.9088074553195475,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "Hispanic",
+      "n": 1,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 1.278972775921481,
+      "erro_absoluto": 1.278972775921481,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 5,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.16372194249254754,
+      "erro_absoluto": 0.16372194249254754,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     }
+    ]
+   },
+   {
+    "publicacao": 2006,
+    "coortes": [
+     2005,
+     2006
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 278,
+      "taxa_verdadeira": 0.03237410071942446,
+      "taxa_publicada": 0.03293627941931027,
+      "erro_absoluto": 0.0005621786998858125,
+      "bits_perdidos": 2.964577681085252,
+      "H_bits": 3.595411902648771
+     },
+     {
+      "cor": "Black",
+      "n": 1206,
+      "taxa_verdadeira": 0.09867330016583747,
+      "taxa_publicada": 0.0983643252992837,
+      "erro_absoluto": 0.0003089748665537767,
+      "bits_perdidos": 3.313401913117783,
+      "H_bits": 4.6212768618525315
+     },
+     {
+      "cor": "Hispanic",
+      "n": 199,
+      "taxa_verdadeira": 0.08040201005025126,
+      "taxa_publicada": 0.07155015530701257,
+      "erro_absoluto": 0.008851854743238685,
+      "bits_perdidos": 3.117976510364974,
+      "H_bits": 3.980662500152627
+     },
+     {
+      "cor": "Other",
+      "n": 24,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.030119880112811644,
+      "erro_absoluto": 0.030119880112811644,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 8402,
+      "taxa_verdadeira": 0.032373244465603426,
+      "taxa_publicada": 0.03251985026515324,
+      "erro_absoluto": 0.00014660579954981628,
+      "bits_perdidos": 3.0918482313102977,
+      "H_bits": 3.861989968410448
+     }
+    ]
+   },
+   {
+    "publicacao": 2007,
+    "coortes": [
+     2005,
+     2006,
+     2007
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 518,
+      "taxa_verdadeira": 0.02895752895752896,
+      "taxa_publicada": 0.02840459426297044,
+      "erro_absoluto": 0.0005529346945585198,
+      "bits_perdidos": 3.0550941607150754,
+      "H_bits": 3.782901116466143
+     },
+     {
+      "cor": "Black",
+      "n": 2219,
+      "taxa_verdadeira": 0.07345651194231635,
+      "taxa_publicada": 0.07371035442643387,
+      "erro_absoluto": 0.0002538424841175141,
+      "bits_perdidos": 3.254938999438959,
+      "H_bits": 4.427229765139263
+     },
+     {
+      "cor": "Hispanic",
+      "n": 878,
+      "taxa_verdadeira": 0.06605922551252848,
+      "taxa_publicada": 0.0641831134532721,
+      "erro_absoluto": 0.0018761120592563768,
+      "bits_perdidos": 3.233964268478984,
+      "H_bits": 4.355928725940757
+     },
+     {
+      "cor": "Other",
+      "n": 49,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.012946219057694688,
+      "erro_absoluto": 0.012946219057694688,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 15333,
+      "taxa_verdadeira": 0.027196243396595578,
+      "taxa_publicada": 0.02715938993550908,
+      "erro_absoluto": 3.685346108649873e-05,
+      "bits_perdidos": 3.0196861472066168,
+      "H_bits": 3.738199010321382
+     }
+    ]
+   },
+   {
+    "publicacao": 2008,
+    "coortes": [
+     2005,
+     2006,
+     2007,
+     2008
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 743,
+      "taxa_verdadeira": 0.026917900403768506,
+      "taxa_publicada": 0.03145178428922099,
+      "erro_absoluto": 0.004533883885452485,
+      "bits_perdidos": 3.0173252293192787,
+      "H_bits": 3.7308575631381022
+     },
+     {
+      "cor": "Black",
+      "n": 3307,
+      "taxa_verdadeira": 0.061989718778348954,
+      "taxa_publicada": 0.06140683210374204,
+      "erro_absoluto": 0.0005828866746069167,
+      "bits_perdidos": 3.233760990609286,
+      "H_bits": 4.312890410153162
+     },
+     {
+      "cor": "Hispanic",
+      "n": 1719,
+      "taxa_verdadeira": 0.061663757998836534,
+      "taxa_publicada": 0.06063975434274133,
+      "erro_absoluto": 0.0010240036560952015,
+      "bits_perdidos": 3.229041782993401,
+      "H_bits": 4.309311391940545
+     },
+     {
+      "cor": "Other",
+      "n": 72,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.019339346021594733,
+      "erro_absoluto": 0.019339346021594733,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 21233,
+      "taxa_verdadeira": 0.024631469881787785,
+      "taxa_publicada": 0.024539768582266093,
+      "erro_absoluto": 9.170129952169176e-05,
+      "bits_perdidos": 3.008909366219963,
+      "H_bits": 3.667357925906176
+     }
+    ]
+   },
+   {
+    "publicacao": 2009,
+    "coortes": [
+     2006,
+     2007,
+     2008,
+     2009
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 956,
+      "taxa_verdadeira": 0.02092050209205021,
+      "taxa_publicada": 0.019340725694594333,
+      "erro_absoluto": 0.0015797763974558753,
+      "bits_perdidos": 2.9482300789801164,
+      "H_bits": 3.5498254120729387
+     },
+     {
+      "cor": "Black",
+      "n": 4422,
+      "taxa_verdadeira": 0.05721393034825871,
+      "taxa_publicada": 0.05722990555252713,
+      "erro_absoluto": 1.5975204268423027e-05,
+      "bits_perdidos": 3.224150017845302,
+      "H_bits": 4.2583020171043895
+     },
+     {
+      "cor": "Hispanic",
+      "n": 2570,
+      "taxa_verdadeira": 0.05914396887159533,
+      "taxa_publicada": 0.058484455117015215,
+      "erro_absoluto": 0.0006595137545801141,
+      "bits_perdidos": 3.230163074993132,
+      "H_bits": 4.280934429913188
+     },
+     {
+      "cor": "Other",
+      "n": 97,
+      "taxa_verdadeira": 0.010309278350515464,
+      "taxa_publicada": 0.01893095156138692,
+      "erro_absoluto": 0.008621673210871457,
+      "bits_perdidos": 1.7561621918134918,
+      "H_bits": 1.8789182912162121
+     },
+     {
+      "cor": "White",
+      "n": 26214,
+      "taxa_verdadeira": 0.025635156786449988,
+      "taxa_publicada": 0.02562013688078419,
+      "erro_absoluto": 1.5019905665797362e-05,
+      "bits_perdidos": 3.014201755175722,
+      "H_bits": 3.695962861416171
+     }
+    ]
+   },
+   {
+    "publicacao": 2010,
+    "coortes": [
+     2007,
+     2008,
+     2009,
+     2010
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 841,
+      "taxa_verdadeira": 0.016646848989298454,
+      "taxa_publicada": 0.01747487294290873,
+      "erro_absoluto": 0.0008280239536102747,
+      "bits_perdidos": 2.869917236597588,
+      "H_bits": 3.3837034954730147
+     },
+     {
+      "cor": "Black",
+      "n": 4240,
+      "taxa_verdadeira": 0.04410377358490566,
+      "taxa_publicada": 0.04361035937700345,
+      "erro_absoluto": 0.0004934142079022069,
+      "bits_perdidos": 3.1499338180494307,
+      "H_bits": 4.078891783288278
+     },
+     {
+      "cor": "Hispanic",
+      "n": 3182,
+      "taxa_verdadeira": 0.05593966059082338,
+      "taxa_publicada": 0.05681228214008135,
+      "erro_absoluto": 0.0008726215492579695,
+      "bits_perdidos": 3.203708429616364,
+      "H_bits": 4.242904164739478
+     },
+     {
+      "cor": "Other",
+      "n": 102,
+      "taxa_verdadeira": 0.00980392156862745,
+      "taxa_publicada": 0.029525183325850406,
+      "erro_absoluto": 0.019721261757222955,
+      "bits_perdidos": 1.7556394422847876,
+      "H_bits": 1.879095485295072
+     },
+     {
+      "cor": "White",
+      "n": 22745,
+      "taxa_verdadeira": 0.022818201802593977,
+      "taxa_publicada": 0.022810017244957254,
+      "erro_absoluto": 8.184557636722878e-06,
+      "bits_perdidos": 2.969766451967981,
+      "H_bits": 3.6124379057834943
+     }
+    ]
+   },
+   {
+    "publicacao": 2011,
+    "coortes": [
+     2008,
+     2009,
+     2010,
+     2011
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 808,
+      "taxa_verdadeira": 0.011138613861386138,
+      "taxa_publicada": 0.010273393176489586,
+      "erro_absoluto": 0.0008652206848965525,
+      "bits_perdidos": 2.696779773621425,
+      "H_bits": 3.085803574203188
+     },
+     {
+      "cor": "Black",
+      "n": 4328,
+      "taxa_verdadeira": 0.04320702402957486,
+      "taxa_publicada": 0.043260039011152225,
+      "erro_absoluto": 5.301498157736506e-05,
+      "bits_perdidos": 3.161873755918645,
+      "H_bits": 4.064600177658829
+     },
+     {
+      "cor": "Hispanic",
+      "n": 3357,
+      "taxa_verdadeira": 0.05361930294906166,
+      "taxa_publicada": 0.053830921291198576,
+      "erro_absoluto": 0.00021161834213691277,
+      "bits_perdidos": 3.202034487732621,
+      "H_bits": 4.213872695240343
+     },
+     {
+      "cor": "Other",
+      "n": 99,
+      "taxa_verdadeira": 0.010101010101010102,
+      "taxa_publicada": -0.006096610371277277,
+      "erro_absoluto": 0.01619762047228738,
+      "bits_perdidos": 1.760417692665481,
+      "H_bits": 1.878991343601726
+     },
+     {
+      "cor": "White",
+      "n": 21196,
+      "taxa_verdadeira": 0.02453293074164937,
+      "taxa_publicada": 0.024698587747277883,
+      "erro_absoluto": 0.00016565700562851463,
+      "bits_perdidos": 2.99574416154388,
+      "H_bits": 3.6644839363381307
+     }
+    ]
+   },
+   {
+    "publicacao": 2012,
+    "coortes": [
+     2009,
+     2010,
+     2011,
+     2012
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 820,
+      "taxa_verdadeira": 0.004878048780487805,
+      "taxa_publicada": 0.006975429159324931,
+      "erro_absoluto": 0.002097380378837126,
+      "bits_perdidos": 2.2198825239712043,
+      "H_bits": 2.436892236573782
+     },
+     {
+      "cor": "Black",
+      "n": 4686,
+      "taxa_verdadeira": 0.04353393085787452,
+      "taxa_publicada": 0.042543457600708066,
+      "erro_absoluto": 0.0009904732571664535,
+      "bits_perdidos": 3.158090484342431,
+      "H_bits": 4.069846268282431
+     },
+     {
+      "cor": "Hispanic",
+      "n": 3857,
+      "taxa_verdadeira": 0.054187192118226604,
+      "taxa_publicada": 0.05276769422326789,
+      "erro_absoluto": 0.001419497894958717,
+      "bits_perdidos": 3.1950753188196055,
+      "H_bits": 4.2211008115884585
+     },
+     {
+      "cor": "Other",
+      "n": 130,
+      "taxa_verdadeira": 0.007692307692307693,
+      "taxa_publicada": 0.013335046943570732,
+      "erro_absoluto": 0.005642739251263039,
+      "bits_perdidos": 1.7552145952872944,
+      "H_bits": 1.8798334825295469
+     },
+     {
+      "cor": "White",
+      "n": 22604,
+      "taxa_verdadeira": 0.02521677579189524,
+      "taxa_publicada": 0.025237149675803237,
+      "erro_absoluto": 2.037388390799602e-05,
+      "bits_perdidos": 3.0087177812368147,
+      "H_bits": 3.6841843025329504
+     }
+    ]
+   },
+   {
+    "publicacao": 2013,
+    "coortes": [
+     2010,
+     2011,
+     2012,
+     2013
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 769,
+      "taxa_verdadeira": 0.011703511053315995,
+      "taxa_publicada": 0.011995090204055276,
+      "erro_absoluto": 0.0002915791507392806,
+      "bits_perdidos": 2.7154602403825754,
+      "H_bits": 3.1229694037881943
+     },
+     {
+      "cor": "Black",
+      "n": 4744,
+      "taxa_verdadeira": 0.041526138279932547,
+      "taxa_publicada": 0.04111807010813888,
+      "erro_absoluto": 0.0004080681717936671,
+      "bits_perdidos": 3.148028058499449,
+      "H_bits": 4.036944186212037
+     },
+     {
+      "cor": "Hispanic",
+      "n": 4096,
+      "taxa_verdadeira": 0.0517578125,
+      "taxa_publicada": 0.05212165695454003,
+      "erro_absoluto": 0.00036384445454003267,
+      "bits_perdidos": 3.1978610385442137,
+      "H_bits": 4.18959128684499
+     },
+     {
+      "cor": "Other",
+      "n": 114,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": -0.03405927590540274,
+      "erro_absoluto": 0.03405927590540274,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 22592,
+      "taxa_verdadeira": 0.02164483002832861,
+      "taxa_publicada": 0.021616988467354728,
+      "erro_absoluto": 2.78415609738826e-05,
+      "bits_perdidos": 2.9578908688245216,
+      "H_bits": 3.5744016029610575
+     }
+    ]
+   },
+   {
+    "publicacao": 2014,
+    "coortes": [
+     2011,
+     2012,
+     2013,
+     2014
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 847,
+      "taxa_verdadeira": 0.009445100354191263,
+      "taxa_publicada": 0.009104843869432442,
+      "erro_absoluto": 0.0003402564847588205,
+      "bits_perdidos": 2.6067141935917304,
+      "H_bits": 2.9606893116292587
+     },
+     {
+      "cor": "Black",
+      "n": 5101,
+      "taxa_verdadeira": 0.03861987845520486,
+      "taxa_publicada": 0.03834724516830311,
+      "erro_absoluto": 0.00027263328690175365,
+      "bits_perdidos": 3.1318337456275858,
+      "H_bits": 3.9862090180567193
+     },
+     {
+      "cor": "Hispanic",
+      "n": 4608,
+      "taxa_verdadeira": 0.049262152777777776,
+      "taxa_publicada": 0.048450511844181456,
+      "erro_absoluto": 0.0008116409335963207,
+      "bits_perdidos": 3.209990046913735,
+      "H_bits": 4.155530136076021
+     },
+     {
+      "cor": "Other",
+      "n": 97,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.016639813898838177,
+      "erro_absoluto": 0.016639813898838177,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 23545,
+      "taxa_verdadeira": 0.01936716925037163,
+      "taxa_publicada": 0.019435716696456058,
+      "erro_absoluto": 6.854744608442848e-05,
+      "bits_perdidos": 2.9189949921522134,
+      "H_bits": 3.493962981583208
+     }
+    ]
+   },
+   {
+    "publicacao": 2015,
+    "coortes": [
+     2012,
+     2013,
+     2014,
+     2015
+    ],
+    "celulas": [
+     {
+      "cor": "Asian",
+      "n": 843,
+      "taxa_verdadeira": 0.010676156583629894,
+      "taxa_publicada": 0.016483725847984135,
+      "erro_absoluto": 0.005807569264354242,
+      "bits_perdidos": 2.670124737523509,
+      "H_bits": 3.0538181179869692
+     },
+     {
+      "cor": "Black",
+      "n": 5355,
+      "taxa_verdadeira": 0.036041083099906626,
+      "taxa_publicada": 0.03602854974399356,
+      "erro_absoluto": 1.253335591306498e-05,
+      "bits_perdidos": 3.110135244891389,
+      "H_bits": 3.9376931203831043
+     },
+     {
+      "cor": "Hispanic",
+      "n": 5187,
+      "taxa_verdadeira": 0.04742625795257374,
+      "taxa_publicada": 0.047573303722185246,
+      "erro_absoluto": 0.0001470457696115049,
+      "bits_perdidos": 3.1781382130265636,
+      "H_bits": 4.129276400015348
+     },
+     {
+      "cor": "Other",
+      "n": 82,
+      "taxa_verdadeira": 0.0,
+      "taxa_publicada": 0.025181991476442327,
+      "erro_absoluto": 0.025181991476442327,
+      "bits_perdidos": -0.0,
+      "H_bits": -0.0
+     },
+     {
+      "cor": "White",
+      "n": 23380,
+      "taxa_verdadeira": 0.0169803250641574,
+      "taxa_publicada": 0.01698608304842823,
+      "erro_absoluto": 5.757984270830102e-06,
+      "bits_perdidos": 2.881451519803645,
+      "H_bits": 3.398204911930905
+     }
+    ]
+   }
+  ],
+  "recusas_do_disjuntor_de_privacidade": [
+   {
+    "publicacao": 2009,
+    "coortes_recusadas": [
+     2005
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2010,
+    "coortes_recusadas": [
+     2005,
+     2006
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2011,
+    "coortes_recusadas": [
+     2005,
+     2006,
+     2007
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2012,
+    "coortes_recusadas": [
+     2005,
+     2006,
+     2007,
+     2008
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2013,
+    "coortes_recusadas": [
+     2005,
+     2006,
+     2007,
+     2008,
+     2009
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2014,
+    "coortes_recusadas": [
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   },
+   {
+    "publicacao": 2015,
+    "coortes_recusadas": [
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011
+    ],
+    "motivo": "orçamento ε = 2.0 por pessoa esgotado"
+   }
+  ]
+ },
+ "K": 1,
+ "contagens": {
+  "emitidas": 83632,
+  "escopo": 22,
+  "disjuntor": 6508,
+  "reajustes": 12,
+  "reajustes_por_deriva": 1,
+  "rotulo_ja_conhecido": 0,
+  "estado_do_futuro": 0
+ },
+ "saida_h3d": true
+}

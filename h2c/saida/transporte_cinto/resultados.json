@@ -1,0 +1,63 @@
+{
+ "dominio": "transporte_cinto",
+ "area": "Transporte (segurança viária)",
+ "titulo": "Uso do cinto de segurança e mortalidade no trânsito sob leis de fiscalização (50 estados + DC, 1983–1997)",
+ "alegacao": "\"O cinto salva o mesmo tanto por ponto de uso, seja qual for a lei que levou as pessoas a usá-lo: a fiscalização primária só vale pelo uso que gera.\"",
+ "ingestao": {
+  "arquivos": 3,
+  "bytes_tabela": 25781,
+  "linhas": 556,
+  "ambientes": [
+   "no",
+   "primary",
+   "secondary"
+  ]
+ },
+ "K": 2,
+ "priori": {
+  "media": -0.15666666670878374,
+  "dp": 0.13343419964325326,
+  "erro_max_quartis": 0.006666666708783742,
+  "q05_q95_implicados": [
+   -0.3761463939513558,
+   0.06281306053378821
+  ],
+  "razao_largura_90_elicitada_sobre_implicada": 1.139057365984862
+ },
+ "filtro1": {
+  "evpi_priori": 0.29751584302588363,
+  "custo_pesquisa": 0.05,
+  "acao_sem_pesquisa": "adotar",
+  "p_adotar_compensa_priori": 0.66525,
+  "passa": true
+ },
+ "governanca": {
+  "tem_titulares": false,
+  "quase_ids": [],
+  "k_anonimato_bruto": null,
+  "dados": "reais (AER_USSeatBelts.csv)",
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  }
+ },
+ "filtro2": {
+  "porta_dos_fundos": {
+   "valido": true,
+   "descendentes_no_ajuste": [],
+   "d_separa_sem_arestas_de_x": true
+  },
+  "n_linhas": 475,
+  "n_unidades": 48,
+  "ep_chave_por_unidade": 0.14022836425198174,
+  "ep_chave_ingenuo": 0.05660952248420103,
+  "efeito_de_desenho": 6.136104583596089,
+  "dp_priori": 0.13343419964325326,
+  "informativo": false,
+  "alerta_unidade": null,
+  "beta_chave_mv": -0.08998120604882949,
+  "passa": false
+ },
+ "status": "podado no F2: dados na unidade independente não informam mais que a priori",
+ "segundos": 0.4
+}

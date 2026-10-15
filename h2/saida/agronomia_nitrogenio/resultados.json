@@ -1,0 +1,216 @@
+{
+ "dominio": "agronomia_nitrogenio",
+ "area": "Agronomia",
+ "titulo": "Resposta do milho ao nitrogênio em Las Rosas, Córdoba (1999 e 2001)",
+ "alegacao": "\"Na Pampa argentina o milho responde ao nitrogênio em todo o lote: aplicar a dose cheia compensa em qualquer posição do relevo.\"",
+ "ingestao": {
+  "arquivos": 4,
+  "bytes_tabela": 38986,
+  "linhas": 3443,
+  "ambientes": [
+   "E",
+   "HT",
+   "LO",
+   "W"
+  ]
+ },
+ "K": 1,
+ "priori": {
+  "media": 0.09333333334803785,
+  "dp": 0.0667170998594149,
+  "erro_max_quartis": 0.0033333333480378563,
+  "q05_q95_implicados": [
+   -0.016406530335404346,
+   0.20307319703148002
+  ],
+  "razao_largura_90_elicitada_sobre_implicada": 1.0023704814989403
+ },
+ "filtro1": {
+  "evpi_priori": 0.0909353412002083,
+  "custo_pesquisa": 0.02,
+  "acao_sem_pesquisa": "adotar",
+  "p_adotar_compensa_priori": 0.745,
+  "passa": true
+ },
+ "governanca": {
+  "tem_titulares": false,
+  "quase_ids": [],
+  "k_anonimato_bruto": null,
+  "dados": "reais (agridat_lasrosas.corn.csv)",
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  }
+ },
+ "filtro2": {
+  "porta_dos_fundos": {
+   "valido": true,
+   "descendentes_no_ajuste": [],
+   "d_separa_sem_arestas_de_x": true
+  },
+  "n_linhas": 2558,
+  "n_unidades": 36,
+  "ep_chave_por_unidade": 0.008302393114967112,
+  "ep_chave_ingenuo": 0.007029454628075123,
+  "efeito_de_desenho": 1.3949650353142968,
+  "dp_priori": 0.0667170998594149,
+  "informativo": true,
+  "alerta_unidade": null,
+  "beta_chave_mv": 0.059086450834493764,
+  "passa": true
+ },
+ "filtro3": {
+  "z_obs": 7.116797532506123,
+  "nulo_q95": 2.3846426432844297,
+  "p_permutacao": 0.004975124378109453,
+  "permutacoes": 200,
+  "nivel_da_permutacao": "entre unidades",
+  "passa": true
+ },
+ "filtro4": {
+  "icp": {
+   "alpha": 0.05,
+   "candidatos": [
+    "ano_2001",
+    "brilho_solo",
+    "nitrogenio",
+    "nitrogenio_quad"
+   ],
+   "subconjuntos_testados": 16,
+   "aceitos": [],
+   "S_hat": [],
+   "modelo_rejeitado": true,
+   "situacao": "rejeitado: nenhum conjunto invariante",
+   "ambientes": 3,
+   "intervalos": {},
+   "p_por_subconjunto": {
+    "∅": 3.9070683382911724e-286,
+    "ano_2001": 0.0,
+    "brilho_solo": 5.181012026609499e-206,
+    "nitrogenio": 3.3718551296855874e-290,
+    "nitrogenio_quad": 1.799309902917575e-285,
+    "ano_2001+brilho_solo": 0.0,
+    "ano_2001+nitrogenio": 0.0,
+    "ano_2001+nitrogenio_quad": 0.0,
+    "brilho_solo+nitrogenio": 1.9244492388396333e-211,
+    "brilho_solo+nitrogenio_quad": 4.253536963051927e-206,
+    "nitrogenio+nitrogenio_quad": 8.222657687042982e-290,
+    "ano_2001+brilho_solo+nitrogenio": 0.0,
+    "ano_2001+brilho_solo+nitrogenio_quad": 0.0,
+    "ano_2001+nitrogenio+nitrogenio_quad": 0.0,
+    "brilho_solo+nitrogenio+nitrogenio_quad": 1.1075851185598725e-211,
+    "ano_2001+brilho_solo+nitrogenio+nitrogenio_quad": 0.0
+   }
+  },
+  "posterior": {
+   "beta_chave_media": 0.059327646240751604,
+   "beta_chave_ic90": [
+    0.04585921872783129,
+    0.07352360166373487
+   ],
+   "theta_media": 0.059327646240751604,
+   "theta_ic90": [
+    0.04585921872783129,
+    0.07352360166373487
+   ],
+   "p_beta_positivo": 1.0,
+   "rhat_max": 1.003173238516995,
+   "ess_min": 1708.863601672738,
+   "aceitacao": 0.42837499999999995,
+   "sbc": {
+    "n_sim": 60,
+    "L": 19,
+    "caixas": [
+     14,
+     11,
+     7,
+     16,
+     12
+    ],
+    "p_uniformidade": 0.42903136322951574
+   },
+   "parametros": [
+    "intercepto",
+    "nitrogenio",
+    "brilho_solo",
+    "ano_2001",
+    "log_sigma"
+   ],
+   "dp_posterior_sobre_dp_priori": 0.12588365088432452,
+   "peso_verossimilhanca": 0.7168638458201154
+  },
+  "preregistro_hash": "70b462cc0c76ad9f03754c253de6c8d9c2aa31cb57bbd8bb3ba9fe4289bc934c",
+  "fora_do_ambiente": {
+   "ambientes_cofre": [
+    "LO"
+   ],
+   "n_cofre": 885,
+   "perda": {
+    "modelo_ajustado": 292.7395518256129,
+    "icp_invariante": 653.8453787763407,
+    "todos_os_candidatos": 293.8257563613151,
+    "climatologia": 653.84537877634
+   },
+   "habilidade": {
+    "modelo_ajustado": 0.5522801547156764,
+    "icp_invariante": -1.1102230246251565e-15,
+    "todos_os_candidatos": 0.5506188987506423
+   },
+   "cobertura_conforme": 0.9898305084745763,
+   "deriva_y": {
+    "ks": 0.5321101849520502,
+    "p_ks": 1.0608369405028181e-171,
+    "wasserstein": 20.351397021861178
+   },
+   "placar_diario": {
+    "modelo_ajustado": {
+     "n": 885,
+     "brier": 0.06039103895004409,
+     "brier_clima": 0.2503787148210817,
+     "ln_capital": 391.2854675009951,
+     "habilidade": 0.7588012264013777,
+     "peso": 1.0
+    },
+    "icp_invariante": {
+     "n": 885,
+     "brier": 0.16833024533221455,
+     "brier_clima": 0.2503787148210817,
+     "ln_capital": 146.84868497019414,
+     "habilidade": 0.3276974624120833,
+     "peso": 1.0
+    },
+    "todos_os_candidatos": {
+     "n": 885,
+     "brier": 0.060876321196166816,
+     "brier_clima": 0.2503787148210817,
+     "ln_capital": 390.5100419118943,
+     "habilidade": 0.7568630335063886,
+     "peso": 1.0
+    }
+   },
+   "invariante_vence_todos_fora_do_ambiente": false
+  },
+  "portao_m15": {
+   "rhat_ok": true,
+   "ess_ok": true,
+   "sbc_ok": true,
+   "conforme_ok": true,
+   "modelo_vence_climatologia": true,
+   "trilha_integra": true
+  },
+  "aprovado": true
+ },
+ "decisao": {
+  "acao": "adotar",
+  "p_adotar_compensa": 0.863,
+  "evpi_posterior": 0.0050789257832947465,
+  "frequencias_naturais": "Em 86 de cada 100 mundos compatíveis com os dados e a priori, adotar 'aplicar a dose cheia de nitrogênio (~125 kg/ha) em todo o lote, inclusive nas baixadas' compensa o custo.",
+  "circuit_breaker": "suspender a recomendação se a deriva KS do desfecho num ambiente novo tiver p < 0,01 ou se o ICP deixar de aceitar o conjunto invariante",
+  "escopo": {
+   "vale_para": "milho de sequeiro em Molissolos da Pampa argentina, doses de 0 a ~130 kg N/ha, safras parecidas com 1999 e 2001",
+   "nao_vale_para": "doses acima de 130 kg, outros cultivos, solos com outro regime hídrico, safras de seca extrema, outras fontes de N"
+  }
+ },
+ "status": "aprovado no F4: decisão emitida",
+ "segundos": 4.3
+}

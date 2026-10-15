@@ -1,0 +1,2050 @@
+{
+ "dominio": "credito_hmda",
+ "area": "Crédito",
+ "titulo": "Raça e negação de financiamento imobiliário em Boston (HMDA, 1990)",
+ "alegacao": "\"Mesmo controlando por renda, histórico de crédito e garantia, bancos de Boston negam mais financiamentos a requerentes negros.\"",
+ "ingestao": {
+  "arquivos": 4,
+  "bytes_tabela": 37152,
+  "linhas": 2380,
+  "ambientes": [
+   "alto",
+   "baixo",
+   "medio",
+   "muito_alto"
+  ]
+ },
+ "K": 1,
+ "priori": {
+  "media": 0.470654035972044,
+  "dp": 0.25333913051159035,
+  "erro_max_quartis": 0.0006504067263083946,
+  "q05_q95_implicados": [
+   0.05394824830132211,
+   0.8873598236427658
+  ],
+  "razao_largura_90_elicitada_sobre_implicada": 1.1465060881065505
+ },
+ "filtro1": {
+  "evpi_priori": 0.3267571483204683,
+  "custo_pesquisa": 0.1,
+  "acao_sem_pesquisa": "adotar",
+  "p_adotar_compensa_priori": 0.6406,
+  "passa": true
+ },
+ "governanca": {
+  "tem_titulares": true,
+  "quase_ids": [
+   "afro",
+   "solteiro",
+   "autonomo",
+   "condominio"
+  ],
+  "k_anonimato_bruto": 4,
+  "dados": "reais (AER_HMDA.csv)",
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  },
+  "justica": {
+   "grupo": "afro",
+   "taxa_base_por_grupo": {
+    "0.0": [
+     0.08465608465608465,
+     1512
+    ],
+    "1.0": [
+     0.2816326530612245,
+     245
+    ]
+   }
+  }
+ },
+ "filtro2": {
+  "porta_dos_fundos": {
+   "valido": true,
+   "descendentes_no_ajuste": [],
+   "d_separa_sem_arestas_de_x": true
+  },
+  "n_linhas": 1757,
+  "n_unidades": 1757,
+  "ep_chave_por_unidade": 0.20767817353562565,
+  "ep_chave_ingenuo": 0.20343658035938317,
+  "efeito_de_desenho": 1.0421341251116396,
+  "dp_priori": 0.25333913051159035,
+  "informativo": true,
+  "alerta_unidade": "uma linha por unidade: nenhum agrupamento declarado; o EP pode ser otimista se houver dependência não modelada",
+  "beta_chave_mv": 0.7930126609407078,
+  "passa": true
+ },
+ "filtro3": {
+  "z_obs": 3.8184689678266666,
+  "nulo_q95": 1.954427704568321,
+  "p_permutacao": 0.004975124378109453,
+  "permutacoes": 200,
+  "nivel_da_permutacao": "entre unidades",
+  "passa": true
+ },
+ "filtro4": {
+  "icp": {
+   "alpha": 0.05,
+   "candidatos": [
+    "afro",
+    "autonomo",
+    "historico_consumo",
+    "historico_hipoteca",
+    "ltv_alto",
+    "razao_pagamento",
+    "registro_publico",
+    "seguro_negado"
+   ],
+   "subconjuntos_testados": 256,
+   "aceitos": [
+    [],
+    [
+     "afro"
+    ],
+    [
+     "autonomo"
+    ],
+    [
+     "historico_consumo"
+    ],
+    [
+     "historico_hipoteca"
+    ],
+    [
+     "ltv_alto"
+    ],
+    [
+     "razao_pagamento"
+    ],
+    [
+     "registro_publico"
+    ],
+    [
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo"
+    ],
+    [
+     "afro",
+     "historico_consumo"
+    ],
+    [
+     "afro",
+     "historico_hipoteca"
+    ],
+    [
+     "afro",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca"
+    ],
+    [
+     "autonomo",
+     "ltv_alto"
+    ],
+    [
+     "autonomo",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto"
+    ],
+    [
+     "historico_consumo",
+     "razao_pagamento"
+    ],
+    [
+     "historico_consumo",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ],
+    [
+     "afro",
+     "autonomo",
+     "historico_consumo",
+     "historico_hipoteca",
+     "ltv_alto",
+     "razao_pagamento",
+     "registro_publico",
+     "seguro_negado"
+    ]
+   ],
+   "S_hat": [],
+   "modelo_rejeitado": false,
+   "situacao": "vazio aceito: os ambientes não mexem o bastante em Y para separar conjuntos (pouco poder)",
+   "ambientes": 3,
+   "intervalos": {
+    "afro": [
+     0.0,
+     1.8219100712473602
+    ],
+    "autonomo": [
+     -0.05061427343740428,
+     0.3831698045336574
+    ],
+    "historico_consumo": [
+     0.0,
+     0.8888649961105398
+    ],
+    "historico_hipoteca": [
+     -0.04140176941039567,
+     0.4784122671707286
+    ],
+    "ltv_alto": [
+     0.0,
+     0.4404075147719292
+    ],
+    "razao_pagamento": [
+     0.0,
+     0.8247722170810764
+    ],
+    "registro_publico": [
+     0.0,
+     0.6503170461441261
+    ],
+    "seguro_negado": [
+     0.0,
+     0.7834198710891058
+    ]
+   },
+   "p_por_subconjunto": {
+    "∅": 0.2986700597441035,
+    "afro": 0.16065638197905813,
+    "autonomo": 0.08901662306447387,
+    "historico_consumo": 0.459762835579147,
+    "historico_hipoteca": 0.4968802694947565,
+    "ltv_alto": 0.5870918990881281,
+    "razao_pagamento": 0.18856518869089053,
+    "registro_publico": 0.4741898120761181,
+    "seguro_negado": 0.44934639830073486,
+    "afro+autonomo": 0.06619902515955083,
+    "afro+historico_consumo": 0.3274232921867517,
+    "afro+historico_hipoteca": 0.23878046049861745,
+    "afro+ltv_alto": 0.34512675093999473,
+    "afro+razao_pagamento": 0.20288373094340434,
+    "afro+registro_publico": 0.38529719872068713,
+    "afro+seguro_negado": 0.24433823896160392,
+    "autonomo+historico_consumo": 0.232609573841207,
+    "autonomo+historico_hipoteca": 0.11834224430854791,
+    "autonomo+ltv_alto": 0.22928289126519058,
+    "autonomo+razao_pagamento": 0.04607953571480452,
+    "autonomo+registro_publico": 0.18567252381179186,
+    "autonomo+seguro_negado": 0.23246883137466062,
+    "historico_consumo+historico_hipoteca": 0.6085064376347358,
+    "historico_consumo+ltv_alto": 0.5697102526477045,
+    "historico_consumo+razao_pagamento": 0.3428975126141482,
+    "historico_consumo+registro_publico": 0.6101602452731891,
+    "historico_consumo+seguro_negado": 0.5659287426661586,
+    "historico_hipoteca+ltv_alto": 0.7509408186248357,
+    "historico_hipoteca+razao_pagamento": 0.25478660057991454,
+    "historico_hipoteca+registro_publico": 0.5014662899091531,
+    "historico_hipoteca+seguro_negado": 0.653301636296558,
+    "ltv_alto+razao_pagamento": 0.39639970546084613,
+    "ltv_alto+registro_publico": 0.5694011516332926,
+    "ltv_alto+seguro_negado": 0.6817782215762618,
+    "razao_pagamento+registro_publico": 0.5108763978856459,
+    "razao_pagamento+seguro_negado": 0.2935445851334478,
+    "registro_publico+seguro_negado": 0.6016524991791261,
+    "afro+autonomo+historico_consumo": 0.2040299839693755,
+    "afro+autonomo+historico_hipoteca": 0.07714552109569646,
+    "afro+autonomo+ltv_alto": 0.16111617820893442,
+    "afro+autonomo+razao_pagamento": 0.07702536925920805,
+    "afro+autonomo+registro_publico": 0.1950115048817574,
+    "afro+autonomo+seguro_negado": 0.15748395746424282,
+    "afro+historico_consumo+historico_hipoteca": 0.40218011587651464,
+    "afro+historico_consumo+ltv_alto": 0.49625154059516874,
+    "afro+historico_consumo+razao_pagamento": 0.2830106342952482,
+    "afro+historico_consumo+registro_publico": 0.4769185494386661,
+    "afro+historico_consumo+seguro_negado": 0.4329533340565431,
+    "afro+historico_hipoteca+ltv_alto": 0.44602694729651104,
+    "afro+historico_hipoteca+razao_pagamento": 0.28778452755070566,
+    "afro+historico_hipoteca+registro_publico": 0.39156110681305634,
+    "afro+historico_hipoteca+seguro_negado": 0.37632630220033986,
+    "afro+ltv_alto+razao_pagamento": 0.3866057519806589,
+    "afro+ltv_alto+registro_publico": 0.5427401894443706,
+    "afro+ltv_alto+seguro_negado": 0.4484718646314584,
+    "afro+razao_pagamento+registro_publico": 0.5083909677968901,
+    "afro+razao_pagamento+seguro_negado": 0.2812467323805659,
+    "afro+registro_publico+seguro_negado": 0.4956653147218758,
+    "autonomo+historico_consumo+historico_hipoteca": 0.304364977462098,
+    "autonomo+historico_consumo+ltv_alto": 0.3466606453923607,
+    "autonomo+historico_consumo+razao_pagamento": 0.1277509448600852,
+    "autonomo+historico_consumo+registro_publico": 0.3744474115985482,
+    "autonomo+historico_consumo+seguro_negado": 0.44332077560300154,
+    "autonomo+historico_hipoteca+ltv_alto": 0.2776467704782079,
+    "autonomo+historico_hipoteca+razao_pagamento": 0.05396173955352762,
+    "autonomo+historico_hipoteca+registro_publico": 0.18735340090775626,
+    "autonomo+historico_hipoteca+seguro_negado": 0.3008026927541568,
+    "autonomo+ltv_alto+razao_pagamento": 0.12893060142755666,
+    "autonomo+ltv_alto+registro_publico": 0.28658538819356016,
+    "autonomo+ltv_alto+seguro_negado": 0.43824297009362734,
+    "autonomo+razao_pagamento+registro_publico": 0.1400875431252125,
+    "autonomo+razao_pagamento+seguro_negado": 0.13420886466095178,
+    "autonomo+registro_publico+seguro_negado": 0.3951562267821461,
+    "historico_consumo+historico_hipoteca+ltv_alto": 0.7240166142778013,
+    "historico_consumo+historico_hipoteca+razao_pagamento": 0.4774667496587979,
+    "historico_consumo+historico_hipoteca+registro_publico": 0.6529003272413278,
+    "historico_consumo+historico_hipoteca+seguro_negado": 0.7315358685514304,
+    "historico_consumo+ltv_alto+razao_pagamento": 0.48379857411768845,
+    "historico_consumo+ltv_alto+registro_publico": 0.6515826265153858,
+    "historico_consumo+ltv_alto+seguro_negado": 0.6867942198093003,
+    "historico_consumo+razao_pagamento+registro_publico": 0.6362166385822029,
+    "historico_consumo+razao_pagamento+seguro_negado": 0.4662134349132736,
+    "historico_consumo+registro_publico+seguro_negado": 0.704415627252837,
+    "historico_hipoteca+ltv_alto+razao_pagamento": 0.46926974782465625,
+    "historico_hipoteca+ltv_alto+registro_publico": 0.6468459553387981,
+    "historico_hipoteca+ltv_alto+seguro_negado": 0.8549748310709072,
+    "historico_hipoteca+razao_pagamento+registro_publico": 0.5060270924682584,
+    "historico_hipoteca+razao_pagamento+seguro_negado": 0.36068370469152583,
+    "historico_hipoteca+registro_publico+seguro_negado": 0.6649872003645159,
+    "ltv_alto+razao_pagamento+registro_publico": 0.657218289749014,
+    "ltv_alto+razao_pagamento+seguro_negado": 0.47329815517346885,
+    "ltv_alto+registro_publico+seguro_negado": 0.6986677300427815,
+    "razao_pagamento+registro_publico+seguro_negado": 0.6459122980853463,
+    "afro+autonomo+historico_consumo+historico_hipoteca": 0.23373775805693423,
+    "afro+autonomo+historico_consumo+ltv_alto": 0.34288111191147924,
+    "afro+autonomo+historico_consumo+razao_pagamento": 0.1448510081656067,
+    "afro+autonomo+historico_consumo+registro_publico": 0.33870852667416945,
+    "afro+autonomo+historico_consumo+seguro_negado": 0.3803255144548498,
+    "afro+autonomo+historico_hipoteca+ltv_alto": 0.18031994370691226,
+    "afro+autonomo+historico_hipoteca+razao_pagamento": 0.09659800434662999,
+    "afro+autonomo+historico_hipoteca+registro_publico": 0.17993762100530744,
+    "afro+autonomo+historico_hipoteca+seguro_negado": 0.2063158410848132,
+    "afro+autonomo+ltv_alto+razao_pagamento": 0.17290318998081902,
+    "afro+autonomo+ltv_alto+registro_publico": 0.3252392033427993,
+    "afro+autonomo+ltv_alto+seguro_negado": 0.31515384389802054,
+    "afro+autonomo+razao_pagamento+registro_publico": 0.21291507950647984,
+    "afro+autonomo+razao_pagamento+seguro_negado": 0.17465924375064976,
+    "afro+autonomo+registro_publico+seguro_negado": 0.37730311487509555,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto": 0.5767391009183321,
+    "afro+historico_consumo+historico_hipoteca+razao_pagamento": 0.39035074666150116,
+    "afro+historico_consumo+historico_hipoteca+registro_publico": 0.4958970872774333,
+    "afro+historico_consumo+historico_hipoteca+seguro_negado": 0.5585619771444541,
+    "afro+historico_consumo+ltv_alto+razao_pagamento": 0.47904047820679085,
+    "afro+historico_consumo+ltv_alto+registro_publico": 0.6089691369941734,
+    "afro+historico_consumo+ltv_alto+seguro_negado": 0.6455807296894049,
+    "afro+historico_consumo+razao_pagamento+registro_publico": 0.5334696441262322,
+    "afro+historico_consumo+razao_pagamento+seguro_negado": 0.38039184736675935,
+    "afro+historico_consumo+registro_publico+seguro_negado": 0.5951115804996864,
+    "afro+historico_hipoteca+ltv_alto+razao_pagamento": 0.4894540636688608,
+    "afro+historico_hipoteca+ltv_alto+registro_publico": 0.5731496603875754,
+    "afro+historico_hipoteca+ltv_alto+seguro_negado": 0.6112512075473122,
+    "afro+historico_hipoteca+razao_pagamento+registro_publico": 0.5444787089886299,
+    "afro+historico_hipoteca+razao_pagamento+seguro_negado": 0.3857651242341622,
+    "afro+historico_hipoteca+registro_publico+seguro_negado": 0.5640081902520203,
+    "afro+ltv_alto+razao_pagamento+registro_publico": 0.6822359321699806,
+    "afro+ltv_alto+razao_pagamento+seguro_negado": 0.45527770803353584,
+    "afro+ltv_alto+registro_publico+seguro_negado": 0.6622622229662345,
+    "afro+razao_pagamento+registro_publico+seguro_negado": 0.6174298340067939,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto": 0.4467669454725576,
+    "autonomo+historico_consumo+historico_hipoteca+razao_pagamento": 0.18984153768311043,
+    "autonomo+historico_consumo+historico_hipoteca+registro_publico": 0.3975291920677045,
+    "autonomo+historico_consumo+historico_hipoteca+seguro_negado": 0.5653863622065953,
+    "autonomo+historico_consumo+ltv_alto+razao_pagamento": 0.22762702304891672,
+    "autonomo+historico_consumo+ltv_alto+registro_publico": 0.45745636657327016,
+    "autonomo+historico_consumo+ltv_alto+seguro_negado": 0.5834650341609894,
+    "autonomo+historico_consumo+razao_pagamento+registro_publico": 0.2814515676268354,
+    "autonomo+historico_consumo+razao_pagamento+seguro_negado": 0.29374021932511163,
+    "autonomo+historico_consumo+registro_publico+seguro_negado": 0.6138342817373448,
+    "autonomo+historico_hipoteca+ltv_alto+razao_pagamento": 0.1403610132499342,
+    "autonomo+historico_hipoteca+ltv_alto+registro_publico": 0.31777601525608196,
+    "autonomo+historico_hipoteca+ltv_alto+seguro_negado": 0.5390572294441651,
+    "autonomo+historico_hipoteca+razao_pagamento+registro_publico": 0.13752744563683586,
+    "autonomo+historico_hipoteca+razao_pagamento+seguro_negado": 0.1480049417620771,
+    "autonomo+historico_hipoteca+registro_publico+seguro_negado": 0.42547264352076364,
+    "autonomo+ltv_alto+razao_pagamento+registro_publico": 0.2604264406964202,
+    "autonomo+ltv_alto+razao_pagamento+seguro_negado": 0.2674310645148758,
+    "autonomo+ltv_alto+registro_publico+seguro_negado": 0.5365430536180503,
+    "autonomo+razao_pagamento+registro_publico+seguro_negado": 0.33270310322319474,
+    "historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento": 0.6176757209963766,
+    "historico_consumo+historico_hipoteca+ltv_alto+registro_publico": 0.7412067800647442,
+    "historico_consumo+historico_hipoteca+ltv_alto+seguro_negado": 0.842871065192339,
+    "historico_consumo+historico_hipoteca+razao_pagamento+registro_publico": 0.6986919415302397,
+    "historico_consumo+historico_hipoteca+razao_pagamento+seguro_negado": 0.6100743271305737,
+    "historico_consumo+historico_hipoteca+registro_publico+seguro_negado": 0.776835575306732,
+    "historico_consumo+ltv_alto+razao_pagamento+registro_publico": 0.6940967217079964,
+    "historico_consumo+ltv_alto+razao_pagamento+seguro_negado": 0.5770838119743529,
+    "historico_consumo+ltv_alto+registro_publico+seguro_negado": 0.7626781902349268,
+    "historico_consumo+razao_pagamento+registro_publico+seguro_negado": 0.7468275705860027,
+    "historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.6648772310436952,
+    "historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.5568137259146516,
+    "historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.8040360389555168,
+    "historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.6539473222899277,
+    "ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.773301444104106,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto": 0.3864422682635672,
+    "afro+autonomo+historico_consumo+historico_hipoteca+razao_pagamento": 0.1999845520113463,
+    "afro+autonomo+historico_consumo+historico_hipoteca+registro_publico": 0.33345543662390165,
+    "afro+autonomo+historico_consumo+historico_hipoteca+seguro_negado": 0.46821881485677086,
+    "afro+autonomo+historico_consumo+ltv_alto+razao_pagamento": 0.27871349009030766,
+    "afro+autonomo+historico_consumo+ltv_alto+registro_publico": 0.4723012694913987,
+    "afro+autonomo+historico_consumo+ltv_alto+seguro_negado": 0.5850528475182641,
+    "afro+autonomo+historico_consumo+razao_pagamento+registro_publico": 0.29622751559063465,
+    "afro+autonomo+historico_consumo+razao_pagamento+seguro_negado": 0.2910129603550282,
+    "afro+autonomo+historico_consumo+registro_publico+seguro_negado": 0.5603262582930459,
+    "afro+autonomo+historico_hipoteca+ltv_alto+razao_pagamento": 0.20376522389812388,
+    "afro+autonomo+historico_hipoteca+ltv_alto+registro_publico": 0.32440576936469667,
+    "afro+autonomo+historico_hipoteca+ltv_alto+seguro_negado": 0.39567255360861514,
+    "afro+autonomo+historico_hipoteca+razao_pagamento+registro_publico": 0.21890248344098476,
+    "afro+autonomo+historico_hipoteca+razao_pagamento+seguro_negado": 0.21845663140814603,
+    "afro+autonomo+historico_hipoteca+registro_publico+seguro_negado": 0.40833561602945445,
+    "afro+autonomo+ltv_alto+razao_pagamento+registro_publico": 0.35945307395963083,
+    "afro+autonomo+ltv_alto+razao_pagamento+seguro_negado": 0.31504668203453456,
+    "afro+autonomo+ltv_alto+registro_publico+seguro_negado": 0.5550685281408969,
+    "afro+autonomo+razao_pagamento+registro_publico+seguro_negado": 0.40812232136089144,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento": 0.5908850140079367,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+registro_publico": 0.6507240852355025,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+seguro_negado": 0.7582913754234417,
+    "afro+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico": 0.6054352244956682,
+    "afro+historico_consumo+historico_hipoteca+razao_pagamento+seguro_negado": 0.5124032418018594,
+    "afro+historico_consumo+historico_hipoteca+registro_publico+seguro_negado": 0.6620225151879247,
+    "afro+historico_consumo+ltv_alto+razao_pagamento+registro_publico": 0.6782446260697599,
+    "afro+historico_consumo+ltv_alto+razao_pagamento+seguro_negado": 0.5740121716326805,
+    "afro+historico_consumo+ltv_alto+registro_publico+seguro_negado": 0.7481362219633283,
+    "afro+historico_consumo+razao_pagamento+registro_publico+seguro_negado": 0.6428466818045409,
+    "afro+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.7132239487075065,
+    "afro+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.5779752341164965,
+    "afro+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.7509654365502859,
+    "afro+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.6797154480285255,
+    "afro+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.776720112536514,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento": 0.3107765664423608,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+registro_publico": 0.5259194412632069,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+seguro_negado": 0.7210978988902734,
+    "autonomo+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico": 0.3311584013886983,
+    "autonomo+historico_consumo+historico_hipoteca+razao_pagamento+seguro_negado": 0.39858523935927637,
+    "autonomo+historico_consumo+historico_hipoteca+registro_publico+seguro_negado": 0.6727827763580061,
+    "autonomo+historico_consumo+ltv_alto+razao_pagamento+registro_publico": 0.3828494541934675,
+    "autonomo+historico_consumo+ltv_alto+razao_pagamento+seguro_negado": 0.4128559664730735,
+    "autonomo+historico_consumo+ltv_alto+registro_publico+seguro_negado": 0.7013797060872735,
+    "autonomo+historico_consumo+razao_pagamento+registro_publico+seguro_negado": 0.5264874225129734,
+    "autonomo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.2620817027357158,
+    "autonomo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.29252949733107225,
+    "autonomo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.6145707098255611,
+    "autonomo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.3334516092245782,
+    "autonomo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.5062490140063538,
+    "historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.7660144543695103,
+    "historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.7130244915804929,
+    "historico_consumo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.8626080642118783,
+    "historico_consumo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.8145999415315428,
+    "historico_consumo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.795148510948461,
+    "historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.7983979419720241,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento": 0.3530638258919556,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+registro_publico": 0.4937709251177461,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+seguro_negado": 0.677771610598586,
+    "afro+autonomo+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico": 0.33969489654841056,
+    "afro+autonomo+historico_consumo+historico_hipoteca+razao_pagamento+seguro_negado": 0.38827265137459643,
+    "afro+autonomo+historico_consumo+historico_hipoteca+registro_publico+seguro_negado": 0.6056128494951397,
+    "afro+autonomo+historico_consumo+ltv_alto+razao_pagamento+registro_publico": 0.436901020283337,
+    "afro+autonomo+historico_consumo+ltv_alto+razao_pagamento+seguro_negado": 0.4658533858834357,
+    "afro+autonomo+historico_consumo+ltv_alto+registro_publico+seguro_negado": 0.7190632640285952,
+    "afro+autonomo+historico_consumo+razao_pagamento+registro_publico+seguro_negado": 0.5080373165057029,
+    "afro+autonomo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.3700910520365203,
+    "afro+autonomo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.378168717916628,
+    "afro+autonomo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.6175277545687547,
+    "afro+autonomo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.4419172623746848,
+    "afro+autonomo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.5927970995423594,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.7431229207215475,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.6959716342844668,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.8181440630269627,
+    "afro+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.7314351870811124,
+    "afro+historico_consumo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.7789381848422359,
+    "afro+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.8296947246627882,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.4504656753340075,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.5268512130500407,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.79589671826422,
+    "autonomo+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.5997299765919285,
+    "autonomo+historico_consumo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.628902377637599,
+    "autonomo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.5230557168503086,
+    "historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.8650313475390441,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico": 0.4916088094468616,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+seguro_negado": 0.5692043214032843,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+registro_publico+seguro_negado": 0.7795742874256316,
+    "afro+autonomo+historico_consumo+historico_hipoteca+razao_pagamento+registro_publico+seguro_negado": 0.582530819786506,
+    "afro+autonomo+historico_consumo+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.6644440214707332,
+    "afro+autonomo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.6353867534547035,
+    "afro+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.8475555669370278,
+    "autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.7103634056370074,
+    "afro+autonomo+historico_consumo+historico_hipoteca+ltv_alto+razao_pagamento+registro_publico+seguro_negado": 0.7347815010456537
+   }
+  },
+  "posterior": {
+   "beta_chave_media": 0.6708743276286462,
+   "beta_chave_ic90": [
+    0.4035449089138086,
+    0.9356140220780466
+   ],
+   "theta_media": 0.06678646771296326,
+   "theta_ic90": [
+    0.04017345413286011,
+    0.09314167065862099
+   ],
+   "p_beta_positivo": 1.0,
+   "rhat_max": 1.009559994575951,
+   "ess_min": 999.9442019027722,
+   "aceitacao": 0.330125,
+   "sbc": {
+    "n_sim": 60,
+    "L": 19,
+    "caixas": [
+     13,
+     10,
+     8,
+     18,
+     11
+    ],
+    "p_uniformidade": 0.3048299344816387
+   },
+   "parametros": [
+    "intercepto",
+    "afro",
+    "razao_pagamento",
+    "razao_habitacao",
+    "ltv_medio",
+    "ltv_alto",
+    "historico_consumo",
+    "historico_hipoteca",
+    "registro_publico",
+    "autonomo",
+    "solteiro",
+    "condominio"
+   ],
+   "dp_posterior_sobre_dp_priori": 0.6408416237060791,
+   "peso_verossimilhanca": 0.9595693835406014
+  },
+  "preregistro_hash": "31d7234691feb475380c8c1dc88ddfe30c42f1e99f201322ad5f7796b2512c2e",
+  "fora_do_ambiente": {
+   "ambientes_cofre": [
+    "alto"
+   ],
+   "n_cofre": 623,
+   "perda": {
+    "modelo_ajustado": 0.10275445880896308,
+    "icp_invariante": 0.12214837972965731,
+    "todos_os_candidatos": 0.08763699900839238,
+    "climatologia": 0.12214837979826856
+   },
+   "habilidade": {
+    "modelo_ajustado": 0.15877346078052834,
+    "icp_invariante": 5.617041276551049e-10,
+    "todos_os_candidatos": 0.2825365415969716
+   },
+   "cobertura_conforme": 0.8731942215088283,
+   "deriva_y": {
+    "ks": 0.029129069596413815,
+    "p_ks": 0.8164632454814647,
+    "wasserstein": 0.029129069596413704
+   },
+   "placar_diario": {
+    "modelo_ajustado": {
+     "n": 623,
+     "brier": 0.10274797778646005,
+     "brier_clima": 0.12214837979826809,
+     "ln_capital": 38.683169585756886,
+     "habilidade": 0.1588265193844438,
+     "peso": 1.0
+    },
+    "icp_invariante": {
+     "n": 623,
+     "brier": 0.1221483797296583,
+     "brier_clima": 0.12214837979826809,
+     "ln_capital": 2.1468706912616128e-07,
+     "habilidade": 5.616922482687414e-10,
+     "peso": 1.0
+    },
+    "todos_os_candidatos": {
+     "n": 623,
+     "brier": 0.08762799390123012,
+     "brier_clima": 0.12214837979826809,
+     "ln_capital": 62.592103972160864,
+     "habilidade": 0.2826102642871684,
+     "peso": 1.0
+    }
+   },
+   "invariante_vence_todos_fora_do_ambiente": false
+  },
+  "portao_m15": {
+   "rhat_ok": true,
+   "ess_ok": true,
+   "sbc_ok": true,
+   "conforme_ok": true,
+   "modelo_vence_climatologia": true,
+   "trilha_integra": true
+  },
+  "aprovado": true
+ },
+ "decisao": {
+  "acao": "adotar",
+  "p_adotar_compensa": 0.951125,
+  "evpi_posterior": 0.016158540296463464,
+  "frequencias_naturais": "Em 95 de cada 100 mundos compatíveis com os dados e a priori, adotar 'exigir segunda revisão independente de todo pedido negado de requerente negro' compensa o custo.",
+  "circuit_breaker": "suspender a recomendação se a deriva KS do desfecho num ambiente novo tiver p < 0,01 ou se o ICP deixar de aceitar o conjunto invariante",
+  "escopo": {
+   "vale_para": "pedidos de financiamento imobiliário convencional na região metropolitana de Boston em 1990, requerentes negros e brancos",
+   "nao_vale_para": "outros mercados e anos, subscrição automatizada moderna, requerentes hispânicos e asiáticos (fora desta base), a decisão da seguradora"
+  }
+ },
+ "status": "aprovado no F4: decisão emitida",
+ "segundos": 6.5
+}

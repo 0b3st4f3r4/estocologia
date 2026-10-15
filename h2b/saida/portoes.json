@@ -1,0 +1,51 @@
+{
+ "G1 simulabilidade e reprodução": {
+  "ok": true,
+  "detalhe": "pytest: 10 passed in 4.36s; reprodução limpa idêntica: {'biologia_sachs': True, 'direito_teto_beneficio': True, 'educacao_star_turmas': True, 'saude_rand': True, 'transporte_cinto': True}"
+ },
+ "G2 funil completo e pré-registro": {
+  "ok": true,
+  "detalhe": "biologia_sachs: podado no F3: a chave não vence o nulo de permutação (K=1); direito_teto_beneficio: aprovado no F4: decisão emitida (K=1); educacao_star_turmas: aprovado no F4: decisão emitida (K=1); saude_rand: aprovado no F4: decisão emitida (K=1); transporte_cinto: podado no F2: dados na unidade independente não informam mais que a priori (K=1)"
+ },
+ "G3 ICP entre ambientes": {
+  "ok": false,
+  "detalhe": "Ŝ ≠ ∅ em 1 domínio(s), 1 área(s): ['direito_teto_beneficio'] | biologia_sachs: não chegou ao F4; direito_teto_beneficio: Ŝ=['beneficio_log'], aceitos=240/1024; habilidade fora do ambiente: invariante +0.070, todos +0.185, modelo +0.185; educacao_star_turmas: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.102, modelo +0.096; saude_rand: Ŝ=∅, aceitos=0/1024 (todos rejeitados); habilidade fora do ambiente: invariante +0.000, todos +0.072, modelo +0.072; transporte_cinto: não chegou ao F4"
+ },
+ "G4 contenção de varredura": {
+  "ok": true,
+  "detalhe": "8 leituras; SELECT *: 0; projeção fora do pedido: 0; cofre fora do F3: 0; agentes acima do orçamento: nenhum; banca recusada: {'select_estrela': True, 'cofre_antes_do_preregistro': True, 'agente_errado_abre_cofre': True, 'cofre_sem_hash': True, 'estouro_de_orcamento': True}; bytes varridos 1.0 MB, gasto por agente (MB) {'agent-f2-data': 1.0, 'agent-f3-lifecycle': 0.0}"
+ },
+ "Trilha do barramento": {
+  "ok": true,
+  "detalhe": "42 fichas, quebras: nenhuma"
+ },
+ "G5 informativo": "M15 aprovou 3/3 que chegaram ao F4: {'direito_teto_beneficio': True, 'educacao_star_turmas': True, 'saude_rand': True}; pareceres de risco sem assinatura de sil: 5",
+ "varredura_por_dominio": {
+  "biologia_sachs": {
+   "varrido": 423548,
+   "tabela": 464936,
+   "leituras": 1
+  },
+  "direito_teto_beneficio": {
+   "varrido": 83536,
+   "tabela": 83536,
+   "leituras": 2
+  },
+  "educacao_star_turmas": {
+   "varrido": 91969,
+   "tabela": 91969,
+   "leituras": 2
+  },
+  "saude_rand": {
+   "varrido": 407711,
+   "tabela": 407711,
+   "leituras": 2
+  },
+  "transporte_cinto": {
+   "varrido": 21454,
+   "tabela": 25781,
+   "leituras": 1
+  }
+ },
+ "saida_do_H2": false
+}

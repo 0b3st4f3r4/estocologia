@@ -1,0 +1,73 @@
+nome: educacao_star
+area: Educação
+titulo: Turmas pequenas no jardim de infância (Project STAR, Tennessee 1985–86)
+pergunta: Reduzir a turma de ~22 para ~15 alunos melhora o desempenho no fim do jardim de infância, e o efeito vale em escolas de outro tipo?
+alegacao: '"Turma pequena rende cerca de 0,2 desvio-padrão a mais em qualquer escola: é política para todo o estado."'
+glossario:
+  turma_pequena: 13 a 17 alunos, um professor
+  turma_regular: 22 a 25 alunos, com ou sem auxiliar em tempo integral
+  auxiliar: professor auxiliar em tempo integral na turma regular
+  SAT_Stanford: Stanford Achievement Test, escala de pontos por disciplina
+  sorteio_intraescola: alunos e professores sorteados entre os tipos de turma dentro de cada escola
+  almoco_gratuito: elegibilidade ao almoço escolar gratuito, indicador de renda familiar baixa
+  tipo_de_escola: rural, suburbana, urbana ou centro antigo (inner-city)
+  atrito: saída de alunos do estudo ao longo dos anos
+  efeito_de_tratamento: diferença média de pontos entre turma pequena e regular
+  conformidade: alunos que ficaram no tipo de turma sorteado
+fontes:
+  - Word et al. (1990), relatório oficial do STAR
+  - Krueger (1999), Experimental estimates of education production functions, QJE
+  - Finn & Achilles (1990), American Educational Research Journal
+  - dados-reais/h2/AER_STAR.csv (Rdatasets AER::STAR)
+arquivos: [AER_STAR.csv]
+familia: gaussiana
+desfecho: soma das notas SAT de leitura e matemática no fim do jardim de infância (pontos)
+chave: turma_pequena
+candidatos:
+  turma_pequena: {tipo: num, descricao: turma pequena sorteada (1) ou regular (0)}
+  auxiliar: {tipo: num, descricao: turma regular com auxiliar}
+  almoco_gratuito: {tipo: num, descricao: elegível ao almoço gratuito}
+  menina: {tipo: num, descricao: sexo feminino}
+  etnia: {tipo: cat, descricao: branca, afro-americana ou outra}
+  experiencia_prof: {tipo: num, descricao: anos de experiência do professor}
+  mestrado_prof: {tipo: num, descricao: professor com pós-graduação}
+icp_candidatos: [turma_pequena, auxiliar, almoco_gratuito, menina, etnia, experiencia_prof, mestrado_prof]
+ajuste: [auxiliar, almoco_gratuito, menina, etnia]
+dag:
+  - [turma_pequena, y]
+  - [auxiliar, y]
+  - [almoco_gratuito, y]
+  - [etnia, almoco_gratuito]
+  - [etnia, y]
+  - [menina, y]
+  - [experiencia_prof, y]
+  - [mestrado_prof, y]
+ambientes:
+  descricao: tipo de escola (rural, suburban, urban, inner-city); urbana fica no cofre, nunca vista
+  cofre: [urban]
+unidade: a escola (79 escolas); o sorteio é dentro da escola e os alunos de uma escola dividem professor, prédio e bairro
+cabecalho:
+  processo_gerador: Alunos e professores sorteados entre turma pequena, regular e regular com auxiliar dentro de cada escola; nota SAT no fim do ano.
+  nao_linearidade: Aditivo em pontos; efeito pode variar com o tipo de escola (é o que o ICP testa).
+  unidade_e_margem: A escola é a unidade; margem com erro padrão agrupado por escola.
+  fisica_do_ruido: Ruído de teste e de professor, aproximadamente gaussiano na soma de duas notas.
+  escada_causal: Degrau 2 (intervenção sorteada). Premissa não testável - o sorteio foi respeitado (há atrito e trocas de turma).
+shelf:
+  quantidade: efeito da turma pequena na soma de leitura + matemática (pontos SAT)
+  fonte: literatura (Krueger 1999; Finn & Achilles 1990), citada de memória e por conferir; nenhum especialista humano consultado
+  painel: literatura publicada
+  quartis: {q05: 2, q25: 8, q50: 12, q75: 16, q95: 24}
+decisao:
+  acao: reduzir as turmas de jardim de infância para ~15 alunos
+  beneficio_por_unidade: 1.0
+  custo: 10.0
+  custo_pesquisa: 0.1
+  nota: utilidade em pontos-equivalentes por aluno; o custo de 10 pontos é uma suposição a elicitar com a secretaria de educação
+termo_escopo:
+  vale_para: jardim de infância em escolas públicas dos EUA, turmas de 13 a 17 contra 22 a 25, professores do próprio sistema
+  nao_vale_para: séries posteriores sem reavaliação, redução em escala estadual que exija contratar professores menos experientes, outros países
+tentativas_de_especificacao: 1
+tem_titulares: true
+quase_ids: [menina, etnia, almoco_gratuito]
+grupo_justica: etnia
+chave_atribuida: dentro_da_unidade   # sorteio dentro da unidade (fato do desenho); o F3 permuta dentro dela

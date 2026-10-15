@@ -1,0 +1,87 @@
+{
+ "biologia_sachs": {
+  "area": "Biologia (sinalização celular)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 53.7
+ },
+ "direito_teto_beneficio": {
+  "area": "Direito (regra de indenização trabalhista)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 47.3
+ },
+ "educacao_star_turmas": {
+  "area": "Educação",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 83.3
+ },
+ "engenharia_tunel_vento": {
+  "area": "Engenharia (aerodinâmica)",
+  "status": "reprovado no F4 (M15): modelo_vence_climatologia",
+  "segundos": 89.6
+ },
+ "fisica_tunel_luz": {
+  "area": "Física (óptica e eletrônica)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 317.9
+ },
+ "genetica_y01": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.3
+ },
+ "genetica_y02": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 12.9
+ },
+ "genetica_y03": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "reprovado no F4 (M15): conforme_ok",
+  "segundos": 12.7
+ },
+ "genetica_y04": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 13.5
+ },
+ "genetica_y05": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.4
+ },
+ "genetica_y06": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.2
+ },
+ "genetica_y07": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 13.1
+ },
+ "genetica_y08": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 13.1
+ },
+ "genetica_y09": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.3
+ },
+ "genetica_y10": {
+  "area": "Genética (expressão gênica em levedura)",
+  "status": "podado no F3: a chave não vence o nulo de permutação",
+  "segundos": 1.0
+ },
+ "saude_rand": {
+  "area": "Saúde (seguro e uso de serviços)",
+  "status": "aprovado no F4: decisão emitida",
+  "segundos": 110.7
+ },
+ "transporte_cinto": {
+  "area": "Transporte (segurança viária)",
+  "status": "reprovado no F4 (M15): conforme_ok",
+  "segundos": 6.4
+ }
+}

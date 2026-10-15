@@ -1,0 +1,81 @@
+nome: fundos_venda_de_seguro
+versao: '1.0'
+colunas:
+  fundo:
+    tipo: str
+  periodo:
+    tipo: int
+    min: 1
+    max: 99
+  tipo_gestora:
+    tipo: str
+    valores:
+    - independente
+    - multimercado
+    - banco
+    - seguradora
+  uf:
+    tipo: str
+    valores:
+    - AC
+    - AL
+    - AM
+    - AP
+    - BA
+    - CE
+    - DF
+    - ES
+    - GO
+    - MA
+    - MG
+    - MS
+    - MT
+    - PA
+    - PB
+    - PE
+    - PI
+    - PR
+    - RJ
+    - RN
+    - RO
+    - RR
+    - RS
+    - SC
+    - SE
+    - SP
+    - TO
+  ano_fundacao:
+    tipo: int
+    min: 1995
+    max: 2020
+  regra:
+    tipo: str
+    valores:
+    - kelly_kn
+    - meio_kelly_kn
+    - kelly_laplace
+  semanas_hist:
+    tipo: int
+    min: 1
+    max: 5000
+  perdas_hist:
+    tipo: int
+    min: 0
+    max: 5000
+  alavancagem:
+    tipo: float
+    min: 0.0
+    max: 3.0
+  semanas_fut:
+    tipo: int
+    min: 1
+    max: 5000
+  perdas_fut:
+    tipo: int
+    min: 0
+    max: 5000
+chave:
+- fundo
+particao: periodo
+grao: 'uma linha por fundo: contagens de perdas no histórico (antes da escolha de
+  f) e nas semanas seguintes'

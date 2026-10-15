@@ -1,0 +1,219 @@
+{
+ "dominio": "clima_tempestades",
+ "area": "Clima",
+ "titulo": "Relação vento-pressão nos ciclones do Atlântico Norte (best track, 1975–2024)",
+ "alegacao": "\"O vento máximo de um ciclone segue a raiz quadrada da queda de pressão central, uns 15 nós por raiz de hPa, em qualquer parte do Atlântico.\"",
+ "ingestao": {
+  "arquivos": 4,
+  "bytes_tabela": 257636,
+  "linhas": 20059,
+  "ambientes": [
+   "atlantico_subtropical",
+   "atlantico_tropical",
+   "caribe",
+   "golfo_mexico"
+  ]
+ },
+ "K": 1,
+ "priori": {
+  "media": 15.000000000000124,
+  "dp": 2.9652044370116677,
+  "erro_max_quartis": 4.369837824924616e-13,
+  "q05_q95_implicados": [
+   10.122672727128883,
+   19.877327272871362
+  ],
+  "razao_largura_90_elicitada_sobre_implicada": 1.2301819550583188
+ },
+ "filtro1": {
+  "evpi_priori": 0.24524962302311115,
+  "custo_pesquisa": 0.05,
+  "acao_sem_pesquisa": "adotar",
+  "p_adotar_compensa_priori": 0.84405,
+  "passa": true
+ },
+ "governanca": {
+  "tem_titulares": false,
+  "quase_ids": [],
+  "k_anonimato_bruto": null,
+  "dados": "reais (dplyr_storms.csv)",
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  }
+ },
+ "filtro2": {
+  "porta_dos_fundos": {
+   "valido": true,
+   "descendentes_no_ajuste": [],
+   "d_separa_sem_arestas_de_x": true
+  },
+  "n_linhas": 17597,
+  "n_unidades": 563,
+  "ep_chave_por_unidade": 0.1905223523078144,
+  "ep_chave_ingenuo": 0.039917055571573545,
+  "efeito_de_desenho": 22.78110955550126,
+  "dp_priori": 2.9652044370116677,
+  "informativo": true,
+  "alerta_unidade": null,
+  "beta_chave_mv": 11.774132011776835,
+  "passa": true
+ },
+ "filtro3": {
+  "z_obs": 61.799216045549066,
+  "nulo_q95": 1.9359268886365035,
+  "p_permutacao": 0.004975124378109453,
+  "permutacoes": 200,
+  "nivel_da_permutacao": "médias entre unidades + desvios dentro da unidade",
+  "passa": true
+ },
+ "filtro4": {
+  "icp": {
+   "alpha": 0.05,
+   "candidatos": [
+    "estrutura",
+    "latitude",
+    "raiz_deficit_pressao",
+    "translacao_kmh"
+   ],
+   "subconjuntos_testados": 16,
+   "aceitos": [],
+   "S_hat": [],
+   "modelo_rejeitado": true,
+   "situacao": "rejeitado: nenhum conjunto invariante",
+   "ambientes": 3,
+   "intervalos": {},
+   "p_por_subconjunto": {
+    "∅": 5.743729540982084e-121,
+    "estrutura": 3.0540847782103535e-126,
+    "latitude": 5.6479455177737905e-126,
+    "raiz_deficit_pressao": 6.062835622631836e-304,
+    "translacao_kmh": 2.8550744110934397e-126,
+    "estrutura+latitude": 4.068511239925571e-155,
+    "estrutura+raiz_deficit_pressao": 0.0,
+    "estrutura+translacao_kmh": 1.6527114952101046e-135,
+    "latitude+raiz_deficit_pressao": 0.0,
+    "latitude+translacao_kmh": 4.562298770998018e-134,
+    "raiz_deficit_pressao+translacao_kmh": 1.38339599025911e-309,
+    "estrutura+latitude+raiz_deficit_pressao": 0.0,
+    "estrutura+latitude+translacao_kmh": 1.2716226045489372e-150,
+    "estrutura+raiz_deficit_pressao+translacao_kmh": 0.0,
+    "latitude+raiz_deficit_pressao+translacao_kmh": 0.0,
+    "estrutura+latitude+raiz_deficit_pressao+translacao_kmh": 0.0
+   }
+  },
+  "posterior": {
+   "beta_chave_media": 11.784895765791731,
+   "beta_chave_ic90": [
+    11.452818399726326,
+    12.100815185918785
+   ],
+   "theta_media": 11.784895765791731,
+   "theta_ic90": [
+    11.452818399726326,
+    12.100815185918785
+   ],
+   "p_beta_positivo": 1.0,
+   "rhat_max": 1.0050595393877237,
+   "ess_min": 1399.2216021772897,
+   "aceitacao": 0.39337500000000003,
+   "sbc": {
+    "n_sim": 60,
+    "L": 19,
+    "caixas": [
+     12,
+     10,
+     13,
+     16,
+     9
+    ],
+    "p_uniformidade": 0.6446357929354278
+   },
+   "parametros": [
+    "intercepto",
+    "raiz_deficit_pressao",
+    "latitude",
+    "translacao_kmh",
+    "estrutura=extratropical",
+    "estrutura=outra_baixa",
+    "estrutura=subtropical",
+    "log_sigma"
+   ],
+   "dp_posterior_sobre_dp_priori": 0.06544792558830542,
+   "peso_verossimilhanca": 0.04389601821472811
+  },
+  "preregistro_hash": "a10d0451b98f806d12bb1a9e751928f0bb4505a489f79fbd339b9d7ac7137397",
+  "fora_do_ambiente": {
+   "ambientes_cofre": [
+    "golfo_mexico"
+   ],
+   "n_cofre": 2462,
+   "perda": {
+    "modelo_ajustado": 111.68342859818749,
+    "icp_invariante": 530.624565660793,
+    "todos_os_candidatos": 111.70716584443,
+    "climatologia": 530.6245656607936
+   },
+   "habilidade": {
+    "modelo_ajustado": 0.7895245794753082,
+    "icp_invariante": 1.1102230246251565e-15,
+    "todos_os_candidatos": 0.7894798449345827
+   },
+   "cobertura_conforme": 0.8521527213647441,
+   "deriva_y": {
+    "ks": 0.21965706897365955,
+    "p_ks": 5.3297678146052956e-92,
+    "wasserstein": 13.198974240818227
+   },
+   "placar_diario": {
+    "modelo_ajustado": {
+     "n": 2000,
+     "brier": 0.15066940686724128,
+     "brier_clima": 0.23402420375838717,
+     "ln_capital": 402.4802845569339,
+     "habilidade": 0.35618023927646225,
+     "peso": 1.0
+    },
+    "icp_invariante": {
+     "n": 2000,
+     "brier": 0.45835710398609836,
+     "brier_clima": 0.23402420375838717,
+     "ln_capital": -1019.0658994978772,
+     "habilidade": -0.9585884563432527,
+     "peso": 0.0
+    },
+    "todos_os_candidatos": {
+     "n": 2000,
+     "brier": 0.15073629771460414,
+     "brier_clima": 0.23402420375838717,
+     "ln_capital": 402.1743623144054,
+     "habilidade": 0.35589441051905757,
+     "peso": 1.0
+    }
+   },
+   "invariante_vence_todos_fora_do_ambiente": false
+  },
+  "portao_m15": {
+   "rhat_ok": true,
+   "ess_ok": true,
+   "sbc_ok": true,
+   "conforme_ok": true,
+   "modelo_vence_climatologia": true,
+   "trilha_integra": true
+  },
+  "aprovado": true
+ },
+ "decisao": {
+  "acao": "manter",
+  "p_adotar_compensa": 0.138,
+  "evpi_posterior": 0.0126365565442863,
+  "frequencias_naturais": "Em 14 de cada 100 mundos compatíveis com os dados e a priori, adotar 'acionar alertas de intensidade a partir da pressão central medida (boias e aviões) quando não há medida de vento' compensa o custo.",
+  "circuit_breaker": "suspender a recomendação se a deriva KS do desfecho num ambiente novo tiver p < 0,01 ou se o ICP deixar de aceitar o conjunto invariante",
+  "escopo": {
+   "vale_para": "ciclones do Atlântico Norte no best track do NHC, 1975–2024, pontos de 6 h com pressão central registrada",
+   "nao_vale_para": "outras bacias (Pacífico, Índico), ventos de rajada, tempestades sem pressão medida, extrapolação para déficits acima de ~110 hPa"
+  }
+ },
+ "status": "aprovado no F4: decisão emitida",
+ "segundos": 8.7
+}

@@ -1,0 +1,1151 @@
+{
+ "semente": 2126,
+ "priori": {
+  "a": 6.160901165008288,
+  "b": 5.418873855197123
+ },
+ "f2": {
+  "lotes": [
+   {
+    "lote": "7a540cc405d59786",
+    "periodo": 1,
+    "idempotente": false,
+    "aceitas": 5393,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "6571b25a93c1f5d6",
+    "periodo": 2,
+    "idempotente": false,
+    "aceitas": 5393,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "9d1173cf283dcc17",
+    "periodo": 3,
+    "idempotente": false,
+    "aceitas": 5391,
+    "quarentena": 0,
+    "motivos": []
+   },
+   {
+    "lote": "86fa86ad54638860",
+    "periodo": 4,
+    "idempotente": false,
+    "aceitas": 260,
+    "quarentena": 0,
+    "motivos": []
+   }
+  ]
+ },
+ "f5": {
+  "k_anonimato": {
+   "quase_identificadores": [
+    "age",
+    "educ",
+    "raca",
+    "marr"
+   ],
+   "k_bruto": 1,
+   "k_generalizado": 11,
+   "meta_k": 5,
+   "cumpre": true,
+   "aplicavel_a_titulares": true
+  },
+  "privacidade_diferencial": {
+   "estatistica": "fração dos treinados do NSW empregados em 1978 (dados reais)",
+   "verdadeira": 0.7567567567567568,
+   "n": 185,
+   "mecanismo": "Laplace sobre a contagem (sensibilidade 1)",
+   "unidade": "pessoa",
+   "por_epsilon": [
+    {
+     "epsilon": 0.1,
+     "erro_absoluto_medio": 0.052646683868950744,
+     "I_bits": 0.1606774510701061,
+     "H_bits": 4.591024323804722,
+     "bits_perdidos": 4.430346872734615
+    },
+    {
+     "epsilon": 0.5,
+     "erro_absoluto_medio": 0.0109140544141716,
+     "I_bits": 1.2980083124136923,
+     "H_bits": 4.591024323804722,
+     "bits_perdidos": 3.293016011391029
+    },
+    {
+     "epsilon": 1.0,
+     "erro_absoluto_medio": 0.005233095583817521,
+     "I_bits": 2.1687126514087396,
+     "H_bits": 4.591024323804722,
+     "bits_perdidos": 2.422311672395982
+    },
+    {
+     "epsilon": 5.0,
+     "erro_absoluto_medio": 0.0010862064494065727,
+     "I_bits": 4.251486126496961,
+     "H_bits": 4.591024323804722,
+     "bits_perdidos": 0.33953819730776047
+    }
+   ]
+  },
+  "lgpd": {
+   "base_legal": "art. 7º, IV (estudo por órgão de pesquisa, dados anonimizados sempre que possível)",
+   "art_20": "decisão automatizada não é tomada sobre titulares: o sistema emite recomendação agregada"
+  },
+  "eu_ai_act_anexo_iv": {
+   "descricao_geral": "Ver não é fazer, em dados reais: o treinamento do NSW contra os controles do CPS",
+   "processo_de_desenvolvimento": "ciclo de 6 estágios, fichas no barramento",
+   "dados_e_governanca": "datacontract.yaml, quarentena, linhagem por hash de lote",
+   "monitoramento": "deriva KS/Wasserstein (F3), circuit breaker (F8)",
+   "supervisao_humana": "responsável humano nomeado assina o parecer"
+  },
+  "trilha_auditoria": {
+   "cadeia_integra": true,
+   "fichas": 19
+  },
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  },
+  "dados_simulados": false,
+  "origem_dos_dados": "dados-reais/nsw_experimental.csv + cps_observational.csv (Rdatasets causaldata)"
+ },
+ "f6": {
+  "classificador": "priorizar para o treinamento quem tem risco previsto de desemprego em 1978 > 25% (escore = frequência na célula raça × desempregado em 74 × em 75 × sem diploma; ajustado nos períodos 1–2, avaliado no período 3 da amostra observacional real, quase toda do CPS)",
+  "grupos": "raça declarada (negro, hispânico, outro), com taxas-base reais diferentes",
+  "taxas_por_grupo_IC95": {
+   "hispanico": {
+    "n": 374,
+    "taxa_base": [
+     0.1443850267379679,
+     0.11237605873880091,
+     0.1836252285731308
+    ],
+    "fpr": [
+     0.071875,
+     0.04836811178148315,
+     0.10553923057354472
+    ],
+    "fnr": [
+     0.7222222222222222,
+     0.5910930359127778,
+     0.823833245517888
+    ],
+    "vpp": [
+     0.39473684210526316,
+     0.25597859263618905,
+     0.5528241300130403
+    ]
+   },
+   "negro": {
+    "n": 466,
+    "taxa_base": [
+     0.1888412017167382,
+     0.15590393271790212,
+     0.2268667712810626
+    ],
+    "fpr": [
+     0.12698412698412698,
+     0.09713029612045898,
+     0.1643435715775603
+    ],
+    "fnr": [
+     0.5,
+     0.3977398665504473,
+     0.6022601334495528
+    ],
+    "vpp": [
+     0.4782608695652174,
+     0.3791196487621324,
+     0.5791448209462197
+    ]
+   },
+   "outro": {
+    "n": 4551,
+    "taxa_base": [
+     0.13249835201054713,
+     0.1229574292943691,
+     0.14265918402540034
+    ],
+    "fpr": [
+     0.05623100303951368,
+     0.04946692553279293,
+     0.06385785954968608
+    ],
+    "fnr": [
+     0.5737976782752903,
+     0.5339812670267051,
+     0.6126797397335434
+    ],
+    "vpp": [
+     0.5365344467640919,
+     0.4917631801183687,
+     0.5807243603089681
+    ]
+   }
+  },
+  "calibracao_por_grupo": {
+   "hispanico": {
+    "sinalizados_previsto": 0.5073878504721948,
+    "sinalizados_observado": 0.39473684210526316,
+    "nao_sinalizados_previsto": 0.07616368520142619,
+    "nao_sinalizados_observado": 0.11607142857142858
+   },
+   "negro": {
+    "sinalizados_previsto": 0.5007669776223,
+    "sinalizados_observado": 0.4782608695652174,
+    "nao_sinalizados_previsto": 0.10427532127711676,
+    "nao_sinalizados_observado": 0.11764705882352941
+   },
+   "outro": {
+    "sinalizados_previsto": 0.5783464463864816,
+    "sinalizados_observado": 0.5365344467640919,
+    "nao_sinalizados_previsto": 0.08042731289195347,
+    "nao_sinalizados_observado": 0.08497053045186641
+   }
+  },
+  "trilema_da_justica": {
+   "aplica_se": true,
+   "identidade": "FPR = p/(1−p) · (1−VPP)/VPP · (1−FNR) (Chouldechova, 2017; Kleinberg et al., 2016)",
+   "taxa_base": {
+    "hispanico": 0.1443850267379679,
+    "negro": 0.1888412017167382,
+    "outro": 0.13249835201054713
+   },
+   "vpp": {
+    "hispanico": 0.39473684210526316,
+    "negro": 0.4782608695652174,
+    "outro": 0.5365344467640919
+   },
+   "fnr": {
+    "hispanico": 0.7222222222222222,
+    "negro": 0.5,
+    "outro": 0.5737976782752903
+   },
+   "fpr": {
+    "hispanico": 0.071875,
+    "negro": 0.12698412698412698,
+    "outro": 0.05623100303951368
+   },
+   "fpr_implicito_se_fnr_igual": {
+    "fnr_comum": 0.5986733001658375,
+    "hispanico": 0.10384328358208955,
+    "negro": 0.1019242412277238,
+    "outro": 0.0529490378815654
+   },
+   "leitura": "O escore inclui a raça e é calibrado por grupo, mas as taxas-base de desemprego diferem (hispanico 0.144, negro 0.189, outro 0.132). Com a VPP fixada pela calibração e um FNR comum de 0.60, os FPR teriam de ser 0.104 (hispanico), 0.102 (negro), 0.053 (outro): diferentes. Calibração e paridade de FPR e FNR não valem juntas com taxas-base distintas."
+  },
+  "quem_paga_o_erro": {
+   "hispanico": "FNR 0.72: de cada 100 hispanicos que ficarão desempregados, 72 ficam fora da prioridade",
+   "negro": "FNR 0.50: de cada 100 negros que ficarão desempregados, 50 ficam fora da prioridade",
+   "outro": "FNR 0.57: de cada 100 outros que ficarão desempregados, 57 ficam fora da prioridade"
+  },
+  "inversao_metrica": {
+   "metrica_original": "calibração (mesmo limiar de risco absoluto para todos os grupos)",
+   "metrica_invertida": "igualdade de oportunidade (FNR igual ao de 'negro'): sinalizar ao acaso 100% da célula logo abaixo do limiar em 'outro'",
+   "fnr_depois": {
+    "hispanico": 0.7222222222222222,
+    "negro": 0.5,
+    "outro": 0.5373134328358209
+   },
+   "fpr_depois": {
+    "hispanico": 0.071875,
+    "negro": 0.12698412698412698,
+    "outro": 0.07826747720364742
+   },
+   "vpp_depois": {
+    "hispanico": 0.39473684210526316,
+    "negro": 0.4782608695652174,
+    "outro": 0.4744897959183674
+   },
+   "fnr_alvo": 0.5,
+   "igualdade_atingida": {
+    "hispanico": false,
+    "negro": true,
+    "outro": false
+   },
+   "nota": "o pós-processamento só mexe na célula de risco logo abaixo do limiar; se ela não basta (fração 100%) ou não tem desempregados, a igualdade de FNR fica parcial, e atingi-la exige descer o limiar em mais células",
+   "ganham": "outro: 22 desempregados a mais entram na prioridade (de 603), FNR 0.57 → 0.54",
+   "perdem": "outro: 87 falsos positivos a mais (de 3948 empregados), VPP 0.537 → 0.474; e o sinal deixa de significar o mesmo risco entre os grupos (perde-se a calibração); as vagas extras saem do orçamento do programa, isto é, de quem estava na fila"
+  },
+  "assimetria_de_poder": "quem avalia o programa com dados baratos (CPS) decide o orçamento; quem é elegível ao NSW arca com o erro do contrafactual, que o sorteio mostra ser outra população",
+  "dados_reais": true
+ },
+ "suf": {
+  "k": [
+   49.71276055755166,
+   546.4500999256823,
+   113.0,
+   27.0
+  ],
+  "n": [
+   75.62091339757245,
+   759.3185545006792,
+   156.0,
+   29.0
+  ],
+  "beta_prop": [
+   -4.210819739396922,
+   0.20577710580597036,
+   -1.2964966697854103,
+   -0.7322412689310243,
+   -0.4512290439484584,
+   3.884116841777881,
+   1.6844348351383052,
+   -1.5276641754533244,
+   0.7563772958309436,
+   -0.7317300056269606,
+   1.3894070888384484,
+   0.4818300110523893,
+   -1.3944413312216837,
+   0.1478725481366568,
+   -0.3613637347379076
+  ],
+  "e_min_tratados": 0.0007376447135163542,
+  "n_tratados": 185,
+  "n_controles": 15992,
+  "ess_controles": 102.55694014517806,
+  "att_ipw_pontual": 0.09049075453787037,
+  "p_tratados": 0.7567567567567568,
+  "p_controles_ponderado": 0.6662660022188864,
+  "frac_controles_fora_suporte": 0.715920460230115
+ },
+ "f1": {
+  "modelo_nulo": {
+   "estatistica": "ATT ajustado por ponderação de propensão (pontos de emprego em 1978)",
+   "nulo": "treinamento inerte: Y ~ Bernoulli(P(Y | covariáveis)) ajustado nos controles, para tratados e controles; mesmo tratamento, mesmos pesos",
+   "observado": 0.09049075453787037,
+   "nulo_media": 0.008291851242111731,
+   "nulo_q025_q975": [
+    -0.1032059115102038,
+    0.11880456684621536
+   ],
+   "p_valor_unilateral": 0.077,
+   "severidade_da_alegacao": 0.923,
+   "severo": false,
+   "teste_ingenuo": {
+    "estatistica": "diferença crua NSW-tratado − CPS",
+    "observado": -0.107425334288766,
+    "nulo_media": -0.23398846889661046,
+    "nulo_q025_q975": [
+     -0.2955577450887606,
+     -0.17441539181753038
+    ],
+    "P_nulo_ingenuo_menor_ou_igual_ao_observado": 1.0
+   },
+   "n_pessoas": 16177,
+   "n_tratados": 185,
+   "leitura": "Com o treinamento inerte, a composição sozinha já daria um contraste ingênuo de ≈ -0.234 [-0.296; -0.174]; o observado, -0.107, é um 'dano' que é só a diferença entre NSW e CPS: a comparação ingênua mede populações, não o programa. O ATT ajustado observado, +0.090, fica dentro da faixa de 95% do nulo [-0.103; +0.119] (p unilateral = 0.077). Este teste é condicional ao modelo de desfecho e à seleção em observáveis: ele não enxerga confundidor não medido."
+  },
+  "hypothesis": {
+   "ok": true,
+   "saida": "18 passed in 8.27s"
+  },
+  "perfil_lote": {
+   "segundos": 0.027883088000180578,
+   "pico_memoria_mb": 2.4772872924804688
+  },
+  "semente_declarada": true
+ },
+ "f4": {
+  "posterior": {
+   "media": 0.09679228924626386,
+   "q05": 0.008817392130922475,
+   "q50": 0.09635154376123678,
+   "q95": 0.18793198560689903
+  },
+  "diagnostico": {
+   "rhat_quantidade": 1.004675454527361,
+   "ess_bulk_quantidade": 806.6399901523176,
+   "rhat_max": 1.0053635486545265,
+   "ess_min": 869.9205290756374,
+   "limiar_rhat": 1.01,
+   "cadeias": 4,
+   "amostras_por_cadeia": 3000
+  },
+  "sbc": {
+   "n_sim": 150,
+   "L": 39,
+   "caixas": [
+    15,
+    15,
+    24,
+    18,
+    25,
+    24,
+    12,
+    17
+   ],
+   "chi2": 9.146666666666668,
+   "p_uniformidade": 0.24229685443062093
+  },
+  "conforme": {
+   "alpha": 0.1,
+   "intervalo": [
+    0.0,
+    1.0
+   ],
+   "n_calibracao": 5391,
+   "garantia": "cobertura marginal ≥ 90% sob trocabilidade"
+  }
+ },
+ "ppc": {
+  "estatistica": "placebo: P(empregado 75 | tratado) − P(empregado 75 | controle) com pesos ATT de um escore sem re75",
+  "implicacao_testada": "R75 ⊥ X | D, R74 (estacionaridade da seleção, Imbens 2015)",
+  "observado": -0.12320387547177447,
+  "replicas_q025_q975": [
+   -0.11484587750769291,
+   0.10236241153312946
+  ],
+  "p_valor": 0.04,
+  "z_padronizado": -2.1204613246337805,
+  "n_tratados": 185
+ },
+ "f3": {
+  "cofre": {
+   "periodo": 4,
+   "aberto_uma_vez": true,
+   "hash_pre_registro": "b2b7f4649689a8c141dbcb254cdc3121a2aa55586909dc7378aa200e200826f2",
+   "previsoes": 260
+  },
+  "placar": {
+   "agent-f4-frontier": {
+    "n": 260,
+    "brier": 0.22479094407407707,
+    "brier_clima": 0.27564117614389466,
+    "ln_capital": 40.9558506499822,
+    "habilidade": 0.1844798109672552,
+    "peso": 1.0
+   },
+   "alegacao-ingenua": {
+    "n": 260,
+    "brier": 0.27617536882498406,
+    "brier_clima": 0.27564117614389466,
+    "ln_capital": -0.5894298799996539,
+    "habilidade": -0.0019380002964815013,
+    "peso": 0.0
+   },
+   "ajuste-regressao-logistica": {
+    "n": 260,
+    "brier": 0.2505074663473969,
+    "brier_clima": 0.27564117614389466,
+    "ln_capital": 19.401529317617634,
+    "habilidade": 0.0911827113354684,
+    "peso": 1.0
+   }
+  },
+  "cobertura_conforme_out_of_time": 1.0,
+  "deriva": {
+   "ks": 0.6524749225917841,
+   "p_ks": 3.925745064170332e-103,
+   "wasserstein": 12105.985970253067,
+   "alarme": true
+  },
+  "politica_ignorancia": {
+   "fora_do_dominio": "recusar",
+   "campo_ausente": "fallback determinístico (ação conservadora)",
+   "confianca_baixa": "devolver intervalo conforme"
+  },
+  "tentativas_de_especificacao": 1,
+  "vazamento_temporal": "nenhum: modelagem leu só períodos [1, 2, 3]"
+ },
+ "lentes": {
+  "conferencia": {
+   "ingenuo_vs_ajustado_vs_experimental_emprego": {
+    "ingenuo": {
+     "estimativa": -0.107425334288766,
+     "IC95": [
+      -0.16964577153965843,
+      -0.04520489703787356
+     ],
+     "ep": 0.03174512104637369,
+     "n1": 185,
+     "n0": 15992
+    },
+    "ajustado_posterior": {
+     "mediana": 0.09635154376123678,
+     "IC90": [
+      0.008817392130922475,
+      0.18793198560689903
+     ],
+     "IC95": [
+      -0.00584277709734424,
+      0.20837342025509267
+     ],
+     "pontual_ponderacao": 0.09049075453787037,
+     "ess_controles": 102.55694014517806
+    },
+    "ajustado_regressao_logistica": {
+     "estimativa": 0.12616134139665802
+    },
+    "experimental": {
+     "estimativa": 0.11060291060291061,
+     "IC95": [
+      0.02554728535915987,
+      0.19565853584666135
+     ],
+     "ep": 0.04339572716517895,
+     "n1": 185,
+     "n0": 260
+    },
+    "ajustado_menos_experimental": -0.01425136684167383,
+    "P_posterior_ajustado_dentro_IC95_experimental": 0.8694166666666666,
+    "ingenuo_menos_experimental": -0.2180282448916766,
+    "placebo_experimental": {
+     "estimativa": 0.08461538461538465,
+     "IC95": [
+      -0.00601220109607363,
+      0.17524297032684294
+     ],
+     "ep": 0.046238564138499125,
+     "n1": 185,
+     "n0": 260
+    },
+    "placebo_experimental_renda_US$": {
+     "estimativa": 265.1462985286594,
+     "IC95": [
+      -332.7404972312837,
+      863.0330942886025
+     ],
+     "ep": 305.0442835509914,
+     "n1": 185,
+     "n0": 260
+    },
+    "placebo_observacional_ajustado": -0.12320387547177447,
+    "placebo_observacional_ajustado_renda_US$": -1454.8329034138235,
+    "cofre_calibracao_no_grosso": {
+     "previsto_medio": 0.6546471763286134,
+     "observado": 0.6461538461538462,
+     "por_grupo": {
+      "negro": {
+       "n": 215,
+       "previsto_posterior": 0.6409267144690594,
+       "observado": 0.6093023255813953,
+       "z": 0.5179416537763115
+      },
+      "nao_negro": {
+       "n": 45,
+       "previsto_posterior": 0.7199037480665524,
+       "observado": 0.8222222222222222,
+       "z": -1.727622963929499
+      }
+     },
+     "ingenua_prevista": 0.8641820910455228
+    },
+    "cofre_brier": {
+     "agent-f4-frontier": 0.22479094407407718,
+     "alegacao-ingenua": 0.2761753688249828,
+     "ajuste-regressao-logistica": 0.2505074663473971,
+     "climatologia": 0.27564117614389316
+    }
+   },
+   "renda_US$": {
+    "ingenuo": {
+     "estimativa": -8497.516148132978,
+     "IC95": [
+      -9641.043014140158,
+      -7353.989282125798
+     ],
+     "ep": 583.432074493459,
+     "n1": 185,
+     "n0": 15992
+    },
+    "ajustado_ponderacao": {
+     "estimativa": 1570.001584760601,
+     "IC95_bootstrap": [
+      217.68161475252347,
+      3265.157136729926
+     ],
+     "B": 200
+    },
+    "experimental": {
+     "estimativa": 1794.3423818501024,
+     "IC95": [
+      479.18915469413264,
+      3109.4956090060723
+     ],
+     "ep": 670.9965444673315,
+     "n1": 185,
+     "n0": 260
+    },
+    "literatura": {
+     "experimental_US$": 1794.0,
+     "confere": true
+    }
+   },
+   "dados": {
+    "nsw_experimental.csv": {
+     "sha256": "72efd333a4b94a2bee55149d3542021d0adde03201d010ebe971e3e863360cd6",
+     "confere_SHA256SUMS": true
+    },
+    "cps_observational.csv": {
+     "sha256": "e357e728bfefa729ff880377aca072aa01563a4b412d956dcf70f2539446cdf5",
+     "confere_SHA256SUMS": true
+    }
+   }
+  },
+  "Morfonomia": {
+   "att_ajustado_por_particao": [
+    0.08215593393834997,
+    0.11007100430938288,
+    0.17897049134409826
+   ],
+   "cochran_Q": 0.42524762049883835,
+   "p_homogeneidade": 0.8084602144639641,
+   "invariante_entre_particoes": true,
+   "nota_particoes": "partições aleatórias da mesma amostra: a homogeneidade é esperada por construção e não testa estabilidade no tempo",
+   "transporte_controle_ajustado_para_sorteado": {
+    "negro": {
+     "cps_ponderado": 0.6573943413800066,
+     "nsw_sorteado": 0.6093023255813953,
+     "ess_cps": 75.62091339757245,
+     "n_nsw": 215,
+     "p_invariancia": 0.4582287981621036
+    },
+    "nao_negro": {
+     "cps_ponderado": 0.7196585631771145,
+     "nsw_sorteado": 0.8222222222222222,
+     "ess_cps": 759.3185545006792,
+     "n_nsw": 45,
+     "p_invariancia": 0.13418227979369007
+    }
+   },
+   "d_separacao": {
+    "R75_indep_X_dado_D_R74 (placebo, sem U)": true,
+    "R75_indep_X_dado_D_R74 (com choque U)": false
+   },
+   "porta_dos_fundos": {
+    "{D, R74, R75} admissível": true,
+    "{} admissível": false,
+    "{D, R74} admissível": false
+   },
+   "leitura": "a forma que deveria se transportar é P(Y | sem treino, covariáveis): do CPS reponderado para os controles sorteados. O grafo de Dehejia–Wahba admite {D, R74, R75}; a implicação testável vizinha (placebo) vale sem choque não medido e falha com ele."
+  },
+  "Fluxonomia": {
+   "informacao_mutua_X_Y_observacional_bits": 0.0006720777953431274,
+   "informacao_mutua_X_Y_experimental_bits": 0.010219249918186929,
+   "laco_performativo": true,
+   "leitura": "no dado observacional, saber se a pessoa foi treinada informa sobre o emprego quase só porque distingue duas populações (NSW vs. CPS), com sinal oposto ao experimental. Se avaliações observacionais virarem regra de financiamento, os programas passam a escolher participantes com histórico melhor (seleção de nata), e o viés da avaliação muda de sinal."
+  },
+  "Crononomia": {
+   "queda_de_ashenfelter": {
+    "NSW_tratados": {
+     "re74_US$": 2095.5736933527764,
+     "re75_US$": 1532.0553130691117,
+     "re78_US$": 6349.143502065298,
+     "empregado_74": 0.2918918918918919,
+     "empregado_75": 0.4,
+     "empregado_78": 0.7567567567567568
+    },
+    "CPS_cru": {
+     "re74_US$": 14016.800359931573,
+     "re75_US$": 13650.80352240194,
+     "re78_US$": 14846.659650198277,
+     "empregado_74": 0.8803776888444222,
+     "empregado_75": 0.890695347673837,
+     "empregado_78": 0.8641820910455228
+    },
+    "CPS_ponderado_ATT": {
+     "re74_US$": 2040.2194266362212,
+     "re75_US$": 1454.2106772090733,
+     "re78_US$": 4779.141917304697,
+     "empregado_74": 0.28860656232377724,
+     "empregado_75": 0.4193414130715469,
+     "empregado_78": 0.6662660022188864
+    },
+    "NSW_controles_sorteados": {
+     "re74_US$": 2107.026651235727,
+     "re75_US$": 1266.9090145404523,
+     "re78_US$": 4554.801120215196,
+     "empregado_74": 0.25,
+     "empregado_75": 0.3153846153846154,
+     "empregado_78": 0.6461538461538462
+    }
+   },
+   "ergodico": "não se aplica de modo relevante",
+   "leitura": "a renda dos elegíveis ao NSW cai de 1974 para 1975 nos dois braços sorteados: é o critério de elegibilidade (desemprego recente), e não efeito. No CPS ponderado a trajetória pré-tratamento imita a dos tratados porque re74 e re75 estão no escore; o que o escore não vê é a queda depois de 1975, até a entrada no programa. O cofre não é futuro: é o mesmo 1978, outra fonte."
+  },
+  "Escalonomia": {
+   "renda_1978_tratados": {
+    "frac_zeros": 0.24324324324324326,
+    "media": 6349.143502065298,
+    "mediana": 4232.30908203125,
+    "q90": 14553.0880859375,
+    "fatia_dos_5%_maiores": 0.23397773300316277
+   },
+   "renda_1978_CPS": {
+    "frac_zeros": 0.13581790895447723,
+    "media": 14846.659650198277,
+    "mediana": 16421.974609375,
+    "q90": 25564.669921875,
+    "fatia_dos_5%_maiores": 0.08603109194176699
+   },
+   "risco_absoluto_do_treino_por_100": 75.1862132304318,
+   "risco_absoluto_sem_treino_por_100": 65.45104118798365,
+   "rr_causal_mediana": 1.1480814811652835,
+   "att_mediana": 0.09635154376123678,
+   "leitura": "a renda tem massa em zero e cauda longa (os 5% maiores levam uma fatia grande do total); a média em US$ do ATT é sensível a poucos. O binário perde a intensidade (horas, salário), mas é robusto; por isso a renda vai na conferência e não no modelo."
+  },
+  "Crisonomia": {
+   "placar": {
+    "agent-f4-frontier": {
+     "n": 260,
+     "brier": 0.22479094407407707,
+     "brier_clima": 0.27564117614389466,
+     "ln_capital": 40.9558506499822,
+     "habilidade": 0.1844798109672552,
+     "peso": 1.0
+    },
+    "alegacao-ingenua": {
+     "n": 260,
+     "brier": 0.27617536882498406,
+     "brier_clima": 0.27564117614389466,
+     "ln_capital": -0.5894298799996539,
+     "habilidade": -0.0019380002964815013,
+     "peso": 0.0
+    },
+    "ajuste-regressao-logistica": {
+     "n": 260,
+     "brier": 0.2505074663473969,
+     "brier_clima": 0.27564117614389466,
+     "ln_capital": 19.401529317617634,
+     "habilidade": 0.0911827113354684,
+     "peso": 1.0
+    }
+   },
+   "evpi_posterior": 0.005302729381764203,
+   "degrau_2_fora_da_amostra": {
+    "experimental": {
+     "estimativa": 0.11060291060291061,
+     "IC95": [
+      0.02554728535915987,
+      0.19565853584666135
+     ],
+     "ep": 0.04339572716517895,
+     "n1": 185,
+     "n0": 260
+    },
+    "cofre_calibracao_no_grosso": {
+     "previsto_medio": 0.6546471763286134,
+     "observado": 0.6461538461538462,
+     "por_grupo": {
+      "negro": {
+       "n": 215,
+       "previsto_posterior": 0.6409267144690594,
+       "observado": 0.6093023255813953,
+       "z": 0.5179416537763115
+      },
+      "nao_negro": {
+       "n": 45,
+       "previsto_posterior": 0.7199037480665524,
+       "observado": 0.8222222222222222,
+       "z": -1.727622963929499
+      }
+     },
+     "ingenua_prevista": 0.8641820910455228
+    },
+    "cofre_brier": {
+     "agent-f4-frontier": 0.22479094407407718,
+     "alegacao-ingenua": 0.2761753688249828,
+     "ajuste-regressao-logistica": 0.2505074663473971,
+     "climatologia": 0.27564117614389316
+    }
+   },
+   "leitura": "o cofre é o juiz: os controles sorteados dizem qual era o emprego dos tratados sem treinamento. O contrafactual ingênuo (taxa do CPS) erra por muito; o ajustado é comparado no mesmo placar."
+  }
+ },
+ "banca": {
+  "MB1_propriedades_ineditas": {
+   "passou": true,
+   "detalhe": "18 passed in 32.43s"
+  },
+  "MB2_lote_corrompido": {
+   "passou": true,
+   "quarentena": 15,
+   "esperado": 15,
+   "reingestao_idempotente": true,
+   "select_estrela_recusado": true,
+   "motivos": [
+    "chave primária duplicada",
+    "periodo acima do máximo",
+    "y nulo"
+   ]
+  },
+  "MB3_deriva_injetada": {
+   "passou": true,
+   "ks": 0.6674230769230769,
+   "p_ks": 6.887290595141623e-100,
+   "wasserstein": 12439.184371477346
+  },
+  "MB4_dado_patologico": {
+   "passou": true,
+   "ppc_patologico": {
+    "estatistica": "placebo: P(empregado 75 | tratado) − P(empregado 75 | controle) com pesos ATT de um escore sem re75",
+    "implicacao_testada": "R75 ⊥ X | D, R74 (estacionaridade da seleção, Imbens 2015)",
+    "observado": -0.6087112190825698,
+    "replicas_q025_q975": [
+     -0.10687859085428725,
+     0.0890183836781789
+    ],
+    "p_valor": 0.0,
+    "z_padronizado": -11.80652836974737,
+    "n_tratados": 242
+   },
+   "ppc_mundo": {
+    "estatistica": "placebo: P(empregado 75 | tratado) − P(empregado 75 | controle) com pesos ATT de um escore sem re75",
+    "implicacao_testada": "R75 ⊥ X | D, R74 (estacionaridade da seleção, Imbens 2015)",
+    "observado": -0.12320387547177447,
+    "replicas_q025_q975": [
+     -0.11484587750769291,
+     0.10236241153312946
+    ],
+    "p_valor": 0.04,
+    "z_padronizado": -2.1204613246337805,
+    "n_tratados": 185
+   }
+  },
+  "MB5_trilha_adulterada": {
+   "passou": true,
+   "quebras_detectadas": [
+    "linha 13 (decisao_executiva): conteúdo adulterado"
+   ],
+   "responsavel_nomeado": "sil"
+  },
+  "MB6_inversao_metrica": {
+   "passou": true,
+   "inversao": {
+    "metrica_original": "calibração (mesmo limiar de risco absoluto para todos os grupos)",
+    "metrica_invertida": "igualdade de oportunidade (FNR igual ao de 'negro'): sinalizar ao acaso 100% da célula logo abaixo do limiar em 'outro'",
+    "fnr_depois": {
+     "hispanico": 0.7222222222222222,
+     "negro": 0.5,
+     "outro": 0.5373134328358209
+    },
+    "fpr_depois": {
+     "hispanico": 0.071875,
+     "negro": 0.12698412698412698,
+     "outro": 0.07826747720364742
+    },
+    "vpp_depois": {
+     "hispanico": 0.39473684210526316,
+     "negro": 0.4782608695652174,
+     "outro": 0.4744897959183674
+    },
+    "fnr_alvo": 0.5,
+    "igualdade_atingida": {
+     "hispanico": false,
+     "negro": true,
+     "outro": false
+    },
+    "nota": "o pós-processamento só mexe na célula de risco logo abaixo do limiar; se ela não basta (fração 100%) ou não tem desempregados, a igualdade de FNR fica parcial, e atingi-la exige descer o limiar em mais células",
+    "ganham": "outro: 22 desempregados a mais entram na prioridade (de 603), FNR 0.57 → 0.54",
+    "perdem": "outro: 87 falsos positivos a mais (de 3948 empregados), VPP 0.537 → 0.474; e o sinal deixa de significar o mesmo risco entre os grupos (perde-se a calibração); as vagas extras saem do orçamento do programa, isto é, de quem estava na fila"
+   }
+  },
+  "MB7_cenario_atipico": {
+   "passou": true,
+   "quantidade_base": 0.09635154376123678,
+   "quantidade_priori_atipica": 0.1087234269337537,
+   "decisao_base": "financiar o treinamento",
+   "decisao_priori_atipica": "financiar o treinamento",
+   "decisao_muda": false,
+   "leitura": "decisão robusta à priori"
+  },
+  "MB8_disjuntor_violado": {
+   "passou": true,
+   "com_deriva": {
+    "disparou": true,
+    "frac_fora_suporte": 0.7205,
+    "frac_negros": 0.0675,
+    "placebo_z": null,
+    "motivo": "72% do lote fora do suporte comum do escore de propensão; fração de negros 0.07 longe da população-alvo 0.84"
+   },
+   "mundo_normal": {
+    "disparou": false,
+    "frac_fora_suporte": 0.0038461538461538464,
+    "frac_negros": 0.8269230769230769,
+    "placebo_z": null,
+    "motivo": "dentro do escopo"
+   }
+  }
+ },
+ "critica": {
+  "1_checagem_preditiva": {
+   "estatistica": "placebo: P(empregado 75 | tratado) − P(empregado 75 | controle) com pesos ATT de um escore sem re75",
+   "implicacao_testada": "R75 ⊥ X | D, R74 (estacionaridade da seleção, Imbens 2015)",
+   "observado": -0.12320387547177447,
+   "replicas_q025_q975": [
+    -0.11484587750769291,
+    0.10236241153312946
+   ],
+   "p_valor": 0.04,
+   "z_padronizado": -2.1204613246337805,
+   "n_tratados": 185
+  },
+  "2_modelo_rival": {
+   "modelo": "o ingênuo: P(Y | X) sem covariáveis",
+   "bic_so_X (ingenuo)": 12931.851019667845,
+   "bic_X_e_covariaveis": 10035.06119544918,
+   "mdl_prefere": "X e covariáveis",
+   "leitura": "o rival prevê pior (MDL) e responde à pergunta errada; o modelo ajustado prevê melhor, mas prever bem no degrau 1 não garante o degrau 2: só o cofre sorteado confere"
+  },
+  "3_identificado_vs_importado": {
+   "dp_posterior_sobre_dp_priori": 0.19353342027474812,
+   "leitura": "identificado pelos dados"
+  },
+  "4_performatividade": "sim: se agências passarem a ser julgadas por comparações observacionais, escolhem participantes com melhor histórico, e a comparação deixa de medir o programa (ver Fluxonomia)",
+  "5_premissas_indecidiveis": [
+   "seleção só em observáveis dado (D, re74, re75): não testável; o placebo com re75 testa a premissa vizinha um período atrás (estacionaridade), não a principal",
+   "renda medida do mesmo jeito no NSW (entrevistas) e no CPS (questionário anual): não verificável aqui; LaLonde e Smith & Todd apontam a diferença como fonte de viés",
+   "mercado de trabalho local: o NSW vem de 10 cidades, o CPS é nacional; a geografia não está nas covariáveis",
+   "suporte comum: 72% dos controles do CPS têm escore abaixo do menor tratado; o ajuste vive de ~103 controles efetivos (Kish)",
+   "verossimilhança ponderada por pseudo-contagens de Kish: aproximação; o escore de propensão entra fixo (sua incerteza não se propaga ao MCMC, só ao bootstrap da renda e ao PPC)",
+   "padronização pela composição racial dos tratados (P(negro) = 0.843), fixada no termo de escopo",
+   "desfecho binário: perde a intensidade da renda (relatada à parte, em US$)",
+   "o conjunto conforme de um desfecho binário a 90% é {0, 1}: a cobertura é trivial e não informativa",
+   "o cofre é fora da amostra por desenho, não fora do tempo; a deriva do F3 entre o período 3 (CPS) e o 4 (NSW) é a diferença de populações que a alegação precisa atravessar, não envelhecimento do modelo",
+   "painel SHELF simulado e escrito por quem conhece o resultado experimental"
+  ],
+  "6_tentativas": 1
+ },
+ "f8": {
+  "recomendacao": "financiar o treinamento",
+  "efeito_causal_att": {
+   "mediana": 0.09635154376123678,
+   "q05": 0.008817392130922475,
+   "q95": 0.18793198560689903
+  },
+  "rr_causal_mediana": 1.1480814811652835,
+  "arvore_CL": {
+   "evento": "emprego em 1978",
+   "acao": "financiar o treinamento",
+   "C": "custo por participante, 0.05 ponto de emprego-equivalente (ILUSTRATIVO)",
+   "L": "1 emprego",
+   "P_treinamento_aumenta_emprego": 0.9636666666666667,
+   "P_aumento_supera_C_L": 0.8085,
+   "regra": "financiar se o ATT causal > C/L"
+  },
+  "frequencias_naturais": "De cada 100 homens elegíveis ao NSW que recebem o treinamento, cerca de 75 estarão empregados em 1978; sem treinamento, cerca de 65. A comparação ingênua diria que, sem treinamento, 86 estariam empregados, porque compara com outra população.",
+  "classe_de_referencia": "homens elegíveis ao NSW, 1976–77, 10 cidades dos EUA, 84% negros",
+  "circuit_breaker": "parar de usar a estimativa se, num lote, mais de 20% das pessoas estiverem fora do suporte comum do escore de propensão, se a fração de negros se afastar mais de 0.25 da população-alvo (0.84), ou se o placebo (re75) num lote com tratados der |z| > 4",
+  "hops_titulo": "Empregados em 1978 por 100 elegíveis",
+  "hops_rotulo": "empregados por 100",
+  "evpi": {
+   "evpi": 0.005634259964907552,
+   "acao_atual": "financiar o treinamento"
+  },
+  "hops": "hops-b.gif"
+ },
+ "portao_m15": {
+  "rhat_ok": true,
+  "ess_ok": true,
+  "sbc_ok": true,
+  "ppc_ok": true,
+  "conforme_ok": true,
+  "modelo_vence_climatologia": true,
+  "hypothesis_ok": true,
+  "trilha_integra": true,
+  "banca": true
+ },
+ "aprovado": true,
+ "log": [
+  "1 · F7: tradução, SHELF e termo de escopo",
+  "2 · F2 + F5 + F6",
+  "3 · F1 + F4 + F3",
+  "4 · lentes",
+  "5 · banca: aprovado",
+  "6 · F8: decisão executiva"
+ ],
+ "varredura": [
+  {
+   "agente": "modelagem",
+   "periodos": [
+    1,
+    2,
+    3
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 3,
+   "bytes_estimados": 412076
+  },
+  {
+   "agente": "modelagem",
+   "periodos": [
+    1,
+    2,
+    3
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "fonte",
+    "sintetico",
+    "origem",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 3,
+   "bytes_estimados": 500378
+  },
+  {
+   "agente": "modelagem",
+   "periodos": [
+    3
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 137650
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "fonte",
+    "sintetico",
+    "origem",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 11532
+  },
+  {
+   "agente": "agent-f3-lifecycle",
+   "periodos": [
+    3
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "fonte",
+    "sintetico",
+    "origem",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 167147
+  },
+  {
+   "agente": "banca",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "fonte",
+    "sintetico",
+    "origem",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 11532
+  },
+  {
+   "agente": "banca",
+   "periodos": [
+    4
+   ],
+   "colunas": [
+    "pessoa",
+    "periodo",
+    "fonte",
+    "sintetico",
+    "origem",
+    "treat",
+    "age",
+    "educ",
+    "black",
+    "hisp",
+    "raca",
+    "marr",
+    "nodegree",
+    "re74",
+    "re75",
+    "re78",
+    "y"
+   ],
+   "arquivos": 1,
+   "bytes_estimados": 11532
+  }
+ ]
+}

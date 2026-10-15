@@ -1,0 +1,1306 @@
+{
+ "V": [
+  {
+   "id": "N_Raiz1",
+   "camada": "raiz",
+   "tipo": "raiz"
+  },
+  {
+   "id": "N_Raiz2",
+   "camada": "raiz",
+   "tipo": "raiz"
+  },
+  {
+   "id": "N_Raiz3",
+   "camada": "raiz",
+   "tipo": "raiz"
+  },
+  {
+   "id": "N_Core",
+   "camada": "core",
+   "tipo": "processo gerador oculto"
+  },
+  {
+   "id": "L1",
+   "camada": "L1",
+   "tipo": "camada"
+  },
+  {
+   "id": "L2",
+   "camada": "L2",
+   "tipo": "camada"
+  },
+  {
+   "id": "L3",
+   "camada": "L3",
+   "tipo": "camada"
+  },
+  {
+   "id": "N_C1",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C2",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C3",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C4",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C5",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C6",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C7",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C8",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C9",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "N_C10",
+   "camada": "conceito",
+   "tipo": "conceito"
+  },
+  {
+   "id": "M0",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M1",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M2",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M3",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M4",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M5",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M6",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M7",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M8",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M9",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M10",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M11",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M12",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M13",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M14",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "M15",
+   "camada": "modulo",
+   "tipo": "modulo"
+  },
+  {
+   "id": "F1",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F2",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F3",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F4",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F5",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F6",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F7",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "F8",
+   "camada": "faixa",
+   "tipo": "faixa"
+  },
+  {
+   "id": "a:ficha_transferencia:00ae50c1",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ficha_transferencia",
+   "projeto": "a",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#00ae50c14c3c7587fa3fb12d6d8f306ff780d710f167981cab76ee5b926cd59e"
+  },
+  {
+   "id": "a:shelf_v4:9ccbc06c",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "shelf_v4",
+   "projeto": "a",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#9ccbc06c46146d4d88afcf0e97fa222e447509d4e0ac128b878cee246d87e37b"
+  },
+  {
+   "id": "a:termo_escopo:fc79d9a4",
+   "camada": "L3",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "termo_escopo",
+   "projeto": "a",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#fc79d9a4d0848597e2a7a02cc79694d04ae79887b94ad5cf7682e048820815be"
+  },
+  {
+   "id": "a:datacontract:a5458617",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "datacontract",
+   "projeto": "a",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#a5458617508f2fbb135fb29b3cb9baa4366edda9e0ee0a8ee4330887a6cd05a5"
+  },
+  {
+   "id": "a:ingestao:276a2604",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "ingestao",
+   "projeto": "a",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#276a26040e4e6033c20acba56fa1212fdd1fcbdccd573e277fc94541925163e8"
+  },
+  {
+   "id": "a:dossie_governanca:f9f2ccbe",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "dossie_governanca",
+   "projeto": "a",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#f9f2ccbef30c0387423a93397ee78fded4da688e16a5bad3b573eee396d541c9"
+  },
+  {
+   "id": "a:auditoria_justica:b39bd3f9",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "auditoria_justica",
+   "projeto": "a",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#b39bd3f986c97ecd3943f277bb462ac710c446a9af60c5eddb1e1983e4c65426"
+  },
+  {
+   "id": "a:portao_crisonomico:afa01bb1",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "portao_crisonomico",
+   "projeto": "a",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#afa01bb16c5a5f2bc165d0cced95bd720a8bf87d8fc84cb95563403159e2b032"
+  },
+  {
+   "id": "a:processo_gerador_e_nulo:7990d85e",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "processo_gerador_e_nulo",
+   "projeto": "a",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#7990d85e739c0433eda42dd6bbce8becba495dedde3238e83e55483c6fcdd7fb"
+  },
+  {
+   "id": "a:fronteira:63da43fd",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "fronteira",
+   "projeto": "a",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#63da43fddcc8b65d0c110c65df0c4516ed306e7f22c50f4dc337b6d25f5c42c0"
+  },
+  {
+   "id": "a:ciclo_de_vida:0cd7b68f",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ciclo_de_vida",
+   "projeto": "a",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#0cd7b68f739050eb9f2d912ed99d4cc2b570b66ca397e119d6ddbad8331763b0"
+  },
+  {
+   "id": "a:lentes:8e392eee",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "lentes",
+   "projeto": "a",
+   "estagio": 4,
+   "artefato_simulavel": "saida/barramento.jsonl#8e392eeed842210596893ff3792efb99eba0ec85661d236c074c4abfa08580ab"
+  },
+  {
+   "id": "a:banca_e_critica:1f7e1b8d",
+   "camada": "L2",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "banca_e_critica",
+   "projeto": "a",
+   "estagio": 5,
+   "artefato_simulavel": "saida/barramento.jsonl#1f7e1b8d538db9904a1fad8523ad4188025d1bcf37b94d8df384d3c20bb3f3da"
+  },
+  {
+   "id": "a:decisao_executiva:2f773d29",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "decisao_executiva",
+   "projeto": "a",
+   "estagio": 6,
+   "artefato_simulavel": "saida/barramento.jsonl#2f773d29912e66fca66ce8a7695cb0f83be0c5f3e864047e23ef1342f8326f58"
+  },
+  {
+   "id": "b:ficha_transferencia:cea7ed43",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ficha_transferencia",
+   "projeto": "b",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#cea7ed43e192d3e45e3df591121980810ca1441d1d2f7bc0218b6461236b667e"
+  },
+  {
+   "id": "b:shelf_v4:201ec879",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "shelf_v4",
+   "projeto": "b",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#201ec879132c4b055feca1f3f47f6d73974956ba6b4a273ed9dcc1c8d21a3f1e"
+  },
+  {
+   "id": "b:termo_escopo:fbddd3a3",
+   "camada": "L3",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "termo_escopo",
+   "projeto": "b",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#fbddd3a34c9889e800a45456a3e9716bb731bf0c21d60dfa074b377545c60a54"
+  },
+  {
+   "id": "b:datacontract:af720799",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "datacontract",
+   "projeto": "b",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#af720799b7505e01ab2ba90b603022e41528869916d45ddf2ef086ec0ec792d7"
+  },
+  {
+   "id": "b:ingestao:4f884014",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "ingestao",
+   "projeto": "b",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#4f88401430e4a0e5589d959c8563887d9494243208ad59a7c1dabb02f71dc68c"
+  },
+  {
+   "id": "b:dossie_governanca:99c12732",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "dossie_governanca",
+   "projeto": "b",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#99c12732f403b44bc1c7c7635b102932ed5e025993e594fd5bc484b66fae6c53"
+  },
+  {
+   "id": "b:auditoria_justica:c97c9cb0",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "auditoria_justica",
+   "projeto": "b",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#c97c9cb0a2ce8f2d6eb63276fcc04611abb24883a5649d0bef4360a7347a649e"
+  },
+  {
+   "id": "b:portao_crisonomico:f5d37859",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "portao_crisonomico",
+   "projeto": "b",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#f5d3785933604f3bb2164b2fdb1b3e6eb73c9ff46b48834fd14b71e3fc7f83cf"
+  },
+  {
+   "id": "b:processo_gerador_e_nulo:e364db1e",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "processo_gerador_e_nulo",
+   "projeto": "b",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#e364db1e9dca0ef4cc5539956992b4866baa2b510e8947617200fac871d95c89"
+  },
+  {
+   "id": "b:fronteira:3a6400ae",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "fronteira",
+   "projeto": "b",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#3a6400aeb5409931f37fce2877955b8e832360fd9fa26b372832fed27bd7751d"
+  },
+  {
+   "id": "b:ciclo_de_vida:3907f2c9",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ciclo_de_vida",
+   "projeto": "b",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#3907f2c903f777d6abba74c81808d4b625c18be6e8e4a51d0e434f7f6afdaeb3"
+  },
+  {
+   "id": "b:lentes:b79600f9",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "lentes",
+   "projeto": "b",
+   "estagio": 4,
+   "artefato_simulavel": "saida/barramento.jsonl#b79600f95e62c880484188ceb575dad11053096d0ebc5ea0d660814b12e565b9"
+  },
+  {
+   "id": "b:banca_e_critica:c54b1f22",
+   "camada": "L2",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "banca_e_critica",
+   "projeto": "b",
+   "estagio": 5,
+   "artefato_simulavel": "saida/barramento.jsonl#c54b1f2235cf37a9b1055b1ab2dcc5d161547ffedcd05b8e37d34f45972a4554"
+  },
+  {
+   "id": "b:decisao_executiva:ed2ee3fb",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "decisao_executiva",
+   "projeto": "b",
+   "estagio": 6,
+   "artefato_simulavel": "saida/barramento.jsonl#ed2ee3fb8634e33e25883da027afa7c5e8d3e99f4228f027e117a934618d9a5d"
+  },
+  {
+   "id": "c:ficha_transferencia:80fc8179",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ficha_transferencia",
+   "projeto": "c",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#80fc817963b7569c313d21975f81e54f653bcf510dc0768443af752e979fdef0"
+  },
+  {
+   "id": "c:shelf_v4:0674195f",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "shelf_v4",
+   "projeto": "c",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#0674195fc43a5b9b02511875b0cb63c9ed5d6406773b5b5dbcadd626bda00e7f"
+  },
+  {
+   "id": "c:termo_escopo:56864d0f",
+   "camada": "L3",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "termo_escopo",
+   "projeto": "c",
+   "estagio": 1,
+   "artefato_simulavel": "saida/barramento.jsonl#56864d0fc3e2247f4862edd024deea6e508ca1216ca1b8235fe40f87aa6279a0"
+  },
+  {
+   "id": "c:datacontract:03076fc9",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "datacontract",
+   "projeto": "c",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#03076fc98dd988bafc182768c4078c170f70eca3d1c7b87126bcc7b9a4c08d6c"
+  },
+  {
+   "id": "c:ingestao:b70c81f8",
+   "camada": "L1",
+   "tipo_incerteza": "Aleatoria",
+   "tipo": "ingestao",
+   "projeto": "c",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#b70c81f8f89512bdbd2fa5f6da5c67cb823d7a77115a67e0c3ec54838c9196d4"
+  },
+  {
+   "id": "c:dossie_governanca:b979f415",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "dossie_governanca",
+   "projeto": "c",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#b979f415b7cc92abe2c38e2e5a8617771151fccc04accf4b80c569f2859b1485"
+  },
+  {
+   "id": "c:auditoria_justica:bb5509ed",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "auditoria_justica",
+   "projeto": "c",
+   "estagio": 2,
+   "artefato_simulavel": "saida/barramento.jsonl#bb5509edfc427b10bf6c47304f363f8308766ba348477608880e066185ec7310"
+  },
+  {
+   "id": "c:portao_crisonomico:b1d7bf77",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "portao_crisonomico",
+   "projeto": "c",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#b1d7bf77c2f7b548534877c32f957a5d5a0b3598c7117feee5bbd8c669118f99"
+  },
+  {
+   "id": "c:processo_gerador_e_nulo:340cebce",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "processo_gerador_e_nulo",
+   "projeto": "c",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#340cebce5bb85674f29d9e5cd2d589947300a76e6973d0de885838fd109938a0"
+  },
+  {
+   "id": "c:fronteira:64e67528",
+   "camada": "L2",
+   "tipo_incerteza": "Epistemica",
+   "tipo": "fronteira",
+   "projeto": "c",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#64e67528883665a36cb04dfbd619f1d54c04428d031c6f3a0309bc6f1d5d4c78"
+  },
+  {
+   "id": "c:ciclo_de_vida:9bb70c94",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "ciclo_de_vida",
+   "projeto": "c",
+   "estagio": 3,
+   "artefato_simulavel": "saida/barramento.jsonl#9bb70c9448937ab112566a2ed1b0937230de6cc96cedbfa6e9c9f5b7d0b3f2d7"
+  },
+  {
+   "id": "c:lentes:c9bc193d",
+   "camada": "L2",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "lentes",
+   "projeto": "c",
+   "estagio": 4,
+   "artefato_simulavel": "saida/barramento.jsonl#c9bc193d9a76e3410c6498ed7155dc8dcbd3d6598d695e2ee5ec21710c099ad9"
+  },
+  {
+   "id": "c:banca_e_critica:74707824",
+   "camada": "L2",
+   "tipo_incerteza": "Knightiana_Especificacao",
+   "tipo": "banca_e_critica",
+   "projeto": "c",
+   "estagio": 5,
+   "artefato_simulavel": "saida/barramento.jsonl#7470782404563a420b5fbe92fac5c5df880a02d748279ebbf41e55aefd6f69e0"
+  },
+  {
+   "id": "c:decisao_executiva:2d986a98",
+   "camada": "L3",
+   "tipo_incerteza": "nao_se_aplica",
+   "tipo": "decisao_executiva",
+   "projeto": "c",
+   "estagio": 6,
+   "artefato_simulavel": "saida/barramento.jsonl#2d986a98a9ea3be81a774b4aca383cad6394384022a07fc06887419eaf62d63f"
+  },
+  {
+   "id": "a:alegacao",
+   "camada": "L3",
+   "tipo": "hipotese",
+   "projeto": "a"
+  },
+  {
+   "id": "b:alegacao",
+   "camada": "L3",
+   "tipo": "hipotese",
+   "projeto": "b"
+  },
+  {
+   "id": "c:alegacao",
+   "camada": "L3",
+   "tipo": "hipotese",
+   "projeto": "c"
+  }
+ ],
+ "E_tree": [
+  {
+   "de": "M0",
+   "para": "M1",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M1",
+   "para": "M2",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M2",
+   "para": "M3",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M3",
+   "para": "M4",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M4",
+   "para": "M5",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M5",
+   "para": "M6",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M6",
+   "para": "M7",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M7",
+   "para": "M8",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M8",
+   "para": "M9",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M9",
+   "para": "M10",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M10",
+   "para": "M11",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M11",
+   "para": "M12",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M12",
+   "para": "M13",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M13",
+   "para": "M14",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "M14",
+   "para": "M15",
+   "tipo": "prerequisito"
+  },
+  {
+   "de": "a:ficha_transferencia:00ae50c1",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:shelf_v4:9ccbc06c",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:ficha_transferencia:00ae50c1",
+   "para": "a:shelf_v4:9ccbc06c",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "a:termo_escopo:fc79d9a4",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:ficha_transferencia:00ae50c1",
+   "para": "a:termo_escopo:fc79d9a4",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "a:shelf_v4:9ccbc06c",
+   "para": "a:termo_escopo:fc79d9a4",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "a:datacontract:a5458617",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:ingestao:276a2604",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:datacontract:a5458617",
+   "para": "a:ingestao:276a2604",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "a:dossie_governanca:f9f2ccbe",
+   "para": "F5",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:auditoria_justica:b39bd3f9",
+   "para": "F6",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:portao_crisonomico:afa01bb1",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:processo_gerador_e_nulo:7990d85e",
+   "para": "F1",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:fronteira:63da43fd",
+   "para": "F4",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:ciclo_de_vida:0cd7b68f",
+   "para": "F3",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:lentes:8e392eee",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:banca_e_critica:1f7e1b8d",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "a:decisao_executiva:2f773d29",
+   "para": "F8",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:ficha_transferencia:cea7ed43",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:shelf_v4:201ec879",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:ficha_transferencia:cea7ed43",
+   "para": "b:shelf_v4:201ec879",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "b:termo_escopo:fbddd3a3",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:ficha_transferencia:cea7ed43",
+   "para": "b:termo_escopo:fbddd3a3",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "b:shelf_v4:201ec879",
+   "para": "b:termo_escopo:fbddd3a3",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "b:datacontract:af720799",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:ingestao:4f884014",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:datacontract:af720799",
+   "para": "b:ingestao:4f884014",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "b:dossie_governanca:99c12732",
+   "para": "F5",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:auditoria_justica:c97c9cb0",
+   "para": "F6",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:portao_crisonomico:f5d37859",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:processo_gerador_e_nulo:e364db1e",
+   "para": "F1",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:fronteira:3a6400ae",
+   "para": "F4",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:ciclo_de_vida:3907f2c9",
+   "para": "F3",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:lentes:b79600f9",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:banca_e_critica:c54b1f22",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "b:decisao_executiva:ed2ee3fb",
+   "para": "F8",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:ficha_transferencia:80fc8179",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:shelf_v4:0674195f",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:ficha_transferencia:80fc8179",
+   "para": "c:shelf_v4:0674195f",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "c:termo_escopo:56864d0f",
+   "para": "F7",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:ficha_transferencia:80fc8179",
+   "para": "c:termo_escopo:56864d0f",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "c:shelf_v4:0674195f",
+   "para": "c:termo_escopo:56864d0f",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "c:datacontract:03076fc9",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:ingestao:b70c81f8",
+   "para": "F2",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:datacontract:03076fc9",
+   "para": "c:ingestao:b70c81f8",
+   "tipo": "lido_por"
+  },
+  {
+   "de": "c:dossie_governanca:b979f415",
+   "para": "F5",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:auditoria_justica:bb5509ed",
+   "para": "F6",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:portao_crisonomico:b1d7bf77",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:processo_gerador_e_nulo:340cebce",
+   "para": "F1",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:fronteira:64e67528",
+   "para": "F4",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:ciclo_de_vida:9bb70c94",
+   "para": "F3",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:lentes:c9bc193d",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:banca_e_critica:74707824",
+   "para": "M15",
+   "tipo": "produzido_por"
+  },
+  {
+   "de": "c:decisao_executiva:2d986a98",
+   "para": "F8",
+   "tipo": "produzido_por"
+  }
+ ],
+ "E_graph": [
+  {
+   "de": "a:alegacao",
+   "para": "N_Core",
+   "tipo": "patologia",
+   "rotulo": "desalinhamento intercamadas apontado pela banca"
+  },
+  {
+   "de": "b:alegacao",
+   "para": "N_Core",
+   "tipo": "patologia",
+   "rotulo": "desalinhamento intercamadas apontado pela banca"
+  },
+  {
+   "de": "c:alegacao",
+   "para": "N_Core",
+   "tipo": "patologia",
+   "rotulo": "desalinhamento intercamadas apontado pela banca"
+  }
+ ],
+ "H": [
+  {
+   "lente": "Crononomia",
+   "projeto": "a",
+   "nos": [
+    "a:ficha_transferencia:00ae50c1",
+    "a:shelf_v4:9ccbc06c",
+    "a:termo_escopo:fc79d9a4",
+    "a:datacontract:a5458617",
+    "a:ingestao:276a2604",
+    "a:dossie_governanca:f9f2ccbe",
+    "a:auditoria_justica:b39bd3f9",
+    "a:portao_crisonomico:afa01bb1",
+    "a:processo_gerador_e_nulo:7990d85e",
+    "a:fronteira:63da43fd",
+    "a:ciclo_de_vida:0cd7b68f",
+    "a:lentes:8e392eee",
+    "a:banca_e_critica:1f7e1b8d",
+    "a:decisao_executiva:2f773d29"
+   ]
+  },
+  {
+   "lente": "Escalonomia",
+   "projeto": "a",
+   "nos": [
+    "a:ficha_transferencia:00ae50c1",
+    "a:shelf_v4:9ccbc06c",
+    "a:termo_escopo:fc79d9a4",
+    "a:datacontract:a5458617",
+    "a:ingestao:276a2604",
+    "a:dossie_governanca:f9f2ccbe",
+    "a:auditoria_justica:b39bd3f9",
+    "a:portao_crisonomico:afa01bb1",
+    "a:processo_gerador_e_nulo:7990d85e",
+    "a:fronteira:63da43fd",
+    "a:ciclo_de_vida:0cd7b68f",
+    "a:lentes:8e392eee",
+    "a:banca_e_critica:1f7e1b8d",
+    "a:decisao_executiva:2f773d29"
+   ]
+  },
+  {
+   "lente": "Fluxonomia",
+   "projeto": "a",
+   "nos": [
+    "a:ficha_transferencia:00ae50c1",
+    "a:shelf_v4:9ccbc06c",
+    "a:termo_escopo:fc79d9a4",
+    "a:datacontract:a5458617",
+    "a:ingestao:276a2604",
+    "a:dossie_governanca:f9f2ccbe",
+    "a:auditoria_justica:b39bd3f9",
+    "a:portao_crisonomico:afa01bb1",
+    "a:processo_gerador_e_nulo:7990d85e",
+    "a:fronteira:63da43fd",
+    "a:ciclo_de_vida:0cd7b68f",
+    "a:lentes:8e392eee",
+    "a:banca_e_critica:1f7e1b8d",
+    "a:decisao_executiva:2f773d29"
+   ]
+  },
+  {
+   "lente": "Morfonomia",
+   "projeto": "a",
+   "nos": [
+    "a:ficha_transferencia:00ae50c1",
+    "a:shelf_v4:9ccbc06c",
+    "a:termo_escopo:fc79d9a4",
+    "a:datacontract:a5458617",
+    "a:ingestao:276a2604",
+    "a:dossie_governanca:f9f2ccbe",
+    "a:auditoria_justica:b39bd3f9",
+    "a:portao_crisonomico:afa01bb1",
+    "a:processo_gerador_e_nulo:7990d85e",
+    "a:fronteira:63da43fd",
+    "a:ciclo_de_vida:0cd7b68f",
+    "a:lentes:8e392eee",
+    "a:banca_e_critica:1f7e1b8d",
+    "a:decisao_executiva:2f773d29"
+   ]
+  },
+  {
+   "lente": "Crisonomia",
+   "projeto": "a",
+   "nos": [
+    "a:ficha_transferencia:00ae50c1",
+    "a:shelf_v4:9ccbc06c",
+    "a:termo_escopo:fc79d9a4",
+    "a:datacontract:a5458617",
+    "a:ingestao:276a2604",
+    "a:dossie_governanca:f9f2ccbe",
+    "a:auditoria_justica:b39bd3f9",
+    "a:portao_crisonomico:afa01bb1",
+    "a:processo_gerador_e_nulo:7990d85e",
+    "a:fronteira:63da43fd",
+    "a:ciclo_de_vida:0cd7b68f",
+    "a:lentes:8e392eee",
+    "a:banca_e_critica:1f7e1b8d",
+    "a:decisao_executiva:2f773d29"
+   ]
+  },
+  {
+   "lente": "conferencia_lab",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Morfonomia",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Fluxonomia",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Crononomia",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Escalonomia",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Crisonomia",
+   "projeto": "b",
+   "nos": [
+    "b:ficha_transferencia:cea7ed43",
+    "b:shelf_v4:201ec879",
+    "b:termo_escopo:fbddd3a3",
+    "b:datacontract:af720799",
+    "b:ingestao:4f884014",
+    "b:dossie_governanca:99c12732",
+    "b:auditoria_justica:c97c9cb0",
+    "b:portao_crisonomico:f5d37859",
+    "b:processo_gerador_e_nulo:e364db1e",
+    "b:fronteira:3a6400ae",
+    "b:ciclo_de_vida:3907f2c9",
+    "b:lentes:b79600f9",
+    "b:banca_e_critica:c54b1f22",
+    "b:decisao_executiva:ed2ee3fb"
+   ]
+  },
+  {
+   "lente": "Crononomia",
+   "projeto": "c",
+   "nos": [
+    "c:ficha_transferencia:80fc8179",
+    "c:shelf_v4:0674195f",
+    "c:termo_escopo:56864d0f",
+    "c:datacontract:03076fc9",
+    "c:ingestao:b70c81f8",
+    "c:dossie_governanca:b979f415",
+    "c:auditoria_justica:bb5509ed",
+    "c:portao_crisonomico:b1d7bf77",
+    "c:processo_gerador_e_nulo:340cebce",
+    "c:fronteira:64e67528",
+    "c:ciclo_de_vida:9bb70c94",
+    "c:lentes:c9bc193d",
+    "c:banca_e_critica:74707824",
+    "c:decisao_executiva:2d986a98"
+   ]
+  },
+  {
+   "lente": "Escalonomia",
+   "projeto": "c",
+   "nos": [
+    "c:ficha_transferencia:80fc8179",
+    "c:shelf_v4:0674195f",
+    "c:termo_escopo:56864d0f",
+    "c:datacontract:03076fc9",
+    "c:ingestao:b70c81f8",
+    "c:dossie_governanca:b979f415",
+    "c:auditoria_justica:bb5509ed",
+    "c:portao_crisonomico:b1d7bf77",
+    "c:processo_gerador_e_nulo:340cebce",
+    "c:fronteira:64e67528",
+    "c:ciclo_de_vida:9bb70c94",
+    "c:lentes:c9bc193d",
+    "c:banca_e_critica:74707824",
+    "c:decisao_executiva:2d986a98"
+   ]
+  },
+  {
+   "lente": "Fluxonomia",
+   "projeto": "c",
+   "nos": [
+    "c:ficha_transferencia:80fc8179",
+    "c:shelf_v4:0674195f",
+    "c:termo_escopo:56864d0f",
+    "c:datacontract:03076fc9",
+    "c:ingestao:b70c81f8",
+    "c:dossie_governanca:b979f415",
+    "c:auditoria_justica:bb5509ed",
+    "c:portao_crisonomico:b1d7bf77",
+    "c:processo_gerador_e_nulo:340cebce",
+    "c:fronteira:64e67528",
+    "c:ciclo_de_vida:9bb70c94",
+    "c:lentes:c9bc193d",
+    "c:banca_e_critica:74707824",
+    "c:decisao_executiva:2d986a98"
+   ]
+  },
+  {
+   "lente": "Morfonomia",
+   "projeto": "c",
+   "nos": [
+    "c:ficha_transferencia:80fc8179",
+    "c:shelf_v4:0674195f",
+    "c:termo_escopo:56864d0f",
+    "c:datacontract:03076fc9",
+    "c:ingestao:b70c81f8",
+    "c:dossie_governanca:b979f415",
+    "c:auditoria_justica:bb5509ed",
+    "c:portao_crisonomico:b1d7bf77",
+    "c:processo_gerador_e_nulo:340cebce",
+    "c:fronteira:64e67528",
+    "c:ciclo_de_vida:9bb70c94",
+    "c:lentes:c9bc193d",
+    "c:banca_e_critica:74707824",
+    "c:decisao_executiva:2d986a98"
+   ]
+  },
+  {
+   "lente": "Crisonomia",
+   "projeto": "c",
+   "nos": [
+    "c:ficha_transferencia:80fc8179",
+    "c:shelf_v4:0674195f",
+    "c:termo_escopo:56864d0f",
+    "c:datacontract:03076fc9",
+    "c:ingestao:b70c81f8",
+    "c:dossie_governanca:b979f415",
+    "c:auditoria_justica:bb5509ed",
+    "c:portao_crisonomico:b1d7bf77",
+    "c:processo_gerador_e_nulo:340cebce",
+    "c:fronteira:64e67528",
+    "c:ciclo_de_vida:9bb70c94",
+    "c:lentes:c9bc193d",
+    "c:banca_e_critica:74707824",
+    "c:decisao_executiva:2d986a98"
+   ]
+  }
+ ],
+ "Phi": [
+  "simulabilidade",
+  "margem_e_unidade",
+  "camadas_e_teste_severo",
+  "escopo_ecologico"
+ ],
+ "contagem": {
+  "nos": 86,
+  "arestas_tree": 69,
+  "arestas_graph": 3,
+  "hiperarestas": 16
+ }
+}

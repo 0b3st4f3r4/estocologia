@@ -1,0 +1,5652 @@
+{
+ "dominio": "direito_teto_beneficio",
+ "area": "Direito (regra de indenização trabalhista)",
+ "titulo": "Teto do benefício por acidente de trabalho e duração do afastamento (Kentucky 1980, Michigan 1982)",
+ "alegacao": "\"O afastamento cresce com o benefício pela mesma elasticidade em qualquer estado e regra: o que se aprendeu no Kentucky vale para a reforma do Michigan.\"",
+ "ingestao": {
+  "arquivos": 4,
+  "bytes_tabela": 83536,
+  "linhas": 6822,
+  "ambientes": [
+   "ky_antes",
+   "ky_depois",
+   "mi_antes",
+   "mi_depois"
+  ]
+ },
+ "K": 3,
+ "priori": {
+  "media": 0.35000000000001663,
+  "dp": 0.22239033277576534,
+  "erro_max_quartis": 6.716849298982197e-14,
+  "q05_q95_implicados": [
+   -0.015799545465146003,
+   0.7157995454651791
+  ],
+  "razao_largura_90_elicitada_sobre_implicada": 1.0251516292157712
+ },
+ "filtro1": {
+  "evpi_priori": 0.08718710226310236,
+  "custo_pesquisa": 0.01,
+  "acao_sem_pesquisa": "manter",
+  "p_adotar_compensa_priori": 0.4962,
+  "passa": true
+ },
+ "governanca": {
+  "tem_titulares": true,
+  "quase_ids": [
+   "homem",
+   "casado",
+   "kentucky"
+  ],
+  "k_anonimato_bruto": 63,
+  "dados": "reais (wooldridge_injury.csv)",
+  "responsavel_humano": {
+   "nome": "sil",
+   "assinatura": "PENDENTE"
+  }
+ },
+ "filtro2": {
+  "porta_dos_fundos": {
+   "valido": true,
+   "descendentes_no_ajuste": [],
+   "d_separa_sem_arestas_de_x": true
+  },
+  "n_linhas": 6146,
+  "n_unidades": 6146,
+  "ep_chave_por_unidade": 0.053277257599799184,
+  "ep_chave_ingenuo": 0.05552909185213518,
+  "efeito_de_desenho": 0.9205398247316968,
+  "dp_priori": 0.22239033277576534,
+  "informativo": true,
+  "alerta_unidade": "uma linha por unidade: nenhum agrupamento declarado; o EP pode ser otimista se houver dependência não modelada",
+  "beta_chave_mv": 0.5952822729044421,
+  "passa": true
+ },
+ "filtro3": {
+  "z_obs": 11.173290438032717,
+  "nulo_q95": 1.9864122088056706,
+  "p_permutacao": 0.004975124378109453,
+  "permutacoes": 200,
+  "nivel_da_permutacao": "entre unidades",
+  "passa": true
+ },
+ "filtro4": {
+  "icp": {
+   "teste": "K2: resíduos não paramétricos (KW + Brown–Forsythe, Bonferroni)",
+   "melhor_conjunto": {
+    "S": [
+     "beneficio_log",
+     "industria",
+     "kentucky"
+    ],
+    "p": 1.0
+   },
+   "regra_saturacao": {
+    "ativa": true,
+    "limiar_acerto_1nn": 0.99,
+    "saturados_testados": 2,
+    "aceitos_saturados": 2,
+    "aceitos_nao_saturados": 578,
+    "aceitos_sem_a_regra": 580,
+    "S_hat_sem_a_regra": [],
+    "melhor_conjunto_incluindo_saturados": {
+     "S": [
+      "beneficio_log",
+      "industria",
+      "kentucky"
+     ],
+     "p": 1.0,
+     "saturado": false
+    },
+    "saturados_diag_k2_entre_aceitos": 0,
+    "nota": "K = 3 (DECLARACAO_K3): saturados fora da família; Ŝ = interseção dos aceitos não saturados"
+   },
+   "alpha": 0.05,
+   "candidatos": [
+    "alta_renda",
+    "beneficio_log",
+    "casado",
+    "homem",
+    "idade_log",
+    "industria",
+    "internacao",
+    "kentucky",
+    "salario_log",
+    "tipo_lesao"
+   ],
+   "subconjuntos_testados": 1024,
+   "subconjuntos_na_familia": 1022,
+   "aceitos": [
+    [
+     "alta_renda",
+     "beneficio_log"
+    ],
+    [
+     "alta_renda",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "idade_log"
+    ],
+    [
+     "beneficio_log",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "salario_log"
+    ],
+    [
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "casado",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "casado",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ],
+    [
+     "alta_renda",
+     "beneficio_log",
+     "casado",
+     "homem",
+     "idade_log",
+     "industria",
+     "internacao",
+     "kentucky",
+     "salario_log",
+     "tipo_lesao"
+    ]
+   ],
+   "S_hat": [],
+   "modelo_rejeitado": false,
+   "situacao": "Ŝ vazio por conjuntos aceitos disjuntos",
+   "ambientes": 3,
+   "intervalos": {
+    "alta_renda": [
+     -0.14776285822619717,
+     0.20865661683051306
+    ],
+    "beneficio_log": [
+     0.0,
+     0.8592480234336043
+    ],
+    "casado": [
+     -0.029627921371547336,
+     0.11964520682116807
+    ],
+    "homem": [
+     -0.11034863333803288,
+     0.07193008650475656
+    ],
+    "idade_log": [
+     0.0,
+     0.18332404845332348
+    ],
+    "industria": [
+     -0.30735817150865563,
+     0.24514392228765736
+    ],
+    "internacao": [
+     0.0,
+     0.5154626658480692
+    ],
+    "kentucky": [
+     -0.11755657983802514,
+     0.04103053731084821
+    ],
+    "salario_log": [
+     -0.1852057359732815,
+     0.31630950427104587
+    ],
+    "tipo_lesao": [
+     -0.771808729023698,
+     1.0496120139355416
+    ]
+   },
+   "p_por_subconjunto": {
+    "∅": 4.84404080772119e-06,
+    "alta_renda": 1.2596489908686117e-07,
+    "beneficio_log": 0.047394031336506146,
+    "casado": 2.056502659236869e-06,
+    "homem": 6.960145337987012e-06,
+    "idade_log": 0.00010838971241761898,
+    "industria": 5.153600418965188e-07,
+    "internacao": 9.669402714883619e-08,
+    "kentucky": 0.02249587375619442,
+    "salario_log": 0.011914119429856629,
+    "tipo_lesao": 7.714724390590912e-06,
+    "alta_renda+beneficio_log": 0.31026738459159736,
+    "alta_renda+casado": 1.7740575744854986e-07,
+    "alta_renda+homem": 6.150307155377674e-08,
+    "alta_renda+idade_log": 4.93324138197961e-06,
+    "alta_renda+industria": 4.7255111183383084e-08,
+    "alta_renda+internacao": 7.950944341469911e-09,
+    "alta_renda+kentucky": 0.054456046949463724,
+    "alta_renda+salario_log": 0.024903092426167932,
+    "alta_renda+tipo_lesao": 3.64116299902655e-07,
+    "beneficio_log+casado": 0.024911058399033945,
+    "beneficio_log+homem": 0.04397312145199071,
+    "beneficio_log+idade_log": 0.08242177050168162,
+    "beneficio_log+industria": 0.07785752253159492,
+    "beneficio_log+internacao": 0.01751006828082331,
+    "beneficio_log+kentucky": 0.8195472551432452,
+    "beneficio_log+salario_log": 0.11258005727362624,
+    "beneficio_log+tipo_lesao": 0.046591561062795786,
+    "casado+homem": 2.8602986298920205e-06,
+    "casado+idade_log": 6.215735109882099e-05,
+    "casado+industria": 3.1699026323001956e-07,
+    "casado+internacao": 5.395689585756814e-08,
+    "casado+kentucky": 0.019226017430231824,
+    "casado+salario_log": 0.007711863378499321,
+    "casado+tipo_lesao": 3.303504558133636e-06,
+    "homem+idade_log": 0.00015657591133547347,
+    "homem+industria": 4.777288796903661e-07,
+    "homem+internacao": 9.479482965069623e-08,
+    "homem+kentucky": 0.018150186204047077,
+    "homem+salario_log": 0.015215928373351654,
+    "homem+tipo_lesao": 1.0243550933575663e-05,
+    "idade_log+industria": 2.0026331476685064e-05,
+    "idade_log+internacao": 1.5188774044505635e-06,
+    "idade_log+kentucky": 0.06441855040625058,
+    "idade_log+salario_log": 0.012101518345415533,
+    "idade_log+tipo_lesao": 0.00015028320672484587,
+    "industria+internacao": 8.228556379183379e-09,
+    "industria+kentucky": 0.014268574681711409,
+    "industria+salario_log": 0.002502488582554253,
+    "industria+tipo_lesao": 1.3039830878541161e-06,
+    "internacao+kentucky": 0.00038088009794951547,
+    "internacao+salario_log": 0.00012391199222711556,
+    "internacao+tipo_lesao": 1.2632170187674635e-07,
+    "kentucky+salario_log": 0.0433037452335711,
+    "kentucky+tipo_lesao": 0.04407335137566863,
+    "salario_log+tipo_lesao": 0.013218697308619761,
+    "alta_renda+beneficio_log+casado": 0.25153505702456225,
+    "alta_renda+beneficio_log+homem": 0.27291874346607065,
+    "alta_renda+beneficio_log+idade_log": 0.2154475286124851,
+    "alta_renda+beneficio_log+industria": 0.3541980998731135,
+    "alta_renda+beneficio_log+internacao": 0.16466913090116392,
+    "alta_renda+beneficio_log+kentucky": 0.6032810997506818,
+    "alta_renda+beneficio_log+salario_log": 0.07815021408615369,
+    "alta_renda+beneficio_log+tipo_lesao": 0.2709902909125569,
+    "alta_renda+casado+homem": 3.526516370942283e-08,
+    "alta_renda+casado+idade_log": 4.079753960979287e-06,
+    "alta_renda+casado+industria": 3.518038699413955e-08,
+    "alta_renda+casado+internacao": 4.551724374472726e-09,
+    "alta_renda+casado+kentucky": 0.059879202379043955,
+    "alta_renda+casado+salario_log": 0.03821566584595851,
+    "alta_renda+casado+tipo_lesao": 3.180662608725891e-07,
+    "alta_renda+homem+idade_log": 4.414154362150264e-06,
+    "alta_renda+homem+industria": 9.13602896901228e-09,
+    "alta_renda+homem+internacao": 2.727701630996395e-09,
+    "alta_renda+homem+kentucky": 0.06948509644414366,
+    "alta_renda+homem+salario_log": 0.029537150530906536,
+    "alta_renda+homem+tipo_lesao": 1.917870167317582e-07,
+    "alta_renda+idade_log+industria": 1.5480916047198299e-06,
+    "alta_renda+idade_log+internacao": 1.67282033994645e-07,
+    "alta_renda+idade_log+kentucky": 0.08745406374647842,
+    "alta_renda+idade_log+salario_log": 0.04730422648345538,
+    "alta_renda+idade_log+tipo_lesao": 8.68450817049822e-06,
+    "alta_renda+industria+internacao": 1.2790368753868587e-09,
+    "alta_renda+industria+kentucky": 0.03648171364660371,
+    "alta_renda+industria+salario_log": 0.029794762732364345,
+    "alta_renda+industria+tipo_lesao": 9.527721073083216e-08,
+    "alta_renda+internacao+kentucky": 0.0018232341945674264,
+    "alta_renda+internacao+salario_log": 0.0015933606438850287,
+    "alta_renda+internacao+tipo_lesao": 1.286718531640474e-08,
+    "alta_renda+kentucky+salario_log": 0.05330062097324091,
+    "alta_renda+kentucky+tipo_lesao": 0.07963580503753115,
+    "alta_renda+salario_log+tipo_lesao": 0.05845511665639036,
+    "beneficio_log+casado+homem": 0.022124948340426914,
+    "beneficio_log+casado+idade_log": 0.05289894581983894,
+    "beneficio_log+casado+industria": 0.04279603620944547,
+    "beneficio_log+casado+internacao": 0.008559640133295732,
+    "beneficio_log+casado+kentucky": 0.8688908568242056,
+    "beneficio_log+casado+salario_log": 0.17573320706693482,
+    "beneficio_log+casado+tipo_lesao": 0.026192670124628035,
+    "beneficio_log+homem+idade_log": 0.06203525493656295,
+    "beneficio_log+homem+industria": 0.05776367219000185,
+    "beneficio_log+homem+internacao": 0.02070357653784169,
+    "beneficio_log+homem+kentucky": 0.5884415571478965,
+    "beneficio_log+homem+salario_log": 0.08216289947647695,
+    "beneficio_log+homem+tipo_lesao": 0.03727076135072502,
+    "beneficio_log+idade_log+industria": 0.11713717136723696,
+    "beneficio_log+idade_log+internacao": 0.03845499182342906,
+    "beneficio_log+idade_log+kentucky": 0.9593799212581433,
+    "beneficio_log+idade_log+salario_log": 0.1160243024959222,
+    "beneficio_log+idade_log+tipo_lesao": 0.07391159187781493,
+    "beneficio_log+industria+internacao": 0.03235877346930274,
+    "beneficio_log+industria+kentucky": 1.0,
+    "beneficio_log+industria+salario_log": 0.19509275958872643,
+    "beneficio_log+industria+tipo_lesao": 0.0679314763932255,
+    "beneficio_log+internacao+kentucky": 1.0,
+    "beneficio_log+internacao+salario_log": 0.6628779032677709,
+    "beneficio_log+internacao+tipo_lesao": 0.019503427668514862,
+    "beneficio_log+kentucky+salario_log": 0.9141227900310444,
+    "beneficio_log+kentucky+tipo_lesao": 0.8175673290624852,
+    "beneficio_log+salario_log+tipo_lesao": 0.15882220821136234,
+    "casado+homem+idade_log": 9.93916686484814e-05,
+    "casado+homem+industria": 3.040625651098777e-07,
+    "casado+homem+internacao": 4.0735117486735964e-08,
+    "casado+homem+kentucky": 0.020550835023249645,
+    "casado+homem+salario_log": 0.009853990295527576,
+    "casado+homem+tipo_lesao": 4.3084590587038e-06,
+    "casado+idade_log+industria": 1.0920650329886829e-05,
+    "casado+idade_log+internacao": 1.0825010552236609e-06,
+    "casado+idade_log+kentucky": 0.06547684394476677,
+    "casado+idade_log+salario_log": 0.01077608710579544,
+    "casado+idade_log+tipo_lesao": 9.116957899782297e-05,
+    "casado+industria+internacao": 5.855178952826449e-09,
+    "casado+industria+kentucky": 0.021356698589470265,
+    "casado+industria+salario_log": 0.0014177736602695656,
+    "casado+industria+tipo_lesao": 6.044914918804045e-07,
+    "casado+internacao+kentucky": 0.0006819433462332732,
+    "casado+internacao+salario_log": 7.547243126548026e-05,
+    "casado+internacao+tipo_lesao": 6.986677681178306e-08,
+    "casado+kentucky+salario_log": 0.049254628018977335,
+    "casado+kentucky+tipo_lesao": 0.055068846734332565,
+    "casado+salario_log+tipo_lesao": 0.008455393413249803,
+    "homem+idade_log+industria": 2.34017235205463e-05,
+    "homem+idade_log+internacao": 1.859366069039446e-06,
+    "homem+idade_log+kentucky": 0.06303872313126974,
+    "homem+idade_log+salario_log": 0.014188359325017148,
+    "homem+idade_log+tipo_lesao": 0.00023119979308099445,
+    "homem+industria+internacao": 7.247163250578702e-09,
+    "homem+industria+kentucky": 0.015726593563720682,
+    "homem+industria+salario_log": 0.003723437260470947,
+    "homem+industria+tipo_lesao": 1.230430022681498e-06,
+    "homem+internacao+kentucky": 0.0006515337733051803,
+    "homem+internacao+salario_log": 0.0001868896590776984,
+    "homem+internacao+tipo_lesao": 1.364955310025777e-07,
+    "homem+kentucky+salario_log": 0.05504240587870391,
+    "homem+kentucky+tipo_lesao": 0.044237422551687944,
+    "homem+salario_log+tipo_lesao": 0.015926780170734952,
+    "idade_log+industria+internacao": 2.510211589825301e-07,
+    "idade_log+industria+kentucky": 0.0431917826755174,
+    "idade_log+industria+salario_log": 0.003287500890282321,
+    "idade_log+industria+tipo_lesao": 2.870018241650044e-05,
+    "idade_log+internacao+kentucky": 0.0018046070303701042,
+    "idade_log+internacao+salario_log": 0.00012922531297079323,
+    "idade_log+internacao+tipo_lesao": 1.6748758033316952e-06,
+    "idade_log+kentucky+salario_log": 0.0857799562893403,
+    "idade_log+kentucky+tipo_lesao": 0.0876660828455222,
+    "idade_log+salario_log+tipo_lesao": 0.01521068949263353,
+    "industria+internacao+kentucky": 0.0003345618327782501,
+    "industria+internacao+salario_log": 2.4595704922373492e-05,
+    "industria+internacao+tipo_lesao": 1.1781407223932847e-08,
+    "industria+kentucky+salario_log": 0.030590467781470128,
+    "industria+kentucky+tipo_lesao": 0.029617708688166485,
+    "industria+salario_log+tipo_lesao": 0.002987962612148769,
+    "internacao+kentucky+salario_log": 0.0010898435354394892,
+    "internacao+kentucky+tipo_lesao": 0.0007252230819836166,
+    "internacao+salario_log+tipo_lesao": 0.00014399685929284851,
+    "kentucky+salario_log+tipo_lesao": 0.08069382771665383,
+    "alta_renda+beneficio_log+casado+homem": 0.2359017081095264,
+    "alta_renda+beneficio_log+casado+idade_log": 0.23039377858335014,
+    "alta_renda+beneficio_log+casado+industria": 0.2925055548036158,
+    "alta_renda+beneficio_log+casado+internacao": 0.12540906339112526,
+    "alta_renda+beneficio_log+casado+kentucky": 0.6224941065632941,
+    "alta_renda+beneficio_log+casado+salario_log": 0.10888027864699418,
+    "alta_renda+beneficio_log+casado+tipo_lesao": 0.22280653753480914,
+    "alta_renda+beneficio_log+homem+idade_log": 0.2045025004731088,
+    "alta_renda+beneficio_log+homem+industria": 0.32492840028481695,
+    "alta_renda+beneficio_log+homem+internacao": 0.1862560935206936,
+    "alta_renda+beneficio_log+homem+kentucky": 0.5936339189822343,
+    "alta_renda+beneficio_log+homem+salario_log": 0.058338047765266,
+    "alta_renda+beneficio_log+homem+tipo_lesao": 0.26067174287946054,
+    "alta_renda+beneficio_log+idade_log+industria": 0.26214397008778983,
+    "alta_renda+beneficio_log+idade_log+internacao": 0.27069830008160123,
+    "alta_renda+beneficio_log+idade_log+kentucky": 0.5376878113623367,
+    "alta_renda+beneficio_log+idade_log+salario_log": 0.05960455310004533,
+    "alta_renda+beneficio_log+idade_log+tipo_lesao": 0.2816532584206518,
+    "alta_renda+beneficio_log+industria+internacao": 0.19381121167945337,
+    "alta_renda+beneficio_log+industria+kentucky": 0.6239287741015185,
+    "alta_renda+beneficio_log+industria+salario_log": 0.15737495062861537,
+    "alta_renda+beneficio_log+industria+tipo_lesao": 0.31423802886512087,
+    "alta_renda+beneficio_log+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+internacao+salario_log": 0.3664349977036462,
+    "alta_renda+beneficio_log+internacao+tipo_lesao": 0.13697595090192985,
+    "alta_renda+beneficio_log+kentucky+salario_log": 0.7275935650029387,
+    "alta_renda+beneficio_log+kentucky+tipo_lesao": 0.6345580439830081,
+    "alta_renda+beneficio_log+salario_log+tipo_lesao": 0.10247494324874964,
+    "alta_renda+casado+homem+idade_log": 3.46642578017444e-06,
+    "alta_renda+casado+homem+industria": 1.2729763556361617e-08,
+    "alta_renda+casado+homem+internacao": 1.8310346058302445e-09,
+    "alta_renda+casado+homem+kentucky": 0.0678110376195355,
+    "alta_renda+casado+homem+salario_log": 0.03966459442064134,
+    "alta_renda+casado+homem+tipo_lesao": 1.7459849145350345e-07,
+    "alta_renda+casado+idade_log+industria": 1.258230599469102e-06,
+    "alta_renda+casado+idade_log+internacao": 1.5498212550712957e-07,
+    "alta_renda+casado+idade_log+kentucky": 0.08716631714974181,
+    "alta_renda+casado+idade_log+salario_log": 0.04983614374932113,
+    "alta_renda+casado+idade_log+tipo_lesao": 7.692935519860045e-06,
+    "alta_renda+casado+industria+internacao": 9.734509704782357e-10,
+    "alta_renda+casado+industria+kentucky": 0.04232141270192413,
+    "alta_renda+casado+industria+salario_log": 0.04113586975872924,
+    "alta_renda+casado+industria+tipo_lesao": 8.44333103995252e-08,
+    "alta_renda+casado+internacao+kentucky": 0.0016815347864251548,
+    "alta_renda+casado+internacao+salario_log": 0.002046177937354512,
+    "alta_renda+casado+internacao+tipo_lesao": 8.626831574552871e-09,
+    "alta_renda+casado+kentucky+salario_log": 0.06382742937530343,
+    "alta_renda+casado+kentucky+tipo_lesao": 0.08747776869458827,
+    "alta_renda+casado+salario_log+tipo_lesao": 0.07439786305391224,
+    "alta_renda+homem+idade_log+industria": 1.092289826858951e-06,
+    "alta_renda+homem+idade_log+internacao": 1.018959519674254e-07,
+    "alta_renda+homem+idade_log+kentucky": 0.09015093319267378,
+    "alta_renda+homem+idade_log+salario_log": 0.04642153497951338,
+    "alta_renda+homem+idade_log+tipo_lesao": 8.090975164439542e-06,
+    "alta_renda+homem+industria+internacao": 3.849044852025685e-10,
+    "alta_renda+homem+industria+kentucky": 0.039701823995127644,
+    "alta_renda+homem+industria+salario_log": 0.03201122824018561,
+    "alta_renda+homem+industria+tipo_lesao": 4.082470484436933e-08,
+    "alta_renda+homem+internacao+kentucky": 0.001953202963663314,
+    "alta_renda+homem+internacao+salario_log": 0.0016454823937149534,
+    "alta_renda+homem+internacao+tipo_lesao": 5.839565570633175e-09,
+    "alta_renda+homem+kentucky+salario_log": 0.06277297217423473,
+    "alta_renda+homem+kentucky+tipo_lesao": 0.08965071694051448,
+    "alta_renda+homem+salario_log+tipo_lesao": 0.05910818319896563,
+    "alta_renda+idade_log+industria+internacao": 4.000954037836607e-08,
+    "alta_renda+idade_log+industria+kentucky": 0.059346346601456046,
+    "alta_renda+idade_log+industria+salario_log": 0.04908489390628599,
+    "alta_renda+idade_log+industria+tipo_lesao": 2.8626598092285735e-06,
+    "alta_renda+idade_log+internacao+kentucky": 0.002717946158334836,
+    "alta_renda+idade_log+internacao+salario_log": 0.0030843434069425762,
+    "alta_renda+idade_log+internacao+tipo_lesao": 2.3797322449272357e-07,
+    "alta_renda+idade_log+kentucky+salario_log": 0.10199385072863812,
+    "alta_renda+idade_log+kentucky+tipo_lesao": 0.1121524939696416,
+    "alta_renda+idade_log+salario_log+tipo_lesao": 0.0766847995994617,
+    "alta_renda+industria+internacao+kentucky": 0.0009091577593654662,
+    "alta_renda+industria+internacao+salario_log": 0.0012705923462340812,
+    "alta_renda+industria+internacao+tipo_lesao": 1.8111830849081177e-09,
+    "alta_renda+industria+kentucky+salario_log": 0.038841588235276774,
+    "alta_renda+industria+kentucky+tipo_lesao": 0.052132067763629907,
+    "alta_renda+industria+salario_log+tipo_lesao": 0.05638613586090329,
+    "alta_renda+internacao+kentucky+salario_log": 0.0015524644092011618,
+    "alta_renda+internacao+kentucky+tipo_lesao": 0.0016120397084693678,
+    "alta_renda+internacao+salario_log+tipo_lesao": 0.001752112432199944,
+    "alta_renda+kentucky+salario_log+tipo_lesao": 0.10158033375870626,
+    "beneficio_log+casado+homem+idade_log": 0.040440009428246125,
+    "beneficio_log+casado+homem+industria": 0.030800834281282975,
+    "beneficio_log+casado+homem+internacao": 0.009285149946645633,
+    "beneficio_log+casado+homem+kentucky": 0.7027935565518812,
+    "beneficio_log+casado+homem+salario_log": 0.1334270350458764,
+    "beneficio_log+casado+homem+tipo_lesao": 0.021385488533908384,
+    "beneficio_log+casado+idade_log+industria": 0.07662618088282247,
+    "beneficio_log+casado+idade_log+internacao": 0.022900445138483865,
+    "beneficio_log+casado+idade_log+kentucky": 0.987638160127144,
+    "beneficio_log+casado+idade_log+salario_log": 0.13697657425913995,
+    "beneficio_log+casado+idade_log+tipo_lesao": 0.050522718262046705,
+    "beneficio_log+casado+industria+internacao": 0.016679586216347894,
+    "beneficio_log+casado+industria+kentucky": 1.0,
+    "beneficio_log+casado+industria+salario_log": 0.278230057666791,
+    "beneficio_log+casado+industria+tipo_lesao": 0.04220816376818387,
+    "beneficio_log+casado+internacao+kentucky": 1.0,
+    "beneficio_log+casado+internacao+salario_log": 0.5412243314116194,
+    "beneficio_log+casado+internacao+tipo_lesao": 0.00911819841834069,
+    "beneficio_log+casado+kentucky+salario_log": 0.8043913571609522,
+    "beneficio_log+casado+kentucky+tipo_lesao": 0.9144311824223961,
+    "beneficio_log+casado+salario_log+tipo_lesao": 0.22844467114763636,
+    "beneficio_log+homem+idade_log+industria": 0.08029724090426274,
+    "beneficio_log+homem+idade_log+internacao": 0.028051135634004132,
+    "beneficio_log+homem+idade_log+kentucky": 0.771166827243075,
+    "beneficio_log+homem+idade_log+salario_log": 0.09960659711430997,
+    "beneficio_log+homem+idade_log+tipo_lesao": 0.050228784055478086,
+    "beneficio_log+homem+industria+internacao": 0.025570720240873722,
+    "beneficio_log+homem+industria+kentucky": 0.8145539125403916,
+    "beneficio_log+homem+industria+salario_log": 0.14480292908220144,
+    "beneficio_log+homem+industria+tipo_lesao": 0.048234257873860965,
+    "beneficio_log+homem+internacao+kentucky": 1.0,
+    "beneficio_log+homem+internacao+salario_log": 0.5396135230082496,
+    "beneficio_log+homem+internacao+tipo_lesao": 0.014994928139067054,
+    "beneficio_log+homem+kentucky+salario_log": 0.8495598105690845,
+    "beneficio_log+homem+kentucky+tipo_lesao": 0.5983580003456336,
+    "beneficio_log+homem+salario_log+tipo_lesao": 0.12413041597305882,
+    "beneficio_log+idade_log+industria+internacao": 0.05394591905398971,
+    "beneficio_log+idade_log+industria+kentucky": 1.0,
+    "beneficio_log+idade_log+industria+salario_log": 0.19378461553997822,
+    "beneficio_log+idade_log+industria+tipo_lesao": 0.11565588988766735,
+    "beneficio_log+idade_log+internacao+kentucky": 1.0,
+    "beneficio_log+idade_log+internacao+salario_log": 0.7203589196461665,
+    "beneficio_log+idade_log+internacao+tipo_lesao": 0.050292975788898305,
+    "beneficio_log+idade_log+kentucky+salario_log": 0.7697616689474838,
+    "beneficio_log+idade_log+kentucky+tipo_lesao": 0.927913648519241,
+    "beneficio_log+idade_log+salario_log+tipo_lesao": 0.15408307595835283,
+    "beneficio_log+industria+internacao+kentucky": 1.0,
+    "beneficio_log+industria+internacao+salario_log": 0.828147897651401,
+    "beneficio_log+industria+internacao+tipo_lesao": 0.034958126631975214,
+    "beneficio_log+industria+kentucky+salario_log": 0.8735158300096251,
+    "beneficio_log+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+industria+salario_log+tipo_lesao": 0.23743913353008228,
+    "beneficio_log+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+internacao+salario_log+tipo_lesao": 0.6324865154690881,
+    "beneficio_log+kentucky+salario_log+tipo_lesao": 0.9032615594740288,
+    "casado+homem+idade_log+industria": 1.3850332434179098e-05,
+    "casado+homem+idade_log+internacao": 1.3119802156898433e-06,
+    "casado+homem+idade_log+kentucky": 0.06428039582591027,
+    "casado+homem+idade_log+salario_log": 0.01265987982980189,
+    "casado+homem+idade_log+tipo_lesao": 0.00015486920237913404,
+    "casado+homem+industria+internacao": 3.661674347625942e-09,
+    "casado+homem+industria+kentucky": 0.022896359635194694,
+    "casado+homem+industria+salario_log": 0.0020837661876264703,
+    "casado+homem+industria+tipo_lesao": 6.756401124608855e-07,
+    "casado+homem+internacao+kentucky": 0.0008804210227188068,
+    "casado+homem+internacao+salario_log": 0.00011512956076873466,
+    "casado+homem+internacao+tipo_lesao": 6.900343931571793e-08,
+    "casado+homem+kentucky+salario_log": 0.06063195474819707,
+    "casado+homem+kentucky+tipo_lesao": 0.05950752975761439,
+    "casado+homem+salario_log+tipo_lesao": 0.01054879769897206,
+    "casado+idade_log+industria+internacao": 1.7881034355897644e-07,
+    "casado+idade_log+industria+kentucky": 0.043326562877077375,
+    "casado+idade_log+industria+salario_log": 0.0028888509438322256,
+    "casado+idade_log+industria+tipo_lesao": 1.7036347467952252e-05,
+    "casado+idade_log+internacao+kentucky": 0.0019392381504466972,
+    "casado+idade_log+internacao+salario_log": 0.000129138222162507,
+    "casado+idade_log+internacao+tipo_lesao": 1.2690755913269928e-06,
+    "casado+idade_log+kentucky+salario_log": 0.08629086830916602,
+    "casado+idade_log+kentucky+tipo_lesao": 0.08987842496021298,
+    "casado+idade_log+salario_log+tipo_lesao": 0.014319900990252966,
+    "casado+industria+internacao+kentucky": 0.0006351022714925403,
+    "casado+industria+internacao+salario_log": 1.3123856829773324e-05,
+    "casado+industria+internacao+tipo_lesao": 7.018710144421036e-09,
+    "casado+industria+kentucky+salario_log": 0.035230470166989804,
+    "casado+industria+kentucky+tipo_lesao": 0.03617389755118998,
+    "casado+industria+salario_log+tipo_lesao": 0.0017008155833930854,
+    "casado+internacao+kentucky+salario_log": 0.0014307932826460458,
+    "casado+internacao+kentucky+tipo_lesao": 0.0008871336375866973,
+    "casado+internacao+salario_log+tipo_lesao": 8.378295430900728e-05,
+    "casado+kentucky+salario_log+tipo_lesao": 0.08949362146626844,
+    "homem+idade_log+industria+internacao": 2.501725138147623e-07,
+    "homem+idade_log+industria+kentucky": 0.04626693178855457,
+    "homem+idade_log+industria+salario_log": 0.004121611643438393,
+    "homem+idade_log+industria+tipo_lesao": 3.694347053630404e-05,
+    "homem+idade_log+internacao+kentucky": 0.002067140084952399,
+    "homem+idade_log+internacao+salario_log": 0.00016764577935987122,
+    "homem+idade_log+internacao+tipo_lesao": 2.3639420154910606e-06,
+    "homem+idade_log+kentucky+salario_log": 0.0886674116127185,
+    "homem+idade_log+kentucky+tipo_lesao": 0.09456108547053867,
+    "homem+idade_log+salario_log+tipo_lesao": 0.01719075344871762,
+    "homem+industria+internacao+kentucky": 0.0004144604610350926,
+    "homem+industria+internacao+salario_log": 3.2932907931830456e-05,
+    "homem+industria+internacao+tipo_lesao": 1.247338323355968e-08,
+    "homem+industria+kentucky+salario_log": 0.03692662297230321,
+    "homem+industria+kentucky+tipo_lesao": 0.03104210373519658,
+    "homem+industria+salario_log+tipo_lesao": 0.004289740090880115,
+    "homem+internacao+kentucky+salario_log": 0.0013961964859996825,
+    "homem+internacao+kentucky+tipo_lesao": 0.0008515599158141158,
+    "homem+internacao+salario_log+tipo_lesao": 0.0001695599984935938,
+    "homem+kentucky+salario_log+tipo_lesao": 0.08722882274216331,
+    "idade_log+industria+internacao+kentucky": 0.0012490367049957272,
+    "idade_log+industria+internacao+salario_log": 2.971919340977592e-05,
+    "idade_log+industria+internacao+tipo_lesao": 2.2941472763276178e-07,
+    "idade_log+industria+kentucky+salario_log": 0.05624050176655632,
+    "idade_log+industria+kentucky+tipo_lesao": 0.05988724436223367,
+    "idade_log+industria+salario_log+tipo_lesao": 0.00420608597461662,
+    "idade_log+internacao+kentucky+salario_log": 0.002730469268646172,
+    "idade_log+internacao+kentucky+tipo_lesao": 0.0015356402339387482,
+    "idade_log+internacao+salario_log+tipo_lesao": 0.00014260551974856748,
+    "idade_log+kentucky+salario_log+tipo_lesao": 0.12021094914582477,
+    "industria+internacao+kentucky+salario_log": 0.0008259293989804846,
+    "industria+internacao+kentucky+tipo_lesao": 0.0003684159682068904,
+    "industria+internacao+salario_log+tipo_lesao": 2.5029281074287895e-05,
+    "industria+kentucky+salario_log+tipo_lesao": 0.05516734484716612,
+    "internacao+kentucky+salario_log+tipo_lesao": 0.0015561701500792207,
+    "alta_renda+beneficio_log+casado+homem+idade_log": 0.22177109848518137,
+    "alta_renda+beneficio_log+casado+homem+industria": 0.27124833086740163,
+    "alta_renda+beneficio_log+casado+homem+internacao": 0.14180179748909513,
+    "alta_renda+beneficio_log+casado+homem+kentucky": 0.5867030832402929,
+    "alta_renda+beneficio_log+casado+homem+salario_log": 0.08386990926189118,
+    "alta_renda+beneficio_log+casado+homem+tipo_lesao": 0.21725876877063932,
+    "alta_renda+beneficio_log+casado+idade_log+industria": 0.28105147551471077,
+    "alta_renda+beneficio_log+casado+idade_log+internacao": 0.22086043842061123,
+    "alta_renda+beneficio_log+casado+idade_log+kentucky": 0.5511144777544118,
+    "alta_renda+beneficio_log+casado+idade_log+salario_log": 0.06873238138476061,
+    "alta_renda+beneficio_log+casado+idade_log+tipo_lesao": 0.2961418413040404,
+    "alta_renda+beneficio_log+casado+industria+internacao": 0.16042662058377002,
+    "alta_renda+beneficio_log+casado+industria+kentucky": 0.6124907644850438,
+    "alta_renda+beneficio_log+casado+industria+salario_log": 0.2023266166677207,
+    "alta_renda+beneficio_log+casado+industria+tipo_lesao": 0.2682266854146495,
+    "alta_renda+beneficio_log+casado+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+internacao+salario_log": 0.2951605566911199,
+    "alta_renda+beneficio_log+casado+internacao+tipo_lesao": 0.10287637149181561,
+    "alta_renda+beneficio_log+casado+kentucky+salario_log": 0.7339455511813093,
+    "alta_renda+beneficio_log+casado+kentucky+tipo_lesao": 0.6273426377724243,
+    "alta_renda+beneficio_log+casado+salario_log+tipo_lesao": 0.1364712803326162,
+    "alta_renda+beneficio_log+homem+idade_log+industria": 0.2445745700735945,
+    "alta_renda+beneficio_log+homem+idade_log+internacao": 0.27461978672066584,
+    "alta_renda+beneficio_log+homem+idade_log+kentucky": 0.521539544226665,
+    "alta_renda+beneficio_log+homem+idade_log+salario_log": 0.053052230102695865,
+    "alta_renda+beneficio_log+homem+idade_log+tipo_lesao": 0.2749601081277218,
+    "alta_renda+beneficio_log+homem+industria+internacao": 0.20424248792638328,
+    "alta_renda+beneficio_log+homem+industria+kentucky": 0.5684992687526845,
+    "alta_renda+beneficio_log+homem+industria+salario_log": 0.12564371799989488,
+    "alta_renda+beneficio_log+homem+industria+tipo_lesao": 0.31449005592486506,
+    "alta_renda+beneficio_log+homem+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+homem+internacao+salario_log": 0.34822659657085986,
+    "alta_renda+beneficio_log+homem+internacao+tipo_lesao": 0.1525971848106768,
+    "alta_renda+beneficio_log+homem+kentucky+salario_log": 0.697693993027347,
+    "alta_renda+beneficio_log+homem+kentucky+tipo_lesao": 0.6099811262885998,
+    "alta_renda+beneficio_log+homem+salario_log+tipo_lesao": 0.0837689163198198,
+    "alta_renda+beneficio_log+idade_log+industria+internacao": 0.292160506568784,
+    "alta_renda+beneficio_log+idade_log+industria+kentucky": 0.5579499560690067,
+    "alta_renda+beneficio_log+idade_log+industria+salario_log": 0.1206172198423469,
+    "alta_renda+beneficio_log+idade_log+industria+tipo_lesao": 0.32073131027280005,
+    "alta_renda+beneficio_log+idade_log+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+idade_log+internacao+salario_log": 0.39061605838228053,
+    "alta_renda+beneficio_log+idade_log+internacao+tipo_lesao": 0.2446217149871773,
+    "alta_renda+beneficio_log+idade_log+kentucky+salario_log": 0.6596540218206932,
+    "alta_renda+beneficio_log+idade_log+kentucky+tipo_lesao": 0.5463003417696052,
+    "alta_renda+beneficio_log+idade_log+salario_log+tipo_lesao": 0.07790553221888381,
+    "alta_renda+beneficio_log+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+industria+internacao+salario_log": 0.510865357892982,
+    "alta_renda+beneficio_log+industria+internacao+tipo_lesao": 0.17694364785897676,
+    "alta_renda+beneficio_log+industria+kentucky+salario_log": 0.7684819691746386,
+    "alta_renda+beneficio_log+industria+kentucky+tipo_lesao": 0.6413271307041483,
+    "alta_renda+beneficio_log+industria+salario_log+tipo_lesao": 0.185333725310735,
+    "alta_renda+beneficio_log+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+internacao+salario_log+tipo_lesao": 0.39822947753945165,
+    "alta_renda+beneficio_log+kentucky+salario_log+tipo_lesao": 0.7484018681359684,
+    "alta_renda+casado+homem+idade_log+industria": 8.313212451693647e-07,
+    "alta_renda+casado+homem+idade_log+internacao": 9.146536600921111e-08,
+    "alta_renda+casado+homem+idade_log+kentucky": 0.08854539106259496,
+    "alta_renda+casado+homem+idade_log+salario_log": 0.04908658943002347,
+    "alta_renda+casado+homem+idade_log+tipo_lesao": 7.0527611858761825e-06,
+    "alta_renda+casado+homem+industria+internacao": 2.3237729207279584e-10,
+    "alta_renda+casado+homem+industria+kentucky": 0.047309951338045095,
+    "alta_renda+casado+homem+industria+salario_log": 0.04082071031912447,
+    "alta_renda+casado+homem+industria+tipo_lesao": 3.794825537919669e-08,
+    "alta_renda+casado+homem+internacao+kentucky": 0.001954891821129714,
+    "alta_renda+casado+homem+internacao+salario_log": 0.002031871064924461,
+    "alta_renda+casado+homem+internacao+tipo_lesao": 4.159648916549547e-09,
+    "alta_renda+casado+homem+kentucky+salario_log": 0.07187760894108917,
+    "alta_renda+casado+homem+kentucky+tipo_lesao": 0.09133429762270007,
+    "alta_renda+casado+homem+salario_log+tipo_lesao": 0.07246086175122948,
+    "alta_renda+casado+idade_log+industria+internacao": 3.645314979912581e-08,
+    "alta_renda+casado+idade_log+industria+kentucky": 0.05785084469887188,
+    "alta_renda+casado+idade_log+industria+salario_log": 0.050396448029965624,
+    "alta_renda+casado+idade_log+industria+tipo_lesao": 2.442709245290305e-06,
+    "alta_renda+casado+idade_log+internacao+kentucky": 0.002765021781274433,
+    "alta_renda+casado+idade_log+internacao+salario_log": 0.0031141307502080325,
+    "alta_renda+casado+idade_log+internacao+tipo_lesao": 2.150726523043214e-07,
+    "alta_renda+casado+idade_log+kentucky+salario_log": 0.10075718185671319,
+    "alta_renda+casado+idade_log+kentucky+tipo_lesao": 0.1131771709408826,
+    "alta_renda+casado+idade_log+salario_log+tipo_lesao": 0.07917266734044669,
+    "alta_renda+casado+industria+internacao+kentucky": 0.0010583884399768208,
+    "alta_renda+casado+industria+internacao+salario_log": 0.0015362860880748183,
+    "alta_renda+casado+industria+internacao+tipo_lesao": 1.502644194079833e-09,
+    "alta_renda+casado+industria+kentucky+salario_log": 0.047031861472529676,
+    "alta_renda+casado+industria+kentucky+tipo_lesao": 0.057888323832709296,
+    "alta_renda+casado+industria+salario_log+tipo_lesao": 0.06739280796645168,
+    "alta_renda+casado+internacao+kentucky+salario_log": 0.001865121424741845,
+    "alta_renda+casado+internacao+kentucky+tipo_lesao": 0.0016053650536847217,
+    "alta_renda+casado+internacao+salario_log+tipo_lesao": 0.0021086898201747376,
+    "alta_renda+casado+kentucky+salario_log+tipo_lesao": 0.10951133984342665,
+    "alta_renda+homem+idade_log+industria+internacao": 2.0026501567682544e-08,
+    "alta_renda+homem+idade_log+industria+kentucky": 0.060176158548272365,
+    "alta_renda+homem+idade_log+industria+salario_log": 0.04742464982115045,
+    "alta_renda+homem+idade_log+industria+tipo_lesao": 2.1054496635056677e-06,
+    "alta_renda+homem+idade_log+internacao+kentucky": 0.0029296211356689833,
+    "alta_renda+homem+idade_log+internacao+salario_log": 0.0027806764015767507,
+    "alta_renda+homem+idade_log+internacao+tipo_lesao": 1.830265293815792e-07,
+    "alta_renda+homem+idade_log+kentucky+salario_log": 0.10408009621662488,
+    "alta_renda+homem+idade_log+kentucky+tipo_lesao": 0.11587058559875166,
+    "alta_renda+homem+idade_log+salario_log+tipo_lesao": 0.07584529081242335,
+    "alta_renda+homem+industria+internacao+kentucky": 0.0010857761600906043,
+    "alta_renda+homem+industria+internacao+salario_log": 0.001278084132151055,
+    "alta_renda+homem+industria+internacao+tipo_lesao": 7.87553161477639e-10,
+    "alta_renda+homem+industria+kentucky+salario_log": 0.04504336456217567,
+    "alta_renda+homem+industria+kentucky+tipo_lesao": 0.05607981124288168,
+    "alta_renda+homem+industria+salario_log+tipo_lesao": 0.055797691576373036,
+    "alta_renda+homem+internacao+kentucky+salario_log": 0.0019458123753462444,
+    "alta_renda+homem+internacao+kentucky+tipo_lesao": 0.0019461437384239448,
+    "alta_renda+homem+internacao+salario_log+tipo_lesao": 0.0017198934287141817,
+    "alta_renda+homem+kentucky+salario_log+tipo_lesao": 0.10811328913146777,
+    "alta_renda+idade_log+industria+internacao+kentucky": 0.0017893059660259473,
+    "alta_renda+idade_log+industria+internacao+salario_log": 0.0023962480738176986,
+    "alta_renda+idade_log+industria+internacao+tipo_lesao": 3.967968750443868e-08,
+    "alta_renda+idade_log+industria+kentucky+salario_log": 0.070132668713024,
+    "alta_renda+idade_log+industria+kentucky+tipo_lesao": 0.07650330764815579,
+    "alta_renda+idade_log+industria+salario_log+tipo_lesao": 0.07275572555830319,
+    "alta_renda+idade_log+internacao+kentucky+salario_log": 0.003153536760982476,
+    "alta_renda+idade_log+internacao+kentucky+tipo_lesao": 0.0024851697638285635,
+    "alta_renda+idade_log+internacao+salario_log+tipo_lesao": 0.002722650898299744,
+    "alta_renda+idade_log+kentucky+salario_log+tipo_lesao": 0.14758495366473462,
+    "alta_renda+industria+internacao+kentucky+salario_log": 0.0010907426653171447,
+    "alta_renda+industria+internacao+kentucky+tipo_lesao": 0.0008080015811862554,
+    "alta_renda+industria+internacao+salario_log+tipo_lesao": 0.0012103727732592638,
+    "alta_renda+industria+kentucky+salario_log+tipo_lesao": 0.07187907318254566,
+    "alta_renda+internacao+kentucky+salario_log+tipo_lesao": 0.0018080234701199182,
+    "beneficio_log+casado+homem+idade_log+industria": 0.05311229806983558,
+    "beneficio_log+casado+homem+idade_log+internacao": 0.01778684844031906,
+    "beneficio_log+casado+homem+idade_log+kentucky": 0.7982350654025379,
+    "beneficio_log+casado+homem+idade_log+salario_log": 0.11886938664287229,
+    "beneficio_log+casado+homem+idade_log+tipo_lesao": 0.03564773371331501,
+    "beneficio_log+casado+homem+industria+internacao": 0.013787017130506955,
+    "beneficio_log+casado+homem+industria+kentucky": 0.9131424143249776,
+    "beneficio_log+casado+homem+industria+salario_log": 0.2147592225239765,
+    "beneficio_log+casado+homem+industria+tipo_lesao": 0.028835493728016626,
+    "beneficio_log+casado+homem+internacao+kentucky": 1.0,
+    "beneficio_log+casado+homem+internacao+salario_log": 0.5378184738424906,
+    "beneficio_log+casado+homem+internacao+tipo_lesao": 0.006455158580403476,
+    "beneficio_log+casado+homem+kentucky+salario_log": 0.7328999753654196,
+    "beneficio_log+casado+homem+kentucky+tipo_lesao": 0.6791947790050855,
+    "beneficio_log+casado+homem+salario_log+tipo_lesao": 0.1821259522207861,
+    "beneficio_log+casado+idade_log+industria+internacao": 0.03186527762793107,
+    "beneficio_log+casado+idade_log+industria+kentucky": 1.0,
+    "beneficio_log+casado+idade_log+industria+salario_log": 0.2240502893781645,
+    "beneficio_log+casado+idade_log+industria+tipo_lesao": 0.07899030756465379,
+    "beneficio_log+casado+idade_log+internacao+kentucky": 1.0,
+    "beneficio_log+casado+idade_log+internacao+salario_log": 0.6065116203905244,
+    "beneficio_log+casado+idade_log+internacao+tipo_lesao": 0.025396226138934542,
+    "beneficio_log+casado+idade_log+kentucky+salario_log": 0.7899159718814197,
+    "beneficio_log+casado+idade_log+kentucky+tipo_lesao": 0.9453714891931777,
+    "beneficio_log+casado+idade_log+salario_log+tipo_lesao": 0.17450390763329363,
+    "beneficio_log+casado+industria+internacao+kentucky": 1.0,
+    "beneficio_log+casado+industria+internacao+salario_log": 0.7020476136475355,
+    "beneficio_log+casado+industria+internacao+tipo_lesao": 0.015990736857971945,
+    "beneficio_log+casado+industria+kentucky+salario_log": 0.8595216494271967,
+    "beneficio_log+casado+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+industria+salario_log+tipo_lesao": 0.32634344788328074,
+    "beneficio_log+casado+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+internacao+salario_log+tipo_lesao": 0.5085013082741339,
+    "beneficio_log+casado+kentucky+salario_log+tipo_lesao": 0.900856524609206,
+    "beneficio_log+homem+idade_log+industria+internacao": 0.03619891289728075,
+    "beneficio_log+homem+idade_log+industria+kentucky": 1.0,
+    "beneficio_log+homem+idade_log+industria+salario_log": 0.1656887857804481,
+    "beneficio_log+homem+idade_log+industria+tipo_lesao": 0.06847569008595496,
+    "beneficio_log+homem+idade_log+internacao+kentucky": 1.0,
+    "beneficio_log+homem+idade_log+internacao+salario_log": 0.6713829690604743,
+    "beneficio_log+homem+idade_log+internacao+tipo_lesao": 0.027280332492355123,
+    "beneficio_log+homem+idade_log+kentucky+salario_log": 0.7519374584342434,
+    "beneficio_log+homem+idade_log+kentucky+tipo_lesao": 0.7692598755922238,
+    "beneficio_log+homem+idade_log+salario_log+tipo_lesao": 0.13926650765874998,
+    "beneficio_log+homem+industria+internacao+kentucky": 1.0,
+    "beneficio_log+homem+industria+internacao+salario_log": 0.7731953613635205,
+    "beneficio_log+homem+industria+internacao+tipo_lesao": 0.019764504350555996,
+    "beneficio_log+homem+industria+kentucky+salario_log": 0.8073174971134327,
+    "beneficio_log+homem+industria+kentucky+tipo_lesao": 0.8368552625528753,
+    "beneficio_log+homem+industria+salario_log+tipo_lesao": 0.18955018017774186,
+    "beneficio_log+homem+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+homem+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+homem+internacao+salario_log+tipo_lesao": 0.5969599028263656,
+    "beneficio_log+homem+kentucky+salario_log+tipo_lesao": 0.8460806279352213,
+    "beneficio_log+idade_log+industria+internacao+kentucky": 1.0,
+    "beneficio_log+idade_log+industria+internacao+salario_log": 0.9242778742453215,
+    "beneficio_log+idade_log+industria+internacao+tipo_lesao": 0.0666052336576009,
+    "beneficio_log+idade_log+industria+kentucky+salario_log": 0.7625027434308498,
+    "beneficio_log+idade_log+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+idade_log+industria+salario_log+tipo_lesao": 0.23595035035643508,
+    "beneficio_log+idade_log+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+idade_log+internacao+salario_log+tipo_lesao": 0.6989107770334816,
+    "beneficio_log+idade_log+kentucky+salario_log+tipo_lesao": 0.7861694096819648,
+    "beneficio_log+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+industria+internacao+salario_log+tipo_lesao": 0.782170389721461,
+    "beneficio_log+industria+kentucky+salario_log+tipo_lesao": 0.8448975045910889,
+    "beneficio_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "casado+homem+idade_log+industria+internacao": 1.7585331839583506e-07,
+    "casado+homem+idade_log+industria+kentucky": 0.0460847730952869,
+    "casado+homem+idade_log+industria+salario_log": 0.0035305268363245066,
+    "casado+homem+idade_log+industria+tipo_lesao": 2.2564872762136713e-05,
+    "casado+homem+idade_log+internacao+kentucky": 0.002145073988076158,
+    "casado+homem+idade_log+internacao+salario_log": 0.00016463271017172544,
+    "casado+homem+idade_log+internacao+tipo_lesao": 1.7376931039426183e-06,
+    "casado+homem+idade_log+kentucky+salario_log": 0.08756906501299012,
+    "casado+homem+idade_log+kentucky+tipo_lesao": 0.09537336125473567,
+    "casado+homem+idade_log+salario_log+tipo_lesao": 0.015919181219048072,
+    "casado+homem+industria+internacao+kentucky": 0.000694188420675911,
+    "casado+homem+industria+internacao+salario_log": 1.9154819943057946e-05,
+    "casado+homem+industria+internacao+tipo_lesao": 5.662669077364921e-09,
+    "casado+homem+industria+kentucky+salario_log": 0.040263691758087215,
+    "casado+homem+industria+kentucky+tipo_lesao": 0.038113486534370605,
+    "casado+homem+industria+salario_log+tipo_lesao": 0.0025521459439985894,
+    "casado+homem+internacao+kentucky+salario_log": 0.0015675698809504322,
+    "casado+homem+internacao+kentucky+tipo_lesao": 0.0011211983192606493,
+    "casado+homem+internacao+salario_log+tipo_lesao": 0.00010679223060203262,
+    "casado+homem+kentucky+salario_log+tipo_lesao": 0.09658318047208388,
+    "casado+idade_log+industria+internacao+kentucky": 0.0012810049957158482,
+    "casado+idade_log+industria+internacao+salario_log": 2.8961622600788124e-05,
+    "casado+idade_log+industria+internacao+tipo_lesao": 1.6349416822036192e-07,
+    "casado+idade_log+industria+kentucky+salario_log": 0.055732778404355046,
+    "casado+idade_log+industria+kentucky+tipo_lesao": 0.05927380130840925,
+    "casado+idade_log+industria+salario_log+tipo_lesao": 0.003906300903312772,
+    "casado+idade_log+internacao+kentucky+salario_log": 0.0026746452347397,
+    "casado+idade_log+internacao+kentucky+tipo_lesao": 0.0016456705006891322,
+    "casado+idade_log+internacao+salario_log+tipo_lesao": 0.00013903588815550032,
+    "casado+idade_log+kentucky+salario_log+tipo_lesao": 0.12032052404975715,
+    "casado+industria+internacao+kentucky+salario_log": 0.0009753639498326115,
+    "casado+industria+internacao+kentucky+tipo_lesao": 0.000557274563304068,
+    "casado+industria+internacao+salario_log+tipo_lesao": 1.2490909738162885e-05,
+    "casado+industria+kentucky+salario_log+tipo_lesao": 0.06008809921906359,
+    "casado+internacao+kentucky+salario_log+tipo_lesao": 0.0016597070489913484,
+    "homem+idade_log+industria+internacao+kentucky": 0.0013364827892851886,
+    "homem+idade_log+industria+internacao+salario_log": 3.839550618910726e-05,
+    "homem+idade_log+industria+internacao+tipo_lesao": 2.6934047293468526e-07,
+    "homem+idade_log+industria+kentucky+salario_log": 0.0573605835371894,
+    "homem+idade_log+industria+kentucky+tipo_lesao": 0.06424163562097064,
+    "homem+idade_log+industria+salario_log+tipo_lesao": 0.00517416084941116,
+    "homem+idade_log+internacao+kentucky+salario_log": 0.002651479859236221,
+    "homem+idade_log+internacao+kentucky+tipo_lesao": 0.0017978248215452476,
+    "homem+idade_log+internacao+salario_log+tipo_lesao": 0.00016874368988054896,
+    "homem+idade_log+kentucky+salario_log+tipo_lesao": 0.1225577320152032,
+    "homem+industria+internacao+kentucky+salario_log": 0.0008329246507390714,
+    "homem+industria+internacao+kentucky+tipo_lesao": 0.00041226746713458033,
+    "homem+industria+internacao+salario_log+tipo_lesao": 3.077903715300202e-05,
+    "homem+industria+kentucky+salario_log+tipo_lesao": 0.05829294001814929,
+    "homem+internacao+kentucky+salario_log+tipo_lesao": 0.0016411604447061955,
+    "idade_log+industria+internacao+kentucky+salario_log": 0.0017208785441620905,
+    "idade_log+industria+internacao+kentucky+tipo_lesao": 0.0009784567619973358,
+    "idade_log+industria+internacao+salario_log+tipo_lesao": 2.9621537464442096e-05,
+    "idade_log+industria+kentucky+salario_log+tipo_lesao": 0.07883060162059558,
+    "idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0025704997690865804,
+    "industria+internacao+kentucky+salario_log+tipo_lesao": 0.0008865322247857448,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria": 0.2639535389751631,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao": 0.22606936206684738,
+    "alta_renda+beneficio_log+casado+homem+idade_log+kentucky": 0.532921414347918,
+    "alta_renda+beneficio_log+casado+homem+idade_log+salario_log": 0.0624041466181111,
+    "alta_renda+beneficio_log+casado+homem+idade_log+tipo_lesao": 0.2909966470458446,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao": 0.16594915219438186,
+    "alta_renda+beneficio_log+casado+homem+industria+kentucky": 0.5695590665752802,
+    "alta_renda+beneficio_log+casado+homem+industria+salario_log": 0.1626991291115867,
+    "alta_renda+beneficio_log+casado+homem+industria+tipo_lesao": 0.26420438805650986,
+    "alta_renda+beneficio_log+casado+homem+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+homem+internacao+salario_log": 0.27043523906141603,
+    "alta_renda+beneficio_log+casado+homem+internacao+tipo_lesao": 0.11179278561743271,
+    "alta_renda+beneficio_log+casado+homem+kentucky+salario_log": 0.7035792205967116,
+    "alta_renda+beneficio_log+casado+homem+kentucky+tipo_lesao": 0.5890492770929969,
+    "alta_renda+beneficio_log+casado+homem+salario_log+tipo_lesao": 0.11105200441198036,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao": 0.23700794739030565,
+    "alta_renda+beneficio_log+casado+idade_log+industria+kentucky": 0.5725918085907414,
+    "alta_renda+beneficio_log+casado+idade_log+industria+salario_log": 0.13678246304464273,
+    "alta_renda+beneficio_log+casado+idade_log+industria+tipo_lesao": 0.3353784809419844,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+salario_log": 0.32761632966768434,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+tipo_lesao": 0.1848064012054127,
+    "alta_renda+beneficio_log+casado+idade_log+kentucky+salario_log": 0.6826233739797408,
+    "alta_renda+beneficio_log+casado+idade_log+kentucky+tipo_lesao": 0.5525062689115102,
+    "alta_renda+beneficio_log+casado+idade_log+salario_log+tipo_lesao": 0.08696232530424015,
+    "alta_renda+beneficio_log+casado+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+industria+internacao+salario_log": 0.4290873834870176,
+    "alta_renda+beneficio_log+casado+industria+internacao+tipo_lesao": 0.13363627366250594,
+    "alta_renda+beneficio_log+casado+industria+kentucky+salario_log": 0.765506680338421,
+    "alta_renda+beneficio_log+casado+industria+kentucky+tipo_lesao": 0.6354476648308345,
+    "alta_renda+beneficio_log+casado+industria+salario_log+tipo_lesao": 0.23378610679796213,
+    "alta_renda+beneficio_log+casado+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+internacao+salario_log+tipo_lesao": 0.3184782703118127,
+    "alta_renda+beneficio_log+casado+kentucky+salario_log+tipo_lesao": 0.7523656674243784,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao": 0.29596810576921695,
+    "alta_renda+beneficio_log+homem+idade_log+industria+kentucky": 0.5327722617593904,
+    "alta_renda+beneficio_log+homem+idade_log+industria+salario_log": 0.10772631600451132,
+    "alta_renda+beneficio_log+homem+idade_log+industria+tipo_lesao": 0.3024053451280904,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+salario_log": 0.3560855259740996,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+tipo_lesao": 0.2462089822106544,
+    "alta_renda+beneficio_log+homem+idade_log+kentucky+salario_log": 0.6414303243360477,
+    "alta_renda+beneficio_log+homem+idade_log+kentucky+tipo_lesao": 0.5321421646074663,
+    "alta_renda+beneficio_log+homem+idade_log+salario_log+tipo_lesao": 0.07232224027699996,
+    "alta_renda+beneficio_log+homem+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+homem+industria+internacao+salario_log": 0.4424193084018044,
+    "alta_renda+beneficio_log+homem+industria+internacao+tipo_lesao": 0.16859062618253726,
+    "alta_renda+beneficio_log+homem+industria+kentucky+salario_log": 0.7172826009983408,
+    "alta_renda+beneficio_log+homem+industria+kentucky+tipo_lesao": 0.5805764063626919,
+    "alta_renda+beneficio_log+homem+industria+salario_log+tipo_lesao": 0.15493654433036108,
+    "alta_renda+beneficio_log+homem+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+homem+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+internacao+salario_log+tipo_lesao": 0.35357239536354335,
+    "alta_renda+beneficio_log+homem+kentucky+salario_log+tipo_lesao": 0.7098722145464956,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+salario_log": 0.5618732025285536,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+tipo_lesao": 0.2658122695920876,
+    "alta_renda+beneficio_log+idade_log+industria+kentucky+salario_log": 0.6633977794978463,
+    "alta_renda+beneficio_log+idade_log+industria+kentucky+tipo_lesao": 0.5722193288966777,
+    "alta_renda+beneficio_log+idade_log+industria+salario_log+tipo_lesao": 0.1468918556429642,
+    "alta_renda+beneficio_log+idade_log+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+idade_log+internacao+salario_log+tipo_lesao": 0.4103297926629545,
+    "alta_renda+beneficio_log+idade_log+kentucky+salario_log+tipo_lesao": 0.664098357639843,
+    "alta_renda+beneficio_log+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+industria+internacao+salario_log+tipo_lesao": 0.5461199458218751,
+    "alta_renda+beneficio_log+industria+kentucky+salario_log+tipo_lesao": 0.7481059897103863,
+    "alta_renda+beneficio_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+casado+homem+idade_log+industria+internacao": 1.8080155015559102e-08,
+    "alta_renda+casado+homem+idade_log+industria+kentucky": 0.05789311169547609,
+    "alta_renda+casado+homem+idade_log+industria+salario_log": 0.04886314766912478,
+    "alta_renda+casado+homem+idade_log+industria+tipo_lesao": 1.7430450829098749e-06,
+    "alta_renda+casado+homem+idade_log+internacao+kentucky": 0.0029515047563403317,
+    "alta_renda+casado+homem+idade_log+internacao+salario_log": 0.0028301697027051614,
+    "alta_renda+casado+homem+idade_log+internacao+tipo_lesao": 1.6729120582809598e-07,
+    "alta_renda+casado+homem+idade_log+kentucky+salario_log": 0.102183080274429,
+    "alta_renda+casado+homem+idade_log+kentucky+tipo_lesao": 0.11661742732430057,
+    "alta_renda+casado+homem+idade_log+salario_log+tipo_lesao": 0.07851674307437086,
+    "alta_renda+casado+homem+industria+internacao+kentucky": 0.0011752962354432534,
+    "alta_renda+casado+homem+industria+internacao+salario_log": 0.0015144233753824688,
+    "alta_renda+casado+homem+industria+internacao+tipo_lesao": 5.273257274206558e-10,
+    "alta_renda+casado+homem+industria+kentucky+salario_log": 0.0495251277482428,
+    "alta_renda+casado+homem+industria+kentucky+tipo_lesao": 0.06181176971756608,
+    "alta_renda+casado+homem+industria+salario_log+tipo_lesao": 0.06654025364826424,
+    "alta_renda+casado+homem+internacao+kentucky+salario_log": 0.002111713939505996,
+    "alta_renda+casado+homem+internacao+kentucky+tipo_lesao": 0.0019831413565111946,
+    "alta_renda+casado+homem+internacao+salario_log+tipo_lesao": 0.002098057756061861,
+    "alta_renda+casado+homem+kentucky+salario_log+tipo_lesao": 0.1148419430391543,
+    "alta_renda+casado+idade_log+industria+internacao+kentucky": 0.0017794286280602453,
+    "alta_renda+casado+idade_log+industria+internacao+salario_log": 0.0023883288785577932,
+    "alta_renda+casado+idade_log+industria+internacao+tipo_lesao": 3.763581487342656e-08,
+    "alta_renda+casado+idade_log+industria+kentucky+salario_log": 0.06873953349989557,
+    "alta_renda+casado+idade_log+industria+kentucky+tipo_lesao": 0.07669239461406895,
+    "alta_renda+casado+idade_log+industria+salario_log+tipo_lesao": 0.07508994134913476,
+    "alta_renda+casado+idade_log+internacao+kentucky+salario_log": 0.0031258077685987064,
+    "alta_renda+casado+idade_log+internacao+kentucky+tipo_lesao": 0.0024614939735508076,
+    "alta_renda+casado+idade_log+internacao+salario_log+tipo_lesao": 0.0027899177684639204,
+    "alta_renda+casado+idade_log+kentucky+salario_log+tipo_lesao": 0.14715387212796385,
+    "alta_renda+casado+industria+internacao+kentucky+salario_log": 0.0012732163517265693,
+    "alta_renda+casado+industria+internacao+kentucky+tipo_lesao": 0.0009623639218305966,
+    "alta_renda+casado+industria+internacao+salario_log+tipo_lesao": 0.0014042569523223458,
+    "alta_renda+casado+industria+kentucky+salario_log+tipo_lesao": 0.07844839917322823,
+    "alta_renda+casado+internacao+kentucky+salario_log+tipo_lesao": 0.0019439845927374613,
+    "alta_renda+homem+idade_log+industria+internacao+kentucky": 0.001797430326660888,
+    "alta_renda+homem+idade_log+industria+internacao+salario_log": 0.0021753926922735505,
+    "alta_renda+homem+idade_log+industria+internacao+tipo_lesao": 2.723045453146346e-08,
+    "alta_renda+homem+idade_log+industria+kentucky+salario_log": 0.06913937434444795,
+    "alta_renda+homem+idade_log+industria+kentucky+tipo_lesao": 0.07877573239368603,
+    "alta_renda+homem+idade_log+industria+salario_log+tipo_lesao": 0.07046661554760537,
+    "alta_renda+homem+idade_log+internacao+kentucky+salario_log": 0.00301553858948526,
+    "alta_renda+homem+idade_log+internacao+kentucky+tipo_lesao": 0.0026353878301311182,
+    "alta_renda+homem+idade_log+internacao+salario_log+tipo_lesao": 0.0026677949599195226,
+    "alta_renda+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.14878548169766317,
+    "alta_renda+homem+industria+internacao+kentucky+salario_log": 0.0011444715517013886,
+    "alta_renda+homem+industria+internacao+kentucky+tipo_lesao": 0.000987491595941255,
+    "alta_renda+homem+industria+internacao+salario_log+tipo_lesao": 0.0011689464306163357,
+    "alta_renda+homem+industria+kentucky+salario_log+tipo_lesao": 0.07366851928747874,
+    "alta_renda+homem+internacao+kentucky+salario_log+tipo_lesao": 0.0018577466308918294,
+    "alta_renda+idade_log+industria+internacao+kentucky+salario_log": 0.0020608983985355767,
+    "alta_renda+idade_log+industria+internacao+kentucky+tipo_lesao": 0.0013912783606053808,
+    "alta_renda+idade_log+industria+internacao+salario_log+tipo_lesao": 0.0018370655817293209,
+    "alta_renda+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.10077178637584261,
+    "alta_renda+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0028415702974431524,
+    "alta_renda+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0010694110924186946,
+    "beneficio_log+casado+homem+idade_log+industria+internacao": 0.022918871568640396,
+    "beneficio_log+casado+homem+idade_log+industria+kentucky": 0.9839138475283612,
+    "beneficio_log+casado+homem+idade_log+industria+salario_log": 0.19147075900210322,
+    "beneficio_log+casado+homem+idade_log+industria+tipo_lesao": 0.047550837439097236,
+    "beneficio_log+casado+homem+idade_log+internacao+kentucky": 1.0,
+    "beneficio_log+casado+homem+idade_log+internacao+salario_log": 0.5712786919887479,
+    "beneficio_log+casado+homem+idade_log+internacao+tipo_lesao": 0.014791699502298975,
+    "beneficio_log+casado+homem+idade_log+kentucky+salario_log": 0.7692416782580864,
+    "beneficio_log+casado+homem+idade_log+kentucky+tipo_lesao": 0.7863493746223106,
+    "beneficio_log+casado+homem+idade_log+salario_log+tipo_lesao": 0.1579121050841717,
+    "beneficio_log+casado+homem+industria+internacao+kentucky": 1.0,
+    "beneficio_log+casado+homem+industria+internacao+salario_log": 0.6759885064026626,
+    "beneficio_log+casado+homem+industria+internacao+tipo_lesao": 0.009289523669169299,
+    "beneficio_log+casado+homem+industria+kentucky+salario_log": 0.8116375689879756,
+    "beneficio_log+casado+homem+industria+kentucky+tipo_lesao": 0.9267535648873659,
+    "beneficio_log+casado+homem+industria+salario_log+tipo_lesao": 0.26054482972459675,
+    "beneficio_log+casado+homem+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+homem+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+homem+internacao+salario_log+tipo_lesao": 0.462897382829013,
+    "beneficio_log+casado+homem+kentucky+salario_log+tipo_lesao": 0.8501278636790599,
+    "beneficio_log+casado+idade_log+industria+internacao+kentucky": 1.0,
+    "beneficio_log+casado+idade_log+industria+internacao+salario_log": 0.8014727004916986,
+    "beneficio_log+casado+idade_log+industria+internacao+tipo_lesao": 0.03273643900641898,
+    "beneficio_log+casado+idade_log+industria+kentucky+salario_log": 0.7819458932194214,
+    "beneficio_log+casado+idade_log+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+idade_log+industria+salario_log+tipo_lesao": 0.2590131031441224,
+    "beneficio_log+casado+idade_log+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+idade_log+internacao+salario_log+tipo_lesao": 0.5701982454866485,
+    "beneficio_log+casado+idade_log+kentucky+salario_log+tipo_lesao": 0.7966966610740062,
+    "beneficio_log+casado+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+industria+internacao+salario_log+tipo_lesao": 0.642257795716335,
+    "beneficio_log+casado+industria+kentucky+salario_log+tipo_lesao": 0.8481857896112717,
+    "beneficio_log+casado+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+kentucky": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+salario_log": 0.8765686276955866,
+    "beneficio_log+homem+idade_log+industria+internacao+tipo_lesao": 0.03274716430371727,
+    "beneficio_log+homem+idade_log+industria+kentucky+salario_log": 0.7354623553946698,
+    "beneficio_log+homem+idade_log+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+industria+salario_log+tipo_lesao": 0.2065874177704238,
+    "beneficio_log+homem+idade_log+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+homem+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+internacao+salario_log+tipo_lesao": 0.6208355229465556,
+    "beneficio_log+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.770658573660388,
+    "beneficio_log+homem+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+homem+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+homem+industria+internacao+salario_log+tipo_lesao": 0.6849683037963502,
+    "beneficio_log+homem+industria+kentucky+salario_log+tipo_lesao": 0.8072943669357542,
+    "beneficio_log+homem+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+idade_log+industria+internacao+salario_log+tipo_lesao": 0.8830162119355,
+    "beneficio_log+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.7785821222474922,
+    "beneficio_log+idade_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "casado+homem+idade_log+industria+internacao+kentucky": 0.0013636799712940838,
+    "casado+homem+idade_log+industria+internacao+salario_log": 3.652054577494656e-05,
+    "casado+homem+idade_log+industria+internacao+tipo_lesao": 1.8490626648222016e-07,
+    "casado+homem+idade_log+industria+kentucky+salario_log": 0.05598918136392037,
+    "casado+homem+idade_log+industria+kentucky+tipo_lesao": 0.06396334121958268,
+    "casado+homem+idade_log+industria+salario_log+tipo_lesao": 0.004667322461101587,
+    "casado+homem+idade_log+internacao+kentucky+salario_log": 0.002648433659148712,
+    "casado+homem+idade_log+internacao+kentucky+tipo_lesao": 0.001827213667366377,
+    "casado+homem+idade_log+internacao+salario_log+tipo_lesao": 0.0001644394464138662,
+    "casado+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.12200639302976614,
+    "casado+homem+industria+internacao+kentucky+salario_log": 0.0009807541326251619,
+    "casado+homem+industria+internacao+kentucky+tipo_lesao": 0.0005988324011206305,
+    "casado+homem+industria+internacao+salario_log+tipo_lesao": 1.7647404560163553e-05,
+    "casado+homem+industria+kentucky+salario_log+tipo_lesao": 0.06317973397818324,
+    "casado+homem+internacao+kentucky+salario_log+tipo_lesao": 0.0017537493151965366,
+    "casado+idade_log+industria+internacao+kentucky+salario_log": 0.0017035205401060038,
+    "casado+idade_log+industria+internacao+kentucky+tipo_lesao": 0.001029710803911903,
+    "casado+idade_log+industria+internacao+salario_log+tipo_lesao": 2.8061603497755673e-05,
+    "casado+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.07830224940245409,
+    "casado+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0025687795800273094,
+    "casado+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0009512509577490577,
+    "homem+idade_log+industria+internacao+kentucky+salario_log": 0.001574796417005476,
+    "homem+idade_log+industria+internacao+kentucky+tipo_lesao": 0.0011142158686634942,
+    "homem+idade_log+industria+internacao+salario_log+tipo_lesao": 3.491193720007646e-05,
+    "homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.07899537627074198,
+    "homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0025366102537144252,
+    "homem+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0008377634486968903,
+    "idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0014197444117047384,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao": 0.24345553296631683,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+kentucky": 0.5436974349575463,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+salario_log": 0.12108317075310776,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+tipo_lesao": 0.31736469092047764,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+salario_log": 0.29825378809035763,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+tipo_lesao": 0.18986230368907137,
+    "alta_renda+beneficio_log+casado+homem+idade_log+kentucky+salario_log": 0.6649753217039892,
+    "alta_renda+beneficio_log+casado+homem+idade_log+kentucky+tipo_lesao": 0.5375158647371221,
+    "alta_renda+beneficio_log+casado+homem+idade_log+salario_log+tipo_lesao": 0.08120532950492125,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+salario_log": 0.3796796543515303,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+tipo_lesao": 0.13131418956809318,
+    "alta_renda+beneficio_log+casado+homem+industria+kentucky+salario_log": 0.7200736451681323,
+    "alta_renda+beneficio_log+casado+homem+industria+kentucky+tipo_lesao": 0.5764730438110406,
+    "alta_renda+beneficio_log+casado+homem+industria+salario_log+tipo_lesao": 0.1933336459471155,
+    "alta_renda+beneficio_log+casado+homem+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+homem+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+homem+internacao+salario_log+tipo_lesao": 0.2770061847705888,
+    "alta_renda+beneficio_log+casado+homem+kentucky+salario_log+tipo_lesao": 0.7159338277039898,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+salario_log": 0.48283228324354405,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+tipo_lesao": 0.19608467392471218,
+    "alta_renda+beneficio_log+casado+idade_log+industria+kentucky+salario_log": 0.680501528283067,
+    "alta_renda+beneficio_log+casado+idade_log+industria+kentucky+tipo_lesao": 0.5743676283813963,
+    "alta_renda+beneficio_log+casado+idade_log+industria+salario_log+tipo_lesao": 0.15863817927399212,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+salario_log+tipo_lesao": 0.3359691003814166,
+    "alta_renda+beneficio_log+casado+idade_log+kentucky+salario_log+tipo_lesao": 0.6724290533039099,
+    "alta_renda+beneficio_log+casado+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+industria+internacao+salario_log+tipo_lesao": 0.4487660974294724,
+    "alta_renda+beneficio_log+casado+industria+kentucky+salario_log+tipo_lesao": 0.7514352045156224,
+    "alta_renda+beneficio_log+casado+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+salario_log": 0.5184867752570681,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+tipo_lesao": 0.2595777418993566,
+    "alta_renda+beneficio_log+homem+idade_log+industria+kentucky+salario_log": 0.6361911737828423,
+    "alta_renda+beneficio_log+homem+idade_log+industria+kentucky+tipo_lesao": 0.5440097290444768,
+    "alta_renda+beneficio_log+homem+idade_log+industria+salario_log+tipo_lesao": 0.13426479725099555,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+salario_log+tipo_lesao": 0.36631319961867487,
+    "alta_renda+beneficio_log+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.6488735004466109,
+    "alta_renda+beneficio_log+homem+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+homem+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+industria+internacao+salario_log+tipo_lesao": 0.4459173359347226,
+    "alta_renda+beneficio_log+homem+industria+kentucky+salario_log+tipo_lesao": 0.7036575343209908,
+    "alta_renda+beneficio_log+homem+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+salario_log+tipo_lesao": 0.5827293002927296,
+    "alta_renda+beneficio_log+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.6708014906695352,
+    "alta_renda+beneficio_log+idade_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+casado+homem+idade_log+industria+internacao+kentucky": 0.001818313860686711,
+    "alta_renda+casado+homem+idade_log+industria+internacao+salario_log": 0.002161687196962178,
+    "alta_renda+casado+homem+idade_log+industria+internacao+tipo_lesao": 2.384988171804531e-08,
+    "alta_renda+casado+homem+idade_log+industria+kentucky+salario_log": 0.06820460339242382,
+    "alta_renda+casado+homem+idade_log+industria+kentucky+tipo_lesao": 0.07835141707300392,
+    "alta_renda+casado+homem+idade_log+industria+salario_log+tipo_lesao": 0.07282625672799184,
+    "alta_renda+casado+homem+idade_log+internacao+kentucky+salario_log": 0.002998347344826461,
+    "alta_renda+casado+homem+idade_log+internacao+kentucky+tipo_lesao": 0.002609902036404682,
+    "alta_renda+casado+homem+idade_log+internacao+salario_log+tipo_lesao": 0.002729832119516254,
+    "alta_renda+casado+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.14941175036777576,
+    "alta_renda+casado+homem+industria+internacao+kentucky+salario_log": 0.001272471140365969,
+    "alta_renda+casado+homem+industria+internacao+kentucky+tipo_lesao": 0.0010739434060216728,
+    "alta_renda+casado+homem+industria+internacao+salario_log+tipo_lesao": 0.0013199248396009975,
+    "alta_renda+casado+homem+industria+kentucky+salario_log+tipo_lesao": 0.07903052941866977,
+    "alta_renda+casado+homem+internacao+kentucky+salario_log+tipo_lesao": 0.002097259269700777,
+    "alta_renda+casado+idade_log+industria+internacao+kentucky+salario_log": 0.0020359667371485607,
+    "alta_renda+casado+idade_log+industria+internacao+kentucky+tipo_lesao": 0.001416691027527915,
+    "alta_renda+casado+idade_log+industria+internacao+salario_log+tipo_lesao": 0.0018626472148349903,
+    "alta_renda+casado+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.10048287572937956,
+    "alta_renda+casado+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0028980859717966235,
+    "alta_renda+casado+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0011680611610496918,
+    "alta_renda+homem+idade_log+industria+internacao+kentucky+salario_log": 0.0019206216012317985,
+    "alta_renda+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 0.0014891097649865675,
+    "alta_renda+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.0017352987093721438,
+    "alta_renda+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.1003054235027931,
+    "alta_renda+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.00294743817355068,
+    "alta_renda+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0010554084781339802,
+    "alta_renda+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.001627727335167539,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+kentucky": 1.0,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+salario_log": 0.7620797310280549,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+tipo_lesao": 0.017321843780592497,
+    "beneficio_log+casado+homem+idade_log+industria+kentucky+salario_log": 0.7539458600494823,
+    "beneficio_log+casado+homem+idade_log+industria+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+homem+idade_log+industria+salario_log+tipo_lesao": 0.22885947747395086,
+    "beneficio_log+casado+homem+idade_log+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+homem+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+homem+idade_log+internacao+salario_log+tipo_lesao": 0.5074096335944739,
+    "beneficio_log+casado+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.7851008802853983,
+    "beneficio_log+casado+homem+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+homem+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+homem+industria+internacao+salario_log+tipo_lesao": 0.5542411322308045,
+    "beneficio_log+casado+homem+industria+kentucky+salario_log+tipo_lesao": 0.8052277772955153,
+    "beneficio_log+casado+homem+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+casado+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+idade_log+industria+internacao+salario_log+tipo_lesao": 0.7273449848540834,
+    "beneficio_log+casado+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.7851557436547821,
+    "beneficio_log+casado+idade_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+casado+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.7918603198886177,
+    "beneficio_log+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.7482556115326121,
+    "beneficio_log+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "casado+homem+idade_log+industria+internacao+kentucky+salario_log": 0.0015667727055275937,
+    "casado+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 0.0011118456564719918,
+    "casado+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 3.273627666723919e-05,
+    "casado+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.07928017266413388,
+    "casado+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0025493692952055958,
+    "casado+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0009323200384521609,
+    "casado+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0013964799773642162,
+    "homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0013295553184351282,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+kentucky": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+salario_log": 0.4460899505422631,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+tipo_lesao": 0.19535768089802935,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+kentucky+salario_log": 0.6535890712585625,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+kentucky+tipo_lesao": 0.5463591553748749,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+salario_log+tipo_lesao": 0.14576474288291372,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+salario_log+tipo_lesao": 0.30011741504339096,
+    "alta_renda+beneficio_log+casado+homem+idade_log+kentucky+salario_log+tipo_lesao": 0.6582799808003184,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+salario_log+tipo_lesao": 0.36596936015020265,
+    "alta_renda+beneficio_log+casado+homem+industria+kentucky+salario_log+tipo_lesao": 0.7063366910667868,
+    "alta_renda+beneficio_log+casado+homem+internacao+kentucky+salario_log+tipo_lesao": 0.9473286480474762,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+salario_log+tipo_lesao": 0.477234008106155,
+    "alta_renda+beneficio_log+casado+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.6795560236023255,
+    "alta_renda+beneficio_log+casado+idade_log+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.5234448395803263,
+    "alta_renda+beneficio_log+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.6493675614741106,
+    "alta_renda+beneficio_log+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.9963977632650526,
+    "alta_renda+beneficio_log+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+casado+homem+idade_log+industria+internacao+kentucky+salario_log": 0.0018604932368179803,
+    "alta_renda+casado+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 0.0014762943996477888,
+    "alta_renda+casado+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.0017524500328090456,
+    "alta_renda+casado+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.10013458681065909,
+    "alta_renda+casado+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.0029376884127580547,
+    "alta_renda+casado+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0011381397263496619,
+    "alta_renda+casado+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.001665160973871058,
+    "alta_renda+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.001555516007494657,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.6603606610906787,
+    "beneficio_log+casado+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.7558420709521945,
+    "beneficio_log+casado+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.9903555452562259,
+    "beneficio_log+casado+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+casado+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "beneficio_log+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "casado+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0013159787958540669,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+salario_log": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+salario_log+tipo_lesao": 0.4355683077223452,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+kentucky+salario_log+tipo_lesao": 0.6565185206198583,
+    "alta_renda+beneficio_log+casado+homem+idade_log+internacao+kentucky+salario_log+tipo_lesao": 0.9475305937700429,
+    "alta_renda+beneficio_log+casado+homem+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+casado+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 0.0015823441848931456,
+    "beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0,
+    "alta_renda+beneficio_log+casado+homem+idade_log+industria+internacao+kentucky+salario_log+tipo_lesao": 1.0
+   },
+   "saturados": [
+    "beneficio_log+kentucky",
+    "alta_renda+beneficio_log+kentucky"
+   ]
+  },
+  "posterior": {
+   "beta_chave_media": 0.5787654344828058,
+   "beta_chave_ic90": [
+    0.4914374122902024,
+    0.6654120716330933
+   ],
+   "theta_media": 0.5787654344828058,
+   "theta_ic90": [
+    0.4914374122902024,
+    0.6654120716330933
+   ],
+   "p_beta_positivo": 1.0,
+   "rhat_max": 1.008302572987096,
+   "ess_min": 873.1986503675345,
+   "aceitacao": 0.316875,
+   "sbc": {
+    "n_sim": 60,
+    "L": 19,
+    "caixas": [
+     11,
+     14,
+     8,
+     10,
+     17
+    ],
+    "p_uniformidade": 0.38391962028604576
+   },
+   "parametros": [
+    "intercepto",
+    "beneficio_log",
+    "salario_log",
+    "alta_renda",
+    "kentucky",
+    "homem",
+    "casado",
+    "idade_log",
+    "internacao",
+    "tipo_lesao=5",
+    "tipo_lesao=6",
+    "tipo_lesao=4",
+    "tipo_lesao=1",
+    "tipo_lesao=8",
+    "tipo_lesao=2",
+    "tipo_lesao=7",
+    "industria=1",
+    "industria=2",
+    "log_sigma"
+   ],
+   "dp_posterior_sobre_dp_priori": 0.2428597611065698,
+   "peso_verossimilhanca": 1.0
+  },
+  "preregistro_hash": "80b6cd9f85d3942bf92e1cead758b249a3add53fdae50a17bd9a57e264edcbfa",
+  "fora_do_ambiente": {
+   "ambientes_cofre": [
+    "mi_depois"
+   ],
+   "n_cofre": 676,
+   "perda": {
+    "modelo_ajustado": 1.6410919921406586,
+    "icp_invariante": 2.0138337925661474,
+    "todos_os_candidatos": 1.6407716201877431,
+    "climatologia": 2.013833792566147
+   },
+   "habilidade": {
+    "modelo_ajustado": 0.18509064740169967,
+    "icp_invariante": -2.220446049250313e-16,
+    "todos_os_candidatos": 0.1852497329995768
+   },
+   "cobertura_conforme": 0.8920118343195266,
+   "deriva_y": {
+    "ks": 0.10631102732907527,
+    "p_ks": 1.8930189611362207e-06,
+    "wasserstein": 0.31541396825797813
+   },
+   "placar_diario": {
+    "modelo_ajustado": {
+     "n": 676,
+     "brier": 0.21887944862201825,
+     "brier_clima": 0.2548299297191325,
+     "ln_capital": 48.88048330296216,
+     "habilidade": 0.1410763686068509,
+     "peso": 1.0
+    },
+    "icp_invariante": {
+     "n": 676,
+     "brier": 0.25218618453456065,
+     "brier_clima": 0.2548299297191325,
+     "ln_capital": 3.598814131458059,
+     "habilidade": 0.01037454739906618,
+     "peso": 1.0
+    },
+    "todos_os_candidatos": {
+     "n": 676,
+     "brier": 0.2189041149644513,
+     "brier_clima": 0.2548299297191325,
+     "ln_capital": 48.87499651516604,
+     "habilidade": 0.14097957329532584,
+     "peso": 1.0
+    }
+   },
+   "invariante_vence_todos_fora_do_ambiente": false
+  },
+  "portao_m15": {
+   "rhat_ok": true,
+   "ess_ok": true,
+   "sbc_ok": true,
+   "conforme_ok": true,
+   "modelo_vence_climatologia": true,
+   "trilha_integra": true
+  },
+  "aprovado": true
+ },
+ "decisao": {
+  "acao": "adotar",
+  "p_adotar_compensa": 1.0,
+  "evpi_posterior": 0.0,
+  "frequencias_naturais": "Em 100 de cada 100 mundos compatíveis com os dados e a priori, adotar 'cortar o benefício semanal em 10% para encurtar os afastamentos' compensa o custo.",
+  "circuit_breaker": "suspender a recomendação se a deriva KS do desfecho num ambiente novo tiver p < 0,01 ou se o ICP deixar de aceitar o conjunto invariante",
+  "escopo": {
+   "vale_para": "indenização por acidente de trabalho em estados dos EUA no início dos anos 1980, mudanças moderadas do teto",
+   "nao_vale_para": "doenças ocupacionais de longa latência, cortes grandes, outros países, duração total sem benefício"
+  }
+ },
+ "status": "aprovado no F4: decisão emitida",
+ "segundos": 47.3
+}

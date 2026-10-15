@@ -1,0 +1,126 @@
+# Ficha epistemológica do subgrafo H0 em domínio real · central de chamadas de um banco (2003)
+# Barramento de fichas (Arquitetura §3). Emitida por agent-f1-code + agent-f2-data, auditada por agent-m15-orchestrator.
+# Sucede a ficha do H0 simulado (h0-lab0/ficha.yaml): a demanda bimodal suposta deu lugar à demanda observada.
+
+alegacao: >
+  "Escalando cada meia hora pelo Erlang C sobre a taxa média do histórico, a central atende 82% das
+  chamadas em até 20 s, com espera média de 10 s, todo dia."
+fonte: >
+  dados-reais/bank_calls.csv (Rdatasets fpp3::bank_calls; chamadas a cada 5 min, 164 dias úteis de
+  3 mar a 24 out 2003). A regra de escala é a prática padrão do setor (Erlang C por intervalo).
+
+cabecalho:  # as 5 perguntas obrigatórias do payload (AGENTS.md §IV)
+  processo_gerador: >
+    Mundo (L1): as contagens reais de chamadas por intervalo de 5 min, com instantes uniformes dentro
+    do intervalo; fila FCFS com c(t) atendentes por meia hora, sem preempção; atendimento exponencial com
+    média de 4 min e paciência exponencial com média de 3 min (ambos SUPOSTOS: a base não os traz).
+    A alegação falha na camada Modelo (L2): usa a taxa média do perfil como se todo dia fosse o dia médio,
+    e a fórmula estacionária sem abandono. O Agente (L3) escala com um número só por meia hora.
+  nao_linearidade: >
+    O nível de serviço do Erlang C é côncavo e despenca perto da saturação: aplicada à taxa real de cada
+    dia do cofre, a própria fórmula da alegação dá em média 57%, não 82% (Jensen: E[SL(Λ)] ≤ SL(E[Λ])).
+    Sem abandono, a espera explode: 956 s de média no mundo real contra 10 s no da alegação.
+  unidade_e_margem: >
+    A unidade independente é o DIA: as chamadas de um dia compartilham a taxa e a fila.
+    n_efetivo = 81 dias de cofre, não 2,65 milhões de chamadas. O erro padrão por chamada é
+    pseudorreplicação (≈ 119× menor que o por dia).
+  fisica_do_ruido: >
+    A demanda diária NÃO é Poisson: dispersão Var/média = 273 (Poisson: 1); desvio entre dias de ~2 900
+    chamadas contra 180 previstas. Parte é estrutura (segunda-feira +15%, viradas de mês, dia seguinte a
+    feriado) e parte é ruído residual com CV de 6%. Abandono é um estado de saída que corta a cauda da
+    espera. Agente passivo: a escala não altera a demanda (rediscagem de quem desistiu está nas contagens,
+    sem identificação).
+  escada_causal: >
+    Degrau 2 (intervenção): as regras R1–R3 são do(escala) simuladas sobre a demanda real, que é mantida
+    fixa. Premissa não testável: a demanda não reage à escala (menos espera não traz mais chamadas e
+    menos desistências não reduzem rediscagens).
+
+nos:
+  - id: N_Core
+    camada: core
+    tipo_incerteza: nao_se_aplica
+    definicao_formal: Processo gerador oculto que produz as esperas da central
+    artefato_simulavel: estocologia/h0.py::executar
+  - id: L1_demanda_real
+    camada: L1
+    tipo_incerteza: Aleatoria
+    definicao_formal: Contagens observadas N_{d,i} por dia d e intervalo de 5 min i (164 × 169)
+    artefato_simulavel: estocologia/central.py::carregar
+  - id: L1_fila_do_dia
+    camada: L1
+    tipo_incerteza: Aleatoria
+    definicao_formal: FCFS com c(t) atendentes, sem preempção, com desistência exata pela espera oferecida
+    artefato_simulavel: estocologia/central.py::_fcfs
+  - id: L1_atendimento_paciencia
+    camada: L1
+    tipo_incerteza: Knightiana_Especificacao
+    definicao_formal: S ~ Exp(média 240 s); paciência ~ Exp(média 180 s); suposições do F7, sem dado
+    artefato_simulavel: estocologia/central.py::servico
+  - id: L2_erlang_c
+    camada: L2
+    tipo_incerteza: Knightiana_Especificacao
+    definicao_formal: SL(c, λ) = 1 − C(c, λ·AHT) e^{−(c − λ·AHT) t / AHT}, estacionária, sem abandono
+    artefato_simulavel: estocologia/central.py::nivel_servico
+  - id: L2_media_por_chamada
+    camada: L2
+    tipo_incerteza: Epistemica
+    definicao_formal: m = Σ_d S_d / Σ_d n_d; ep² = Σ_d (S_d − m n_d)² / (Σ_d n_d)²
+    artefato_simulavel: estocologia/central.py::media_por_chamada
+  - id: L2_modelo_nulo
+    camada: L2
+    tipo_incerteza: Epistemica
+    definicao_formal: 400 dias Poisson com o perfil médio do treino, mesma escala; bootstrap de 81 dias
+    artefato_simulavel: estocologia/h0.py::executar
+  - id: L2_conforme_total
+    camada: L2
+    tipo_incerteza: Epistemica
+    definicao_formal: Intervalo conforme de 90% para total do dia / média do dia da semana, fora do tempo
+    artefato_simulavel: estocologia/central.py::conforme
+  - id: L3_gestor_de_escala
+    camada: L3
+    tipo_incerteza: Knightiana_Especificacao
+    definicao_formal: Escolhe c por meia hora; regras R0 (alegação) a R3
+    artefato_simulavel: estocologia/central.py::escala_do_perfil
+
+arestas:
+  - {de: L1_demanda_real, para: L1_fila_do_dia, tipo: causal, rotulo: "a chegada do dia define a fila do dia"}
+  - {de: L1_atendimento_paciencia, para: L1_fila_do_dia, tipo: causal, rotulo: "serviço e desistência"}
+  - {de: L1_fila_do_dia, para: N_Core, tipo: tree}
+  - {de: L2_erlang_c, para: L1_fila_do_dia, tipo: patologia, rotulo: "Falácia da Média: SL(E[Λ]) no lugar de E[SL(Λ)]"}
+  - {de: L2_erlang_c, para: L1_demanda_real, tipo: patologia, rotulo: "Poisson suposto; dispersão observada 273"}
+  - {de: L2_media_por_chamada, para: L1_demanda_real, tipo: ponte, rotulo: "Jensen: côncavo no SL, convexo na espera (M0 ↔ M8)"}
+  - {de: L3_gestor_de_escala, para: L2_erlang_c, tipo: patologia, rotulo: "Decisão pelo dia médio sem a cauda dos dias"}
+  - {de: L2_modelo_nulo, para: L2_media_por_chamada, tipo: tree, rotulo: "Teste severo (M5)"}
+  - {de: L2_conforme_total, para: L3_gestor_de_escala, tipo: ponte, rotulo: "a margem da R2 vem do CV residual"}
+
+hiperarestas:
+  - {lente: Crononomia, nos: [L1_demanda_real, L2_erlang_c], nota: "perfil intradiário, segunda-feira e virada de mês: a demanda tem calendário"}
+  - {lente: Fluxonomia, nos: [L1_fila_do_dia, L1_atendimento_paciencia], nota: "a desistência é o vazamento que segura a fila; sem ela a espera explode"}
+  - {lente: Escalonomia, nos: [L1_demanda_real], nota: "sobredispersão: a variância entre dias é 273 × a de Poisson"}
+  - {lente: Crisonomia, nos: [L3_gestor_de_escala, L1_demanda_real], nota: "decidir pela fração de dias abaixo da meta, não pela média do período"}
+
+termo_de_escopo:  # Φ4
+  vale_para: >
+    uma central grande (60–240 atendentes), demanda de dias úteis com o perfil e o calendário de 2003,
+    atendimento com média de 3–5 min e paciência com média de 1–10 min; escala fixa por meia hora decidida na véspera
+  nao_vale_para: >
+    centrais pequenas (o ganho de escala muda), retornos de chamadas e multicanal, dias com campanha ou incidente
+    (fora da distribuição do treino), demanda que reage à espera, atendimento com habilidades distintas
+  regra_de_decisao: >
+    R2: escalar pelo perfil do dia da semana com margem de 1,28 × CV residual (p90 da taxa do dia): 3,7% dos dias
+    abaixo da meta contra 26% na regra da alegação, por +7% de agente-horas; a mesma folga distribuída por igual
+    (R3) deixa 7,4%. Só trocar o perfil médio pelo do dia da semana (R1, custo zero) já leva a 12%.
+  frequencias_naturais: >
+    "De cada 100 dias do segundo semestre, cerca de 26 ficam abaixo da meta com a escala da alegação; no mundo que
+    a alegação descreve, nenhum. Com a regra R2, cerca de 4."
+  circuit_breaker: >
+    Se o total do dia sair do intervalo conforme de 90% (0,89 a 1,07 × a média do dia da semana) em 3 dos últimos 10
+    dias, ou o nível de serviço ficar abaixo de 60% em 2 dias seguidos, o modelo sai do escopo: voltar ao F2/F7,
+    refazer o perfil e reelicitar atendimento e paciência.
+
+tentativas_de_especificacao: 1   # K do PLAN.md §4: uma especificação, escolhida antes de ver o cofre
+
+pendencias_para_H1:
+  - Tempo de atendimento e paciência são suposições (F7): a base pública não os traz. A sensibilidade mostra que a paciência governa o tamanho do efeito (1% a 40% dos dias abaixo da meta para paciência de 1 a 10 min); o sentido do efeito não muda.
+  - Domínio de saúde: os portais do DATASUS e de dados.gov.br estão bloqueados na rede deste ambiente; chegadas reais de um pronto-atendimento entram quando houver dado no Drive.
+  - Laço performativo (M11): rediscagem de quem desistiu infla as contagens e não está identificada.
