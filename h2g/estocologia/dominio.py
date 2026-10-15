@@ -59,7 +59,7 @@ def _nucleo(txt: str) -> str:
 
 
 def _checar_pergunta_do_decisor(meta: dict) -> list[str]:
-    """Erro de tipo III (livro, seção 14.6): a pergunta que o modelo responde tem de ser a que o decisor fez.
+    """Erro de tipo III (livro, seção 14.4): a pergunta que o modelo responde tem de ser a que o decisor fez.
 
     O texto tem de nomear quem decide (não um lugar-comum), copiar literalmente a ação de `decisao.acao` — a ação
     que a decisão muda — e terminar em pergunta. Texto genérico é recusado."""

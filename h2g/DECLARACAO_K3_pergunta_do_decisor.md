@@ -11,7 +11,7 @@ declaração da rodada K = 3 do H2g para o ponto da auditoria, em arquivo própr
 ## Por que existe
 
 A auditoria de fundo deixou em aberto, com nome, a **pergunta explícita na ficha contra o erro de tipo III**
-(`../estocologia-livro-didatico.md`, seção 14.6): "a pergunta que o modelo responde é a que o decisor fez?".
+(`../estocologia-livro-didatico.md`, seção 14.4): "a pergunta que o modelo responde é a que o decisor fez?".
 O pacote de domínio do F7 declara pergunta, alegação, desfecho, decisão e termo de escopo, mas nada obriga o
 texto a amarrar a pergunta do decisor à ação que a decisão muda. Esta declaração fecha esse ponto.
 
@@ -86,3 +86,11 @@ prova abaixo proíbe.
 
 Se a única forma de avançar em algum passo for mudar número publicado, para-se e relata-se, como manda a regra da
 casa.
+## Reemissão (2026-10-15T22:10:32Z)
+
+Ponteiro corrigido: a citação acima apontava para a “seção 14.6” do livro didático, que não existe — a lista dos pontos
+em aberto da auditoria de fundo é a **seção 14.4**. Nada mais mudou: o critério, os números, o K = 3 e a hora do registro
+original continuam os mesmos, e o trabalho descrito aqui continua sendo o que foi declarado antes de rodar.
+
+O SHA-256 anterior deste arquivo era `a9fe5fed1720eca37f211ea78361e778e0a8321788f8ae8ee74e2462388e53bd`, registrado em 2026-10-15T19:30:11Z, e está
+preservado em `DECLARACAO_K3_pergunta_do_decisor.sha256`.

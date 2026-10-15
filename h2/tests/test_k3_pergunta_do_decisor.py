@@ -1,6 +1,6 @@
 """K = 3 do H2g: a pergunta do decisor (ver ../README.md).
 
-Erro de tipo III (livro, seção 14.6): a pergunta que o modelo responde tem de ser a que o decisor fez. O teste
+Erro de tipo III (livro, seção 14.4): a pergunta que o modelo responde tem de ser a que o decisor fez. O teste
 recusa pacote sem o campo e pacote com texto genérico, e confere que os 12 pacotes do H2/ preenchem a regra.
 """
 

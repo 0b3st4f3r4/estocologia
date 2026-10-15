@@ -7,7 +7,7 @@ Escrita em 2026-10-15T19:52:03Z (UTC), **antes** de tocar em `h1-real/projetos/*
 ## O ponto da auditoria que isto fecha
 
 A auditoria de fundo deixou em aberto, com nome: falta ao F2 a pergunta "**por que o dado está ausente?**"
-(`../estocologia-livro-didatico.md`, seção 7.2 e a lista da seção 14.6 — "um campo no contrato de dados do F2
+(`../estocologia-livro-didatico.md`, seção 7.2 e a lista da seção 14.4 — "um campo no contrato de dados do F2
 para o mecanismo da ausência (MCAR, MAR ou MNAR), com análise de sensibilidade quando a ausência pode depender
 do próprio valor"). Hoje o `contrato()` declara colunas, faixas, `nulo` e chave; o `portao2` recusa nulo onde o
 contrato não o admite; e nada classifica o mecanismo da ausência. Esta declaração fecha esse ponto.
@@ -124,3 +124,11 @@ checagem entra na rodada **K = 3** já declarada para o H2g nesta mesma tarefa
    regeneração do contrato pela própria esteira.
 
 Se a única forma de avançar em algum passo for mudar número publicado, para-se e relata-se.
+## Reemissão (2026-10-15T22:10:32Z)
+
+Ponteiro corrigido: a citação acima apontava para a “seção 14.6” do livro didático, que não existe — a lista dos pontos
+em aberto da auditoria de fundo é a **seção 14.4**. Nada mais mudou: o critério, os números, e a hora do registro
+original continuam os mesmos, e o trabalho descrito aqui continua sendo o que foi declarado antes de rodar.
+
+O SHA-256 anterior deste arquivo era `1bbff4626377c876365cce6b9a0227edaed3c975d69137e4a9672a8cf3bf446b`, registrado em 2026-10-15T19:52:03Z, e está
+preservado em `DECLARACAO_F2_AUSENCIA.sha256`.
