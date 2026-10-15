@@ -30,6 +30,7 @@ o resultado. Dado grande e rastro pesado ficam fora do Git, com `FONTES.md` e `S
   p08) aparecem como ausentes, e por isso esses dois passos não rodam aqui.
 - **Depende de gente, e só disso:** a elicitação SHELF do `p12-shelf` (protocolo pronto, nenhuma entrevista) e a
   releitura dos 21 pareceres em [`governanca/RELEITURA.md`](../governanca/RELEITURA.md), que espera a leitura de sil.
+- **Divergência nova, achada ao conferir os portões do H3:** o G4 publicado (`h3/saida/portoes.json`) não reproduz a partir do HEAD — r̂ 0,5529 contra 0,5632 publicado, e n_choques 2395 contra 2375, em execução determinística nesta máquina. Ou o arquivo publicado é anterior à versão final do laço, ou o ambiente que o gerou mudava o número de sorteios. Fica registrado como ponto aberto, não corrigido: mexer no número publicado é o que a regra de casa proíbe.
 - **Levar o resumo ao livro, feito para as dez frentes originais.** Os pontos estão na seção 8 do artigo e na seção 9.7
   do livro didático; as extensões (saúde, evento raro, ficha, contrato) entram na mesma seção quando fecharem.
 
