@@ -11,7 +11,7 @@ for v in original literatura fraca; do
     tab=""; [ "$v" != original ] && tab="$AQUI/prioris/$h/$v.yaml"
     case $h in h2) dados="$DADOS_REDE/h2";; h2g) dados="$DADOS_REDE/h2b";; *) dados="";; esac
     ( cd "$AQUI/$h" && env P05_PRIORI="$tab" ESTOCOLOGIA_SAIDA="$OUT/$h/$v" \
-        ${dados:+ESTOCOLOGIA_DADOS="$dados"} python3 rodar.py > "$OUT/$h-$v.log" 2>&1; echo "$h $v saiu $?" >> "$OUT/fim.txt" ) &
+        ${dados:+ESTOCOLOGIA_DADOS="$dados"} python3 p05_rodar.py > "$OUT/$h-$v.log" 2>&1; echo "$h $v saiu $?" >> "$OUT/fim.txt" ) &
   done
 done
 wait
