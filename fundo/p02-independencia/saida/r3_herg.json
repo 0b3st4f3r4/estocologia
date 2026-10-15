@@ -1,0 +1,2100 @@
+{
+  "S_hat": [
+    "c_dof",
+    "c_qui",
+    "c_ran"
+  ],
+  "S_hat_sem_regra": [
+    "c_dof",
+    "c_qui",
+    "c_ran"
+  ],
+  "aceitos_nao_saturados": 35,
+  "aceitos_saturados": 0,
+  "inclinacao_dof": {
+    "efeito_desenho": 3.5027382040150203,
+    "ep_agrupado": 1.3587425094255388,
+    "ep_ingenuo": 0.7259944878216998,
+    "ic90": [
+      22.989618037741266,
+      27.430438992821337
+    ],
+    "mqo": 25.173413600781533,
+    "posterior": 25.2100285152813,
+    "priori": [
+      28.0,
+      11.860637509266123
+    ],
+    "sd_posterior": 1.3499134133120845
+  },
+  "maior_p_nao_saturado": {
+    "S": [
+      "c_dof",
+      "c_qui",
+      "c_ran",
+      "idade"
+    ],
+    "p": 1.0,
+    "saturado": false
+  },
+  "n_conjuntos": 512,
+  "n_por_ambiente": {
+    "dofetilida": 350,
+    "placebo": 352,
+    "quinidina": 336,
+    "ranolazina": 351,
+    "verapamil": 352
+  },
+  "n_treino": 1389,
+  "p_por_conjunto": {
+    "": [
+      6.301282184071899e-104,
+      false
+    ],
+    "c_dof": [
+      1.8727783966181728e-84,
+      false
+    ],
+    "c_dof|c_qui": [
+      1.6938874117517912e-09,
+      false
+    ],
+    "c_dof|c_qui|c_ran": [
+      0.30365112671676703,
+      false
+    ],
+    "c_dof|c_qui|c_ran|idade": [
+      1.0,
+      false
+    ],
+    "c_dof|c_qui|c_ran|idade|peso": [
+      0.5861502541105592,
+      false
+    ],
+    "c_dof|c_qui|c_ran|peso": [
+      0.4424639554606166,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr": [
+      0.16734225194475602,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|idade": [
+      0.6221328950456764,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|idade|peso": [
+      0.18770831422302414,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|peso": [
+      0.12673568979525598,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|sexo": [
+      0.08110120133520049,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|sexo|idade": [
+      0.26637192124952963,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|sexo|idade|peso": [
+      0.12428998271767044,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|sexo|peso": [
+      0.11193204101352186,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp": [
+      0.005370956027850399,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|idade": [
+      0.0013772040474187128,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|idade|peso": [
+      4.3170486203941896e-05,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|peso": [
+      0.003937101525953021,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|sexo": [
+      0.0016534459698526577,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|sexo|idade": [
+      0.0009334105556420502,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|sexo|idade|peso": [
+      4.970990122660918e-05,
+      false
+    ],
+    "c_dof|c_qui|c_ran|pr|tamp|sexo|peso": [
+      0.001456944538516238,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr": [
+      0.32755267725922466,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|idade": [
+      1.0,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|idade|peso": [
+      0.7240990740310507,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|peso": [
+      0.5389636675004912,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr": [
+      0.12463640599376907,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|idade": [
+      0.569055340228224,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|idade|peso": [
+      0.17873417158494637,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|peso": [
+      0.131012601279848,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|sexo": [
+      0.09129103684356561,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|sexo|idade": [
+      0.2698702583038729,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|sexo|idade|peso": [
+      0.1002306899787377,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|sexo|peso": [
+      0.08993724721984263,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp": [
+      0.004829806492897125,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|idade": [
+      0.00221593183676425,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|idade|peso": [
+      7.247393034312658e-05,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|peso": [
+      0.0036534299767385222,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|sexo": [
+      0.0027157625033787654,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|sexo|idade": [
+      0.005012775512534319,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|sexo|idade|peso": [
+      0.00020328850051397094,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|pr|tamp|sexo|peso": [
+      0.0023563308363901566,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|sexo": [
+      0.17602889109263944,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|sexo|idade": [
+      0.7958822495542819,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|sexo|idade|peso": [
+      0.27358308715830265,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|sexo|peso": [
+      0.2751676597396859,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp": [
+      0.05032617171599154,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|idade": [
+      0.06924745055555379,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|idade|peso": [
+      0.0018871907363546309,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|peso": [
+      0.016049052307193504,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|sexo": [
+      0.03135479913699239,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|sexo|idade": [
+      0.10101156077997699,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|sexo|idade|peso": [
+      0.0010847789977150005,
+      false
+    ],
+    "c_dof|c_qui|c_ran|rr|tamp|sexo|peso": [
+      0.01081678958622438,
+      false
+    ],
+    "c_dof|c_qui|c_ran|sexo": [
+      0.1417366826694679,
+      false
+    ],
+    "c_dof|c_qui|c_ran|sexo|idade": [
+      0.7384330208864772,
+      false
+    ],
+    "c_dof|c_qui|c_ran|sexo|idade|peso": [
+      0.24347594742882017,
+      false
+    ],
+    "c_dof|c_qui|c_ran|sexo|peso": [
+      0.2402536228639479,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp": [
+      0.0495753971346996,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|idade": [
+      0.042386165724468294,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|idade|peso": [
+      0.00033641501269017753,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|peso": [
+      0.01015749477436875,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|sexo": [
+      0.018203640012393073,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|sexo|idade": [
+      0.02949009621149338,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|sexo|idade|peso": [
+      0.00011817260237955376,
+      false
+    ],
+    "c_dof|c_qui|c_ran|tamp|sexo|peso": [
+      0.0043496879335052675,
+      false
+    ],
+    "c_dof|c_qui|idade": [
+      9.26498835585735e-09,
+      false
+    ],
+    "c_dof|c_qui|idade|peso": [
+      5.85910224890631e-12,
+      false
+    ],
+    "c_dof|c_qui|peso": [
+      1.762525177726125e-11,
+      false
+    ],
+    "c_dof|c_qui|pr": [
+      5.7150942141616124e-12,
+      false
+    ],
+    "c_dof|c_qui|pr|idade": [
+      1.7317550849065258e-11,
+      false
+    ],
+    "c_dof|c_qui|pr|idade|peso": [
+      5.959817799296434e-16,
+      false
+    ],
+    "c_dof|c_qui|pr|peso": [
+      5.350794703379969e-15,
+      false
+    ],
+    "c_dof|c_qui|pr|sexo": [
+      3.732710808262333e-14,
+      false
+    ],
+    "c_dof|c_qui|pr|sexo|idade": [
+      4.557066135211028e-15,
+      false
+    ],
+    "c_dof|c_qui|pr|sexo|idade|peso": [
+      2.8795828246070105e-18,
+      false
+    ],
+    "c_dof|c_qui|pr|sexo|peso": [
+      4.3693872174762676e-16,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp": [
+      5.748918115503111e-08,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|idade": [
+      2.864560534553145e-09,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|idade|peso": [
+      1.1872198468164924e-12,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|peso": [
+      3.398253873438492e-09,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|sexo": [
+      5.167628052378854e-09,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|sexo|idade": [
+      5.5975817749426145e-11,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|sexo|idade|peso": [
+      6.62470163462214e-14,
+      false
+    ],
+    "c_dof|c_qui|pr|tamp|sexo|peso": [
+      1.453157970360009e-09,
+      false
+    ],
+    "c_dof|c_qui|rr": [
+      1.9324872109876516e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|idade": [
+      8.980998632925093e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|idade|peso": [
+      5.2663900028634175e-12,
+      false
+    ],
+    "c_dof|c_qui|rr|peso": [
+      4.430665783933549e-11,
+      false
+    ],
+    "c_dof|c_qui|rr|pr": [
+      5.705485686917453e-12,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|idade": [
+      2.967084519030747e-11,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|idade|peso": [
+      6.581265483550266e-16,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|peso": [
+      5.4608109705477325e-15,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|sexo": [
+      7.410825706357126e-14,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|sexo|idade": [
+      9.008643052142245e-15,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|sexo|idade|peso": [
+      1.3764196686159959e-18,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|sexo|peso": [
+      3.001827846814858e-16,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp": [
+      7.974969571623487e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|idade": [
+      1.5452427775881116e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|idade|peso": [
+      1.1452930243739884e-13,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|peso": [
+      1.9545984145616007e-10,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|sexo": [
+      2.4038709468958527e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|sexo|idade": [
+      1.199794679450454e-10,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|sexo|idade|peso": [
+      1.2837099149411733e-14,
+      false
+    ],
+    "c_dof|c_qui|rr|pr|tamp|sexo|peso": [
+      1.9039927179500878e-10,
+      false
+    ],
+    "c_dof|c_qui|rr|sexo": [
+      1.05304442250855e-11,
+      false
+    ],
+    "c_dof|c_qui|rr|sexo|idade": [
+      2.1031889833766295e-13,
+      false
+    ],
+    "c_dof|c_qui|rr|sexo|idade|peso": [
+      3.1632935907130825e-17,
+      false
+    ],
+    "c_dof|c_qui|rr|sexo|peso": [
+      1.7583878331559011e-13,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp": [
+      8.067424515661042e-07,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|idade": [
+      6.453501643911961e-07,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|idade|peso": [
+      2.0641748060078574e-11,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|peso": [
+      7.367555956322288e-09,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|sexo": [
+      2.47467844346813e-07,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|sexo|idade": [
+      5.5006696066954626e-08,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|sexo|idade|peso": [
+      1.705707777557714e-13,
+      false
+    ],
+    "c_dof|c_qui|rr|tamp|sexo|peso": [
+      5.5913999782875226e-09,
+      false
+    ],
+    "c_dof|c_qui|sexo": [
+      4.8837213876874825e-12,
+      false
+    ],
+    "c_dof|c_qui|sexo|idade": [
+      1.1222027371202581e-13,
+      false
+    ],
+    "c_dof|c_qui|sexo|idade|peso": [
+      2.5824080034549974e-17,
+      false
+    ],
+    "c_dof|c_qui|sexo|peso": [
+      1.27525707251183e-13,
+      false
+    ],
+    "c_dof|c_qui|tamp": [
+      2.6572039118937575e-06,
+      false
+    ],
+    "c_dof|c_qui|tamp|idade": [
+      6.170429023489819e-07,
+      false
+    ],
+    "c_dof|c_qui|tamp|idade|peso": [
+      3.1016738336203144e-11,
+      false
+    ],
+    "c_dof|c_qui|tamp|peso": [
+      2.202939868900438e-08,
+      false
+    ],
+    "c_dof|c_qui|tamp|sexo": [
+      4.211622399983343e-07,
+      false
+    ],
+    "c_dof|c_qui|tamp|sexo|idade": [
+      2.459422392070713e-08,
+      false
+    ],
+    "c_dof|c_qui|tamp|sexo|idade|peso": [
+      5.156060426364184e-13,
+      false
+    ],
+    "c_dof|c_qui|tamp|sexo|peso": [
+      1.1896931377078159e-08,
+      false
+    ],
+    "c_dof|c_ran": [
+      2.8712518067154433e-80,
+      false
+    ],
+    "c_dof|c_ran|idade": [
+      3.3266221323510365e-80,
+      false
+    ],
+    "c_dof|c_ran|idade|peso": [
+      1.0013251037960269e-86,
+      false
+    ],
+    "c_dof|c_ran|peso": [
+      3.2957394802971526e-84,
+      false
+    ],
+    "c_dof|c_ran|pr": [
+      9.487441767725938e-85,
+      false
+    ],
+    "c_dof|c_ran|pr|idade": [
+      6.367456701456854e-85,
+      false
+    ],
+    "c_dof|c_ran|pr|idade|peso": [
+      6.616119741783587e-88,
+      false
+    ],
+    "c_dof|c_ran|pr|peso": [
+      9.504892031030725e-87,
+      false
+    ],
+    "c_dof|c_ran|pr|sexo": [
+      1.0403691715277757e-89,
+      false
+    ],
+    "c_dof|c_ran|pr|sexo|idade": [
+      4.042624038148264e-93,
+      false
+    ],
+    "c_dof|c_ran|pr|sexo|idade|peso": [
+      6.041205905639659e-96,
+      false
+    ],
+    "c_dof|c_ran|pr|sexo|peso": [
+      1.5764465513867593e-90,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp": [
+      2.332586991928535e-69,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|idade": [
+      1.0962435133326977e-71,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|idade|peso": [
+      1.2362602134634865e-80,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|peso": [
+      2.0734916172995803e-73,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|sexo": [
+      1.333602351683401e-66,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|sexo|idade": [
+      2.7083795685986026e-71,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|sexo|idade|peso": [
+      3.544043761286174e-78,
+      false
+    ],
+    "c_dof|c_ran|pr|tamp|sexo|peso": [
+      4.802874161317966e-67,
+      false
+    ],
+    "c_dof|c_ran|rr": [
+      2.0507483504241834e-74,
+      false
+    ],
+    "c_dof|c_ran|rr|idade": [
+      2.616367364871857e-75,
+      false
+    ],
+    "c_dof|c_ran|rr|idade|peso": [
+      2.2995205414461757e-82,
+      false
+    ],
+    "c_dof|c_ran|rr|peso": [
+      8.642411152218081e-79,
+      false
+    ],
+    "c_dof|c_ran|rr|pr": [
+      5.059719616510458e-78,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|idade": [
+      1.4892715022685525e-78,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|idade|peso": [
+      6.002076922517923e-84,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|peso": [
+      1.8959695507366322e-81,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|sexo": [
+      2.3271349265331173e-81,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|sexo|idade": [
+      2.6408030673008453e-85,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|sexo|idade|peso": [
+      3.641888635770238e-89,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|sexo|peso": [
+      2.340648447470224e-83,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp": [
+      1.0697423783324611e-69,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|idade": [
+      1.2687749146595952e-72,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|idade|peso": [
+      3.6730112640906797e-81,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|peso": [
+      1.9388283542135356e-74,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|sexo": [
+      3.9020052315683e-65,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|sexo|idade": [
+      3.5772378547979506e-71,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|sexo|idade|peso": [
+      1.860754745037075e-78,
+      false
+    ],
+    "c_dof|c_ran|rr|pr|tamp|sexo|peso": [
+      3.394170276945501e-67,
+      false
+    ],
+    "c_dof|c_ran|rr|sexo": [
+      1.0836229859304126e-78,
+      false
+    ],
+    "c_dof|c_ran|rr|sexo|idade": [
+      6.14846341253694e-83,
+      false
+    ],
+    "c_dof|c_ran|rr|sexo|idade|peso": [
+      6.1012003006833984e-89,
+      false
+    ],
+    "c_dof|c_ran|rr|sexo|peso": [
+      2.203735827526381e-81,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp": [
+      3.466864700784101e-66,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|idade": [
+      6.2766501504745565e-68,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|idade|peso": [
+      4.791818944206123e-80,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|peso": [
+      1.5806275486521867e-72,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|sexo": [
+      1.051036110690855e-60,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|sexo|idade": [
+      1.6431823314022387e-65,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|sexo|idade|peso": [
+      2.1178925010117455e-76,
+      false
+    ],
+    "c_dof|c_ran|rr|tamp|sexo|peso": [
+      5.8184036980644475e-64,
+      false
+    ],
+    "c_dof|c_ran|sexo": [
+      4.872323804601923e-86,
+      false
+    ],
+    "c_dof|c_ran|sexo|idade": [
+      4.875186197639887e-90,
+      false
+    ],
+    "c_dof|c_ran|sexo|idade|peso": [
+      1.9797686975796613e-95,
+      false
+    ],
+    "c_dof|c_ran|sexo|peso": [
+      2.578900259997647e-88,
+      false
+    ],
+    "c_dof|c_ran|tamp": [
+      3.720621106566444e-65,
+      false
+    ],
+    "c_dof|c_ran|tamp|idade": [
+      1.5240901830346052e-66,
+      false
+    ],
+    "c_dof|c_ran|tamp|idade|peso": [
+      7.152111307173041e-80,
+      false
+    ],
+    "c_dof|c_ran|tamp|peso": [
+      1.6209600331741472e-71,
+      false
+    ],
+    "c_dof|c_ran|tamp|sexo": [
+      3.191334681503427e-61,
+      false
+    ],
+    "c_dof|c_ran|tamp|sexo|idade": [
+      3.5819710826087017e-65,
+      false
+    ],
+    "c_dof|c_ran|tamp|sexo|idade|peso": [
+      8.339281292628689e-77,
+      false
+    ],
+    "c_dof|c_ran|tamp|sexo|peso": [
+      1.0001347358620663e-63,
+      false
+    ],
+    "c_dof|idade": [
+      1.8220007652550457e-84,
+      false
+    ],
+    "c_dof|idade|peso": [
+      6.759370311847967e-93,
+      false
+    ],
+    "c_dof|peso": [
+      1.9536962230548916e-89,
+      false
+    ],
+    "c_dof|pr": [
+      1.6500533790661508e-89,
+      false
+    ],
+    "c_dof|pr|idade": [
+      6.124562154000518e-90,
+      false
+    ],
+    "c_dof|pr|idade|peso": [
+      6.937909622671027e-95,
+      false
+    ],
+    "c_dof|pr|peso": [
+      5.851599216487273e-93,
+      false
+    ],
+    "c_dof|pr|sexo": [
+      7.760599913889187e-96,
+      false
+    ],
+    "c_dof|pr|sexo|idade": [
+      3.690179314828781e-101,
+      false
+    ],
+    "c_dof|pr|sexo|idade|peso": [
+      3.408378588483798e-105,
+      false
+    ],
+    "c_dof|pr|sexo|peso": [
+      1.4912816525804588e-97,
+      false
+    ],
+    "c_dof|pr|tamp": [
+      1.456219509582583e-75,
+      false
+    ],
+    "c_dof|pr|tamp|idade": [
+      3.619865322923775e-78,
+      false
+    ],
+    "c_dof|pr|tamp|idade|peso": [
+      1.7328527018565218e-88,
+      false
+    ],
+    "c_dof|pr|tamp|peso": [
+      1.5186927032861955e-80,
+      false
+    ],
+    "c_dof|pr|tamp|sexo": [
+      8.154376192651286e-71,
+      false
+    ],
+    "c_dof|pr|tamp|sexo|idade": [
+      5.1130350520738345e-77,
+      false
+    ],
+    "c_dof|pr|tamp|sexo|idade|peso": [
+      8.70735630166788e-85,
+      false
+    ],
+    "c_dof|pr|tamp|sexo|peso": [
+      1.1546186957471158e-71,
+      false
+    ],
+    "c_dof|rr": [
+      1.4566227346343973e-79,
+      false
+    ],
+    "c_dof|rr|idade": [
+      1.0611726682973531e-80,
+      false
+    ],
+    "c_dof|rr|idade|peso": [
+      1.505400153605826e-88,
+      false
+    ],
+    "c_dof|rr|peso": [
+      3.8104667711976124e-84,
+      false
+    ],
+    "c_dof|rr|pr": [
+      2.9058097600104875e-83,
+      false
+    ],
+    "c_dof|rr|pr|idade": [
+      5.213136956510732e-84,
+      false
+    ],
+    "c_dof|rr|pr|idade|peso": [
+      2.33151720859542e-90,
+      false
+    ],
+    "c_dof|rr|pr|peso": [
+      2.2518917512821343e-87,
+      false
+    ],
+    "c_dof|rr|pr|sexo": [
+      2.1261270058010127e-87,
+      false
+    ],
+    "c_dof|rr|pr|sexo|idade": [
+      4.424633519245938e-93,
+      false
+    ],
+    "c_dof|rr|pr|sexo|idade|peso": [
+      1.204273891718303e-97,
+      false
+    ],
+    "c_dof|rr|pr|sexo|peso": [
+      1.1625891382677663e-89,
+      false
+    ],
+    "c_dof|rr|pr|tamp": [
+      4.670568364252205e-75,
+      false
+    ],
+    "c_dof|rr|pr|tamp|idade": [
+      2.7660164848623695e-79,
+      false
+    ],
+    "c_dof|rr|pr|tamp|idade|peso": [
+      3.836505618767737e-89,
+      false
+    ],
+    "c_dof|rr|pr|tamp|peso": [
+      1.0100773629703976e-80,
+      false
+    ],
+    "c_dof|rr|pr|tamp|sexo": [
+      5.774559741662551e-69,
+      false
+    ],
+    "c_dof|rr|pr|tamp|sexo|idade": [
+      4.3398092281357755e-77,
+      false
+    ],
+    "c_dof|rr|pr|tamp|sexo|idade|peso": [
+      8.353159153745586e-85,
+      false
+    ],
+    "c_dof|rr|pr|tamp|sexo|peso": [
+      6.801435762116474e-71,
+      false
+    ],
+    "c_dof|rr|sexo": [
+      8.2213245021232e-85,
+      false
+    ],
+    "c_dof|rr|sexo|idade": [
+      9.688463310819274e-91,
+      false
+    ],
+    "c_dof|rr|sexo|idade|peso": [
+      2.3713071087809973e-97,
+      false
+    ],
+    "c_dof|rr|sexo|peso": [
+      3.0832425095435744e-87,
+      false
+    ],
+    "c_dof|rr|tamp": [
+      1.6503851761278198e-71,
+      false
+    ],
+    "c_dof|rr|tamp|idade": [
+      1.997750159901131e-74,
+      false
+    ],
+    "c_dof|rr|tamp|idade|peso": [
+      4.6071025894726546e-88,
+      false
+    ],
+    "c_dof|rr|tamp|peso": [
+      2.484425712630921e-78,
+      false
+    ],
+    "c_dof|rr|tamp|sexo": [
+      1.7443173882115148e-64,
+      false
+    ],
+    "c_dof|rr|tamp|sexo|idade": [
+      7.284825487736286e-71,
+      false
+    ],
+    "c_dof|rr|tamp|sexo|idade|peso": [
+      4.7502980140734095e-82,
+      false
+    ],
+    "c_dof|rr|tamp|sexo|peso": [
+      1.0589077249897655e-67,
+      false
+    ],
+    "c_dof|sexo": [
+      5.199552570157887e-92,
+      false
+    ],
+    "c_dof|sexo|idade": [
+      1.6942509026828275e-97,
+      false
+    ],
+    "c_dof|sexo|idade|peso": [
+      5.964655200630672e-104,
+      false
+    ],
+    "c_dof|sexo|peso": [
+      1.1626335541064184e-94,
+      false
+    ],
+    "c_dof|tamp": [
+      3.4335266041027495e-71,
+      false
+    ],
+    "c_dof|tamp|idade": [
+      3.652002447451069e-73,
+      false
+    ],
+    "c_dof|tamp|idade|peso": [
+      2.4847824739220976e-88,
+      false
+    ],
+    "c_dof|tamp|peso": [
+      2.1188775267258756e-78,
+      false
+    ],
+    "c_dof|tamp|sexo": [
+      1.148076388704846e-65,
+      false
+    ],
+    "c_dof|tamp|sexo|idade": [
+      1.251313090234551e-70,
+      false
+    ],
+    "c_dof|tamp|sexo|idade|peso": [
+      2.57273580898385e-83,
+      false
+    ],
+    "c_dof|tamp|sexo|peso": [
+      8.479983663467755e-69,
+      false
+    ],
+    "c_qui": [
+      1.3012328358279154e-56,
+      false
+    ],
+    "c_qui|c_ran": [
+      6.876970407708786e-55,
+      false
+    ],
+    "c_qui|c_ran|idade": [
+      8.36178620187053e-58,
+      false
+    ],
+    "c_qui|c_ran|idade|peso": [
+      2.2021049451682515e-63,
+      false
+    ],
+    "c_qui|c_ran|peso": [
+      5.313179069801542e-59,
+      false
+    ],
+    "c_qui|c_ran|pr": [
+      5.062468707884627e-59,
+      false
+    ],
+    "c_qui|c_ran|pr|idade": [
+      1.2354383985663107e-61,
+      false
+    ],
+    "c_qui|c_ran|pr|idade|peso": [
+      5.521805679168225e-65,
+      false
+    ],
+    "c_qui|c_ran|pr|peso": [
+      3.158624048403373e-62,
+      false
+    ],
+    "c_qui|c_ran|pr|sexo": [
+      3.4624346902182572e-62,
+      false
+    ],
+    "c_qui|c_ran|pr|sexo|idade": [
+      3.382979209195818e-66,
+      false
+    ],
+    "c_qui|c_ran|pr|sexo|idade|peso": [
+      1.48893774460475e-69,
+      false
+    ],
+    "c_qui|c_ran|pr|sexo|peso": [
+      5.535054658064026e-65,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp": [
+      1.6097522830057935e-60,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|idade": [
+      3.0946901731944626e-66,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|idade|peso": [
+      1.0016803889315495e-71,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|peso": [
+      1.460047216615091e-62,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|sexo": [
+      8.775463812641388e-61,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|sexo|idade": [
+      1.250634055092015e-66,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|sexo|idade|peso": [
+      5.192192281385355e-71,
+      false
+    ],
+    "c_qui|c_ran|pr|tamp|sexo|peso": [
+      1.8055936569645e-60,
+      false
+    ],
+    "c_qui|c_ran|rr": [
+      4.455203135822292e-56,
+      false
+    ],
+    "c_qui|c_ran|rr|idade": [
+      3.0012257714626803e-58,
+      false
+    ],
+    "c_qui|c_ran|rr|idade|peso": [
+      2.98964739098993e-62,
+      false
+    ],
+    "c_qui|c_ran|rr|peso": [
+      1.2899922087433626e-57,
+      false
+    ],
+    "c_qui|c_ran|rr|pr": [
+      4.591385652280429e-59,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|idade": [
+      5.821377807698585e-61,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|idade|peso": [
+      2.3316712964820406e-63,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|peso": [
+      6.674566930134984e-60,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|sexo": [
+      1.0944427547746877e-60,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|sexo|idade": [
+      9.726022761329459e-64,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|sexo|idade|peso": [
+      1.3309399079975957e-66,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|sexo|peso": [
+      1.1537550046825703e-61,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp": [
+      1.8746916481031724e-58,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|idade": [
+      1.091122248611421e-62,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|idade|peso": [
+      2.230082184059396e-67,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|peso": [
+      1.3815579555494923e-57,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|sexo": [
+      1.5354223331439705e-58,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|sexo|idade": [
+      1.541272825267717e-62,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|sexo|idade|peso": [
+      2.227324943637914e-66,
+      false
+    ],
+    "c_qui|c_ran|rr|pr|tamp|sexo|peso": [
+      2.138597567805094e-55,
+      false
+    ],
+    "c_qui|c_ran|rr|sexo": [
+      6.965152131618079e-58,
+      false
+    ],
+    "c_qui|c_ran|rr|sexo|idade": [
+      2.4487992168504805e-62,
+      false
+    ],
+    "c_qui|c_ran|rr|sexo|idade|peso": [
+      6.713447298109403e-67,
+      false
+    ],
+    "c_qui|c_ran|rr|sexo|peso": [
+      1.9289604449993265e-59,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp": [
+      3.0586826509025733e-55,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|idade": [
+      3.5697252738865473e-59,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|idade|peso": [
+      1.4316150474312207e-66,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|peso": [
+      7.208662867896695e-56,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|sexo": [
+      6.534203162469664e-55,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|sexo|idade": [
+      1.7020934942920226e-59,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|sexo|idade|peso": [
+      2.502387222087665e-66,
+      false
+    ],
+    "c_qui|c_ran|rr|tamp|sexo|peso": [
+      8.192078531678099e-54,
+      false
+    ],
+    "c_qui|c_ran|sexo": [
+      9.904709910365128e-59,
+      false
+    ],
+    "c_qui|c_ran|sexo|idade": [
+      2.659724294420239e-64,
+      false
+    ],
+    "c_qui|c_ran|sexo|idade|peso": [
+      3.7307332828901196e-70,
+      false
+    ],
+    "c_qui|c_ran|sexo|peso": [
+      3.071484112544923e-62,
+      false
+    ],
+    "c_qui|c_ran|tamp": [
+      1.9978704498733532e-56,
+      false
+    ],
+    "c_qui|c_ran|tamp|idade": [
+      7.781271433488862e-61,
+      false
+    ],
+    "c_qui|c_ran|tamp|idade|peso": [
+      3.748777025520871e-71,
+      false
+    ],
+    "c_qui|c_ran|tamp|peso": [
+      1.0713715793171778e-60,
+      false
+    ],
+    "c_qui|c_ran|tamp|sexo": [
+      3.778512682472924e-56,
+      false
+    ],
+    "c_qui|c_ran|tamp|sexo|idade": [
+      4.252380940298295e-61,
+      false
+    ],
+    "c_qui|c_ran|tamp|sexo|idade|peso": [
+      1.3214200186529177e-70,
+      false
+    ],
+    "c_qui|c_ran|tamp|sexo|peso": [
+      8.01742596564543e-58,
+      false
+    ],
+    "c_qui|idade": [
+      1.7348914737004687e-59,
+      false
+    ],
+    "c_qui|idade|peso": [
+      1.761783541398109e-66,
+      false
+    ],
+    "c_qui|peso": [
+      1.3116442516096214e-61,
+      false
+    ],
+    "c_qui|pr": [
+      2.1381775965189586e-61,
+      false
+    ],
+    "c_qui|pr|idade": [
+      4.5892176083783895e-64,
+      false
+    ],
+    "c_qui|pr|idade|peso": [
+      5.811761712632128e-69,
+      false
+    ],
+    "c_qui|pr|peso": [
+      4.855950783179189e-66,
+      false
+    ],
+    "c_qui|pr|sexo": [
+      8.349967172626045e-66,
+      false
+    ],
+    "c_qui|pr|sexo|idade": [
+      3.2706429971182995e-71,
+      false
+    ],
+    "c_qui|pr|sexo|idade|peso": [
+      1.9258858037496256e-75,
+      false
+    ],
+    "c_qui|pr|sexo|peso": [
+      1.9960759496378702e-69,
+      false
+    ],
+    "c_qui|pr|tamp": [
+      9.554844244052898e-67,
+      false
+    ],
+    "c_qui|pr|tamp|idade": [
+      1.7143213716741235e-74,
+      false
+    ],
+    "c_qui|pr|tamp|idade|peso": [
+      7.719146567499706e-81,
+      false
+    ],
+    "c_qui|pr|tamp|peso": [
+      2.75353393521668e-69,
+      false
+    ],
+    "c_qui|pr|tamp|sexo": [
+      1.605925747684387e-66,
+      false
+    ],
+    "c_qui|pr|tamp|sexo|idade": [
+      5.593570509928976e-75,
+      false
+    ],
+    "c_qui|pr|tamp|sexo|idade|peso": [
+      6.930765789246379e-80,
+      false
+    ],
+    "c_qui|pr|tamp|sexo|peso": [
+      2.2423090850641436e-66,
+      false
+    ],
+    "c_qui|rr": [
+      2.2916772752914676e-58,
+      false
+    ],
+    "c_qui|rr|idade": [
+      1.285842299572816e-60,
+      false
+    ],
+    "c_qui|rr|idade|peso": [
+      1.8430593771874262e-65,
+      false
+    ],
+    "c_qui|rr|peso": [
+      2.1458280050328863e-60,
+      false
+    ],
+    "c_qui|rr|pr": [
+      1.1343262205074441e-61,
+      false
+    ],
+    "c_qui|rr|pr|idade": [
+      9.009448492549347e-64,
+      false
+    ],
+    "c_qui|rr|pr|idade|peso": [
+      2.0334658171672332e-67,
+      false
+    ],
+    "c_qui|rr|pr|peso": [
+      1.0858020864918472e-63,
+      false
+    ],
+    "c_qui|rr|pr|sexo": [
+      3.3313219912747536e-64,
+      false
+    ],
+    "c_qui|rr|pr|sexo|idade": [
+      7.456382961084499e-69,
+      false
+    ],
+    "c_qui|rr|pr|sexo|idade|peso": [
+      4.520639219913694e-73,
+      false
+    ],
+    "c_qui|rr|pr|sexo|peso": [
+      1.3548228186517167e-66,
+      false
+    ],
+    "c_qui|rr|pr|tamp": [
+      4.785737513465481e-63,
+      false
+    ],
+    "c_qui|rr|pr|tamp|idade": [
+      5.7745039766703527e-70,
+      false
+    ],
+    "c_qui|rr|pr|tamp|idade|peso": [
+      3.17723770266921e-75,
+      false
+    ],
+    "c_qui|rr|pr|tamp|peso": [
+      3.611914051840329e-63,
+      false
+    ],
+    "c_qui|rr|pr|tamp|sexo": [
+      3.3551840982212317e-63,
+      false
+    ],
+    "c_qui|rr|pr|tamp|sexo|idade": [
+      2.6374016198371544e-70,
+      false
+    ],
+    "c_qui|rr|pr|tamp|sexo|idade|peso": [
+      1.111783886473387e-74,
+      false
+    ],
+    "c_qui|rr|pr|tamp|sexo|peso": [
+      7.032408068938934e-61,
+      false
+    ],
+    "c_qui|rr|sexo": [
+      8.881773735815422e-61,
+      false
+    ],
+    "c_qui|rr|sexo|idade": [
+      9.810330873435015e-67,
+      false
+    ],
+    "c_qui|rr|sexo|idade|peso": [
+      2.4326282337503097e-72,
+      false
+    ],
+    "c_qui|rr|sexo|peso": [
+      5.613996248209847e-63,
+      false
+    ],
+    "c_qui|rr|tamp": [
+      5.811638260103035e-59,
+      false
+    ],
+    "c_qui|rr|tamp|idade": [
+      1.6382986937475298e-65,
+      false
+    ],
+    "c_qui|rr|tamp|idade|peso": [
+      2.4293390209251785e-74,
+      false
+    ],
+    "c_qui|rr|tamp|peso": [
+      2.0993847500932605e-60,
+      false
+    ],
+    "c_qui|rr|tamp|sexo": [
+      1.3124911002676644e-58,
+      false
+    ],
+    "c_qui|rr|tamp|sexo|idade": [
+      2.344519196177805e-66,
+      false
+    ],
+    "c_qui|rr|tamp|sexo|idade|peso": [
+      3.556009737814535e-74,
+      false
+    ],
+    "c_qui|rr|tamp|sexo|peso": [
+      5.822917937538627e-58,
+      false
+    ],
+    "c_qui|sexo": [
+      9.831546113522806e-62,
+      false
+    ],
+    "c_qui|sexo|idade": [
+      1.1138924914981926e-68,
+      false
+    ],
+    "c_qui|sexo|idade|peso": [
+      3.6101177650269265e-75,
+      false
+    ],
+    "c_qui|sexo|peso": [
+      1.5449154016367642e-65,
+      false
+    ],
+    "c_qui|tamp": [
+      3.6235926482964573e-62,
+      false
+    ],
+    "c_qui|tamp|idade": [
+      6.276423083792426e-69,
+      false
+    ],
+    "c_qui|tamp|idade|peso": [
+      4.214894376509237e-80,
+      false
+    ],
+    "c_qui|tamp|peso": [
+      1.415258926010597e-66,
+      false
+    ],
+    "c_qui|tamp|sexo": [
+      3.727806937477816e-61,
+      false
+    ],
+    "c_qui|tamp|sexo|idade": [
+      4.989880032397497e-69,
+      false
+    ],
+    "c_qui|tamp|sexo|idade|peso": [
+      4.256789584399747e-79,
+      false
+    ],
+    "c_qui|tamp|sexo|peso": [
+      3.630559648620421e-63,
+      false
+    ],
+    "c_ran": [
+      1.9821548184620765e-94,
+      false
+    ],
+    "c_ran|idade": [
+      4.502414145821418e-96,
+      false
+    ],
+    "c_ran|idade|peso": [
+      1.974849330167688e-105,
+      false
+    ],
+    "c_ran|peso": [
+      1.561223059486805e-100,
+      false
+    ],
+    "c_ran|pr": [
+      1.3462874146753862e-99,
+      false
+    ],
+    "c_ran|pr|idade": [
+      2.8745274268083155e-101,
+      false
+    ],
+    "c_ran|pr|idade|peso": [
+      1.4106515513050202e-106,
+      false
+    ],
+    "c_ran|pr|peso": [
+      1.0337914295642072e-103,
+      false
+    ],
+    "c_ran|pr|sexo": [
+      1.592116753518602e-105,
+      false
+    ],
+    "c_ran|pr|sexo|idade": [
+      7.549641148593804e-112,
+      false
+    ],
+    "c_ran|pr|sexo|idade|peso": [
+      1.552410041588179e-116,
+      false
+    ],
+    "c_ran|pr|sexo|peso": [
+      3.4620213440189166e-109,
+      false
+    ],
+    "c_ran|pr|tamp": [
+      5.076107142445963e-83,
+      false
+    ],
+    "c_ran|pr|tamp|idade": [
+      1.5134322265968252e-87,
+      false
+    ],
+    "c_ran|pr|tamp|idade|peso": [
+      2.9749312209679074e-96,
+      false
+    ],
+    "c_ran|pr|tamp|peso": [
+      1.656496129313871e-86,
+      false
+    ],
+    "c_ran|pr|tamp|sexo": [
+      3.354294348704898e-81,
+      false
+    ],
+    "c_ran|pr|tamp|sexo|idade": [
+      1.5832786972400777e-87,
+      false
+    ],
+    "c_ran|pr|tamp|sexo|idade|peso": [
+      2.4532712835181823e-94,
+      false
+    ],
+    "c_ran|pr|tamp|sexo|peso": [
+      1.9492205082061466e-81,
+      false
+    ],
+    "c_ran|rr": [
+      2.133752031832338e-93,
+      false
+    ],
+    "c_ran|rr|idade": [
+      2.8195348311068326e-95,
+      false
+    ],
+    "c_ran|rr|idade|peso": [
+      1.0232181235124166e-103,
+      false
+    ],
+    "c_ran|rr|peso": [
+      6.07670831713951e-99,
+      false
+    ],
+    "c_ran|rr|pr": [
+      2.802624242885346e-97,
+      false
+    ],
+    "c_ran|rr|pr|idade": [
+      3.0371529034520555e-99,
+      false
+    ],
+    "c_ran|rr|pr|idade|peso": [
+      3.615864129344718e-105,
+      false
+    ],
+    "c_ran|rr|pr|peso": [
+      6.572336699625963e-102,
+      false
+    ],
+    "c_ran|rr|pr|sexo": [
+      7.98692275803657e-102,
+      false
+    ],
+    "c_ran|rr|pr|sexo|idade": [
+      8.560055141587436e-108,
+      false
+    ],
+    "c_ran|rr|pr|sexo|idade|peso": [
+      4.145921669710014e-113,
+      false
+    ],
+    "c_ran|rr|pr|sexo|peso": [
+      2.607783273745109e-106,
+      false
+    ],
+    "c_ran|rr|pr|tamp": [
+      5.793847900052245e-84,
+      false
+    ],
+    "c_ran|rr|pr|tamp|idade": [
+      8.110897896279607e-89,
+      false
+    ],
+    "c_ran|rr|pr|tamp|idade|peso": [
+      2.3291331363859595e-96,
+      false
+    ],
+    "c_ran|rr|pr|tamp|peso": [
+      4.574382527181689e-87,
+      false
+    ],
+    "c_ran|rr|pr|tamp|sexo": [
+      4.8271307065070004e-82,
+      false
+    ],
+    "c_ran|rr|pr|tamp|sexo|idade": [
+      1.423687409537792e-88,
+      false
+    ],
+    "c_ran|rr|pr|tamp|sexo|idade|peso": [
+      4.484642735852986e-95,
+      false
+    ],
+    "c_ran|rr|pr|tamp|sexo|peso": [
+      6.118480924124303e-82,
+      false
+    ],
+    "c_ran|rr|sexo": [
+      1.4932636800823555e-98,
+      false
+    ],
+    "c_ran|rr|sexo|idade": [
+      2.3729264157930514e-105,
+      false
+    ],
+    "c_ran|rr|sexo|idade|peso": [
+      2.9265638891853944e-112,
+      false
+    ],
+    "c_ran|rr|sexo|peso": [
+      4.851888105546936e-103,
+      false
+    ],
+    "c_ran|rr|tamp": [
+      2.648297324668882e-80,
+      false
+    ],
+    "c_ran|rr|tamp|idade": [
+      1.1015749089223896e-84,
+      false
+    ],
+    "c_ran|rr|tamp|idade|peso": [
+      2.9864044407308733e-96,
+      false
+    ],
+    "c_ran|rr|tamp|peso": [
+      1.2822414397207657e-84,
+      false
+    ],
+    "c_ran|rr|tamp|sexo": [
+      5.900629904042631e-77,
+      false
+    ],
+    "c_ran|rr|tamp|sexo|idade": [
+      4.391356696365243e-84,
+      false
+    ],
+    "c_ran|rr|tamp|sexo|idade|peso": [
+      3.167222480792741e-94,
+      false
+    ],
+    "c_ran|rr|tamp|sexo|peso": [
+      5.439108584282584e-78,
+      false
+    ],
+    "c_ran|sexo": [
+      1.5595283371847773e-101,
+      false
+    ],
+    "c_ran|sexo|idade": [
+      1.72567015947501e-108,
+      false
+    ],
+    "c_ran|sexo|idade|peso": [
+      1.0097769072652023e-115,
+      false
+    ],
+    "c_ran|sexo|peso": [
+      6.579438807982215e-106,
+      false
+    ],
+    "c_ran|tamp": [
+      8.499195897067087e-79,
+      false
+    ],
+    "c_ran|tamp|idade": [
+      2.3144721306240056e-82,
+      false
+    ],
+    "c_ran|tamp|idade|peso": [
+      1.7156568638981188e-96,
+      false
+    ],
+    "c_ran|tamp|peso": [
+      1.4129058343222774e-84,
+      false
+    ],
+    "c_ran|tamp|sexo": [
+      1.5934260462928317e-75,
+      false
+    ],
+    "c_ran|tamp|sexo|idade": [
+      6.781927054048191e-82,
+      false
+    ],
+    "c_ran|tamp|sexo|idade|peso": [
+      4.795257858962635e-94,
+      false
+    ],
+    "c_ran|tamp|sexo|peso": [
+      1.1454041548426315e-77,
+      false
+    ],
+    "idade": [
+      1.7439856941331019e-105,
+      false
+    ],
+    "idade|peso": [
+      6.878903563777979e-117,
+      false
+    ],
+    "peso": [
+      1.6198504637694078e-110,
+      false
+    ],
+    "pr": [
+      3.8669457320276066e-110,
+      false
+    ],
+    "pr|idade": [
+      6.460223627747687e-112,
+      false
+    ],
+    "pr|idade|peso": [
+      4.65526481543662e-119,
+      false
+    ],
+    "pr|peso": [
+      2.9677585863352303e-115,
+      false
+    ],
+    "pr|sexo": [
+      9.111930740413676e-118,
+      false
+    ],
+    "pr|sexo|idade": [
+      2.2253285779929773e-125,
+      false
+    ],
+    "pr|sexo|idade|peso": [
+      9.356529934686853e-131,
+      false
+    ],
+    "pr|sexo|peso": [
+      1.5243808204052142e-121,
+      false
+    ],
+    "pr|tamp": [
+      5.3967535935324565e-101,
+      false
+    ],
+    "pr|tamp|idade": [
+      5.496305487402106e-108,
+      false
+    ],
+    "pr|tamp|idade|peso": [
+      2.1445129135068098e-119,
+      false
+    ],
+    "pr|tamp|peso": [
+      3.116673905311548e-106,
+      false
+    ],
+    "pr|tamp|sexo": [
+      5.297604115599471e-98,
+      false
+    ],
+    "pr|tamp|sexo|idade": [
+      7.463887556927105e-108,
+      false
+    ],
+    "pr|tamp|sexo|idade|peso": [
+      2.0689256201545194e-116,
+      false
+    ],
+    "pr|tamp|sexo|peso": [
+      1.3454742032466898e-98,
+      false
+    ],
+    "rr": [
+      4.2863142720043225e-105,
+      false
+    ],
+    "rr|idade": [
+      8.10574894478638e-107,
+      false
+    ],
+    "rr|idade|peso": [
+      3.6468668017763137e-116,
+      false
+    ],
+    "rr|peso": [
+      7.841777481075835e-110,
+      false
+    ],
+    "rr|pr": [
+      1.0164070604697067e-109,
+      false
+    ],
+    "rr|pr|idade": [
+      9.14017711488435e-112,
+      false
+    ],
+    "rr|pr|idade|peso": [
+      2.1849506114489127e-118,
+      false
+    ],
+    "rr|pr|peso": [
+      3.5671888028778565e-114,
+      false
+    ],
+    "rr|pr|sexo": [
+      5.488705923944986e-115,
+      false
+    ],
+    "rr|pr|sexo|idade": [
+      2.4007838617070114e-122,
+      false
+    ],
+    "rr|pr|sexo|idade|peso": [
+      8.195694025468575e-128,
+      false
+    ],
+    "rr|pr|sexo|peso": [
+      6.448225186816863e-119,
+      false
+    ],
+    "rr|pr|tamp": [
+      5.2368371733364525e-101,
+      false
+    ],
+    "rr|pr|tamp|idade": [
+      3.0573543251771127e-108,
+      false
+    ],
+    "rr|pr|tamp|idade|peso": [
+      2.9635701790313304e-118,
+      false
+    ],
+    "rr|pr|tamp|peso": [
+      9.396622080468896e-105,
+      false
+    ],
+    "rr|pr|tamp|sexo": [
+      3.885328453101397e-98,
+      false
+    ],
+    "rr|pr|tamp|sexo|idade": [
+      4.858466753938127e-108,
+      false
+    ],
+    "rr|pr|tamp|sexo|idade|peso": [
+      3.2748333015360863e-116,
+      false
+    ],
+    "rr|pr|tamp|sexo|peso": [
+      6.549898007441194e-98,
+      false
+    ],
+    "rr|sexo": [
+      5.002588471038632e-111,
+      false
+    ],
+    "rr|sexo|idade": [
+      3.341885591364428e-119,
+      false
+    ],
+    "rr|sexo|idade|peso": [
+      1.9672696328626243e-126,
+      false
+    ],
+    "rr|sexo|peso": [
+      1.7840818048492986e-114,
+      false
+    ],
+    "rr|tamp": [
+      6.050879196208418e-96,
+      false
+    ],
+    "rr|tamp|idade": [
+      3.269082162520925e-102,
+      false
+    ],
+    "rr|tamp|idade|peso": [
+      3.162154131867346e-117,
+      false
+    ],
+    "rr|tamp|peso": [
+      2.1739472205222792e-101,
+      false
+    ],
+    "rr|tamp|sexo": [
+      3.138111043640812e-91,
+      false
+    ],
+    "rr|tamp|sexo|idade": [
+      3.399583035162337e-101,
+      false
+    ],
+    "rr|tamp|sexo|idade|peso": [
+      2.5757779601536737e-114,
+      false
+    ],
+    "rr|tamp|sexo|peso": [
+      6.341733477527112e-93,
+      false
+    ],
+    "sexo": [
+      4.804831402999382e-113,
+      false
+    ],
+    "sexo|idade": [
+      1.7746013039980926e-121,
+      false
+    ],
+    "sexo|idade|peso": [
+      2.1332496660690406e-129,
+      false
+    ],
+    "sexo|peso": [
+      4.350027588262135e-117,
+      false
+    ],
+    "tamp": [
+      1.6590871217614296e-95,
+      false
+    ],
+    "tamp|idade": [
+      1.983359176438013e-101,
+      false
+    ],
+    "tamp|idade|peso": [
+      1.531749457179256e-119,
+      false
+    ],
+    "tamp|peso": [
+      6.251438881586962e-103,
+      false
+    ],
+    "tamp|sexo": [
+      1.010984032521457e-90,
+      false
+    ],
+    "tamp|sexo|idade": [
+      5.93769054092074e-100,
+      false
+    ],
+    "tamp|sexo|idade|peso": [
+      1.3544548242033583e-115,
+      false
+    ],
+    "tamp|sexo|peso": [
+      7.191063231115037e-94,
+      false
+    ]
+  },
+  "saturados_testados": 0
+}

@@ -1,0 +1,4138 @@
+{
+  "S_hat": [
+    "anos_pequena_antes",
+    "turma_pequena"
+  ],
+  "S_hat_sem_regra": [
+    "turma_pequena"
+  ],
+  "aceitos_nao_saturados": 57,
+  "aceitos_saturados": 152,
+  "maior_p_nao_saturado": {
+    "S": [
+      "turma_pequena",
+      "anos_pequena_antes",
+      "menina",
+      "mestrado_prof",
+      "prof_negro",
+      "tipo_escola"
+    ],
+    "p": 0.07511639537255119,
+    "saturado": false
+  },
+  "n_cofre": 1841,
+  "n_conjuntos": 1024,
+  "n_por_ambiente": {
+    "1_pequena": 1786,
+    "1_regular": 2381,
+    "2_pequena": 1708,
+    "2_regular": 1947,
+    "3_regular": 1703,
+    "k_pequena": 1733,
+    "k_regular": 1978
+  },
+  "n_treino": 13236,
+  "p_por_conjunto": {
+    "": [
+      1.6236992834638416e-37,
+      false
+    ],
+    "almoco_gratuito": [
+      1.0753748308648281e-39,
+      false
+    ],
+    "almoco_gratuito|etnia": [
+      1.6706929390308598e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof": [
+      1.3929148703402698e-38,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      1.411565397637409e-38,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      1.4676912556724445e-38,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      4.7464668392225685e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      5.2074693473212616e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      1.4851769725504215e-38,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      5.0457351782856524e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      5.439575415892776e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|mestrado_prof": [
+      1.1435487900614813e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      1.2888733847750899e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      5.627515937541856e-40,
+      false
+    ],
+    "almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      5.03101072356131e-40,
+      false
+    ],
+    "almoco_gratuito|etnia|prof_negro": [
+      1.8614764084939793e-39,
+      false
+    ],
+    "almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      8.33453376421744e-40,
+      false
+    ],
+    "almoco_gratuito|etnia|tipo_escola": [
+      7.407199179325487e-40,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof": [
+      5.205167983861751e-39,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|mestrado_prof": [
+      4.9445442506568686e-39,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      1.4051217567954086e-38,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      6.855917637590708e-40,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      5.578800712195858e-40,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|prof_negro": [
+      1.317888906604727e-38,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      7.800771888116414e-40,
+      false
+    ],
+    "almoco_gratuito|experiencia_prof|tipo_escola": [
+      6.313434272717279e-40,
+      false
+    ],
+    "almoco_gratuito|menina": [
+      6.1791705324935816e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia": [
+      1.2489886377850334e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof": [
+      8.780152467327987e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      8.781092797417564e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      9.771506840926658e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.2106454289751296e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.514037658272921e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      9.77274910911295e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      3.42690649214397e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      3.680400407409845e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|mestrado_prof": [
+      8.403154387704715e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      9.276676126411045e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      3.899100274997677e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      3.49440139451658e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|prof_negro": [
+      1.3595981763163308e-39,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      5.856879084345374e-40,
+      false
+    ],
+    "almoco_gratuito|menina|etnia|tipo_escola": [
+      5.269809429925267e-40,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof": [
+      2.904344813743085e-39,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      2.7826818719134626e-39,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      9.255065778773573e-39,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      4.385468397386746e-40,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.4417909924098035e-40,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      8.806318496861538e-39,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      5.033742292108794e-40,
+      false
+    ],
+    "almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      3.921886904258071e-40,
+      false
+    ],
+    "almoco_gratuito|menina|mestrado_prof": [
+      3.596044458006537e-40,
+      false
+    ],
+    "almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      4.144646250369559e-40,
+      false
+    ],
+    "almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      4.899731409684117e-41,
+      false
+    ],
+    "almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      4.214305258239946e-41,
+      false
+    ],
+    "almoco_gratuito|menina|prof_negro": [
+      6.306134591936797e-40,
+      false
+    ],
+    "almoco_gratuito|menina|prof_negro|tipo_escola": [
+      8.299414470482838e-41,
+      false
+    ],
+    "almoco_gratuito|menina|tipo_escola": [
+      7.229758592682053e-41,
+      false
+    ],
+    "almoco_gratuito|mestrado_prof": [
+      6.2072582465480376e-40,
+      false
+    ],
+    "almoco_gratuito|mestrado_prof|prof_negro": [
+      6.430685381184573e-40,
+      false
+    ],
+    "almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      7.470082854690286e-41,
+      false
+    ],
+    "almoco_gratuito|mestrado_prof|tipo_escola": [
+      6.288425357069793e-41,
+      false
+    ],
+    "almoco_gratuito|prof_negro": [
+      9.906669452188553e-40,
+      false
+    ],
+    "almoco_gratuito|prof_negro|tipo_escola": [
+      1.2481351709713177e-40,
+      false
+    ],
+    "almoco_gratuito|tipo_escola": [
+      1.0370464367895016e-40,
+      false
+    ],
+    "anos_pequena_antes": [
+      3.2703227202568926e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito": [
+      1.8952949700405347e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia": [
+      1.5820655405941244e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof": [
+      7.086692987191647e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      7.188026594281324e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      7.336587506585451e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      4.1489135701682504e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      5.052844868672779e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      7.217716737869407e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      4.265427869435139e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      5.104385838167694e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof": [
+      1.340647147400558e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      1.3479752907277775e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      8.503256727294242e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      1.0487445445424946e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|prof_negro": [
+      1.5989189639936398e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      1.0156428508291711e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|etnia|tipo_escola": [
+      1.249047404993814e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof": [
+      1.0984181482774914e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      1.0935226676377071e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      5.406727131320795e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.2375781979387838e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.016126784522293e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|prof_negro": [
+      5.229472577280063e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      1.306384118994959e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|experiencia_prof|tipo_escola": [
+      1.0750386137553216e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina": [
+      1.2686913306754137e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia": [
+      1.1498508321481708e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof": [
+      4.951104663816324e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      4.961574586522004e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      5.274297867116361e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.069865667175144e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.554824568519881e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      5.235351343893089e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      3.1711885033720326e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      3.62210364984498e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof": [
+      9.639207225394637e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      9.978291722133733e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      6.167458859240261e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      7.306614946043662e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|prof_negro": [
+      1.195023105839776e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      7.533136912587018e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|etnia|tipo_escola": [
+      8.690320226298769e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof": [
+      7.178003207679891e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      7.125974525267877e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      3.656162011217071e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      8.68152626135726e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      7.042515456071837e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      3.604204260961589e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      9.333488773906242e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      7.622924909325673e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|mestrado_prof": [
+      9.128574513131962e-11,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      5.676542462623108e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      1.9813883797044152e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      1.640502028682583e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|prof_negro": [
+      7.311532371230275e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      2.5255547095095965e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|menina|tipo_escola": [
+      2.0698795227702724e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|mestrado_prof": [
+      1.419696594901958e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|mestrado_prof|prof_negro": [
+      8.040547972068326e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      2.8302904364014003e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|mestrado_prof|tipo_escola": [
+      2.423796052651396e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|prof_negro": [
+      1.0382920240311583e-09,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|prof_negro|tipo_escola": [
+      3.5312371805985686e-10,
+      false
+    ],
+    "anos_pequena_antes|almoco_gratuito|tipo_escola": [
+      3.026378901264971e-10,
+      false
+    ],
+    "anos_pequena_antes|etnia": [
+      1.5418108593537375e-08,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof": [
+      5.309561974477843e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|mestrado_prof": [
+      5.163136626680795e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      5.136139163440851e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.3541482329264998e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.554631716455623e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|prof_negro": [
+      5.254222586177087e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      1.4793880444284677e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|experiencia_prof|tipo_escola": [
+      1.6930382378463236e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|mestrado_prof": [
+      1.196172421135204e-08,
+      false
+    ],
+    "anos_pequena_antes|etnia|mestrado_prof|prof_negro": [
+      1.1629890841619155e-08,
+      false
+    ],
+    "anos_pequena_antes|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      3.169122019781581e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|mestrado_prof|tipo_escola": [
+      3.700777386404177e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|prof_negro": [
+      1.5146212886782146e-08,
+      false
+    ],
+    "anos_pequena_antes|etnia|prof_negro|tipo_escola": [
+      4.130767470505212e-09,
+      false
+    ],
+    "anos_pequena_antes|etnia|tipo_escola": [
+      4.913198765584023e-09,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof": [
+      2.6016496460691783e-10,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|mestrado_prof": [
+      2.46483626624653e-10,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|mestrado_prof|prof_negro": [
+      5.1310628235265576e-09,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.5940392334478928e-10,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|mestrado_prof|tipo_escola": [
+      9.873184458251779e-11,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|prof_negro": [
+      5.14268683947904e-09,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|prof_negro|tipo_escola": [
+      1.7835454203334477e-10,
+      false
+    ],
+    "anos_pequena_antes|experiencia_prof|tipo_escola": [
+      1.1442260662131253e-10,
+      false
+    ],
+    "anos_pequena_antes|menina": [
+      2.601209974529039e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia": [
+      1.4149462975113383e-08,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof": [
+      5.001125370926759e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof": [
+      4.8365301233889145e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      4.841542752046624e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.2367884601995672e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.4012642963105361e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|prof_negro": [
+      5.006192788505614e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      1.3753392644727504e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|experiencia_prof|tipo_escola": [
+      1.5584025948925195e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|mestrado_prof": [
+      1.0757935793446794e-08,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|mestrado_prof|prof_negro": [
+      1.0573525269667466e-08,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.873780185967378e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|mestrado_prof|tipo_escola": [
+      3.27335068067609e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|prof_negro": [
+      1.407594308595925e-08,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|prof_negro|tipo_escola": [
+      3.8075993905283574e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|etnia|tipo_escola": [
+      4.335484700527784e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof": [
+      2.2270340388213634e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|mestrado_prof": [
+      2.108647863430857e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      4.772515618794185e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.3809193831332196e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      8.391350322730496e-11,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|prof_negro": [
+      4.832995728973855e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|prof_negro|tipo_escola": [
+      1.581720667648929e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|experiencia_prof|tipo_escola": [
+      9.760922815536731e-11,
+      false
+    ],
+    "anos_pequena_antes|menina|mestrado_prof": [
+      1.8314024196290348e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|mestrado_prof|prof_negro": [
+      7.796021732289283e-09,
+      false
+    ],
+    "anos_pequena_antes|menina|mestrado_prof|prof_negro|tipo_escola": [
+      3.5366126361687083e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|mestrado_prof|tipo_escola": [
+      2.0716799212939467e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|prof_negro": [
+      1.0347441812181626e-08,
+      false
+    ],
+    "anos_pequena_antes|menina|prof_negro|tipo_escola": [
+      5.022710548892179e-10,
+      false
+    ],
+    "anos_pequena_antes|menina|tipo_escola": [
+      2.9700711192072376e-10,
+      false
+    ],
+    "anos_pequena_antes|mestrado_prof": [
+      2.2269034406049299e-10,
+      false
+    ],
+    "anos_pequena_antes|mestrado_prof|prof_negro": [
+      8.546843921670759e-09,
+      false
+    ],
+    "anos_pequena_antes|mestrado_prof|prof_negro|tipo_escola": [
+      4.0623576496455194e-10,
+      false
+    ],
+    "anos_pequena_antes|mestrado_prof|tipo_escola": [
+      2.475898225656614e-10,
+      false
+    ],
+    "anos_pequena_antes|prof_negro": [
+      1.1237834651598373e-08,
+      false
+    ],
+    "anos_pequena_antes|prof_negro|tipo_escola": [
+      5.634153749815608e-10,
+      false
+    ],
+    "anos_pequena_antes|serie": [
+      5.2340932342353085e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito": [
+      5.322202252321386e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia": [
+      1.5694831420027226e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof": [
+      2.545593053360813e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      2.5477030084928033e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      2.4934357626038393e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      2.4120239734428788e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      2.6366621235005233e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      2.485801471304154e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      2.4781990868098633e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      2.7450591820294e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof": [
+      1.4367904722757647e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      1.4155339452247059e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      1.450843869364842e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      1.580814822676287e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|prof_negro": [
+      1.546739019073421e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      1.5955964853876748e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|etnia|tipo_escola": [
+      1.7465305558499273e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof": [
+      1.2441015077803598e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      1.2453118897033996e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      2.10968514244586e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.1836278250335102e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.1865797967698005e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|prof_negro": [
+      2.0771038791448538e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      1.2572372639225892e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|tipo_escola": [
+      1.2482385280552522e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina": [
+      4.582231498984204e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia": [
+      1.4199320252341552e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof": [
+      2.2391208882404178e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      2.220643434082959e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      2.2030572839818278e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      2.1599492036601324e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      2.377539906534201e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      2.2173951903167695e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      2.2470420607865254e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      2.4816202613966985e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof": [
+      1.2858908547650833e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      1.2606201482968815e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      1.258511329480105e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      1.3524337675950214e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|prof_negro": [
+      1.3996397626569904e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      1.4247859017236594e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|etnia|tipo_escola": [
+      1.5373559617986362e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof": [
+      1.0832802758267989e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      1.0735652330150483e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      1.81862613822369e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.0202268546157233e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.0169284452638966e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      1.8030991891911802e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      1.0777857438939362e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      1.074476968366759e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof": [
+      3.8797940706340265e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      6.0767261786249035e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      5.273284134439818e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      5.338546125993163e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|prof_negro": [
+      7.16823430180872e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      6.119450122434764e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|menina|tipo_escola": [
+      6.066051679750995e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|mestrado_prof": [
+      4.590854866521382e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|prof_negro": [
+      7.074548531183197e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      6.449103433041267e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|tipo_escola": [
+      6.448474746232968e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|prof_negro": [
+      7.94733819496015e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|prof_negro|tipo_escola": [
+      7.221176996608126e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|almoco_gratuito|tipo_escola": [
+      7.264544693685247e-09,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia": [
+      9.494174513266028e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof": [
+      1.4216580909091514e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof": [
+      1.3476163623892695e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      1.3134450646868236e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.2714428414711746e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.39828521576556e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|prof_negro": [
+      1.3818141208351612e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      1.4837356308161907e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|experiencia_prof|tipo_escola": [
+      1.640302731116776e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|mestrado_prof": [
+      7.964501927643227e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|mestrado_prof|prof_negro": [
+      7.827839919851575e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      7.910127402660126e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|mestrado_prof|tipo_escola": [
+      8.409151105966643e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|prof_negro": [
+      9.373816468327226e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|prof_negro|tipo_escola": [
+      9.754739923574069e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|etnia|tipo_escola": [
+      1.0354966056479738e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof": [
+      1.100223916105475e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|mestrado_prof": [
+      1.0529974109627293e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|mestrado_prof|prof_negro": [
+      3.7786989564833095e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      7.222731907883298e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|mestrado_prof|tipo_escola": [
+      6.481163521055788e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|prof_negro": [
+      3.7872281186670515e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|prof_negro|tipo_escola": [
+      8.744148929256326e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|experiencia_prof|tipo_escola": [
+      8.071614106406302e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina": [
+      5.302007527611042e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia": [
+      1.0443314142448246e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof": [
+      1.5639065555712327e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof": [
+      1.469241947043535e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      1.4361575317786192e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.394546491916946e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.5254683211671195e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|prof_negro": [
+      1.5317282838649947e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      1.643511774425742e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|experiencia_prof|tipo_escola": [
+      1.7957553546248404e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|mestrado_prof": [
+      8.652909519650367e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|mestrado_prof|prof_negro": [
+      8.477131177961472e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      8.314366829042013e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|mestrado_prof|tipo_escola": [
+      9.054995225244646e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|prof_negro": [
+      1.0132097685120808e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|prof_negro|tipo_escola": [
+      1.037095601663012e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|etnia|tipo_escola": [
+      1.1276351873660554e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof": [
+      1.1195953093622703e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof": [
+      1.053968819697901e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      4.176325779576074e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      7.610654340607136e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      6.779032815320808e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|prof_negro": [
+      4.2035852637635123e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|prof_negro|tipo_escola": [
+      9.318588195127768e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|experiencia_prof|tipo_escola": [
+      8.413172873056921e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|mestrado_prof": [
+      3.794578300461734e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|mestrado_prof|prof_negro": [
+      1.294527946405725e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|mestrado_prof|prof_negro|tipo_escola": [
+      3.898469605307867e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|mestrado_prof|tipo_escola": [
+      3.677661535660377e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|prof_negro": [
+      1.7172446516099865e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|prof_negro|tipo_escola": [
+      5.050217989114918e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|menina|tipo_escola": [
+      4.810206371085171e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|mestrado_prof": [
+      3.80465012630619e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|mestrado_prof|prof_negro": [
+      1.200744382788248e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|mestrado_prof|prof_negro|tipo_escola": [
+      3.7334928719957286e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|mestrado_prof|tipo_escola": [
+      3.627924027090513e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|prof_negro": [
+      1.6422449617828704e-07,
+      false
+    ],
+    "anos_pequena_antes|serie|prof_negro|tipo_escola": [
+      4.890722254358532e-08,
+      false
+    ],
+    "anos_pequena_antes|serie|tipo_escola": [
+      4.6594490785647633e-08,
+      false
+    ],
+    "anos_pequena_antes|tipo_escola": [
+      3.49926667001368e-10,
+      false
+    ],
+    "etnia": [
+      3.1328659166077275e-38,
+      false
+    ],
+    "etnia|experiencia_prof": [
+      2.1038305976771538e-37,
+      false
+    ],
+    "etnia|experiencia_prof|mestrado_prof": [
+      2.035693497143884e-37,
+      false
+    ],
+    "etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      2.005134004428193e-37,
+      false
+    ],
+    "etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.8830191532744185e-38,
+      false
+    ],
+    "etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      2.034664721271932e-38,
+      false
+    ],
+    "etnia|experiencia_prof|prof_negro": [
+      2.037603803963738e-37,
+      false
+    ],
+    "etnia|experiencia_prof|prof_negro|tipo_escola": [
+      2.2726888776593446e-38,
+      false
+    ],
+    "etnia|experiencia_prof|tipo_escola": [
+      2.40581805388555e-38,
+      false
+    ],
+    "etnia|mestrado_prof": [
+      1.7807361938865542e-38,
+      false
+    ],
+    "etnia|mestrado_prof|prof_negro": [
+      1.7514504282275005e-38,
+      false
+    ],
+    "etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.456177291957961e-39,
+      false
+    ],
+    "etnia|mestrado_prof|tipo_escola": [
+      2.273281881314589e-39,
+      false
+    ],
+    "etnia|prof_negro": [
+      3.04113559483116e-38,
+      false
+    ],
+    "etnia|prof_negro|tipo_escola": [
+      4.414422706586563e-39,
+      false
+    ],
+    "etnia|tipo_escola": [
+      3.916067681862204e-39,
+      false
+    ],
+    "experiencia_prof": [
+      3.239917717968451e-37,
+      false
+    ],
+    "experiencia_prof|mestrado_prof": [
+      2.8891521814418672e-37,
+      false
+    ],
+    "experiencia_prof|mestrado_prof|prof_negro": [
+      1.547158450164561e-36,
+      false
+    ],
+    "experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      7.814724407416303e-40,
+      false
+    ],
+    "experiencia_prof|mestrado_prof|tipo_escola": [
+      5.389657564262404e-40,
+      false
+    ],
+    "experiencia_prof|prof_negro": [
+      1.5457166739226978e-36,
+      false
+    ],
+    "experiencia_prof|prof_negro|tipo_escola": [
+      1.0020578003073288e-39,
+      false
+    ],
+    "experiencia_prof|tipo_escola": [
+      7.064804593517308e-40,
+      false
+    ],
+    "menina": [
+      1.4724128668057609e-37,
+      false
+    ],
+    "menina|etnia": [
+      3.312365706926314e-38,
+      false
+    ],
+    "menina|etnia|experiencia_prof": [
+      2.17497697307592e-37,
+      false
+    ],
+    "menina|etnia|experiencia_prof|mestrado_prof": [
+      2.096575051701855e-37,
+      false
+    ],
+    "menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      2.0802654763215594e-37,
+      false
+    ],
+    "menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.976957507672287e-38,
+      false
+    ],
+    "menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      2.051144478200653e-38,
+      false
+    ],
+    "menina|etnia|experiencia_prof|prof_negro": [
+      2.143238637594206e-37,
+      false
+    ],
+    "menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      2.3891388917679116e-38,
+      false
+    ],
+    "menina|etnia|experiencia_prof|tipo_escola": [
+      2.4555246836768043e-38,
+      false
+    ],
+    "menina|etnia|mestrado_prof": [
+      1.9654160032511428e-38,
+      false
+    ],
+    "menina|etnia|mestrado_prof|prof_negro": [
+      1.9749435898068746e-38,
+      false
+    ],
+    "menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.5190320938428977e-39,
+      false
+    ],
+    "menina|etnia|mestrado_prof|tipo_escola": [
+      2.4218265385595872e-39,
+      false
+    ],
+    "menina|etnia|prof_negro": [
+      3.1978260743743124e-38,
+      false
+    ],
+    "menina|etnia|prof_negro|tipo_escola": [
+      4.6475081211644926e-39,
+      false
+    ],
+    "menina|etnia|tipo_escola": [
+      4.295198028464012e-39,
+      false
+    ],
+    "menina|experiencia_prof": [
+      3.2184392736081286e-37,
+      false
+    ],
+    "menina|experiencia_prof|mestrado_prof": [
+      2.6970511104485264e-37,
+      false
+    ],
+    "menina|experiencia_prof|mestrado_prof|prof_negro": [
+      1.661193117030234e-36,
+      false
+    ],
+    "menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      7.104049172475745e-40,
+      false
+    ],
+    "menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      4.607009462132116e-40,
+      false
+    ],
+    "menina|experiencia_prof|prof_negro": [
+      1.6830973171036854e-36,
+      false
+    ],
+    "menina|experiencia_prof|prof_negro|tipo_escola": [
+      9.14385763080286e-40,
+      false
+    ],
+    "menina|experiencia_prof|tipo_escola": [
+      6.042241638219911e-40,
+      false
+    ],
+    "menina|mestrado_prof": [
+      8.510230171185046e-38,
+      false
+    ],
+    "menina|mestrado_prof|prof_negro": [
+      7.0659454733092e-38,
+      false
+    ],
+    "menina|mestrado_prof|prof_negro|tipo_escola": [
+      9.444198185388585e-41,
+      false
+    ],
+    "menina|mestrado_prof|tipo_escola": [
+      7.756525993007004e-41,
+      false
+    ],
+    "menina|prof_negro": [
+      1.134321192487745e-37,
+      false
+    ],
+    "menina|prof_negro|tipo_escola": [
+      1.9660922650969527e-40,
+      false
+    ],
+    "menina|tipo_escola": [
+      1.583102353732573e-40,
+      false
+    ],
+    "mestrado_prof": [
+      8.862121854273112e-38,
+      false
+    ],
+    "mestrado_prof|prof_negro": [
+      6.254203020793058e-38,
+      false
+    ],
+    "mestrado_prof|prof_negro|tipo_escola": [
+      1.0354280918452e-40,
+      false
+    ],
+    "mestrado_prof|tipo_escola": [
+      8.964933444799684e-41,
+      false
+    ],
+    "prof_negro": [
+      1.053715190481437e-37,
+      false
+    ],
+    "prof_negro|tipo_escola": [
+      2.0579986320068736e-40,
+      false
+    ],
+    "serie": [
+      2.050718337628979e-33,
+      false
+    ],
+    "serie|almoco_gratuito": [
+      6.658747705685866e-34,
+      false
+    ],
+    "serie|almoco_gratuito|etnia": [
+      1.6195337083731874e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof": [
+      2.2545121040368736e-31,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      2.192193668049342e-31,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      2.3844554071962003e-31,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.804314742454195e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.677993143240245e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      2.4723111658253324e-31,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      4.121283188574255e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      3.9552570830068266e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|mestrado_prof": [
+      1.5340880363807389e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      1.8459760001976455e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      3.226495445842729e-33,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      2.7334569164964145e-33,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|prof_negro": [
+      1.9023573437305434e-32,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      3.485850937041548e-33,
+      false
+    ],
+    "serie|almoco_gratuito|etnia|tipo_escola": [
+      2.9519761116946734e-33,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof": [
+      2.9152095509866335e-32,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      2.7907248810131774e-32,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      4.0303782933058454e-32,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.2966505106750512e-33,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.1238809671502185e-33,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|prof_negro": [
+      4.110070202746925e-32,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      1.4194806863857161e-33,
+      false
+    ],
+    "serie|almoco_gratuito|experiencia_prof|tipo_escola": [
+      1.2322248803003857e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina": [
+      4.21337201569598e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia": [
+      1.2424711680978946e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof": [
+      1.654385273754138e-31,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      1.6103781799388424e-31,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      1.7822665946183498e-31,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.0976919199347184e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.0374861641020844e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      1.8660355498019738e-31,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      3.2862370605570184e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      3.219526550916269e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|mestrado_prof": [
+      1.1293544681362906e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      1.327046958434372e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.7396743984136083e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      2.3753493980873324e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|prof_negro": [
+      1.4022660995506244e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      2.8609568953065432e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina|etnia|tipo_escola": [
+      2.4389803808332613e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof": [
+      1.9591390701710085e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      1.8551699376359987e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      3.0881821970688113e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      9.349567823480071e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      8.110301459380411e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      3.125714208098539e-32,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      1.0250808930401167e-33,
+      false
+    ],
+    "serie|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      8.92990378010332e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|mestrado_prof": [
+      4.851262852936461e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      4.460957278241638e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      5.113999817262518e-35,
+      false
+    ],
+    "serie|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      4.5904626413791904e-35,
+      false
+    ],
+    "serie|almoco_gratuito|menina|prof_negro": [
+      4.056388450062279e-34,
+      false
+    ],
+    "serie|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      5.696942690989964e-35,
+      false
+    ],
+    "serie|almoco_gratuito|menina|tipo_escola": [
+      5.016441181138371e-35,
+      false
+    ],
+    "serie|almoco_gratuito|mestrado_prof": [
+      7.411604352850404e-34,
+      false
+    ],
+    "serie|almoco_gratuito|mestrado_prof|prof_negro": [
+      6.431005277794119e-34,
+      false
+    ],
+    "serie|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      6.856649380671931e-35,
+      false
+    ],
+    "serie|almoco_gratuito|mestrado_prof|tipo_escola": [
+      5.999877368618237e-35,
+      false
+    ],
+    "serie|almoco_gratuito|prof_negro": [
+      5.935507723861144e-34,
+      false
+    ],
+    "serie|almoco_gratuito|prof_negro|tipo_escola": [
+      7.786638342841839e-35,
+      false
+    ],
+    "serie|almoco_gratuito|tipo_escola": [
+      6.757092365890737e-35,
+      false
+    ],
+    "serie|etnia": [
+      5.458711550174432e-32,
+      false
+    ],
+    "serie|etnia|experiencia_prof": [
+      9.64268103996008e-31,
+      false
+    ],
+    "serie|etnia|experiencia_prof|mestrado_prof": [
+      9.110361551973055e-31,
+      false
+    ],
+    "serie|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      9.001785408707158e-31,
+      false
+    ],
+    "serie|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.2574195770129743e-32,
+      false
+    ],
+    "serie|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.363713949938819e-32,
+      false
+    ],
+    "serie|etnia|experiencia_prof|prof_negro": [
+      9.442240478985059e-31,
+      false
+    ],
+    "serie|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      3.8806932331016046e-32,
+      false
+    ],
+    "serie|etnia|experiencia_prof|tipo_escola": [
+      4.0193777096359285e-32,
+      false
+    ],
+    "serie|etnia|mestrado_prof": [
+      5.167797293591459e-32,
+      false
+    ],
+    "serie|etnia|mestrado_prof|prof_negro": [
+      5.460981861967431e-32,
+      false
+    ],
+    "serie|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.119993788223321e-33,
+      false
+    ],
+    "serie|etnia|mestrado_prof|tipo_escola": [
+      1.8802761999859167e-33,
+      false
+    ],
+    "serie|etnia|prof_negro": [
+      5.725281066271017e-32,
+      false
+    ],
+    "serie|etnia|prof_negro|tipo_escola": [
+      2.4520726565496858e-33,
+      false
+    ],
+    "serie|etnia|tipo_escola": [
+      2.1034379800306565e-33,
+      false
+    ],
+    "serie|experiencia_prof": [
+      1.613678438626892e-31,
+      false
+    ],
+    "serie|experiencia_prof|mestrado_prof": [
+      1.5202752096276655e-31,
+      false
+    ],
+    "serie|experiencia_prof|mestrado_prof|prof_negro": [
+      4.145948656331443e-31,
+      false
+    ],
+    "serie|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.6537089078836816e-34,
+      false
+    ],
+    "serie|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.3392968864083183e-34,
+      false
+    ],
+    "serie|experiencia_prof|prof_negro": [
+      4.319015536180366e-31,
+      false
+    ],
+    "serie|experiencia_prof|prof_negro|tipo_escola": [
+      1.9648946784332194e-34,
+      false
+    ],
+    "serie|experiencia_prof|tipo_escola": [
+      1.5740184421941896e-34,
+      false
+    ],
+    "serie|menina": [
+      2.098953926159867e-33,
+      false
+    ],
+    "serie|menina|etnia": [
+      5.78931361358572e-32,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof": [
+      1.1088960792854555e-30,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|mestrado_prof": [
+      1.0553983081756936e-30,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      1.0474905119832352e-30,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      3.702051036556852e-32,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      3.813919104407227e-32,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|prof_negro": [
+      1.124513785355837e-30,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      4.308593585213776e-32,
+      false
+    ],
+    "serie|menina|etnia|experiencia_prof|tipo_escola": [
+      4.390468409471102e-32,
+      false
+    ],
+    "serie|menina|etnia|mestrado_prof": [
+      5.752614892687132e-32,
+      false
+    ],
+    "serie|menina|etnia|mestrado_prof|prof_negro": [
+      5.853674720243696e-32,
+      false
+    ],
+    "serie|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      2.294369017945873e-33,
+      false
+    ],
+    "serie|menina|etnia|mestrado_prof|tipo_escola": [
+      2.1324986017460444e-33,
+      false
+    ],
+    "serie|menina|etnia|prof_negro": [
+      5.897193779427472e-32,
+      false
+    ],
+    "serie|menina|etnia|prof_negro|tipo_escola": [
+      2.7437549595222184e-33,
+      false
+    ],
+    "serie|menina|etnia|tipo_escola": [
+      2.4738809225692294e-33,
+      false
+    ],
+    "serie|menina|experiencia_prof": [
+      1.8532463123753603e-31,
+      false
+    ],
+    "serie|menina|experiencia_prof|mestrado_prof": [
+      1.7325797758940333e-31,
+      false
+    ],
+    "serie|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      5.093362352480298e-31,
+      false
+    ],
+    "serie|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      1.8242992260285707e-34,
+      false
+    ],
+    "serie|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      1.4311402958653483e-34,
+      false
+    ],
+    "serie|menina|experiencia_prof|prof_negro": [
+      5.388318172363871e-31,
+      false
+    ],
+    "serie|menina|experiencia_prof|prof_negro|tipo_escola": [
+      2.178504394865437e-34,
+      false
+    ],
+    "serie|menina|experiencia_prof|tipo_escola": [
+      1.6760300329521573e-34,
+      false
+    ],
+    "serie|menina|mestrado_prof": [
+      3.145205962867962e-33,
+      false
+    ],
+    "serie|menina|mestrado_prof|prof_negro": [
+      2.996527917168938e-33,
+      false
+    ],
+    "serie|menina|mestrado_prof|prof_negro|tipo_escola": [
+      6.114601030160415e-36,
+      false
+    ],
+    "serie|menina|mestrado_prof|tipo_escola": [
+      5.556190595449033e-36,
+      false
+    ],
+    "serie|menina|prof_negro": [
+      2.1433744177156906e-33,
+      false
+    ],
+    "serie|menina|prof_negro|tipo_escola": [
+      6.646254001496387e-36,
+      false
+    ],
+    "serie|menina|tipo_escola": [
+      5.990491506057823e-36,
+      false
+    ],
+    "serie|mestrado_prof": [
+      2.9257335086267295e-33,
+      false
+    ],
+    "serie|mestrado_prof|prof_negro": [
+      2.480194549043388e-33,
+      false
+    ],
+    "serie|mestrado_prof|prof_negro|tipo_escola": [
+      5.8862617348618814e-36,
+      false
+    ],
+    "serie|mestrado_prof|tipo_escola": [
+      5.3732141664484114e-36,
+      false
+    ],
+    "serie|prof_negro": [
+      1.8213090039015567e-33,
+      false
+    ],
+    "serie|prof_negro|tipo_escola": [
+      6.378075553295369e-36,
+      false
+    ],
+    "serie|tipo_escola": [
+      5.9299871070467656e-36,
+      false
+    ],
+    "tipo_escola": [
+      1.7284020027535451e-40,
+      false
+    ],
+    "turma_pequena": [
+      0.010079535665508394,
+      false
+    ],
+    "turma_pequena|almoco_gratuito": [
+      0.000756735117146603,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia": [
+      7.886520221820214e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof": [
+      0.00043522698112598995,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      0.00042467973270018207,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.00042789946692189083,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.0008807426515156801,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.0008023881446280395,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      0.00043494601384196346,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.0008969830213566792,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      0.0008277629327932126,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|mestrado_prof": [
+      7.440552529732863e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      8.066910007996422e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.00019067008186002808,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      0.0001462908973809389,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|prof_negro": [
+      8.385284877109473e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      0.00019497821313632307,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|etnia|tipo_escola": [
+      0.000153415221979808,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof": [
+      0.00130033806370916,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      0.0012990649595793248,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0009841629690662498,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.002253523693654023,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.0021759590060253238,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|prof_negro": [
+      0.0009949427825242207,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      0.0022965976789102575,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|experiencia_prof|tipo_escola": [
+      0.0022097985544540775,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina": [
+      0.0008560792728102209,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia": [
+      9.109847801126623e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof": [
+      0.00043830075488008094,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.0004261606884781112,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0004343737630641074,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.0008509537232009491,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.0007734117456742389,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      0.00044852762698059835,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.0008759741875688671,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      0.0008002547226507956,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|mestrado_prof": [
+      8.583779824369707e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      9.229598085099341e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.00020575142939147667,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      0.00016016752349228743,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|prof_negro": [
+      9.827115035686007e-05,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      0.00021795995915753567,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|etnia|tipo_escola": [
+      0.00017061564483948567,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof": [
+      0.0012719364084335049,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      0.0012569332079785138,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0009470843304776342,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.0022418042931901814,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.0021556939776817166,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      0.0009638209937252843,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.002277368603387532,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      0.0021864816179780425,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|mestrado_prof": [
+      0.0008332200128715066,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      0.0002476078122934434,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.0006198696844494373,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      0.0006030824872904128,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|prof_negro": [
+      0.00024725485526339843,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      0.0006231737911498967,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|menina|tipo_escola": [
+      0.0006104486318294391,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|mestrado_prof": [
+      0.000766361085992575,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|mestrado_prof|prof_negro": [
+      0.00022699907251583662,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      0.000567116846600101,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|mestrado_prof|tipo_escola": [
+      0.0005403455869367719,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|prof_negro": [
+      0.00021791380648323878,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|prof_negro|tipo_escola": [
+      0.0005654882075902647,
+      false
+    ],
+    "turma_pequena|almoco_gratuito|tipo_escola": [
+      0.0005445247302518039,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes": [
+      0.039113924009781004,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito": [
+      0.03770380646786414,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia": [
+      0.024120043362062586,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof": [
+      0.025406060435870178,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      0.025233807625580456,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.025032292456486308,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.03210366994939079,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.03312355331539695,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      0.025164129076380805,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.03234770657396245,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      0.03358720416231758,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof": [
+      0.023112006046923643,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      0.023217849262207952,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.031067104918687742,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      0.03075915493843937,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|prof_negro": [
+      0.02395033624534082,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      0.031791006679856404,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|etnia|tipo_escola": [
+      0.031830509861558456,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof": [
+      0.025748998539836872,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      0.025811359776945316,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      0.03522562935552282,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.047465852503208054,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04562082105708708,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|prof_negro": [
+      0.03545119344370868,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      0.04760001023955461,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|experiencia_prof|tipo_escola": [
+      0.045801911917218524,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina": [
+      0.03784307784456012,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia": [
+      0.025595897065933973,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof": [
+      0.02614568053220237,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.0258576127513434,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.025815482847179383,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.032683007303893626,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.03373120825871131,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      0.026038184032041205,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.033102971939168876,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      0.0342570215266851,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof": [
+      0.02458698616615724,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      0.024754875444148155,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.033170239157849446,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      0.03280749944391484,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|prof_negro": [
+      0.025810377046703407,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      0.03440207679718368,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|etnia|tipo_escola": [
+      0.03395999764209066,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof": [
+      0.02481663716963915,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      0.024906429090893308,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.03500807196297847,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.04787738839264971,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.0457461597864847,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      0.03536659329710016,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.04783461672637184,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      0.045974599207948656,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|mestrado_prof": [
+      0.0378950540215491,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      0.03835174112528273,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.05347754472010806,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      0.05155115977839325,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|prof_negro": [
+      0.038405105052169396,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      0.05371683657290186,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|menina|tipo_escola": [
+      0.05225792555729062,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|mestrado_prof": [
+      0.037467677941080114,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|mestrado_prof|prof_negro": [
+      0.037785264310251684,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      0.05152509900054687,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|mestrado_prof|tipo_escola": [
+      0.049757977406098906,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|prof_negro": [
+      0.037467212261510244,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|prof_negro|tipo_escola": [
+      0.051399681119435506,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|almoco_gratuito|tipo_escola": [
+      0.05025114027380393,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia": [
+      0.062017531564938555,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof": [
+      0.05844461682596124,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|mestrado_prof": [
+      0.056539969020598095,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.05592297353723709,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.05506292725332807,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.05519582308068709,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|prof_negro": [
+      0.057606142044159515,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.05667483557561811,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|experiencia_prof|tipo_escola": [
+      0.05713297594449298,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|mestrado_prof": [
+      0.05921228169603397,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|mestrado_prof|prof_negro": [
+      0.059143217272114045,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.06478655355635297,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|mestrado_prof|tipo_escola": [
+      0.06345544608136836,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|prof_negro": [
+      0.06178161337653714,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|prof_negro|tipo_escola": [
+      0.06696553432181075,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|etnia|tipo_escola": [
+      0.06582344043148221,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof": [
+      0.02835656812983832,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|mestrado_prof": [
+      0.028628453100291898,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|mestrado_prof|prof_negro": [
+      0.04956855762737882,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.05585462059324723,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.05390912767160857,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|prof_negro": [
+      0.04992351217554464,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|prof_negro|tipo_escola": [
+      0.05427823044517611,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|experiencia_prof|tipo_escola": [
+      0.05226135254478784,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina": [
+      0.038187992235797025,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia": [
+      0.06577852433269406,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof": [
+      0.06010507980913016,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.05817693932423582,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.05793657508375693,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.056610911951348285,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.05674948994134384,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|prof_negro": [
+      0.059849722533437226,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.058259243828322343,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|experiencia_prof|tipo_escola": [
+      0.05848683465433533,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|mestrado_prof": [
+      0.06280002475172566,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|mestrado_prof|prof_negro": [
+      0.06287464616634784,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.06805813914712021,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|mestrado_prof|tipo_escola": [
+      0.06660193726038256,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|prof_negro": [
+      0.06600127015447016,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|prof_negro|tipo_escola": [
+      0.07012452286117771,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|etnia|tipo_escola": [
+      0.0684377088455019,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof": [
+      0.02710650772231527,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|mestrado_prof": [
+      0.027294692936688583,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.047785334138134974,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.0560442490930062,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.05362062412170993,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|prof_negro": [
+      0.04813243980832223,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.054562089203685486,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|experiencia_prof|tipo_escola": [
+      0.052419290000485896,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|mestrado_prof": [
+      0.04524761879722167,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|mestrado_prof|prof_negro": [
+      0.05053734501406438,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.07511639537255119,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|mestrado_prof|tipo_escola": [
+      0.07465519088979403,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|prof_negro": [
+      0.04318371067476858,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|prof_negro|tipo_escola": [
+      0.06909943069860881,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|menina|tipo_escola": [
+      0.06949551968572472,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|mestrado_prof": [
+      0.04629731757963085,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|mestrado_prof|prof_negro": [
+      0.051008149155445465,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|mestrado_prof|prof_negro|tipo_escola": [
+      0.07349475196904817,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|mestrado_prof|tipo_escola": [
+      0.07368577964981013,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|prof_negro": [
+      0.04384039669969198,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|prof_negro|tipo_escola": [
+      0.06815061968028671,
+      false
+    ],
+    "turma_pequena|anos_pequena_antes|serie": [
+      0.024171897923375284,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito": [
+      0.030427943240413792,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia": [
+      0.03781065765175836,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof": [
+      0.044451259005038615,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      0.044074027305763486,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.04363292084753925,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.04799596738879748,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04589575147241209,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      0.04391000628305639,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.047782815438276297,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      0.04637555555510507,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof": [
+      0.03949968095780381,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      0.03963107170407667,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.043593733000445854,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      0.040636960719827385,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|prof_negro": [
+      0.03819141927149136,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      0.04154258339378591,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|etnia|tipo_escola": [
+      0.039060110474316005,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof": [
+      0.04420481498102147,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      0.044273466601451046,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      0.03314650923005574,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.04645800581908578,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04936519528619764,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|prof_negro": [
+      0.03340225984443142,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      0.04633937092865121,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|experiencia_prof|tipo_escola": [
+      0.04925311672114645,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina": [
+      0.03459137293598107,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia": [
+      0.0461594616584405,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof": [
+      0.05445168697515415,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.0538675314110712,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0530704574856143,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.058352195081474975,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.05608102444532846,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      0.053390929756510344,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.05829669922016292,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      0.05639722039139317,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof": [
+      0.048068638398654634,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      0.047746768297626384,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.05206714869745472,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      0.04957952992059267,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|prof_negro": [
+      0.04550757730609966,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      0.049480657874464165,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|etnia|tipo_escola": [
+      0.04728251637095175,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof": [
+      0.05122775710858125,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      0.051257436818210024,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.03853509645319239,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.05502616934561228,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.058707498281552556,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      0.03884459937303242,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.054406066463507534,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      0.05865000471560889,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof": [
+      0.03850984601942347,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      0.02742653189898247,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.046080081370899424,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      0.04862489500631176,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|prof_negro": [
+      0.025228137226592028,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      0.04269768938279296,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|menina|tipo_escola": [
+      0.04552002510601626,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|mestrado_prof": [
+      0.03367592041414178,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|prof_negro": [
+      0.02458884153343088,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      0.040136526642343705,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|mestrado_prof|tipo_escola": [
+      0.0423383370632391,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|prof_negro": [
+      0.023148279106074983,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|prof_negro|tipo_escola": [
+      0.0374873292945836,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|almoco_gratuito|tipo_escola": [
+      0.039504485498479465,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia": [
+      0.042843857918815856,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof": [
+      0.050584351097330386,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof": [
+      0.049416081307429485,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.04980609139760889,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.03988879777829963,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.03850899705693413,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|prof_negro": [
+      0.05104431721544399,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.04126276586511227,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|experiencia_prof|tipo_escola": [
+      0.04034124069643872,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|mestrado_prof": [
+      0.0442242906682,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|mestrado_prof|prof_negro": [
+      0.04487138911207779,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.036309845248831824,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|mestrado_prof|tipo_escola": [
+      0.034113264795384846,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|prof_negro": [
+      0.04344366217683045,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|prof_negro|tipo_escola": [
+      0.035026692018556536,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|etnia|tipo_escola": [
+      0.03347826604390035,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof": [
+      0.04259367324694841,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|mestrado_prof": [
+      0.042510669389935064,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|mestrado_prof|prof_negro": [
+      0.029938818002256763,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.03428594844581984,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04024340269783415,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|prof_negro": [
+      0.030183021341900602,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|prof_negro|tipo_escola": [
+      0.03491412335303773,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|experiencia_prof|tipo_escola": [
+      0.04101514813933825,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina": [
+      0.02643758826248704,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia": [
+      0.05152294662175828,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof": [
+      0.06106334767245029,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.05928373349697838,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.05991032823487297,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.04784805239110408,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04688634905318366,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|prof_negro": [
+      0.061444277714482076,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.049497792892490164,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|experiencia_prof|tipo_escola": [
+      0.0491299366894748,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|mestrado_prof": [
+      0.05324449110533364,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|mestrado_prof|prof_negro": [
+      0.053589267801130484,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.04324773376556256,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|mestrado_prof|tipo_escola": [
+      0.04137521546183771,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|prof_negro": [
+      0.05166977047231626,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|prof_negro|tipo_escola": [
+      0.041610163326157676,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|etnia|tipo_escola": [
+      0.04053928344489255,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof": [
+      0.04766882840628866,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof": [
+      0.0476284337258792,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.03298371433298748,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.03922931820291469,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.04618953997785215,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|prof_negro": [
+      0.0331928028226804,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.04011479721460936,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|experiencia_prof|tipo_escola": [
+      0.047224486978805394,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|mestrado_prof": [
+      0.029756374029637413,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|mestrado_prof|prof_negro": [
+      0.01999615329040739,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.032059519249247825,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|mestrado_prof|tipo_escola": [
+      0.037687749858781754,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|prof_negro": [
+      0.018227272957479067,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|prof_negro|tipo_escola": [
+      0.028986134710919927,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|menina|tipo_escola": [
+      0.03483906504643428,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|mestrado_prof": [
+      0.027385998619360783,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|mestrado_prof|prof_negro": [
+      0.018270650481575917,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|mestrado_prof|prof_negro|tipo_escola": [
+      0.028853938653815532,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|mestrado_prof|tipo_escola": [
+      0.03360667840033992,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|prof_negro": [
+      0.01682804671290341,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|prof_negro|tipo_escola": [
+      0.02634229426464985,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|serie|tipo_escola": [
+      0.0307022251913295,
+      true
+    ],
+    "turma_pequena|anos_pequena_antes|tipo_escola": [
+      0.06790379257435071,
+      false
+    ],
+    "turma_pequena|etnia": [
+      0.0003417854672615787,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof": [
+      0.0016914805786066068,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|mestrado_prof": [
+      0.001621112289130474,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0016442225958395317,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.0041903869075928255,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.003800915407343231,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|prof_negro": [
+      0.0017029104700214844,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.004335912672542272,
+      false
+    ],
+    "turma_pequena|etnia|experiencia_prof|tipo_escola": [
+      0.0039641985071804465,
+      false
+    ],
+    "turma_pequena|etnia|mestrado_prof": [
+      0.00032796057070797347,
+      false
+    ],
+    "turma_pequena|etnia|mestrado_prof|prof_negro": [
+      0.0003527476389698101,
+      false
+    ],
+    "turma_pequena|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.0012003607272123528,
+      false
+    ],
+    "turma_pequena|etnia|mestrado_prof|tipo_escola": [
+      0.0009560630213658913,
+      false
+    ],
+    "turma_pequena|etnia|prof_negro": [
+      0.00036828386271015755,
+      false
+    ],
+    "turma_pequena|etnia|prof_negro|tipo_escola": [
+      0.0012496633581452064,
+      false
+    ],
+    "turma_pequena|etnia|tipo_escola": [
+      0.0009865290494520736,
+      false
+    ],
+    "turma_pequena|experiencia_prof": [
+      0.009940559366574555,
+      false
+    ],
+    "turma_pequena|experiencia_prof|mestrado_prof": [
+      0.010136836222597242,
+      false
+    ],
+    "turma_pequena|experiencia_prof|mestrado_prof|prof_negro": [
+      0.004768661889679904,
+      false
+    ],
+    "turma_pequena|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.011511102587465386,
+      false
+    ],
+    "turma_pequena|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.012870752330408582,
+      false
+    ],
+    "turma_pequena|experiencia_prof|prof_negro": [
+      0.004754956129827797,
+      false
+    ],
+    "turma_pequena|experiencia_prof|prof_negro|tipo_escola": [
+      0.011100745116648299,
+      false
+    ],
+    "turma_pequena|experiencia_prof|tipo_escola": [
+      0.012507975458569652,
+      false
+    ],
+    "turma_pequena|menina": [
+      0.01035070539199118,
+      false
+    ],
+    "turma_pequena|menina|etnia": [
+      0.00038161328921281303,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof": [
+      0.0016803525413624655,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.0016175404467775349,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.0016388613330516977,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.004068528219320892,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.003653597575773137,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|prof_negro": [
+      0.0017043894812602354,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.004263303087310789,
+      false
+    ],
+    "turma_pequena|menina|etnia|experiencia_prof|tipo_escola": [
+      0.0038304255888482602,
+      false
+    ],
+    "turma_pequena|menina|etnia|mestrado_prof": [
+      0.0003608803783594665,
+      false
+    ],
+    "turma_pequena|menina|etnia|mestrado_prof|prof_negro": [
+      0.0003859615082049301,
+      false
+    ],
+    "turma_pequena|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.0012618460851275398,
+      false
+    ],
+    "turma_pequena|menina|etnia|mestrado_prof|tipo_escola": [
+      0.0010067425108906715,
+      false
+    ],
+    "turma_pequena|menina|etnia|prof_negro": [
+      0.0004055028737963442,
+      false
+    ],
+    "turma_pequena|menina|etnia|prof_negro|tipo_escola": [
+      0.0013017548520379125,
+      false
+    ],
+    "turma_pequena|menina|etnia|tipo_escola": [
+      0.0010452392473354328,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof": [
+      0.009300556641169966,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|mestrado_prof": [
+      0.009453375618379934,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.004457101036622277,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.011012941737946957,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.012268121987074833,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|prof_negro": [
+      0.0044410491793660705,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.010638961915822092,
+      false
+    ],
+    "turma_pequena|menina|experiencia_prof|tipo_escola": [
+      0.011765500304616091,
+      false
+    ],
+    "turma_pequena|menina|mestrado_prof": [
+      0.012667347900443299,
+      false
+    ],
+    "turma_pequena|menina|mestrado_prof|prof_negro": [
+      0.0010949314995526253,
+      false
+    ],
+    "turma_pequena|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.0037983183042184492,
+      false
+    ],
+    "turma_pequena|menina|mestrado_prof|tipo_escola": [
+      0.004942558834312869,
+      false
+    ],
+    "turma_pequena|menina|prof_negro": [
+      0.0008414729204266089,
+      false
+    ],
+    "turma_pequena|menina|prof_negro|tipo_escola": [
+      0.0033794253379770952,
+      false
+    ],
+    "turma_pequena|menina|tipo_escola": [
+      0.004442902838821608,
+      false
+    ],
+    "turma_pequena|mestrado_prof": [
+      0.01240386553305058,
+      false
+    ],
+    "turma_pequena|mestrado_prof|prof_negro": [
+      0.0010924620526449296,
+      false
+    ],
+    "turma_pequena|mestrado_prof|prof_negro|tipo_escola": [
+      0.0037373840545641035,
+      false
+    ],
+    "turma_pequena|mestrado_prof|tipo_escola": [
+      0.004824414809832517,
+      false
+    ],
+    "turma_pequena|prof_negro": [
+      0.0008406606150466603,
+      false
+    ],
+    "turma_pequena|prof_negro|tipo_escola": [
+      0.0033283977884518722,
+      false
+    ],
+    "turma_pequena|serie": [
+      0.18071382452349272,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito": [
+      0.35910818356395,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia": [
+      0.5178400037025706,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof": [
+      0.668152444157201,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof": [
+      0.6712662598160797,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.6890997827367589,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.6651471662585388,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.5962484335806381,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro": [
+      0.6842909291970811,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.6582740810401154,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|experiencia_prof|tipo_escola": [
+      0.5902720742693635,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|mestrado_prof": [
+      0.5495276827000557,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro": [
+      0.5718394783681275,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.5568957687951905,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|mestrado_prof|tipo_escola": [
+      0.4826102987837703,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|prof_negro": [
+      0.5360653377911728,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|prof_negro|tipo_escola": [
+      0.5210568482711506,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|etnia|tipo_escola": [
+      0.4543712448317727,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof": [
+      0.5683124411357707,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|mestrado_prof": [
+      0.5764664572926451,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro": [
+      0.3588939723354916,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.4986893223097032,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.5010314542666015,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|prof_negro": [
+      0.3552825763150144,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|prof_negro|tipo_escola": [
+      0.486043280527079,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|experiencia_prof|tipo_escola": [
+      0.4879723367501593,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina": [
+      0.3357815335845898,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia": [
+      0.505367136597317,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof": [
+      0.6446758012235491,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.6500903232878171,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.6627388281193388,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.6445645790023237,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.5792978778756444,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro": [
+      0.6561881703664498,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.6353017178766865,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|experiencia_prof|tipo_escola": [
+      0.5700343752250873,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|mestrado_prof": [
+      0.5352735596920938,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro": [
+      0.5524118848297496,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.5381405692188854,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|mestrado_prof|tipo_escola": [
+      0.46960317270632035,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|prof_negro": [
+      0.5207135110295296,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|prof_negro|tipo_escola": [
+      0.5059235676660911,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|etnia|tipo_escola": [
+      0.4422806098797412,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof": [
+      0.5376772570198223,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof": [
+      0.5472492458849256,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.33257800007357174,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.4721786210178503,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.48049920845762145,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|prof_negro": [
+      0.3283455382014293,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.4599272636282565,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|experiencia_prof|tipo_escola": [
+      0.46667370548273246,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|mestrado_prof": [
+      0.3815140035387352,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|mestrado_prof|prof_negro": [
+      0.20819128426336703,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.3619226574002257,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|mestrado_prof|tipo_escola": [
+      0.36499216573173066,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|prof_negro": [
+      0.18119076784024912,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|prof_negro|tipo_escola": [
+      0.3260410657113232,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|menina|tipo_escola": [
+      0.33048016344247877,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|mestrado_prof": [
+      0.39994641964714245,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|mestrado_prof|prof_negro": [
+      0.22612760524472347,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|mestrado_prof|prof_negro|tipo_escola": [
+      0.3847445175651933,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|mestrado_prof|tipo_escola": [
+      0.38611236931804666,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|prof_negro": [
+      0.19674827936585007,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|prof_negro|tipo_escola": [
+      0.3489838161841087,
+      true
+    ],
+    "turma_pequena|serie|almoco_gratuito|tipo_escola": [
+      0.35299147329555103,
+      true
+    ],
+    "turma_pequena|serie|etnia": [
+      0.46003465723953907,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof": [
+      0.6232718159382018,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|mestrado_prof": [
+      0.6331688024143036,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.652460583612053,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.47903876960866104,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.43077846258649927,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|prof_negro": [
+      0.6414306724622016,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.46355917167426547,
+      true
+    ],
+    "turma_pequena|serie|etnia|experiencia_prof|tipo_escola": [
+      0.4174023257016429,
+      true
+    ],
+    "turma_pequena|serie|etnia|mestrado_prof": [
+      0.495519917464037,
+      true
+    ],
+    "turma_pequena|serie|etnia|mestrado_prof|prof_negro": [
+      0.5176340798703034,
+      true
+    ],
+    "turma_pequena|serie|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.38112032283746256,
+      true
+    ],
+    "turma_pequena|serie|etnia|mestrado_prof|tipo_escola": [
+      0.33169662806106076,
+      true
+    ],
+    "turma_pequena|serie|etnia|prof_negro": [
+      0.4795285404694842,
+      true
+    ],
+    "turma_pequena|serie|etnia|prof_negro|tipo_escola": [
+      0.3467819535171554,
+      true
+    ],
+    "turma_pequena|serie|etnia|tipo_escola": [
+      0.30243027286033697,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof": [
+      0.4072028745285113,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|mestrado_prof": [
+      0.4233332268040354,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|mestrado_prof|prof_negro": [
+      0.1577335206073991,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.2215737409357948,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.2596626250790165,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|prof_negro": [
+      0.15266177098782802,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|prof_negro|tipo_escola": [
+      0.20285155184039666,
+      true
+    ],
+    "turma_pequena|serie|experiencia_prof|tipo_escola": [
+      0.2389074430549144,
+      true
+    ],
+    "turma_pequena|serie|menina": [
+      0.16394272937668458,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia": [
+      0.4425787983171041,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof": [
+      0.6012956506821695,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|mestrado_prof": [
+      0.6127413583441711,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro": [
+      0.6285777491709709,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.4617838753146732,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.41736619644248235,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|prof_negro": [
+      0.6144605549167639,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|prof_negro|tipo_escola": [
+      0.44371820161625664,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|experiencia_prof|tipo_escola": [
+      0.4023256625336322,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|mestrado_prof": [
+      0.4833853227234571,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|mestrado_prof|prof_negro": [
+      0.5042457166255084,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|mestrado_prof|prof_negro|tipo_escola": [
+      0.36698233162874894,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|mestrado_prof|tipo_escola": [
+      0.3226146524980364,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|prof_negro": [
+      0.4576569745699733,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|prof_negro|tipo_escola": [
+      0.3296869747273178,
+      true
+    ],
+    "turma_pequena|serie|menina|etnia|tipo_escola": [
+      0.28982759510202466,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof": [
+      0.37661108307895874,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|mestrado_prof": [
+      0.39594680383197833,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|mestrado_prof|prof_negro": [
+      0.14113560269598588,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|mestrado_prof|prof_negro|tipo_escola": [
+      0.2033199276974239,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|mestrado_prof|tipo_escola": [
+      0.2444632109771205,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|prof_negro": [
+      0.1356526491204062,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|prof_negro|tipo_escola": [
+      0.18456865974595912,
+      true
+    ],
+    "turma_pequena|serie|menina|experiencia_prof|tipo_escola": [
+      0.22267321542528123,
+      true
+    ],
+    "turma_pequena|serie|menina|mestrado_prof": [
+      0.22818805162643283,
+      true
+    ],
+    "turma_pequena|serie|menina|mestrado_prof|prof_negro": [
+      0.06036644867599942,
+      true
+    ],
+    "turma_pequena|serie|menina|mestrado_prof|prof_negro|tipo_escola": [
+      0.13615534681004587,
+      true
+    ],
+    "turma_pequena|serie|menina|mestrado_prof|tipo_escola": [
+      0.16715686869485416,
+      true
+    ],
+    "turma_pequena|serie|menina|prof_negro": [
+      0.04291227363097103,
+      true
+    ],
+    "turma_pequena|serie|menina|prof_negro|tipo_escola": [
+      0.10710565266185797,
+      true
+    ],
+    "turma_pequena|serie|menina|tipo_escola": [
+      0.13268683175882967,
+      true
+    ],
+    "turma_pequena|serie|mestrado_prof": [
+      0.24560437634519025,
+      true
+    ],
+    "turma_pequena|serie|mestrado_prof|prof_negro": [
+      0.06936224032350152,
+      true
+    ],
+    "turma_pequena|serie|mestrado_prof|prof_negro|tipo_escola": [
+      0.15013133685937965,
+      true
+    ],
+    "turma_pequena|serie|mestrado_prof|tipo_escola": [
+      0.182317543159469,
+      true
+    ],
+    "turma_pequena|serie|prof_negro": [
+      0.050187546130239596,
+      true
+    ],
+    "turma_pequena|serie|prof_negro|tipo_escola": [
+      0.12034377738044898,
+      true
+    ],
+    "turma_pequena|serie|tipo_escola": [
+      0.1454832124287731,
+      true
+    ],
+    "turma_pequena|tipo_escola": [
+      0.0043691879934192185,
+      false
+    ]
+  },
+  "p_turma_pequena_sozinha": [
+    0.010079535665508394,
+    false
+  ],
+  "saturados_testados": 256
+}

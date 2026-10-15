@@ -1,0 +1,4 @@
+experimento {'dR': 0.1106, 'ic95': [0.0257, 0.1955], 'drenda': 1794.3424}
+crua_cps {'dR': -0.1074, 'ic95': [-0.1695, -0.0454], 'drenda': -8497.5161}
+escore_propensao {'dR': 0.088, 'drenda': 1680.1756, 'ess': 87.9114, 'frac_cps_abaixo_min_tratado': 0.7319, 'ic95_dR': [-0.0271, 0.2147], 'ic95_drenda': [178.1486, 3203.1254]}
+n {'tratados': 185.0, 'controles_nsw': 260.0, 'cps': 15992.0}
