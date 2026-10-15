@@ -17,7 +17,7 @@ python3 portoes.py --reproducao     # os 5 portões, com uma segunda execução 
 | 3 · convergência, SBC e conforme | **passa**: R-hat ≤ 1,007; ESS ≥ 547; cobertura 96% / 100% / 92% |
 | 4 · corte temporal e habilidade | **falha por C**: habilidade −0,015 no cofre |
 | 5 · governança e decisão | **falha por C**: o M15 reprovou, então o F8 não emitiu decisão |
-| humano | os três pareceres de risco seguem sem a assinatura de sil |
+| humano | os três pareceres de risco foram assinados por sil em 2026-10-15T03:53:28Z (`../governanca/ASSINATURAS.md`, itens 19 a 21) |
 
 A e B foram aprovados pelo M15. C foi reprovado. Os testes não foram ajustados para passar: a reprovação de C é
 o resultado do projeto.

@@ -23,7 +23,7 @@ Este livro ensina a Estocologia de ponta a ponta: o que ela é, com que conceito
 
 **Como cada capítulo funciona.** Cada capítulo abre com os objetivos de aprendizagem, desenvolve as ideias com um caso trabalhado e fecha com um resumo e exercícios. Os exercícios têm três tipos: de conceito (responder com palavras), de conta (responder com um número) e de laboratório (responder com código que outra pessoa possa rodar e obter o mesmo resultado).
 
-**Uma regra que vale para o livro inteiro.** A Estocologia exige que toda alegação declare onde pode falhar. Este livro também declara as suas falhas, e depois as testa: a seção 9.7 recolhe dez pontos de fundo que a auditoria do próprio programa levantou — da tese central, que nunca havia sido posta à prova, ao laço performativo que o H3 declarou sem medir — e diz o que cada um respondeu, com os números. As prioris que não foram conferidas com especialistas, os dados antigos e públicos e os portões que só passaram depois de várias rodadas continuam no texto, não escondidos em nota de rodapé.
+**Uma regra que vale para o livro inteiro.** A Estocologia exige que toda alegação declare onde pode falhar. Este livro também declara as suas falhas, e depois as testa: a seção 9.7 recolhe os dez pontos de fundo que a auditoria do próprio programa levantou — da tese central, que nunca havia sido posta à prova, ao laço performativo que o H3 declarou sem medir — e as frentes que vieram depois (evento raro, saúde, ficha e contrato e a elicitação humana, que espera gente), dizendo o que cada uma respondeu, com os números. As prioris que não foram conferidas com especialistas, os dados antigos e públicos e os portões que só passaram depois de várias rodadas continuam no texto, não escondidos em nota de rodapé.
 
 # Parte I. Fundamentos
 
@@ -75,7 +75,7 @@ O primeiro gesto da Estocologia é separar três coisas que o senso comum mistur
 
 As três camadas formam um laço. O Mundo gera dados, o Modelo os interpreta, o Agente age, e a ação volta a mudar o Mundo.
 
-&#91;embedded content: as três camadas e o laço da ação\]
+*[Figura 1 — as três camadas e o laço da ação. O diagrama não está incluído nesta versão em texto.]*
 
 Cada seta é uma ponte em que o erro pode entrar: dados filtrados entre Mundo e Modelo, previsão mal lida entre Modelo e Agente, e ação que deforma o Mundo que se queria medir.
 
@@ -593,7 +593,7 @@ O conhecimento fica guardado como um grafo tipado:
 | --- | --- | --- |
 | V, nós | Conceitos, hipóteses, variáveis, conjuntos de dados | L1\_demanda\_real: contagens de chamadas a cada 5 minutos |
 | E\_tree, árvore | O que depende do quê: pré-requisitos entre módulos do curso (M0 a M15, especiais e bancas) | Na ficha do H0 real, L2\_modelo\_nulo → L2\_media\_por\_chamada, com o rótulo "Teste severo (M5)" |
-| E\_graph, transversais | Pontes matemáticas, arestas causais do(x) e arestas de patologia | Jensen liga M0 a M6 e M8 |
+| E\_graph, transversais | Pontes matemáticas, arestas causais do(x) e arestas de patologia | Jensen liga M0 a M8 |
 | H, hiperarestas | As cinco lentes, que envolvem grupos inteiros de nós | Na ficha do H0 real, Crononomia sobre L1\_demanda\_real e L2\_erlang\_c: "a demanda tem calendário" |
 | Φ, invariantes | Os quatro invariantes que toda alegação cumpre para entrar no grafo | Φ2: margem na unidade independente |
 
@@ -714,7 +714,7 @@ A deriva de dado tem ela mesma duas formas, e a correção muda conforme a forma
 
 A correção da deriva de rótulo tem forma fechada. Saerens, Latinne e Decaestecker (2002) mostraram que, se as densidades P(X | Y) de cada classe não mudam, a probabilidade corrigida é a antiga multiplicada pela razão entre a taxa-base nova e a antiga, depois renormalizada. Com dois desfechos, segue da fórmula que a correção soma uma constante ao logito: é uma correção de intercepto. A literatura clínica usa a mesma correção quando a incidência do desfecho difere entre a população em que o modelo foi feito e aquela em que é aplicado, caso em que todos os riscos saem sistematicamente altos ou baixos (Janssen e colegas, 2009). A hierarquia de Van Calster e colegas (2016) separa os dois níveis que o H3 encontrou: a calibração na média, medida pelo intercepto de calibração, e a calibração fraca, que exige intercepto 0 e inclinação 1.
 
-No H3, os voos de 2023 passaram com a correção do intercepto, e as prisões de Toronto, com erro de inclinação, não (Capítulo 13). Mas o trimestre de 2023 não repetiu o desvio de 2013, e o modelo cru, sem correção, também teria passado (h3/README.md): a passagem dos voos não é evidência a favor da correção nem de uma deriva de rótulo. A leitura do desvio de 2013 como deriva de rótulo fica em aberto, porque o intercepto conserta qualquer deslocamento da média, venha ele de onde vier. Um teste ajudaria: Lipton, Wang e Smola (2018) estimam P(Y) no período novo pela matriz de confusão do modelo, sem rótulos novos e supondo P(X | Y) fixo, e testam se ela mudou. A auditoria rodou os dois. Pelo critério fixado antes — um alarme novo no cofre antes do primeiro alarme do sensor original, em 16 de outubro de 2013 — a resposta é não: o teste da média ligou no cofre em 6 de novembro de 2013 e o BBSE em 21 de novembro. Pior que chegar tarde, o teste da média fica ligado em 95% das verificações daquele ano: com a janela de três dias do disjuntor, ele mede a variação de um dia ruim, não a deriva do trimestre. E a hipótese do BBSE, um classificador fixo, não vale onde o modelo é reajustado todo dia: ele fica ligado em 99% a 100% das verificações do cofre nos voos, em 71% a 82% no Rhode Island e em Toronto de 2020 e 2021 e em cerca de 20% nos outros fluxos.
+No H3, os voos de 2023 passaram com a correção do intercepto, e as prisões de Toronto, com erro de inclinação, não (Capítulo 13). Mas o trimestre de 2023 não repetiu o desvio de 2013, e o modelo cru, sem correção, também teria passado (h3/README.md): a passagem dos voos não é evidência a favor da correção nem de uma deriva de rótulo. A leitura do desvio de 2013 como deriva de rótulo fica em aberto, porque o intercepto conserta qualquer deslocamento da média, venha ele de onde vier. Um teste ajudaria: Lipton, Wang e Smola (2018) estimam P(Y) no período novo pela matriz de confusão do modelo, sem rótulos novos e supondo P(X | Y) fixo, e testam se ela mudou. A auditoria rodou os dois. Pelo critério fixado antes — um alarme novo no cofre antes do primeiro alarme do sensor original, em 16 de outubro de 2013 — a resposta é não: o teste da média ligou no cofre em 6 de novembro de 2013 e o BBSE em 21 de novembro. Pior que chegar tarde, o teste da média fica ligado em 95% das verificações daquele ano: com a janela de três dias do disjuntor, ele mede a variação de um dia ruim, não a deriva do trimestre. E a hipótese do BBSE, um classificador fixo, não vale onde o modelo é reajustado todo dia: ele fica ligado em 99% a 100% das verificações do cofre nos voos, em 71% a 82% no Rhode Island e em Toronto de 2021 e em cerca de 20% nos outros fluxos.
 
 **F7, pedir bem.** Quando um parâmetro não vem dos dados, vem de alguém. O protocolo de Sheffield (SHELF) não pede ao especialista uma média: pede a mediana, os quartis e os extremos plausíveis, ajusta uma distribuição a esses quantis e a devolve para que ele a confirme, controlando a âncora do entrevistador, a ordem dos cenários e o excesso de confiança. Na pesquisa, nenhuma elicitação foi feita com especialista humano. O que a auditoria mediu, e é o que se pode medir sem painel, foi a sensibilidade à escolha da priori: em 33 domínios, a priori do pacote foi trocada pela de literatura e por uma deliberadamente fraca; cinco domínios mudam de status ou de ação com a de literatura e dois com a fraca, e entre eles está a aprovação do projeto de cauda que o H1 havia reprovado. Duas das cinco vêm de fonte construída sobre a própria base do domínio, o caso de dupla contagem que a declaração previa marcar. A conclusão não é que as prioris simuladas estivessem erradas; é que em cinco de 33 domínios a decisão não sobrevive à troca da priori. O painel humano continua em aberto (seções 9.7 e 14.4).
 
@@ -729,20 +729,23 @@ Uma pergunta percorre seis estágios, cada um com suas fichas de saída. A lista
 5. **Banca adversarial (M15).** Reprovado volta ao estágio que falhou; aprovado segue.
 6. **Decisão e fechamento (F8).** Memorando em frequências naturais, HOPs, árvore C/L e cláusula de saída.
 
-&#91;embedded content: ciclo de pesquisa · 6 estágios, 1 laço de volta\]
+*[Figura 2 — o ciclo de pesquisa: seis estágios e um laço de volta. O diagrama não está incluído nesta versão em texto.]*
 
 O único caminho até a decisão passa pela banca; um trabalho reprovado volta ao estágio em que falhou, não ao começo.
 
 ### 7.4 A banca adversarial
 
-A banca não lê relatórios: ataca o artefato ao vivo. Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento temporal, contrato de dados violado sem tratamento e ausência de um responsável humano nomeado. Depois, cinco faixas recebem ataques específicos; as de código, governança e domínio não têm ataque próprio definido.
+A banca não lê relatórios: ataca o artefato ao vivo. Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento temporal, contrato de dados violado sem tratamento e ausência de um responsável humano nomeado. Depois, as oito faixas recebem cada uma o seu ataque, oito no total (MB1 a MB8 na implementação).
 
 | Faixa atacada | O ataque |
 | --- | --- |
+| Código | Uma bateria nova de propriedades, com semente que o autor não escolheu |
 | Dados | Um lote com registros corrompidos, que precisa ser isolado |
 | Modelo em operação | Um lote com deriva forte, ao vivo |
 | Inferência | Um conjunto de dados patológico, para ver se a incerteza denuncia a inadequação |
+| Governança | Adulteração da trilha de auditoria, que o verificador da cadeia tem de detectar |
 | Justiça | Inverter a métrica escolhida e mostrar quem passaria a pagar |
+| Domínio | Um cenário atípico do domínio, com priori alternativa, para ver se a decisão resiste |
 | Decisão | Uma crise que viola a própria cláusula de saída |
 
 Um trabalho completo com uma faixa fraca declarada vale mais que um trabalho uniforme sem lacuna admitida. No H1 real, foi a banca que reprovou o projeto dos incêndios dinamarqueses (Capítulo 11): a alegação perdeu, mas o modelo rival não ganhou o direito de decidir.
@@ -804,7 +807,7 @@ Uma pergunta a mais entrou depois da auditoria de fundo, e ela não é do cabeç
 trazer, obrigatório, o campo `pergunta_do_decisor`, com três partes na ordem — quem decide, qual ação a decisão muda
 (copiada literalmente do campo `decisao.acao` do próprio pacote) e a pergunta que essa decisão usa, terminada em
 interrogação. A forma é validada no código, que recusa texto genérico sem quem decide e ação que não seja a do pacote;
-os 18 domínios do H2g, os 12 do h2 e a ficha do H0, que não tem bloco de decisão e copia a ação do termo de escopo,
+os 18 domínios do H2g, os 12 do h2 e a ficha do H0 simulado, que não tem bloco de decisão e copia a ação do termo de escopo,
 carregam o campo. É o que ataca o erro de tipo III: que a pergunta que o modelo responde seja a que o decisor fez deixa
 de ser suposição e passa a ser uma frase conferível.
 
@@ -849,7 +852,7 @@ Nada entra no grafo sem passar por quatro invariantes, que funcionam como travas
 | --- | --- | --- |
 | Φ1 Simulabilidade | Toda alegação vira código com semente declarada e testes de propriedades | Argumento só em prosa |
 | Φ2 Margem e unidade | Todo número vem com margem calculada na unidade de fato independente | Pseudorreplicação, duplicatas, valores sentinela |
-| Φ3 Diagnóstico e teste severo | Auditar o filtro da amostra, desenhar o grafo causal e confrontar a hipótese com um modelo nulo simulado | Padrão lido antes do nulo, colisor, Simpson |
+| Φ3 Camadas e teste severo | Auditar o filtro da amostra, desenhar o grafo causal e confrontar a hipótese com um modelo nulo simulado | Padrão lido antes do nulo, colisor, Simpson |
 | Φ4 Escopo ecológico | Julgar a decisão no ambiente em que vai operar, com termo de escopo e cláusula objetiva de saída | Recomendação sem prazo de validade |
 
 ### 8.4 O funil de quatro filtros
@@ -875,7 +878,7 @@ Nenhuma entrega é consolidada sem passar em cinco portões numa máquina limpa.
 | 4 | F3 | Corte temporal sem vazamento, insensibilidade ao passo de tempo, fallback, invariância |
 | 5 | F5, F6, F8 | Parecer de governança, trilema da justiça, cláusula de saída C/L |
 
-Na prática, cada horizonte da pesquisa tem um `portoes.py` que repete a execução, compara os hashes dos resultados e aplica os critérios do horizonte. Os cinco portões acima foram implementados como tais no H1; no H0 a esteira aplica Φ1–Φ4, e no H2 e no H3 cada portoes.py aplica os critérios de saída do horizonte (G1–G5 ou G1–G7), com a segunda execução pedida por --reproducao. O H0 simulado, por exemplo, grava um `resultados.json` com o hash SHA-256 das saídas.
+Na prática, cada horizonte da pesquisa tem um `portoes.py` que repete a execução, compara os hashes dos resultados e aplica os critérios do horizonte. Os cinco portões acima foram implementados como tais no H1; no H0 a esteira aplica Φ1–Φ4, e no H2 e no H3 cada portoes.py aplica os critérios de saída do horizonte — G1–G4 na primeira rodada do H2, G1–G5 das rodadas H2b a H2g e G1–G7 no H3 —, com a segunda execução pedida por --reproducao. O H0 simulado, por exemplo, grava um `resultados.json` com o hash SHA-256 das saídas.
 
 ### Resumo
 
@@ -923,13 +926,14 @@ Os 21 pareceres foram assinados por sil em 15 de outubro de 2026, depois de ler 
 
 ### 9.6 O limite: o auditor é parte interessada
 
-Os pareceres foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado. O responsável nomeado responde à pergunta que uma auditoria precisa responder (quem decidiu usar, quem aprovou, quem olha o placar, quem desliga), mas nomear um responsável não torna a auditoria independente. O que o programa pode fazer, e ainda não fez, é registrar o que a auditoria não pôde olhar e quais grupos afetados foram ouvidos, ou declarar que nenhum foi.
+Os pareceres foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado. O responsável nomeado responde à pergunta que uma auditoria precisa responder (quem decidiu usar, quem aprovou, quem olha o placar, quem desliga), mas nomear um responsável não torna a auditoria independente. O que o programa fez na direção que uma auditoria exige foi registrar o que a auditoria não pôde olhar e quais grupos afetados foram ouvidos: o registro está em `governanca/GRUPOS.md`, e ele declara que nenhum dos sete grupos foi ouvido (Capítulo 13). O registro, porém, é declaração sobre o que faltou, não escuta de quem paga.
 
 ### 9.7 A auditoria de fundo: o que foi suposto e o que se mediu
 
 A governança também serve para marcar o que não foi medido, e para depois medir. A pesquisa se vira contra si mesma
-numa auditoria de fundo: dez pontos que o texto sustentava e que nunca haviam sido postos à prova viraram dez frentes de
-trabalho na pasta `fundo/` do repositório. Cada frente segue a mesma regra dos horizontes, e é ela que faz a prática
+numa auditoria de fundo: dez pontos que o texto sustentava e que nunca haviam sido postos à prova viraram frentes de
+trabalho na pasta `fundo/` do repositório, às quais se somaram, depois, as extensões (evento raro, saúde, ficha e
+contrato) e a frente da elicitação humana, que espera gente. Cada frente segue a mesma regra dos horizontes, e é ela que faz a prática
 funcionar — a declaração com hash vem antes de rodar, o resultado é relatado com os limites, e mudança de critério
 depois de ver o resultado entra como declaração nova e conta no número de tentativas. A tabela diz o que cada ponto
 perguntou e o que ele respondeu.
@@ -947,6 +951,7 @@ perguntou e o que ele respondeu.
 | Evento raro | Um previsor de evento raro serve para decidir quando tem boa calibração | Decomposição de Brier em três cofres: indometacina, COVID e Rhode Island | Nenhum caminho vence nos três: só em Rhode Island RES − REL fica acima de zero (+2,74643e-4 na logística, +3,11655e-4 no ranking), e a habilidade de Brier fica em +0,018629 e +0,017952, abaixo do +0,05 declarado; no COVID a AUC é 0,7685 e a habilidade é −0,020853 |
 | Saúde | O círculo que o Lab 0 abriu se fecha com dado real de saúde, em espelho aberto | PhysioNet/CinC Challenge 2019 (sepse precoce) no espelho do PhysioNet: o funil do H2g rodou de ponta a ponta, sem uma linha mudada, com o cofre no segundo sistema hospitalar | O efeito existe e é preciso (β = 0,0388 em log-razão de chances por respiração por minuto, IC90 0,0257 a 0,0523), mas a invariância não: 0 de 512 subconjuntos aceitos, Ŝ = ∅, e o G3 falha; a habilidade no cofre é +0,00568 e a taxa de decisão registrada é 8,4% nas internações de um sistema e 3,9% nas do outro |
 | Ficha e contrato | A pergunta que o modelo responde é a que o decisor fez; o contrato de dados não diz por que o dado falta | Campo obrigatório `pergunta_do_decisor` no pacote de domínio (18 do H2g, 12 do h2 e a ficha do H0) e bloco `ausencia` (MCAR, MAR, MNAR ou não declarado) no contrato do F2 | Os dois campos entram validados no código; nos três contratos do H1 real e nas 18 tabelas do H2g a regra da ausência é vacuosa hoje — nenhuma coluna tem um único valor ausente — e nenhum número publicado muda |
+| Elicitação humana (SHELF) | A priori simulada seria substituída por painel de especialistas | Protocolo do painel e seis formulários escritos; critério de K = 2 fixado | Nada foi elicitado: nenhuma entrevista, nenhuma previsão corrigida e nenhuma linha de decisão assinada — a frente só tem instrumento |
 
 Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o H3 corrigiu é cerca de
 quatro vezes o que se mediu num caso real (Capítulos 5 e 13). A tolerância de 0,03 do erro de calibração é maior que
@@ -973,7 +978,7 @@ resumo.
 - O cofre fora do tempo só se abre uma vez; correções pedem cofre novo.
 - O diário pontua cada previsor com regra própria e pesa os agentes pelo placar.
 - Pareceres assinados nomeiam o responsável, mas não tornam a auditoria independente.
-- A auditoria de fundo testou dez suposições do próprio programa, declaradas antes de rodar; a seção 9.7 diz o que cada uma respondeu.
+- A auditoria de fundo testou as dez suposições do próprio programa, declaradas antes de rodar, e as frentes abertas depois; a seção 9.7 diz o que cada uma respondeu.
 
 ### Exercícios
 
@@ -1124,6 +1129,13 @@ Há um análogo exato no curso: a estratégia que vende seguro (Capítulo 5), em
 - Acertar o número não basta; o procedimento precisa poder ter errado (projeto B).
 - Reprovar o próprio modelo é um resultado, não uma falha do programa (projeto C).
 
+### Resumo
+
+- Uma refutação precisa dizer exatamente o que refuta: no Dow Jones, "rende 3 vezes" cai, e o que sobrevive é o crescimento do tempo (0,060 ao ano em 3×).
+- Acertar o número não basta; o procedimento precisa poder ter errado: no LaLonde, o experimento estima +1 794 e a comparação crua erra por −10 292, quase todo viés de seleção.
+- Em cauda selvagem (α = 1,81), a amostra engana: 36 meses limpos valem 2,2 bits, a regra de Laplace dá 1 chance em 38 e a resseguradora quebra em agosto de 1989.
+- A alegação perde e o modelo não ganha o direito de decidir: no cofre, nenhum previsor venceu a frequência histórica simples.
+
 ### Exercícios
 
 1. *(Conta)* Com crescimento temporal de 0,060 ao ano, em quanto o capital se multiplica em 20 anos? Compare com a riqueza média de 19 vezes e com a mediana de 2,1, e explique as diferenças.
@@ -1246,6 +1258,13 @@ caminho conta ainda onze aberturas de cofre, isto é, onze vezes em que um resul
 de desenho. E se valesse só a primeira versão declarada de cada escolha, o H2 não estaria aprovado: a rodada 1 dá
 uma área só (o lado do H3 dessa conta fica no Capítulo 13).
 
+### Resumo
+
+- O portão do H2 pedia Ŝ ≠ ∅ em três áreas distintas; a primeira rodada deu uma (o Direito, e contra a alegação), e o portão só passou na sexta rodada, com ressalva registrada na Genética.
+- Duas rodadas conferiram o método contra verdade conhecida: o túnel de luz recuperou {red, green, blue} e o ensaio do FDA recuperou as três drogas que bloqueiam o hERG.
+- O efeito transporta melhor que o conjunto: em 9 domínios o modelo previu o ambiente nunca visto, com habilidade de 0,04 a 0,88, mesmo com o ICP rejeitado.
+- A multiplicidade é parte do resultado: o K honesto do portão é 38 testes, e com Bonferroni os conjuntos invariantes encolhem — no STAR e na levedura.
+
 ### Exercícios
 
 1. *(Conceito)* Por que um ambiente que é o ano ou a região costuma violar a premissa do ICP?
@@ -1321,10 +1340,12 @@ Em Toronto 1997–2002 o grupo menos favorecido é o que tem a MENOR taxa de fal
 `Black` perde 0,64 dos casos em 1998 contra 0,70 do `White`, enquanto pela métrica escolhida quem paga é o `Black`
 (0,196 de falso positivo contra 0,105) e pela invertida o `Black` sai e fica o empate ou o `White`. Quem é marcado com
 mais frequência sem sofrer o desfecho é o `Black`; quem é perdido com mais frequência é o `White`. Trocar a métrica
-troca quem paga, e nesse fluxo isso acontece em um a dois limiares do grid, todos acima do limiar declarado: 0,85 em
-1998, 0,50 em 2000 e 0,80 em 2001. Em Toronto 2020–2021 e em Rhode Island os intervalos se sobrepõem em quase toda a
-varredura e a inversão não troca pagador nenhum: os dois fluxos ficam em empate nos quatro semestres e nos três anos do
-cofre, com a taxa de falso negativo do grupo menos favorecido em Rhode Island entre 0,85 e 0,93 no limiar de 0,90.
+troca quem paga, e nesse fluxo isso acontece num limiar do grid por ano, todos acima do limiar declarado: 0,85 em
+1998, 0,50 em 2000 e 0,80 em 2001, e em nenhum em 1999 e 2002. Em Toronto 2020–2021 a troca aparece no segundo semestre
+de 2020, em 5 dos 19 limiares varridos (0,35 a 0,55), todos abaixo do limiar declarado: no limiar de 0,70 do fluxo, os
+quatro semestres ficam em empate sob as duas métricas. Em Rhode Island não há troca em limiar nenhum da varredura: o
+grupo menos favorecido paga sob a métrica escolhida em 2014 e empata em 2013 e 2015, e a taxa de falso negativo dele
+fica entre 0,85 e 0,93 no limiar de 0,90.
 
 O registro dos grupos afetados é curto e não é bom. Em sete decisões que envolvem pessoas — os quatro pareceres que este
 capítulo já citava e os três fluxos de prisões —, **nenhum grupo afetado foi ouvido** (`governanca/GRUPOS.md`). Não há
@@ -1416,7 +1437,8 @@ Dez das lacunas que a primeira edição deste capítulo listava deixaram de ser 
   bate a confiabilidade, e a habilidade de Brier fica em +0,019, longe do +0,05 exigido; no COVID a ordenação é boa
   (AUC 0,77) e a previsão perde para a constante por deslocamento de nível (seção 9.7).
 - **A auditoria de quem paga pelo erro.** A pergunta do Φ4 foi rodada ao avesso nos três fluxos de prisões: em Toronto
-  1997–2002 trocar a métrica troca quem paga, e nos outros dois fluxos o empate não muda (Capítulo 13).
+  1997–2002 trocar a métrica troca quem paga, em Toronto 2020–2021 troca em 5 dos 19 limiares do segundo semestre de
+  2020, e em Rhode Island não troca em limiar nenhum (Capítulo 13).
 - **Um campo no contrato de dados do F2 para o mecanismo da ausência** (MCAR, MAR ou MNAR), com análise de
   sensibilidade quando a ausência pode depender do próprio valor. O bloco entrou no contrato, com a regra validada no
   código; nos dados de hoje ele é vacuoso, e é isso que o mantém barato (Capítulo 8).
@@ -1438,6 +1460,12 @@ Ficam em aberto, agora com nome:
   afetados existe e diz que nenhum foi ouvido, nas sete decisões que envolvem pessoas: quem paga o erro continua sem
   voz no programa.
 
+### Resumo
+
+- A arquitetura não produziu teorema novo: produziu um modo de auditar alegações, e ele custou rodadas de falha declaradas.
+- O que a pesquisa autoriza é mais estreito que o que ela publicou: nenhum número caiu por erro de conta, e a auditoria de fundo estreitou o que esses números autorizam.
+- Ficam em aberto, com nome: a elicitação com especialistas humanos, a resolução da validação por intervenção da Genética e o tempo de atendimento e a paciência da central.
+- Quem paga o erro continua sem voz no programa: nas sete decisões que envolvem pessoas, nenhum grupo afetado foi ouvido.
 
 ### Exercícios finais
 
@@ -1493,16 +1521,17 @@ Todo o código está no repositório 0b3st4f3r4/estocologia, com uma pasta por h
 | --- | --- | --- |
 | h0-lab0/ | Lab 0, posto de saúde simulado (Cap. 10) | `python3 portoes.py` |
 | h0-real/ | Central de chamadas do banco (Cap. 10) | `python3 portoes.py` |
+| h1/ | H1 simulado: os três projetos do caso, com a banca MB1–MB8 (Cap. 11) | `python3 rodar.py` e `python3 portoes.py --reproducao` |
 | h1-real/ | Dow Jones, LaLonde, incêndios dinamarqueses (Cap. 11) | `python3 rodar.py` e `python3 portoes.py --reproducao` |
 | h2/ a h2g/ | As sete rodadas do ICP (Cap. 12) | `python3 rodar.py` e `python3 portoes.py --reproducao` em cada pasta |
 | h3/ | Os seis fluxos e as revisões H3b a H3d (Cap. 13) | `python3 rodar.py` e `python3 portoes.py --reproducao` |
 | governanca/ | Registro das assinaturas dos 21 pareceres (Cap. 9) | Leitura |
-| fundo/ | A auditoria de fundo: os dez pontos supostos (p01 a p09) e as extensões (p10-saude, p11-eventos-raros, p12-shelf) (seção 9.7 e Cap. 14) | Leitura; `rodar.sh` em p02 e p05, script próprio nas demais |
+| fundo/ | A auditoria de fundo: os dez pontos supostos (p01 a p09; o ponto 4 vive dentro de p03) e as frentes seguintes (p10-saude, p11-eventos-raros, p12-shelf) (seção 9.7 e Cap. 14) | Leitura; `rodar.sh` em p02 e p05, script próprio nas demais — a p12-shelf só tem protocolo e formulários |
 | fundo/AMBIENTE.md | O que roda e o que não roda nesta máquina, com as versões conferidas uma a uma | Leitura |
 
 Cada `portoes.py` roda o horizonte duas vezes e compara os hashes. Se o seu hash sair diferente do publicado, a reprodução falhou, e esse é o primeiro dado a investigar.
 
-O `fundo/AMBIENTE.md` é a foto do ambiente das frentes, e ela tem duas ausências declaradas. Nesta máquina, Python 3.13.7, estão instaladas as nove dependências que o `fundo/requirements.txt` lista — numpy 2.4.6, pandas 3.0.5, scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7. Falta `statsmodels`, que só o gabarito do p01 usa, e falta `pyreadr`, que só um passo do p08 usa (a conversão dos `.rda` de voos novos); sem eles, essas duas partes não reproduzem aqui, e o arquivo diz como instalá-los.
+O `fundo/AMBIENTE.md` é a foto do ambiente das frentes, e ela tem duas ausências declaradas. Nesta máquina, Python 3.13.7, estão instaladas as nove dependências que o `fundo/requirements.txt` lista — numpy 2.5.1 (o de registro; o `python3` padrão importa o 2.4.6 de `~/.local`, e é o 2.5.1 que reproduz o G4 do H3), pandas 3.0.5, scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7. Falta `statsmodels`, que só o gabarito do p01 usa, e falta `pyreadr`, que só um passo do p08 usa (a conversão dos `.rda` de voos novos); sem eles, essas duas partes não reproduzem aqui, e o arquivo diz como instalá-los.
 
 ## Apêndice C. Respostas selecionadas
 
