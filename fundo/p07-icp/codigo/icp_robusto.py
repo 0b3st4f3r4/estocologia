@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import multiprocessing as mp
 import os
 import sys
 import time
@@ -114,21 +115,24 @@ class Permutador:
         Tk = np.sum(np.where(n_g > 0, S_g ** 2 / np.maximum(n_g, 1), 0.0), axis=1)   # monótono no H de KW
         ordem = np.argsort(u, kind="stable")
         us = u[ordem]
-        E = L[:, self.blk]                                   # (B + 1) × linhas: ambiente de cada linha
+        K = L.shape[0]
+        E = L.astype(np.int8)[:, self.blk]                  # (B + 1) × linhas: ambiente de cada linha
         Es = E[:, ordem]
-        med = np.zeros((L.shape[0], m))
-        idx = np.arange(L.shape[0])
+        med = np.zeros((K, m))
         for g in range(m):
-            c = np.cumsum(Es == g, axis=1)
-            ng = c[:, -1]
-            k1, k2 = (ng - 1) // 2 + 1, ng // 2 + 1
-            p1 = np.argmax(c >= k1[:, None], axis=1)
-            p2 = np.argmax(c >= k2[:, None], axis=1)
-            med[:, g] = np.where(ng > 0, (us[p1] + us[p2]) / 2, 0.0)
-        d = np.abs(u[None, :] - np.take_along_axis(med, E, axis=1))
+            lin, col = np.nonzero(Es == g)                   # por linha, posições em ordem crescente de u
+            ng = np.bincount(lin, minlength=K)
+            ini = np.concatenate([[0], np.cumsum(ng)[:-1]])
+            ok = ng > 0
+            k1, k2 = (ng - 1) // 2, ng // 2
+            v1 = np.where(ok, us[col[np.minimum(ini + k1, col.size - 1)]] if col.size else 0.0, 0.0)
+            v2 = np.where(ok, us[col[np.minimum(ini + k2, col.size - 1)]] if col.size else 0.0, 0.0)
+            med[:, g] = (v1 + v2) / 2
+        d = np.abs(u[None, :] - np.take_along_axis(med, E.astype(np.intp), axis=1))
         N = u.size
         ne = n_g
-        sd = np.stack([np.sum(np.where(E == g, d, 0.0), axis=1) for g in range(m)], axis=1)
+        chave = (np.arange(K)[:, None] * m + E).ravel()
+        sd = np.bincount(chave, weights=d.ravel(), minlength=K * m).reshape(K, m)
         sd2 = np.sum(d * d, axis=1)
         mm = np.sum(ne > 0, axis=1)
         mg = np.where(ne > 0, sd / np.maximum(ne, 1), 0.0)
@@ -140,6 +144,24 @@ class Permutador:
         p_loc = (1 + np.sum(Tk[1:] >= Tk[0] * (1 - eps))) / Tk.size
         p_esc = (1 + np.sum(Tb[1:] >= Tb[0] * (1 - eps))) / Tb.size
         return min(1.0, 2 * min(p_loc, p_esc)), float(p_loc), float(p_esc)
+
+
+_CTX: dict = {}
+
+
+def _um_S(S):
+    c = _CTX
+    n = c["y"].size
+    Xe = np.hstack([np.ones((n, 1))] + [c["exp"][v][0] for v in S])
+    sat = acerto_1nn([c["blocos"][v] for v in S], c["amb"]) >= LIMIAR_SATURACAO
+    u = residuo_u(Xe, c["y"])
+    p0 = p_invariancia_np(Xe, c["y"], c["amb"])
+    pc, pcl, pce = p_cr(u, c["ae"], c["cl"], c["m"], c["G"])
+    t = {"S": list(S), "saturado": bool(sat), "p_original": p0, "p_cr": pc, "p_cr_loc": pcl, "p_cr_esc": pce}
+    if not sat:
+        pp, ppl, ppe = c["perm"].p(u)
+        t.update({"p_perm": pp, "p_perm_loc": ppl, "p_perm_esc": ppe})
+    return t
 
 
 def resumo_icp(testes, chave_p, alpha):
@@ -166,21 +188,12 @@ def icp_robusto(nome, grupo_col, alpha=0.05):
     orig = icp(blocos, y, amb, "gaussiana", alpha=alpha, teste="residuos_np", regra_saturacao=True)
     perm = Permutador(ae, cl, m, B_PERM, SEMENTE_PERM)
     nomes = sorted(blocos)
+    _CTX.update(blocos=blocos, y=y, amb=amb, ae=ae, cl=cl, m=m, G=G, perm=perm,
+                exp={v: expandir(blocos[v]) for v in nomes})
+    todos = [S for k in range(len(nomes) + 1) for S in combinations(nomes, k)]
+    with mp.get_context("fork").Pool(int(os.environ.get("P07_PROCESSOS", "4"))) as pool:
+        testes = pool.map(_um_S, todos, chunksize=4)
     n = y.size
-    exp = {v: expandir(blocos[v]) for v in nomes}
-    testes = []
-    for k in range(len(nomes) + 1):
-        for S in combinations(nomes, k):
-            Xe = np.hstack([np.ones((n, 1))] + [exp[v][0] for v in S])
-            sat = acerto_1nn([blocos[v] for v in S], amb) >= LIMIAR_SATURACAO
-            u = residuo_u(Xe, y)
-            p0 = p_invariancia_np(Xe, y, amb)
-            pc, pcl, pce = p_cr(u, ae, cl, m, G)
-            t = {"S": list(S), "saturado": bool(sat), "p_original": p0, "p_cr": pc, "p_cr_loc": pcl, "p_cr_esc": pce}
-            if not sat:
-                pp, ppl, ppe = perm.p(u)
-                t.update({"p_perm": pp, "p_perm_loc": ppl, "p_perm_esc": ppe})
-            testes.append(t)
     out = {"dominio": nome, "area": p.area, "n_linhas": int(n), "ambientes": rot.tolist(), "grupo": grupo_col,
            "n_grupos": G, "n_blocos_perm": int(perm.n_blk), "alpha": alpha, "B_perm": B_PERM,
            "linhas_por_grupo": {"min": int(np.bincount(cl).min()), "mediana": float(np.median(np.bincount(cl))),

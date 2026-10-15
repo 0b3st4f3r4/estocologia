@@ -1,0 +1,25 @@
+{
+ "n_treino": 438,
+ "eventos_treino": 43,
+ "n_cofre": 164,
+ "eventos_cofre": 36,
+ "taxa_treino": 0.09817351598173515,
+ "taxa_cofre": 0.21951219512195122,
+ "brier": 0.17994425378015869,
+ "brier_clima": 0.18604966637018594,
+ "habilidade": 0.03281603621841067,
+ "habilidade_ic90_bootstrap": [
+  0.0045290492465221875,
+  0.06330865734391301
+ ],
+ "murphy_modelo": {
+  "confiabilidade": 0.025176993442480058,
+  "resolucao": 0.014283101573461018,
+  "incerteza": 0.17132659131469363
+ },
+ "prob_prevista_min_max": [
+  0.029215742255598098,
+  0.2201498170265576
+ ],
+ "beta_indometacina_padronizado": -0.3100560688395128
+}
