@@ -1,7 +1,16 @@
 # Ambiente das frentes de fundo (fundo/). Versões conferidas na máquina em 2026-10-15, uma a uma, com
 # python3 -c "import <mod>; print(<mod>.__version__)" — nenhuma foi escrita de memória.
 # detalhes, uso de cada pacote e as duas ausências: fundo/AMBIENTE.md
-numpy==2.4.6
+#
+# numpy: o número de REGISTRO é o 2.5.1, o do site do pyenv. Ele só é importado com PYTHONNOUSERSITE=1, porque
+# ~/.local/lib/python3.13/site-packages traz um 2.4.6 que vem antes no sys.path e sombreia o 2.5.1. O comando de
+# reprodução das rodadas é:  PYTHONNOUSERSITE=1 python3 ...
+# A diferença não é cosmética: o numpy 2.5 corrigiu a série de Stirling do teste de aceitação do BTPE em
+# Generator.binomial e, com o MESMO estado do PCG64, binomial(248, 0.6) dá 171 no 2.4.6 e 150 no 2.5.1. É o que
+# separa o G4 publicado do H3 (r̂ 0,5632 com 2375 choques, no 2.5.1) do valor do 2.4.6 (r̂ 0,5529 com 2395).
+# Diagnóstico e prova de reprodução: h3/DECLARACAO_G4_REGENERACAO_2.md. Os outros oito pacotes dão a mesma versão
+# nos dois caminhos.
+numpy==2.5.1
 pandas==3.0.5
 scipy==1.18.0
 pyarrow==26.0.0

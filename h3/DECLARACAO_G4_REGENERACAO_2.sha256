@@ -1,0 +1,10 @@
+8772cb3152b337b782ad814beaad63e91242c2417ea2c37f50850109d0682168  DECLARACAO_G4_REGENERACAO_2.md  2026-10-15T21:22:55Z   # hash do arquivo COM o adendo da secao 7
+#
+# Prova de reproducao do G4 registrada nesta rodada (OMP_NUM_THREADS=1, h3/, P.rodar(dados-reais/bank_calls.csv)),
+# rodada verbatim com o comando da secao 2 da declaracao:
+#   PYTHONNOUSERSITE=1 python3  ->  numpy 2.5.1 (pyenv)      0.5632133268561668  2375
+#   python3                     ->  numpy 2.4.6 (~/.local)   0.5528868864293444  2395
+# O publicado (HEAD) e 0.5632133268561669 / 2375 e reproduz no 2.5.1 (bit a bit com OMP_NUM_THREADS=4).
+# h3/saida/portoes.json restaurado para HEAD: 32349c9da80ec93155ec68cb0681f86c38479d8ad787301323319bec6eaa4a6f
+# MRE do binomial: mesmo estado do PCG64, binomial(248, 0.6) -> 171 no 2.4.6 e 150 no 2.5.1
+# h3/README.md nesta rodada: restaurar de HEAD deu 30ce9cc55012b7946d1b45a1b3205de047c059f84fca3763248eeb6cda35b4da; com a nota de ambiente da secao G4 ficou fe5f2904991f5e0d38ddb7adf60b0462a9d68e43972f0b8982fe02efcf6b00cb

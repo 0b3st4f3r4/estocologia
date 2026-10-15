@@ -4,7 +4,7 @@
 
 As nove dependências das frentes de `fundo/` que estão instaladas nesta máquina foram conferidas uma a uma com
 `python3 -c "import <mod>; print(<mod>.__version__)"` em **2026-10-15**, e são as do
-[`requirements.txt`](requirements.txt): **numpy 2.4.6, pandas 3.0.5, scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0,
+[`requirements.txt`](requirements.txt): **numpy 2.5.1, pandas 3.0.5, scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0,
 duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7**. **Duas dependências não estão instaladas, e sem
 elas uma frente inteira e um passo de outra não reproduzem aqui:** `statsmodels` (o gabarito do p01) e `pyreadr`
 (um passo do p08, a conversão dos `.rda` de voos novos). Os comandos de instalação estão abaixo e ficaram
@@ -13,6 +13,12 @@ comentados no `requirements.txt`.
 Interpretador: **Python 3.13.7** (`/home/silvano-neto/.pyenv/versions/3.13.7/bin/python3`, GCC 15.2.0), pip 25.2.
 Nada foi instalado nesta frente: o que está escrito aqui é a foto do que a máquina tem.
 
+**O numpy tem dois exemplares no caminho, e é o único pacote nesta situação.** O **2.5.1** é o do `pyenv` e só
+aparece com `PYTHONNOUSERSITE=1`; o **2.4.6** mora em `~/.local/lib/python3.13/site-packages` e vem antes no
+`sys.path`, de modo que o `python3` padrão importa o 2.4.6. **O número de registro é o 2.5.1**, e o comando de
+reprodução das rodadas é `PYTHONNOUSERSITE=1 python3 ...`. Os outros oito pacotes dão a mesma versão nos dois
+caminhos (conferido em 2026-10-15, um a um). A consequência prática está na seção "O numpy do caminho" abaixo.
+
 ## O que foi feito
 
 **1. Conferência uma a uma, com a saída do comando.** A saída abaixo é literal; nenhuma versão foi escrita de
@@ -20,7 +26,9 @@ memória.
 
 ```
 $ python3 -c "import numpy; print(numpy.__version__)"
-  2.4.6
+  2.4.6                       # o de ~/.local/lib/python3.13/site-packages, que vem antes no sys.path
+$ PYTHONNOUSERSITE=1 python3 -c "import numpy; print(numpy.__version__)"
+  2.5.1                       # o do pyenv: é o numpy de registro, e é dele que sai o G4 publicado do H3
 $ python3 -c "import pandas; print(pandas.__version__)"
   3.0.5
 $ python3 -c "import scipy; print(scipy.__version__)"
@@ -48,7 +56,7 @@ mesmo dia:
 
 | pacote | versão | arquivos | onde |
 |---|---|---|---|
-| numpy | 2.4.6 | 424 | toda a árvore: h0-real, h1, h1-real, h2–h2g, h3 e as frentes de `fundo/` |
+| numpy | 2.5.1 | 424 | toda a árvore: h0-real, h1, h1-real, h2–h2g, h3 e as frentes de `fundo/` |
 | pandas | 3.0.5 | 298 | idem; a leitura dos CSV e dos Parquet |
 | scipy | 1.18.0 | 152 | idem; `scipy.stats`, `scipy.spatial.cKDTree` (a regra 1-NN do ICP) |
 | pyarrow | 26.0.0 | 23 | `estocologia/armazem.py` e as cópias: leitura e escrita de Parquet |
@@ -72,6 +80,50 @@ No `requirements.txt` o nome é o do pacote de importação (`numpy`), e o de di
 A conferência acha `statsmodels` em **um único arquivo de toda a árvore**, o gabarito do p01, e nenhum arquivo do
 p02 o importa — o `fundo/p02-independencia/comum.py` traz uma logística de Newton própria (`logit_ajustar`). O que
 está escrito acima é o que a árvore mostra.
+
+## O numpy do caminho (2.5.1 contra 2.4.6)
+
+O `Generator.binomial` do numpy 2.5 corrigiu dois erros independentes da série de Stirling do passo de
+aceitação/rejeição do BTPE: o 3º e o 4º termos de erro eram **somados** em vez de subtraídos (erro herdado da seção
+5.3 do artigo de 1988, Kachitvichyanukul & Schmeiser) e o coeficiente principal dizia `13680` onde devia dizer
+`13860`. O BTPE é o caminho que o `binomial` usa quando `n·min(p, 1−p) > 30`. Com o **mesmo** estado do PCG64 o
+sorteio muda de valor e consome outro número de palavras cruas:
+
+```
+np.random.default_rng(693).binomial(248, 0.6)      ->  171 no numpy 2.4.6, 143 no 2.5.1
+```
+
+No laço do G4 do H3 (`h3/estocologia/performativo.py`) isso acontece **uma vez em 9126 sorteios** — dia 16,
+intervalo 55, com o mesmo estado do PCG64 nos dois: `binomial(248; 0,6)` dá **171** no 2.4.6 e **150** no 2.5.1.
+Daí em diante as duas rodadas descorrelacionam e o G4 sai com **2375 choques e r̂ = 0,5632** no 2.5.1 (o publicado)
+contra **2395 e r̂ = 0,5529** no 2.4.6. O bloco de r = 0,0 do laço não passa por essa repartição e é idêntico nos
+dois numpys. O diagnóstico completo, com os hashes das duas instalações e a prova de reprodução das duas saídas,
+está em [`../h3/DECLARACAO_G4_REGENERACAO_2.md`](../h3/DECLARACAO_G4_REGENERACAO_2.md).
+
+**Outros números publicados que dependem do mesmo sorteio** (relatados, não corrigidos aqui): o
+`fundo/p03-multiplicidade/laco_versoes.py`, que reimplementa o mesmo laço e publica r̂ = 0,563 com viés +1,7% (o
+regime do 2.5.1; no 2.4.6 daria 0,553 e +2,2%), e as cópias idênticas do módulo em `fundo/p08-calibracao/codigo/` e
+`fundo/p11-eventos-raros/codigo/h3/`.
+
+**As frentes do H1 foram reconferidas nos dois numpys nesta rodada.** Rodando `h1/rodar.py` inteiro (projetos `a`,
+`b` e `c`) com `OMP_NUM_THREADS=1` e a semente fixa de `h1/rodar.py:44` (2026, 2126 e 2226), o 2.4.6 e o 2.5.1
+divergem em **5 campos no `a`, 7 no `b` e 59 no `c`**. As maiores diferenças relativas: 4,1e-4 na riqueza média da
+estratégia de Kelly (`a`), 7,9e-4 nos quantis do modelo nulo (`b`) e **0,37 no xi² do SBC** (`f4.sbc.chi2`, `c`,
+3,49 contra 2,21); no `c` muda também o `f3.cofre.hash_pre_registro`. **Os três projetos passam o portão nos dois
+numpys**, e o **controle de repetibilidade** (duas rodadas do `c` no mesmo numpy e na mesma semente) difere em **1**
+campo, só o tempo do pytest: o cano é determinístico dada a semente, então a diferença é do numpy e não do relógio.
+
+Ajuste de leitura, sem corrigir nada: os números publicados de `h1/saida/` ficam **mais perto da rodada do 2.5.1**
+do que da do 2.4.6 — 2 contra 6 campos diferentes no `a`, 35 contra 41 no `b` e 31 contra 62 no `c` — o que é
+consistente com o ambiente de registro ser o 2.5.1 também aqui. Eles, no entanto, **não reproduzem bit a bit em
+nenhum dos dois numpys** (o `hash_pre_registro` muda e sobra poeira de 1e-8 a 1e-9): isso é outra pergunta, de outra
+natureza, e fica aberta.
+
+As demais frentes que chamam `Generator.binomial` no regime do BTPE — `h1-real/projetos/{b_real,c_real}.py`,
+`fundo/p05-prioris/h1-real/projetos/{b_real,c_real}.py` e o `evsi_beta_bernoulli` dos `estat.py` (chamadores em
+`h1/projetos/c_cauda.py:483` e `h1-real/projetos/c_real.py:678`) — continuam **não** reconferidas nos dois numpys.
+(`Generator.multinomial`, que o próprio numpy diz usar binomial por dentro, não aparece em nenhum arquivo da
+árvore.)
 
 ## Limites
 
@@ -97,8 +149,9 @@ A partir da raiz do repositório:
 
 ```
 for m in numpy pandas scipy pyarrow rdata duckdb yaml pytest hypothesis; do
-  printf '%s ' "$m"; python3 -c "import $m; print($m.__version__)"
+  printf '%s ' "$m"; PYTHONNOUSERSITE=1 python3 -c "import $m; print($m.__version__)"
 done
+python3 -c "import numpy; print(numpy.__version__)"   # 2.4.6: o de ~/.local, que o python3 padrão importa
 python3 -c "import statsmodels" || python3 -m pip install statsmodels
 python3 -c "import pyreadr"     || python3 -m pip install pyreadr
 ```

@@ -93,6 +93,15 @@ probabilidade r. Em 10% dos intervalos, um sorteio muda a escala para × 0,7 ou 
   - voos: +0,02;
   - nos outros fluxos, o cofre ficou acima do desenvolvimento.
 
+**Registro de ambiente (2026-10-15).** O r̂ de 0,56 e os 2375 choques acima são do **numpy 2.5.1** do `pyenv`, o
+interpretador sem o site do usuário no caminho: `PYTHONNOUSERSITE=1 python3`. Com o `python3` padrão, que importa
+o **numpy 2.4.6** de `~/.local`, o mesmo código dá r̂ = 0,5529 e 2395 choques. A troca não é de código — o
+`estocologia/performativo.py` tem uma versão só — e é do gerador: com o mesmo estado do PCG64,
+`binomial(248; 0,6)` devolve **171** no 2.4.6 e **150** no 2.5.1, porque o numpy 2.5 corrigiu a série de Stirling do
+teste de aceitação do BTPE (o 3º e o 4º termos eram somados, e o coeficiente principal dizia `13680` em vez de
+`13860`). O número publicado reproduz no 2.5.1 e fica como está. Diagnóstico, hashes e prova:
+[`DECLARACAO_G4_REGENERACAO_2.md`](DECLARACAO_G4_REGENERACAO_2.md).
+
 ## Informativos
 
 - **F5.**
