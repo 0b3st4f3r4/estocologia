@@ -7,7 +7,7 @@ OUT="${1:-$AQUI/saida_rodadas}"
 DADOS_REDE="${P05_DADOS:-/mnt/project-files/estocologia/dados-reais}"
 mkdir -p "$OUT"
 for v in original literatura fraca; do
-  for h in h2 h2g h1-real; do
+  for h in ${P05_H:-h2 h2g h1-real}; do
     tab=""; [ "$v" != original ] && tab="$AQUI/prioris/$h/$v.yaml"
     case $h in h2) dados="$DADOS_REDE/h2";; h2g) dados="$DADOS_REDE/h2b";; *) dados="";; esac
     ( cd "$AQUI/$h" && env P05_PRIORI="$tab" ESTOCOLOGIA_SAIDA="$OUT/$h/$v" \

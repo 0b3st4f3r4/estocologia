@@ -1,0 +1,230 @@
+{
+ "fluxo": "voos17",
+ "area": "logistica",
+ "tipo": "binario",
+ "fase": "completo",
+ "K": 1,
+ "hash_especificacao": "cefe630a614dfd1f962e86c50b39a333b4fd4dcce5c762ccb521cb248f0cce0c",
+ "preregistro": "cefe630a614dfd1f962e86c50b39a333b4fd4dcce5c762ccb521cb248f0cce0c",
+ "corte": 1506816000,
+ "contagens": {
+  "emitidas": 287308,
+  "escopo": 0,
+  "disjuntor": 13038,
+  "reajustes": 450,
+  "reajustes_por_deriva": 1,
+  "rotulo_ja_conhecido": 0,
+  "estado_do_futuro": 0
+ },
+ "decisoes_C_L": {
+  "alteradas": 56753,
+  "total": 287308
+ },
+ "limiares_deriva": [
+  {
+   "sensor": "atraso_partida",
+   "alto": 0.315,
+   "baixo": 0.27291250000000006,
+   "janelas_calibracao": 54
+  },
+  {
+   "sensor": "residuo_padronizado",
+   "alto": 0.31778125,
+   "baixo": 0.26525,
+   "janelas_calibracao": 56
+  }
+ ],
+ "eventos_operacao": [
+  {
+   "evento": "abriu",
+   "t": 1497535200,
+   "perda_modelo": 0.19294423401056515,
+   "perda_reserva": 0.17654615755925435,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "fechou",
+   "t": 1497798000,
+   "perda_modelo": 0.19508417773522305,
+   "perda_reserva": 0.20389422744173044,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "abriu",
+   "t": 1498273200,
+   "perda_modelo": 0.21067372222109376,
+   "perda_reserva": 0.20181747716171736,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "fechou",
+   "t": 1498402800,
+   "perda_modelo": 0.2038098125813496,
+   "perda_reserva": 0.20670443321503562,
+   "tipo": "disjuntor"
+  },
+  {
+   "sensor": "atraso_partida",
+   "evento": "ligou",
+   "t": 1504216800,
+   "ks": 0.32912500000000006,
+   "wasserstein": 16.994125000000004,
+   "tipo": "deriva"
+  },
+  {
+   "evento": "abriu",
+   "t": 1504890000,
+   "perda_modelo": 0.21669152962224053,
+   "perda_reserva": 0.2034554370645612,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "fechou",
+   "t": 1505340000,
+   "perda_modelo": 0.19778298711840334,
+   "perda_reserva": 0.19918364793482657,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "abriu",
+   "t": 1513724400,
+   "perda_modelo": 0.18927677602221327,
+   "perda_reserva": 0.16581902334936624,
+   "tipo": "disjuntor"
+  },
+  {
+   "evento": "fechou",
+   "t": 1514300400,
+   "perda_modelo": 0.17738699620845833,
+   "perda_reserva": 0.1797270951470609,
+   "tipo": "disjuntor"
+  }
+ ],
+ "varredura": {
+  "por_tabela": {
+   "agenda": {
+    "leituras": 8762,
+    "bytes_varridos": 25380279,
+    "bytes_tabela": 11983865,
+    "varreduras_equivalentes": 2.117870903919562
+   },
+   "partida": {
+    "leituras": 8762,
+    "bytes_varridos": 15515042,
+    "bytes_tabela": 7240773,
+    "varreduras_equivalentes": 2.1427328270061774
+   },
+   "chegada": {
+    "leituras": 8762,
+    "bytes_varridos": 10873811,
+    "bytes_tabela": 5076775,
+    "varreduras_equivalentes": 2.1418737288928504
+   },
+   "clima": {
+    "leituras": 8762,
+    "bytes_varridos": 5379224,
+    "bytes_tabela": 4702576,
+    "varreduras_equivalentes": 1.143888796268258
+   },
+   "canario": {
+    "leituras": 8762,
+    "bytes_varridos": 10873811,
+    "bytes_tabela": 5076775,
+    "varreduras_equivalentes": 2.1418737288928504
+   }
+  },
+  "leituras": 43810,
+  "leituras_com_futuro": 0,
+  "gasto_por_agente": {
+   "agent-f2-data": 68022167
+  },
+  "orcamento_por_agente": 2000000000
+ },
+ "ingestao": {
+  "agenda": {
+   "tabela": "agenda",
+   "linhas": 303748,
+   "bytes_tabela": 11983865,
+   "grupos": 7600,
+   "colunas": [
+    "id",
+    "prog",
+    "carrier",
+    "origin",
+    "dest",
+    "distance",
+    "hora",
+    "dow",
+    "t_disp"
+   ]
+  },
+  "partida": {
+   "tabela": "partida",
+   "linhas": 303748,
+   "bytes_tabela": 7240773,
+   "grupos": 7602,
+   "colunas": [
+    "id",
+    "origin",
+    "carrier",
+    "dep_delay",
+    "t_disp"
+   ]
+  },
+  "chegada": {
+   "tabela": "chegada",
+   "linhas": 303748,
+   "bytes_tabela": 5076775,
+   "grupos": 7599,
+   "colunas": [
+    "id",
+    "y",
+    "t_disp"
+   ]
+  },
+  "clima": {
+   "tabela": "clima",
+   "linhas": 26198,
+   "bytes_tabela": 4702576,
+   "grupos": 8734,
+   "colunas": [
+    "origin",
+    "t_obs",
+    "visib",
+    "wind",
+    "precip",
+    "t_disp"
+   ]
+  },
+  "canario": {
+   "tabela": "canario",
+   "linhas": 303748,
+   "bytes_tabela": 5076775,
+   "grupos": 7599,
+   "colunas": [
+    "id",
+    "c",
+    "t_disp"
+   ]
+  }
+ },
+ "segundos": 5997.3,
+ "canario_vazado": false,
+ "placar": {
+  "desenvolvimento": {
+   "n": 212142,
+   "perda_modelo": 0.16964795502624355,
+   "perda_reserva": 0.18699980351476622,
+   "perda_oficial": 0.16970842198578737,
+   "habilidade_oficial_vs_reserva": 0.09246737806124727
+  },
+  "cofre": {
+   "n": 75166,
+   "perda_modelo": 0.14566851908446238,
+   "perda_reserva": 0.15282899331224972,
+   "perda_oficial": 0.1455807233457503,
+   "habilidade_oficial_vs_reserva": 0.04742732258721516
+  }
+ },
+ "fichas": 15
+}

@@ -339,5 +339,867 @@
    -1.010028090804262,
    1.2517053328520291
   ]
+ },
+ "voos17": {
+  "cofre_oficial": {
+   "n": 75166,
+   "p_medio": 0.18760141630821908,
+   "y_medio": 0.19669797514833834,
+   "citl": -0.009096558840119257,
+   "ece": 0.022023591569336105,
+   "habilidade_vs_climatologia": 0.10657266208350136,
+   "passa_G2": true
+  },
+  "cofre_cru": {
+   "n": 75166,
+   "p_medio": 0.18855251516039725,
+   "y_medio": 0.19669797514833834,
+   "citl": -0.008145459987941084,
+   "ece": 0.01671829712270852,
+   "habilidade_vs_climatologia": 0.11022893694776148,
+   "passa_G2": true
+  },
+  "trimestres": [
+   {
+    "periodo": "2017Q1",
+    "n": 56947,
+    "y_medio": 0.2662124431488928,
+    "citl_cru": 0.0051651830722528325,
+    "citl_oficial": -0.009774234207387655,
+    "ece_oficial": 0.0265053708592721,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017Q2",
+    "n": 77329,
+    "y_medio": 0.2984779319530836,
+    "citl_cru": -0.017253959697426158,
+    "citl_oficial": -0.00027859195168034034,
+    "ece_oficial": 0.012233963660443893,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017Q3",
+    "n": 77878,
+    "y_medio": 0.26640386245152675,
+    "citl_cru": 0.02774322780228311,
+    "citl_oficial": 0.0011923577310632982,
+    "ece_oficial": 0.030021929343581936,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017Q4",
+    "n": 75154,
+    "y_medio": 0.19667615828831467,
+    "citl_cru": -0.00812729062618342,
+    "citl_oficial": -0.009066301386851494,
+    "ece_oficial": 0.022007585860164484,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "meses": [
+   {
+    "periodo": "2017-01",
+    "n": 7985,
+    "y_medio": 0.21966186599874765,
+    "citl_cru": 0.05789174727654983,
+    "citl_oficial": -0.027028857069436973,
+    "ece_oficial": 0.04574143937771822,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 0.0
+   },
+   {
+    "periodo": "2017-02",
+    "n": 22432,
+    "y_medio": 0.23667082738944364,
+    "citl_cru": 0.01921400536131504,
+    "citl_oficial": -0.00859941337872433,
+    "ece_oficial": 0.015349916565602318,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-03",
+    "n": 26530,
+    "y_medio": 0.3052016584998115,
+    "citl_cru": -0.022583207306923814,
+    "citl_oficial": -0.005574287628990038,
+    "ece_oficial": 0.033259865401665555,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-04",
+    "n": 25260,
+    "y_medio": 0.2780285035629454,
+    "citl_cru": -0.012260526019318652,
+    "citl_oficial": 0.0024041841148967347,
+    "ece_oficial": 0.015858519133925966,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-05",
+    "n": 26089,
+    "y_medio": 0.30043313273793554,
+    "citl_cru": -0.016082162430208935,
+    "citl_oficial": -0.0017101961351365103,
+    "ece_oficial": 0.013865127581801338,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-06",
+    "n": 25980,
+    "y_medio": 0.3163972286374134,
+    "citl_cru": -0.023285720806487942,
+    "citl_oficial": -0.0014494080371130758,
+    "ece_oficial": 0.01986851570101849,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-07",
+    "n": 26319,
+    "y_medio": 0.30274706485808733,
+    "citl_cru": 0.016119263247652116,
+    "citl_oficial": 0.013645564568340374,
+    "ece_oficial": 0.03167239954557311,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-08",
+    "n": 27325,
+    "y_medio": 0.28497712717291857,
+    "citl_cru": 0.025772035370892676,
+    "citl_oficial": 0.005068119802359827,
+    "ece_oficial": 0.036622072160341294,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-09",
+    "n": 24234,
+    "y_medio": 0.20599158207477097,
+    "citl_cru": 0.042589887714021946,
+    "citl_oficial": -0.01670238310200059,
+    "ece_oficial": 0.02400232867705443,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-10",
+    "n": 25694,
+    "y_medio": 0.19284657896785243,
+    "citl_cru": 0.00971543125279048,
+    "citl_oficial": -0.00807910591020497,
+    "ece_oficial": 0.015466247751850891,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-11",
+    "n": 24362,
+    "y_medio": 0.14736064362531812,
+    "citl_cru": 0.01618717994923541,
+    "citl_oficial": 0.005294527460220938,
+    "ece_oficial": 0.014230485545707817,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2017-12",
+    "n": 25098,
+    "y_medio": 0.24846601322814568,
+    "citl_cru": -0.04999516966501952,
+    "citl_oficial": -0.024016636590825202,
+    "ece_oficial": 0.05705991302817226,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 0.0
+   }
+  ],
+  "delta_min_max": [
+   -1.0668885215926598,
+   1.1084558641622342
+  ],
+  "estresse": null,
+  "contagens": {
+   "emitidas": 287308,
+   "escopo": 0,
+   "disjuntor": 13038,
+   "reajustes": 450,
+   "reajustes_por_deriva": 1,
+   "rotulo_ja_conhecido": 0,
+   "estado_do_futuro": 0
+  },
+  "deriva": [
+   [
+    "atraso_partida",
+    "ligou",
+    1504216800
+   ]
+  ]
+ },
+ "voospnw14": {
+  "cofre_oficial": {
+   "n": 38608,
+   "p_medio": 0.16102799754586267,
+   "y_medio": 0.160588479071695,
+   "citl": 0.0004395184741676772,
+   "ece": 0.01582427059282774,
+   "habilidade_vs_climatologia": 0.052561204490408575,
+   "passa_G2": true
+  },
+  "cofre_cru": {
+   "n": 38608,
+   "p_medio": 0.14296167163292173,
+   "y_medio": 0.160588479071695,
+   "citl": -0.017626807438773262,
+   "ece": 0.017836237482075967,
+   "habilidade_vs_climatologia": 0.04288248693759433,
+   "passa_G2": true
+  },
+  "trimestres": [
+   {
+    "periodo": "2014Q1",
+    "n": 27452,
+    "y_medio": 0.14887804167273788,
+    "citl_cru": 0.0038839290617934674,
+    "citl_oficial": -0.008133457088716767,
+    "ece_oficial": 0.015174591985124877,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014Q2",
+    "n": 41902,
+    "y_medio": 0.14123430862488665,
+    "citl_cru": -0.007683477125856292,
+    "citl_oficial": -0.0016897143167085293,
+    "ece_oficial": 0.006569949058363749,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014Q3",
+    "n": 45211,
+    "y_medio": 0.15750591670168765,
+    "citl_cru": 0.006661510379329494,
+    "citl_oficial": -0.0008929552477874025,
+    "ece_oficial": 0.02071324782994564,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014Q4",
+    "n": 38551,
+    "y_medio": 0.16056652226920184,
+    "citl_cru": -0.01758803285248134,
+    "citl_oficial": 0.0004685962250547959,
+    "ece_oficial": 0.01584260583632791,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "meses": [
+   {
+    "periodo": "2014-01",
+    "n": 3870,
+    "y_medio": 0.12868217054263567,
+    "citl_cru": 0.026700532335138555,
+    "citl_oficial": -0.017473439783437225,
+    "ece_oficial": 0.034049250390954466,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-02",
+    "n": 10722,
+    "y_medio": 0.17459429210968103,
+    "citl_cru": -0.008741249115938876,
+    "citl_oficial": -0.013088418494793308,
+    "ece_oficial": 0.013217664557953524,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-03",
+    "n": 12860,
+    "y_medio": 0.13351477449455676,
+    "citl_cru": 0.007543875076863493,
+    "citl_oficial": -0.0011915574600604162,
+    "ece_oficial": 0.01710866696468115,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-04",
+    "n": 13014,
+    "y_medio": 0.1181804210849854,
+    "citl_cru": 0.011165751979231073,
+    "citl_oficial": -0.0006220824405585718,
+    "ece_oficial": 0.01312942158220855,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-05",
+    "n": 13972,
+    "y_medio": 0.13083309476095048,
+    "citl_cru": -0.006837372520786936,
+    "citl_oficial": -0.0025434510137250232,
+    "ece_oficial": 0.012822716211322365,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-06",
+    "n": 14916,
+    "y_medio": 0.1710914454277286,
+    "citl_cru": -0.024921720697566846,
+    "citl_oficial": -0.001821502470737868,
+    "ece_oficial": 0.008519398671263403,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-07",
+    "n": 15756,
+    "y_medio": 0.17453668443767453,
+    "citl_cru": -0.004961033536085152,
+    "citl_oficial": 0.0036695888246069397,
+    "ece_oficial": 0.02073765376150998,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-08",
+    "n": 15994,
+    "y_medio": 0.16118544454170314,
+    "citl_cru": 0.008360104620100978,
+    "citl_oficial": 0.01030881875578546,
+    "ece_oficial": 0.02091932584594972,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-09",
+    "n": 13461,
+    "y_medio": 0.13319961369883368,
+    "citl_cru": 0.018247387033692053,
+    "citl_oficial": -0.01954302714569911,
+    "ece_oficial": 0.021895241281098914,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-10",
+    "n": 13344,
+    "y_medio": 0.1291217026378897,
+    "citl_cru": 0.007855448931281955,
+    "citl_oficial": 0.011537222809479913,
+    "ece_oficial": 0.017096200572470792,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2014-11",
+    "n": 12377,
+    "y_medio": 0.13880584955966713,
+    "citl_cru": -0.010370209636160005,
+    "citl_oficial": -0.021822435267640078,
+    "ece_oficial": 0.022957857121964808,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 0.0
+   },
+   {
+    "periodo": "2014-12",
+    "n": 12830,
+    "y_medio": 0.2142634450506625,
+    "citl_cru": -0.05101381764366966,
+    "citl_oficial": 0.010460517007791797,
+    "ece_oficial": 0.014073660758163603,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "delta_min_max": [
+   -0.5785002767406661,
+   0.6877157746877973
+  ],
+  "estresse": null,
+  "contagens": {
+   "emitidas": 153116,
+   "escopo": 0,
+   "disjuntor": 0,
+   "reajustes": 538,
+   "reajustes_por_deriva": 0,
+   "rotulo_ja_conhecido": 0,
+   "estado_do_futuro": 0
+  },
+  "deriva": []
+ },
+ "voos23e1": {
+  "cofre_oficial": {
+   "n": 104489,
+   "p_medio": 0.15525881438461836,
+   "y_medio": 0.15708830594608045,
+   "citl": -0.0018294915614620877,
+   "ece": 0.013683827515530145,
+   "habilidade_vs_climatologia": 0.09261746492540346,
+   "passa_G2": true
+  },
+  "cofre_cru": {
+   "n": 104489,
+   "p_medio": 0.1616810942087589,
+   "y_medio": 0.15708830594608045,
+   "citl": 0.004592788262678449,
+   "ece": 0.013122590180723604,
+   "habilidade_vs_climatologia": 0.09342948991363575,
+   "passa_G2": true
+  },
+  "trimestres": [
+   {
+    "periodo": "2023Q1",
+    "n": 86678,
+    "y_medio": 0.24749071275294768,
+    "citl_cru": -0.016527593590295764,
+    "citl_oficial": -0.0018452046364880736,
+    "ece_oficial": 0.02058586574672765,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q2",
+    "n": 112107,
+    "y_medio": 0.24360655445244275,
+    "citl_cru": -0.0008883681510931385,
+    "citl_oficial": 0.0005572500706196581,
+    "ece_oficial": 0.013115174800607211,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q3",
+    "n": 108481,
+    "y_medio": 0.300246126049723,
+    "citl_cru": 0.01920454939202626,
+    "citl_oficial": 0.00528644953590085,
+    "ece_oficial": 0.03243726800999841,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q4",
+    "n": 104469,
+    "y_medio": 0.15710880739740976,
+    "citl_cru": 0.004549243364036976,
+    "citl_oficial": -0.0018703563674704604,
+    "ece_oficial": 0.013661260168980512,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "meses": [
+   {
+    "periodo": "2023-01",
+    "n": 12403,
+    "y_medio": 0.23494315891316617,
+    "citl_cru": -0.033112046198047196,
+    "citl_oficial": -0.027282119335484384,
+    "ece_oficial": 0.04495633324857126,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 0.0
+   },
+   {
+    "periodo": "2023-02",
+    "n": 34761,
+    "y_medio": 0.2317827450303501,
+    "citl_cru": -0.007000176785833673,
+    "citl_oficial": 0.0025968594851093763,
+    "ece_oficial": 0.025818181994619813,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-03",
+    "n": 39514,
+    "y_medio": 0.26524776028749303,
+    "citl_cru": -0.019703317886645533,
+    "citl_oficial": 0.0022314128175991987,
+    "ece_oficial": 0.012154520688563545,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-04",
+    "n": 37476,
+    "y_medio": 0.2677180061906287,
+    "citl_cru": 0.007086511960236297,
+    "citl_oficial": -0.004953854504376964,
+    "ece_oficial": 0.009000825309647522,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-05",
+    "n": 38710,
+    "y_medio": 0.14368380263497804,
+    "citl_cru": 0.04546189323507033,
+    "citl_oficial": 0.007655372744850036,
+    "ece_oficial": 0.013931913584375209,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-06",
+    "n": 35921,
+    "y_medio": 0.3261323459814593,
+    "citl_cru": -0.05915749276651494,
+    "citl_oficial": -0.0013423121260587312,
+    "ece_oficial": 0.023540593474597537,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-07",
+    "n": 36211,
+    "y_medio": 0.41299605092375247,
+    "citl_cru": -0.028998697173433396,
+    "citl_oficial": 0.016664728708200127,
+    "ece_oficial": 0.06149879734908516,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-08",
+    "n": 36765,
+    "y_medio": 0.22048143614851082,
+    "citl_cru": 0.07538450151418205,
+    "citl_oficial": 0.007892770383973458,
+    "ece_oficial": 0.030019933888415028,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-09",
+    "n": 35505,
+    "y_medio": 0.2678495986480777,
+    "citl_cru": 0.010192630552730453,
+    "citl_oficial": -0.009016895150411486,
+    "ece_oficial": 0.01911469081481356,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-10",
+    "n": 36586,
+    "y_medio": 0.1591592412398185,
+    "citl_cru": 0.011712162865311376,
+    "citl_oficial": -0.005622555275596214,
+    "ece_oficial": 0.0213824757303253,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-11",
+    "n": 34521,
+    "y_medio": 0.14191361779786216,
+    "citl_cru": 0.009060218803484121,
+    "citl_oficial": 0.002296387720061438,
+    "ece_oficial": 0.016865338235392827,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-12",
+    "n": 33362,
+    "y_medio": 0.17058329836340747,
+    "citl_cru": -0.007973565700730795,
+    "citl_oficial": -0.002067053909374311,
+    "ece_oficial": 0.01068429430917348,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "delta_min_max": [
+   -1.010028090804262,
+   1.2517053328520291
+  ],
+  "estresse": {
+   "modo": "S1",
+   "trocados": 2785,
+   "voos_no_cofre": 104570
+  },
+  "contagens": {
+   "emitidas": 411735,
+   "escopo": 2,
+   "disjuntor": 21543,
+   "reajustes": 439,
+   "reajustes_por_deriva": 5,
+   "rotulo_ja_conhecido": 0,
+   "estado_do_futuro": 0
+  },
+  "deriva": [
+   [
+    "residuo_padronizado",
+    "ligou",
+    1687903200
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1691121600
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1694534400
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1694977200
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1702663200
+   ]
+  ]
+ },
+ "voos23e2": {
+  "cofre_oficial": {
+   "n": 104489,
+   "p_medio": 0.1532192405801549,
+   "y_medio": 0.15607384509374192,
+   "citl": -0.002854604513587017,
+   "ece": 0.014742694322339253,
+   "habilidade_vs_climatologia": 0.10422304252228187,
+   "passa_G2": true
+  },
+  "cofre_cru": {
+   "n": 104489,
+   "p_medio": 0.15312300469453724,
+   "y_medio": 0.15607384509374192,
+   "citl": -0.0029508403992046794,
+   "ece": 0.01154927233289355,
+   "habilidade_vs_climatologia": 0.09695992571409973,
+   "passa_G2": true
+  },
+  "trimestres": [
+   {
+    "periodo": "2023Q1",
+    "n": 86678,
+    "y_medio": 0.24749071275294768,
+    "citl_cru": -0.016527593590295764,
+    "citl_oficial": -0.0018452046364880736,
+    "ece_oficial": 0.02058586574672765,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q2",
+    "n": 112107,
+    "y_medio": 0.24360655445244275,
+    "citl_cru": -0.0008883681510931385,
+    "citl_oficial": 0.0005572500706196581,
+    "ece_oficial": 0.013115174800607211,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q3",
+    "n": 108481,
+    "y_medio": 0.30022768964150404,
+    "citl_cru": 0.01922298580024523,
+    "citl_oficial": 0.005304885944119819,
+    "ece_oficial": 0.03241883160177946,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023Q4",
+    "n": 104469,
+    "y_medio": 0.1560941523322708,
+    "citl_cru": -0.0029958294829464382,
+    "citl_oficial": -0.0028956655716801116,
+    "ece_oficial": 0.014772671464327418,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "meses": [
+   {
+    "periodo": "2023-01",
+    "n": 12403,
+    "y_medio": 0.23494315891316617,
+    "citl_cru": -0.033112046198047196,
+    "citl_oficial": -0.027282119335484384,
+    "ece_oficial": 0.04495633324857126,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 0.0
+   },
+   {
+    "periodo": "2023-02",
+    "n": 34761,
+    "y_medio": 0.2317827450303501,
+    "citl_cru": -0.007000176785833673,
+    "citl_oficial": 0.0025968594851093763,
+    "ece_oficial": 0.025818181994619813,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-03",
+    "n": 39514,
+    "y_medio": 0.26524776028749303,
+    "citl_cru": -0.019703317886645533,
+    "citl_oficial": 0.0022314128175991987,
+    "ece_oficial": 0.012154520688563545,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-04",
+    "n": 37476,
+    "y_medio": 0.2677180061906287,
+    "citl_cru": 0.007086511960236297,
+    "citl_oficial": -0.004953854504376964,
+    "ece_oficial": 0.009000825309647522,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-05",
+    "n": 38710,
+    "y_medio": 0.14368380263497804,
+    "citl_cru": 0.04546189323507033,
+    "citl_oficial": 0.007655372744850036,
+    "ece_oficial": 0.013931913584375209,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-06",
+    "n": 35921,
+    "y_medio": 0.3261323459814593,
+    "citl_cru": -0.05915749276651494,
+    "citl_oficial": -0.0013423121260587312,
+    "ece_oficial": 0.023540593474597537,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-07",
+    "n": 36211,
+    "y_medio": 0.41299605092375247,
+    "citl_cru": -0.028998697173433396,
+    "citl_oficial": 0.016664728708200127,
+    "ece_oficial": 0.06149879734908516,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-08",
+    "n": 36765,
+    "y_medio": 0.22048143614851082,
+    "citl_cru": 0.07538450151418205,
+    "citl_oficial": 0.007892770383973458,
+    "ece_oficial": 0.030019933888415028,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-09",
+    "n": 35505,
+    "y_medio": 0.2677932685537248,
+    "citl_cru": 0.01024896064708336,
+    "citl_oficial": -0.008960565056058578,
+    "ece_oficial": 0.01905836072046065,
+    "desvio_como_2013": 0.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-10",
+    "n": 36586,
+    "y_medio": 0.14582080577269993,
+    "citl_cru": 0.021270456115424496,
+    "citl_oficial": -0.005242359765953553,
+    "ece_oficial": 0.016314019467836307,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-11",
+    "n": 34521,
+    "y_medio": 0.11540801251412183,
+    "citl_cru": 0.021970120792122266,
+    "citl_oficial": 0.002836014194798689,
+    "ece_oficial": 0.012737215991003168,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   },
+   {
+    "periodo": "2023-12",
+    "n": 33362,
+    "y_medio": 0.2094598645165158,
+    "citl_cru": -0.05544040397930891,
+    "citl_oficial": -0.006252993172751048,
+    "ece_oficial": 0.020937247203332916,
+    "desvio_como_2013": 1.0,
+    "corrigido_ok": 1.0
+   }
+  ],
+  "delta_min_max": [
+   -1.010028090804262,
+   1.2517053328520291
+  ],
+  "estresse": {
+   "modo": "S2",
+   "trocados": 2677,
+   "voos_no_cofre": 104570
+  },
+  "contagens": {
+   "emitidas": 411735,
+   "escopo": 2,
+   "disjuntor": 22697,
+   "reajustes": 440,
+   "reajustes_por_deriva": 5,
+   "rotulo_ja_conhecido": 0,
+   "estado_do_futuro": 0
+  },
+  "deriva": [
+   [
+    "residuo_padronizado",
+    "ligou",
+    1687903200
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1691121600
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1694534400
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1694977200
+   ],
+   [
+    "residuo_padronizado",
+    "ligou",
+    1700211600
+   ]
+  ]
  }
 }

@@ -11,3 +11,10 @@ Escrito pelo coordenador em 2026-10-15, depois de lançar os braços A e B e ant
 - Os braços analisaram cópias dos casos em pastas separadas do scratchpad (bracoA/ e bracoB/), com instrução de
   não ler o repositório, o disco compartilhado, a web nem outras pastas. O isolamento é por instrução, não por
   permissão de arquivo: é uma limitação declarada.
+
+## Adendo (antes de o juiz ver qualquer material)
+
+Ao preparar o material, o texto completo dos pareceres do braço A continuava reconhecível depois da limpeza (fichas
+em YAML e marcas de termos apagados), o que quebraria o cegamento. Por isso o juiz recebeu só os blocos finais
+(VEREDITO e MOTIVO PRINCIPAL), que saíram sem nenhum termo apagado, e o gabarito. O sorteio X/Y foi o registrado
+acima; o mapa fica em `scratchpad/mapa_XY.json` até o juiz entregar as notas.

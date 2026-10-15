@@ -1,0 +1,165 @@
+{
+ "fluxo": "voospnw14",
+ "area": "logistica",
+ "tipo": "binario",
+ "fase": "completo",
+ "K": 1,
+ "hash_especificacao": "2a866a04dfb8bb868977e3bc51bffa87cce869a3dd4f6d42c19ad239ed67100d",
+ "preregistro": "2a866a04dfb8bb868977e3bc51bffa87cce869a3dd4f6d42c19ad239ed67100d",
+ "corte": 1412121600,
+ "contagens": {
+  "emitidas": 153116,
+  "escopo": 0,
+  "disjuntor": 0,
+  "reajustes": 538,
+  "reajustes_por_deriva": 0,
+  "rotulo_ja_conhecido": 0,
+  "estado_do_futuro": 0
+ },
+ "decisoes_C_L": {
+  "alteradas": 7059,
+  "total": 153116
+ },
+ "limiares_deriva": [
+  {
+   "sensor": "atraso_partida",
+   "alto": 0.17084374999999996,
+   "baixo": 0.141625,
+   "janelas_calibracao": 26
+  },
+  {
+   "sensor": "residuo_padronizado",
+   "alto": 0.34671875,
+   "baixo": 0.3099375,
+   "janelas_calibracao": 26
+  }
+ ],
+ "eventos_operacao": [],
+ "varredura": {
+  "por_tabela": {
+   "agenda": {
+    "leituras": 8767,
+    "bytes_varridos": 19857810,
+    "bytes_tabela": 6405253,
+    "varreduras_equivalentes": 3.1002381951189126
+   },
+   "partida": {
+    "leituras": 8767,
+    "bytes_varridos": 12121926,
+    "bytes_tabela": 3875099,
+    "varreduras_equivalentes": 3.1281590483236688
+   },
+   "chegada": {
+    "leituras": 8767,
+    "bytes_varridos": 8576659,
+    "bytes_tabela": 2737584,
+    "varreduras_equivalentes": 3.1329299849794565
+   },
+   "clima": {
+    "leituras": 8767,
+    "bytes_varridos": 6952120,
+    "bytes_tabela": 3473560,
+    "varreduras_equivalentes": 2.0014394454104725
+   },
+   "canario": {
+    "leituras": 8767,
+    "bytes_varridos": 8576659,
+    "bytes_tabela": 2737584,
+    "varreduras_equivalentes": 3.1329299849794565
+   }
+  },
+  "leituras": 43835,
+  "leituras_com_futuro": 0,
+  "gasto_por_agente": {
+   "agent-f2-data": 56085174
+  },
+  "orcamento_por_agente": 2000000000
+ },
+ "ingestao": {
+  "agenda": {
+   "tabela": "agenda",
+   "linhas": 161192,
+   "bytes_tabela": 6405253,
+   "grupos": 4036,
+   "colunas": [
+    "id",
+    "prog",
+    "carrier",
+    "origin",
+    "dest",
+    "distance",
+    "hora",
+    "dow",
+    "t_disp"
+   ]
+  },
+  "partida": {
+   "tabela": "partida",
+   "linhas": 161192,
+   "bytes_tabela": 3875099,
+   "grupos": 4034,
+   "colunas": [
+    "id",
+    "origin",
+    "carrier",
+    "dep_delay",
+    "t_disp"
+   ]
+  },
+  "chegada": {
+   "tabela": "chegada",
+   "linhas": 161192,
+   "bytes_tabela": 2737584,
+   "grupos": 4037,
+   "colunas": [
+    "id",
+    "y",
+    "t_disp"
+   ]
+  },
+  "clima": {
+   "tabela": "clima",
+   "linhas": 17426,
+   "bytes_tabela": 3473560,
+   "grupos": 5813,
+   "colunas": [
+    "origin",
+    "t_obs",
+    "visib",
+    "wind",
+    "precip",
+    "t_disp"
+   ]
+  },
+  "canario": {
+   "tabela": "canario",
+   "linhas": 161192,
+   "bytes_tabela": 2737584,
+   "grupos": 4037,
+   "colunas": [
+    "id",
+    "c",
+    "t_disp"
+   ]
+  }
+ },
+ "segundos": 4722.6,
+ "canario_vazado": false,
+ "placar": {
+  "desenvolvimento": {
+   "n": 114508,
+   "perda_modelo": 0.12065535014444154,
+   "perda_reserva": 0.1254682675038144,
+   "perda_oficial": 0.12065535014444154,
+   "habilidade_oficial_vs_reserva": 0.03835963829839717
+  },
+  "cofre": {
+   "n": 38608,
+   "perda_modelo": 0.12781881281519572,
+   "perda_reserva": 0.13238142807354533,
+   "perda_oficial": 0.12781881281519572,
+   "habilidade_oficial_vs_reserva": 0.03446567486652907
+  }
+ },
+ "fichas": 6
+}
