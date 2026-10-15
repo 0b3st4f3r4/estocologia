@@ -8,7 +8,7 @@ Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob inc
 
 O artigo percorre as velhas fronteiras que a disciplina herda, apresenta a arquitetura com que o projeto pretende operá-la (um hipergrafo tipado, auditado por agentes especializados e por quatro invariantes) e relata os primeiros resultados. Num posto de saúde simulado, a mesma demanda média produz uma espera média de 9,3 ou de 20,7 minutos, conforme o mundo varie ou não. Em dados reais, a mesma lógica mostra que a escala padrão de uma central bancária, que promete cumprir a meta todo dia, falha em 26 de cada 100. O programa passou nos quatro horizontes do seu plano, mas não de primeira: o terceiro, a busca de estruturas causais invariantes entre áreas, exigiu sete rodadas, e o quarto, a calibração contínua fora do tempo, três tentativas no fluxo mais difícil. O artigo trata as falhas do caminho como resultado e termina com os horizontes que se abrem e as objeções que a disciplina precisa enfrentar.
 
-Esta versão aprofunda cada passo com o material do curso que sustenta a disciplina, dezessete módulos centrais, vinte e cinco especiais e oito bancas. Entram a forma exata das contas que antes eram só nomeadas (Bayes em chances, a identidade de Meng, a porta dos fundos, o critério de Kelly, a decomposição de Murphy) e os casos que as tornam concretas, da mamografia ao navio de Bernoulli. Entram também três objeções novas, entre elas a de que o auditor do programa é parte interessada.
+Esta versão acrescenta a auditoria de fundo do programa, na seção 8: dez pontos que o texto supunha e que foram testados contra os próprios dados, entre eles o piloto cego da tese central, que empatou no teto, e o laço performativo, que a medição numa central real põe em torno de 0,15, e não nos 0,6 declarados. Aprofunda também cada passo com o material do curso que sustenta a disciplina, dezessete módulos centrais, vinte e cinco especiais e oito bancas. Entram a forma exata das contas que antes eram só nomeadas (Bayes em chances, a identidade de Meng, a porta dos fundos, o critério de Kelly, a decomposição de Murphy) e os casos que as tornam concretas, da mamografia ao navio de Bernoulli. Entram também três objeções novas, entre elas a de que o auditor do programa é parte interessada.
 
 ## 1. Introdução: decidir sem saber
 
@@ -298,7 +298,7 @@ Depois do Lab 0, o programa percorreu os quatro horizontes do plano com bases p�
 | --- | --- | --- | --- |
 | H0 Semente | 2,65 milhões de chamadas de uma central bancária (2003) | Φ1 a Φ4 e reprodução limpa | Passou |
 | H1 Ciclo completo | Dow Jones 1885–2023; LaLonde (NSW e CPS); incêndios dinamarqueses 1980–1990 | Um projeto aprovado na banca adversarial | Passou: 2 de 3 projetos aprovados; o de cauda pesada foi reprovado |
-| H2 Transferência | 12 domínios de conveniência; depois bases com intervenções conhecidas, câmaras físicas, deleções de genes em levedura e um ensaio de cardiologia do FDA | Conjunto causal invariante (ICP) não vazio em 3 áreas | Passou na sétima rodada: 4 áreas; sem a Genética, frágil, restam Educação, Física e Farmacologia |
+| H2 Transferência | 12 domínios de conveniência; depois bases com intervenções conhecidas, câmaras físicas, deleções de genes em levedura e um ensaio de cardiologia do FDA | Conjunto causal invariante (ICP) não vazio em 3 áreas | Passou na sétima rodada: 4 áreas; a auditoria de fundo (seção 8) troca a Educação pela Genética replicada, e o portão segue de pé com três áreas |
 | H3 Malha contínua | 6 fluxos em replay sob relógio, 453 973 previsões; depois voos de 2023, prisões de 2020–2021 e paradas de trânsito em Rhode Island | Calibração fora do tempo, zero vazamento, controle de Goodhart | Passou na terceira tentativa do fluxo de prisões; habilidade baixa (+0,019) |
 
 ### H0 real: a central de chamadas
@@ -427,29 +427,147 @@ As regras são simples e raramente seguidas. "30% de chance" não diz 30% de qu�
 
 Uma parte da comunicação corre no sentido inverso, do especialista para o modelo. Quando um parâmetro não vem dos dados, vem de alguém, e pedir bem é um método. O protocolo de Sheffield não pede ao especialista uma média. Pede a mediana, os quartis e os extremos plausíveis, ajusta uma distribuição a esses quantis e a devolve para que ele a confirme, controlando a âncora dada pelo entrevistador, a ordem dos cenários e o excesso de confiança. Antes de adotar uma priori informativa, convém medir a calibração do especialista em previsões já resolvidas. Foi esse passo que a pesquisa não deu, e as suas prioris "de literatura" ficaram marcadas como não conferidas.
 
-Os quatro horizontes do plano já foram percorridos, e a seção 6 mostra o que passou e o que não passou. Os próximos passos saem das ressalvas: testes de invariância que respeitem medidas repetidas da mesma pessoa; previsores de eventos raros com mais resolução, e não só boa calibração; a auditoria de quem paga pelo erro, que nos dois fluxos de prisões mostrou o mesmo desequilíbrio; e dados reais de saúde, para fechar o círculo que o Lab 0 abriu.
+Os quatro horizontes do plano já foram percorridos, e a seção 6 mostra o que passou e o que não passou. Os próximos passos saem das ressalvas, e a auditoria de fundo já testou dois deles: os testes de invariância que respeitem medidas repetidas da mesma pessoa e os dados reais de saúde, que entraram e foram podados no teste severo por falta de poder (seção 8). Ficam abertos a resolução dos previsores de eventos raros, e não só a sua calibração; a auditoria de quem paga pelo erro, que nos dois fluxos de prisões mostrou o mesmo desequilíbrio; e o painel de especialistas humanos.
 
-## 8. Limites e objeções
+## 8. A auditoria de fundo: o programa contra si mesmo
+
+Ao fechar a pesquisa, uma auditoria do livro listou dez pontos de fundo: afirmações que o texto sustentava e que
+nunca haviam sido testadas. Cada ponto virou uma frente de trabalho na pasta `fundo/` do repositório, com a mesma
+regra de casa dos horizontes: a declaração com hash vem antes de rodar, o resultado é relatado com os limites, e
+mudança de critério depois de ver o resultado entra como declaração nova e conta no número de tentativas. O que
+segue é o resultado agregado, e ele é menos confortável que as seções anteriores.
+
+**A tese central, num piloto cego.** A hipótese que dá nome ao programa é que a arquitetura pega erros que a
+prática estatística comum deixa passar. Ela foi testada uma vez. Doze casos foram montados por um plantador a
+partir de uma lista externa de dez erros comuns (Makin e Orban de Xivry, 2019): oito com um defeito plantado cada,
+quatro limpos. Dois braços independentes analisaram os mesmos doze casos: um com a arquitetura, outro com a
+instrução de analisar com rigor, sem os agentes nem os portões. Os dois apontaram 8 de 8 defeitos e deram 0 alarme
+falso nos 4 casos limpos. A regra declarada antes dizia que empate no teto não sustenta a tese, e é isso que o
+resultado diz. Ele também não a refuta: mostra que, para os dez erros dessa lista, um analista competente acha
+tudo o que o outro acha. Se a tese vale, vale para erros que a lista não cobre, e um teste justo disso precisa de
+casos mais difíceis escolhidos fora do programa, de analistas humanos e de um juiz humano.
+
+**Independência.** Quatro resultados que sustentam as saídas aprovadas foram reimplementados do zero, sem ler o
+código nem as saídas originais, a partir dos README e das declarações. Todos concordaram com o publicado dentro das
+tolerâncias fixadas antes. O STAR e o ensaio do FDA saíram idênticos, até o número de conjuntos aceitos. O LaLonde e
+o Rhode Island concordam na conclusão, mas não exatamente nos números, e a diferença vem de escolhas que nenhum
+documento fixa: as covariáveis do escore de propensão, que só estão numa docstring, e o fato de o "+0,096"
+publicado ser a mediana de uma posterior bayesiana de quatro células, e não a estimativa de ponderação; em Rhode
+Island, o filtro de linhas e os parâmetros do disjuntor. Não se achou nenhum erro no original. O limite é o que
+importa: a "equipe independente" era um modelo da mesma família, e três escolhas que a especificação deixa em
+aberto saíram iguais às do original sem estarem escritas. Uma concordância assim é evidência fraca; uma divergência
+teria sido forte.
+
+**Multiplicidade e ajustes depois de ver o resultado.** O portão de transferência do H2 foi tentado 38 vezes, se se
+contam os testes distintos (32 a 72, conforme o que se inclui). Com Bonferroni sobre 38, o H2g continua com Ŝ ≠ ∅ em
+quatro áreas, ao custo de 9,6 bits de Occam, e os conjuntos invariantes encolhem: no STAR, {anos pequena antes,
+turma pequena} vira {turma pequena}; na levedura, {plate, x1, x5, x9} vira {plate, x5}, e o único gene que a
+validação por intervenção confirmava sai. Duas ressalvas pesam mais que a correção. A primeira é que dividir α não é
+monótono no método: com α menor, domínios que rejeitavam tudo passam a aceitar algum conjunto, e aparecem Ŝ em
+modelos quase rejeitados. A segunda é que a aprovação depende do arcabouço v2 do H2: com a versão anterior
+reconstruída, o STAR é podado antes do teste de invariância e o H2g cai para três áreas, uma delas a genética
+frágil. E no H3, das quatro versões do estimador do laço, só a quarta passa no critério (vieses de +4,7%, −5,9%,
+−8,4% e +1,7%, para um limite de 3%). Se valesse apenas a primeira versão declarada de cada escolha, nem o H2 nem o
+H3 estariam aprovados. O inventário do caminho também conta onze aberturas de cofre, isto é, onze vezes em que um
+resultado foi visto antes de uma decisão de desenho.
+
+**O laço performativo.** O H3 supôs que quem desiste da fila volta a ligar com probabilidade 0,6. O mesmo parâmetro
+foi medido numa central real que está ao alcance dos dados (AnonymousBank, 1999), com um desenho quase experimental:
+a fila encontrada ao entrar, dentro da mesma data e hora, serve de instrumento para a desistência. Por esse desenho,
+desistir em vez de ser atendido aumenta em 0,145 (IC 90% de 0,132 a 0,157) a chance de o mesmo cliente ligar de novo
+em até quinze minutos. O sinal confere e a ordem de grandeza não: o laço declarado é cerca de quatro vezes o
+observado, fora da faixa de um terço a três que estava declarada. O excesso de chegadas que o laço medido produz
+nessa central é de 2,3% das chegadas, contra o viés de 29% que o laço declarado gerou no H3. Ou seja: a correção
+performativa do H3 foi testada contra um laço bem mais forte que o de um caso real. O valor medido é provavelmente
+um limite inferior, porque uma nova chamada só é visível quando entra na fila, e a central é de outro banco, de
+outro país e de outro ano.
+
+**Calibração: a tolerância não é o ruído.** O H3 reprovava um cofre quando o erro de calibração passava de 0,03.
+Com uma tolerância que depende de n — o ECE observado contra o quantil 95% do ECE sob calibração perfeita, com as
+mesmas previsões —, nenhum cofre binário passa, nem os que foram aprovados: nos ciclones, nos voos de 2023 e em
+Rhode Island, o ECE observado é de 1,4 a 2,3 vezes o valor nulo, com valor-p de 0,0005 ou menos. O ruído nesses
+cofres é de 0,002 a 0,006, e 0,03 é uma tolerância prática que deixa passar descalibração detectável. Pela regra
+secundária, max(0,03; quantil 95%), o quadro do H3 não muda: os três aprovados continuam aprovados e os dois de
+Toronto continuam reprovados — a reprovação de Toronto 1997–2002, aliás, não era ruído (ECE 0,036 contra 0,032,
+valor-p 0,008). Os dois testes de deriva de rótulo testados não teriam avisado antes do sensor original no cofre de
+2013, e o que compara a taxa realizada com a média prevista fica ligado em 95% das verificações daquele ano: com
+janela de três dias, ele mede o tempo de um dia ruim, não a deriva do trimestre. A correção dos voos aguentou o
+único desvio real que apareceu em dois anos novos de dados, mas não houve prova no cofre, e o estresse declarado não
+discriminou porque o reajuste diário absorve a deriva sozinho.
+
+**O ICP depende de quem é a unidade.** O teste de invariância supõe linhas independentes; no ensaio do FDA há 16
+instantes por voluntário e no STAR há 80 escolas. Refazendo o teste com erro agrupado por voluntário e por escola, e
+com permutação de blocos inteiros, as duas áreas se separam. A farmacologia sobrevive intacta: o conjunto
+{c_dof, c_qui, c_ran} — as concentrações das três drogas que bloqueiam o hERG — sai em todos os testes, embora a
+evidência contra o conjunto vazio caia de cerca de 340 bits para 49, e a 9 na permutação em blocos. A educação não sobrevive: com 80 escolas como
+unidades de fato independentes, os conjuntos que o teste não consegue rejeitar não têm variável em comum, e o
+conjunto invariante fica vazio nas duas correções. A física entra como estava. A genética, que era a área frágil, foi
+replicada num sorteio novo de 40 genes: em dez deles o teste devolveu um conjunto invariante com gene, e um par passou na
+validação por intervenção — no mutante do gene deletado, a expressão do alvo fica abaixo de todas as outras 1 740 amostras. As
+áreas são então três, a física, a farmacologia e a genética, e o portão de transferência do H2 segue de pé: não pela
+área que caiu, mas por um domínio novo no lugar do único que já era frágil.
+
+**Escala e dados.** Dois domínios novos de saúde entraram no pacote padronizado, com o funil sem mudança: um ensaio
+sorteado de indometacina contra pancreatite pós-CPRE, 602 pacientes, e um painel país-mês de vacinação e
+mortes por covid. Os dois foram podados no teste de permutação (p = 0,060 e p = 0,28). No ensaio, o sinal está do
+lado esperado e o funil simplesmente não tem poder depois de reservar um centro inteiro como cofre. A escala foi
+testada com o funil rodando em lote sobre 329 domínios gerados por regra a partir de um catálogo público: 327
+chegaram ao fim, ao custo de 3,8 segundos de processador por domínio. O hipergrafo saltou de 12 797 para 26 634
+nós, mas só 6 494 são nós de conceito; 20 140 são hipóteses do teste de invariância, uma por subconjunto tentado,
+que crescem como 2 elevado ao número de variáveis e não são conhecimento novo. E dos 6 494, apenas 554 vêm de
+pacotes curados. O gargalo não é a máquina: é a curadoria semântica, que não escala por regra, a oferta de
+conjuntos com ambientes identificáveis (9% do catálogo passa), as pontes do grafo, que crescem com o quadrado do
+número de domínios, e manter tudo em memória. A contagem de "1 538 nós" que a auditoria usou estava desatualizada, e
+isso mostra o risco do número bonito.
+
+**As prioris.** As prioris informativas do programa nunca passaram por um especialista humano: foram lidas de
+literatura e convertidas em distribuições por regras fixas. A frente que mede se as conclusões dependiam delas trocou,
+em 33 domínios, a priori do pacote pela de literatura e por uma deliberadamente fraca. Cinco domínios mudam de status
+ou de ação com a de literatura, e dois com a fraca; nenhuma das mudanças é cosmética. Uma reprovação vira poda no
+primeiro filtro, outra vira aprovação — o projeto de cauda pesada que o H1 reprovou passa quando o painel simulado
+vira um Beta(1,1) quase sem informação. Duas das cinco vêm de fonte construída sobre a própria base do domínio, o
+caso de dupla contagem que a declaração previa marcar. O deslocamento grande, porém, não decide sozinho: dois domínios
+andam mais de um desvio-padrão da posterior e não cruzam o limiar do F8. O portão de transferência do H2 continua
+passando, agora com exatamente três áreas. E a rodada de controle, que deveria reproduzir os números publicados, não
+mudou categoria, portão nem ação em nenhum dos 33 domínios: ficou a menos de sete milésimos de desvio-padrão em cada
+posterior, que é ruído do ambiente numérico. Como a declaração escreveu a condição de falha sem tolerância, ela dispara
+pela letra, e o veredito sai rotulado como condicional — afrouxar o limiar depois de ver o resultado é o tipo de
+ajuste que o parágrafo da multiplicidade, nesta mesma seção, denuncia.
+
+**O que a auditoria muda no resto do texto.** Nenhum número publicado nas seções 5 a 7 caiu por erro de conta: a
+reimplementação independente não achou um. O que a auditoria estreita é o que esses números autorizam. O laço de 0,6
+que o H3 corrigiu é quatro vezes o que se mediu num caso real. A tolerância de 0,03 do erro de calibração é maior
+que o ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de n. As prioris informativas também
+não são neutras: cinco dos 33 domínios mudam de decisão com a de literatura, entre eles o projeto de cauda que o H1
+reprovou. O portão de transferência do H2 depende de qual versão de cada escolha conta, e a área da educação não
+sobrevive à correção de agrupamento — quem sustenta a terceira área agora é a genética replicada, não a educação. E a
+hipótese que dá nome ao programa continua sem demonstração, porque no único teste direto que ela teve os dois braços
+empataram no teto. Um levantamento das referências completou o quadro: as obras antes citadas de memória foram
+conferidas uma a uma em fonte autoritativa, com DOI, e três citações mudaram de forma — o artigo de Meyer, Viscusi e
+Durbin, que o texto atribuía a dois autores; o de Baltagi e Levin, que saiu em *Structural Change and Economic
+Dynamics*, e não em *Empirical Economics*; e a obra de Hume de 1748, cujo título só passou a *Enquiry* em 1758.
+
+## 9. Limites e objeções
 
 Uma disciplina que exige teste severo das alegações alheias precisa aplicá-lo a si mesma. Sete objeções merecem resposta direta.
 
-**"Isso é só estatística com outro nome."** Em parte, sim: quase todas as ferramentas têm dono há décadas. O que a Estocologia acrescenta é a organização: a separação em camadas, a tipagem da incerteza e a exigência de que cada alegação passe pelos mesmos portões. A hipótese que o programa precisa demonstrar, e ainda não demonstrou, é que essa organização pega erros que a prática estatística comum deixa passar.
+**"Isso é só estatística com outro nome."** Em parte, sim: quase todas as ferramentas têm dono há décadas. O que a Estocologia acrescenta é a organização: a separação em camadas, a tipagem da incerteza e a exigência de que cada alegação passe pelos mesmos portões. A hipótese que o programa precisa demonstrar, e ainda não demonstrou, é que essa organização pega erros que a prática estatística comum deixa passar. O primeiro teste direto dela, o piloto cego da seção 8, empatou no teto: os dois braços apontaram os mesmos oito defeitos plantados e deram os mesmos zero alarmes falsos.
 
 A documentação do curso dá a resposta mais curta ao comparar o campo com os vizinhos: a Estocologia não busca teoremas novos, usa-os para julgar argumentos e pressupostos, e pergunta o que um modelo autoriza concluir, não como otimizá-lo.
 
-**"Os dados reais são antigos e de bases públicas."** É verdade, e foi escolha: chamadas de 2003, empregos de 1978, incêndios de 1980 a 1990. São bases conhecidas, verificáveis por hash e com desfecho já sabido, o que permite auditar o método, mas não substitui uma operação de verdade. Várias peças continuam supostas: prioris de literatura citadas de memória, sem especialista consultado; tempos de atendimento e custos de decisão; o laço performativo do H3. E os dois últimos portões só passaram depois de várias rodadas, com mudanças declaradas no caminho. A arquitetura registra tudo isso como pendência declarada, que é exatamente o que ela exige de qualquer alegação.
+**"Os dados reais são antigos e de bases públicas."** É verdade, e foi escolha: chamadas de 2003, empregos de 1978, incêndios de 1980 a 1990. São bases conhecidas, verificáveis por hash e com desfecho já sabido, o que permite auditar o método, mas não substitui uma operação de verdade. Várias peças continuam supostas: as prioris informativas, que seguem sem especialista consultado e cuja sensibilidade foi medida na seção 8, com veredito condicional; tempos de atendimento e custos de decisão; e o laço performativo do H3, que a medição numa central real põe em cerca de 0,15, e não nos 0,6 declarados (seção 8). E os dois últimos portões só passaram depois de várias rodadas, com mudanças declaradas no caminho. A arquitetura registra tudo isso como pendência declarada, que é exatamente o que ela exige de qualquer alegação.
 
 **"Formalizar o julgamento é eliminar o julgamento."** A arquitetura não decide o que vale a pena perguntar, nem quanto um erro custa para quem o sofre. Esses valores entram pela elicitação e pela razão custo/perda, que são declarados, não calculados. A ambição é tornar o julgamento visível e contável, não substituí-lo; por isso a definição diz "ciência (ou arte)".
 
 **"O aparato é pesado demais."** Oito agentes, cinco lentes e quatro invariantes são muito para uma pergunta simples. O plano reconhece o risco e responde com o funil: a maior parte das hipóteses deve ser descartada barato, antes de qualquer simulação cara. Se o custo de usar a máquina for maior que o valor das decisões que ela melhora, a própria Crisonomia mandaria desligar a máquina.
 
-**"Bayes resolve o problema de Hume."** Não resolve, e a disciplina não deve vender isso. A atualização bayesiana é a regra coerente dentro de um espaço de hipóteses, mas o problema da indução se desloca para a escolha da priori e do espaço, como a regra de sucessão de Laplace mostrou na seção 2. O próprio teorema de Cox depende de hipóteses técnicas, como mostra o contraexemplo de Halpern (1999). E nem toda informação é bem-vinda. Good (1967) provou que informação gratuita nunca piora a decisão de quem tem preferências sobre estados do mundo, mas quem tem preferências sobre as próprias observações pode pagar para não saber: entre pessoas com risco de doença de Huntington, menos de 10% faz o exame genético antes dos sintomas.
+**"Bayes resolve o problema de Hume."** Não resolve, e a disciplina não deve vender isso. A atualização bayesiana é a regra coerente dentro de um espaço de hipóteses, mas o problema da indução se desloca para a escolha da priori e do espaço, como a regra de sucessão de Laplace mostrou na seção 2. O próprio teorema de Cox depende de hipóteses técnicas, como mostra o contraexemplo de Halpern (1999). E nem toda informação é bem-vinda. Good (1967) provou que informação gratuita nunca piora a decisão de quem tem preferências sobre estados do mundo, mas quem tem preferências sobre as próprias observações pode pagar para não saber: entre pessoas com risco de doença de Huntington, 17,4% fizeram o exame genético antes dos sintomas no Reino Unido entre 1994 e 2014 (Baig e colegas, 2016).
 
 **"A ergodicidade virou doutrina."** A Crononomia se apoia no programa de Ole Peters, que é contestado, e a disciplina o ensina como debate. Peters propôs que a aversão a perdas talvez não seja viés, e sim uma resposta racional a uma dinâmica multiplicativa. Os números mostram em que escala isso vale. Tversky e Kahneman estimaram que perdas pesam cerca de 2,25 vezes os ganhos, e, pelo critério do crescimento, uma razão dessa ordem só se justifica quando 56% da riqueza estão em jogo. A tese explica a recusa de arriscar meio patrimônio, mas não a aversão medida em laboratório com apostas pequenas, em que qualquer utilidade côncava e suave é quase neutra; o teorema de calibração de Rabin vale também para o logaritmo. Num experimento em Copenhague (Meder e colegas, 2021), a aversão ao risco dos participantes aumentou quando o jogo passou de aditivo a multiplicativo; Doctor, Wakker e Wang (2020) respondem que a utilidade esperada nunca supôs ergodicidade. O debate fica mais preciso, sem vencedor. Algo parecido vale para as caudas: Taleb pede que se suponha cauda pesada até prova em contrário, e Clauset, Shalizi e Newman (2009) pedem prova antes de declarar uma lei de potência. A questão é de quem é o ônus da prova, e a resposta depende de quanto custa errar.
 
 **"O auditor é parte interessada."** Os 21 pareceres de risco foram assinados por quem conduz o programa. Uma auditoria autorizada por quem é auditado tem valor limitado, e o escopo, nesse caso, é uma concessão do auditado. A arquitetura responde em parte com o responsável humano nomeado, porque a pergunta de uma auditoria não é técnica: quem decidiu usar, quem aprovou, quem olha o placar, quem desliga. Mas nomear um responsável não torna a auditoria independente. O que o programa pode fazer, e ainda não fez, é registrar o que a auditoria não pôde olhar e quais grupos afetados foram ouvidos, ou declarar que nenhum foi.
 
-## 9. Conclusão
+## 10. Conclusão
 
 A Estocologia propõe uma mudança de pergunta. Em vez de "qual é a probabilidade?", pergunta: em que camada esta afirmação pode falhar, que tipo de incerteza a ameaça, e que teste ela teria de enfrentar para merecer confiança? As velhas fronteiras (entre filosofia, estatística e dinâmica; entre risco e incerteza; entre a norma e o comportamento) não desaparecem. Viram costuras, e é nas costuras que a disciplina trabalha.
 
@@ -481,10 +599,10 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Johannesen, L. et al. Differentiating drug-induced multichannel block on the electrocardiogram: randomized study of dofetilide, quinidine, ranolazine, and verapamil. *Clinical Pharmacology & Therapeutics*, 96(5):549–558, 2014.
 - Gibbs, I.; Candès, E. Adaptive conformal inference under distribution shift. *NeurIPS 34*, 2021.
 
-**Obras clássicas citadas** (referências de memória, sem conferência bibliográfica nesta versão)
+**Obras clássicas citadas** (conferidas em fonte autoritativa as sete que a conferência registra — Bernoulli, Knight, Savage, Tversky e Kahneman, Mayo, Pearl, Gigerenzer; as demais seguem como as fontes as dão; ver [referencias/CONFERENCIA.md](../referencias/CONFERENCIA.md))
 
 - Bernoulli, J. *Ars Conjectandi*, 1713.
-- Hume, D. *An Enquiry Concerning Human Understanding*, 1748.
+- Hume, D. *Philosophical Essays Concerning Human Understanding*. Londres: A. Millar, 1748 (o título *An Enquiry* só aparece na edição de 1758).
 - Bayes, T. "An Essay towards Solving a Problem in the Doctrine of Chances", 1763.
 - Knight, F. *Risk, Uncertainty and Profit*, 1921.
 - Kolmogorov, A. *Grundbegriffe der Wahrscheinlichkeitsrechnung*, 1933.
@@ -498,8 +616,9 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Meng, X.-L. "Statistical Paradises and Paradoxes in Big Data", 2018.
 
 
-**Obras citadas a partir dos módulos do curso** (referências como os módulos as dão, sem conferência bibliográfica nesta versão)
+**Obras citadas a partir dos módulos do curso** (referências como os módulos as dão; as que entraram depois estão conferidas, ver [referencias/CONFERENCIA.md](../referencias/CONFERENCIA.md))
 
+- Baig, S. S. et al. "22 years of predictive testing for Huntington's disease: the experience of the UK Huntington's Prediction Consortium", *European Journal of Human Genetics* 24(10):1396–1402, 2016. DOI: 10.1038/ejhg.2016.36.
 - Berkson, J. "Limitations of the application of fourfold table analysis to hospital data", *Biometrics Bulletin* 2(3), 1946.
 - Birkhoff, G. D. "Proof of the ergodic theorem", *PNAS* 17(12), 1931.
 - Breiman, L. "Optimal gambling systems for favorable games", *4th Berkeley Symposium*, 1961.
@@ -520,6 +639,7 @@ O posto de saúde simulado resume a lição em uma frase: a mesma média pode es
 - Kelly, J. L. "A new interpretation of information rate", *Bell System Technical Journal* 35(4), 1956.
 - Kramers, H. A. *Physica* 7(4), 1940.
 - Lucas, R. E. "Econometric policy evaluation: a critique", *Carnegie-Rochester Conference Series on Public Policy* 1, 1976.
+- Makin, T. R.; Orban de Xivry, J.-J. "Ten common statistical mistakes to watch out for when writing or reviewing a manuscript", *eLife* 8:e48175, 2019. DOI: 10.7554/eLife.48175.
 - Meder, D. et al. "Ergodicity-breaking reveals time optimal decision making in humans", *PLoS Computational Biology* 17(9), 2021.
 - Meng, X.-L. "Statistical paradises and paradoxes in big data (I)", *Annals of Applied Statistics* 12(2), 2018.
 - Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6), 2018.

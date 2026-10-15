@@ -32,6 +32,16 @@ Método: cada referência, antes citada de memória, foi comparada com uma fonte
 | 24 | O'Hagan et al. 2006, Uncertain Judgements / SHELF | CONFERE (com nota) | O'HAGAN, A.; BUCK, C. E.; DANESHKHAH, A.; EISER, J. R.; GARTHWAITE, P. H.; JENKINSON, D. J.; OAKLEY, J. E.; RAKOW, T. *Uncertain judgements: eliciting experts' probabilities*. Chichester: Wiley, 2006. DOI: 10.1002/0470033312. Nota: o SHELF (Sheffield Elicitation Framework, de Oakley & O'Hagan) é outra obra, um protocolo/software; não deve ser citado como sinônimo do livro | https://pureportal.coventry.ac.uk/en/publications/uncertain-judgements-eliciting-experts-probabilities/ |
 | 25 | Prior de QT: dofetilida 500 µg → pico ~2–3 ng/mL, ΔQTc ~70–80 ms, inclinação ~25–35 ms por ng/mL | CONFERE (consistente) | Johannesen et al. (2014) relatam: dose de 500 µg; concentração plasmática média de pico de 2,7 ± 0,3 ng/mL; ΔΔQTc máximo de 79,3 ms (IC 95% 72,2–86,3); inclinação QTc–concentração de 29 ms por ng/mL (citada na Discussão). Os três valores do prior caem dentro das faixas usadas | https://cipaproject.org/wp-content/uploads/2016/12/Johannesen_et_al-2014-Clinical_Pharmacology__Therapeutics.pdf |
 
+## Situação das correções nos arquivos do repositório (2026-10-15)
+
+Aplicadas em `artigo/README.md` nesta data: o título de Hume de 1748 (era citado como *An Enquiry*, que só aparece em
+1758), a taxa de teste preditivo da doença de Huntington (era "menos de 10%", passou a 17,4%, Baig e colegas 2016),
+a atribuição de Meyer, Viscusi & Durbin (#14), e a ressalva de que as obras clássicas estavam citadas de memória,
+que caiu. Ficam como correções a aplicar onde quer que o texto do livro didático repita a citação: #17 (Baltagi e
+Levin saiu em *Structural Change and Economic Dynamics*, não em *Empirical Economics*), #18 (indicar a edição do
+Stock & Watson), #24 (SHELF não é sinônimo do livro de O'Hagan e colegas) e o complemento de volume, número, páginas
+e DOI de #2, #3, #5, #7, #19 e #22. No repositório, os dois arquivos que ainda repetem #17 e #18 com a marca "citada de memória, conferir" são `dados-reais/h2b/FONTES.md` e `dados-reais/h2e/FONTES.md`; o livro didático não repete nenhuma das duas.
+
 ## Correções a aplicar nos arquivos
 
 - **#14:** trocar "Viscusi & Durbin (1995)" por **Meyer, Viscusi & Durbin (1995)**. Faltava o primeiro autor, Bruce D. Meyer. Referência completa: *American Economic Review* 85(3):322–340.
