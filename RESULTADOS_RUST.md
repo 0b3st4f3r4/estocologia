@@ -89,6 +89,29 @@ categoria=justica probabilidade=0.9117 produtos=[0.0177, 0.0177, 0.0177, 0.0177,
 categoria=outros probabilidade=0.8718 produtos=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] soma=1.0000 fora_de[0.01;0.99]=0 | probabilidade 0.8718 | soma 1.0000 | fora de [0.01;0.99] 0
 ~~~
 
+### O Sistema 2 deliberativo
+
+LATS contra o ganancioso no grafo declarado da amostra, a crenca da banca medida em ataques ate o
+primeiro reprovado, a posterior da Beta(4, 8) contra a forma fechada (1/3) e a resolucao escolhida
+pelo proprio instrumento do eixo R. O no que nenhuma lente cobre e a frente declarada e nao
+implementada (f1.sintese-de-codigo).
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --s2
+~~~
+
+~~~text
+== Sistema 2 :: deliberação sobre o hipergrafo ==
+grafo declarado: 8 nos, 6 arestas de arvore, 2 de grafo, 5 hiperarestas | validacao ok
+nos que nenhuma lente cobre: ["f1.sintese-de-codigo"]
+ganancioso: para em h0.fila (valor 0.600) | LATS: raiz.estocologia -> r.resolucao -> f1.sintese-de-codigo (valor 1.000, no sem lente true)
+crenca da banca: faixa mais provavel A5-governanca com probabilidade 0.9205 | entropia 0.4324
+estresse: deliberado parou em A5-governanca com 1 ataque(s) | ordem declarada parou em A5-governanca com 5 ataques | mesma reprovacao true
+inferencia: Beta(4, 8) media da cadeia 0.3346 contra a forma fechada 0.3333 | aceitacao 0.676
+eixo R: perda do agregado 46.24 min contra margem de 12,00 min -> R1-dia (a perda do agregado paga a margem do dia) | fora do alcance medido: R2-hora, R3-subpergunta
+eixo R sem oscilacao: perda 0.00 min -> R0-agregada
+~~~
+
 ### O horizonte R: a resolucao da pergunta
 
 Bracos pareados, mesmo recurso total. A perda de resolucao mede quanto custa perguntar pelo dia medio em
@@ -880,14 +903,38 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 5 tests
-test testes::a_decisao_e_deterministica_na_semente ... ok
-test testes::a_deliberacao_bate_o_ganancioso ... ok
-test testes::evidencia_invalida_nao_zera_o_estado ... ok
-test testes::mundo_sem_acao_nao_decide ... ok
-test testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
+running 29 tests
+test crenca::testes::a_evidencia_de_ficha_move_a_crenca_para_a_camada_da_ficha ... ok
+test crenca::testes::evidencia_invalida_nao_zera_o_estado ... ok
+test crenca::testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
+test crenca::testes::o_ranking_desempata_pela_ordem_declarada ... ok
+test estresse::testes::a_crenca_aprende_a_faixa_fraca_e_ataca_ela_primeiro ... ok
+test estresse::testes::a_crenca_da_banca_respeita_o_piso_e_o_teto ... ok
+test estresse::testes::ficha_com_os_oito_cuidados_nao_reprova_em_nenhuma_ordem ... ok
+test estresse::testes::o_ataque_e_deterministico ... ok
+test estresse::testes::sem_aprendizado_a_ordem_deliberativa_e_a_declarada ... ok
+test hipergrafo::testes::a_acao_declara_o_tipo_da_aresta ... ok
+test hipergrafo::testes::a_busca_e_deterministica_no_grafo_de_teste ... ok
+test hipergrafo::testes::a_busca_no_grafo_da_amostra_chega_na_frente_sem_lente ... ok
+test hipergrafo::testes::a_cobertura_conta_lentes_distintas ... ok
+test hipergrafo::testes::a_deliberacao_acha_o_no_sem_lente_onde_o_ganancioso_para_antes ... ok
+test hipergrafo::testes::no_ausente_do_grafo_nao_vale_nada ... ok
+test hipergrafo::testes::o_grafo_da_amostra_e_valido_e_tem_um_no_descoberto ... ok
+test inferencia::testes::a_cadeia_e_deterministica_na_semente ... ok
+test inferencia::testes::a_cadeia_recupera_a_media_de_uma_normal ... ok
+test inferencia::testes::a_cadeia_recupera_a_posterior_conjugada_da_beta ... ok
+test inferencia::testes::alvo_fora_do_suporte_nao_aceita_nada ... ok
+test inferencia::testes::passo_grande_derruba_a_aceitacao ... ok
+test lats::testes::a_decisao_e_deterministica_na_semente ... ok
+test lats::testes::a_deliberacao_bate_o_ganancioso ... ok
+test lats::testes::mundo_sem_acao_nao_decide ... ok
+test planejamento::testes::a_avaliacao_declara_os_degraus_fora_do_alcance ... ok
+test planejamento::testes::a_escada_de_resolucao_vem_do_core ... ok
+test planejamento::testes::com_oscilacao_a_perda_paga_a_margem ... ok
+test planejamento::testes::margem_cara_volta_para_o_agregado ... ok
+test planejamento::testes::sem_oscilacao_a_perda_e_zero_e_o_agregado_basta ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 9 tests
 test testes::cadeia_aplica_renomeacao_descarte_e_acrescimo ... ok

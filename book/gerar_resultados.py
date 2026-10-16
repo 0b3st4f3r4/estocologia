@@ -104,6 +104,14 @@ def main() -> int:
         "[0,01; 0,99] e soma conferida a cada rodada. Sem casamento, a resposta e a priori declarada de outros.",
     ))
     partes.append(bloco(
+        "O Sistema 2 deliberativo",
+        [str(BIN), "--s2"],
+        "LATS contra o ganancioso no grafo declarado da amostra, a crenca da banca medida em ataques ate o\n"
+        "primeiro reprovado, a posterior da Beta(4, 8) contra a forma fechada (1/3) e a resolucao escolhida\n"
+        "pelo proprio instrumento do eixo R. O no que nenhuma lente cobre e a frente declarada e nao\n"
+        "implementada (f1.sintese-de-codigo).",
+    ))
+    partes.append(bloco(
         "O horizonte R: a resolucao da pergunta",
         [str(BIN), "--resolucao"],
         "Bracos pareados, mesmo recurso total. A perda de resolucao mede quanto custa perguntar pelo dia medio em\n"

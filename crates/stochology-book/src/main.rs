@@ -18,6 +18,7 @@ fn main() {
     let mut resolucao = false;
     let mut banco = false;
     let mut sistema1 = false;
+    let mut sistema2 = false;
     let mut fila_flag = false;
     let mut i = 0;
     while i < args.len() {
@@ -32,6 +33,7 @@ fn main() {
             "--resolucao" => resolucao = true,
             "--banco" => banco = true,
             "--s1" => sistema1 = true,
+            "--s2" => sistema2 = true,
             "--fila" => fila_flag = true,
             _ => {}
         }
@@ -47,6 +49,10 @@ fn main() {
     }
     if sistema1 {
         sistema_1();
+        return;
+    }
+    if sistema2 {
+        sistema_2();
         return;
     }
     if fila_flag {
@@ -89,6 +95,104 @@ fn sistema_1() {
             t.fora_do_intervalo()
         );
     }
+}
+
+
+/// Sistema 2: deliberação sobre o hipergrafo, crença da banca, inferência e eixo R.
+fn sistema_2() {
+    use stochology_core::medir_perda_de_resolucao;
+    use stochology_core::{Camada, Ficha, TipoIncerteza};
+    use stochology_s2::{
+        CrencaDaBanca, Lats, Metropolis, MundoHipergrafo, ORDEM_DECLARADA, aprender,
+        avaliar_resolucoes, decidir, destino_da_acao, estressar_deliberativo, estressar_em_ordem,
+        ganancioso, grafo_de_amostra, log_beta,
+    };
+
+    println!("== Sistema 2 :: deliberação sobre o hipergrafo ==");
+    let grafo = grafo_de_amostra();
+    let problemas = grafo.validar();
+    println!(
+        "grafo declarado: {} nos, {} arestas de arvore, {} de grafo, {} hiperarestas | validacao {}",
+        grafo.nos.len(),
+        grafo.arestas_tree.len(),
+        grafo.arestas_graph.len(),
+        grafo.hiperarestas.len(),
+        if problemas.is_empty() { "ok".to_string() } else { format!("{problemas:?}") }
+    );
+    let mundo = MundoHipergrafo::novo(&grafo);
+    println!("nos que nenhuma lente cobre: {:?}", mundo.nos_descobertos());
+    let lats = Lats { profundidade: 2, orcamento: 40, exploracao: 1.0, semente: 2026 };
+    let guloso = ganancioso(&mundo, "raiz.estocologia").expect("o grafo tem saidas");
+    let busca = mundo.busca("raiz.estocologia", &lats, 3).expect("a busca chega");
+    println!(
+        "ganancioso: para em {} (valor {:.3}) | LATS: {} (valor {:.3}, no sem lente {})",
+        destino_da_acao(&guloso.acao),
+        guloso.valor,
+        busca.caminho.join(" -> "),
+        busca.valor,
+        busca.sem_lente
+    );
+
+    let ficha_completa = |id: &str| {
+        Ficha::nova(id, Camada::Agente, TipoIncerteza::Epistemica).com_cuidados().completa()
+    };
+    let mut banca = CrencaDaBanca::nova();
+    let treino: Vec<Ficha> = (0..4)
+        .map(|i| {
+            let mut f = ficha_completa(&format!("s2.treino.{i}"));
+            f.trilha_integra = false;
+            f
+        })
+        .collect();
+    aprender(&mut banca, &treino, 2026, 3.0);
+    let topo = banca.ordem()[0];
+    println!(
+        "crenca da banca: faixa mais provavel {} com probabilidade {:.4} | entropia {:.4}",
+        topo.nome(),
+        banca.probabilidade(topo),
+        banca.entropia()
+    );
+    let mut alvo = ficha_completa("s2.alvo");
+    alvo.trilha_integra = false;
+    let deliberado = estressar_deliberativo(&alvo, 2026, &banca);
+    let declarado = estressar_em_ordem(&alvo, 2026, &ORDEM_DECLARADA);
+    println!(
+        "estresse: deliberado parou em {} com {} ataque(s) | ordem declarada parou em {} com {} ataques | mesma reprovacao {}",
+        deliberado.agente.nome(),
+        deliberado.ataques,
+        declarado.agente.nome(),
+        declarado.ataques,
+        deliberado.reprovou == declarado.reprovou
+    );
+
+    let cadeia = Metropolis { passo: 0.15, semente: 7 }.amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
+    println!(
+        "inferencia: Beta(4, 8) media da cadeia {:.4} contra a forma fechada {:.4} | aceitacao {:.3}",
+        cadeia.media(20_000),
+        1.0 / 3.0,
+        cadeia.aceitacao()
+    );
+
+    let perda = medir_perda_de_resolucao(1909, 200, 10, 5.0, 11.0);
+    let decisao = decidir(&perda, 12.0);
+    let fora: Vec<String> = avaliar_resolucoes(&perda, 12.0)
+        .iter()
+        .filter(|a| a.fora_do_alcance.is_some())
+        .map(|a| a.resolucao.codigo().to_string())
+        .collect();
+    println!(
+        "eixo R: perda do agregado {:.2} min contra margem de 12,00 min -> {} ({}) | fora do alcance medido: {}",
+        perda.perda,
+        decisao.escolhida.codigo(),
+        decisao.motivo,
+        fora.join(", ")
+    );
+    let sem_oscilacao = medir_perda_de_resolucao(1909, 200, 10, 8.0, 8.0);
+    println!(
+        "eixo R sem oscilacao: perda {:.2} min -> {}",
+        sem_oscilacao.perda,
+        decidir(&sem_oscilacao, 12.0).escolhida.codigo()
+    );
 }
 
 /// H0 real em Rust: a central de chamadas do banco.

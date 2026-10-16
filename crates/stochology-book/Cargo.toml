@@ -10,4 +10,5 @@ name = "labs"
 path = "src/main.rs"
 
 [dependencies]
+stochology-s2 = { path = "../stochology-s2" }
 stochology-core = { path = "../stochology-core" }

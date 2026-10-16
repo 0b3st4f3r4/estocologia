@@ -11,6 +11,7 @@ name = "stochology-book"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
+ "stochology-s2",
 ]
 
 [[package]]
@@ -90,6 +91,7 @@ name = "stochology-s2"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
+ "stochology-hypergraph",
 ]
 
 [[package]]

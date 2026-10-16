@@ -43,8 +43,8 @@
 //!
 //! O Sistema 1 é triagem, não julgamento: localiza a família de erro de uma ficha e devolve uma
 //! distribuição sobre rótulos fechados. A pergunta que exige deliberação — eixo R, síntese de
-//! código, estresse adversarial — fica com o Sistema 2, que é outra proposta declarada e não
-//! vive neste arquivo.
+//! código, estresse adversarial — fica com o Sistema 2, que vive em `crates/stochology-s2`: LATS,
+//! motor de estado de crença, inferência de Metropolis e estresse deliberativo da banca.
 
 use std::collections::BTreeMap;
 

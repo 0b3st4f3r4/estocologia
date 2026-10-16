@@ -5,19 +5,18 @@ anterior: o que já existe aparece com o arquivo, a linha e o teste que o susten
 o que precisaria existir para fechar. Cada ponteiro foi aberto antes de entrar na tabela, e um deles não
 existia, o que gerou §6 e o conserto das linhas que dependiam dele.
 
-A lista viva tem onze itens (§1). São os sete originais mais as cinco frentes que estavam fora dela e
-entraram por decisão do autor em 2026-10-16, menos o item 1: os dez crates do roteiro passaram a viver na
-segunda passada do dia e a prova deles está em §2. Os itens que a consolidação em Rust fechou saíram para §2,
-com a prova ao lado, e §3 registra as decisões do dia.
+A lista viva tem dez itens (§1). São os sete originais mais as cinco frentes que estavam fora dela e
+entraram por decisão do autor em 2026-10-16, menos o item 1 — os dez crates do roteiro — e o item 2 — o
+Sistema 2 deliberativo: os dois passaram a viver no mesmo dia, e a prova de cada um está em §2. Os itens que
+a consolidação em Rust fechou saíram para §2, com a prova ao lado, e §3 registra as decisões do dia.
 
 ## 1. O que continua como proposta declarada
 
-Os números dos itens são os da revisão anterior, para o registro não perder a referência: o item 1 saiu da
-lista em 2026-10-16 e a numeração de 2 a 12 continua como estava.
+Os números dos itens são os da revisão anterior, para o registro não perder a referência: os itens 1 e 2
+saíram da lista em 2026-10-16 e a numeração de 3 a 12 continua como estava.
 
 | Proposta | Onde está declarada | O que falta |
 | --- | --- | --- |
-| **2. Sistema 2 deliberativo** | `PLAN.md` §4 e Capítulo 13; `crates/stochology-core/src/s1.rs:44-46` reserva a deliberação para cá | qualquer implementação: `LATS` mais `Belief-State Engine` sobre o hipergrafo não têm arquivo. A triagem que o acompanha já está de pé (§2) |
 | **3. Elicitação humana SHELF** | Capítulos 15 e 21; `fundo/p12-shelf/` (protocolo, 6 formulários, `comparacao.md` em esqueleto) e `governanca/RELEITURA.md` (21 linhas em branco) | a primeira entrevista. Nenhum especialista foi consultado, nenhum parecer relido, nenhum arquivo assinado; cinco dos 33 domínios mudam de decisão conforme a priori escolhida |
 | **4. Resolução fina da genética** | `book/cap19.md:80` e `book/cap21.md:68-69,161,274` | a segunda linha: cada mutante é hoje um ambiente de uma linha só, e o piso do desenho é $p = 1/1\,000$ |
 | **5. A voz de quem paga o erro** | Capítulos 11, 15, 20 e 21; `governanca/GRUPOS.md` | escuta. Nas sete decisões que afetam pessoas reais, a coluna "ouvidos" diz **nenhum** nas sete |
@@ -31,11 +30,12 @@ lista em 2026-10-16 e a numeração de 2 a 12 continua como estava.
 
 ## 2. Fechado depois do inventário anterior
 
-Sete linhas do inventário anterior, agrupadas aqui em seis itens, passaram a ter código, teste e comando.
+Oito linhas do inventário anterior, agrupadas aqui em sete itens, passaram a ter código, teste e comando.
 Ficam como registro, e não como proposta.
 
 | Item | Prova no código | Comando |
 | --- | --- | --- |
+| **Sistema 2 deliberativo (item 2)** | `crates/stochology-s2`, com sete módulos testados: `lats` (busca com UCB e o ganancioso que serve de nulo), `crenca` (estado de crença com piso e teto), `hipergrafo` (o mundo sobre `Grafo`, com o valor de cada nó medido em lentes que o cobrem e o nó sem lente como alvo), `inferencia` (Metropolis com alvo declarado), `estresse` (a banca A1-A8 atacada na ordem que a crença aprendeu) e `planejamento` (o eixo R decidido pelo instrumento). A síntese de código (F1) fica declarada e não implementada | `cargo test --workspace` e `labs --s2` |
 | **Crates do roteiro (item 1)** | os dez nomes que faltavam vivem, cada um com lib, teste próprio e dependência declarada: `stochology-schema` (contrato em arquivo, versão e cadeia de migrações), `-s2` (LATS e estado de crença), `-h0` (Erlang, escala mínima, nulo de Poisson, resumo obrigatório), `-h1` (arrasto, viés de seleção, Hill), `-h2` (rodadas, contador $K$, Bonferroni, nulo por embaralhamento), `-h3` (relógio estrito com canário, ECE, Brier, laço performativo), `-icp`, `-drift` (CUSUM e KL), `-fairness` (paridade, oportunidades, ECE por subgrupo) e `-wasm` (ponte C e a página de `www/`). Sem dependência externa | `cargo test --workspace` e `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm` |
 | **$\Phi_5$ e o campo de resolução na ficha** | `invariantes.rs:12,110` com 10 testes no arquivo, entre eles `acao_agregada_contra_unidade_dia_reprova_phi5`; campo `resolucao` em `camada.rs:52`, troca em `camada.rs:98`; `portoes` conta $\Phi_1$–$\Phi_5$ em `crates/stochology-gates/src/main.rs:316`. Limite declarado: a trava só morde com unidade igual ou mais grossa que o dia | `cargo test --workspace` |
 | **Sistema 1 determinístico** | `crates/stochology-core/src/s1.rs` (877 linhas, 12 testes), vocabulário fechado, árvore de sufixos e probabilidade presa em $[0{,}01; 0{,}99]$ | `labs --s1` |
@@ -94,21 +94,23 @@ apontam agora para o que ficou.
 | --- | --- | --- |
 | 1. Teoria e invariantes | 4 | 0 como proposta de código; as previsões 3 e 5 são o item 8 |
 | 2. Crates do roteiro | 11 | 0 — os dez nomes vivem desde 2026-10-16 (item 1, §2) |
-| 3. Método declarado e não implementado | 6 | 1 (o Sistema 2, item 2); 5 fechados em §2 |
+| 3. Método declarado e não implementado | 6 | 0 — o Sistema 2 entrou em §2 e o restante estava fechado |
 | 4. Pesquisa empírica em aberto | 4 | 3 (SHELF, genética, voz), nos itens 3 a 5 |
 | 5. Registro sem segunda opinião | 12 resultados | 12, no item 12 |
 | 6. Decisões de não fazer | 5 | 5 |
 | 7. Limites estruturais | 3 | 3 |
-| — Lista viva de proposta declarada | 7 | **11**: os itens 8 a 12 entraram em 2026-10-16 e o item 1 saiu na mesma data |
+| — Lista viva de proposta declarada | 7 | **10**: os itens 8 a 12 entraram em 2026-10-16 e os itens 1 e 2 saíram na mesma data |
 
 ### Verificação desta revisão
 
 Rodada em 2026-10-16, nesta árvore, com o código já consolidado. Código de saída entre parênteses. A segunda
-passada do dia fechou o item 1: os números de `cargo test` e a linha do alvo `wasm` são dela.
+passada do dia fechou os itens 1 e 2: os números de `cargo test`, a linha do alvo `wasm` e a linha do
+`labs --s2` são dela.
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test --workspace` | 157 testes aprovados, nenhum reprovado: `core` 51, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `s2` 5, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
+| `cargo test --workspace` | 181 testes aprovados, nenhum reprovado: `core` 51, `s2` 29, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
+| `labs --s2` | o Sistema 2 roda: o grafo declarado valida com 8 nós e 5 hiperarestas, o LATS chega em `f1.sintese-de-codigo` (o nó que nenhuma lente cobre) onde o ganancioso para em `h0.fila`, a crença da banca acerta A5 de primeira contra 5 ataques da ordem declarada, a posterior da Beta(4, 8) dá 0,3346 contra a forma fechada 1/3 e o eixo R escolhe R1-dia com a perda de 46,24 min (0) |
 | `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm` | o playground compila: `stochology_wasm.wasm`, 30 606 bytes (0) |
 | `labs --todos` | os 21 laboratórios rodam (0) |
 | `labs --banco` | o $H_0$ real roda sobre `dados-reais/bank_calls.csv` (0) |

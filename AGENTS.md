@@ -57,8 +57,10 @@ decisão), em `crates/stochology-core/src/agentes.rs`, com a condição
 Registros antigos usam os rótulos MB1–MB8: é a mesma lista. O orquestrador M
 (`crates/stochology-core/src/orquestrador.rs`) conduz o ciclo de seis estágios: tradução e escopo, ingestão
 e grão, simulação e modelo nulo, projeção nas cinco lentes, banca e portão, decisão e fechamento. Dos dois
-modos, o **Sistema 2** segue declarado e não implementado, e o **Sistema 1** já vive em
-`crates/stochology-core/src/s1.rs`, com o funil de filtros ao lado. Veja `PROPOSTAS_DECLARADAS.md`.
+modos, o **Sistema 1** já vive em `crates/stochology-core/src/s1.rs`, com o funil de filtros ao lado, e o
+**Sistema 2** vive em `crates/stochology-s2`: LATS, motor de estado de crença, inferência de Metropolis e
+estresse deliberativo da banca, com a síntese de código (F1) declarada e não implementada. Veja
+`PROPOSTAS_DECLARADAS.md`.
 
 ## V. Verificação obrigatória antes de consolidar
 
@@ -68,6 +70,7 @@ cargo run --release --bin labs -- --todos           # os 21 laboratórios do liv
 cargo run --release --bin labs -- --banco           # o H0 real, lendo dados-reais/bank_calls.csv
 cargo run --release --bin labs -- --resolucao       # o horizonte R
 cargo run --release --bin labs -- --s1              # a triagem do Sistema 1
+cargo run --release --bin labs -- --s2              # o Sistema 2: hipergrafo, crença, inferência e eixo R
 cargo run --release --bin labs -- --fila            # a fila com desistência e a tabela R0 a R3
 cargo run --release --bin portoes -- --horizonte todos --reproducao   # os sete portões
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23  # prova negativa: sai com 1
@@ -96,7 +99,7 @@ gerador do registro, os crates) ou registro (capítulos, declarações, manifest
 | Resultados | `RESULTADOS_RUST.md` | registro gerado dos próprios instrumentos |
 | Registro empírico | `REGISTRO_EMPIRICO.md`, `fundo/`, `governanca/`, `dados-reais/` | cada número com a marca do instrumento que o reproduz; o andaime Python saiu em 2026-10-16 |
 | Aposentado | commit `1bfec905` | o código Python de simulação e os artefatos não significativos para a teoria |
-| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | os onze itens vivos de §1: Sistema 2 (deliberativo além do LATS e do estado de crença), SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a tese da ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião. O Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila e os dez crates do roteiro saíram da lista em 2026-10-16, ao serem implementados |
+| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | os dez itens vivos de §1: SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a tese da ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião. O Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila, os dez crates do roteiro e o Sistema 2 saíram da lista em 2026-10-16, ao serem implementados |
 
 ## VIII. O que não entra neste repositório
 

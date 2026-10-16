@@ -94,7 +94,9 @@ A cognição da máquina opera em modos acoplados sob governança central:
   epistemológico $p \in [0{,}01;\ 0{,}99]$.
 - **Modo Sistema 2 (deliberativo):** busca em árvore (*LATS* + *Belief-State Engine* sobre o
   hipergrafo $\mathcal{G}$) para síntese profunda de código ($F_1$), inferência MCMC e estresse
-  adversarial.
+  adversarial. Vive em `crates/stochology-s2`: a busca sobre o hipergrafo, o motor de estado de crença, a
+  inferência de Metropolis e o estresse deliberativo da banca estão de pé com teste e comando
+  (`labs --s2`); a síntese de código ($F_1$) segue declarada e não implementada.
 - **Orquestrador ($\mathcal{M}$) e agentes de faixa ($F_1$ a $F_8$):** o orquestrador conduz o ciclo
   de seis estágios e submete os artefatos às faixas especialistas: $F_1$ (código e simulação),
   $F_2$ (grão do dado e ausentes), $F_3$ (relógio, deriva e "não sei"), $F_4$ (estatística e SBC),
