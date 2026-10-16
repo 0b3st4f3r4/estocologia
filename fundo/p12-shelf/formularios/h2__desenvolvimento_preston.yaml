@@ -91,8 +91,8 @@ especialistas:
       q50: 4.5   # elicitado em 2026-10-16, mediana primeiro
       q25: 3.25   # elicitado em 2026-10-16, depois do q50
       q75: 5.75   # elicitado em 2026-10-16, depois do q50
-      q05: null
-      q95: null
+      q05: 1.25   # elicitado em 2026-10-16, passo dos extremos
+      q95: 7.75   # elicitado em 2026-10-16, passo dos extremos
       justificativa: ""
       fonte: ""
     controles:
@@ -100,8 +100,8 @@ especialistas:
       ancora_S: null
       ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""
+      razao_largura_90_elicitada_sobre_implicada: 1.0662   # elicidata 6.5000 / implicada 6.0967, computada por labs --elicitacao
+      excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: ""
       rodada_1_confirmacao: ""     # confirma / ajusta
@@ -116,6 +116,15 @@ especialistas:
       q50: null
       q75: null
       q95: null
+    ajuste:
+      familia: "gaussiana"
+      media: 4.500000
+      dp: 1.853253
+      erro_max_quartis: 0.0        # os tres quartis centrais caem exatamente na Normal ajustada
+      largura_90_elicitada: 6.5000
+      largura_90_implicada: 6.0967
+      razao: 1.0662
+      comando: "cargo run --release --bin labs -- --elicitacao 1.25,3.25,4.5,5.75,7.75"
   E2:
     nome: ""
     codigo: "E2"

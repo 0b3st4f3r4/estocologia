@@ -8,6 +8,7 @@
 //! seguem como registro; o que existe aqui e o mecanismo, nao a base.
 
 pub mod preteste;
+pub mod shelf;
 
 use stochology_core::Rng;
 
