@@ -286,6 +286,34 @@ demanda 7 ou 9 (oscilacao leve): capacidade media 8.0 | espera agregada 47.70 mi
 demanda 8 ou 8 (sem oscilacao): capacidade media 8.0 | espera agregada 41.56 min, espera fina 41.56 min, perda 0.00 min
    acima de 30 min: agregada 0.5013, fina 0.5013
 escada de resolucao: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
+
+-- previsao 3: o limiar de oscilacao (dia falho: mais de 10% acima de 30 min; limiar: mais de 1/4 dos dias) --
+  200 dias por amplitude | 10 h por dia | especificacao 1: o plano de Erlang do dia medio, 12 agentes
+   amplitude  dias falhos         fracao  perda (min) acima30 R0
+         0.0           41          0.205        -0.26     0.0612
+         0.5           52          0.260        -1.89     0.0776
+         1.0           51          0.255         1.97     0.0954
+         1.5           64          0.320         2.60     0.1267
+         2.0           66          0.330         2.27     0.1365
+         2.5           73          0.365         7.04     0.1634
+         3.0           80          0.400         8.93     0.2314
+  limiar: amplitude 0.5 | perda de resolucao no limiar -1.89 min | monotona: false
+
+-- previsao 3, especificacao 2: a escala de R0 calibrada na demanda plana --
+  a escala calibrada tem 13 agentes (a plana falha no maximo 10% dos dias)
+   amplitude  dias falhos         fracao  perda (min) acima30 R0
+         0.0           19          0.095        -2.24     0.0339
+         0.5           30          0.150        -4.08     0.0467
+         1.0           33          0.165        -0.66     0.0554
+         1.5           39          0.195        -0.65     0.0739
+         2.0           42          0.210        -1.12     0.0854
+         2.5           53          0.265         2.87     0.1027
+         3.0           66          0.330         3.36     0.1458
+  limiar: amplitude 2.5 | perda de resolucao no limiar 2.87 min | monotona: true
+
+-- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --
+  6 perfis x 200 dias | limiar do dia 0.10 | violacoes da implicacao: 0 | contraexemplos: 3 | conservacao do agregado conferida: true
+  leitura: nenhum perfil sobrevive a R1 e falha em R0; 3 perfis passam em R0 e falham em algum dia
 ~~~
 
 ## 2. Os 21 laboratorios do livro
@@ -916,12 +944,14 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 51 tests
+running 59 tests
 test agentes::testes::falta_de_cuidado_reprova_o_agente_da_faixa ... ok
 test agentes::testes::oito_agentes_aprovam_ficha_com_cuidados ... ok
 test agentes::testes::severidade_reproduz_com_a_mesma_semente ... ok
 test camada::testes::com_resolucao_troca_a_resolucao_e_completa_preserva ... ok
 test camada::testes::nova_traz_r1_dia_como_resolucao_padrao ... ok
+test erlang::testes::a_escala_minima_entrega_a_meta_e_uma_a_menos_nao ... ok
+test erlang::testes::erlang_b_e_erlang_c_ficam_na_faixa ... ok
 test funil::testes::a_cota_superior_limita_o_evsi_de_qualquer_exame ... ok
 test funil::testes::a_poda_declara_sem_incerteza_no_extremo ... ok
 test funil::testes::a_poda_dispara_quando_o_evsi_nao_cobre_o_limiar ... ok
@@ -951,8 +981,14 @@ test invariantes::testes::unidade_de_semana_tambem_reprova_com_r0_agregada ... o
 test invariantes::testes::unidade_mais_fina_que_o_dia_fica_fora_do_phi5_declarado ... ok
 test orquestrador::testes::ataque_unico_roda ... ok
 test orquestrador::testes::banca_reprova_ficha_incompleta ... ok
+test resolucao::testes::a_checagem_da_implicacao_acha_o_contraexemplo_e_nao_a_violacao ... ok
+test resolucao::testes::a_conservacao_reprova_um_agregado_que_nao_bate ... ok
 test resolucao::testes::a_ordem_das_resolucoes_e_a_da_finura ... ok
+test resolucao::testes::a_transferencia_nao_tem_violacao_e_tem_contraexemplo ... ok
+test resolucao::testes::abaixo_do_limiar_refinar_compra_menos_do_que_acima ... ok
 test resolucao::testes::com_o_mesmo_recurso_a_pergunta_fina_espera_menos ... ok
+test resolucao::testes::com_o_plano_calibrado_o_limiar_existe_e_a_fracao_cresce ... ok
+test resolucao::testes::com_o_plano_de_erlang_a_previsao_3_nao_se_sustenta ... ok
 test resolucao::testes::sem_variacao_nao_ha_perda_de_resolucao ... ok
 test rng::testes::mesma_semente_mesma_sequencia ... ok
 test rng::testes::sementes_diferentes_divergem ... ok
@@ -969,7 +1005,7 @@ test s1::tests::reprojecao_do_teto_preserva_a_soma ... ok
 test s1::tests::soma_um_depois_do_ajuste ... ok
 test s1::tests::sufixo_longo_vence_tema_curto ... ok
 
-test result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 59 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 5 tests
 test testes::a_kl_e_zero_contra_si_mesma_e_cresce_com_a_distancia ... ok

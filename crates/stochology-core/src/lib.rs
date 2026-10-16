@@ -6,6 +6,7 @@
 
 pub mod agentes;
 pub mod camada;
+pub mod erlang;
 pub mod funil;
 pub mod invariantes;
 pub mod orquestrador;

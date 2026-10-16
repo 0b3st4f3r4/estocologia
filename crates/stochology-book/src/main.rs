@@ -583,6 +583,62 @@ fn horizonte_r() {
     }
     let finuras: Vec<&str> = Resolucao::TODAS.iter().map(|r| r.codigo()).collect();
     println!("escada de resolucao: {}", finuras.join(" -> "));
+
+    // ---- previsao 3: o limiar de oscilacao
+    println!("\n-- previsao 3: o limiar de oscilacao (dia falho: mais de 10% acima de 30 min; limiar: mais de 1/4 dos dias) --");
+    let amplitudes = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
+    let calibrada = stochology_core::resolucao::escala_calibrada(1909, 200, 10, 8.0, 0.10);
+    let erlang = stochology_core::resolucao::limiar_de_oscilacao(1909, 200, 10, 8.0, &amplitudes);
+    println!(
+        "  {} dias por amplitude | 10 h por dia | especificacao 1: o plano de Erlang do dia medio, {} agentes",
+        erlang.pontos[0].dias, erlang.pontos[0].agentes_r0
+    );
+    println!("  {:>10} {:>12} {:>14} {:>12} {:>10}", "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0");
+    for p in &erlang.pontos {
+        println!(
+            "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
+            p.amplitude, p.dias_falhos, p.fracao_de_dias_falhos, p.perda, p.acima30_r0
+        );
+    }
+    match erlang.limiar {
+        Some(a) => println!(
+            "  limiar: amplitude {:.1} | perda de resolucao no limiar {:.2} min | monotona: {}",
+            a,
+            erlang.perda_no_limiar.unwrap_or(f64::NAN),
+            erlang.monotona
+        ),
+        None => println!("  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}", erlang.monotona),
+    }
+
+    println!("\n-- previsao 3, especificacao 2: a escala de R0 calibrada na demanda plana --");
+    let l = stochology_core::resolucao::limiar_de_oscilacao_com_plano(1909, 200, 10, 8.0, &amplitudes, calibrada);
+    println!("  a escala calibrada tem {} agentes (a plana falha no maximo 10% dos dias)", calibrada);
+    println!("  {:>10} {:>12} {:>14} {:>12} {:>10}", "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0");
+    for p in &l.pontos {
+        println!(
+            "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
+            p.amplitude, p.dias_falhos, p.fracao_de_dias_falhos, p.perda, p.acima30_r0
+        );
+    }
+    match l.limiar {
+        Some(a) => println!(
+            "  limiar: amplitude {:.1} | perda de resolucao no limiar {:.2} min | monotona: {}",
+            a,
+            l.perda_no_limiar.unwrap_or(f64::NAN),
+            l.monotona
+        ),
+        None => println!("  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}", l.monotona),
+    }
+
+    // ---- previsao 5: a transferencia
+    println!("\n-- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --");
+    let perfis = [(8.0, 0.5), (8.0, 1.0), (8.0, 1.5), (8.0, 2.0), (8.0, 2.5), (8.0, 3.0)];
+    let t = stochology_core::resolucao::transferencia(1909, 200, 10, &perfis);
+    println!(
+        "  {} perfis x 200 dias | limiar do dia {:.2} | violacoes da implicacao: {} | contraexemplos: {} | conservacao do agregado conferida: {}",
+        t.perfis, t.limiar, t.violacoes, t.contraexemplos, t.conservacao_conferida
+    );
+    println!("  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia", t.contraexemplos);
 }
 
 fn rodar(cap: usize) {

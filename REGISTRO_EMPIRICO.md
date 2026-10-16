@@ -51,6 +51,14 @@ Rust a partir do registro versionado (a medida continua sem instrumento — decl
 | Goodhart medido por instrumento: 0,145 [0,132; 0,157], quatro vezes menos que os 0,6 declarados | **P** / **V** | a medida é registro (é resultado de campo e o dado bruto não está versionado); o veredito do critério declarado e a razão de 4,1483 são **re-derivados** de `fundo/p06-laco/resultados.json` por `labs --h3`, com zero divergência |
 | Hipergrafo: 454 178 nós no H3, dos quais 453 973 previsões e 205 de topologia | **P** | o grafo do H3 saiu com o andaime; o hipergrafo do Rust é o validador, não o grafo do H3. Classe declarada em `fundo/p14-h3/registro.tsv` |
 
+## Eixo R — a resolução da pergunta
+
+| Resultado | Marca | Fonte / instrumento |
+| --- | --- | --- |
+| Perda de resolução: 46,24 min onde a demanda oscila de 5 a 11, 5,97 min onde oscila de 7 a 9 e 0,00 min onde não oscila | **R** | `labs --resolucao`; Capítulos 16 e 21 |
+| Previsão 3 (limiar de oscilação): com o plano calibrado na demanda plana a fração de dias falhos cresce de 0,095 a 0,330 e cruza o quarto na amplitude 2,5, com a perda virando +2,87 min no cruzamento e negativa abaixo dele; com o plano de Erlang a previsão **não se sustenta** (a demanda plana já falha 1 dia em 5, a fração não é monótona e no cruzamento refinar custa) | **R** / **D** | `labs --resolucao`; ponto de fundo 15, com K = 2 declarado |
+| Previsão 5 (transferência): 0 violações da implicação (nenhum perfil sobrevive a R1 e falha em R0) e 3 contraexemplos em 6 perfis × 200 dias, com a conservação do agregado conferida | **R** | `labs --resolucao`; ponto de fundo 15 |
+
 ## Auditoria de fundo
 
 | Resultado | Marca | Fonte |

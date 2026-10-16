@@ -65,10 +65,19 @@ ação. A lição da unidade independente reaparece aqui, agora no eixo do grão
 2. **Convexidade da perda.** A perda de resolução cresce mais rápido que a oscilação da demanda (0,00 → 5,97 →
    46,24 nos três casos medidos).
 3. **Limiar de oscilação.** Existe um ponto a partir do qual uma decisão tomada em R0 falha em mais de um
-   quarto dos dias, e abaixo dele refinar deixa de compensar.
+   quarto dos dias, e abaixo dele refinar deixa de compensar. **Medida** (`labs --resolucao`, ponto de fundo 15):
+   depende de como a escala de R0 é dimensionada, e as duas leituras ficam publicadas. Com a escala de Erlang C do
+   dia médio (12 agentes) a previsão **não se sustenta** — a demanda plana já falha 1 dia em 5, a fração não é
+   monótona e no cruzamento refinar custa. Com a escala calibrada na demanda plana (13 agentes, no máximo 10% de
+   dias falhos sem oscilação nenhuma) ela **se sustenta**: a fração cresce de 0,095 a 0,330, cruza o quarto na
+   amplitude **2,5**, a perda de resolução é negativa em todas as amplitudes abaixo do limiar e vira **+2,87 min**
+   no cruzamento. O critério de dia falho é declarado: mais de 10% dos clientes acima de 30 min.
 4. **Custo de refinar.** O ganho de R1 sobre R0 é limitado pelo dado disponível, e refinar além do que o dado
    sustenta vira a inflação de $K$ que o contador de tentativas existe para conter.
-5. **Transferência.** Um resultado que sobrevive a R1 sobrevive a R0; o contrário não é verdadeiro.
+5. **Transferência.** Um resultado que sobrevive a R1 sobrevive a R0; o contrário não é verdadeiro. **Medida**
+   (`labs --resolucao`, ponto de fundo 15): em 6 perfis de demanda × 200 dias, **0 violações** da implicação e
+   **3 contraexemplos** — perfis que passam em R0 e falham em algum dia. A conservação do agregado (a soma dos dias
+   tem de reconstruir o agregado) é conferida em cada perfil, e um agregado que não bata é reprovado.
 
 ## O que a arquitetura precisava ganhar
 
@@ -77,8 +86,10 @@ ação. A lição da unidade independente reaparece aqui, agora no eixo do grão
 - **Regra de acoplamento (candidata a $\Phi_5$).** A ação declarada tem de estar no grão da unidade
   independente; ação por dia com margem por paciente é desalinhamento, ainda que o número acerte.
 - **Teste empírico barato.** As seis frentes da tabela acima já permitem medir a perda de resolução
-  retroativamente, sem dado novo. Só a previsão 3 (limiar de oscilação) exige dado novo, e ela pede uma frente
-  com a mesma decisão tomada em dois grãos.
+  retroativamente, sem dado novo. Só a previsão 3 (limiar de oscilação) exigia dado novo, e ela pedia uma frente
+  com a mesma decisão tomada em dois grãos. Ela foi medida em laboratório (ponto 15, com o critério de dia falho
+  declarado antes da segunda especificação do plano), e o que falta continua sendo exatamente o que este documento
+  pedia: a operação real com a mesma decisão em dois grãos.
 - **Estado do código.** O tipo `Resolucao` e o instrumento `medir_perda_de_resolucao` estão em
   `crates/stochology-core/src/resolucao.rs`, com 3 testes. O campo na ficha e a regra de acoplamento saíram da
   proposta e passaram a invariante cobrado. O campo entrou como `Ficha.resolucao`

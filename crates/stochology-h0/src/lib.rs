@@ -10,45 +10,9 @@
 
 use stochology_core::Rng;
 
-/// Erlang B: probabilidade de bloqueio de `agentes` servidores com carga `carga = lambda/mu`.
-/// Recorrencia estavel, presa em [0, 1].
-pub fn erlang_b(agentes: u32, carga: f64) -> f64 {
-    if carga <= 0.0 || agentes == 0 {
-        return 0.0;
-    }
-    let mut b = 1.0_f64;
-    for k in 1..=agentes {
-        let kf = k as f64;
-        b = carga * b / (kf + carga * b);
-    }
-    b.clamp(0.0, 1.0)
-}
-
-/// Erlang C: probabilidade de esperar, com `agentes` servidores e carga `carga`.
-pub fn erlang_c(agentes: u32, carga: f64) -> f64 {
-    if agentes == 0 {
-        return 1.0;
-    }
-    if carga >= agentes as f64 {
-        return 1.0;
-    }
-    let b = erlang_b(agentes, carga);
-    let rho = carga / agentes as f64;
-    (b / (1.0 - rho * (1.0 - b))).clamp(0.0, 1.0)
-}
-
-/// Menor numero de servidores que faz o serviço imediato cobrir `meta` da carga: Erlang C <= 1 - meta.
-pub fn escala_minima(lambda: f64, mu: f64, meta: f64) -> u32 {
-    if mu <= 0.0 || lambda <= 0.0 {
-        return 0;
-    }
-    let carga = lambda / mu;
-    let mut agentes = carga.ceil().max(1.0) as u32;
-    while erlang_c(agentes, carga) > 1.0 - meta && agentes < 100_000 {
-        agentes += 1;
-    }
-    agentes
-}
+/// A fórmula de Erlang e a escala mínima vivem no núcleo (elas servem também ao eixo R) e são
+/// re-exportadas aqui, porque o H0 é o horizonte onde a fila nasceu.
+pub use stochology_core::erlang::{erlang_b, erlang_c, escala_minima};
 
 /// Modelo nulo declarado do H0: chegadas de Poisson com a mesma media.
 #[derive(Debug, Clone, Copy, PartialEq)]
