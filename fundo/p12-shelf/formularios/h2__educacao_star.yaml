@@ -91,8 +91,8 @@ especialistas:
       q50: 12.0   # elicitado em 2026-10-16, mediana primeiro, em pontos SAT
       q25: 6.0   # elicitado em 2026-10-16, passo dos quartis
       q75: 18.0   # elicitado em 2026-10-16, passo dos quartis
-      q05: null
-      q95: null
+      q05: -2.5   # elicitado em 2026-10-16, passo dos extremos
+      q95: 26.5   # elicitado em 2026-10-16, passo dos extremos
       justificativa: ""
       fonte: ""
     controles:
@@ -100,8 +100,8 @@ especialistas:
       ancora_S: null
       ancora_p_com_S_mediana_propria: null
       ancora_deslocamento_dp: null
-      razao_largura_90_elicitada_sobre_implicada: null
-      excesso_de_confianca_ok: ""
+      razao_largura_90_elicitada_sobre_implicada: 0.9910
+      excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: ""
       rodada_1_confirmacao: ""
@@ -116,6 +116,15 @@ especialistas:
       q50: null
       q75: null
       q95: null
+    ajuste:
+      familia: "gaussiana"
+      media: 12.000000
+      dp: 8.895613   # o valor do instrumento (labs --elicitacao)
+      erro_max_quartis: 0.0
+      largura_90_elicitada: 29.0000
+      largura_90_implicada: 29.2640
+      razao: 0.9910
+      comando: "cargo run --release --bin labs -- --elicitacao -2.5,6,12,18,26.5"
   E2:
     nome: ""
     codigo: "E2"
@@ -151,8 +160,8 @@ especialistas:
       ancora_S: null
       ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""  # sim / nao
+      razao_largura_90_elicitada_sobre_implicada: 0.9910  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
     devolucao:
       rodada_1_em: ""
       rodada_1_confirmacao: ""     # confirma / ajusta
@@ -202,8 +211,8 @@ especialistas:
       ancora_S: null
       ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""  # sim / nao
+      razao_largura_90_elicitada_sobre_implicada: 0.9910  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
     devolucao:
       rodada_1_em: ""
       rodada_1_confirmacao: ""     # confirma / ajusta
