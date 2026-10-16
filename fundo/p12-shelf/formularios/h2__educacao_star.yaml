@@ -93,8 +93,8 @@ especialistas:
       q75: 18.0   # elicitado em 2026-10-16, passo dos quartis
       q05: -2.5   # elicitado em 2026-10-16, passo dos extremos
       q95: 26.5   # elicitado em 2026-10-16, passo dos extremos
-      justificativa: ""
-      fonte: ""
+      justificativa: "a mediana de 12 pontos apoia-se nos resultados classicos do experimento STAR do Tennessee (Word et al., 1990), que documentam ganhos substanciais nas notas combinadas de leitura e matematica para turmas reduzidas; a dispersao abrangente (-2,5 a 26,5) acomoda tanto a robustez dos achados originais quanto as criticas metodologicas sobre atrito amostral, efeitos de substituicao e a dificuldade de replicar esses ganhos fora daquele contexto experimental"
+      fonte: "Word et al. (1990), o experimento STAR do Tennessee, citado pelo especialista; a critica metodologica (atrito, substituicao, replicabilidade) entra na justificativa do alargamento"
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
@@ -103,10 +103,17 @@ especialistas:
       razao_largura_90_elicitada_sobre_implicada: 0.9910
       excesso_de_confianca_ok: "sim"
     devolucao:
-      rodada_1_em: ""
-      rodada_1_confirmacao: ""
+      rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
+      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
       rodada_1_ajuste_q05_q95: []
       rodada_1_motivo: ""
+      rodada_1_mostrado:
+        numeros_do_especialista: "q05 -2,5 | q25 6,0 | q50 12,0 | q75 18,0 | q95 26,5, em pontos SAT"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 12,0"
+        priori_de_literatura_p05: "q05 1,3021781198967624 | q25 4,860110016547187 | q50 7,333191149998485 | q75 9,806272283449783 | q95 13,364204180100208 (Krueger 1999, NBER w6051, regra R3: 4 pontos de percentil convertidos por 0,0251 dp x 73,138 pontos)"
+        marca_do_p05: "MESMA BASE DE DADOS do dominio (AER_STAR): a priori de literatura deste dominio nao e evidencia independente, e o p05 a marca assim"
+        ajuste_da_literatura_pelo_mesmo_instrumento: "media 7,333191 | dp 3,666596 | erro maximo nos quartis 4,4e-16 | razao da largura 90% 1,0000"
+        comparacao: "mediana do especialista 12,0 contra 7,333191 da literatura, 63% acima; dp 8,895613 contra 3,666734, ou seja, 2,4 vezes mais largo; e o q05 negativo (-2,5) contra 1,302 da literatura, que nao admite efeito negativo em nenhuma das duas pontas"
       rodada_2_em: ""
       rodada_2_confirmacao: ""
       rodada_2_motivo: ""
