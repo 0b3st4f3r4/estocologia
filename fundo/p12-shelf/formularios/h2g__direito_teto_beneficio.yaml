@@ -94,8 +94,8 @@ especialistas:
       resultado: "APROVADO pela regua em vigor"
     elicitacao:
       q50: 0.35   # elicitado em 2026-10-16, mediana primeiro, coeficiente log-log
-      q25: null
-      q75: null
+      q25: 0.20   # elicitado em 2026-10-16, passo dos quartis
+      q75: 0.50   # elicitado em 2026-10-16, passo dos quartis
       q05: null
       q95: null
       justificativa: ""
