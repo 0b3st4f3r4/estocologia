@@ -6,7 +6,7 @@
 # Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
 
 protocolo: fundo/p12-shelf/protocolo.md
-protocolo_sha256: ""              # preencher no congelamento
+protocolo_sha256: "175004ac45caa0fc8e231ea0bd85466b913ef7da104f3d0c4d394cb7e6e95058"
 declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
 
 dominio: h2/educacao_star
@@ -25,39 +25,69 @@ status_na_rodada_a: "aprovado"
 K_de_hoje: "1"
 K_de_hoje_fonte: h2/saida/educacao_star/resultados.json
 
-facilitador: ""
+facilitador: "agente executor do repositorio (conduz, guarda o gabarito e nao elicita)"
 
 pre_teste:
   itens: 20
-  semente_do_sorteio: ""
+  semente_do_sorteio: "2026 (sorteio estratificado: 10 sim + 10 nao)"
   pool: ""                        # de onde vieram os 20 itens já resolvidos
-  fora_do_cofre_do_dominio: ""    # sim / nao (se nao, o dominio fica marcado como contaminado)
-  gabarito_com: ""
+  fora_do_cofre_do_dominio: "sim: fatos publicos de educacao de outros paises e anos; nada de tamanho de turma nos EUA, nada da base STAR/AER_STAR do dominio, nada de Toronto, Rhode Island ou LaLonde/NSW"
+  gabarito_com: "Banco Mundial (13 itens, valor da API lido por maquina e comparado), Eurostat (7, JSON-stat, batendo exatamente), NCES (6), IBGE Censo 2022 (2, PDF baixado e lido com pdftotext) e o digest do PISA 2018 (2); 20 itens com igualdade exata e 10 com presenca na pagina citada"
 
 especialistas:
   E1:
-    nome: ""
+    nome: "sil"
     codigo: "E1"
-    qualificacao: ""
-    de_fora_do_programa: ""        # sim / nao
-    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
-    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    qualificacao: "autor do livro e do programa"
+    de_fora_do_programa: "nao"
+    de_fora_da_area_do_dominio: "nao"
+    conflitos_declarados: "escreveu o pacote do dominio, viu as saidas do h2 e do h2g, assinou os 21 pareceres; e o autor do programa"
     pre_teste:
-      respostas: []                # 20 pares (p, y), p em (0,1)
-      brier: null
-      brier_climatologia: null
-      habilidade: null             # 1 - brier / brier_climatologia
-      ece: null
-      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
-      murphy_rel: null
-      murphy_res: null
-      murphy_unc: null
-      criterio_1_habilidade_positiva: ""     # sim / nao
-      criterio_2_ece_ate_0_10: ""            # sim / nao
-      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
-      criterio_4_curva_fracamente_monotona: "" # sim / nao
-      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
-    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      respostas:
+        # ordem congelada na declaracao de itens (semente 2026, sorteio estratificado 10 sim + 10 nao)
+        - {item: E20, p: 0.35, y: nao}
+        - {item: E26, p: 0.15, y: nao}
+        - {item: E01, p: 0.95, y: sim}
+        - {item: E28, p: 0.20, y: nao}
+        - {item: E15, p: 0.40, y: nao}
+        - {item: E29, p: 0.75, y: sim}
+        - {item: E21, p: 0.85, y: sim}
+        - {item: E13, p: 0.25, y: nao}
+        - {item: E18, p: 0.25, y: nao}
+        - {item: E07, p: 0.25, y: nao}
+        - {item: E25, p: 0.60, y: sim}
+        - {item: E23, p: 0.75, y: sim}
+        - {item: E14, p: 0.60, y: sim}
+        - {item: E12, p: 0.10, y: nao}
+        - {item: E04, p: 0.85, y: sim}
+        - {item: E27, p: 0.95, y: sim}
+        - {item: E16, p: 0.80, y: sim}
+        - {item: E06, p: 0.60, y: sim}
+        - {item: E02, p: 0.20, y: nao}
+        - {item: E30, p: 0.10, y: nao}
+      itens_na_direcao_certa: "20 de 20"
+      brier: 0.064375
+      brier_climatologia: 0.250000
+      habilidade: 0.742500
+      portao: "ajustado (declaracao 1): 5 caixas de massa igual; a divergencia entre as duas reguas do criterio 3 esta na declaracao 3"
+      ece: 0.1525
+      ece_no_portao_como_escrito: 0.2275
+      caixas:
+        - {indice: 0, n: 4, media_prevista: 0.1375, taxa_observada: 0.0000, desvio: -0.1375}
+        - {indice: 1, n: 4, media_prevista: 0.2375, taxa_observada: 0.0000, desvio: -0.2375}
+        - {indice: 2, n: 4, media_prevista: 0.4875, taxa_observada: 0.5000, desvio: 0.0125}
+        - {indice: 3, n: 4, media_prevista: 0.7250, taxa_observada: 1.0000, desvio: 0.2750}
+        - {indice: 4, n: 4, media_prevista: 0.9000, taxa_observada: 1.0000, desvio: 0.1000}
+      murphy_rel: 0.064375
+      murphy_res: 0.250000
+      murphy_unc: 0.250000   # identidade exata: 0,064375 - 0,250000 + 0,250000 = 0,064375
+      criterio_1_habilidade_positiva: "sim (0,7425)"
+      criterio_2_ece_ate_0_10: "sim no portao ajustado (0,1525 <= 0,25); no como escrito dao 0,2275, acima de 0,10"
+      criterio_3_sem_caixa_com_n4_e_0_25: "REPROVADO como escrito: a caixa 3 tem n = 4 e |desvio| = 0,2750 > 0,25. Aprovado pela regua corrigida (teste binomial com Bonferroni): p bilateral 0,55, p corrigido 1,00"
+      criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito; a curva observada tambem e fracamente monotonona"
+      resultado: "COMO O PORTAO ESTA ESCRITO: reprovado, pela caixa 3. COM O CRITERIO 3 CORRIGIDO: aprovado. A escolha da regua e do operador e esta declarada na declaracao 3 do ponto 12"
+      medida_do_vicio_do_portao: "no nulo calibrado do desenho (20 itens, 5 caixas, limiar de ECE 0,25): aprovados 0,2935 | reprovados pelo criterio 3 como escrito 0,7052 | pelo criterio 3 corrigido 0,0031 | pelo criterio 2 0,0592. Ou seja: o criterio 3 como escrito reprova 7 calibrados em 10, e a reprovacao do E1 neste dominio diz mais sobre a regua do que sobre ele"
+    elicitacao:
       q50: null
       q25: null
       q75: null
@@ -66,19 +96,19 @@ especialistas:
       justificativa: ""
       fonte: ""
     controles:
-      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
-      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""  # sim / nao
+      ancora_p_com_S_mediana_propria: null
+      ancora_deslocamento_dp: null
+      razao_largura_90_elicitada_sobre_implicada: null
+      excesso_de_confianca_ok: ""
     devolucao:
       rodada_1_em: ""
-      rodada_1_confirmacao: ""     # confirma / ajusta
-      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_confirmacao: ""
+      rodada_1_ajuste_q05_q95: []
       rodada_1_motivo: ""
       rodada_2_em: ""
-      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_confirmacao: ""
       rodada_2_motivo: ""
     quartis_confirmados:
       q05: null

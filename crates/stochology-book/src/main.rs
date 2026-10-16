@@ -242,7 +242,7 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
 fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
     use stochology_h3::preteste::{
         BALDES_AJUSTADOS, BALDES_DO_PROTOCOLO, ECE_MAXIMO_AJUSTADO, ECE_MAXIMO_DO_PROTOCOLO,
-        avaliar_com, nulo_do_pre_teste, probabilidades_invalidas,
+        avaliar_com, nulo_com_gate, probabilidades_invalidas,
     };
 
     if let (Some(respostas), Some(gabarito)) = (respostas, gabarito) {
@@ -325,18 +325,29 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
     println!(
         "limites medidos do desenho: o critério 3 (caixa com n >= 4) fica vacuoso, porque 20 itens em 10 caixas dão 2 por caixa; o critério 4, na letra do protocolo, é inerte: as caixas são cortadas por p ordenado e a média prevista da de cima supera a da de baixo por construção"
     );
-    for (itens, baldes) in [(20usize, BALDES_DO_PROTOCOLO), (20, 5), (20, 20), (200, 10)] {
-        let nulo = nulo_do_pre_teste(2026, 20_000, itens, baldes);
+    for (itens, baldes, limiar) in [
+        (20usize, 5usize, ECE_MAXIMO_AJUSTADO),
+        (20, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO),
+        (200, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO),
+    ] {
+        let nulo = nulo_com_gate(2026, 20_000, itens, baldes, limiar);
         println!(
-            "nulo calibrado, {itens} itens em {baldes} caixas: ECE p50 {:.4} | p90 {:.4} | p95 {:.4} | maximo {:.4} | habilidade p50 {:.4} | p10 {:.4} | Brier p50 {:.4} | fracao que passa no limiar: {:.4}",
+            "nulo calibrado, {itens} itens em {baldes} caixas, limiar de ECE {limiar}: ECE p50 {:.4} | p90 {:.4} | p95 {:.4} | maximo {:.4} | habilidade p50 {:.4} | p10 {:.4} | Brier p50 {:.4}",
             nulo.ece_p50,
             nulo.ece_p90,
             nulo.ece_p95,
             nulo.ece_maximo,
             nulo.habilidade_p50,
             nulo.habilidade_p10,
-            nulo.brier_p50,
-            nulo.quantos_passam
+            nulo.brier_p50
+        );
+        println!(
+            "    veredito do portao no mundo calibrado: aprovados {:.4} | reprovados pelo criterio 3 {:.4} | pelo criterio 3 corrigido (binomial) {:.4} | pelo criterio 2 {:.4} | por algum criterio {:.4}",
+            nulo.quantos_passam,
+            nulo.reprovados_criterio_3,
+            nulo.reprovados_criterio_3_binomial,
+            nulo.reprovados_criterio_2,
+            nulo.reprovados_por_algum
         );
     }
 }

@@ -126,6 +126,67 @@ pub fn caixas_de_massa_igual(confianca: &[f64], acerto: &[bool], baldes: usize) 
     caixas
 }
 
+/// Uma caixa julgada pelo **teste binomial**, e não por um limiar fixo.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct CaixaTestada {
+    pub indice: usize,
+    pub n: usize,
+    pub acertos: usize,
+    pub media_prevista: f64,
+    /// p bilateral do teste binomial para o número observado de acertos, dada a média prevista.
+    pub p_bilateral: f64,
+    /// O mesmo p com a correção de Bonferroni pelo número de caixas.
+    pub p_com_bonferroni: f64,
+}
+
+impl CaixaTestada {
+    pub fn sistematica(self, alfa: f64) -> bool {
+        self.p_com_bonferroni < alfa
+    }
+}
+
+fn fatorial_binomial(n: usize, p: f64) -> Vec<f64> {
+    // pmf por recorrência; p preso em (0,1) para não dividir por zero
+    let p = p.clamp(1e-9, 1.0 - 1e-9);
+    let mut pmf = vec![0.0_f64; n + 1];
+    pmf[0] = (1.0 - p).powi(n as i32);
+    for i in 1..=n {
+        let i_f = i as f64;
+        let n_f = n as f64;
+        pmf[i] = pmf[i - 1] * (n_f - i_f + 1.0) / i_f * p / (1.0 - p);
+    }
+    pmf
+}
+
+/// O critério 3 pelo teste certo: uma caixa é sistemática quando o número de acertos é improvável dada a
+/// **média que o próprio especialista previu** para ela, com Bonferroni sobre as caixas.
+///
+/// O protocolo fixa `|média prevista − taxa observada| > 0,25` com `n >= 4`, e essa régua é ruído: medida no
+/// nulo calibrado do desenho de 20 itens em 5 caixas, ela reprova 70% dos calibrados. O teste binomial não tem
+/// esse vício, porque o limiar de cada caixa sai da própria previsão e do tamanho dela.
+pub fn caixas_por_teste_binomial(caixas: &[Caixa]) -> Vec<CaixaTestada> {
+    let quantas = caixas.len() as f64;
+    caixas
+        .iter()
+        .map(|caixa| {
+            let pmf = fatorial_binomial(caixa.n, caixa.media_prevista);
+            let acertos = (caixa.taxa_observada * caixa.n as f64).round() as usize;
+            let acertos = acertos.min(caixa.n);
+            let cauda_baixa: f64 = pmf[..=acertos].iter().sum();
+            let cauda_alta: f64 = pmf[acertos..].iter().sum();
+            let p_bilateral = (2.0 * cauda_baixa.min(cauda_alta)).min(1.0);
+            CaixaTestada {
+                indice: caixa.indice,
+                n: caixa.n,
+                acertos,
+                media_prevista: caixa.media_prevista,
+                p_bilateral,
+                p_com_bonferroni: (p_bilateral * quantas).min(1.0),
+            }
+        })
+        .collect()
+}
+
 /// Erro de calibracao esperado nas caixas de massa igual.
 pub fn ece_de_massa_igual(confianca: &[f64], acerto: &[bool], baldes: usize) -> f64 {
     let caixas = caixas_de_massa_igual(confianca, acerto, baldes);
@@ -265,6 +326,14 @@ pub struct Nulo {
     pub habilidade_p10: f64,
     pub brier_p50: f64,
     pub quantos_passam: f64,
+    /// Fração de calibrados que o critério 3 reprova sozinho (a caixa sistemática).
+    pub reprovados_criterio_3: f64,
+    /// Fração de calibrados que o critério 2 reprova sozinho (o ECE acima do limiar).
+    pub reprovados_criterio_2: f64,
+    /// Fração de calibrados reprovada por algum critério: é o vício do portão.
+    pub reprovados_por_algum: f64,
+    /// Fração de calibrados que o **critério 3 corrigido** (teste binomial com Bonferroni) reprova.
+    pub reprovados_criterio_3_binomial: f64,
 }
 
 fn quantil_de(valores: &mut [f64], q: f64) -> f64 {
@@ -285,11 +354,26 @@ fn quantil_de(valores: &mut [f64], q: f64) -> f64 {
 /// O nulo declarado do pre-teste: `p` sai da priori uniforme declarada e o desfecho e o sorteio de Bernoulli
 /// dela. Roda o mesmo desenho (n itens, caixas de massa igual) e devolve a distribuicao das medidas.
 pub fn nulo_do_pre_teste(semente: u64, repeticoes: usize, itens: usize, baldes: usize) -> Nulo {
+    nulo_com_gate(semente, repeticoes, itens, baldes, ECE_MAXIMO_DO_PROTOCOLO)
+}
+
+/// O mesmo nulo, com o limiar de ECE declarado pelo chamador: é o portão ajustado que interessa.
+pub fn nulo_com_gate(
+    semente: u64,
+    repeticoes: usize,
+    itens: usize,
+    baldes: usize,
+    ece_maximo: f64,
+) -> Nulo {
     let mut rng = Rng::novo(semente);
     let mut eces = Vec::with_capacity(repeticoes);
     let mut habilidades = Vec::with_capacity(repeticoes);
     let mut briers = Vec::with_capacity(repeticoes);
     let mut passam = 0usize;
+    let mut reprovados_3 = 0usize;
+    let mut reprovados_2 = 0usize;
+    let mut reprovados_algum = 0usize;
+    let mut reprovados_3_binomial = 0usize;
     for _ in 0..repeticoes {
         let confianca: Vec<f64> = (0..itens).map(|_| uniforme(&mut rng)).collect();
         let acerto: Vec<bool> = confianca.iter().map(|p| uniforme(&mut rng) < *p).collect();
@@ -297,10 +381,34 @@ pub fn nulo_do_pre_teste(semente: u64, repeticoes: usize, itens: usize, baldes: 
         let media: f64 = acerto.iter().filter(|y| **y).count() as f64 / itens as f64;
         let clima = media * (1.0 - media);
         let habilidade = if clima == 0.0 { 0.0 } else { 1.0 - b / clima };
-        eces.push(ece_de_massa_igual(&confianca, &acerto, baldes));
+        let ece = ece_de_massa_igual(&confianca, &acerto, baldes);
+        eces.push(ece);
         habilidades.push(habilidade);
         briers.push(b);
-        if habilidade > 0.0 && ece_de_massa_igual(&confianca, &acerto, baldes) <= ECE_MAXIMO_DO_PROTOCOLO {
+        // o vício do portão: roda os quatro critérios, com o limiar do portão ajustado, no mundo calibrado
+        let veredito = avaliar_com(&confianca, &acerto, baldes, ece_maximo);
+        let c3 = veredito
+            .reprovacoes
+            .iter()
+            .any(|r| matches!(r, Reprovacao::CaixaSistematica { .. }));
+        let c2 = veredito
+            .reprovacoes
+            .iter()
+            .any(|r| matches!(r, Reprovacao::EceAcimaDoLimite { .. }));
+        if c3 {
+            reprovados_3 += 1;
+        }
+        if c2 {
+            reprovados_2 += 1;
+        }
+        if !veredito.aprovado {
+            reprovados_algum += 1;
+        }
+        let caixas = caixas_de_massa_igual(&confianca, &acerto, baldes);
+        if caixas_por_teste_binomial(&caixas).iter().any(|c| c.sistematica(0.05)) {
+            reprovados_3_binomial += 1;
+        }
+        if habilidade > 0.0 && ece <= ece_maximo && !c3 && !c2 {
             passam += 1;
         }
     }
@@ -316,6 +424,10 @@ pub fn nulo_do_pre_teste(semente: u64, repeticoes: usize, itens: usize, baldes: 
         habilidade_p10: quantil_de(&mut habilidades.clone(), 0.10),
         brier_p50: quantil_de(&mut briers.clone(), 0.50),
         quantos_passam: passam as f64 / repeticoes as f64,
+        reprovados_criterio_3: reprovados_3 as f64 / repeticoes as f64,
+        reprovados_criterio_2: reprovados_2 as f64 / repeticoes as f64,
+        reprovados_por_algum: reprovados_algum as f64 / repeticoes as f64,
+        reprovados_criterio_3_binomial: reprovados_3_binomial as f64 / repeticoes as f64,
     }
 }
 
@@ -398,6 +510,37 @@ mod testes {
         assert_eq!(caixas.len(), 10);
         assert!(caixas.iter().all(|c| c.n == 2), "com 20 itens e 10 caixas, n = 2: {caixas:?}");
         assert!(caixas.iter().all(|c| c.n < CAIXA_N_MINIMO), "o criterio 3 fica vacuoso neste desenho");
+    }
+
+    #[test]
+    fn o_teste_binomial_nao_reprova_a_caixa_calibrada() {
+        // a caixa que reprovou o terceiro pré-teste: n = 4, média prevista 0,725, taxa observada 1
+        let caixas = vec![Caixa { indice: 3, n: 4, media_prevista: 0.725, taxa_observada: 1.0 }];
+        let t = caixa(&caixas);
+        assert!(!t[0].sistematica(0.05), "p com Bonferroni {}", t[0].p_com_bonferroni);
+        assert!(t[0].p_bilateral > 0.5, "p bilateral {}", t[0].p_bilateral);
+    }
+
+    #[test]
+    fn o_teste_binomial_reprova_a_caixa_impossivel() {
+        // o caso que ele tem de pegar: prever 0,9 numa caixa e nenhum item sair sim
+        let caixas = vec![Caixa { indice: 0, n: 4, media_prevista: 0.9, taxa_observada: 0.0 }];
+        let t = caixa(&caixas);
+        assert!(t[0].sistematica(0.05), "p com Bonferroni {}", t[0].p_com_bonferroni);
+    }
+
+    fn caixa(caixas: &[Caixa]) -> Vec<CaixaTestada> {
+        caixas_por_teste_binomial(caixas)
+    }
+
+    #[test]
+    fn a_caixa_na_media_tem_p_proximo_de_um() {
+        for (n, p) in [(4usize, 0.5_f64), (4, 0.25), (4, 0.75), (10, 0.7)] {
+            let acertos = (n as f64 * p).round();
+            let caixas = vec![Caixa { indice: 0, n, media_prevista: p, taxa_observada: acertos / n as f64 }];
+            let t = caixa(&caixas);
+            assert!(t[0].p_bilateral > 0.5, "n {n} p {p}: {}", t[0].p_bilateral);
+        }
     }
 
     #[test]
