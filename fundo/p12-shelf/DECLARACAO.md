@@ -62,3 +62,26 @@ declaração de itens, com hash próprio, antes do pré-teste daquele domínio:
   especialista aprovado não fecha painel nenhum (seção 2.4), e o consenso de n = 1 **não** substitui a priori do
   pacote na rodada oficial: fica como sensibilidade.
 - **Não preenche formulário de ninguém.** O que não estiver escrito com nome e data não aconteceu.
+---
+
+## Declaração 2 — retificação do hash do pool do pré-teste
+
+**2026-10-16.** O arquivo do pool foi reescrito pelo executor **depois** de a declaração de itens ser congelada:
+ele acrescentou o detalhe dos itens descartados, e o arquivo foi de 200 para 204 linhas. O hash que a primeira
+versão da declaração de itens registrava deixou de valer.
+
+| versão | hash | estado |
+| --- | --- | --- |
+| pool antes da retificação | `c287a013d0865be891c6368da5f4f68f364412396ed11b6d9f77a3463598cb1e` | superseded |
+| pool depois da retificação | `e4bd218d16fc50064c2f10e55221af8b3321e8926d3857f5e239edc5a69cffbb` | corrente |
+| `DECLARACAO.md` na versão 1 | `fbe4fac2d768649d11b2274c5c4ca8c82cbe7f445491b85ac8abd2baa8f50031` | superseded por esta retificação; o hash corrente está em `DECLARACAO.sha256` |
+
+**O que não mudou, conferido e não suposto.** O arquivo continua com 22 itens, na mesma ordem de identificadores
+(`P01 … P22`); o sorteio declarado foi **reproduzido contra o arquivo novo** e devolve exatamente a lista
+congelada (`P05 P01 P06 P18 P10 P07 P22 P09 P17 P11 P21 P02 P14 P13 P08 P20 P19 P04 P12 P15`), porque a semente
+embaralha a lista de identificadores e a lista não mudou de ordem. As resoluções dos 20 sorteados foram
+reconferidas contra as fontes citadas.
+
+**K:** esta retificação não é especificação nova — nenhum critério, limiar ou item mudou. Ela conserta o registro
+do hash, e não conta K. A frente segue com **K = 3**.
+

@@ -5,7 +5,8 @@ protocolo (seção 2.1) exige, por domínio.
 
 | o que | valor |
 | --- | --- |
-| pool de origem | `fundo/p12-shelf/preteste/desenvolvimento_preston.yaml`, 22 itens, SHA-256 `c287a013d0865be891c6368da5f4f68f364412396ed11b6d9f77a3463598cb1e` |
+| pool de origem | `fundo/p12-shelf/preteste/desenvolvimento_preston.yaml`, 22 itens, SHA-256 `e4bd218d16fc50064c2f10e55221af8b3321e8926d3857f5e239edc5a69cffbb` |
+| retificação | o hash do pool mudou depois do primeiro congelamento (o executor acrescentou o detalhe dos descartados); a lista dos 20 sorteados e a ordem **não** mudaram, e a retificação está na `DECLARACAO.md`, declaração 2 |
 | semente do sorteio | `2026` |
 | regra do sorteio | embaralhamento de Fisher-Yates sobre os 22 identificadores, na ordem do arquivo, com o `SplitMix64` do próprio repositório (`crates/stochology-core/src/rng.rs`); entram os 20 primeiros |
 | descartados | `P03`, `P16` |

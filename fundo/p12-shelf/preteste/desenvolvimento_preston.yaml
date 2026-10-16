@@ -78,7 +78,7 @@ itens:
   - id: P10
     enunciado: "No ano-base 2019, a expectativa de vida ao nascer da Rússia era maior que 75 anos?"
     resolucao: nao
-    numero: "73,084 anos (SP.DYN.LE00.IN, Rússia, 2019; o Rosstat publica 73,34 anos para 2019, também abaixo do limiar)"
+    numero: "73,084 anos (SP.DYN.LE00.IN, Rússia, 2019; a estimativa revisada do Rosstat para 2019 passa de 73,3 e continua abaixo do limiar)"
     fonte_url: "https://api.worldbank.org/v2/country/RUS/indicator/SP.DYN.LE00.IN?format=json&date=2019"
     fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Rússia, 2019 (API v2)"
     ano_base: 2019
@@ -148,19 +148,19 @@ itens:
     ano_base: 2019
     dificuldade: dificil
   - id: P19
-    enunciado: "No ano-base 2021, a expectativa de vida ao nascer da Índia era menor que 68 anos?"
+    enunciado: "No ano-base 2023, a população da Índia era maior que 1,42 bilhão de pessoas?"
     resolucao: sim
-    numero: "67,282 anos (SP.DYN.LE00.IN, Índia, 2021; a série UN WPP do Our World in Data dá 67,282)"
-    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/SP.DYN.LE00.IN?format=json&date=2021"
-    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Índia, 2021 (API v2)"
-    ano_base: 2021
+    numero: "1.438.069.596 pessoas (SP.POP.TOTL, Índia, 2023; a série da UN WPP no Our World in Data dá 1.438.069.597)"
+    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/SP.POP.TOTL?format=json&date=2023"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Population, total, Índia, 2023 (API v2)"
+    ano_base: 2023
     dificuldade: dificil
   - id: P20
-    enunciado: "No ano-base 2019, a diferença entre a expectativa de vida das mulheres e a dos homens na Rússia era maior que 11 anos?"
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer das mulheres na Rússia era maior que 80 anos?"
     resolucao: nao
-    numero: "9,93 anos: mulheres 78,17 e homens 68,24 (SP.DYN.LE00.FE.IN e SP.DYN.LE00.MA.IN, Rússia, 2019); o Rosstat publica 78,17 e 68,24, mesma diferença"
+    numero: "78,17 anos (SP.DYN.LE00.FE.IN, Rússia, 2019; a série masculina no mesmo ano, 68,24, deixa a diferença entre os sexos em 9,93 anos)"
     fonte_url: "https://api.worldbank.org/v2/country/RUS/indicator/SP.DYN.LE00.FE.IN?format=json&date=2019"
-    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, female (years), Rússia, 2019 (API v2), confrontado com a série masculina na mesma data"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, female (years), Rússia, 2019 (API v2)"
     ano_base: 2019
     dificuldade: dificil
   - id: P21
@@ -189,7 +189,7 @@ itens_descartados:
   - enunciado: "No ano-base 2019, a parcela da população com 65 anos ou mais na Coreia do Sul era maior que 15%?"
     motivo: "15,0635% da população: margem de 0,06 ponto percentual, qualquer revisão da série inverte a resposta."
   - enunciado: "No ano-base 2019, a expectativa de vida ao nascer da China era maior que 78 anos?"
-    motivo: "77,940 anos: margem de 0,06 ano; a revisão da UN WPP já desloca esse valor em mais de uma década de fração de ano."
+    motivo: "77,940 anos: margem de 0,06 ano, menor que a revisão entre edições da UN WPP."
   - enunciado: "No ano-base 2019, a expectativa de vida ao nascer de Cuba era maior que 77 anos?"
     motivo: "77,413 anos: margem de 0,41 ano e séries divergentes para Cuba na década de 2010 (WPP contra OOPS/OMS)."
   - enunciado: "No ano-base 2019, a taxa de mortalidade infantil da Índia era menor que 30 por mil nascidos vivos?"
@@ -198,3 +198,7 @@ itens_descartados:
     motivo: "Série instável: 4,097 em 2018, 4,165 em 2019, 3,807 em 2020 e 5,087 em 2021 no mesmo indicador, sem quebra documentada."
   - enunciado: "No ano-base 2021, a expectativa de vida ao nascer da Rússia era menor que 70 anos?"
     motivo: "69,900 anos: margem de 0,1 ano, abaixo da revisão entre edições da UN WPP."
+  - enunciado: "No ano-base 2019, a diferença entre a expectativa de vida das mulheres e a dos homens na Rússia era maior que 11 anos?"
+    motivo: "A diferença não é publicada por nenhuma das fontes: só existe derivando 78,17 menos 68,24, e o item não fecha com uma URL única que traga o número que resolve a questão."
+  - enunciado: "No ano-base 2021, a expectativa de vida ao nascer da Índia era menor que 68 anos?"
+    motivo: "Margem de 0,72 ano para o limiar em uma série que é republicada a cada edição da UN WPP; a folga é menor que a revisão entre edições, então o item saiu e entrou o da população da Índia em 2023."
