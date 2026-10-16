@@ -90,8 +90,12 @@ ausentes, ciclos dedutivos em $E_{\text{tree}}$ e hiperarestas com menos de dois
 A cognição da máquina opera em modos acoplados sob governança central:
 
 - **Modo Sistema 1 ($O(1)$):** triagem rápida e classificação categórica fechada de fichas YAML via
-  árvores de sufixos determinísticas (*LLM-as-Jev*), emitindo probabilidades restritas ao intervalo
-  epistemológico $p \in [0{,}01;\ 0{,}99]$.
+  árvores de sufixos determinísticas, emitindo probabilidades restritas ao intervalo epistemológico
+  $p \in [0{,}01;\ 0{,}99]$. O nome *LLM-as-Jev* cobre duas receitas, e o estado delas não é o mesmo: o
+  **Jev determinístico** existe em `crates/stochology-core/src/s1.rs` (877 linhas, 12 testes, `labs --s1`),
+  com o lugar do LLM ocupado por um juiz mudo, porque um LLM livre não fecha o G1; o **LLM-as-Jev** de pesos
+  abertos congelados segue declarado e não implementado, como item 13 de `PROPOSTAS_DECLARADAS.md`, e a
+  conferência da transcrição que o propôs está em `INTEGRACAO_JEV.md`.
 - **Modo Sistema 2 (deliberativo):** busca em árvore (*LATS* + *Belief-State Engine* sobre o
   hipergrafo $\mathcal{G}$) para síntese profunda de código ($F_1$), inferência MCMC e estresse
   adversarial. Vive em `crates/stochology-s2`: a busca sobre o hipergrafo, o motor de estado de crença, a
@@ -556,11 +560,12 @@ regra dos arquivos novos. O que cada um virou:
 | *Plano escalável de pesquisa* (5 eixos) | eixos de maturidade, funil com poda por EVSI, escala horizontal, governança anti-sobreajuste e infraestrutura | tabela abaixo |
 | *Fundamentação: três camadas e inferência* | taxonomia de incerteza e as três camadas | Capítulos 2 e 4 do livro; seções 1 e 3 deste plano |
 | Artigo *Velhas Fronteiras, Novos Horizontes* | já era o texto canônico de `artigo/README.md` (mais novo e mais longo); a cópia baixada era versão anterior | `artigo/` |
+| *Integração de Modelos Jev à Estocologia* (conversa do Gemini) | a conferência de cada alegação contra o código: o que já existe com arquivo e comando, as divergências ($M_{15}$ e $MB_1$–$MB_8$, quatro filtros, $\Phi_1$–$\Phi_4$, *LLM-as-Jev*) e a ponte Jev-LLM como proposta declarada | `INTEGRACAO_JEV.md`; item 13 de `PROPOSTAS_DECLARADAS.md` |
 
 | Eixo de escala | O que pede | Estado no repositório |
 | --- | --- | --- |
 | 1. Maturidade em horizontes ($H_0 \to H_3$) | portões de saída por horizonte | cumprido no registro empírico; a esteira virou o binário `portoes` |
-| 2. Funil com poda por EVSI | não gastar computação sem valor de informação | **declarado, não implementado**: o critério está no Capítulo 11, não há poda em código |
+| 2. Funil com poda por EVSI | não gastar computação sem valor de informação | **feito em código**: `crates/stochology-core/src/funil.rs` (878 linhas, 17 testes) tem a poda por valor da informação e o contador $K$, verificado por `cargo test --workspace` e `labs --s1`. A linha dizia "declarado, não implementado" e a **declaração de divergência** fica aqui, com o valor antigo e o novo, porque o critério saiu do Capítulo 11 para o código depois da redação |
 | 3. Escala horizontal `plug-and-play` (F7) | domínio novo entra por ficha padronizada | parcial: a ficha existe e é validada; o motor de domínio não existe |
 | 4. Governança anti-sobreajuste | declarar tentativas e corrigir multiplicidade | cumprido em registro ($K = 38$; Bonferroni aplicado nas 4 áreas do $H_{2g}$) |
 | 5. Infraestrutura e custos | ambiente versionado, execução repetível | cumprido em Rust: `cargo test --workspace`, semente fixa e `RESULTADOS_RUST.md`; a parte Python foi aposentada |

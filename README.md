@@ -21,6 +21,7 @@ H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenh
 | `crates/` | Workspace Rust (Edition 2024): quinze crates — núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`) e o playground WebAssembly (`-wasm`) |
 | `RESULTADOS_RUST.md` | Registro dos resultados em Rust, gerado por `book/gerar_resultados.py` a partir dos próprios instrumentos |
 | `PROPOSTAS_DECLARADAS.md` | Inventário do que está declarado e ainda não exigido nem medido: SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião |
+| `INTEGRACAO_JEV.md` | A auditoria da transcrição *Integração de Modelos Jev à Estocologia*: cada alegação conferida contra o código, com as divergências declaradas ($M_{15}$ e $MB_1$–$MB_8$, quatro filtros, $\Phi_1$–$\Phi_4$, *LLM-as-Jev*) e a ponte Jev-LLM como proposta declarada |
 | `DECLARACAO_REMOVIDO_PYTHON.md` | O que saiu da árvore em 2026-10-16: o código Python de simulação, com o commit de recuperação e o manifesto `python-removido.txt` |
 
 Em 2026-10-16 o andaime de medição em Python saiu da árvore — o código, as frentes `h0` a `h3` com os seus

@@ -5,15 +5,18 @@ anterior: o que já existe aparece com o arquivo, a linha e o teste que o susten
 o que precisaria existir para fechar. Cada ponteiro foi aberto antes de entrar na tabela, e um deles não
 existia, o que gerou §6 e o conserto das linhas que dependiam dele.
 
-A lista viva tem dez itens (§1). São os sete originais mais as cinco frentes que estavam fora dela e
-entraram por decisão do autor em 2026-10-16, menos o item 1 — os dez crates do roteiro — e o item 2 — o
-Sistema 2 deliberativo: os dois passaram a viver no mesmo dia, e a prova de cada um está em §2. Os itens que
-a consolidação em Rust fechou saíram para §2, com a prova ao lado, e §3 registra as decisões do dia.
+A lista viva tem onze itens (§1). São os sete originais, mais as cinco frentes que estavam fora dela e
+entraram por decisão do autor em 2026-10-16, mais a ponte Jev-LLM do item 13, que entrou na mesma data, menos
+o item 1 — os dez crates do roteiro — e o item 2 — o Sistema 2 deliberativo: os dois passaram a viver no
+mesmo dia, e a prova de cada um está em §2. Os itens que a consolidação em Rust fechou saíram para §2, com a
+prova ao lado, e §3 registra as decisões do dia.
 
 ## 1. O que continua como proposta declarada
 
 Os números dos itens são os da revisão anterior, para o registro não perder a referência: os itens 1 e 2
-saíram da lista em 2026-10-16 e a numeração de 3 a 12 continua como estava.
+saíram da lista em 2026-10-16 e a numeração de 3 a 12 continua como estava. O item 13 entrou depois da
+revisão, também em 2026-10-16, ao receber a transcrição *Integração de Modelos Jev à Estocologia*: a auditoria
+de cada alegação dela contra o código está em `INTEGRACAO_JEV.md`.
 
 | Proposta | Onde está declarada | O que falta |
 | --- | --- | --- |
@@ -27,6 +30,7 @@ saíram da lista em 2026-10-16 e a numeração de 3 a 12 continua como estava.
 | **10. Migrações de contrato** *(entrou em 2026-10-16)* | `PLAN.md` §7 | o crate de schema e o versionamento por migração: hoje a ficha é o contrato em código, sem arquivo de migração |
 | **11. Eixo R nos laboratórios dos capítulos** *(entrou em 2026-10-16)* | `book/horizontes-de-resolucao-da-pergunta.md` | bloco do eixo nos 21 capítulos; o instrumento existe fora do livro (`labs --resolucao`) e não aparece em nenhum Degrau 3 |
 | **12. Registro empírico sem segunda opinião** *(entrou em 2026-10-16)* | `REGISTRO_EMPIRICO.md` | segunda opinião para os 12 resultados marcados **P**: $H_0$ real inteiro, $H_2$ real, $H_3$ real (item 7), os números do hipergrafo ($454\,178$ nós, $26\,634$, $12\,797$, 329 domínios) e os da auditoria de fundo ($K = 38$, 0,0071 dp, 33 dos 33, 0,145, os 21 pareceres). Todos voltam com `git checkout 1bfec905 -- <pasta>` |
+| **13. Ponte Jev-LLM (Sistema 1 sobre pesos abertos congelados)** *(entrou em 2026-10-16)* | `PLAN.md` §4, o cabeçalho de `crates/stochology-core/src/s1.rs` e `INTEGRACAO_JEV.md` | o runner local com pesos congelados e o `sha256` dos pesos, a decodificação restrita ao esquema da ficha, a prova de determinismo na forma do G1 (duas execuções, hash idêntico), a calibração contra o Brier do Jev determinístico, o custo por chamada e a pergunta paralela de adequação do espaço de hipóteses. A abstenção já existe em código: `Categoria::Outros` em `s1.rs` |
 
 ## 2. Fechado depois do inventário anterior
 
@@ -99,7 +103,7 @@ apontam agora para o que ficou.
 | 5. Registro sem segunda opinião | 12 resultados | 12, no item 12 |
 | 6. Decisões de não fazer | 5 | 5 |
 | 7. Limites estruturais | 3 | 3 |
-| — Lista viva de proposta declarada | 7 | **10**: os itens 8 a 12 entraram em 2026-10-16 e os itens 1 e 2 saíram na mesma data |
+| — Lista viva de proposta declarada | 7 | **11**: os itens 8 a 12 entraram em 2026-10-16, os itens 1 e 2 saíram na mesma data e o item 13 entrou nela |
 
 ### Verificação desta revisão
 
