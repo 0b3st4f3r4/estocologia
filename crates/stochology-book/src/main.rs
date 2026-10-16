@@ -20,6 +20,8 @@ fn main() {
     let mut sistema1 = false;
     let mut sistema2 = false;
     let mut pre_teste_flag = false;
+    let mut respostas: Option<String> = None;
+    let mut gabarito: Option<String> = None;
     let mut fila_flag = false;
     let mut i = 0;
     while i < args.len() {
@@ -36,6 +38,18 @@ fn main() {
             "--s1" => sistema1 = true,
             "--s2" => sistema2 = true,
             "--preteste" => pre_teste_flag = true,
+            "--respostas" => {
+                if i + 1 < args.len() {
+                    respostas = Some(args[i + 1].clone());
+                    i += 1;
+                }
+            }
+            "--gabarito" => {
+                if i + 1 < args.len() {
+                    gabarito = Some(args[i + 1].clone());
+                    i += 1;
+                }
+            }
             "--fila" => fila_flag = true,
             _ => {}
         }
@@ -58,7 +72,7 @@ fn main() {
         return;
     }
     if pre_teste_flag {
-        pre_teste_do_painel();
+        pre_teste_do_painel(respostas.as_deref(), gabarito.as_deref());
         return;
     }
     if fila_flag {
@@ -105,8 +119,83 @@ fn sistema_1() {
 
 
 /// Pré-teste de calibração do painel SHELF: o nulo declarado do desenho do protocolo.
-fn pre_teste_do_painel() {
-    use stochology_h3::preteste::{BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO, nulo_do_pre_teste};
+fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
+    use stochology_h3::preteste::{
+        BALDES_AJUSTADOS, BALDES_DO_PROTOCOLO, ECE_MAXIMO_AJUSTADO, ECE_MAXIMO_DO_PROTOCOLO,
+        avaliar_com, nulo_do_pre_teste, probabilidades_invalidas,
+    };
+
+    if let (Some(respostas), Some(gabarito)) = (respostas, gabarito) {
+        let confianca: Vec<f64> = respostas
+            .split(',')
+            .filter_map(|t| t.trim().parse::<f64>().ok())
+            .collect();
+        let acerto: Vec<bool> = gabarito
+            .split(',')
+            .map(|t| t.trim().eq_ignore_ascii_case("sim"))
+            .collect();
+        if confianca.len() != acerto.len() || confianca.is_empty() {
+            println!("respostas com {} valores e gabarito com {}: não pontuo", confianca.len(), acerto.len());
+            return;
+        }
+        let invalidas = probabilidades_invalidas(&confianca);
+        if !invalidas.is_empty() {
+            println!("p fora de (0, 1) nos itens {:?}: o protocolo recusa 0 e 1 exatos", invalidas);
+        }
+        println!("== Pré-teste SHELF :: pontuação de um especialista ==");
+        println!("itens: {} | p distintos: {}", confianca.len(), {
+            let mut v = confianca.clone();
+            v.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+            v.dedup();
+            v.len()
+        });
+        let ajustado = avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
+        println!(
+            "Brier {:.6} | climatologia do pool {:.6} | habilidade {:.6} | REL {:.6} RES {:.6} UNC {:.6}",
+            ajustado.brier,
+            ajustado.brier_clima,
+            ajustado.habilidade,
+            ajustado.murphy.rel,
+            ajustado.murphy.res,
+            ajustado.murphy.unc
+        );
+        for caixa in &ajustado.caixas {
+            println!(
+                "  caixa {} | n {} | media prevista {:.4} | taxa observada {:.4} | desvio {:+.4}",
+                caixa.indice, caixa.n, caixa.media_prevista, caixa.taxa_observada, caixa.desvio()
+            );
+        }
+        println!(
+            "criterio 3 (n >= 4 e |desvio| > 0,25): {}",
+            if ajustado.reprovacoes.iter().any(|x| matches!(x, stochology_h3::preteste::Reprovacao::CaixaSistematica { .. })) { "reprovado" } else { "ok" }
+        );
+        println!(
+            "curva observada (diagnostico que morde): {}",
+            if stochology_h3::preteste::curva_observada_e_fracamente_monotona(&ajustado.caixas) { "fracamente monotona" } else { "NAO monotonona" }
+        );
+        for caixa in &ajustado.caixas {
+            println!("  item a item da caixa {}: ver o formulario do especialista", caixa.indice);
+        }
+        println!(
+            "portao ajustado ({} caixas, ECE <= {}): ECE {:.4} -> {}",
+            BALDES_AJUSTADOS,
+            ECE_MAXIMO_AJUSTADO,
+            ajustado.ece,
+            if ajustado.aprovado { "APROVADO" } else { "REPROVADO" }
+        );
+        for r in &ajustado.reprovacoes {
+            println!("  reprovacao: {r:?}");
+        }
+        let escrito = avaliar_com(&confianca, &acerto, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO);
+        println!(
+            "portao do protocolo como escrito ({} caixas, ECE <= {}): ECE {:.4} -> {}",
+            BALDES_DO_PROTOCOLO,
+            ECE_MAXIMO_DO_PROTOCOLO,
+            escrito.ece,
+            if escrito.aprovado { "aprovado" } else { "reprovado" }
+        );
+        return;
+    }
 
     println!("== Pré-teste SHELF :: calibração do painel ==");
     println!(

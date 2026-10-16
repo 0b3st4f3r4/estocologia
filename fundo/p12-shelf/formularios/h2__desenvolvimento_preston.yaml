@@ -6,7 +6,7 @@
 # Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
 
 protocolo: fundo/p12-shelf/protocolo.md
-protocolo_sha256: ""              # preencher no congelamento
+protocolo_sha256: "175004ac45caa0fc8e231ea0bd85466b913ef7da104f3d0c4d394cb7e6e95058"
 declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
 
 dominio: h2/desenvolvimento_preston
@@ -25,38 +25,68 @@ status_na_rodada_a: "aprovado"
 K_de_hoje: "1"
 K_de_hoje_fonte: h2/saida/desenvolvimento_preston/resultados.json
 
-facilitador: ""
+facilitador: "agente executor do repositorio (conduz, guarda o gabarito e nao elicita)"
 
 pre_teste:
   itens: 20
-  semente_do_sorteio: ""
+  semente_do_sorteio: "2026"
   pool: ""                        # de onde vieram os 20 itens já resolvidos
-  fora_do_cofre_do_dominio: ""    # sim / nao (se nao, o dominio fica marcado como contaminado)
-  gabarito_com: ""
+  fora_do_cofre_do_dominio: "sim: fatos publicos de desenvolvimento, saude populacional e renda, nenhum medindo a quantidade elicitada"
+  gabarito_com: "Banco Mundial (API v2) em 20 itens, com conferencia cruzada por Our World in Data (UN WPP e UN IGME), IBGE, CDC/NCHS, Rosstat e OMS/GHED"
 
 especialistas:
   E1:
-    nome: ""
+    nome: "sil"
     codigo: "E1"
-    qualificacao: ""
-    de_fora_do_programa: ""        # sim / nao
-    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
-    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    qualificacao: "autor do livro e do programa"
+    de_fora_do_programa: "nao"        # o proprio autor: o controle principal do protocolo segue ausente
+    de_fora_da_area_do_dominio: "nao"
+    conflitos_declarados: "escreveu o pacote do dominio, viu as saidas do h2 e do h2g e assinou os 21 pareceres; e o autor do programa"
     pre_teste:
-      respostas: []                # 20 pares (p, y), p em (0,1)
-      brier: null
-      brier_climatologia: null
-      habilidade: null             # 1 - brier / brier_climatologia
-      ece: null
-      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
-      murphy_rel: null
-      murphy_res: null
-      murphy_unc: null
-      criterio_1_habilidade_positiva: ""     # sim / nao
-      criterio_2_ece_ate_0_10: ""            # sim / nao
-      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
-      criterio_4_curva_fracamente_monotona: "" # sim / nao
-      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+      respostas:
+        # ordem da declaracao de itens (semente 2026); y e o gabarito, guardado pelo facilitador
+        - {item: P05, p: 0.75, y: sim}
+        - {item: P01, p: 0.75, y: sim}
+        - {item: P06, p: 0.25, y: nao}
+        - {item: P18, p: 0.25, y: nao}
+        - {item: P10, p: 0.25, y: nao}
+        - {item: P07, p: 0.75, y: sim}
+        - {item: P22, p: 0.25, y: nao}
+        - {item: P09, p: 0.75, y: sim}
+        - {item: P17, p: 0.75, y: sim}
+        - {item: P11, p: 0.75, y: sim}
+        - {item: P21, p: 0.75, y: sim}
+        - {item: P02, p: 0.25, y: nao}
+        - {item: P14, p: 0.25, y: nao}
+        - {item: P13, p: 0.75, y: sim}
+        - {item: P08, p: 0.25, y: nao}
+        - {item: P20-frozen, p: 0.25, y: nao}
+        - {item: P19-frozen, p: 0.75, y: sim}
+        - {item: P04, p: 0.25, y: nao}
+        - {item: P12, p: 0.25, y: nao}
+        - {item: P15, p: 0.25, y: sim}
+      brier: 0.087500
+      brier_climatologia: 0.250000
+      habilidade: 0.650000
+      portao: "ajustado (declaracao 1 do ponto 12): 5 caixas de massa igual, ECE <= 0,25; o portao como escrito (10 caixas, ECE <= 0,10) reprovaria"
+      ece: 0.2250
+      ece_no_portao_como_escrito: 0.2750
+      caixas:
+        - {indice: 0, n: 4, media_prevista: 0.2500, taxa_observada: 0.0000, desvio: -0.2500}
+        - {indice: 1, n: 4, media_prevista: 0.2500, taxa_observada: 0.0000, desvio: -0.2500}
+        - {indice: 2, n: 4, media_prevista: 0.3750, taxa_observada: 0.5000, desvio: 0.1250}
+        - {indice: 3, n: 4, media_prevista: 0.7500, taxa_observada: 1.0000, desvio: 0.2500}
+        - {indice: 4, n: 4, media_prevista: 0.7500, taxa_observada: 1.0000, desvio: 0.2500}
+      murphy_rel: 0.042045
+      murphy_res: 0.204545
+      murphy_unc: 0.250000
+      criterio_1_habilidade_positiva: "sim (0,6500)"
+      criterio_2_ece_ate_0_10: "nao no portao como escrito (0,2750 em 10 caixas); sim no ajustado (0,2250 em 5 caixas)"
+      criterio_3_sem_caixa_com_n4_e_0_25: "sim: o maior |desvio| e 0,2500, exatamente no limiar, e ele nao e ultrapassado"
+      criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito; o diagnostico que morde (taxa observada da caixa de cima acima da de baixo) tambem da sim"
+      resultado: "aprovado no portao ajustado; reprovado no portao como escrito"
+      falha_de_execucao_declarada: "o arquivo do pool mudou depois do congelamento da lista: os itens 16 e 17 da lista congelada (P20 e P19 na versao final) foram trocados pelo executor. As perguntas administradas foram as congeladas, e o gabarito desses dois foi reconstruido na fonte primaria (Banco Mundial: Russia 78,170 - 68,240 = 9,930 anos, logo nao; India 67,282 anos em 2021, logo sim) e coincide com o da versao nova"
+      observacao_do_facilitador: "o especialista usou so dois valores de p (0,25 e 0,75), o minimo de granularidade: a habilidade de 0,65 vem da discriminacao (RES 0,2045) e nao da calibracao fina (REL 0,0420), e a ECE de 0,2250 fica perto do limiar por construcao, porque as caixas comparam 0,25/0,75 com taxas observadas de 0 e 1. Com 20 itens e duas probabilidades, o pre-teste mede direcao, nao calibracao fina"
     elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
       q50: null
       q25: null
@@ -66,12 +96,12 @@ especialistas:
       justificativa: ""
       fonte: ""
     controles:
-      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ordem_recebida: "mediana_primeiro"   # um so especialista: nao ha metade do painel na ordem inversa, declarado
       ancora_S: null
       ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
       razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""  # sim / nao
+      excesso_de_confianca_ok: ""
     devolucao:
       rodada_1_em: ""
       rodada_1_confirmacao: ""     # confirma / ajusta

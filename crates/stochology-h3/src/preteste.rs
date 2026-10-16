@@ -24,6 +24,14 @@ pub const BALDES_DO_PROTOCOLO: usize = 10;
 /// Limiar declarado do protocolo para o ECE.
 pub const ECE_MAXIMO_DO_PROTOCOLO: f64 = 0.10;
 
+/// Caixas do **portão ajustado** (declaração 1 do ponto 12, 2026-10-16): 20 itens em 5 caixas de massa
+/// igual dão 4 itens por caixa, e o critério 3 volta a morder.
+pub const BALDES_AJUSTADOS: usize = 5;
+
+/// Limiar do portão ajustado: o p90 medido do ECE de um especialista perfeitamente calibrado nesse
+/// desenho (0,2316), arredondado para cima. Ver `labs --preteste`.
+pub const ECE_MAXIMO_AJUSTADO: f64 = 0.25;
+
 /// Tamanho minimo de caixa para a regra da secao sistematica morder.
 pub const CAIXA_N_MINIMO: usize = 4;
 
@@ -185,21 +193,34 @@ fn brier(confianca: &[f64], acerto: &[bool]) -> f64 {
         / confianca.len() as f64
 }
 
-/// Roda os quatro criterios do protocolo sobre um pre-teste.
+/// Roda os quatro criterios do protocolo **como escritos** (10 caixas, ECE <= 0,10).
+///
+/// Declarado: este portao foi medido e substituido pelo ajustado (`BALDES_AJUSTADOS`,
+/// `ECE_MAXIMO_AJUSTADO`), porque o nulo calibrado o reprova em 99,92% dos casos.
 pub fn avaliar(confianca: &[f64], acerto: &[bool]) -> PreTeste {
+    avaliar_com(confianca, acerto, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO)
+}
+
+/// Roda os quatro criterios com o desenho de caixas e o limiar declarados pelo chamador.
+pub fn avaliar_com(
+    confianca: &[f64],
+    acerto: &[bool],
+    baldes: usize,
+    ece_maximo: f64,
+) -> PreTeste {
     let n = confianca.len();
     let b = brier(confianca, acerto);
     let media: f64 = acerto.iter().filter(|y| **y).count() as f64 / n.max(1) as f64;
     let brier_clima = media * (1.0 - media);
     let habilidade = if brier_clima == 0.0 { 0.0 } else { 1.0 - b / brier_clima };
-    let caixas = caixas_de_massa_igual(confianca, acerto, BALDES_DO_PROTOCOLO);
-    let ece = ece_de_massa_igual(confianca, acerto, BALDES_DO_PROTOCOLO);
+    let caixas = caixas_de_massa_igual(confianca, acerto, baldes);
+    let ece = ece_de_massa_igual(confianca, acerto, baldes);
     let mut reprovacoes = Vec::new();
     if !(habilidade > 0.0) {
         reprovacoes.push(Reprovacao::HabilidadeNaoPositiva { habilidade });
     }
-    if !(ece <= ECE_MAXIMO_DO_PROTOCOLO) {
-        reprovacoes.push(Reprovacao::EceAcimaDoLimite { ece, limite: ECE_MAXIMO_DO_PROTOCOLO });
+    if !(ece <= ece_maximo) {
+        reprovacoes.push(Reprovacao::EceAcimaDoLimite { ece, limite: ece_maximo });
     }
     for caixa in &caixas {
         if caixa.n >= CAIXA_N_MINIMO && caixa.desvio().abs() > CAIXA_DESVIO_MAXIMO {
