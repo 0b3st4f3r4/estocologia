@@ -363,3 +363,49 @@ A elicitada tem a **maior largura das três** no log (0,471459 contra 0,283331 d
   de três especialistas estreitar essa distribuição, o EVPI cai junto e o F1 volta a podar — é o que o p05 já
   tinha mostrado com a literatura.
 
+
+---
+
+## 8. Terceiro domínio preenchido, com a marca **P**: \`h2/educacao_star\`
+
+Mesmo caminho (cópia do p05 fora da árvore, commit \`1bfec905\`, três prioris pelo mesmo código) e a semente de novo preservada: \`educacao_star\` é o sexto na ordem alfabética, então a chamada leva os cinco primeiros antes dele para a semente continuar \`2027 + 100 × 5 = 2527\`.
+
+### As três prioris (pontos SAT)
+
+| prior | q05 | q25 | q50 | q75 | q95 | média | dp |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **pacote** | 2,2453 | 8,0000 | 12,0000 | 16,0000 | 21,7547 | 12,0000 | 5,930409 |
+| **literatura (p05)** | 1,3021781198967624 | 4,860110016547187 | 7,333191149998485 | 9,806272283449783 | 13,364204180100208 | 7,333191 | 3,666596 |
+| **elicitada (E1)** | −2,5 | 6,0 | 12,0 | 18,0 | 26,5 | 12,0000 | 8,895613 |
+
+**A literatura deste domínio carrega a marca \`mesma base\`**: ela nasceu da própria \`AER_STAR\` que o domínio usa, e por isso não é evidência independente. A elicitada tem a mesma mediana do pacote (12,0) e o **maior desvio das três** (8,895613).
+
+### A conferência que autoriza a terceira coluna
+
+| rodada | o que a tabela do p05 diz | o que a rodada de hoje deu |
+| --- | --- | --- |
+| (a) pacote | aprovado; adotar; média posterior 13,5; razão dp 0,61 | aprovado no F4; adotar; média 13,518436; razão 0,609555 |
+| (b) literatura | podado no F2: dados na unidade independente não informam mais que a priori | podado no F2, com a mesma justificativa; efeito de desenho 3,343892 |
+
+### As três rodadas
+
+| rodada | status | EVPI (F1) | F2 informativo | ação do F8 | P(adotar compensa) | média posterior | IC90 | razão dp post/priori |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (a) **pacote** | aprovado no F4 | 1,502145 | sim | adotar | **0,839625** | 13,518436 | [7,485530; 19,505214] | 0,609555 |
+| (b) **literatura** | **podado no F2** | 0,497782 | **não** | — | — | — | — | — |
+| (c) **elicitada (E1)** | aprovado no F4 | **2,640820** | sim | **adotar** | **0,836500** | **13,879785** | [7,140456; 20,576858] | **0,454279** |
+
+### O que a linha nova diz, e é o resultado mais informativo dos três domínios
+
+- **A ação não muda**: \`adotar\`, com P(adotar compensa) **0,836500** contra **0,839625** do pacote — diferença de 0,4%. A eliciteda tem a mesma mediana do pacote e alarga a dispersão, sem mexer na decisão.
+- **O F2 muda, e é o achado**: a priori de **mesma base** foi **podada no F2** — "dados na unidade independente não informam mais que a priori" —, e a elicitada passa. O motivo é direto: uma priori construída da própria base do domínio, e estreita, **torna o dado redundante**; o F2 pega isso. Alargar a priori devolve valor ao dado. É o pedágio da circularidade, medido.
+- **O EVPI sobre com a elicitada**: 2,640820 contra 1,502145 do pacote e 0,497782 da literatura.
+- **A posterior quase não anda** (13,879785 contra 13,518436, +2,7%), mas a razão dp post/priori cai de 0,609555 para 0,454279.
+- **Comparação com o \`h2g/educacao_star_turmas\`**, que é o outro lado do par de mesma base: lá a literatura também foi podada no F1. Os dois lados do par se comportam igual, e é o que se espera de uma priori que não acrescenta informação nova.
+
+### Limites, os mesmos dos outros domínios
+
+- **Marca P**: o número sai do Python aposentado.
+- **Sensibilidade, não rodada oficial**: painel de 1 de 3, e o especialista é o autor do programa.
+- **A exclusão do par de mesma base continua valendo** para quando o painel existir: a mesma pessoa não pode servir \`h2/educacao_star\` e \`h2g/educacao_star_turmas\`.
+
