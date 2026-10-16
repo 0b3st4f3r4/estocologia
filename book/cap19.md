@@ -374,6 +374,13 @@ levedura é a exceção: a resolução da réplica é medida de novo, em Rust, p
 verdadeiro e o artefato de linha plantados pelo instrumento — o que o instrumento mede ali é o **desenho**, e não
 os 40 genes reais, que continuam sem instrumento.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 19 | sem perda medida neste capitulo | agrupar por escola derruba a área; por aluno, não: a unidade independente no vocabulário do eixo
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Explique, com o mundo B do laboratório, por que usar o ano como ambiente faz o conjunto invariante

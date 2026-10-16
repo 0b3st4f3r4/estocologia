@@ -183,6 +183,13 @@ falha diante de dados novos (erro 1,191 contra 1,000). O que não muda é a dire
 pré-registrado acusa 5,2%, perto dos 5% nominais, e o jardim multiplica isso por quatro ou por nove. Os
 dois valores ficam registrados; nenhum foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  7 | sem perda medida neste capitulo | testes severos e multiplicidade; sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Explique, sem conta, por que a média das proporções por sequência ($5/12$) é menor que

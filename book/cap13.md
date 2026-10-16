@@ -240,6 +240,13 @@ severidades a partir dos **oitos cuidados da ficha** (bandeiras verdadeiro/falso
 rodar o ataque é a maquinaria do repositório, e o número que a banca publica é o da severidade. Por isso os
 valores 8, 9 e 10 aqui reproduzem o pior = 8 do portão, e não um relatório de ataque executado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 13 | sem perda medida neste capitulo | a banca adversarial julga a ficha, e não o grão dela
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Uma base tem uma linha por consulta médica, e a pergunta é sobre pacientes. Que faixa deve

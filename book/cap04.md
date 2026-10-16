@@ -106,6 +106,13 @@ intervalo mais largo (ou um desconto menor) eleva a cobertura acima de 97% — a
 `crates/stochology-book/examples/grade_cap04.rs` mostra o efeito. Os dois valores ficam
 registrados; nenhum foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  4 | sem perda medida neste capitulo | os três tipos de incerteza; o eixo R é ortogonal a eles
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Classifique cada incerteza: o resultado do próximo lance de uma moeda; o vício

@@ -277,6 +277,13 @@ de controle do H1; este laboratório mede $+628$ (com $+274$ na direção invers
 parte das taxas por grupo em vez das unidades. As divergências estão declaradas e nenhum valor antigo
 foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 11 | sem perda medida neste capitulo | o trilema é a subpergunta do R3: cada hora, e para quem
+```
+
 **Exercícios.**
 
 1. *(Conta)* No navio de Bernoulli, o seguro custa 1 800 e cobre uma perda de 34 000 com chance de

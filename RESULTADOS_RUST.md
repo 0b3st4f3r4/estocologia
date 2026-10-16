@@ -378,6 +378,29 @@ escada de resolucao: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
 -- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --
   6 perfis x 200 dias | limiar do dia 0.10 | violacoes da implicacao: 0 | contraexemplos: 3 | conservacao do agregado conferida: true
   leitura: nenhum perfil sobrevive a R1 e falha em R0; 3 perfis passam em R0 e falham em algum dia
+
+-- o eixo R, capitulo por capitulo (a tabela esta em book/eixo-r.tsv; a leitura e calculada aqui) --
+capítulo  1 | sem perda medida neste capitulo | o capítulo apresenta o alvo e a tese; não há decisão de escala
+capítulo  2 | sem perda medida neste capitulo | as três camadas; o grão da pergunta não entra na conta aqui
+capítulo  3 | sem perda medida neste capitulo | probabilidade sem decisão de escala
+capítulo  4 | sem perda medida neste capitulo | os três tipos de incerteza; o eixo R é ortogonal a eles
+capítulo  5 | perda de resolucao 46.24 min (demanda de 5 a 11) | a média mente: o capítulo é o posto que oscila entre 5 e 11
+capítulo  6 | sem perda medida neste capitulo | a unidade independente é o Φ2; o eixo R é o primo dele no grão da pergunta
+capítulo  7 | sem perda medida neste capitulo | testes severos e multiplicidade; sem decisão de escala
+capítulo  8 | perda de resolucao 5.97 min (demanda de 7 a 9) | a tolerância de calibração depende do n do cofre: a oscilação de 7 a 9 é o caso leve
+capítulo  9 | sem perda medida neste capitulo | a escada de causa; o grão entra como a unidade dos ambientes
+capítulo 10 | perda de resolucao 0.00 min (demanda plana) | o arrasto e a ruína se medem por dia; sem oscilação, refinar não rende nada
+capítulo 11 | sem perda medida neste capitulo | o trilema é a subpergunta do R3: cada hora, e para quem
+capítulo 12 | sem perda medida neste capitulo | o mapa do conhecimento; sem decisão de escala
+capítulo 13 | sem perda medida neste capitulo | a banca adversarial julga a ficha, e não o grão dela
+capítulo 14 | sem perda medida neste capitulo | o contrato carrega o campo resolucao (R0 a R3) e o Φ5; a trava só morde com unidade igual ou mais grossa que o dia
+capítulo 15 | sem perda medida neste capitulo | cada cofre é um grão novo: a régua do eixo R quando a correção muda de pergunta
+capítulo 16 | perda de resolucao 46.24 min (demanda de 5 a 11) | o capítulo traz a tabela R0 a R3 do posto e do banco
+capítulo 17 | sem perda medida neste capitulo | a unidade independente é a pessoa; o eixo R aparece como o grão da comparação
+capítulo 18 | perda de resolucao 0.00 min (demanda plana) | os incêndios: o número muda de janela, e a janela é o grão
+capítulo 19 | sem perda medida neste capitulo | agrupar por escola derruba a área; por aluno, não: a unidade independente no vocabulário do eixo
+capítulo 20 | perda de resolucao 46.24 min (demanda de 5 a 11) | o cofre ao vivo: laboratório 0,0022 e cofre real 0,0048 são dois grãos de teste
+capítulo 21 | limiar de oscilacao na amplitude 2.5 (plano calibrado) | o capítulo nomeia o eixo e as previsões 3 e 5
 ~~~
 
 ## 2. Os 21 laboratorios do livro

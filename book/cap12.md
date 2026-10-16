@@ -240,6 +240,13 @@ G2 semente fixa, G3 escopo declarado, G4 invariantes e tipo III, G5 integridade 
 $A_1$–$A_8$, G7 cláusula de saída), com saída de código 0 ou 1. O Capítulo 14 detalha os sete; nenhum valor
 antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 12 | sem perda medida neste capitulo | o mapa do conhecimento; sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Escreva um nó $L_1$ e um nó $L_2$ para a alegação "com essa média de demanda, a espera

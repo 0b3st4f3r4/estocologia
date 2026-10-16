@@ -110,6 +110,13 @@ não foi escolhida para forçar um resultado; ela é só o ponto de partida. **0
 Três sementes diferentes, três moedas honestas, frequências de caras a menos de 0,0013 de um meio em
 100 mil jogadas. O acaso, quando se acumula, se comporta.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  1 | sem perda medida neste capitulo | o capítulo apresenta o alvo e a tese; não há decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Explique, com suas palavras, por que a definição diz "ciência (ou arte)". Dê um

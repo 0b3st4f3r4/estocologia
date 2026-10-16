@@ -172,6 +172,13 @@ concentradas ($n = 1\,488$, espalhamento 0,4) o q50 nulo deste instrumento é 0,
 relatório. O que interessa não muda: o ruído do ECE anda com $1/\sqrt n$, e por isso uma tolerância fixa
 é apertada num cofre pequeno e frouxa num cofre grande. Nenhum valor antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  8 | perda de resolucao 5.97 min (demanda de 7 a 9) | a tolerância de calibração depende do n do cofre: a oscilação de 7 a 9 é o caso leve
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Por que a taxa de acerto não é uma regra própria? Dê um exemplo de dois previsores

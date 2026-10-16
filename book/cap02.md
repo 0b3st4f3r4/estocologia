@@ -144,6 +144,13 @@ de inocência vai de **0,0001** (0,01%) a **0,5** (50%). A terceira coluna mostr
 99 vezes no primeiro mundo, 499.999,7 vezes no último. O erro não está na conta; está em responder
 sobre o Mundo com um número do Modelo.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  2 | sem perda medida neste capitulo | as três camadas; o grão da pergunta não entra na conta aqui
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Classifique cada item como Mundo, Modelo ou Agente: a taxa real de chegada de

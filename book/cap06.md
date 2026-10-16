@@ -183,6 +183,13 @@ do corte de seleção, que o texto antigo não declara. Os números de 1936 conv
 milhões de cédulas, 57,4% para Landon contra os 57% publicados, e a equivalência de 7 pessoas. Nenhum
 valor antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  6 | sem perda medida neste capitulo | a unidade independente é o Φ2; o eixo R é o primo dele no grão da pergunta
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Uma empresa diz: "temos milhões de usuários, então nossa pesquisa de satisfação é

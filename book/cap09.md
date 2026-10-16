@@ -253,6 +253,13 @@ efeito verdadeiro com a variação entre sítios; $Z$ vai de 0,6015 para 1,2029,
 ser uma relação estável. Quando os sítios intervêm no mecanismo, nenhum conjunto é a resposta
 certa, e o teste rejeita, como deve.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  9 | sem perda medida neste capitulo | a escada de causa; o grão entra como a unidade dos ambientes
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Classifique no degrau de Pearl: "bairros com mais polícia têm mais crimes"; "se

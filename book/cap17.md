@@ -234,6 +234,13 @@ diferente merece registro: a edição anterior cita "de 1929 a 1932, o capital c
 **0,00025** — exatamente os números do material. A divergência não era de método: era de janela, e as duas
 aparecem agora, com a data de cada uma.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 17 | sem perda medida neste capitulo | a unidade independente é a pessoa; o eixo R aparece como o grão da comparação
+```
+
 **Exercícios.**
 
 1. *(Conta)* Use o arrasto de segunda ordem, $\tfrac{1}{2}L^2\sigma^2$, com $\sigma = 0{,}1749$ ao ano para

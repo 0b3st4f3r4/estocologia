@@ -295,6 +295,13 @@ for coberto fica arquivado como exercício de sensibilidade. A prova negativa es
 decisão que se diz emitida com a coluna "ouvidos" em nenhum é reprovada, e a caixa só abre quando a cobertura chega
 ao mínimo.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 21 | limiar de oscilacao na amplitude 2.5 (plano calibrado) | o capítulo nomeia o eixo e as previsões 3 e 5
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Escolha um problema da sua escola e escreva a pergunta do decisor nas três partes exigidas. Depois

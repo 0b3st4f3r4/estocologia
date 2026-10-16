@@ -250,6 +250,13 @@ repositório dizem que "no $H_0$ a esteira aplica $\Phi_1$–$\Phi_4$", e este l
 isso: uma ficha completa gera zero falhas de invariante, e cada defeito gera uma. O número "falhas = 0" do
 portão G4, no horizonte `todos`, reproduz aqui.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 14 | sem perda medida neste capitulo | o contrato carrega o campo resolucao (R0 a R3) e o Φ5; a trava só morde com unidade igual ou mais grossa que o dia
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Preencha as cinco perguntas do cabeçalho para a alegação "alunos que estudam com música

@@ -339,6 +339,13 @@ diferenças é o dado: o de cá é gerado por um modelo aditivo simples, com tr�
 registro policial real. O ganho do canário com o relógio desligado, $+0{,}6521$, cai dentro da faixa medida nos
 cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode Island).
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 20 | perda de resolucao 46.24 min (demanda de 5 a 11) | o cofre ao vivo: laboratório 0,0022 e cofre real 0,0048 são dois grãos de teste
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Por que um canário que não dá ganho com o relógio honesto prova pouco se ninguém o testa com o

@@ -651,7 +651,43 @@ fn horizonte_r() {
         t.perfis, t.limiar, t.violacoes, t.contraexemplos, t.conservacao_conferida
     );
     println!("  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia", t.contraexemplos);
+    let l_limiar = l.limiar;
+
+    // ---- o eixo R, capítulo por capítulo
+    println!("\n-- o eixo R, capitulo por capitulo (a tabela esta em book/eixo-r.tsv; a leitura e calculada aqui) --");
+    let perfis: [(&str, f64, f64, &str); 3] = [
+        ("posto", 5.0, 11.0, "demanda de 5 a 11"),
+        ("posto-leve", 7.0, 9.0, "demanda de 7 a 9"),
+        ("plano", 8.0, 8.0, "demanda plana"),
+    ];
+    let tabela = std::fs::read_to_string("book/eixo-r.tsv").unwrap_or_default();
+    for linha in tabela.lines() {
+        let l = linha.trim_end();
+        if l.is_empty() || l.starts_with('#') {
+            continue;
+        }
+        let campos: Vec<&str> = l.split('\t').collect();
+        if campos.len() < 3 || campos[0] == "cap" {
+            continue;
+        }
+        let (cap, caso, frase) = (campos[0], campos[1], campos[2]);
+        let leitura = match perfis.iter().find(|(nome, _, _, _)| *nome == caso) {
+            Some((_, baixa, alta, rotulo)) => {
+                let p = medir_perda(1909, 200, 10, *baixa, *alta);
+                format!("perda de resolucao {:.2} min ({})", p.perda, rotulo)
+            }
+            None => match caso {
+                "previsoes" => match l_limiar {
+                    Some(amplitude) => format!("limiar de oscilacao na amplitude {amplitude:.1} (plano calibrado)"),
+                    None => "limiar de oscilacao nao encontrado".to_string(),
+                },
+                _ => "sem perda medida neste capitulo".to_string(),
+            },
+        };
+        println!("capítulo {cap:>2} | {leitura} | {frase}");
+    }
 }
+
 
 fn contrato() {
     println!("== O contrato :: a ficha em arquivo, a versao e a cadeia de migracoes ==");

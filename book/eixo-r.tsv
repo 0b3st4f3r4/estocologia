@@ -1,0 +1,25 @@
+# formato	cap<TAB>caso<TAB>frase
+# congelado	2026-10-16
+# nota	o instrumento le esta tabela e calcula a leitura de cada capitulo pelo caso declarado; a frase e editorial e nao carrega numero
+cap	caso	frase
+1	teoria	o capítulo apresenta o alvo e a tese; não há decisão de escala
+2	teoria	as três camadas; o grão da pergunta não entra na conta aqui
+3	teoria	probabilidade sem decisão de escala
+4	teoria	os três tipos de incerteza; o eixo R é ortogonal a eles
+5	posto	a média mente: o capítulo é o posto que oscila entre 5 e 11
+6	teoria	a unidade independente é o Φ2; o eixo R é o primo dele no grão da pergunta
+7	teoria	testes severos e multiplicidade; sem decisão de escala
+8	posto-leve	a tolerância de calibração depende do n do cofre: a oscilação de 7 a 9 é o caso leve
+9	teoria	a escada de causa; o grão entra como a unidade dos ambientes
+10	plano	o arrasto e a ruína se medem por dia; sem oscilação, refinar não rende nada
+11	teoria	o trilema é a subpergunta do R3: cada hora, e para quem
+12	teoria	o mapa do conhecimento; sem decisão de escala
+13	teoria	a banca adversarial julga a ficha, e não o grão dela
+14	teoria	o contrato carrega o campo resolucao (R0 a R3) e o Φ5; a trava só morde com unidade igual ou mais grossa que o dia
+15	teoria	cada cofre é um grão novo: a régua do eixo R quando a correção muda de pergunta
+16	posto	o capítulo traz a tabela R0 a R3 do posto e do banco
+17	teoria	a unidade independente é a pessoa; o eixo R aparece como o grão da comparação
+18	plano	os incêndios: o número muda de janela, e a janela é o grão
+19	teoria	agrupar por escola derruba a área; por aluno, não: a unidade independente no vocabulário do eixo
+20	posto	o cofre ao vivo: laboratório 0,0022 e cofre real 0,0048 são dois grãos de teste
+21	previsoes	o capítulo nomeia o eixo e as previsões 3 e 5

@@ -249,6 +249,13 @@ menor. O motivo provável é a cauda real. O Dow de 1885 a 2023 tem 19/10/1987 e
 que o modelo gaussiano não tem. A linha do crash, medida, é a evidência de que o efeito existe; o
 valor exato do crescimento com $3\times$ depende de qual cauda entra na conta.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 10 | perda de resolucao 0.00 min (demanda plana) | o arrasto e a ruína se medem por dia; sem oscilação, refinar não rende nada
+```
+
 **Exercícios.**
 
 1. *(Conta)* Na moeda de Peters, calcule $\mathbb{E}[\ln M]$ à mão e explique por que a mediana cai

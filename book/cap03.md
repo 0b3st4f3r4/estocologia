@@ -138,6 +138,13 @@ independente e para 29,79% no caso correlacionado. A independência não era um 
 metade da conclusão. O número do repositório para o caso correlacionado é 30%, o valor arredondado que
 aparece no roteiro do curso.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  3 | sem perda medida neste capitulo | probabilidade sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conta)* Refaça a árvore da mamografia para 1.000 mulheres (em vez de 10.000) e confira que a

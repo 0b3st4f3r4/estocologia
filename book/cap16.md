@@ -267,6 +267,13 @@ porque a espera média por paciente no mundo oscilante é razão de somas de cau
 com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença
 está dentro da variação do instrumento, e os dois conjuntos de números ficam registrados.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 16 | perda de resolucao 46.24 min (demanda de 5 a 11) | o capítulo traz a tabela R0 a R3 do posto e do banco
+```
+
 **Exercícios.**
 
 1. *(Conta)* Use $W(\lambda)=\lambda/(\mu(\mu-\lambda))$ com $\mu = 12$ para achar a espera de longo prazo com

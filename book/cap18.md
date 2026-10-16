@@ -200,6 +200,13 @@ frequência mensal simples do treino, $p = 5/108 = 0{,}04630$. A diferença não
 "perigoso" se coloca do outro lado. A cauda ajustada é mais pessimista que a contagem crua de meses, e por isso
 exige mais meses limpos. Os dois valores ficam registrados; nenhum foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 18 | perda de resolucao 0.00 min (demanda plana) | os incêndios: o número muda de janela, e a janela é o grão
+```
+
 **Exercícios.**
 
 1. *(Conta)* Com a regra de Laplace, calcule a chance mensal depois de 12, 36 e 69 meses limpos. Quantos meses

@@ -157,6 +157,13 @@ do NumPy com `SeedSequence(1909)`; aqui, o SplitMix64 com a semente 1909) e o co
 aqui é sempre uma fila vazia. A identidade de Jensen, o sinal do pedágio e a conclusão sobre a unidade
 da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  5 | perda de resolucao 46.24 min (demanda de 5 a 11) | a média mente: o capítulo é o posto que oscila entre 5 e 11
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Para cada caso, diga se a média esconde um pedágio e de que sinal. (a) O tempo de

@@ -205,6 +205,13 @@ central travou porque o Erlang C escrito com fatoriais estourava em cargas grand
 estável de Erlang B só afeta a decisão, não as previsões, mas muda o hash do módulo e **conta no $K$ (3)**.
 Nenhum valor antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 15 | sem perda medida neste capitulo | cada cofre é um grão novo: a régua do eixo R quando a correção muda de pergunta
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Por que abrir o cofre duas vezes destrói o seu valor? Relacione com a severidade de Mayo,
