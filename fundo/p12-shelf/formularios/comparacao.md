@@ -409,3 +409,49 @@ Mesmo caminho (cópia do p05 fora da árvore, commit \`1bfec905\`, três prioris
 - **Sensibilidade, não rodada oficial**: painel de 1 de 3, e o especialista é o autor do programa.
 - **A exclusão do par de mesma base continua valendo** para quando o painel existir: a mesma pessoa não pode servir \`h2/educacao_star\` e \`h2g/educacao_star_turmas\`.
 
+
+---
+
+## 9. Quarto domínio preenchido, com a marca **P**: \`h2g/direito_teto_beneficio\`
+
+Mesmo caminho, com uma diferença de pasta: este domínio vive no **\`h2g\`** do p05 e lê a base **\`dados-reais/h2b\`**. A semente de novo preservada — \`direito_teto_beneficio\` é o **segundo** na ordem alfabética dos dezoito domínios do h2g, então a chamada leva \`biologia_sachs\` antes dele para a semente continuar \`2027 + 100 × 1 = 2127\`.
+
+### As três prioris (coeficiente log-log)
+
+| prior | q05 | q25 | q50 | q75 | q95 | média | dp |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **pacote** | **0,00** | 0,20 | 0,35 | 0,50 | **0,75** | 0,350000 | 0,222390 |
+| **literatura (p05)** | 0,22806681817823804 | 0,30 | 0,35 | 0,40 | 0,4719331818217619 | 0,350000 | 0,074130 |
+| **elicitada (E1)** | **0,05** | 0,20 | 0,35 | 0,50 | **0,65** | 0,350000 | 0,222390 |
+
+### A conferência que autoriza a terceira coluna
+
+| rodada | o que a tabela do p05 diz | o que a rodada de hoje deu |
+| --- | --- | --- |
+| (a) pacote | aprovado; adotar; média posterior 0,579; razão dp 0,24 | aprovado no F4; adotar; média 0,578765; razão 0,242860 |
+| (b) literatura | aprovado; adotar; média 0,506; razão 0,6 | aprovado no F4; adotar; média 0,505514; razão 0,602756 |
+
+### As três rodadas
+
+| rodada | status | EVPI (F1) | ação do F8 | P(adotar compensa) | média posterior | IC90 | razão dp post/priori |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| (a) **pacote** | aprovado no F4 | 0,087187 | adotar | 1,0 | 0,578765 | [0,491437; 0,665412] | 0,242860 |
+| (b) **literatura** | aprovado no F4 | 0,029062 | adotar | 0,99875 | 0,505514 | [0,433538; 0,576837] | 0,602756 |
+| (c) **elicitada (E1)** | aprovado no F4 | **0,087187** | adotar | **1,0** | **0,578765** | **[0,491437; 0,665412]** | **0,242860** |
+
+### O achado: a elicitação reproduziu o pacote, e o funil saiu idêntico
+
+A linha (c) é **igual à linha (a) até o último dígito** — status, ação, P(adotar compensa), média posterior, IC90 e razão dp. Não é coincidência de arredondamento: os **três quartis que o ajuste usa** (q25, q50, q75) são os mesmos no pacote e na elicitação — 0,20, 0,35 e 0,50 —, e o ajuste da Normal é por mínimos quadrados **nesses três**. O \`priori\` das duas rodadas sai com média 0,350000 e dp 0,222390, e daí tudo o mais é idêntico por construção.
+
+O que difere são as **pontas**, e o ajuste as ignora: q05 0,05 contra 0,00 do pacote, e q95 0,65 contra 0,75. Elas aparecem só nos controles, e aí sim há diferença — a razão da largura 90% é **0,8201** na elicitada e **1,0000** no pacote.
+
+**A leitura.** Neste domínio a elicitação formal **não trouxe priori nova: ela documentou a priori que já existia**. O pacote declara, na própria letra, "Meyer, Viscusi & Durbin (1995)… citados de memória, conferir; **nenhum especialista humano consultado**". Agora há um especialista, um pré-teste aprovado (habilidade 0,8585), uma justificativa escrita e duas notas assinadas — e os três quartis centrais que ele produziu são os mesmos que o pacote trazia. É a primeira **validação** de uma priori de pacote desta árvore por elicitação formal, e ela vale o que vale: mede consistência do autor consigo mesmo ao longo do tempo, e não concordância com gente de fora.
+
+**Correção de uma frase da devolução.** Ao devolver os números, o facilitador escreveu que "o p05 já registrou que os dois lados desse par foram podados no funil". Isso **não** é o caso deste domínio: com a priori de literatura ele continuou **aprovado no F4**, e a tabela do p05 mostra \`adotar\` nas três rodadas. O que foi podado, no p05, foram \`h2/direito_prisoes\` (no F1) e \`h2g/educacao_star_turmas\` (no F1) — e a marca \`mesma base\` deste domínio continua valendo pelo motivo certo: a evidência não é independente. A frase fica corrigida aqui, e o especialista foi avisado.
+
+### Limites
+
+- **Marca P** e **sensibilidade, não rodada oficial**: painel de 1 de 3, e o especialista é o autor do programa.
+- **O achado tem teto**: reproduzir o pacote não é confirmar a estimativa contra o mundo. É o autor chegando ao mesmo lugar por dois caminhos — o que é útil contra erro de transcrição e inútil contra erro de leitura da literatura.
+- **O ajuste descarta as pontas**: as diferenças de q05 e q95 entre pacote e elicitação não entram no funil, porque a Normal é ajustada nos três quartis centrais. Fica registrado como limite declarado do ajuste, não como escolha deste domínio.
+
