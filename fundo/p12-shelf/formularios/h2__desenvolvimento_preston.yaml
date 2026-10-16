@@ -88,7 +88,7 @@ especialistas:
       falha_de_execucao_declarada: "o arquivo do pool mudou depois do congelamento da lista: os itens 16 e 17 da lista congelada (P20 e P19 na versao final) foram trocados pelo executor. As perguntas administradas foram as congeladas, e o gabarito desses dois foi reconstruido na fonte primaria (Banco Mundial: Russia 78,170 - 68,240 = 9,930 anos, logo nao; India 67,282 anos em 2021, logo sim) e coincide com o da versao nova"
       observacao_do_facilitador: "o especialista usou so dois valores de p (0,25 e 0,75), o minimo de granularidade: a habilidade de 0,65 vem da discriminacao (RES 0,2045) e nao da calibracao fina (REL 0,0420), e a ECE de 0,2250 fica perto do limiar por construcao, porque as caixas comparam 0,25/0,75 com taxas observadas de 0 e 1. Com 20 itens e duas probabilidades, o pre-teste mede direcao, nao calibracao fina"
     elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
-      q50: null
+      q50: 4.5   # elicitado em 2026-10-16, mediana primeiro
       q25: null
       q75: null
       q05: null
