@@ -98,8 +98,8 @@ especialistas:
       q75: 0.50   # elicitado em 2026-10-16, passo dos quartis
       q05: 0.05   # elicitado em 2026-10-16, passo dos extremos
       q95: 0.65   # elicitado em 2026-10-16, passo dos extremos
-      justificativa: ""
-      fonte: ""
+      justificativa: "a mediana de 0,35 apoia-se na literatura empirica de economia do trabalho e seguro social sobre efeito de substituicao e moral hazard em beneficios de afastamento, que aponta de forma consistente para elasticidade positiva e moderada; o q05 estritamente positivo reflete a conviccao teorica de que beneficios maiores nao encurtam o afastamento, e a amplitude ate 0,65 acomoda a variacao institucional de elegibilidade e o rigor de controle entre jurisdicoes"
+      fonte: "literatura de economia do trabalho e seguro social sobre efeito de substituicao e moral hazard, citada em termos gerais; nenhuma referencia especifica nomeada"
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
@@ -108,10 +108,17 @@ especialistas:
       razao_largura_90_elicitada_sobre_implicada: 0.8201
       excesso_de_confianca_ok: "sim"
     devolucao:
-      rodada_1_em: ""
-      rodada_1_confirmacao: ""
+      rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
+      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
       rodada_1_ajuste_q05_q95: []
       rodada_1_motivo: ""
+      rodada_1_mostrado:
+        numeros_do_especialista: "q05 0,05 | q25 0,20 | q50 0,35 | q75 0,50 | q95 0,65, coeficiente log-log"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 0,35"
+        priori_de_literatura_p05: "q05 0,22806681817823804 | q25 0,30 | q50 0,35 | q75 0,40 | q95 0,4719331818217619 (Meyer, Viscusi & Durbin 1995 pela regra R2, faixa [0,3; 0,4])"
+        marca_do_p05: "MESMA BASE do dominio: a priori de literatura nao e evidencia independente aqui"
+        ajuste_da_literatura_pelo_mesmo_instrumento: "media 0,35 | dp 0,074130 | razao da largura 90% 1,0000"
+        comparacao: "medianas identicas (0,35 nos dois); o dp do especialista e 3,0 vezes maior (0,222390 contra 0,074130); a ponta inferior vai a 0,05 contra 0,228 da literatura, e a superior a 0,65 contra 0,472"
       rodada_2_em: ""
       rodada_2_confirmacao: ""
       rodada_2_motivo: ""
