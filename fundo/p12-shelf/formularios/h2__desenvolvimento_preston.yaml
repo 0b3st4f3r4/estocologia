@@ -89,8 +89,8 @@ especialistas:
       observacao_do_facilitador: "o especialista usou so dois valores de p (0,25 e 0,75), o minimo de granularidade: a habilidade de 0,65 vem da discriminacao (RES 0,2045) e nao da calibracao fina (REL 0,0420), e a ECE de 0,2250 fica perto do limiar por construcao, porque as caixas comparam 0,25/0,75 com taxas observadas de 0 e 1. Com 20 itens e duas probabilidades, o pre-teste mede direcao, nao calibracao fina"
     elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
       q50: 4.5   # elicitado em 2026-10-16, mediana primeiro
-      q25: null
-      q75: null
+      q25: 3.25   # elicitado em 2026-10-16, depois do q50
+      q75: 5.75   # elicitado em 2026-10-16, depois do q50
       q05: null
       q95: null
       justificativa: ""
