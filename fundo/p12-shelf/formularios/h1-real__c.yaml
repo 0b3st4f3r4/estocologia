@@ -6,7 +6,7 @@
 # Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
 
 protocolo: fundo/p12-shelf/protocolo.md
-protocolo_sha256: ""              # preencher no congelamento
+protocolo_sha256: "175004ac45caa0fc8e231ea0bd85466b913ef7da104f3d0c4d394cb7e6e95058"
 declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
 
 dominio: h1-real/c
@@ -25,39 +25,74 @@ status_na_rodada_a: "reprovado: modelo_vence_climatologia"
 K_de_hoje: "—"
 K_de_hoje_fonte: h1-real/saida/c/resultados.json (não tem campo K)
 
-facilitador: ""
+facilitador: "agente executor do repositorio (conduz, guarda o gabarito e nao elicita)"
 
 pre_teste:
   itens: 20
-  semente_do_sorteio: ""
+  semente_do_sorteio: "2026 (sorteio estratificado: 10 sim + 10 nao)"
   pool: ""                        # de onde vieram os 20 itens já resolvidos
-  fora_do_cofre_do_dominio: ""    # sim / nao (se nao, o dominio fica marcado como contaminado)
-  gabarito_com: ""
+  fora_do_cofre_do_dominio: "sim: fatos publicos de seguros e catastrofes de outros mercados e anos; nada da base dinamarquesa de incendios, nada do esquema 100 xs 50, nada da camada de resseguro do dominio"
+  gabarito_com: "Swiss Re sigma (1/2025, 1/2024, 3/2024), Munich Re (2023 e 2024), NOAA/NCEI (2023 e 2024), III/Aon, EIOPA e OCDE; os 30 itens tiveram o gabarito localizado pelo facilitador nas proprias copias das dez fontes, 24 de primeira e 6 depois de corrigir a leitura do separador decimal"
 
 especialistas:
   E1:
-    nome: ""
+    nome: "sil"
     codigo: "E1"
-    qualificacao: ""
-    de_fora_do_programa: ""        # sim / nao
-    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
-    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    qualificacao: "autor do livro e do programa"
+    de_fora_do_programa: "nao"
+    de_fora_da_area_do_dominio: "nao"
+    conflitos_declarados: "escreveu o projeto c_real, viu a saida do h1-real e assinou os 21 pareceres; e o autor do programa"
     pre_teste:
-      respostas: []                # 20 pares (p, y), p em (0,1)
-      brier: null
-      brier_climatologia: null
-      habilidade: null             # 1 - brier / brier_climatologia
-      ece: null
-      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
-      murphy_rel: null
-      murphy_res: null
-      murphy_unc: null
-      criterio_1_habilidade_positiva: ""     # sim / nao
-      criterio_2_ece_ate_0_10: ""            # sim / nao
-      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
-      criterio_4_curva_fracamente_monotona: "" # sim / nao
-      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
-    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      respostas:
+        # ordem congelada na declaracao de itens (semente 2026, estratificada 10 sim + 10 nao)
+        - {item: C23, p: 0.10, y: nao}
+        - {item: C27, p: 0.20, y: nao}
+        - {item: C01, p: 0.90, y: sim}
+        - {item: C28, p: 0.35, y: nao}
+        - {item: C15, p: 0.40, y: nao}
+        - {item: C29, p: 0.15, y: sim}
+        - {item: C19, p: 0.80, y: sim}
+        - {item: C14, p: 0.85, y: nao}
+        - {item: C20, p: 0.10, y: nao}
+        - {item: C08, p: 0.35, y: nao}
+        - {item: C22, p: 0.85, y: sim}
+        - {item: C21, p: 0.80, y: sim}
+        - {item: C13, p: 0.60, y: sim}
+        - {item: C12, p: 0.55, y: nao}
+        - {item: C04, p: 0.95, y: sim}
+        - {item: C26, p: 0.90, y: sim}
+        - {item: C16, p: 0.95, y: sim}
+        - {item: C06, p: 0.90, y: sim}
+        - {item: C03, p: 0.60, y: nao}
+        - {item: C30, p: 0.10, y: nao}
+      itens_na_direcao_certa: "16 de 20"
+      brier: 0.144000
+      brier_climatologia: 0.250000
+      habilidade: 0.424000        # o menor dos cinco pre-testes, e ainda positivo
+      portao: "em vigor (declaracao 3): 5 caixas de massa igual, ECE <= 0,25, criterio 3 pelo teste binomial"
+      ece: 0.1550
+      caixas:
+        - {indice: 0, n: 4, media_prevista: 0.1125, taxa_observada: 0.2500, desvio: 0.1375}
+        - {indice: 1, n: 4, media_prevista: 0.3250, taxa_observada: 0.0000, desvio: -0.3250}
+        - {indice: 2, n: 4, media_prevista: 0.6375, taxa_observada: 0.5000, desvio: -0.1375}
+        - {indice: 3, n: 4, media_prevista: 0.8500, taxa_observada: 0.7500, desvio: -0.1000}
+        - {indice: 4, n: 4, media_prevista: 0.9250, taxa_observada: 1.0000, desvio: 0.0750}
+      caixas_pelo_teste_binomial:
+        - {indice: 0, acertos: 1, n: 4, p_bilateral: 0.7592, p_com_bonferroni: 1.0000}
+        - {indice: 1, acertos: 0, n: 4, p_bilateral: 0.4152, p_com_bonferroni: 1.0000}
+        - {indice: 2, acertos: 2, n: 4, p_bilateral: 0.9183, p_com_bonferroni: 1.0000}
+        - {indice: 3, acertos: 3, n: 4, p_bilateral: 0.9560, p_com_bonferroni: 1.0000}
+        - {indice: 4, acertos: 4, n: 4, p_bilateral: 1.0000, p_com_bonferroni: 1.0000}
+      murphy_rel: 0.094000
+      murphy_res: 0.200000
+      murphy_unc: 0.250000
+      criterio_1_habilidade_positiva: "sim (0,4240)"
+      criterio_2_ece_ate_0_10: "sim no portao em vigor (0,1550 <= 0,25)"
+      criterio_3_sem_caixa_com_n4_e_0_25: "sim pelo teste binomial (o menor p com Bonferroni e 1,0000); a caixa 1 tem desvio -0,3250 e seria reprovada pelo limiar fixo, mas 0 de 4 com previsao 0,3250 tem p bilateral 0,4152 — e o que se espera de quem previu 0,325"
+      criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito"
+      resultado: "APROVADO pela regua em vigor"
+      os_quatro_erros: "item 6 (C29): previu 0,15 e os Paises Baixos tinham 7,2% do PIB em nao-vida; item 8 (C14): previu 0,85 e o custo NOAA foi 182,7 contra o limiar de 200; item 14 (C12): previu 0,55 e os perigos secundarios de 2024 (67) ficaram abaixo dos de 2023 (82); item 19 (C03): previu 0,60 e a lacuna foi 57% contra o limiar de 70%. Tres dos quatro sao estimativa de grandeza por cima do limiar (ou de comparacao entre anos), e um e estimativa por baixo de um numero incomum (a Holanda)"
+    elicitacao:
       q50: null
       q25: null
       q75: null
@@ -66,19 +101,19 @@ especialistas:
       justificativa: ""
       fonte: ""
     controles:
-      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
-      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: null  # esperado >= 0,75
-      excesso_de_confianca_ok: ""  # sim / nao
+      ancora_p_com_S_mediana_propria: null
+      ancora_deslocamento_dp: null
+      razao_largura_90_elicitada_sobre_implicada: null
+      excesso_de_confianca_ok: ""
     devolucao:
       rodada_1_em: ""
-      rodada_1_confirmacao: ""     # confirma / ajusta
-      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_confirmacao: ""
+      rodada_1_ajuste_q05_q95: []
       rodada_1_motivo: ""
       rodada_2_em: ""
-      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_confirmacao: ""
       rodada_2_motivo: ""
     quartis_confirmados:
       q05: null
