@@ -15,6 +15,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --genetica` | a resolucao da validacao por intervencao: o que a segunda linha muda |
 | `labs --escuta` | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |
 | `labs --h3` | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |
+| `labs --ponte` | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -207,6 +208,43 @@ veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (raza
   com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
 -- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
   divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+~~~
+
+### A tese da ponte em escala, com o teste justo por fazer
+
+Re-deriva o piloto P01 das notas do juiz cego (8 de 8 defeitos nos dois bracos, 0 de 4 alarmes falsos, 0 pares
+discordantes, empate no teto) e da o veredito do portao: enquanto faltar escolhedor de casos, analistas
+humanos, juiz humano e os 12 casos, a tese fica nao sustentada e nenhuma linha do registro pode dizer o contrario.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --ponte
+~~~
+
+~~~text
+== Ponto 16 :: a tese da ponte em escala ==
+-- o piloto P01, re-derivado das notas do juiz cego --
+casos 12 | com defeito 8 | limpos 4 | pares discordantes 0
+apontou o defeito: braco X 8 de 8 | braco Y 8 de 8
+alarme falso nos limpos: braco X 0 de 4 | braco Y 0 de 4
+veredito: empate no teto: os dois bracos apontaram 8 de 8 defeitos e deram 0 alarmes falsos em 4 casos limpos; pela regra declarada, a tese NAO e sustentada
+
+-- o teste justo --
+prazo da janela: 2027-01-14 | casos minimos: 12
+  escolhedor_dos_casos   nao designado de fora do programa, escolhe os casos antes de existir resultado
+  analistas_braco_A      nao designado dois humanos, um de fora do programa
+  analistas_braco_B      nao designado dois humanos, um de fora, cegos de qualquer texto da Estocologia
+  juiz                   nao designado um humano de fora do programa, cego ao braco, com o gabarito
+  casos                  0 de 12    casos mais dificeis que a lista de 2019, escolhidos pelo de fora
+  status_da_tese         nao sustentada nao sustentada ate o teste justo (o empate no teto conta como nao sustentada)
+designados: [] | pendentes: ["escolhedor_dos_casos", "analistas_braco_A", "analistas_braco_B", "juiz", "casos (0 de 12)"] | casos faltando: 12
+divergencias: nenhuma — nenhuma linha afirma o que o teste justo ainda nao sustenta
+veredito: TESE NAO SUSTENTADA e caixa fechada — com 5 pendente(s), a tese nao vira "sustentada" por nenhum caminho que nao o teste justo, e que seja ate 2027-01-14
+
+-- prova negativa: um registro que diz a tese sustentada sem o teste justo --
+  divergencias: ["status declarado \"sustentada\" com o teste justo por fazer: a tese so muda de estado depois do resultado do juiz"]
+  caixa fechada: true
+-- prova positiva: papeis designados e casos no minimo --
+  divergencias: [] | caixa fechada: false
 ~~~
 
 ### O lacre das sete decisoes que mexem com pessoas
@@ -907,7 +945,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 29 tests
+running 34 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -937,8 +975,13 @@ test fila::testes::grade_e_o_recorte_do_instrumento ... ok
 test fila::testes::impressao_de_trabalho ... ok
 test fila::testes::instrumento_roda_com_semente_fixa ... ok
 test fila::testes::monotonicidade_r2_melhor_que_r0 ... ok
+test ponte::testes::com_os_papeis_designados_o_teste_pode_rodar ... ok
+test ponte::testes::o_piloto_re_deriva_o_empate_no_teto ... ok
+test ponte::testes::o_registro_do_teste_justo_declara_o_que_falta ... ok
+test ponte::testes::o_status_em_teste_sem_os_papeis_reprova ... ok
+test ponte::testes::uma_tese_sustentada_sem_teste_justo_e_reprovada ... ok
 
-test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

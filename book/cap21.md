@@ -164,6 +164,10 @@ naturais, com cláusula de saída, defendido em banca.
 - **A resolução da validação por intervenção da genética.** O desenho está medido: uma linha por mutante aprova
   4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
   Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
+- **A tese da ponte em escala.** O piloto cego empatou no teto e a tese segue **não sustentada**, agora com portão:
+  um registro que a declare sustentada sem o teste justo é reprovado, e o piloto é re-derivado das notas do juiz
+  (`labs --ponte`). O teste justo precisa de um escolhedor de casos de fora do programa, de analistas humanos e de um
+  juiz humano, e o prazo é 2027-01-14.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
   releitura dos 21 pareceres foi feita (17 confirmados, 4 retirados e reemitidos), e ela não substitui a escuta:
   a assinatura do responsável é de quem decide usar o artefato, não de quem paga o erro. A frente tem agora

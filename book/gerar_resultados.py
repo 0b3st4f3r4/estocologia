@@ -81,6 +81,7 @@ def main() -> int:
         "| BTlabs --geneticaBT | a resolucao da validacao por intervencao: o que a segunda linha muda |\n"
         "| BTlabs --escutaBT | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |\n"
         "| BTlabs --h3BT | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |\n"
+        "| BTlabs --ponteBT | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -140,6 +141,13 @@ def main() -> int:
         "veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do\n"
         "BTresultados.jsonBT do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda\n"
         "declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.",
+    ))
+    partes.append(bloco(
+        "A tese da ponte em escala, com o teste justo por fazer",
+        [str(BIN), "--ponte"],
+        "Re-deriva o piloto P01 das notas do juiz cego (8 de 8 defeitos nos dois bracos, 0 de 4 alarmes falsos, 0 pares\n"
+        "discordantes, empate no teto) e da o veredito do portao: enquanto faltar escolhedor de casos, analistas\n"
+        "humanos, juiz humano e os 12 casos, a tese fica nao sustentada e nenhuma linha do registro pode dizer o contrario.",
     ))
     partes.append(bloco(
         "O lacre das sete decisoes que mexem com pessoas",

@@ -63,7 +63,7 @@ Rust a partir do registro versionado (a medida continua sem instrumento — decl
 
 | Resultado | Marca | Fonte |
 | --- | --- | --- |
-| Piloto cego de 12 casos: empate no teto, com 8 de 8 defeitos nos dois braços e 0 alarme falso | **P** | `governanca/` e `fundo/p01-tese/` (mantidos) |
+| Piloto cego de 12 casos: empate no teto, com 8 de 8 defeitos nos dois braços e 0 alarme falso | **P** / **V** | as notas do juiz cego (`fundo/p01-tese/juiz/notas.yaml`) são **re-derivadas** por `labs --ponte`, que devolve os mesmos 8 de 8, 0 de 4 alarmes falsos e 0 pares discordantes; o portão do ponto 16 trava a tese em **não sustentada** até o teste justo, com o motivo declarado (faltam escolhedor de casos, analistas e juiz humanos) |
 | Multiplicidade: $K = 38$; com Bonferroni, o H2g mantém 4 áreas antes da correção e 3 depois | **P** | registro |
 | Prioris: três rodadas em 33 domínios, desvio máximo de 0,0071 dp, 33 dos 33 idênticos | **P** | `fundo/p05-prioris/` |
 | Laço performativo: 0,145 medido contra 0,6 declarado | **P** | `fundo/p06-laco/` |
