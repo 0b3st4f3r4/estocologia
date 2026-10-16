@@ -48,8 +48,8 @@ pareceres deve **citar** `GRUPOS.md` em vez de repetir o que ele já levanta.
 | # | parecer | envolve pessoas | arquivo | SHA-256 | data | decisão | nota |
 |---|---|---|---|---|---|---|---|
 | 1 | Biologia (sinalização celular): biologia_sachs | não | `h2g/saida/biologia_sachs/resultados.json` | `c4586baf485c2edf1b77f2c2718df317e246e4729f05601f2a3be0fa11f5168b` | 2026-10-16 | confirmo | nenhum |
-| 2 | Direito (regra de indenização trabalhista): direito_teto_beneficio | sim | `h2g/saida/direito_teto_beneficio/resultados.json` | `ba8a63e9924224a16c539ce7b00db3814a91d6fd2389721bd1f9679cf3d11d30` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/2-direito_teto_beneficio.md`; nota obrigatória escrita pelo facilitador como proposta, **pendente de confirmação do signatário** |
-| 3 | Educação: educacao_star_turmas | sim | `h2g/saida/educacao_star_turmas/resultados.json` | `f5b4307e4cbd103b96e7e0750c24e1758ec29995ae4eb7fa2bca28bc39477994` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/3-educacao_star_turmas.md`; nota obrigatória escrita pelo facilitador como proposta, **pendente de confirmação do signatário** |
+| 2 | Direito (regra de indenização trabalhista): direito_teto_beneficio | sim | `h2g/saida/direito_teto_beneficio/resultados.json` | `ba8a63e9924224a16c539ce7b00db3814a91d6fd2389721bd1f9679cf3d11d30` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/2-direito_teto_beneficio.md`; nota confirmada e assinada por sil em 2026-10-16 |
+| 3 | Educação: educacao_star_turmas | sim | `h2g/saida/educacao_star_turmas/resultados.json` | `f5b4307e4cbd103b96e7e0750c24e1758ec29995ae4eb7fa2bca28bc39477994` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/3-educacao_star_turmas.md`; nota confirmada e assinada por sil em 2026-10-16 |
 | 4 | Engenharia (aerodinâmica): engenharia_tunel_vento | não | `h2g/saida/engenharia_tunel_vento/resultados.json` | `fbe8d0731fc3e7ab1a35c7a4fef134c5687e4026f7e8955130c46b8ee2e444fe` | 2026-10-16 | confirmo | nenhum |
 | 5 | Farmacologia clínica (cardiologia): farmacologia_qt | não | `h2g/saida/farmacologia_qt/resultados.json` | `d0042974a80fb3166d6e0f601c4b5facec8d6e66eb0547eb6e60fc9fce3c979e` | 2026-10-16 | confirmo | nenhum |
 | 6 | Física (óptica e eletrônica): fisica_tunel_luz | não | `h2g/saida/fisica_tunel_luz/resultados.json` | `9bfa0f14b512611fc142a726505054925022767cac385bfb8dcfcd6f63c86ec0` | 2026-10-16 | confirmo | nenhum |
@@ -63,10 +63,10 @@ pareceres deve **citar** `GRUPOS.md` em vez de repetir o que ele já levanta.
 | 14 | Genética (expressão gênica em levedura): genetica_y08 | não | `h2g/saida/genetica_y08/resultados.json` | `86f19427ef3057afa25ed3da0f02c5cd700ab1529c7eced343ed062b843dacc5` | 2026-10-16 | confirmo | nenhum |
 | 15 | Genética (expressão gênica em levedura): genetica_y09 | não | `h2g/saida/genetica_y09/resultados.json` | `b4733257657015481c0f608e7c391e39c8b545d658a80d61e919d1112391aab2` | 2026-10-16 | confirmo | nenhum |
 | 16 | Genética (expressão gênica em levedura): genetica_y10 | não | `h2g/saida/genetica_y10/resultados.json` | `7fcfc653b550d0ae71e8491086683b4d2aaf286150be6961a891c7b26dc405e2` | 2026-10-16 | confirmo | nenhum |
-| 17 | Saúde (seguro e uso de serviços): saude_rand | sim | `h2g/saida/saude_rand/resultados.json` | `4e9c87b011fc1e01b8faea4a66ed1bbd5454504082435a5b62a9eb5bc44c7d6c` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/17-saude_rand.md`; nota obrigatória escrita pelo facilitador como proposta, **pendente de confirmação do signatário** |
+| 17 | Saúde (seguro e uso de serviços): saude_rand | sim | `h2g/saida/saude_rand/resultados.json` | `4e9c87b011fc1e01b8faea4a66ed1bbd5454504082435a5b62a9eb5bc44c7d6c` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/17-saude_rand.md`; nota confirmada e assinada por sil em 2026-10-16 |
 | 18 | Transporte (segurança viária): transporte_cinto | não | `h2g/saida/transporte_cinto/resultados.json` | `390b12022336021768a6febe9976f6faca46fc1540aab02b04d5289e682d5347` | 2026-10-16 | confirmo | nenhum |
 | 19 | H1·A Dow Jones, aditivo contra multiplicativo (1885–2023) | não | `h1-real/saida/a/resultados.json` | `2b95a0b4832289c221f05c03c3d1136649c0d0e13c571e01bfe5f51255e4d73a` | 2026-10-16 | confirmo | nenhum |
-| 20 | H1·B NSW (LaLonde): treino profissional contra controles do CPS | sim | `h1-real/saida/b/resultados.json` | `5aaa954e56ede16cd7d38360bd923b3c75dea201f46464e7bb398c36f436aa58` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/20-nsw-lalonde.md`; nota obrigatória escrita pelo facilitador como proposta, **pendente de confirmação do signatário** |
+| 20 | H1·B NSW (LaLonde): treino profissional contra controles do CPS | sim | `h1-real/saida/b/resultados.json` | `5aaa954e56ede16cd7d38360bd923b3c75dea201f46464e7bb398c36f436aa58` | 2026-10-16 | retiro e reemito | parecer novo em `pareceres/20-nsw-lalonde.md`; nota confirmada e assinada por sil em 2026-10-16 |
 | 21 | H1·C cauda dos incêndios dinamarqueses, camada 100 xs 50 | não | `h1-real/saida/c/resultados.json` | `0ecd25593905e8bf021262a1735538d27d574f58a75b64474d25c7b2c4116f38` | 2026-10-16 | confirmo | nenhum |
 
 ## Material para a nota (levantado do repositório; não é a nota)
@@ -128,11 +128,11 @@ EOF
 
 Saída esperada: `linhas: 21 | divergentes: 0`.
 
-## Bloco para `governanca/ASSINATURAS.md` (não aplicado)
+## Bloco para `governanca/ASSINATURAS.md` — **aplicado em 2026-10-16**
 
-Este bloco **não** foi colado em `ASSINATURAS.md`: mudar arquivo de outro escopo de escrita é o que esta tarefa
-proíbe. Quando a releitura estiver decidida, é esta a seção que `ASSINATURAS.md` deve ganhar, no fim do arquivo,
-com os campos preenchidos.
+A releitura foi decidida, e a seção foi para o fim de `ASSINATURAS.md` com os campos preenchidos: os dezessete
+confirmados, os quatro retirados e reemitidos com o hash novo de cada um, e as quatro notas em duas partes. O
+esqueleto abaixo fica como registro do que era para ser feito.
 
 ````markdown
 ## Releitura
@@ -194,6 +194,13 @@ levantado (`GRUPOS.md` e os `resultados.json` do commit). Cada um dos quatro doc
 **pendente de confirmação do signatário**. Enquanto ela não for confirmada, o parecer novo **não** entra em
 `ASSINATURAS.md`: o hash dele só se registra com a nota fechada, e é por isso que `ASSINATURAS.md` segue
 intocado.
+
+**Fecho da confirmação, no mesmo dia.** O signatário revisou os quatro pareceres novos e: confirmou o **3** e o **17**
+na íntegra; confirmou o **2** com um microajuste de redação no primeiro ponto da nota ("o efeito da mudança sobre
+quem está abaixo do teto", e não "o efeito do corte"); e confirmou o **20** com um microajuste na cláusula final
+("o disjuntor declarado desarma caso a fração de negros de um lote se afaste mais de 0,25 de 0,84", no lugar de
+"para se afastar"). As notas ficaram como o signatário as assinou, o rótulo de pendência saiu dos quatro arquivos, e
+os quatro SHA-256 entraram na seção "Releitura" de `ASSINATURAS.md`, ao lado dos antigos.
 
 **Contagem.** K da releitura: as 21 releituras são um ato só (K = 1 da releitura). As quatro reemissões não somam
 K, porque não são especificação nova: é o mesmo parecer reemitido com o que faltava declarado.

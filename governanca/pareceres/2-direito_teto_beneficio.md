@@ -21,8 +21,9 @@ antigo.
 - titulares: **sim**; quase-identificadores: `homem`, `casado`, `kentucky`; k-anonimato bruto: 63; dados reais (`wooldridge_injury.csv`); responsável humano: sil, assinatura pendente.
 
 ## Nota obrigatória — duas partes
-*Proposta escrita pelo facilitador a partir do material levantado (`governanca/GRUPOS.md` e o próprio
-`resultados.json`); **pendente de confirmação do signatário**, que é quem escreve a nota dele.*
+*Escrita pelo facilitador a partir do material levantado (`governanca/GRUPOS.md` e o próprio
+`resultados.json`) e **confirmada e assinada por sil em 2026-10-16**, com um microajuste de redação no primeiro
+ponto.*
 
-- **não olhou:** o efeito do corte sobre quem está **abaixo** do teto (o parecer mede a duração do afastamento, não a renda de quem o corte não atinge); a incidência fora de Kentucky e Michigan; e o custo real do corte — o `C` do F1 é **inventado**, e a ressalva de que isto não é conselho de política acompanha o parecer desde a assinatura.
-- **grupos afetados:** trabalhadores acidentados no trabalho cobertos pelo teto, Kentucky (1980) e Michigan (1982), com o corte caindo no grupo `alta_renda` acima do teto; **nenhum** deles foi ouvido (`GRUPOS.md`, linha da decisão `direito_teto_beneficio`).
+- **não olhou:** o efeito da mudança sobre quem está **abaixo** do teto (o parecer mede a duração do afastamento, não a recomposição de renda de quem o reajuste do teto não atinge); a incidência fora de Kentucky e Michigan; e o custo real da medida — o `C` do F1 é **inventado**, e a ressalva de que isto não é conselho de política acompanha o parecer desde a assinatura.
+- **grupos afetados:** trabalhadores acidentados no trabalho cobertos pelo seguro em Kentucky (1980) e Michigan (1982), com a mudança incidindo no grupo `alta_renda` acima do teto; **nenhum** deles foi ouvido (`GRUPOS.md`, linha da decisão `direito_teto_beneficio`).

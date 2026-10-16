@@ -22,7 +22,7 @@ antigo.
 
 ## Nota obrigatória — duas partes
 *Proposta escrita pelo facilitador a partir do material levantado (`governanca/GRUPOS.md` e o próprio
-`resultados.json`); **pendente de confirmação do signatário**, que é quem escreve a nota dele.*
+`resultados.json`); **confirmada e assinada por sil em 2026-10-16, na íntegra**, sem ajuste.*
 
 - **não olhou:** qualquer desfecho de saúde (o parecer mede gasto, e o próprio escopo diz que saúde não está coberta); os idosos, que o escopo exclui por Medicare; e o sacrifício orçamentário das famílias que passam a pagar 25% — não há medida de renda nem de adesão a tratamento no parecer.
 - **grupos afetados:** famílias não idosas dos EUA no RAND HIE (anos 1970), nos planos com teto de desembolso; **nenhum** grupo ouvido (`GRUPOS.md`, linha da decisão `saude_rand`).

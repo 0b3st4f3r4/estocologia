@@ -22,7 +22,7 @@ antigo.
 
 ## Nota obrigatória — duas partes
 *Proposta escrita pelo facilitador a partir do material levantado (`governanca/GRUPOS.md` e o próprio
-`resultados.json`); **pendente de confirmação do signatário**, que é quem escreve a nota dele.*
+`resultados.json`); **confirmada e assinada por sil em 2026-10-16**, com um microajuste na cláusula final.*
 
 - **não olhou:** o custo real por participante: o `C` é **ilustrativo**, de modo que a regra de decisão não fecha recomendação de campo; o bloco de governança, que simplesmente não existia; e o desfecho de emprego de longo prazo, que o parecer não mede.
 - **grupos afetados:** 185 participantes do treino do NSW e 15 992 controles do CPS, por raça declarada (`negro`, `hispanico`, `outro`); **nenhum** grupo ouvido (`GRUPOS.md`, linha da decisão `h1-real/saida/b`).

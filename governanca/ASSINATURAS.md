@@ -32,3 +32,30 @@ Ela não é conselho de política.
 | 19 | H1·A Dow Jones, aditivo contra multiplicativo (1885–2023) | não | `h1-real/saida/a/resultados.json` | `2b95a0b4832289c221f05c03c3d1136649c0d0e13c571e01bfe5f51255e4d73a` |
 | 20 | H1·B NSW (LaLonde): treino profissional contra controles do CPS | sim | `h1-real/saida/b/resultados.json` | `5aaa954e56ede16cd7d38360bd923b3c75dea201f46464e7bb398c36f436aa58` |
 | 21 | H1·C cauda dos incêndios dinamarqueses, camada 100 xs 50 | não | `h1-real/saida/c/resultados.json` | `0ecd25593905e8bf021262a1735538d27d574f58a75b64474d25c7b2c4116f38` |
+
+## Releitura
+
+**Relida em 2026-10-16 por sil.** A releitura usou o formulário `governanca/RELEITURA.md` (tabela de 21 linhas, com os mesmos SHA-256). Os 21 `resultados.json` não estão mais na árvore: eles vivem no commit `1bfec905`, e a conferência foi refeita lá, com **21 de 21 batendo** e nenhum ausente. O resultado de cada parecer está na tabela daquele arquivo: `confirmo` mantém a assinatura de 2026-10-15T03:53:28Z, `retiro` a retira, `retiro e reemito` a retira e registra o hash novo.
+
+**Dezessete pareceres confirmados** (1, 4 a 16, 18, 19 e 21). A assinatura de 2026-10-15T03:53:28Z fica de pé, com os mesmos SHA-256 da tabela acima, e a nota é "nenhum": nenhum deles envolve pessoas.
+
+**Quatro pareceres retirados e reemitidos** (2, 3, 17 e 20, os que envolvem pessoas). A assinatura antiga sai; o hash antigo continua citado na tabela acima e em `RELEITURA.md`, e o parecer novo vive em `governanca/pareceres/`, com hash próprio:
+
+| # | parecer | decisão | SHA-256 do parecer novo | arquivo novo | nota |
+|---|---|---|---|---|---|
+| 2 | Direito (regra de indenização trabalhista) | retiro e reemito | `d1a5564ac9637a845c98532fa37c9a446c78c433b92a8ef6a8a4d19d145fd29e` | `pareceres/2-direito_teto_beneficio.md` | confirmada em 2026-10-16, com microajuste de redação no primeiro ponto |
+| 3 | Educação (STAR) | retiro e reemito | `431a36aac14df3e960f02c203872d5052638538dd5b9985dc3183967bde5c585` | `pareceres/3-educacao_star_turmas.md` | confirmada na íntegra |
+| 17 | Saúde (seguro e uso de serviços) | retiro e reemito | `a5e0e89f8b1b01040b9399d54ac90565912eb53ecd48331076f3043592b2e7b3` | `pareceres/17-saude_rand.md` | confirmada na íntegra |
+| 20 | H1·B NSW (LaLonde) | retiro e reemito | `451948fe717774b730aa5d54bcdd41dc8e98ac2779f9f8bca1f39dbb6d03dc35` | `pareceres/20-nsw-lalonde.md` | confirmada, com microajuste na cláusula final |
+
+**As quatro notas, em duas partes.** Em cada uma, o que o parecer **não olhou** e quais **grupos afetados** existem:
+
+- **2 · Direito (regra de indenização trabalhista)** — não olhou: o efeito da mudança sobre quem está **abaixo** do teto (o parecer mede a duração do afastamento, não a recomposição de renda de quem o reajuste do teto não atinge); a incidência fora de Kentucky e Michigan; e o custo real da medida, que é inventado no F1. Grupos afetados: trabalhadores acidentados no trabalho cobertos pelo seguro em Kentucky (1980) e Michigan (1982), com a mudança incidindo no grupo `alta_renda` acima do teto; nenhum ouvido.
+- **3 · Educação (STAR)** — não olhou: o que acontece com o grupo `outra` (n = 80) quando a turma encolhe; a implementação em escala estadual com professores menos experientes; e a priori elicitada, que não existe neste domínio. Grupos afetados: crianças do jardim à 3ª série das escolas públicas do Tennessee no STAR (11 598 alunos, 80 escolas), por etnia declarada (`afam` 4 524, `cauc` 8 632, `outra` 80); nenhum ouvido.
+- **17 · Saúde (RAND HIE)** — não olhou: qualquer desfecho de saúde (o parecer mede gasto); os idosos, que o escopo exclui por Medicare; e o sacrifício orçamentário das famílias que passam a pagar 25%. Grupos afetados: famílias não idosas dos EUA no RAND HIE (anos 1970), nos planos com teto de desembolso; nenhum ouvido.
+- **20 · H1·B NSW (LaLonde)** — não olhou: o custo real por participante, que é ilustrativo e por isso não fecha recomendação de campo; o bloco de governança, que não existia no `resultados.json`; e o desfecho de emprego de longo prazo. Grupos afetados: 185 participantes do treino do NSW e 15 992 controles do CPS, por raça declarada (`negro`, `hispanico`, `outro`); nenhum ouvido; o disjuntor declarado desarma caso a fração de negros de um lote se afaste mais de 0,25 de 0,84.
+
+**Nada foi reescrito.** Os 21 `resultados.json` continuam como estavam no commit `1bfec905`; os quatro retirados não foram alterados, e os pareceres novos são arquivos novos. O que aqueles arquivos dizem, e o que a releitura não pôde olhar, está em `governanca/GRUPOS.md`.
+
+**A leitura da releitura, em uma frase.** Dos 21 pareceres, quatro envolvem pessoas e nos quatro a nota registra a mesma coisa: nenhum grupo afetado foi ouvido, e quem assinou é quem conduz o programa — o auditor é parte interessada, como o Capítulo 15 declara.
+

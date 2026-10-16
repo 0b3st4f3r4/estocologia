@@ -23,7 +23,7 @@ antigo.
 
 ## Nota obrigatória — duas partes
 *Proposta escrita pelo facilitador a partir do material levantado (`governanca/GRUPOS.md` e o próprio
-`resultados.json`); **pendente de confirmação do signatário**, que é quem escreve a nota dele.*
+`resultados.json`); **confirmada e assinada por sil em 2026-10-16, na íntegra**, sem ajuste.*
 
 - **não olhou:** o que acontece com o grupo `outra` (n = 80) quando a turma encolhe — é pequeno demais para sustentar intervalo; a implementação em escala estadual com professores menos experientes; e a priori elicitada, que **não existe** neste domínio (nenhum educador foi consultado; a priori é a de literatura do p05).
 - **grupos afetados:** crianças do jardim à 3ª série das escolas públicas do Tennessee no STAR (11 598 alunos, 80 escolas), por etnia declarada: `afam` 4 524, `cauc` 8 632, `outra` 80; **nenhum** grupo ouvido (`GRUPOS.md`, linha da decisão `educacao_star_turmas`).
