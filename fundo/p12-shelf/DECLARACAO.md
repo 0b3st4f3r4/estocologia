@@ -112,3 +112,18 @@ Isto é declaração nova, como a regra de casa exige, e o K da frente vai de **
 
 **Efeito nos pré-testes já feitos**, recalculados com a régua em vigor: \`desenvolvimento_preston\` **aprovado** (as duas réguas concordam), \`direito_prisoes\` **aprovado** (as duas concordam) e \`educacao_star\` **aprovado** — este último era reprovado pelo limiar fixo (caixa 3: quatro itens com previsão 0,7250, todos \`sim\`, desvio 0,2750) e passa pelo teste binomial, com p bilateral 0,55 e p corrigido 1,00. A reprovação daquele domínio era da régua, e fica registrada como tal.
 
+
+---
+
+## Nota de execução — a ordem dos domínios e a exclusão do par de mesma base
+
+**2026-10-16.** Decisão do operador. O especialista E1 serviu \`h2/educacao_star\`, e a seção 3 do protocolo proíbe que o mesmo especialista sirva os dois lados de um par de mesma base: \`h2/educacao_star\` e \`h2g/educacao_star_turmas\` nascem da mesma base \`AER_STAR\`. Perguntado, o operador escolheu **não** abrir exceção.
+
+Consequências, declaradas:
+
+- \`h2g/educacao_star_turmas\` sai da fila do E1 e fica **reservado** para um segundo especialista — e por isso o painel deste domínio não pode ser fechado pelo E1 nem agora nem depois;
+- o quarto domínio elicitado passa a ser \`h2g/direito_teto_beneficio\`, cujo par de mesma base declarado no p05 é \`h1-real/b\` (NSW/LaLonde), que o E1 não serviu como especialista SHELF;
+- a fila viva do E1 fica: \`h2/desenvolvimento_preston\` (feito), \`h2/direito_prisoes\` (feito), \`h2/educacao_star\` (feito), \`h2g/direito_teto_beneficio\` (em curso) e \`h1-real/c\` (pendente).
+
+Isto não é mudança de critério nem de limiar: é o desenho do painel seguindo o protocolo, e não conta K. A frente segue com **K = 5**.
+
