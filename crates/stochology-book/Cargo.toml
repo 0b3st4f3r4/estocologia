@@ -1,0 +1,13 @@
+[package]
+name = "stochology-book"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "labs"
+path = "src/main.rs"
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }

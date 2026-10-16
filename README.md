@@ -3,23 +3,36 @@
 Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob incerteza.
 
 Este repositório guarda a pesquisa conduzida segundo a arquitetura do projeto (hipergrafo tipado, camadas
-Mundo/Modelo/Agente, agentes F1–F8 e orquestrador M15, fichas YAML, invariantes Φ1–Φ4), do H0 ao H3, em dados reais.
-A pesquisa foi encerrada em 2026-10-15.
+Mundo/Modelo/Agente, banca adversarial A1–A8, orquestrador M, fichas estruturadas, invariantes Φ1–Φ5), do H0 ao
+H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenharia é **Rust**.
 
 | Pasta | Conteúdo |
 |---|---|
-| `h0-lab0/` | H0 simulado (Lab 0, posto de saúde) |
-| `h0-real/` | H0 real: central de atendimento bancária, 2003 |
-| `h1/` | H1 simulado: projetos A multiplicativo, B causal, C cauda |
-| `h1-real/` | H1 real: Dow Jones (aprovado), NSW de LaLonde (aprovado), incêndios dinamarqueses (rejeitado) |
-| `h2/` … `h2g/` | H2: 12 domínios reais, reexecuções com intervenções (K=1–3), genética de levedura (H2f) e ensaio cardíaco da FDA (H2g) |
-| `h3/` | H3: malha contínua em 6 fluxos, com as revisões H3b–H3d |
-| `dados-reais/` | Dados, origens (`FONTES.md`) e somas `SHA256SUMS` |
-| `governanca/` | Pareceres de risco F5 assinados |
+| `REGISTRO_EMPIRICO.md` | Os números da pesquisa, com o instrumento Rust que reproduz cada um e a marca de divergência declarada |
+| `dados-reais/` | Os cinco dados que os instrumentos leem (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), com origens em `FONTES.md` e somas em `SHA256SUMS` |
+| `governanca/` | Pareceres de risco e a auditoria de quem paga pelo erro |
+| `AGENTS.md` | O contrato de governança, engenharia e orquestração desta edição |
 | `fundo/` | Pontos de fundo: auditoria do livro, uma frente por ponto (tese central, independência, multiplicidade, prioris, laço performativo, ICP, calibração, escala e dados) |
 | `referencias/` | Conferência das referências bibliográficas |
 | `artigo/` | Artigo "Estocologia": Velhas Fronteiras, Novos Horizontes, com as figuras |
-| `estocologia-livro-didatico.md` | Livro didático: quatro partes, 14 capítulos e apêndices (a seção 9.7 é a auditoria de fundo) |
+| `estocologia-livro-didatico.md` | Livro didático em 21 capítulos e 5 partes, três degraus por capítulo, com laboratórios em Rust cuja saída está citada no texto (a edição anterior, de 14 capítulos, vive no histórico do git, em `estocologia-livro-didatico.md` no commit `1bfec905`) |
+| `book/` | Edição do livro em 21 capítulos e 5 partes, três degraus por capítulo: um arquivo por capítulo, `gerar.py` monta e confere |
+| `PLAN.md` | Plano diretor: epistemologia, pedagogia, arquitetura, banca adversarial A1–A8 e governança |
+| `crates/` | Workspace Rust (Edition 2024): núcleo, hipergrafo e lentes, trilha SHA-256, portões e laboratórios do livro |
+| `RESULTADOS_RUST.md` | Registro dos resultados em Rust, gerado por `book/gerar_resultados.py` a partir dos próprios instrumentos |
+| `PROPOSTAS_DECLARADAS.md` | Inventário do que está declarado e ainda não exigido nem medido: Φ5, campo de resolução, 11 crates do roteiro, Sistema 1 e 2, SHELF, genética fina, a voz de quem paga e os limites estruturais |
+| `DECLARACAO_REMOVIDO_PYTHON.md` | O que saiu da árvore em 2026-10-16: o código Python de simulação, com o commit de recuperação e o manifesto `python-removido.txt` |
 
-Cada horizonte tem seu `README.md` com resultados, comandos de reprodução e limites declarados.
-Arquivos grandes ficaram fora do Git; veja [FORA_DO_GIT.md](FORA_DO_GIT.md).
+Em 2026-10-16 o andaime de medição em Python saiu da árvore — o código, as frentes `h0` a `h3` com os seus
+READMEs e os dados que só elas usavam. O número ficou: em `REGISTRO_EMPIRICO.md` e no livro, com o commit
+`1bfec905` como âncora de recuperação e os manifestos `python-removido.txt`, `registro-python-removido.txt` e
+`nao-significante-removido.txt` com o hash de blob de cada arquivo.
+
+Como verificar o que existe hoje:
+
+```bash
+cargo test --workspace
+cargo run --release --bin labs -- --todos
+cargo run --release --bin portoes -- --horizonte todos --reproducao
+python3 book/gerar.py --check && python3 book/conferir_labs.py && python3 book/gerar_resultados.py --check
+```

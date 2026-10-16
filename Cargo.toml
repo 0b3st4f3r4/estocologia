@@ -1,0 +1,19 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/stochology-core",
+    "crates/stochology-hypergraph",
+    "crates/stochology-audit",
+    "crates/stochology-book",
+    "crates/stochology-gates",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
