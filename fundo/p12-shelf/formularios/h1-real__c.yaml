@@ -93,7 +93,7 @@ especialistas:
       resultado: "APROVADO pela regua em vigor"
       os_quatro_erros: "item 6 (C29): previu 0,15 e os Paises Baixos tinham 7,2% do PIB em nao-vida; item 8 (C14): previu 0,85 e o custo NOAA foi 182,7 contra o limiar de 200; item 14 (C12): previu 0,55 e os perigos secundarios de 2024 (67) ficaram abaixo dos de 2023 (82); item 19 (C03): previu 0,60 e a lacuna foi 57% contra o limiar de 70%. Tres dos quatro sao estimativa de grandeza por cima do limiar (ou de comparacao entre anos), e um e estimativa por baixo de um numero incomum (a Holanda)"
     elicitacao:
-      q50: null
+      q50: 0.08   # elicitado em 2026-10-16, mediana primeiro, frequencia mensal da camada
       q25: null
       q75: null
       q05: null
