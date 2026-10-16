@@ -159,3 +159,80 @@ ajustar_normal({"q05": 3, "q25": 5, "q50": 6.5, "q75": 8, "q95": 10.5})
    `$P05_PRIORI`, `OMP_NUM_THREADS=1`, no máximo 2 processos em paralelo) e preencher as duas tabelas de
    decisão.
 5. Escrever o veredito e congelar a declaração com hash (`DECLARACAO_K2.md` + `DECLARACAO_K2.sha256`).
+
+---
+
+# Preenchimento de 2026-10-16 (parcial): o domínio \`h2/desenvolvimento_preston\`
+
+O esqueleto acima continua valendo e não foi reescrito. O que segue é o que já pode ser preenchido, o que não pode,
+e por quê.
+
+## 1. As três prioris, lado a lado
+
+| prior | q05 | q25 | q50 | q75 | q95 | média | dp | fonte |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **pacote** | 3 | 5 | 6,5 | 8 | 10,5 | 6,5 | 2,223903 | \`fundo/p05-prioris/h2/dominios/desenvolvimento_preston/pacote.yaml\`, bloco \`shelf\`: literatura de Preston "citada de memória e por conferir; nenhum especialista humano consultado" |
+| **literatura (p05)** | −2,746195205080443 | −0,21995975644268073 | 1,536 | 3,291959756442681 | 5,818195205080443 | 1,536 | 2,603390 | p05, Pritchett & Summers (1996), regra R1 |
+| **elicitada (E1, n = 1)** | −0,50 | 1,75 | 3,25 | 4,75 | 7,00 | 3,25 | 2,223903 | \`formularios/h2__desenvolvimento_preston.yaml\`, rodada 1 confirmada; ajuste e controles em \`labs --elicitacao\` |
+
+A priori elicitada tem a **mesma forma** do pacote — dp 2,223903 nos dois — sem ter visto o pacote: o especialista
+não recebeu nenhum número do domínio antes de escrever os cinco quantis. O que muda é o **centro**: 3,25, isto é,
+2,75 anos acima da literatura e 3,25 abaixo do pacote. A largura 90% elicitada é 7,5 contra 7,3160 implicada
+(razão 1,0252), no limite de cima do controle de excesso de confiança, e as pontas do especialista são mais largas
+do que os próprios quartis exigiriam.
+
+## 2. A leitura no plano da própria priori
+
+O limiar da decisão deste domínio está no próprio \`pacote.yaml\`: a via da renda compensa se \`theta\` passa de
+**5 anos** (benefício 1,0 por unidade contra custo 5,0).
+
+| prior | \`P(theta > 5)\` na própria priori |
+| --- | --- |
+| pacote | **0,7500** |
+| literatura | **0,0917** |
+| elicitada | **0,2157** |
+
+\`\`\`bash
+cargo run --release --bin labs -- --elicitacao "<q05,q25,q50,q75,q95>" --limiar 5
+\`\`\`
+
+Leitura: das duas prioris informativas (literatura e elicitada), as duas põem \`P(theta > 5)\` bem abaixo de 0,50 —
+a elicitada em 0,2157, quase o dobro da literatura e menos de um terço do pacote. É o mesmo lado do limiar para as
+duas, e é o lado que o p05 já tinha visto: com a literatura, a ação do F8 deste domínio virou **manter** (era
+\`adotar\` com o pacote).
+
+## 3. O que **não** é computável hoje, e por quê
+
+O p05 mediu a passagem completa pelo funil com cada priori. Para este domínio, a tabela dele traz: status
+\`aprovado\` nas três rodadas, ação do F8 \`adotar / manter / manter\`, média posterior 5,09 / 4,81 / 4,98 e
+\`P(adotar compensa)\` 0,565 / 0,366 / 0,495 — a última é a priori fraca, não a elicitação.
+
+Refazer essa passagem com a priori elicitada exige a cadeia que transforma priori em ação: o \`preparo.py\` do
+domínio e a maquinaria do \`h2f/estocologia\`, **aposentados em 2026-10-16**
+(\`DECLARACAO_REMOVIDO_PYTHON.md\`). O que sobrou na árvore é o \`pacote.yaml\` do domínio, não o código que roda.
+Logo a coluna **(c) elicitada** fica **vazia**, marcada como vazia, e não preenchida por aproximação.
+
+Dois caminhos declarados, e nenhum decidido aqui:
+
+1. rodar a cópia do p05 que sobrou na árvore, aceitando a marca **P** do \`REGISTRO_EMPIRICO.md\` (número que só
+   existe em Python) — o que mantém a comparação maçã com maçã, porque as colunas (a) e (b) saíram do mesmo código;
+2. reimplementar o funil do domínio em Rust e preencher a coluna com instrumento — é o caminho do item 12 do
+   inventário, que já pedia a segunda opinião dos resultados marcados **P**.
+
+## 4. O que este preenchimento não pode dizer
+
+- **se a priori elicitada muda a ação do F8** deste domínio: depende da seção 3, e hoje não fecha;
+- **o consenso do painel**: este domínio tem **1** especialista aprovado, e a seção 2.4 do protocolo diz que com
+  menos de três o domínio fica **não elicitado**. O que está aqui é a elicitação do E1, mantida como
+  **sensibilidade**, e ela não substitui a priori do pacote na rodada oficial;
+- **o controle de fora**: o E1 é o autor do programa, então o painel não tem o especialista de fora que o
+  protocolo exige como controle principal;
+- **o controle de ordem**: com um só especialista não há metade do painel na ordem inversa, e isso fica declarado
+  em vez de simulado.
+
+## 5. K
+
+A frente tinha **K = 2** (protocolo = 1, comparação = 2) e a declaração de ajuste do pré-teste levou a **K = 3**.
+Este preenchimento **não** soma K novo: enquanto a coluna (c) não fechar, o que está escrito aqui é aritmética
+descritiva sobre prioris já publicadas, com um critério que já foi declarado.
+

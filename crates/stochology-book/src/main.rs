@@ -22,6 +22,7 @@ fn main() {
     let mut pre_teste_flag = false;
     let mut respostas: Option<String> = None;
     let mut elicitacao: Option<String> = None;
+    let mut limiar: Option<f64> = None;
     let mut gabarito: Option<String> = None;
     let mut fila_flag = false;
     let mut i = 0;
@@ -42,6 +43,12 @@ fn main() {
             "--respostas" => {
                 if i + 1 < args.len() {
                     respostas = Some(args[i + 1].clone());
+                    i += 1;
+                }
+            }
+            "--limiar" => {
+                if i + 1 < args.len() {
+                    limiar = args[i + 1].replace(',', ".").parse::<f64>().ok();
                     i += 1;
                 }
             }
@@ -83,7 +90,7 @@ fn main() {
         return;
     }
     if let Some(entrada) = elicitacao.as_deref() {
-        elicitar(entrada);
+        elicitar(entrada, limiar);
         return;
     }
     if fila_flag {
@@ -132,10 +139,11 @@ fn sistema_1() {
 /// Elicitação SHELF: o ajuste da priori pelos quartis e os controles do protocolo.
 ///
 /// Uso: `labs --elicitacao q05,q25,q50,q75,q95`
-fn elicitar(entrada: &str) {
+fn elicitar(entrada: &str, limiar: Option<f64>) {
     use stochology_h3::shelf::{
         ANCORA_ESPERADA, ANCORA_TOLERANCIA, RAZAO_LARGURA_MINIMA, ajustar_normal,
-        excesso_de_confianca_ok, largura_90_elicitada, largura_90_implicada, razao_largura_90,
+        excesso_de_confianca_ok, largura_90_elicitada, largura_90_implicada, p_acima_de,
+        razao_largura_90,
     };
 
     let valores: Vec<f64> = entrada
@@ -171,6 +179,13 @@ fn elicitar(entrada: &str) {
         "âncora com S igual à mediana do próprio especialista: esperado {:.2} +- {:.2} em P(theta > S)",
         ANCORA_ESPERADA, ANCORA_TOLERANCIA
     );
+    if let Some(s) = limiar {
+        println!(
+            "limiar da decisão em {s}: P(theta > {s}) na própria priori = {:.4} | P(theta > S) com S na mediana = {:.4}",
+            p_acima_de(s, priori.media, priori.dp),
+            p_acima_de(priori.media, priori.media, priori.dp)
+        );
+    }
 }
 
 /// Pré-teste de calibração do painel SHELF: o nulo declarado do desenho do protocolo.

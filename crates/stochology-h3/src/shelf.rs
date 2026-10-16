@@ -83,6 +83,35 @@ pub fn ancora_na_mediana_ok(p: f64) -> bool {
     (p - ANCORA_ESPERADA).abs() <= ANCORA_TOLERANCIA
 }
 
+/// A probabilidade de a quantidade ficar acima de `S` na própria Normal do especialista.
+///
+/// É a leitura de coerência da âncora: se o especialista responde `P(theta > S)` muito longe do que a
+/// própria priori dele prevê, a priori e a âncora contam histórias diferentes, e as duas ficam registradas.
+pub fn p_acima_de(s: f64, media: f64, dp: f64) -> f64 {
+    if dp <= 0.0 {
+        return f64::NAN;
+    }
+    1.0 - phi((s - media) / dp)
+}
+
+/// Distribuição acumulada da normal padrão: `Phi(z) = 0,5 (1 + erf(z / raiz(2)))`, com o erf pela
+/// aproximação de Abramowitz-Stegun 7.1.26 (erro < 1,5e-7).
+///
+/// A divisão por raiz de 2 é do próprio `Phi`: sem ela o zeroth ficaria em 0,76 em vez de 0,69, e a
+/// previsão da âncora sairia inflada. O teste `phi_bate_com_a_tabela` guarda isso.
+fn phi(z: f64) -> f64 {
+    let x = z / std::f64::consts::SQRT_2;
+    let sinal = if x < 0.0 { -1.0 } else { 1.0 };
+    let x = x.abs();
+    let t = 1.0 / (1.0 + 0.327_591_1 * x);
+    let polinomio = t
+        * (0.254_829_592
+            + t * (-0.284_496_736
+                + t * (1.421_413_741 + t * (-1.453_152_027 + t * 1.061_405_429))));
+    let erf = sinal * (1.0 - polinomio * (-x * x).exp());
+    0.5 * (1.0 + erf)
+}
+
 /// O deslocamento da mediana, em unidades do dp, quando se move a mediana do especialista.
 pub fn deslocamento_em_dp(mediana_nova: f64, mediana_original: f64, dp: f64) -> f64 {
     if dp <= 0.0 {
@@ -148,6 +177,30 @@ mod testes {
         assert!(deslocamento_dentro_do_limite(0.19));
         assert!(!deslocamento_dentro_do_limite(0.21));
         assert!((deslocamento_em_dp(4.9, 4.5, 2.0) - 0.2).abs() < 1e-12);
+    }
+
+    #[test]
+    fn a_ancora_preve_o_que_a_prioris_diz() {
+        let p = ajustar_normal(1.75, 3.25, 4.75);
+        // na propria mediana a priori preve 0,50 exatos
+        let na_mediana = p_acima_de(p.media, p.media, p.dp);
+        assert!((na_mediana - 0.5).abs() < 1e-7, "P(theta > mediana): {na_mediana}");
+        // em 4,5 a priori ajustada preve 0,2870; o especialista declarou 0,29, a 0,003
+        let previsto = p_acima_de(4.5, p.media, p.dp);
+        assert!((previsto - 0.2870).abs() < 0.001, "P(theta > 4,5) pela priori: {previsto}");
+        // a regra dos 0,50 +- 0,10 vale na propria mediana, e la ela fecha exata
+        assert!(ancora_na_mediana_ok(na_mediana), "na propria mediana: {na_mediana}");
+        // em 4,5 nao ha regra de 0,50: o que se le e a coerencia entre o declarado e a propria priori
+        assert!((0.29 - previsto).abs() < 0.01, "o declarado e o previsto batem: {previsto}");
+    }
+
+    #[test]
+    fn phi_bate_com_a_tabela() {
+        // os valores da tabela da normal padrão, item a item
+        for (z, esperado) in [(0.0_f64, 0.5_f64), (0.5, 0.691_462), (1.0, 0.841_345), (1.96, 0.975_002), (-1.0, 0.158_655)] {
+            let obtido = phi(z);
+            assert!((obtido - esperado).abs() < 1e-6, "Phi({z}) = {obtido}, tabela {esperado}");
+        }
     }
 
     #[test]

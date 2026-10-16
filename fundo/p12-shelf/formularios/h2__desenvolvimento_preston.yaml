@@ -97,26 +97,41 @@ especialistas:
       fonte: "Preston (1975); Deaton (2003), citados pelo especialista na propria justificativa"
     controles:
       ordem_recebida: "mediana_primeiro"   # um so especialista: nao ha metade do painel na ordem inversa, declarado
-      ancora_S: null
-      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
-      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
-      razao_largura_90_elicitada_sobre_implicada: 1.0662   # elicidata 6.5000 / implicada 6.0967, computada por labs --elicitacao
+      ancora_S: "4,5 (a mediana da primeira rodada) e 3,25 (a mediana confirmada)"
+      ancora_p_com_S_mediana_propria: 0.50   # declarado para S = 3,25; a priori preve 0.5000, desvio 0.0000
+      ancora_deslocamento_dp: null   # a leitura com a mediana do grupo e degenerada: o grupo e o proprio especialista
+      razao_largura_90_elicitada_sobre_implicada: 1.0252   # elicitada 7.5000 / implicada 7.3160, na rodada confirmada
       excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
-      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
-      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
-      rodada_1_motivo: ""
+      rodada_1_confirmacao: "ajusta"     # rodada 1: o especialista ajustou, com motivo escrito
+      rodada_1_ajuste_q05_q95: [-0.50, 7.00]
+      rodada_1_motivo: "a primeira rodada apoiou demais a curva de Preston em corte transversal (~4 a 6 anos) e subestimou o efeito de analisar os 142 paises ao longo de 12 ondas; a referencia de Pritchett & Summers (1996) lembra que, dentro do pais, descontando caracteristicas fixas e ganhos tecnologicos globais em saude, o efeito direto da renda cai e ganha incerteza; a mediana recua para 3,25, meio-termo entre o corte transversal e a literatura de painel, e a dispersao abre para acomodar o centro dela sem descartar efeito nulo ou levemente negativo na ponta inferior"
       rodada_2_em: ""
-      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_confirmacao: "nao houve"     # nada ficou em divergencia: extremos largos, mediana na mesma ordem, controles dentro do limite
       rodada_2_motivo: ""
+      rodada_1_mostrado:            # o que o facilitador devolveu, na letra do protocolo
+        numeros_do_especialista: "q05 1,25 | q25 3,25 | q50 4,5 | q75 5,75 | q95 7,75"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 4,5"
+        priori_de_literatura_p05: "q05 -2,746195205080443 | q25 -0,21995975644268073 | q50 1,536 | q75 3,291959756442681 | q95 5,818195205080443 (Pritchett & Summers 1996, regra R1, ponto 1,536 e dp 2,603)"
+        ajuste_da_literatura_pelo_mesmo_instrumento: "media 1,536000 | dp 2,603390 | razao da largura 90% 1,0000"
+        comparacao: "q50 elicitado 3,0 anos acima do de literatura; dp elicitado 1,8533 contra 2,6034, ou seja, a priori do especialista e mais estreita que a da literatura"
+    ajuste_confirmado:            # o ajuste dos quantis confirmados na rodada 1
+      familia: "gaussiana"
+      media: 3.250000
+      dp: 2.223903
+      erro_max_quartis: 0.0
+      largura_90_elicitada: 7.5000
+      largura_90_implicada: 7.3160
+      razao: 1.0252
+      comando: "cargo run --release --bin labs -- --elicitacao -0.5,1.75,3.25,4.75,7.0"
     quartis_confirmados:
-      q05: null
-      q25: null
-      q50: null
-      q75: null
-      q95: null
-    ajuste:
+      q05: -0.50   # confirmado na rodada 1
+      q25: 1.75   # confirmado na rodada 1
+      q50: 3.25   # confirmado na rodada 1
+      q75: 4.75   # confirmado na rodada 1
+      q95: 7.00   # confirmado na rodada 1
+    ajuste_da_primeira_rodada:    # o ajuste dos quantis como elicitados antes do ajuste do especialista
       familia: "gaussiana"
       media: 4.500000
       dp: 1.853253
@@ -125,12 +140,10 @@ especialistas:
       largura_90_implicada: 6.0967
       razao: 1.0662
       comando: "cargo run --release --bin labs -- --elicitacao 1.25,3.25,4.5,5.75,7.75"
-      rodada_1_mostrado:            # o que o facilitador devolveu, na letra do protocolo
-        numeros_do_especialista: "q05 1,25 | q25 3,25 | q50 4,5 | q75 5,75 | q95 7,75"
-        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 4,5"
-        priori_de_literatura_p05: "q05 -2,746195205080443 | q25 -0,21995975644268073 | q50 1,536 | q75 3,291959756442681 | q95 5,818195205080443 (Pritchett & Summers 1996, regra R1, ponto 1,536 e dp 2,603)"
-        ajuste_da_literatura_pelo_mesmo_instrumento: "media 1,536000 | dp 2,603390 | razao da largura 90% 1,0000"
-        comparacao: "q50 elicitado 3,0 anos acima do de literatura; dp elicitado 1,8533 contra 2,6034, ou seja, a priori do especialista e mais estreita que a da literatura"
+    ancora:                       # as duas leituras da secao 5 do protocolo, com o que a propria priori preve
+      s_mediana_confirmada: {declarado: 0.50, previsto_pela_priori: 0.5000, desvio: 0.0000, dentro_da_tolerancia: sim}
+      s_mediana_anterior: {s: 4.5, declarado: 0.29, previsto_pela_priori: 0.2870, desvio: 0.0030, leitura: "coerencia entre o declarado e a priori ajustada; nao ha regra de 0,50 aqui"}
+      nota: "a previsao da ancora sai de labs --elicitacao e de stochology_h3::shelf::p_acima_de; a funcao Phi do instrumento estava sem o fator raiz de 2 e foi consertada em 2026-10-16, com o teste phi_bate_com_a_tabela guardando os valores da tabela"
   E2:
     nome: ""
     codigo: "E2"
