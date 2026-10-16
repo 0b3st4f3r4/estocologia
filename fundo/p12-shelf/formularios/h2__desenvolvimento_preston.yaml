@@ -93,8 +93,8 @@ especialistas:
       q75: 5.75   # elicitado em 2026-10-16, depois do q50
       q05: 1.25   # elicitado em 2026-10-16, passo dos extremos
       q95: 7.75   # elicitado em 2026-10-16, passo dos extremos
-      justificativa: ""
-      fonte: ""
+      justificativa: "Preston (1975) e Deaton (2003): a inclinacao log-linear em corte transversal costuma girar entre 4 e 6 anos de vida por unidade de log do PIB per capita; os quartis abrem 3,25 a 5,75 e as caudas 1,25 a 7,75 para dar conta da sensibilidade a especificacao num painel de 142 paises — a variacao entre paises sustenta coeficientes mais altos, e o controle por efeitos fixos (instituicoes e geografia) e o erro de medida no PIB comprimem para baixo"
+      fonte: "Preston (1975); Deaton (2003), citados pelo especialista na propria justificativa"
     controles:
       ordem_recebida: "mediana_primeiro"   # um so especialista: nao ha metade do painel na ordem inversa, declarado
       ancora_S: null
@@ -103,8 +103,8 @@ especialistas:
       razao_largura_90_elicitada_sobre_implicada: 1.0662   # elicidata 6.5000 / implicada 6.0967, computada por labs --elicitacao
       excesso_de_confianca_ok: "sim"
     devolucao:
-      rodada_1_em: ""
-      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
+      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
       rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
       rodada_1_motivo: ""
       rodada_2_em: ""
@@ -125,6 +125,12 @@ especialistas:
       largura_90_implicada: 6.0967
       razao: 1.0662
       comando: "cargo run --release --bin labs -- --elicitacao 1.25,3.25,4.5,5.75,7.75"
+      rodada_1_mostrado:            # o que o facilitador devolveu, na letra do protocolo
+        numeros_do_especialista: "q05 1,25 | q25 3,25 | q50 4,5 | q75 5,75 | q95 7,75"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 4,5"
+        priori_de_literatura_p05: "q05 -2,746195205080443 | q25 -0,21995975644268073 | q50 1,536 | q75 3,291959756442681 | q95 5,818195205080443 (Pritchett & Summers 1996, regra R1, ponto 1,536 e dp 2,603)"
+        ajuste_da_literatura_pelo_mesmo_instrumento: "media 1,536000 | dp 2,603390 | razao da largura 90% 1,0000"
+        comparacao: "q50 elicitado 3,0 anos acima do de literatura; dp elicitado 1,8533 contra 2,6034, ou seja, a priori do especialista e mais estreita que a da literatura"
   E2:
     nome: ""
     codigo: "E2"
