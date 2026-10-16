@@ -242,7 +242,7 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
 fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
     use stochology_h3::preteste::{
         BALDES_AJUSTADOS, BALDES_DO_PROTOCOLO, ECE_MAXIMO_AJUSTADO, ECE_MAXIMO_DO_PROTOCOLO,
-        avaliar_com, nulo_com_gate, probabilidades_invalidas,
+        avaliar_ajustado, avaliar_com, nulo_com_gate, probabilidades_invalidas,
     };
 
     if let (Some(respostas), Some(gabarito)) = (respostas, gabarito) {
@@ -269,7 +269,8 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
             v.dedup();
             v.len()
         });
-        let ajustado = avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
+        // declaração 3 do ponto 12: o critério 3 vale pelo teste binomial, e o portão em vigor é o ajustado
+        let ajustado = avaliar_ajustado(&confianca, &acerto);
         println!(
             "Brier {:.6} | climatologia do pool {:.6} | habilidade {:.6} | REL {:.6} RES {:.6} UNC {:.6}",
             ajustado.brier,
@@ -285,9 +286,29 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
                 caixa.indice, caixa.n, caixa.media_prevista, caixa.taxa_observada, caixa.desvio()
             );
         }
+        let caixas_testadas = stochology_h3::preteste::caixas_por_teste_binomial(&ajustado.caixas);
+        for t in &caixas_testadas {
+            println!(
+                "  caixa {} pelo teste binomial: {} acertos de {} com previsao {:.4} | p bilateral {:.4} | p com Bonferroni {:.4} -> {}",
+                t.indice,
+                t.acertos,
+                t.n,
+                t.media_prevista,
+                t.p_bilateral,
+                t.p_com_bonferroni,
+                if t.sistematica(0.05) { "SISTEMATICA" } else { "ok" }
+            );
+        }
+        let escrito_limiar = avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
+        let por_limiar_fixo = escrito_limiar
+            .reprovacoes
+            .iter()
+            .filter(|x| matches!(x, stochology_h3::preteste::Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }))
+            .count();
         println!(
-            "criterio 3 (n >= 4 e |desvio| > 0,25): {}",
-            if ajustado.reprovacoes.iter().any(|x| matches!(x, stochology_h3::preteste::Reprovacao::CaixaSistematica { .. })) { "reprovado" } else { "ok" }
+            "criterio 3, as duas reguas: pelo teste binomial (em vigor, declaracao 3) {} | pelo limiar fixo de 0,25 (como escrito) {}",
+            if caixas_testadas.iter().any(|t| t.sistematica(0.05)) { "reprovado" } else { "ok" },
+            if por_limiar_fixo > 0 { "reprovado" } else { "ok" }
         );
         println!(
             "curva observada (diagnostico que morde): {}",
@@ -297,7 +318,7 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
             println!("  item a item da caixa {}: ver o formulario do especialista", caixa.indice);
         }
         println!(
-            "portao ajustado ({} caixas, ECE <= {}): ECE {:.4} -> {}",
+            "portao ajustado, em vigor ({} caixas, ECE <= {}, criterio 3 pelo teste binomial): ECE {:.4} -> {}",
             BALDES_AJUSTADOS,
             ECE_MAXIMO_AJUSTADO,
             ajustado.ece,

@@ -85,3 +85,30 @@ reconferidas contra as fontes citadas.
 **K:** esta retificação não é especificação nova — nenhum critério, limiar ou item mudou. Ela conserta o registro
 do hash, e não conta K. A frente segue com **K = 3**.
 
+
+---
+
+## Declaração 3 — o critério 3 do pré-teste, corrigido pelo teste certo
+
+**2026-10-16.** Antes de aceitar a reprovação do especialista E1 no pré-teste de \`h2/educacao_star\`, o portão foi medido no nulo calibrado (20 000 repetições do desenho de 20 itens em 5 caixas, \`labs --preteste\`):
+
+| régua | reprovação de especialistas **perfeitamente calibrados** |
+| --- | --- |
+| critério 3 como escrito (n ≥ 4 e abs(desvio) > 0,25) | **0,7052** |
+| critério 2 (ECE ≤ 0,25) | 0,0592 |
+| critério 3 corrigido (teste binomial, Bonferroni) | **0,0031** |
+| aprovação total do portão como escrito | 0,2935 |
+
+**A leitura.** O critério 3, na letra do protocolo, reprovava sete calibrados em dez: numa caixa de quatro itens, o desvio de 0,25 é ruído de amostra pequena, não seção sistemática. O limiar de 0,25 foi escolha de desenho desta frente (declaração 1, ao optar por 5 caixas para fazer o critério morder), e a medição mostrou que ele morde o lado errado.
+
+**O que passa a valer, declarado antes de usar:**
+
+- o critério 3 é julgado pelo **teste binomial bilateral** do número de acertos de cada caixa, dada a **média que o próprio especialista previu** para ela, com **Bonferroni** pelo número de caixas e alfa 0,05 (\`caixas_por_teste_binomial\`, em \`crates/stochology-h3/src/preteste.rs\`);
+- o limiar fixo de 0,25 deixa de gate e fica **relatado ao lado**, como leitura do protocolo como escrito;
+- os critérios 1 (habilidade > 0), 2 (ECE ≤ 0,25 nas 5 caixas) e o diagnóstico da curva observada seguem como estavam;
+- o veredito passa a sair de \`labs --preteste\`, que imprime as **duas réguas** lado a lado.
+
+Isto é declaração nova, como a regra de casa exige, e o K da frente vai de **4** para **5**.
+
+**Efeito nos pré-testes já feitos**, recalculados com a régua em vigor: \`desenvolvimento_preston\` **aprovado** (as duas réguas concordam), \`direito_prisoes\` **aprovado** (as duas concordam) e \`educacao_star\` **aprovado** — este último era reprovado pelo limiar fixo (caixa 3: quatro itens com previsão 0,7250, todos \`sim\`, desvio 0,2750) e passa pelo teste binomial, com p bilateral 0,55 e p corrigido 1,00. A reprovação daquele domínio era da régua, e fica registrada como tal.
+

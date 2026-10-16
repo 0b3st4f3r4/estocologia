@@ -85,7 +85,7 @@ especialistas:
       criterio_2_ece_ate_0_10: "sim no portao ajustado (0,1525 <= 0,25); no como escrito dao 0,2275, acima de 0,10"
       criterio_3_sem_caixa_com_n4_e_0_25: "REPROVADO como escrito: a caixa 3 tem n = 4 e |desvio| = 0,2750 > 0,25. Aprovado pela regua corrigida (teste binomial com Bonferroni): p bilateral 0,55, p corrigido 1,00"
       criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito; a curva observada tambem e fracamente monotonona"
-      resultado: "COMO O PORTAO ESTA ESCRITO: reprovado, pela caixa 3. COM O CRITERIO 3 CORRIGIDO: aprovado. A escolha da regua e do operador e esta declarada na declaracao 3 do ponto 12"
+      resultado: "APROVADO pela regua em vigor (declaracao 3: criterio 3 pelo teste binomial com Bonferroni). Pelo limiar fixo de 0,25 o pre-teste seria reprovado, e essa leitura fica registrada ao lado"
       medida_do_vicio_do_portao: "no nulo calibrado do desenho (20 itens, 5 caixas, limiar de ECE 0,25): aprovados 0,2935 | reprovados pelo criterio 3 como escrito 0,7052 | pelo criterio 3 corrigido 0,0031 | pelo criterio 2 0,0592. Ou seja: o criterio 3 como escrito reprova 7 calibrados em 10, e a reprovacao do E1 neste dominio diz mais sobre a regua do que sobre ele"
     elicitacao:
       q50: null

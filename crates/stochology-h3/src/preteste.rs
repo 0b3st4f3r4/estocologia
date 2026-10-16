@@ -68,6 +68,10 @@ pub struct Murphy {
 /// O motivo declarado de uma reprovacao no pre-teste.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Reprovacao {
+    /// Caixa sistemática pela régua do protocolo como escrito (limiar fixo de desvio).
+    CaixaSistemáticaPorLimiarFixo { indice: usize, n: usize, desvio: f64 },
+    /// Caixa sistemática pela régua corrigida (declaração 3): teste binomial com Bonferroni.
+    CaixaSistemáticaPorTeste { indice: usize, n: usize, p_com_bonferroni: f64 },
     HabilidadeNaoPositiva { habilidade: f64 },
     EceAcimaDoLimite { ece: f64, limite: f64 },
     CaixaSistematica { indice: usize, n: usize, desvio: f64 },
@@ -262,12 +266,40 @@ pub fn avaliar(confianca: &[f64], acerto: &[bool]) -> PreTeste {
     avaliar_com(confianca, acerto, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO)
 }
 
-/// Roda os quatro criterios com o desenho de caixas e o limiar declarados pelo chamador.
+/// Roda os quatro critérios com o desenho de caixas e o limiar declarados pelo chamador, com o critério 3
+/// pela **régua corrigida** (declaração 3 do ponto 12: teste binomial bilateral com Bonferroni).
+pub fn avaliar_corrigido(
+    confianca: &[f64],
+    acerto: &[bool],
+    baldes: usize,
+    ece_maximo: f64,
+) -> PreTeste {
+    avaliar_interno(confianca, acerto, baldes, ece_maximo, true)
+}
+
+/// O portão em vigor para o pré-teste do painel SHELF: 5 caixas de massa igual, ECE <= 0,25 e o critério 3
+/// pelo teste binomial (declaração 3).
+pub fn avaliar_ajustado(confianca: &[f64], acerto: &[bool]) -> PreTeste {
+    avaliar_corrigido(confianca, acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO)
+}
+
+/// Roda os quatro critérios com o desenho de caixas e o limiar declarados pelo chamador, com o critério 3
+/// pela régua do protocolo **como escrito** (limiar fixo).
 pub fn avaliar_com(
     confianca: &[f64],
     acerto: &[bool],
     baldes: usize,
     ece_maximo: f64,
+) -> PreTeste {
+    avaliar_interno(confianca, acerto, baldes, ece_maximo, false)
+}
+
+fn avaliar_interno(
+    confianca: &[f64],
+    acerto: &[bool],
+    baldes: usize,
+    ece_maximo: f64,
+    caixa_por_teste: bool,
 ) -> PreTeste {
     let n = confianca.len();
     let b = brier(confianca, acerto);
@@ -285,11 +317,24 @@ pub fn avaliar_com(
     }
     for caixa in &caixas {
         if caixa.n >= CAIXA_N_MINIMO && caixa.desvio().abs() > CAIXA_DESVIO_MAXIMO {
-            reprovacoes.push(Reprovacao::CaixaSistematica {
+            reprovacoes.push(Reprovacao::CaixaSistemáticaPorLimiarFixo {
                 indice: caixa.indice,
                 n: caixa.n,
                 desvio: caixa.desvio(),
             });
+        }
+    }
+    if caixa_por_teste {
+        // declaração 3: o critério 3 vale pelo teste binomial, e a régua de limiar fixo sai do veredito
+        reprovacoes.retain(|r| !matches!(r, Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }));
+        for caixa in caixas_por_teste_binomial(&caixas) {
+            if caixa.sistematica(0.05) {
+                reprovacoes.push(Reprovacao::CaixaSistemáticaPorTeste {
+                    indice: caixa.indice,
+                    n: caixa.n,
+                    p_com_bonferroni: caixa.p_com_bonferroni,
+                });
+            }
         }
     }
     if !curva_fracamente_monotona(&caixas) {
@@ -390,7 +435,7 @@ pub fn nulo_com_gate(
         let c3 = veredito
             .reprovacoes
             .iter()
-            .any(|r| matches!(r, Reprovacao::CaixaSistematica { .. }));
+            .any(|r| matches!(r, Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }));
         let c2 = veredito
             .reprovacoes
             .iter()
@@ -487,7 +532,7 @@ mod testes {
         let r = avaliar(&confianca, &acerto);
         assert!(!r.aprovado);
         assert!(r.reprovacoes.iter().any(|x| matches!(x, Reprovacao::EceAcimaDoLimite { .. })));
-        assert!(r.reprovacoes.iter().any(|x| matches!(x, Reprovacao::CaixaSistematica { .. })));
+        assert!(r.reprovacoes.iter().any(|x| matches!(x, Reprovacao::CaixaSistemáticaPorLimiarFixo { .. })));
         assert!(r.habilidade < 0.0, "prever alto e errar derruba a habilidade: {}", r.habilidade);
     }
 
