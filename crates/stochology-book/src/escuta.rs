@@ -45,6 +45,8 @@ impl Linha {
 pub struct Registro {
     pub carimbo: String,
     pub prazo: String,
+    /// Como a escuta é conduzida: "protocolo cego" ou "facilitador neutro", declarado antes do primeiro contato.
+    pub conducao: String,
     pub grupos_minimos: usize,
     pub linhas: Vec<Linha>,
 }
@@ -62,6 +64,7 @@ pub struct Veredito {
 pub fn ler(texto: &str) -> Result<Registro, String> {
     let mut carimbo = String::new();
     let mut prazo = String::new();
+    let mut conducao = String::new();
     let mut grupos_minimos: Option<usize> = None;
     let mut linhas = Vec::new();
     for linha in texto.lines() {
@@ -75,6 +78,7 @@ pub fn ler(texto: &str) -> Result<Registro, String> {
                 match campos[0] {
                     "registros" => carimbo = campos[1].trim().to_string(),
                     "prazo" => prazo = campos[1].trim().to_string(),
+                    "conducao" => conducao = campos[1].trim().to_string(),
                     "grupos_minimos" => {
                         grupos_minimos = Some(campos[1].trim().parse().map_err(|_| "grupos_minimos nao e numero")?)
                     }
@@ -96,10 +100,10 @@ pub fn ler(texto: &str) -> Result<Registro, String> {
             pode_emitir: campos[5].to_string(),
         });
     }
-    if prazo.is_empty() || grupos_minimos.is_none() {
-        return Err("registro sem prazo ou sem grupos_minimos".to_string());
+    if prazo.is_empty() || grupos_minimos.is_none() || conducao.is_empty() {
+        return Err("registro sem prazo, sem conducao ou sem grupos_minimos".to_string());
     }
-    Ok(Registro { carimbo, prazo, grupos_minimos: grupos_minimos.unwrap(), linhas })
+    Ok(Registro { carimbo, prazo, conducao, grupos_minimos: grupos_minimos.unwrap(), linhas })
 }
 
 /// Lê o registro de um arquivo. Devolve o erro em vez de entrar em pânico, para o portão poder reprovar.
@@ -133,9 +137,10 @@ pub fn relatar(registro: &Registro) -> String {
     let veredito = registro.veredito();
     let mut saida = String::new();
     saida.push_str(&format!(
-        "decisoes: {} | carimbo do registro: {} | prazo da janela: {} | cobertura minima: {} de {}\n",
+        "decisoes: {} | carimbo do registro: {} | conducao: {} | prazo da janela: {} | cobertura minima: {} de {}\n",
         registro.linhas.len(),
         registro.carimbo,
+        registro.conducao,
         registro.prazo,
         registro.grupos_minimos,
         registro.linhas.len()
@@ -190,14 +195,14 @@ pub fn rodar(caminho: &str) {
     }
 
     println!("\n-- prova negativa: a decisao que se diz emitida sem ninguem ouvido --");
-    let mentiroso = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\nh3/prisoes20\tprisoes\t65276\tnenhum\t-\tnao\nh3/prisoes_ri\tparadas\t86113\tnenhum\t-\tnao\n";
+    let mentiroso = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\nh3/prisoes20\tprisoes\t65276\tnenhum\t-\tnao\nh3/prisoes_ri\tparadas\t86113\tnenhum\t-\tnao\n";
     match ler(mentiroso) {
         Ok(r) => println!("{}", relatar(&r)),
         Err(e) => println!("nao li o caso sintetico: {e}"),
     }
 
     println!("-- prova positiva: dois grupos ouvidos, com registro assinado --");
-    let honesto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tassociacao de defesa publica de TORONTO\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo de ex-detentos\tregistro-02.md\tsim\n";
+    let honesto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tassociacao de defesa publica de TORONTO\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo de ex-detentos\tregistro-02.md\tsim\n";
     match ler(honesto) {
         Ok(r) => println!("{}", relatar(&r)),
         Err(e) => println!("nao li o caso sintetico: {e}"),
@@ -226,7 +231,7 @@ mod testes {
 
     #[test]
     fn a_decisao_emitida_sem_ninguem_ouvido_reprova() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\n";
+        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\n";
         let registro = ler(texto).expect("caso sintetico");
         let veredito = registro.veredito();
         assert_eq!(veredito.divergencias, vec!["h3/prisoes".to_string()]);
@@ -235,7 +240,7 @@ mod testes {
 
     #[test]
     fn a_cobertura_minima_abre_a_caixa() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tdefensoria\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo\tregistro-02.md\tsim\n";
+        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tdefensoria\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo\tregistro-02.md\tsim\n";
         let veredito = ler(texto).expect("caso sintetico").veredito();
         assert_eq!(veredito.cobertura, 2);
         assert!(!veredito.lacrado);
@@ -244,7 +249,7 @@ mod testes {
 
     #[test]
     fn a_escuta_sem_registro_assinado_nao_conta() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tconversa informal\t-\tnao\n";
+        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tconversa informal\t-\tnao\n";
         let registro = ler(texto).expect("caso sintetico");
         assert_eq!(registro.veredito().cobertura, 0, "conversa sem registro nao e escuta");
     }
@@ -254,5 +259,11 @@ mod testes {
         let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
         assert_eq!(registro.prazo, "2026-12-15");
         assert_eq!(registro.carimbo, "2026-10-16");
+    }
+
+    #[test]
+    fn a_conducao_declarada_e_protocolo_cego() {
+        let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
+        assert_eq!(registro.conducao, "protocolo cego", "a forma escolhida na declaracao 2");
     }
 }

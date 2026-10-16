@@ -265,7 +265,7 @@ cargo run --release --bin labs -- --escuta
 
 ```text
 == Ponto 13 :: a escuta de quem paga o erro ==
-decisoes: 7 | carimbo do registro: 2026-10-16 | prazo da janela: 2026-12-15 | cobertura minima: 2 de 7
+decisoes: 7 | carimbo do registro: 2026-10-16 | conducao: protocolo cego | prazo da janela: 2026-12-15 | cobertura minima: 2 de 7
 decisao                              titulares ouvidos      registro   pode emitir
 h2g/saida/direito_teto_beneficio             - nenhum       -          nao
 h2g/saida/educacao_star_turmas           11598 nenhum       -          nao
