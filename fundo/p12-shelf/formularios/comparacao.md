@@ -236,3 +236,75 @@ A frente tinha **K = 2** (protocolo = 1, comparação = 2) e a declaração de a
 Este preenchimento **não** soma K novo: enquanto a coluna (c) não fechar, o que está escrito aqui é aritmética
 descritiva sobre prioris já publicadas, com um critério que já foi declarado.
 
+
+---
+
+## 6. A coluna (c) preenchida, com a marca **P** — decisão declarada do operador
+
+**Decisão de 2026-10-16:** rodar a **cópia aposentada do p05** (o mesmo código que gerou as colunas (a) e (b)),
+e não reimplementar o funil em Rust agora. Motivo declarado: a tabela compara **sensibilidade da decisão** a três
+prioris, e usar o mesmo código é o que garante comparação maçã com maçã; a reimplementação do funil em Rust fica no
+escopo próprio, o item 12 do inventário. O número que sai daqui leva a marca **P** do `REGISTRO_EMPIRICO.md`.
+
+### Como rodar, e por que fora da árvore
+
+O código do p05 saiu da árvore em 2026-10-16 e vive no commit `1bfec905`. A cópia foi restaurada **fora da
+árvore** e rodada lá, para o repositório continuar só Rust (§VIII do contrato):
+
+~~~bash
+rm -rf /tmp/p05run && mkdir -p /tmp/p05run
+git archive 1bfec905 fundo/p05-prioris dados-reais/h2 | tar -x -C /tmp/p05run
+# a priori elicitada entra no formato do p05 (fonte, painel e quartis)
+# /tmp/p05run/fundo/p05-prioris/prioris/h2/elicitada.yaml
+cd /tmp/p05run/fundo/p05-prioris/h2
+for v in original literatura elicitada; do
+  tab=""; [ "$v" != original ] && tab="/tmp/p05run/fundo/p05-prioris/prioris/h2/$v.yaml"
+  P05_PRIORI="$tab" ESTOCOLOGIA_DADOS=/tmp/p05run/dados-reais/h2 ESTOCOLOGIA_SAIDA=/tmp/p05run/saida/$v \
+    python3 p05_rodar.py agronomia_nitrogenio clima_tempestades credito_hmda desenvolvimento_preston
+done
+~~~
+
+**A lista de domínios não é enfeite.** O `p05_rodar.py` dá a semente `2027 + 100 i`, com `i` a posição do domínio
+na lista pedida. `desenvolvimento_preston` é o quarto na ordem alfabética dos dez domínios, então os três primeiros
+entram na chamada só para a semente dele continuar sendo **2327**, a mesma da rodada do p05. Rodar só o preston
+mudaria a semente e o número não seria comparável.
+
+### A conferência que autoriza a terceira coluna
+
+As colunas (a) e (b) do p05 saem **iguais** quando o mesmo código roda de novo. A tabela do p05 traz média posterior
+5,09 / 4,81 e `P(adotar compensa)` 0,565 / 0,366; a rodada de hoje deu 5,087198 / 4,806199 e 0,565375 / 0,366375.
+Quem duvidar roda o bloco acima e compara.
+
+### As três rodadas, lado a lado
+
+| rodada | status | ação do F8 | P(adotar compensa) | média posterior | IC90 | razão dp post/priori | desloc. em dp da (a) | P(theta > 5) na priori (F1) | EVPI |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (a) **pacote** | aprovado no F4 | adotar | **0,565375** | 5,087198 | [4,142920; 6,040198] | 0,2638 | 0 | 0,75285 | 0,32340 |
+| (b) **literatura** | aprovado no F4 | manter | **0,366375** | 4,806199 | [3,828045; 5,781023] | 0,2293 | 0,4790 | 0,09210 | 0,11246 |
+| (c) **elicitada (E1)** | aprovado no F4 | **manter** | **0,418875** | 4,867977 | [3,913771; 5,836887] | 0,2656 | 0,3737 | 0,21245 | 0,27330 |
+
+O dp posterior da rodada (a) é 0,586673, e é nele que o deslocamento está medido.
+
+### O que a linha nova diz
+
+- **A ação do F8 muda de `adotar` para `manter`** com a priori elicitada, como já mudava com a de literatura. O
+  status não muda: `aprovado no F4`, decisão emitida.
+- **`P(adotar compensa)` cai de 0,565375 para 0,418875** e cruza o limiar de 0,50. A literatura leva a 0,366375: a
+  elicitada fica **entre o pacote e a literatura**, mais perto da literatura.
+- **O deslocamento é 0,3737 dp da rodada (a)** — menor que o da literatura (0,4790), como esperado, porque a média
+  posterior da elicitada (4,867977) está mais perto da do pacote (5,087198) do que a da literatura (4,806199).
+- **A razão dp posterior / dp priori é 0,2656**, praticamente a do pacote (0,2638): a priori elicitada tem a mesma
+  forma do pacote, então o dado aperta a posterior quase igualmente.
+- **A priori elicitada é a única das três com preço de pesquisa ainda alto** (EVPI 0,27330 contra 0,11246 da
+  literatura), porque é mais larga que ela — e o F1 passa nas três.
+
+### Limites desta linha, declarados
+
+- **Marca P.** O número sai da cópia aposentada do Python, não de instrumento Rust. É o mesmo caminho das colunas
+  (a) e (b), e é por isso que a comparação vale; a segunda opinião em Rust é o item 12 do inventário.
+- **A rodada (c) é sensibilidade, não rodada oficial.** O painel do domínio tem **1** especialista aprovado, e é o
+  autor do programa; a seção 2.4 do protocolo diz que com menos de três o domínio fica **não elicitado**.
+- **O que esta linha não mede:** o efeito de uma priori elicitada *por três especialistas com um de fora*. Com n = 1
+  e sem o controle de fora, o que se mediu foi a sensibilidade do funil à cabeça de uma pessoa — a mesma que já
+  tinha escrito o pacote.
+

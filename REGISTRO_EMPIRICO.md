@@ -58,7 +58,7 @@ Legenda: **R** o instrumento Rust mede de novo; **D** divergência declarada no 
 | Prioris: três rodadas em 33 domínios, desvio máximo de 0,0071 dp, 33 dos 33 idênticos | **P** | `fundo/p05-prioris/` |
 | Laço performativo: 0,145 medido contra 0,6 declarado | **P** | `fundo/p06-laco/` |
 | Escala, evento raro e saúde: pontos 9 e 10 e as extensões | **aposentado** | saíram da árvore em 2026-10-16 (`DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md`) |
-| Elicitação humana: protocolo e seis formulários prontos, nenhuma entrevista | **aberto** | `fundo/p12-shelf/` |
+| Elicitação humana (SHELF): um especialista entrevistado, no domínio `h2/desenvolvimento_preston`; pré-teste aprovado no portão ajustado (habilidade 0,65 e ECE 0,2250) e cinco quantis confirmados (média 3,25 e dp 2,2239, contra 6,5 e 2,2239 do pacote e 1,536 e 2,6034 da literatura) | **R** / **P** | pré-teste, ajuste e controles em Rust (`labs --preteste` e `labs --elicitacao`); a passagem pelo funil com a priori elicitada roda a cópia aposentada do p05, com a marca **P** — `P(adotar compensa)` 0,418875 e ação do F8 `manter`, contra 0,565375 (`adotar`) do pacote e 0,366375 (`manter`) da literatura, essas duas reproduzidas pelo mesmo comando. Painel incompleto: 1 de 3, e o especialista é o autor do programa | `fundo/p12-shelf/`, `governanca/RELEITURA.md` |
 
 ## Onde ficam as fontes
 
