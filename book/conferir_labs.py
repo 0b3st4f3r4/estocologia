@@ -50,6 +50,7 @@ def main() -> int:
         ("labs --h3", saida([str(BIN), "--h3"])),
         ("labs --ponte", saida([str(BIN), "--ponte"])),
         ("labs --schema", saida([str(BIN), "--schema"])),
+        ("labs --segunda", saida([str(BIN), "--segunda"])),
     ]
 
     total = 0

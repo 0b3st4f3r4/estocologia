@@ -83,6 +83,7 @@ def main() -> int:
         "| BTlabs --h3BT | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |\n"
         "| BTlabs --ponteBT | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |\n"
         "| BTlabs --schemaBT | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |\n"
+        "| BTlabs --segundaBT | a segunda opiniao dos resultados marcados P |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -142,6 +143,14 @@ def main() -> int:
         "veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do\n"
         "BTresultados.jsonBT do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda\n"
         "declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.",
+    ))
+    partes.append(bloco(
+        "A segunda opiniao dos resultados marcados P",
+        [str(BIN), "--segunda"],
+        "Le o registro do ponto 19 com as catorze linhas marcadas P e da a classe de cada uma: conferida (uma\n"
+        "segunda implementacao refez a conta), derivada ou registro. Mede o que da: os limiares alfa/M do p03,\n"
+        "o vies do laco em duas fontes independentes, a base do banco recontada em Rust, os pareceres contados e a\n"
+        "reproducao do p05, onde a divergencia entre o campo em maquina e a frase publicada fica declarada.",
     ))
     partes.append(bloco(
         "O contrato da ficha: a cadeia de migracoes em arquivo",

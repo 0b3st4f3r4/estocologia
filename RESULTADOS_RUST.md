@@ -17,6 +17,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --h3` | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |
 | `labs --ponte` | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |
 | `labs --schema` | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |
+| `labs --segunda` | a segunda opiniao dos resultados marcados P |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -209,6 +210,48 @@ veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (raza
   com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
 -- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
   divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+~~~
+
+### A segunda opiniao dos resultados marcados P
+
+Le o registro do ponto 19 com as catorze linhas marcadas P e da a classe de cada uma: conferida (uma
+segunda implementacao refez a conta), derivada ou registro. Mede o que da: os limiares alfa/M do p03,
+o vies do laco em duas fontes independentes, a base do banco recontada em Rust, os pareceres contados e a
+reproducao do p05, onde a divergencia entre o campo em maquina e a frase publicada fica declarada.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --segunda
+~~~
+
+~~~text
+== Ponto 19 :: a segunda opiniao dos resultados marcados P ==
+carimbo do registro: 2026-10-16
+item                       classe      segunda opiniao
+h1.coortes                 registro    declara: o dado saiu com o andaime; nao ha segunda implementacao possivel
+h1.brier                   registro    declara: o teste fora do tempo e do roteiro antigo
+h2.luz                     registro    declara: o metodo e reproduzido em mundos simulados no capitulo 19
+h2.fda                     registro    declara: o dado do ensaio nao esta na arvore
+h2.levedura                derivada    o desenho da replica e medido de novo no ponto 14; os 40 genes reais seguem sem instrumento
+h2.star                    registro    declara: e o segundo teste da unidade independente, e o dado saiu
+h2.k                       conferida   os limiares alfa/M gravados sao recalculados aqui como 0,05/M, na forma exata do arquivo
+h3.fluxos                  registro    declara: o mecanismo do canario e medido no capitulo 20
+h3.goodhart                conferida   o vies do previsor ingenuo aparece em duas fontes independentes e as duas concordam digito por digito
+h3.hipergrafo              registro    declara: o grafo saiu com o andaime; o hipergrafo do Rust e o validador
+aud.piloto                 derivada    o ponto 16 re-deriva o empate no teto das notas do juiz
+aud.prioris                conferida   a reproducao e lida do registro e contada de novo; o desvio maximo nao esta em maquina e fica como registro
+aud.pareceres              conferida   as linhas da releitura e os arquivos reemitidos sao contados
+h0.real                    conferida   a base e recontada em Rust por um caminho proprio, com a dispersao por uma passada so
+
+-- o que a segunda opiniao mediu --
+  multiplicidade: M = 32 | alfa/M esperado 0.0015625 | gravado no registro: confere
+  multiplicidade: M = 38 | alfa/M esperado 0.0013157894736842105 | gravado no registro: confere
+  multiplicidade: M = 72 | alfa/M esperado 0.0006944444444444445 | gravado no registro: confere
+  prioris: reproducao do p05 lida do registro: 8 identicos de 33 dominios
+  laco performativo: vies do ingenuo em duas fontes independentes: 0.29124674633711956 (p03) e 0.29124674633711956 (p06) | concordam digito por digito
+  H0 real: recontado em Rust: 164 dias | cofre 2654950 chamadas (publicado: 2 649 354) | Var/media entre dias 261.7 em todos e 247.4 no cofre (publicado: 261.1 e 246.7)
+  pareceres: 30 linhas na releitura | 4 pareceres reemitidos na pasta
+
+linhas conferidas por segunda implementacao: 5 | linhas que so restam como registro: 7
 ~~~
 
 ### O contrato da ficha: a cadeia de migracoes em arquivo
@@ -994,7 +1037,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 37 tests
+running 43 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -1032,8 +1075,14 @@ test ponte::testes::o_registro_declara_o_veredito_se_o_prazo_vencer ... ok
 test ponte::testes::o_registro_do_teste_justo_declara_o_que_falta ... ok
 test ponte::testes::o_status_em_teste_sem_os_papeis_reprova ... ok
 test ponte::testes::uma_tese_sustentada_sem_teste_justo_e_reprovada ... ok
+test segunda::testes::a_releitura_e_os_pareceres_sao_contados ... ok
+test segunda::testes::a_reproducao_das_prioris_tem_33_dominios_e_uma_divergencia_declarada ... ok
+test segunda::testes::o_banco_e_recontado_em_rust_e_bate_com_o_publicado ... ok
+test segunda::testes::o_registro_declara_as_classes ... ok
+test segunda::testes::o_vies_do_laco_concorda_em_duas_fontes ... ok
+test segunda::testes::os_limiares_da_multiplicidade_batem_com_alfa_sobre_m ... ok
 
-test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

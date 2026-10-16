@@ -3,7 +3,7 @@
 //! Uso: ~cargo run --release --bin labs -- --cap 4~
 //!      ~cargo run --release --bin labs -- --todos~
 
-use stochology_book::{banco, cadeia, escuta, fila, genetica, ponte};
+use stochology_book::{banco, cadeia, escuta, fila, genetica, ponte, segunda};
 use stochology_core::s1::{Categoria, S1};
 use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
@@ -31,6 +31,7 @@ fn main() {
     let mut cadeia_flag = false;
     let mut ponte_flag = false;
     let mut schema_flag = false;
+    let mut segunda_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -82,6 +83,7 @@ fn main() {
             "--h3" => cadeia_flag = true,
             "--ponte" => ponte_flag = true,
             "--schema" => schema_flag = true,
+            "--segunda" => segunda_flag = true,
             _ => {}
         }
         i += 1;
@@ -132,6 +134,10 @@ fn main() {
     }
     if schema_flag {
         contrato();
+        return;
+    }
+    if segunda_flag {
+        segunda::rodar();
         return;
     }
     if todos {
