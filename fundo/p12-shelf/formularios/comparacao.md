@@ -308,3 +308,58 @@ O dp posterior da rodada (a) é 0,586673, e é nele que o deslocamento está med
   e sem o controle de fora, o que se mediu foi a sensibilidade do funil à cabeça de uma pessoa — a mesma que já
   tinha escrito o pacote.
 
+
+---
+
+## 7. Segundo domínio preenchido, com a marca **P**: \`h2/direito_prisoes\`
+
+Mesmo caminho do primeiro (decisão do operador de 2026-10-16): cópia aposentada do p05 restaurada fora da árvore, no commit \`1bfec905\`, e as três prioris rodadas pelo **mesmo código**. A priori elicitada entra no formato do p05 em \`prioris/h2/elicitada_direito.yaml\`.
+
+**A semente de novo preservada.** \`direito_prisoes\` é o quinto domínio na ordem alfabética dos dez, então a chamada leva os quatro primeiros antes dele para a semente continuar \`2027 + 100 × 4 = 2427\`, a mesma da rodada do p05.
+
+### As três prioris, lado a lado (escala de razão de chances, e o log que o ajuste usa)
+
+| prior | q05 | q25 | q50 | q75 | q95 | média no log | dp no log |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **pacote** | 0,42 | 0,58 | 0,70 | 0,85 | 1,05 | −0,354640 | 0,283331 |
+| **literatura (p05)** | 0,5944060189976956 | 0,6578947368421053 | 0,7059781184061313 | 0,7575757575757576 | 0,8384926931067868 | −0,348171 | 0,104582 |
+| **elicitada (E1)** | 0,20 | 0,45 | 0,65 | 0,85 | 1,15 | −0,463937 | 0,471459 |
+
+A elicitada tem a **maior largura das três** no log (0,471459 contra 0,283331 do pacote e 0,104582 da literatura) e a mediana mais pessimista (0,65; pacote 0,70 e literatura 0,706). O especialista declarou o motivo: ceticismo metodológico com intervalos de meta-análise artificialmente estreitos.
+
+### A conferência que autoriza a terceira coluna
+
+| rodada | o que a tabela do p05 diz | o que a rodada de hoje deu |
+| --- | --- | --- |
+| (a) pacote | reprovado: modelo_vence_climatologia; média posterior −0,73; razão dp 0,28 | reprovado no F4 (M15): modelo_vence_climatologia; média −0,729791; razão 0,275878 |
+| (b) literatura | podado no F1: a pesquisa não muda a decisão (EVPI < custo) | podado no F1: a pesquisa não muda a decisão (EVPI < custo); priori ajustada com média −0,348171 e dp 0,104582 |
+
+### As três rodadas
+
+| rodada | status | EVPI na priori (F1) | P(adotar compensa) na priori | ação do F8 | média posterior | IC90 | razão dp post/priori |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| (a) **pacote** | reprovado no F4 (M15): modelo_vence_climatologia | 0,541955 | 0,79195 | — | −0,729791 | [−0,859514; −0,603526] | 0,275878 |
+| (b) **literatura** | podado no F1: EVPI < custo | 0,009989 | 0,98290 | — | — | — | — |
+| (c) **elicitada (E1)** | reprovado no F4 (M15): modelo_vence_climatologia | **1,054148** | 0,76510 | — | **−0,752532** | [−0,885605; −0,623203] | **0,169906** |
+
+### O que a linha nova diz, e é diferente do primeiro domínio
+
+- **A ação não muda em nenhuma das três**: com o pacote, com a literatura e com a elicitada, o domínio fica
+  **reprovado no F4** — o modelo não vence a climatologia — e nenhuma decisão é emitida. Aqui a controvérsia sobre
+  a priori **não decide nada**, porque quem barra é outro portão.
+- **O EVPI explode com a elicitada**: 0,541955 (pacote) → 0,009989 (literatura) → **1,054148** (elicitada). A
+  priori mais larga das três é a que dá mais valor à pesquisa — e é a única das informativas que sobrevive ao F1,
+  onde a de literatura foi podada.
+- **A posterior anda pouco**: −0,729791 (pacote) contra −0,752532 (elicitada), 2,3% de diferença, com a razão
+  dp post/priori caindo de 0,275878 para 0,169906 — com priori larga, o dado puxa mais.
+- **A leitura de fundo**: em \`h2/desenvolvimento_preston\` a priori elicitada cruzou o limiar do F8 e virou a ação;
+  aqui não vira nada, e o que ela move é o **valor da pesquisa**. Duas faces da mesma elicitação.
+
+### Limites, os mesmos do primeiro domínio
+
+- **Marca P**: o número sai do Python aposentado, o mesmo que gerou as colunas (a) e (b).
+- **Sensibilidade, não rodada oficial**: o painel tem 1 especialista e é o autor do programa.
+- **A largura elicitada é a variável dominante**, e ela veio de ceticismo declarado, não de dados: se um painel
+  de três especialistas estreitar essa distribuição, o EVPI cai junto e o F1 volta a podar — é o que o p05 já
+  tinha mostrado com a literatura.
+
