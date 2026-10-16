@@ -103,15 +103,15 @@ especialistas:
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: null
+      ancora_p_com_S_mediana_propria: 0.50   # declarado; previsto pela Beta ajustada 0,5115; desvio 0,0115, dentro da tolerancia
       ancora_deslocamento_dp: null
       razao_largura_90_elicitada_sobre_implicada: 1.0591
       excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
-      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
+      rodada_1_confirmacao: "confirma"
       rodada_1_ajuste_q05_q95: []
-      rodada_1_motivo: ""
+      rodada_1_motivo: "a Beta ajustada com parametros assimetricos traduz a logica de camadas de resseguro nao-proporcional; a uniforme anterior representava ausencia de informacao e implicava frequencia implausivel de ativacao em metade dos meses; os numeros elicitados corrigem esse vazio com estrutura coerente de eventos raros, massa perto de zero e cauda controlada ate 0,30"
       rodada_1_mostrado:
         numeros_do_especialista: "q05 0,01 | q25 0,04 | q50 0,08 | q75 0,15 | q95 0,30, frequencia mensal da camada"
         faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 0,08"
@@ -119,14 +119,14 @@ especialistas:
         ajuste_da_fraca_pelo_mesmo_instrumento: "a = 1,000000 | b = 1,000000 | erro 8,9e-16 | razao da largura 90% 1,0000"
         comparacao: "a mediana elicitada (0,08) e SEIS VEZES menor que a da fraca (0,50); o q95 vai a 0,30 contra 0,95; e o ajuste sai em a = 1,171038 e b = 9,919921 contra a = b = 1 da uniforme. Aqui a devolucao compara o especialista com a ausencia de literatura, e nao com literatura"
       rodada_2_em: ""
-      rodada_2_confirmacao: ""
+      rodada_2_confirmacao: "nao houve"
       rodada_2_motivo: ""
     quartis_confirmados:
-      q05: null
-      q25: null
-      q50: null
-      q75: null
-      q95: null
+      q05: 0.01   # confirmado na rodada 1
+      q25: 0.04   # confirmado na rodada 1
+      q50: 0.08   # confirmado na rodada 1
+      q75: 0.15   # confirmado na rodada 1
+      q95: 0.30   # confirmado na rodada 1
     ajuste:                       # familia: frequencia em (0,1), ajustada por Beta
       familia: "beta"
       a: 1.171038
