@@ -230,6 +230,7 @@ veredito: empate no teto: os dois bracos apontaram 8 de 8 defeitos e deram 0 ala
 
 -- o teste justo --
 prazo da janela: 2027-01-14 | casos minimos: 12
+se a janela vencer sem os papeis: nao sustentada em definitivo, aceito pelo dono em 2026-10-16
   escolhedor_dos_casos   nao designado de fora do programa, escolhe os casos antes de existir resultado
   analistas_braco_A      nao designado dois humanos, um de fora do programa
   analistas_braco_B      nao designado dois humanos, um de fora, cegos de qualquer texto da Estocologia
@@ -945,7 +946,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 34 tests
+running 37 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -975,13 +976,16 @@ test fila::testes::grade_e_o_recorte_do_instrumento ... ok
 test fila::testes::impressao_de_trabalho ... ok
 test fila::testes::instrumento_roda_com_semente_fixa ... ok
 test fila::testes::monotonicidade_r2_melhor_que_r0 ... ok
+test ponte::testes::a_escolha_e_mecanica_deterministica_e_na_proporcao ... ok
+test ponte::testes::a_lista_que_nao_sustenta_a_proporcao_reprova ... ok
 test ponte::testes::com_os_papeis_designados_o_teste_pode_rodar ... ok
 test ponte::testes::o_piloto_re_deriva_o_empate_no_teto ... ok
+test ponte::testes::o_registro_declara_o_veredito_se_o_prazo_vencer ... ok
 test ponte::testes::o_registro_do_teste_justo_declara_o_que_falta ... ok
 test ponte::testes::o_status_em_teste_sem_os_papeis_reprova ... ok
 test ponte::testes::uma_tese_sustentada_sem_teste_justo_e_reprovada ... ok
 
-test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

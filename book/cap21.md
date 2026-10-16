@@ -167,7 +167,8 @@ naturais, com cláusula de saída, defendido em banca.
 - **A tese da ponte em escala.** O piloto cego empatou no teto e a tese segue **não sustentada**, agora com portão:
   um registro que a declare sustentada sem o teste justo é reprovado, e o piloto é re-derivado das notas do juiz
   (`labs --ponte`). O teste justo precisa de um escolhedor de casos de fora do programa, de analistas humanos e de um
-  juiz humano, e o prazo é 2027-01-14.
+  juiz humano, e o prazo é 2027-01-14 — vencido sem eles, a tese fica não sustentada em definitivo, e o dono já
+  aceitou essa consequência por escrito.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
   releitura dos 21 pareceres foi feita (17 confirmados, 4 retirados e reemitidos), e ela não substitui a escuta:
   a assinatura do responsável é de quem decide usar o artefato, não de quem paga o erro. A frente tem agora

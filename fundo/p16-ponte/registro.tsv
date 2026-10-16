@@ -1,6 +1,8 @@
 # registros	2026-10-16
 # prazo	2027-01-14
 # casos_minimos	12
+# veredito_se_o_prazo_vencer	nao sustentada em definitivo, aceito pelo dono em 2026-10-16
+# regra_de_escolha	fundo/p16-ponte/regra_de_escolha.md (mecanica, semente 20270114)
 papel	exigencia	quem	estado
 escolhedor_dos_casos	de fora do programa, escolhe os casos antes de existir resultado	-	nao designado
 analistas_braco_A	dois humanos, um de fora do programa	-	nao designado

@@ -190,6 +190,8 @@ pub struct Ponte {
     pub carimbo: String,
     pub prazo: String,
     pub casos_minimos: usize,
+    /// O veredito declarado pelo dono se a janela vencer sem os papeis: não sustentada em definitivo.
+    pub veredito_se_o_prazo_vencer: String,
     pub papeis: Vec<Exigencia>,
 }
 
@@ -210,6 +212,7 @@ pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
     let mut carimbo = String::new();
     let mut prazo = String::new();
     let mut casos_minimos = 0usize;
+    let mut veredito_se_o_prazo_vencer = String::new();
     let mut papeis = Vec::new();
     for linha in texto.lines() {
         let l = linha.trim_end();
@@ -223,6 +226,7 @@ pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
                     "registros" => carimbo = campos[1].trim().to_string(),
                     "prazo" => prazo = campos[1].trim().to_string(),
                     "casos_minimos" => casos_minimos = campos[1].trim().parse().map_err(|_| "casos_minimos nao e numero")?,
+                    "veredito_se_o_prazo_vencer" => veredito_se_o_prazo_vencer = campos[1].trim().to_string(),
                     _ => {}
                 }
             }
@@ -239,10 +243,10 @@ pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
             estado: campos[3].to_string(),
         });
     }
-    if prazo.is_empty() || papeis.is_empty() {
-        return Err("registro da ponte sem prazo ou sem papeis".to_string());
+    if prazo.is_empty() || papeis.is_empty() || veredito_se_o_prazo_vencer.is_empty() {
+        return Err("registro da ponte sem prazo, sem papeis ou sem o veredito da janela".to_string());
     }
-    Ok(Ponte { carimbo, prazo, casos_minimos, papeis })
+    Ok(Ponte { carimbo, prazo, casos_minimos, veredito_se_o_prazo_vencer, papeis })
 }
 
 impl Ponte {
@@ -294,6 +298,44 @@ impl Ponte {
     }
 }
 
+/// Um caso elegível da lista externa: o identificador e a classificação do catálogo de fora.
+#[derive(Debug, Clone, PartialEq)]
+pub struct CasoElegivel {
+    pub id: String,
+    /// "defeito" ou "limpo", pela classificação do catálogo externo.
+    pub grupo: String,
+}
+
+/// A escolha mecânica dos casos: a permutação da lista pela semente declarada, na proporção declarada.
+/// Se a lista externa não sustenta a proporção pedida, a escolha é **reprovada** em vez de completada
+/// com o que houver — é o portão da regra de escolha.
+pub fn escolher_casos(
+    lista: &[CasoElegivel],
+    com_defeito: usize,
+    limpos: usize,
+    semente: u64,
+) -> Result<Vec<String>, String> {
+    let mut rng = stochology_core::Rng::novo(semente);
+    let mut escolhidos = Vec::new();
+    for (grupo, quantos) in [("defeito", com_defeito), ("limpo", limpos)] {
+        let mut candidatos: Vec<&CasoElegivel> = lista.iter().filter(|c| c.grupo == grupo).collect();
+        if candidatos.len() < quantos {
+            return Err(format!(
+                "a lista externa nao sustenta a escolha: {quantos} casos do grupo {grupo} pedidos, {} elegiveis",
+                candidatos.len()
+            ));
+        }
+        for i in (1..candidatos.len()).rev() {
+            let j = rng.uniforme(i as u64 + 1) as usize;
+            candidatos.swap(i, j);
+        }
+        for c in candidatos.into_iter().take(quantos) {
+            escolhidos.push(c.id.clone());
+        }
+    }
+    Ok(escolhidos)
+}
+
 /// Relatório: o piloto re-derivado e o estado do teste justo.
 pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
     let mut s = String::new();
@@ -321,6 +363,7 @@ pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
         Some(p) => {
             let v = p.veredito();
             s.push_str(&format!("prazo da janela: {} | casos minimos: {}\n", p.prazo, p.casos_minimos));
+            s.push_str(&format!("se a janela vencer sem os papeis: {}\n", p.veredito_se_o_prazo_vencer));
             for papel in &p.papeis {
                 s.push_str(&format!("  {:<22} {:<10} {}\n", papel.papel, papel.estado, papel.exigencia));
             }
@@ -356,7 +399,7 @@ pub fn rodar(caminho_registro: &str, caminho_notas: &str) {
     print!("{}", relatar(pontuacao.as_ref(), ponte.as_ref()));
 
     println!("\n-- prova negativa: um registro que diz a tese sustentada sem o teste justo --");
-    let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\t-\tnao designado\nanalistas_braco_A\tdois humanos\t-\tnao designado\nanalistas_braco_B\tdois humanos\t-\tnao designado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
+    let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\t-\tnao designado\nanalistas_braco_A\tdois humanos\t-\tnao designado\nanalistas_braco_B\tdois humanos\t-\tnao designado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
     match ler_ponte(mentiroso) {
         Ok(p) => {
             let v = p.veredito();
@@ -367,7 +410,7 @@ pub fn rodar(caminho_registro: &str, caminho_notas: &str) {
     }
 
     println!("-- prova positiva: papeis designados e casos no minimo --");
-    let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano (de fora)\tdesignado\nanalistas_braco_A\tdois humanos\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois humanos, cegos\tsicrano e beltrano\tdesignado\njuiz\tum humano de fora\tjuiz de fora\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+    let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano (de fora)\tdesignado\nanalistas_braco_A\tdois humanos\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois humanos, cegos\tsicrano e beltrano\tdesignado\njuiz\tum humano de fora\tjuiz de fora\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
     match ler_ponte(honesto) {
         Ok(p) => {
             let v = p.veredito();
@@ -414,7 +457,7 @@ mod testes {
 
     #[test]
     fn uma_tese_sustentada_sem_teste_justo_e_reprovada() {
-        let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\npapel\texigencia\tquem\testado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
+        let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
         let v = ler_ponte(mentiroso).expect("caso sintetico").veredito();
         assert_eq!(v.divergencias.len(), 1, "{:?}", v.divergencias);
         assert!(v.caixa_fechada);
@@ -422,7 +465,7 @@ mod testes {
 
     #[test]
     fn com_os_papeis_designados_o_teste_pode_rodar() {
-        let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano\tdesignado\nanalistas_braco_A\tdois\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois\tsicrano\tdesignado\njuiz\tum de fora\tjuiz\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+        let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano\tdesignado\nanalistas_braco_A\tdois\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois\tsicrano\tdesignado\njuiz\tum de fora\tjuiz\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
         let v = ler_ponte(honesto).expect("caso sintetico").veredito();
         assert!(!v.caixa_fechada);
         assert!(v.divergencias.is_empty(), "{:?}", v.divergencias);
@@ -431,8 +474,66 @@ mod testes {
 
     #[test]
     fn o_status_em_teste_sem_os_papeis_reprova() {
-        let apressado = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\npapel\texigencia\tquem\testado\njuiz\tum de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+        let apressado = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
         let v = ler_ponte(apressado).expect("caso sintetico").veredito();
         assert_eq!(v.divergencias.len(), 1, "{:?}", v.divergencias);
+    }
+
+    // ---------------------------------------------------------------- a regra de escolha mecânica
+
+    fn lista_de_teste(com_defeito: usize, limpos: usize) -> Vec<CasoElegivel> {
+        let mut lista = Vec::new();
+        for i in 0..com_defeito {
+            lista.push(CasoElegivel { id: format!("defeito_{i:02}"), grupo: "defeito".to_string() });
+        }
+        for i in 0..limpos {
+            lista.push(CasoElegivel { id: format!("limpo_{i:02}"), grupo: "limpo".to_string() });
+        }
+        lista
+    }
+
+    #[test]
+    fn a_escolha_e_mecanica_deterministica_e_na_proporcao() {
+        let lista = lista_de_teste(40, 20);
+        let a = escolher_casos(&lista, 8, 4, 20270114).expect("escolha");
+        let b = escolher_casos(&lista, 8, 4, 20270114).expect("escolha");
+        assert_eq!(a, b, "a mesma lista e a mesma semente dao a mesma escolha");
+        assert_eq!(a.len(), 12);
+        let com_defeito = a.iter().filter(|id| id.starts_with("defeito")).count();
+        let limpos = a.iter().filter(|id| id.starts_with("limpo")).count();
+        assert_eq!((com_defeito, limpos), (8, 4), "a proporção declarada");
+        let mut distintos = a.clone();
+        distintos.sort();
+        distintos.dedup();
+        assert_eq!(distintos.len(), 12, "sem repetição");
+        let c = escolher_casos(&lista, 8, 4, 20270115).expect("escolha");
+        assert_ne!(a, c, "outra semente da outra escolha");
+        let mut ordenada = lista.iter().map(|c| c.id.clone()).collect::<Vec<_>>();
+        ordenada.sort();
+        let mut escolhidos = a.clone();
+        escolhidos.sort();
+        assert_eq!(escolhidos.len(), 12, "a escolha sai da lista, e nao de fora dela");
+        assert!(escolhidos.iter().all(|id| ordenada.contains(id)));
+    }
+
+    #[test]
+    fn a_lista_que_nao_sustenta_a_proporcao_reprova() {
+        let curta = lista_de_teste(5, 20);
+        let erro = escolher_casos(&curta, 8, 4, 20270114).expect_err("deveria reprovar");
+        assert!(erro.contains("nao sustenta a escolha"), "erro: {erro}");
+        let sem_limpos = lista_de_teste(40, 2);
+        assert!(escolher_casos(&sem_limpos, 8, 4, 20270114).is_err());
+        let vazia: Vec<CasoElegivel> = Vec::new();
+        assert!(escolher_casos(&vazia, 8, 4, 20270114).is_err());
+    }
+
+    #[test]
+    fn o_registro_declara_o_veredito_se_o_prazo_vencer() {
+        let ponte = ler_ponte(&ler_arquivo(REGISTRO)).expect("registro da ponte");
+        assert!(
+            ponte.veredito_se_o_prazo_vencer.contains("nao sustentada em definitivo"),
+            "o registro carrega a decisao do dono: {}",
+            ponte.veredito_se_o_prazo_vencer
+        );
     }
 }

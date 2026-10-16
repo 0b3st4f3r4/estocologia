@@ -12,6 +12,11 @@ resultado; dois analistas humanos por braço, com pelo menos um de fora; um juiz
 no mínimo 12 casos mais difíceis que os da lista de Makin e Orban de Xivry (2019) — a lista que qualquer
 estatístico competente procura, e por isso o piloto não discriminou.
 
+**As respostas do dono (2026-10-16), registradas.** Não há ninguém de fora para escolher os casos, não há equipe de
+analistas, não há juiz externo — e o dono aceita a regra mecânica de escolha e aceita, sem ressalvas, o veredito
+definitivo se a janela vencer. A `DECLARACAO_2.md` guarda as cinco respostas, e a regra está em
+`regra_de_escolha.md`.
+
 **O portão.** Enquanto isso não existir, nenhuma linha do programa pode dizer que a tese está sustentada: o
 instrumento reprova quem afirmar o contrário, e há teste para isso. O prazo da janela é **2027-01-14**; vencido
 sem a cobertura mínima, a tese fica **não sustentada em definitivo** como veredito do programa.
