@@ -12,6 +12,7 @@ version = "0.1.0"
 dependencies = [
  "stochology-core",
  "stochology-h0",
+ "stochology-h2",
  "stochology-h3",
  "stochology-s2",
 ]

@@ -36,7 +36,8 @@ Legenda: **R** o instrumento Rust mede de novo; **D** divergência declarada no 
 | --- | --- | --- |
 | Túnel de luz: 128 conjuntos aceitos de 1 024, com os três LEDs red, green e blue | **P** | `labs --cap 19` reproduz o método em mundos simulados, não os dados originais |
 | Farmacologia (FDA/hERG): 35 de 512 conjuntos, três canais iônicos e o verapamil previsto com habilidade +0,57 | **P** | registro |
-| Genética de levedura: 40 genes, p = 0,001, réplica de um gene validado | **P** | registro |
+| Genética de levedura: 40 genes, p = 0,001, réplica de um gene validado | **P** | registro; os 40 genes reais seguem sem instrumento, e o **desenho** da réplica é medido na linha abaixo |
+| Resolução da validação por intervenção: com uma linha por mutante passam 4 de 40 no piso de 0,001 (o mover, o artefato de linha e dois de ruído, que o p não separa); com duas linhas passa 1 de 40, o piso cai para 0,000001 e a estimativa deixa de ser um ponto | **R** | \`labs --genetica\` |
 | Educação (STAR): 11 598 alunos em 80 escolas; por aluno a área sobrevive, por escola cai para conjunto vazio | **P** | registro; é o segundo teste da unidade independente |
 | $K = 38$ testes distintos (32 a 72), com Bonferroni mantendo 4 áreas antes da correção e 3 depois | **P** | registro; contador de tentativas é proposta declarada para Rust |
 

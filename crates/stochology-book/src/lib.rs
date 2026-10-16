@@ -6,6 +6,7 @@
 pub mod banco;
 pub mod cap01;
 pub mod fila;
+pub mod genetica;
 pub mod cap02;
 pub mod cap03;
 pub mod cap04;

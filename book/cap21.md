@@ -64,9 +64,13 @@ de especialistas. O protocolo de painel e seis formulários estão escritos, com
 domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o erro. O
 registro dos grupos afetados existe e diz que nenhum foi ouvido.
 
-**E uma ponta que é só de resolução.** Na genética de levedura, a validação que sustenta a réplica decide com
-**um mutante por ambiente**. O menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
-o piso. Ali falta resolução, e o p não é o problema. Um efeito medido em uma linha é um efeito medido em uma linha.
+**E uma ponta que era só de resolução.** Na genética de levedura, a validação que sustentava a réplica decidia com
+**um mutante por ambiente**: o menor p-valor possível ali era $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que
+é o piso. O p não era o problema — faltava linha. O desenho dessa falta hoje tem instrumento: com uma linha por
+mutante o teste aprova **4 de 40** (o que se procura, um artefato de linha e dois que são só ruído, todos no piso
+de $0{,}001$, sem que o p separe uns dos outros), e com a segunda linha aprova **1 de 40**, com o piso caindo para
+$10^{-6}$ e a estimativa deixando de ser um ponto (`labs --genetica`, Capítulo 19). O que continua aberto é
+rodar os 40 genes **reais** com a segunda linha: o instrumento mede o desenho, não os dados da levedura.
 
 ---
 
@@ -157,8 +161,9 @@ naturais, com cláusula de saída, defendido em banca.
 
 - **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
   foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
-- **A resolução da validação por intervenção da genética.** Um mutante por ambiente, $p = 0{,}001$, o piso de 999
-  sorteios: falta a segunda linha, e o p-valor não é o problema.
+- **A resolução da validação por intervenção da genética.** O desenho está medido: uma linha por mutante aprova
+  4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
+  Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
   releitura dos 21 pareceres assinados está preparada, com as 21 linhas e os 21 resumos criptográficos conferidos,
   e nenhuma decisão foi assinada.
@@ -271,8 +276,8 @@ literalmente e termina em pergunta.
   de conta; a auditoria estreitou a autorização desses números. A tese central empatou, a tolerância de calibração
   era frouxa, o laço declarado era quatro vezes o medido.
 - Ficam em aberto, com nome: a elicitação com especialistas humanos (5 de 33 domínios dependem da priori), a
-  resolução da validação da genética (um mutante por ambiente) e a voz de quem paga o erro (nenhum grupo afetado
-  ouvido nas sete decisões que envolvem pessoas).
+  segunda linha nos 40 genes reais da genética (o desenho já tem instrumento: 4 de 40 passam com uma linha, 1 de
+  40 com duas) e a voz de quem paga o erro (nenhum grupo afetado ouvido nas sete decisões que envolvem pessoas).
 - O projeto final fecha o curso: escolher um problema da escola ou da cidade, escrever a pergunta do decisor,
   preencher a ficha, fixar a semente, construir o nulo, pré-registrar, rodar e defender um memorando em frequências
   naturais com cláusula de saída.

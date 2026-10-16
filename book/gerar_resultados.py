@@ -78,6 +78,7 @@ def main() -> int:
         "| BTlabs --s1BT | a triagem deterministica do Sistema 1 |\n"
         "| BTlabs --s2BT | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |\n"
         "| BTlabs --pretesteBT | o nulo do pre-teste de calibracao do painel SHELF |\n"
+        "| BTlabs --geneticaBT | a resolucao da validacao por intervencao: o que a segunda linha muda |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -121,6 +122,13 @@ def main() -> int:
         "primeiro reprovado, a posterior da Beta(4, 8) contra a forma fechada (1/3) e a resolucao escolhida\n"
         "pelo proprio instrumento do eixo R. O no que nenhuma lente cobre e a frente declarada e nao\n"
         "implementada (f1.sintese-de-codigo).",
+    ))
+    partes.append(bloco(
+        "A resolucao da validacao por intervencao (genetica de levedura)",
+        [str(BIN), "--genetica"],
+        "O desenho da replica: 40 mutantes, um deles o mover verdadeiro (o efeito aparece nas duas linhas) e\n"
+        "outro o artefato de linha (o efeito aparece numa linha so). O mesmo mundo e validado com uma linha por\n"
+        "mutante e com duas, e o que se mede e quantos mutantes passam e qual e o piso do desenho em cada arranjo.",
     ))
     partes.append(bloco(
         "O horizonte R: a resolucao da pergunta",

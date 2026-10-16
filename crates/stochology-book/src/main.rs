@@ -3,7 +3,7 @@
 //! Uso: ~cargo run --release --bin labs -- --cap 4~
 //!      ~cargo run --release --bin labs -- --todos~
 
-use stochology_book::{banco, fila};
+use stochology_book::{banco, fila, genetica};
 use stochology_core::s1::{Categoria, S1};
 use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
@@ -26,6 +26,7 @@ fn main() {
     let mut escala: Option<String> = None;
     let mut gabarito: Option<String> = None;
     let mut fila_flag = false;
+    let mut genetica_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -72,6 +73,7 @@ fn main() {
                 }
             }
             "--fila" => fila_flag = true,
+            "--genetica" => genetica_flag = true,
             _ => {}
         }
         i += 1;
@@ -102,6 +104,10 @@ fn main() {
     }
     if fila_flag {
         fila::rodar();
+        return;
+    }
+    if genetica_flag {
+        genetica::rodar();
         return;
     }
     if todos {

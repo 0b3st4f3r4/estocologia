@@ -12,6 +12,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --s1` | a triagem deterministica do Sistema 1 |
 | `labs --s2` | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |
 | `labs --preteste` | o nulo do pre-teste de calibracao do painel SHELF |
+| `labs --genetica` | a resolucao da validacao por intervencao: o que a segunda linha muda |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -136,6 +137,39 @@ estresse: deliberado parou em A5-governanca com 1 ataque(s) | ordem declarada pa
 inferencia: Beta(4, 8) media da cadeia 0.3346 contra a forma fechada 0.3333 | aceitacao 0.676
 eixo R: perda do agregado 46.24 min contra margem de 12,00 min -> R1-dia (a perda do agregado paga a margem do dia) | fora do alcance medido: R2-hora, R3-subpergunta
 eixo R sem oscilacao: perda 0.00 min -> R0-agregada
+~~~
+
+### A resolucao da validacao por intervencao (genetica de levedura)
+
+O desenho da replica: 40 mutantes, um deles o mover verdadeiro (o efeito aparece nas duas linhas) e
+outro o artefato de linha (o efeito aparece numa linha so). O mesmo mundo e validado com uma linha por
+mutante e com duas, e o que se mede e quantos mutantes passam e qual e o piso do desenho em cada arranjo.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --genetica
+~~~
+
+~~~text
+== Capítulo 19 :: a resolução fina da validação por intervenção ==
+desenho: 40 mutantes | 60 individuos por linha | 999 sorteios por teste | alfa = 0.05 | Bonferroni alfa/40 = 0.001250
+plantados pelo instrumento: mover verdadeiro = mutante 7 | artefato de linha = mutante 23
+
+-- a validacao de hoje: cada mutante e um ambiente de uma linha so --
+  40 mutantes x 60 individuos | piso do desenho = 0.001000 | limiar = 0.001250
+  mutante  7 | efeito  +0.940 | p  0.001000 | passa no piso <- mover verdadeiro (efeito nas duas linhas)
+  mutante 14 | efeito  -0.450 | p  0.001000 | passa no piso
+  mutante 23 | efeito  +0.813 | p  0.001000 | passa no piso <- artefato de linha (efeito numa linha so)
+  mutante 29 | efeito  +0.496 | p  0.001000 | passa no piso
+  passam: 4 de 40
+
+-- o mesmo mundo, com a segunda linha: o efeito tem de estar nas duas --
+  40 mutantes x 2 linhas x 60 individuos | piso do desenho = 0.000001 | limiar = 0.001250
+  mutante  7 | efeito l1  +0.456 | efeito l2  +1.016 | faixa  0.560 | p  0.000001 | passa <- mover verdadeiro (efeito nas duas linhas)
+  mutante 23 | efeito l1  +0.607 | efeito l2  +0.028 | faixa  0.579 | p  0.000831 | rejeitado <- artefato de linha (efeito numa linha so)
+  passam: 1 de 40
+  efeito na segunda linha: artefato  +0.028 (nao se reproduz) | mover  +1.016 (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero
+
+leitura: com uma linha o piso de 0.001000 e o limiar de 0.001250 deixam passar 4 dos 40 mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para 0.000001000: passa 1 dos 40 mutantes. O p nunca foi o problema: o problema era a linha ser uma so.
 ~~~
 
 ### O horizonte R: a resolucao da pergunta
@@ -880,7 +914,13 @@ test testes::o_vies_de_selecao_inverte_o_sinal_do_ganho ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 7 tests
+running 13 tests
+test genetica::testes::a_segunda_linha_separa_o_artefato_do_mover ... ok
+test genetica::testes::com_a_segunda_linha_todo_efeito_tem_intervalo ... ok
+test genetica::testes::o_artefato_de_linha_passa_sem_a_segunda_linha ... ok
+test genetica::testes::o_desenho_e_deterministico ... ok
+test genetica::testes::o_piso_cai_com_a_potencia_das_linhas ... ok
+test genetica::testes::sem_a_segunda_linha_o_intervalo_e_um_ponto ... ok
 test testes::a_rodada_guarda_a_area_e_a_contagem_de_conjuntos ... ok
 test testes::bonferroni_derruba_uma_area_e_conta_o_k ... ok
 test testes::dez_candidatos_dao_mil_e_vinte_e_quatro_conjuntos ... ok
@@ -889,7 +929,7 @@ test testes::o_grao_da_unidade_muda_a_familia_aceita ... ok
 test testes::o_nulo_embaralhado_mostra_o_poder_do_teste ... ok
 test testes::sem_area_a_rodada_devolve_area_vazia ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 33 tests
 test beta::testes::a_incompleta_bate_com_a_forma_fechada_da_beta_2_2 ... ok

@@ -81,6 +81,15 @@ gene que passa na validação estrita, com taxa nula de $p = 0{,}001$. É o piso
 *um gene num mutante*, e não um efeito medido com resolução. Cada mutante é um ambiente de uma linha só, e o menor
 p-valor possível ali é $1/1\,000$.
 
+O laboratório deste capítulo mede o que a **segunda linha** muda, no mesmo desenho (40 mutantes, $lpha/40 =
+0{,}00125$ por gene) e com dois casos plantados: um mutante cujo efeito aparece nas **duas** linhas e um artefato
+cujo efeito aparece em **uma** linha só. Com uma linha por mutante, a validação aprova **4 dos 40** — o mover
+verdadeiro, o artefato de linha e dois que são só ruído, todos encostados no piso de $0{,}001$. O p não separa o
+que se procura do que não se procura, porque todos batem no chão ao mesmo tempo. Com a segunda linha, exigindo o
+efeito nas duas, passa **1 dos 40**: o mover, com $p = 10^{-6}$, que é o piso novo; o artefato cai fora porque o
+efeito dele na segunda linha é $+0{,}028$, contra $+1{,}016$ do mover. Faltava linha, não p-valor menor
+(`labs --genetica`).
+
 **A queda da educação.** A educação era a área mais confortável. Eram turmas pequenas sorteadas no experimento STAR do
 Tennessee, 11.598 alunos. Quando os alunos deixaram de ser contados como 11.598 observações independentes e
 passaram a ser contados como **80 escolas**, os conjuntos aceitos não tiveram nenhuma variável em comum, e o
@@ -312,6 +321,47 @@ método devolve $\hat{S} = \emptyset$, o oposto da verdade, com cara de rigor. C
 conjuntos aceitos e o $\hat{S}$ é $\{x_1, x_2\}$. Foi isso que aconteceu no experimento de seguro da RAND no
 H2d, onde a saúde saiu do placar por saturação.
 
+**A segunda linha, medida.** O mesmo laboratório traz o desenho da validação por intervenção da levedura: os dois
+casos plantados — o mutante que se move nas duas linhas e o artefato que se move numa só — e os dois arranjos
+rodados sobre o mesmo mundo. O instrumento está em `crates/stochology-h2/src/genetica.rs`, a leitura em
+`crates/stochology-book/src/genetica.rs`:
+
+```bash
+cargo run --release --bin labs -- --genetica
+```
+
+```text
+== Capítulo 19 :: a resolução fina da validação por intervenção ==
+desenho: 40 mutantes | 60 individuos por linha | 999 sorteios por teste | alfa = 0.05 | Bonferroni alfa/40 = 0.001250
+plantados pelo instrumento: mover verdadeiro = mutante 7 | artefato de linha = mutante 23
+
+-- a validacao de hoje: cada mutante e um ambiente de uma linha so --
+  40 mutantes x 60 individuos | piso do desenho = 0.001000 | limiar = 0.001250
+  mutante  7 | efeito  +0.940 | p  0.001000 | passa no piso <- mover verdadeiro (efeito nas duas linhas)
+  mutante 14 | efeito  -0.450 | p  0.001000 | passa no piso
+  mutante 23 | efeito  +0.813 | p  0.001000 | passa no piso <- artefato de linha (efeito numa linha so)
+  mutante 29 | efeito  +0.496 | p  0.001000 | passa no piso
+  passam: 4 de 40
+
+-- o mesmo mundo, com a segunda linha: o efeito tem de estar nas duas --
+  40 mutantes x 2 linhas x 60 individuos | piso do desenho = 0.000001 | limiar = 0.001250
+  mutante  7 | efeito l1  +0.456 | efeito l2  +1.016 | faixa  0.560 | p  0.000001 | passa <- mover verdadeiro (efeito nas duas linhas)
+  mutante 23 | efeito l1  +0.607 | efeito l2  +0.028 | faixa  0.579 | p  0.000831 | rejeitado <- artefato de linha (efeito numa linha so)
+  passam: 1 de 40
+  efeito na segunda linha: artefato  +0.028 (nao se reproduz) | mover  +1.016 (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero
+
+leitura: com uma linha o piso de 0.001000 e o limiar de 0.001250 deixam passar 4 dos 40 mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para 0.000001000: passa 1 dos 40 mutantes. O p nunca foi o problema: o problema era a linha ser uma so.
+```
+
+Leia os dois blocos juntos. No arranjo de **uma linha**, a lista dos que passam tem quatro nomes, e só dois deles
+são o que se procura: o mover verdadeiro e o artefato de linha chegam ao piso de $0{,}001$ pela mesma porta, e dois
+mutantes sem efeito nenhum entram com eles, porque no piso o teste não tem resolução para separar. É a medida exata
+do que a réplica já dizia em prosa: *um gene num mutante*. No arranjo de **duas linhas**, o efeito tem de aparecer
+nas duas, e a lista encolhe para um nome. O artefato não cai por p-valor grande — o efeito dele na primeira linha é
+$+0{,}607$, maior que o do mover na mesma linha —, cai porque na segunda linha o efeito é $+0{,}028$, que é nada.
+O piso do desenho, que era o chão de $1/1\,000$, passa a ser o produto dos dois, $10^{-6}$, e a estimativa de
+cada efeito deixa de ser um ponto. **O p nunca foi o problema; a linha é que era uma só.**
+
 **Declaração de divergência.** Os números acima são de dados **simulados** por este laboratório, e não do
 repositório da pesquisa; as três simulações mostram um mecanismo único, em escala de brinquedo. Os valores do
 repositório citados neste capítulo (128 de 1.024 conjuntos aceitos no túnel de luz com $p = 0{,}29$ para
@@ -319,7 +369,10 @@ $\{$vermelho, verde, azul$\}$; 35 de 512 no ensaio do FDA; 57 conjuntos aceitos 
 levedura com melhor $p = 0{,}0072$) não são reproduzidos aqui, e não podem ser: eles exigem os dados reais e o
 arcabouço em Python dos horizontes, cujos comandos estão no Apêndice C. O laboratório mede o que pode com
 dados próprios: que o método acha as duas causas no mundo A, que devolve vazio no mundo B e que a regra de
-saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
+saturação é a diferença entre $\emptyset$ e a verdade no mundo C. O desenho da validação por intervenção da
+levedura é a exceção: a resolução da réplica é medida de novo, em Rust, por `labs --genetica`, com o mover
+verdadeiro e o artefato de linha plantados pelo instrumento — o que o instrumento mede ali é o **desenho**, e não
+os 40 genes reais, que continuam sem instrumento.
 
 **Exercícios.**
 
@@ -329,7 +382,8 @@ saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
    que aceitar um conjunto saturado não é evidência de invariância.
 3. *(Conta)* No laboratório, o piso da permutação com 999 sorteios é $1/1\,000 = 0{,}001$. Qual é o menor p-valor
    possível com 9.999 sorteios, e por que isso importa para a validação da levedura, onde cada mutante é um
-   ambiente de uma linha?
+   ambiente de uma linha? Confira a conta no arranjo de duas linhas: se cada linha tem o piso $1/1\,000$ e o p
+   combinado é o produto, onde fica o piso do desenho com duas linhas?
 4. *(Laboratório)* Troque, no laboratório, o deslocamento de $Y$ do mundo B de $[0; 6; -4]$ para $[0; 1; -0{,}5]$
    e rode de novo. O portão continua falhando? O que isso diz sobre o poder do teste?
 5. *(Conceito)* A correção de multiplicidade encolhe os conjuntos e ainda deixa quatro áreas. Por que ela também

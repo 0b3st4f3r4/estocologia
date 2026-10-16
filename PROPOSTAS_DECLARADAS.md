@@ -5,10 +5,10 @@ anterior: o que já existe aparece com o arquivo, a linha e o teste que o susten
 o que precisaria existir para fechar. Cada ponteiro foi aberto antes de entrar na tabela, e um deles não
 existia, o que gerou §6 e o conserto das linhas que dependiam dele.
 
-A lista viva tem onze itens (§1). São os sete originais, mais as cinco frentes que estavam fora dela e
+A lista viva tem dez itens (§1). São os sete originais, mais as cinco frentes que estavam fora dela e
 entraram por decisão do autor em 2026-10-16, mais a ponte Jev-LLM do item 13, que entrou na mesma data, menos
-o item 1 — os dez crates do roteiro — e o item 2 — o Sistema 2 deliberativo: os dois passaram a viver no
-mesmo dia, e a prova de cada um está em §2. Os itens que a consolidação em Rust fechou saíram para §2, com a
+o item 1 — os dez crates do roteiro —, o item 2 — o Sistema 2 deliberativo — e o item 4 — a resolução fina da
+genética: os três passaram a viver com a prova em §2. Os itens que a consolidação em Rust fechou saíram para §2, com a
 prova ao lado, e §3 registra as decisões do dia.
 
 ## 1. O que continua como proposta declarada
@@ -21,7 +21,6 @@ de cada alegação dela contra o código está em `INTEGRACAO_JEV.md`.
 | Proposta | Onde está declarada | O que falta |
 | --- | --- | --- |
 | **3. Elicitação humana SHELF** | Capítulos 15 e 21; `fundo/p12-shelf/` (protocolo congelado com as declarações 1, 3 e a nota de execução; 6 formulários) e `governanca/RELEITURA.md` (21 linhas preenchidas) | **o painel completo.** A trilha individual do primeiro especialista (E1, o autor do programa) está fechada em 2026-10-16: **cinco domínios elicitados de ponta a ponta** — `h2/desenvolvimento_preston`, `h2/direito_prisoes`, `h2/educacao_star`, `h2g/direito_teto_beneficio` e `h1-real/c` —, cada um com pré-teste (20/20, 20/20, 20/20, 20/20 e 16/20; habilidades 0,6500, 0,9730, 0,7425, 0,8585 e 0,4240), cinco quantis confirmados na rodada 1, controles lidos e a comparação preenchida até o funil, com a marca **P** nas três prioris de cada domínio (`formularios/comparacao.md`, seções 6 a 10). `h2g/educacao_star_turmas` fica **reservado**, pela exclusão do par de mesma base. Faltam as outras duas pessoas por domínio e, em todas, o **controle de fora do programa**, que é o que impede a elicitação de substituir a priori do pacote na rodada oficial. A releitura dos 21 pareceres foi feita: 17 confirmados, 4 retirados e reemitidos com nota assinada |
-| **4. Resolução fina da genética** | `book/cap19.md:80` e `book/cap21.md:68-69,161,274` | a segunda linha: cada mutante é hoje um ambiente de uma linha só, e o piso do desenho é $p = 1/1\,000$ |
 | **5. A voz de quem paga o erro** | Capítulos 11, 15, 20 e 21; `governanca/GRUPOS.md` | escuta. Nas sete decisões que afetam pessoas reais, a coluna "ouvidos" diz **nenhum** nas sete |
 | **6. Conferência da bibliografia contra os arquivos baixados** | Apêndice D, regras 1 e 2 (linha 208) e §D.6 (linha 325) | marcar as 50 linhas de D.2 a D.4, item a item, como `[conferido]` contra os arquivos baixados em 2026-10-16, e registrar no livro qualquer divergência que apareça. Das 50, 23 já têm evidência em `referencias/CONFERENCIA.md` (D.3 inteiro), e as 27 de D.2 e D.4 seguem sem fonte conferida |
 | **7. Reexecução completa do $H_3$** | `REGISTRO_EMPIRICO.md` §H3 (linha 43) | o instrumento Rust que re-rodasse a cadeia: das quatro linhas do $H_3$, três levam a marca **P** e uma leva **D**, com a segunda opinião presa a simulação (item 12) |
@@ -46,6 +45,7 @@ Ficam como registro, e não como proposta.
 | **Funil de quatro filtros e contador $K$** | `crates/stochology-core/src/funil.rs` (878 linhas, 17 testes), com a poda por valor da informação e `o_funil_conta_as_tentativas_ate_a_versao_final` | `cargo test --workspace` |
 | **Cofre fora do tempo** | `crates/stochology-audit/src/cofre.rs` (705 linhas, 6 testes): abertura única, adulteração invalida a verificação e errar depois da abertura exige cofre novo | `cargo test --workspace` |
 | **Fila com desistência e a tabela $H_0$ de R0 a R3** | `crates/stochology-book/src/fila.rs` (1 113 linhas, 8 testes); `REGISTRO_EMPIRICO.md` §H0 marca **R** nos agente-horas e **D** nas falhas por dia, com a divergência declarada no Capítulo 16 | `labs --fila` |
+| **Resolução fina da genética (item 4)** | `crates/stochology-h2/src/genetica.rs` (290 linhas, 6 testes próprios: o piso cai com a potência das linhas, o intervalo é um ponto sem a segunda linha, todo efeito ganha faixa com ela, o artefato de linha passa na validação de uma linha, a segunda linha separa o artefato do mover e o desenho é determinístico) e a leitura em `crates/stochology-book/src/genetica.rs`. O desenho planta dois casos — o mover verdadeiro, com efeito nas duas linhas, e o artefato de linha, com efeito numa só — e roda os dois arranjos sobre o mesmo mundo: com uma linha por mutante passam **4 de 40** no piso de $0{,}001$ (o mover, o artefato e dois de ruído, que o p não separa), e com duas passa **1 de 40**, com o piso caindo para $10^{-6}$ e a estimativa deixando de ser um ponto. O livro mudou junto: `book/cap19.md` (Degrau 1, o bloco do instrumento no Degrau 3 e o exercício 3) e `book/cap21.md` (as três passagens) | `cargo test -p stochology-h2` e `labs --genetica` |
 
 ## 3. Decisões registradas em 2026-10-16
 
@@ -99,11 +99,25 @@ apontam agora para o que ficou.
 | 1. Teoria e invariantes | 4 | 0 como proposta de código; as previsões 3 e 5 são o item 8 |
 | 2. Crates do roteiro | 11 | 0 — os dez nomes vivem desde 2026-10-16 (item 1, §2) |
 | 3. Método declarado e não implementado | 6 | 0 — o Sistema 2 entrou em §2 e o restante estava fechado |
-| 4. Pesquisa empírica em aberto | 4 | 3 (SHELF, genética, voz), nos itens 3 a 5 |
+| 4. Pesquisa empírica em aberto | 4 | 2 (SHELF e voz), nos itens 3 e 5 — a genética fina saiu em 2026-10-16 (item 4, §2) |
 | 5. Registro sem segunda opinião | 12 resultados | 12, no item 12 |
 | 6. Decisões de não fazer | 5 | 5 |
 | 7. Limites estruturais | 3 | 3 |
-| — Lista viva de proposta declarada | 7 | **11**: os itens 8 a 12 entraram em 2026-10-16, os itens 1 e 2 saíram na mesma data e o item 13 entrou nela |
+| — Lista viva de proposta declarada | 7 | **10**: os itens 8 a 12 entraram em 2026-10-16, os itens 1, 2 e 4 saíram nela e o item 13 entrou nela |
+
+### Verificação do fechamento do item 4
+
+Rodada em 2026-10-16, depois de a resolução fina da genética entrar no código e no livro. Código de saída
+entre parênteses.
+
+| Comando | Resultado |
+| --- | --- |
+| `cargo test --workspace` | 214 testes aprovados, nenhum reprovado: `core` 51, `h3` 33, `s2` 29, `book` 23, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` e `labs` 0 (0) |
+| `labs --genetica` | 40 mutantes com dois casos plantados: uma linha por mutante aprova 4 de 40 no piso de $0{,}001$; duas linhas aprovam 1 de 40, o piso cai para $10^{-6}$ e o artefato de linha sai da lista porque o efeito não se reproduz na segunda (0) |
+| `python3 book/gerar.py --check` | a rampa de três degraus dos 21 capítulos confere, com 5 652 linhas e 72 268 palavras (0) |
+| `python3 book/conferir_labs.py` | 25 blocos citados, 0 divergentes — o bloco 2 do Capítulo 19 confere em `labs --genetica` (0) |
+| `python3 book/conferir_livro.py` | partes, capítulos, cercas e ordem conferem (0) |
+| `python3 book/gerar_resultados.py --check` | `RESULTADOS_RUST.md` está atualizado, com o bloco novo da genética (0) |
 
 ### Verificação desta revisão
 

@@ -7,6 +7,8 @@
 //! Declarado e nao implementado: as sete rodadas reais (tunel de luz, farmacologia, genetica de
 //! levedura, STAR) seguem como registro — o metodo e o que esta aqui; a base externa nao.
 
+pub mod genetica;
+
 use stochology_icp::{Ambiente, Erro, area, contar_conjuntos, familia_aceita, normal};
 
 /// Uma rodada: um alvo, os candidatos e o que sobrou de area.
