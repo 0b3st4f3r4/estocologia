@@ -455,3 +455,47 @@ O que difere são as **pontas**, e o ajuste as ignora: q05 0,05 contra 0,00 do p
 - **O achado tem teto**: reproduzir o pacote não é confirmar a estimativa contra o mundo. É o autor chegando ao mesmo lugar por dois caminhos — o que é útil contra erro de transcrição e inútil contra erro de leitura da literatura.
 - **O ajuste descarta as pontas**: as diferenças de q05 e q95 entre pacote e elicitação não entram no funil, porque a Normal é ajustada nos três quartis centrais. Fica registrado como limite declarado do ajuste, não como escolha deste domínio.
 
+
+---
+
+## 10. Quinto domínio preenchido, com a marca **P**: \`h1-real/c\`
+
+O pipeline vive no **\`h1-real\`** do p05 e roda os três projetos (\`a\`, \`b\`, \`c\`) por \`p05_rodar.py\`, com semente \`2026 + 100 × i\`. Como o projeto \`c\` é o terceiro, a chamada tem de ser a completa (sem argumentos) para a semente dele continuar **2226**. As bases do H1 real são os cinco CSVs de \`dados-reais/\`, copiados para fora da árvore para o p05 rodar.
+
+### As três prioris (frequência mensal da camada "100 xs 50")
+
+| prior | q05 | q25 | q50 | q75 | q95 | Beta ajustada (a, b) | média implicada |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **(a) painel simulado do p05** | — | — | — | — | — | 2,327958 / 106,930083 | 0,021307 |
+| **(b) fraca Beta(1; 1)** | 0,05 (derivado) | 0,25 | 0,50 | 0,75 | 0,95 (derivado) | 1,000000 / 1,000000 | 0,500000 |
+| **(c) elicitada (E1)** | 0,01 | 0,04 | 0,08 | 0,15 | 0,30 | **1,168188 / 9,911852** | **0,105432** |
+
+A elicitada tem mediana **seis vezes menor** que a fraca e 2,5 vezes maior que o painel simulado. E o ajuste que o Python aposentado faz dela — \`a = 1,168188\`, \`b = 9,911852\` — **confere com o ajuste Beta que eu escrevi em Rust**: \`a = 1,171038\`, \`b = 9,919921\`, uma diferença de 0,24% e 0,08%. Duas implementações independentes, mesmo resultado: é a segunda opinião do ajuste, e ela fecha.
+
+### A conferência que autoriza a terceira coluna
+
+| rodada | o que a tabela do p05 diz | o que a rodada de hoje deu |
+| --- | --- | --- |
+| (a) painel simulado | reprovado: modelo_vence_climatologia; razão dp post/priori 0,87 | reprovado (\`modelo_vence_climatologia\` falso no portão); razão **0,872232** |
+| (b) fraca Beta(1; 1) | aprovado; razão 0,072 | aprovado; razão **0,072434** |
+
+### As três rodadas
+
+| rodada | portão \`modelo_vence_climatologia\` | aprovado | razão dp posterior / dp priori | média da priori |
+| --- | --- | --- | --- | --- |
+| (a) **painel simulado** | falso | **não** | 0,872232 | 0,021307 |
+| (b) **fraca Beta(1; 1)** | verdadeiro | **sim** | 0,072434 | 0,500000 |
+| (c) **elicitada (E1)** | verdadeiro | **sim** | **0,221084** | **0,105432** |
+
+### O que a linha nova diz
+
+- **A elicitação resgata o projeto**, como a fraca já resgatava: \`h1-real/c\` é reprovado pelo painel simulado do p05 e passa com a priori elicitada. O que muda é a **qualidade da priori**: a fraca passava com uma uniforme declarada sem fonte; a elicitada passa com uma Beta de mediana 0,08, construída por um especialista, com pré-teste aprovado e justificativa escrita.
+- **A razão dp post/priori fica entre as duas**: 0,221084 contra 0,872232 do painel simulado e 0,072434 da fraca. Isto é a medida da informação: a priori elicitada é mais informativa que a uniforme e menos que o painel simulado, e o dado a aperta na proporção correspondente.
+- **A prioridade de literatura deste domínio não existe** — o p05 declara, com todas as letras, \`SEM FONTE CONFERIDA\` e usa a fraca. Então este é o único dos cinco domínios em que a elicitação não compara com literatura nenhuma: ela **ocupa o lugar vazio** que o p05 tinha preenchido com uma uniforme, e o ocupou com um número.
+
+### Limites
+
+- **Marca P**: o número do funil sai do Python aposentado.
+- **Sensibilidade, não rodada oficial**: painel de 1 de 3, e o especialista é o autor do programa. Este é o **último domínio da fila dele**; \`h2g/educacao_star_turmas\` fica reservado.
+- **O que este domínio não resolve**: a elicitada passa o portão, mas isso **não** valida a frequência de 0,08 contra o mundo — a série dinamarquesa tem 108 meses e o próprio projeto declara as premissas indecidíveis (prêmio como múltiplo do \`burning cost\`, ξ incerto, meses tratados como independentes embora a frequência cresça na década). O que ficou provado é que a decisão muda com a priori, e que agora essa priori é uma declaração com nome e data em vez de uma uniforme.
+
