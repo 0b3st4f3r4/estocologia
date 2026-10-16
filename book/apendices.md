@@ -226,6 +226,9 @@ terceiros não são versionados, por direito autoral. Deles ficam a citação, o
 | **[arquivo]** | há arquivo baixado para consulta, ainda sem conferência item a item contra o texto do livro |
 | **[histórico]** | material aposentado, que fica só como registro de onde um número veio |
 
+**O estado de cada linha está na linha.** Depois da conferência de 2026-10-16, todas as linhas de D.2 a D.4 levam
+a marca **[conferido]**, e a fonte de cada conferência está em `referencias/CONFERENCIA.md`.
+
 **3. Todo experimento deste livro é Rust.** O Python aparece apenas como registro histórico aposentado
 (veja o Apêndice C). Nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
 
@@ -255,17 +258,17 @@ repositório guarda. É o registro empírico conferido, as declarações e os la
 
 | Referência | Por que ler agora |
 | --- | --- |
-| Bernoulli, *Ars Conjectandi* (1713) | O livro que transformou "provavelmente" em conta. A regra de Laplace deste livro é filha dele |
-| Hume, *Enquiry* (1748; o título *Enquiry* é da edição de 1758) | A pergunta que nenhuma estatística resolve: por que o futuro se parece com o passado? |
-| Knight, *Risk, Uncertainty and Profit* (1921) | A distinção entre risco mensurável e incerteza que não se mede, no Capítulo 4 |
-| Savage, *The Foundations of Statistics* (1954) e Savage, *JASA* 46:55–67 (1951) | De onde vem a ideia de regra própria: apostar contra a própria crença é perder dinheiro |
-| Wald, *Statistical Decision Functions* (1950) e Chernoff, *Econometrica* 22(4) (1954) | Decidir com perda, e não só com probabilidade: a base do Capítulo 11 |
-| Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | A verossimilhança como medida de evidência, e não como resposta final |
-| Tversky e Kahneman, "Judgment under Uncertainty" (1974) | O catálogo dos atalhos mentais que o Capítulo 2 organiza por modelo de acaso ignorado |
-| Mayo, *Error and the Growth of Experimental Knowledge* (1996) | A severidade: um teste só vale o que vale o seu poder de errar |
-| Pearl, *Causality* (2000) | A escada de ver, agir e imaginar, e a porta dos fundos |
-| Gigerenzer, *Calculated Risks* (2002) | Como escrever risco para quem precisa decidir: frequências naturais, sem jargão |
-| Mandelbrot, *Fractals and Scaling in Finance* (1997) | Caudas selvagens contadas por quem as viu primeiro nos preços |
+| **[conferido]** Bernoulli, *Ars Conjectandi* (1713) | O livro que transformou "provavelmente" em conta. A regra de Laplace deste livro é filha dele |
+| **[conferido]** Hume, *Enquiry* (1748; o título *Enquiry* é da edição de 1758) | A pergunta que nenhuma estatística resolve: por que o futuro se parece com o passado? |
+| **[conferido]** Knight, *Risk, Uncertainty and Profit* (1921) | A distinção entre risco mensurável e incerteza que não se mede, no Capítulo 4 |
+| **[conferido]** Savage, *The Foundations of Statistics* (1954) e Savage, *JASA* 46:55–67 (1951) | De onde vem a ideia de regra própria: apostar contra a própria crença é perder dinheiro |
+| **[conferido]** Wald, *Statistical Decision Functions* (1950) e Chernoff, *Econometrica* 22(4) (1954) | Decidir com perda, e não só com probabilidade: a base do Capítulo 11 |
+| **[conferido]** Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | A verossimilhança como medida de evidência, e não como resposta final |
+| **[conferido]** Tversky e Kahneman, "Judgment under Uncertainty" (1974) | O catálogo dos atalhos mentais que o Capítulo 2 organiza por modelo de acaso ignorado |
+| **[conferido]** Mayo, *Error and the Growth of Experimental Knowledge* (1996) | A severidade: um teste só vale o que vale o seu poder de errar |
+| **[conferido]** Pearl, *Causality* (2000) | A escada de ver, agir e imaginar, e a porta dos fundos |
+| **[conferido]** Gigerenzer, *Calculated Risks* (2002) | Como escrever risco para quem precisa decidir: frequências naturais, sem jargão |
+| **[conferido]** Mandelbrot, *Fractals and Scaling in Finance* (1997) | Caudas selvagens contadas por quem as viu primeiro nos preços |
 
 ### D.3 Métodos e dados usados na pesquisa
 
@@ -299,22 +302,22 @@ repositório guarda. É o registro empírico conferido, as declarações e os la
 
 | Referência | Onde entra |
 | --- | --- |
-| Rubin, D. B. *Biometrika* 63(3):581–592, 1976. DOI: 10.1093/biomet/63.3.581 | MCAR, MAR e MNAR: por que o dado falta (Capítulo 6) |
-| Kimball, A. W. *JASA* 52(278):133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | O erro de tipo III: responder à pergunta errada |
-| Gelman, A.; Tuerlinckx, F. *Computational Statistics* 15(3):373–390, 2000. DOI: 10.1007/s001800000040 | Os erros de tipo S (sinal) e tipo M (magnitude) |
-| Gelman, A.; Carlin, J. *Perspectives on Psychological Science* 9(6):641–651, 2014. DOI: 10.1177/1745691614551642 | Como o poder pequeno produz exageros de tamanho |
-| Walker, W. E. et al. *Integrated Assessment* 4(1):5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | A tipologia da incerteza, em linguagem de decisão pública |
-| Stirling, A. *Nature* 468(7327):1029–1031, 2010. DOI: 10.1038/4681029a | Incerteza, ambiguidade e ignorância, e por que simplificar custa |
-| Moreno-Torres, J. G. et al. *Pattern Recognition* 45(1):521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | A visão unificada das mudanças de distribuição, no Capítulo 4 |
-| Ellsberg, D. *Quarterly Journal of Economics* 75(4):643–669, 1961. DOI: 10.2307/1884324 | A aversão à ambiguidade, na matriz de Stirling |
-| Sweeney, L. *Simple Demographics Often Identify People Uniquely*, Carnegie Mellon, 2000 | Quase-identificadores e o k-anonimato do H3 |
-| Baig, S. S. et al. *European Journal of Human Genetics* 24(10):1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | O teste preditivo da doença de Huntington, e o que "17,4%" quer dizer |
-| Makin, T. R.; Orban de Xivry, J.-J. *eLife* 8:e48175, 2019. DOI: 10.7554/eLife.48175 | Os dez erros estatísticos mais comuns, usados no piloto cego |
-| van Dantzig, D. *Econometrica* 24(3):276–287, 1956 | O problema do dique: quanto gastar contra uma enchente improvável (Capítulo 11) |
-| Saerens, M.; Latinne, P.; Decaestecker, C. *Neural Computation* 14:21–41, 2002 | Ajustar as saídas de um classificador a novas taxas-base |
-| Lipton, Z.; Wang, Y.-X.; Smola, A. *ICML* 80:3122–3130, 2018 | O teste de deriva de rótulo que não avisou o desvio de 2013 (Capítulo 20) |
-| Janssen, K. J. M. et al. *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | Ajustar um modelo de risco às circunstâncias locais |
-| Van Calster, B. et al. *Journal of Clinical Epidemiology* 74:167–176, 2016 | A hierarquia da calibração, de utopia a dado empírico |
+| **[conferido]** Rubin, D. B. *Biometrika* 63(3):581–592, 1976. DOI: 10.1093/biomet/63.3.581 | MCAR, MAR e MNAR: por que o dado falta (Capítulo 6) |
+| **[conferido]** Kimball, A. W. *JASA* 52(278):133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | O erro de tipo III: responder à pergunta errada |
+| **[conferido]** Gelman, A.; Tuerlinckx, F. *Computational Statistics* 15(3):373–390, 2000. DOI: 10.1007/s001800000040 | Os erros de tipo S (sinal) e tipo M (magnitude) |
+| **[conferido]** Gelman, A.; Carlin, J. *Perspectives on Psychological Science* 9(6):641–651, 2014. DOI: 10.1177/1745691614551642 | Como o poder pequeno produz exageros de tamanho |
+| **[conferido]** Walker, W. E. et al. *Integrated Assessment* 4(1):5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | A tipologia da incerteza, em linguagem de decisão pública |
+| **[conferido]** Stirling, A. *Nature* 468(7327):1029–1031, 2010. DOI: 10.1038/4681029a | Incerteza, ambiguidade e ignorância, e por que simplificar custa |
+| **[conferido]** Moreno-Torres, J. G. et al. *Pattern Recognition* 45(1):521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | A visão unificada das mudanças de distribuição, no Capítulo 4 |
+| **[conferido]** Ellsberg, D. *Quarterly Journal of Economics* 75(4):643–669, 1961. DOI: 10.2307/1884324 | A aversão à ambiguidade, na matriz de Stirling |
+| **[conferido]** Sweeney, L. *Simple Demographics Often Identify People Uniquely*, Carnegie Mellon, 2000 | Quase-identificadores e o k-anonimato do H3 |
+| **[conferido]** Baig, S. S. et al. *European Journal of Human Genetics* 24(10):1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | O teste preditivo da doença de Huntington, e o que "17,4%" quer dizer |
+| **[conferido]** Makin, T. R.; Orban de Xivry, J.-J. *eLife* 8:e48175, 2019. DOI: 10.7554/eLife.48175 | Os dez erros estatísticos mais comuns, usados no piloto cego |
+| **[conferido]** van Dantzig, D. *Econometrica* 24(3):276–287, 1956 | O problema do dique: quanto gastar contra uma enchente improvável (Capítulo 11) |
+| **[conferido]** Saerens, M.; Latinne, P.; Decaestecker, C. *Neural Computation* 14:21–41, 2002 | Ajustar as saídas de um classificador a novas taxas-base |
+| **[conferido]** Lipton, Z.; Wang, Y.-X.; Smola, A. *ICML* 80:3122–3130, 2018 | O teste de deriva de rótulo que não avisou o desvio de 2013 (Capítulo 20) |
+| **[conferido]** Janssen, K. J. M. et al. *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | Ajustar um modelo de risco às circunstâncias locais |
+| **[conferido]** Van Calster, B. et al. *Journal of Clinical Epidemiology* 74:167–176, 2016 | A hierarquia da calibração, de utopia a dado empírico |
 
 ### D.5 Como usar esta lista
 
@@ -331,7 +334,17 @@ uma a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc
 artigo do teto do benefício é de **Meyer**, Viscusi e Durbin, e não de Viscusi e Durbin) e uma revista
 trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*).
 
-Falta o seguinte, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
-baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no livro qualquer divergência que
-apareça, como os capítulos já fazem com as divergências de número.
+**A conferência terminou em 2026-10-16.** As 50 linhas de D.2 a D.4 foram conferidas item a item contra a API do
+Crossref, as páginas das editoras, o PubMed, os anais do PMLR e catálogos de biblioteca: as 23 de D.3 na primeira
+passada (2026-10-15) e as 27 de D.2 e D.4 na segunda. Cada linha deste apêndice traz a marca **[conferido]** e cada
+conferência está na sua linha de `referencias/CONFERENCIA.md`, com a fonte ao lado.
+
+O que apareceu: **nenhuma divergência de conteúdo** nas 27 linhas novas — autores, anos, títulos, periódicos e
+páginas conferem —, **onze complementos** (os DOIs que faltavam em dez linhas e o número do *working paper* do
+Sweeney) e **duas ressalvas de fonte declaradas**: a página final do Chernoff de 1954 e a do van Dantzig de 1956
+não saíram nas fontes consultadas, e o ano do Sweeney (2000) vem do registro do CMU.
+
+A regra 1 deste apêndice continua valendo: todo arquivo foi baixado para consulta, e o que o livro guarda de cada
+um é a citação, o DOI e o número que ele usa. O que não entra no repositório são os arquivos de terceiros, por
+direito autoral.
 

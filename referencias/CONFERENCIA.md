@@ -76,3 +76,57 @@ Referências que o livro didático (Claude Doc "Estocologia: livro didático", A
 Clássicos conferidos na mesma rodada: Bernoulli, *Ars Conjectandi* (Basel, 1713, póstumo); Knight (Houghton Mifflin, 1921); Savage, *The Foundations of Statistics* (Wiley, 1954); Tversky & Kahneman, *Science* 185(4157):1124–1131, 1974, DOI 10.1126/science.185.4157.1124; Mayo (University of Chicago Press, 1996); Pearl, *Causality* (Cambridge University Press, 2000); Gigerenzer, *Calculated Risks* (Simon & Schuster, 2002).
 
 Fatos conferidos: Gigerenzer et al. 2007 (*PSPI* 8(2):53–96; 160 ginecologistas, 21% acertam); Miller & Sanjurjo 2018 (*Econometrica* 86(6):2019–2047); Simmons, Nelson & Simonsohn 2011 (*Psychological Science* 22(11):1359–1366; 60,7%); Open Science Collaboration 2015 (*Science* 349(6251):aac4716; 97% e 36%); Charig et al. 1986 (*BMJ* 292(6524):879–882; 78% e 83%); Literary Digest 1936; Stampfer et al. 1991 (*NEJM* 325(11):756–762; RR 0,56) e WHI 2002 (*JAMA* 288(3):321–333; HR 1,29); Netuno (Galle, 1846). Não confirmado: o ano de Vulcano (o livro não o cita).
+
+## As 27 linhas de D.2 e D.4 (conferência de 2026-10-16)
+
+Segunda conferência, feita para fechar o Apêndice D: as 11 linhas de **D.2 Clássicos para começar** e as 16 de
+**D.4 Tipologias de erro, incerteza e calibração**, uma a uma, contra a API do Crossref (`api.crossref.org`), as
+páginas das editoras, o PubMed, os anais do PMLR e catálogos de biblioteca (Chicago, CiNii, HathiTrust, Internet
+Archive, kilthub do CMU). O método é o da tabela de cima: conferir autores, ano, título, periódico, volume, número,
+páginas e DOI; **CONFERE** quando a citação está correta, **CORRIGIR** quando há erro, **NÃO ENCONTRADA** quando a
+fonte não aparece.
+
+| # | como citado no apêndice | situação | referência conferida (com o que faltava completado) | fonte da conferência |
+|---|---|---|---|---|
+| 1 | Bernoulli, *Ars Conjectandi* (1713) | CONFERE | BERNOULLI, J. *Ars conjectandi, opus posthumum*. Basel: Thurnisiorum, 1713 (obra póstuma) | WorldCat 1197705310; catálogo de leilão com a edição de 1713 |
+| 2 | Hume, *Enquiry* (1748; o título *Enquiry* é da edição de 1758) | CONFERE | HUME, D. *Philosophical Essays Concerning Human Understanding*. London: A. Millar, 1748; reeditado como *An Enquiry Concerning Human Understanding*, 1758 | Internet Archive (exemplar digitalizado) |
+| 3 | Knight, *Risk, Uncertainty and Profit* (1921) | CONFERE | KNIGHT, F. H. *Risk, uncertainty and profit*. Boston: Houghton Mifflin, 1921 | Internet Archive 102093146; HathiTrust |
+| 4 | Savage, *The Foundations of Statistics* (1954) e Savage, *JASA* 46:55–67 (1951) | CONFERE | SAVAGE, L. J. The theory of statistical decision. *JASA*, v. 46, n. 253, p. 55–67, 1951. DOI: 10.1080/01621459.1951.10500768; SAVAGE, L. J. *The foundations of statistics*. New York: Wiley, 1954 (2. ed. revista: Dover, 1972) | Crossref 10.1080/01621459.1951.10500768; catálogos de Chicago e CiNii BA03712395 |
+| 5 | Wald, *Statistical Decision Functions* (1950) e Chernoff, *Econometrica* 22(4) (1954) | CONFERE (com nota) | WALD, A. *Statistical decision functions*. New York: Wiley, 1950; CHERNOFF, H. Rational selection of decision functions. *Econometrica*, v. 22, n. 4, p. 422, 1954. DOI: 10.2307/1907435. **Nota:** a fonte devolve só a página inicial; o intervalo 422–443 fica declarado como não confirmado nela | Catálogo de Chicago 1980089; Crossref 10.2307/1907435 |
+| 6 | Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | CONFERE | ROYALL, R. *Statistical evidence: a likelihood paradigm*. London: Chapman & Hall, 1997 (reedição Routledge, DOI 10.1201/9780203738665) | Crossref (monografia Routledge); resenha em periódico, JSTOR 10.2307/1271009 |
+| 7 | Tversky e Kahneman, "Judgment under Uncertainty" (1974) | CONFERE | TVERSKY, A.; KAHNEMAN, D. Judgment under uncertainty: heuristics and biases. *Science*, v. 185, n. 4157, p. 1124–1131, 1974. DOI: 10.1126/science.185.4157.1124 | Crossref 10.1126/science.185.4157.1124 |
+| 8 | Mayo, *Error and the Growth of Experimental Knowledge* (1996) | CONFERE | MAYO, D. G. *Error and the growth of experimental knowledge*. Chicago: University of Chicago Press, 1996 | Google Books xV38RylOu5UC |
+| 9 | Pearl, *Causality* (2000) | CONFERE | PEARL, J. *Causality: models, reasoning, and inference*. Cambridge: Cambridge University Press, 2000 (edição on-line de 2009: DOI 10.1017/CBO9780511803161) | Crossref 10.1017/CBO9780511803161 |
+| 10 | Gigerenzer, *Calculated Risks* (2002) | CONFERE | GIGERENZER, G. *Calculated risks: how to know when numbers deceive you*. New York: Simon & Schuster, 2002 (edição britânica: *Reckoning with risk*, Penguin, 2002) | HathiTrust 004598054 |
+| 11 | Mandelbrot, *Fractals and Scaling in Finance* (1997) | CONFERE | MANDELBROT, B. *Fractals and scaling in finance: discontinuity, concentration, risk*. New York: Springer, 1997. DOI: 10.1007/978-1-4757-2763-0 | Crossref 10.1007/978-1-4757-2763-0 |
+| 12 | Rubin, *Biometrika* 63(3):581–592, 1976 | CONFERE | RUBIN, D. B. Inference and missing data. *Biometrika*, v. 63, n. 3, p. 581–592, 1976. DOI: 10.1093/biomet/63.3.581 | Crossref 10.1093/biomet/63.3.581 |
+| 13 | Kimball, *JASA* 52(278):133–142, 1957 | CONFERE | KIMBALL, A. W. Errors of the Third Kind in Statistical Consulting. *JASA*, v. 52, n. 278, p. 133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | Crossref 10.1080/01621459.1957.10501374 |
+| 14 | Gelman e Tuerlinckx, *Computational Statistics* 15(3):373–390, 2000 | CONFERE | GELMAN, A.; TUERLINCKX, F. Type S error rates for classical and Bayesian single and multiple comparison procedures. *Computational Statistics*, v. 15, n. 3, p. 373–390, 2000. DOI: 10.1007/s001800000040 | Crossref 10.1007/s001800000040 |
+| 15 | Gelman e Carlin, *Perspectives on Psychological Science* 9(6):641–651, 2014 | CONFERE | GELMAN, A.; CARLIN, J. Beyond power calculations: assessing Type S (sign) and Type M (magnitude) errors. *Perspectives on Psychological Science*, v. 9, n. 6, p. 641–651, 2014. DOI: 10.1177/1745691614551642 | Crossref 10.1177/1745691614551642 |
+| 16 | Walker, W. E. et al., *Integrated Assessment* 4(1):5–17, 2003 | CONFERE | WALKER, W. E.; HARREMOËS, P.; ROTMANS, J.; VAN DER SLUIJS, J. P.; VAN ASSELT, M. B. A.; JANSSEN, P.; KRAYER VON KRAUSS, M. Defining uncertainty: a conceptual basis for uncertainty management in model-based decision support. *Integrated Assessment*, v. 4, n. 1, p. 5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | Crossref 10.1076/iaij.4.1.5.16466 |
+| 17 | Stirling, *Nature* 468(7327):1029–1031, 2010 | CONFERE | STIRLING, A. Keep it complex. *Nature*, v. 468, n. 7327, p. 1029–1031, 2010. DOI: 10.1038/4681029a | Crossref 10.1038/4681029a |
+| 18 | Moreno-Torres et al., *Pattern Recognition* 45(1):521–530, 2012 | CONFERE | MORENO-TORRES, J. G.; RAEDER, T.; ALAIZ-RODRÍGUEZ, R.; CHAWLA, N. V.; HERRERA, F. A unifying view on dataset shift in classification. *Pattern Recognition*, v. 45, n. 1, p. 521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | Crossref 10.1016/j.patcog.2011.06.019 |
+| 19 | Ellsberg, *QJE* 75(4):643–669, 1961 | CONFERE | ELLSBERG, D. Risk, ambiguity, and the Savage axioms. *Quarterly Journal of Economics*, v. 75, n. 4, p. 643–669, 1961. DOI: 10.2307/1884324 | Crossref 10.2307/1884324 |
+| 20 | Sweeney, *Simple Demographics Often Identify People Uniquely*, Carnegie Mellon, 2000 | CONFERE (com nota) | SWEENEY, L. *Simple demographics often identify people uniquely*. Pittsburgh: Carnegie Mellon University, Data Privacy Working Paper 3, 2000. **Nota:** título e acervo conferidos no repositório do CMU; o ano vem do registro de lá, não de fonte primária | kilthub.cmu.edu (artigo 6625769) |
+| 21 | Baig et al., *European Journal of Human Genetics* 24(10):1396–1402, 2016 | CONFERE | BAIG, S. S. et al. 22 Years of predictive testing for Huntington's disease: the experience of the UK Huntington's Prediction Consortium. *European Journal of Human Genetics*, v. 24, n. 10, p. 1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | PubMed 27165004 |
+| 22 | Makin e Orban de Xivry, *eLife* 8:e48175, 2019 | CONFERE | MAKIN, T. R.; ORBAN DE XIVRY, J.-J. Ten common statistical mistakes to watch out for when writing or reviewing a manuscript. *eLife*, v. 8, e48175, 2019. DOI: 10.7554/eLife.48175 | Crossref 10.7554/elife.48175 (artigo e carta de decisão) |
+| 23 | van Dantzig, *Econometrica* 24(3):276–287, 1956 | CONFERE (com nota) | VAN DANTZIG, D. Economic decision problems for flood prevention. *Econometrica*, v. 24, n. 3, p. 276, 1956. DOI: 10.2307/1911632. **Nota:** a fonte confirma a página inicial (276) e não a final (287) | Crossref 10.2307/1911632; página da Econometric Society |
+| 24 | Saerens, Latinne e Decaestecker, *Neural Computation* 14:21–41, 2002 | CONFERE | SAERENS, M.; LATINNE, P.; DECAESTECKER, C. Adjusting the outputs of a classifier to new a priori probabilities: a simple procedure. *Neural Computation*, v. 14, n. 1, p. 21–41, 2002. DOI: 10.1162/089976602753284446 | PubMed 11747533 |
+| 25 | Lipton, Wang e Smola, *ICML* 80:3122–3130, 2018 | CONFERE | LIPTON, Z. C.; WANG, Y.-X.; SMOLA, A. Detecting and correcting for label shift with black box predictors. In: *Proceedings of the 35th International Conference on Machine Learning (ICML)*, PMLR, v. 80, p. 3122–3130, 2018 (sem DOI; arXiv:1802.03916) | PMLR v80, `lipton18a` (metadados de primeira e última página) |
+| 26 | Janssen, K. J. M. et al., *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | CONFERE | JANSSEN, K. J. M. et al. A simple method to adjust clinical prediction models to local circumstances. *Canadian Journal of Anesthesia*, v. 56, n. 3, p. 194–201, 2009. DOI: 10.1007/s12630-009-9041-x | PubMed 19247740 |
+| 27 | Van Calster, B. et al., *Journal of Clinical Epidemiology* 74:167–176, 2016 | CONFERE | VAN CALSTER, B.; NIEBOER, D.; VERGOUWE, Y.; DE COCK, B.; PENCIANA, M. J.; STEYERBERG, E. W. A calibration hierarchy for risk models was defined: from utopia to empirical data. *Journal of Clinical Epidemiology*, v. 74, p. 167–176, 2016. DOI: 10.1016/j.jclinepi.2015.12.005 | Crossref 10.1016/j.jclinepi.2015.12.005 |
+
+### O que a conferência mudou
+
+- **Nenhuma divergência de conteúdo.** Das 27 linhas, nenhuma traz autor, ano, título, periódico ou páginas
+  errados: o apêndice passou inteiro. É o oposto do que aconteceu na primeira conferência, onde duas de 25 linhas
+  tinham erro (a atribuição de Meyer, Viscusi e Durbin e a revista do Baltagi e Levin), e é o resultado esperado de
+  uma lista que já tinha passado por uma revisão.
+- **Onze complementos de completude**, que é o que a conferência acrescentou: o DOI que faltava em seis linhas de
+  D.2 (Savage 1951, Chernoff 1954, Royall 1997, Tversky e Kahneman 1974, Pearl 2000 e Mandelbrot 1997) e em quatro
+  de D.4 (Sweeney 2000, Lipton 2018, Janssen 2009 e Van Calster 2016), mais o número do working paper do Sweeney.
+- **Duas ressalvas de fonte, declaradas em vez de escondidas.** A página final do Chernoff de 1954 e a do van
+  Dantzig de 1956 não saíram nas fontes consultadas: as duas linhas ficam com a página inicial confirmada e o
+  intervalo declarado como vindo do apêndice. E o ano do Sweeney (2000) vem do registro do CMU.
+- **O estado de cada linha de D.2 a D.4 é [conferido]**, e o Apêndice D.6 registra isso. As 23 linhas de D.3 já
+  estavam marcadas pela conferência de 2026-10-15.
