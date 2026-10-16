@@ -99,24 +99,24 @@ especialistas:
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: null   # previsto pela priori ajustada: 0,4720 para S = 0,65 (a Normal ajustada tem mediana 0,6288, e nao 0,65); o especialista ainda nao declarou
+      ancora_p_com_S_mediana_propria: 0.50   # declarado; previsto pela priori ajustada 0,4720; desvio 0,028, dentro da tolerancia de 0,10
       ancora_deslocamento_dp: null
       razao_largura_90_elicitada_sobre_implicada: 1.1278
       excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
-      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
+      rodada_1_confirmacao: "confirma"     # rodada 1: confirmado, com motivo escrito
       rodada_1_ajuste_q05_q95: []
-      rodada_1_motivo: ""
+      rodada_1_motivo: "a disparidade de largura em relacao a literatura nao e erro, e ceticismo metodologico deliberado: meta-analises e estudos individuais tendem a gerar intervalos artificialmente estreitos por nao capturarem a heterogeneidade institucional, a variacao entre jurisdicoes locais e o risco de vies de publicacao; a distribuicao mais ampla acomoda que o efeito varie conforme o contexto ou que o vies sistemico seja menor em certas realidades"
       rodada_2_em: ""
-      rodada_2_confirmacao: ""
+      rodada_2_confirmacao: "nao houve"     # nada ficou em divergencia
       rodada_2_motivo: ""
     quartis_confirmados:
-      q05: null
-      q25: null
-      q50: null
-      q75: null
-      q95: null
+      q05: 0.20   # confirmado na rodada 1
+      q25: 0.45   # confirmado na rodada 1
+      q50: 0.65   # confirmado na rodada 1
+      q75: 0.85   # confirmado na rodada 1
+      q95: 1.15   # confirmado na rodada 1
     ajuste:                       # escala: log natural da razao de chances (familia binomial)
       escala: "log natural da razao de chances"
       media: -0.463937
