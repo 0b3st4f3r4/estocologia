@@ -99,7 +99,7 @@ especialistas:
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: 0.4720   # declarado para S = 0,65; previsto 0,4720 (o ajuste log-normal tem mediana 0,6288, e nao 0,65)
+      ancora_p_com_S_mediana_propria: null   # previsto pela priori ajustada: 0,4720 para S = 0,65 (a Normal ajustada tem mediana 0,6288, e nao 0,65); o especialista ainda nao declarou
       ancora_deslocamento_dp: null
       razao_largura_90_elicitada_sobre_implicada: 1.1278
       excesso_de_confianca_ok: "sim"
@@ -160,7 +160,7 @@ especialistas:
     controles:
       ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
       ancora_S: null
-      ancora_p_com_S_mediana_propria: 0.4720   # declarado para S = 0,65; previsto 0,4720 (o ajuste log-normal tem mediana 0,6288, e nao 0,65)   # esperado 0,50 +- 0,10
+      ancora_p_com_S_mediana_propria: null   # previsto pela priori ajustada: 0,4720 para S = 0,65 (a Normal ajustada tem mediana 0,6288, e nao 0,65); o especialista ainda nao declarou   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
       razao_largura_90_elicitada_sobre_implicada: 1.1278  # esperado >= 0,75
       excesso_de_confianca_ok: "sim"  # sim / nao
@@ -211,7 +211,7 @@ especialistas:
     controles:
       ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
       ancora_S: null
-      ancora_p_com_S_mediana_propria: 0.4720   # declarado para S = 0,65; previsto 0,4720 (o ajuste log-normal tem mediana 0,6288, e nao 0,65)   # esperado 0,50 +- 0,10
+      ancora_p_com_S_mediana_propria: null   # previsto pela priori ajustada: 0,4720 para S = 0,65 (a Normal ajustada tem mediana 0,6288, e nao 0,65); o especialista ainda nao declarou   # esperado 0,50 +- 0,10
       ancora_deslocamento_dp: null           # esperado <= 0,20 dp
       razao_largura_90_elicitada_sobre_implicada: 1.1278  # esperado >= 0,75
       excesso_de_confianca_ok: "sim"  # sim / nao
