@@ -23,6 +23,7 @@ fn main() {
     let mut respostas: Option<String> = None;
     let mut elicitacao: Option<String> = None;
     let mut limiar: Option<f64> = None;
+    let mut escala: Option<String> = None;
     let mut gabarito: Option<String> = None;
     let mut fila_flag = false;
     let mut i = 0;
@@ -43,6 +44,12 @@ fn main() {
             "--respostas" => {
                 if i + 1 < args.len() {
                     respostas = Some(args[i + 1].clone());
+                    i += 1;
+                }
+            }
+            "--escala" => {
+                if i + 1 < args.len() {
+                    escala = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
@@ -90,7 +97,7 @@ fn main() {
         return;
     }
     if let Some(entrada) = elicitacao.as_deref() {
-        elicitar(entrada, limiar);
+        elicitar(entrada, limiar, escala.as_deref());
         return;
     }
     if fila_flag {
@@ -139,7 +146,7 @@ fn sistema_1() {
 /// Elicitação SHELF: o ajuste da priori pelos quartis e os controles do protocolo.
 ///
 /// Uso: `labs --elicitacao q05,q25,q50,q75,q95`
-fn elicitar(entrada: &str, limiar: Option<f64>) {
+fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
     use stochology_h3::shelf::{
         ANCORA_ESPERADA, ANCORA_TOLERANCIA, RAZAO_LARGURA_MINIMA, ajustar_normal,
         excesso_de_confianca_ok, largura_90_elicitada, largura_90_implicada, p_acima_de,
@@ -156,6 +163,49 @@ fn elicitar(entrada: &str, limiar: Option<f64>) {
     }
     let [q05, q25, q50, q75, q95] = [valores[0], valores[1], valores[2], valores[3], valores[4]];
     println!("== Elicitação SHELF :: ajuste pelos quartis e controles ==");
+    if escala == Some("log") {
+        // domínio binomial em razão de chances: os quantis viram log antes do ajuste
+        let logs: Vec<f64> = valores.iter().map(|v| v.ln()).collect();
+        println!(
+            "escala declarada: log natural (razão de chances) | quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
+        );
+        println!(
+            "no log: q05 {:.6} | q25 {:.6} | q50 {:.6} | q75 {:.6} | q95 {:.6}",
+            logs[0], logs[1], logs[2], logs[3], logs[4]
+        );
+        let p_log = ajustar_normal(logs[1], logs[2], logs[3]);
+        println!(
+            "Normal ajustada no log: média {:.6} | dp {:.6} | erro máximo nos quartis {:.3e}",
+            p_log.media, p_log.dp, p_log.erro_max_quartis
+        );
+        let elicitada = largura_90_elicitada(logs[0], logs[4]);
+        let implicada = largura_90_implicada(p_log.dp);
+        let razao = razao_largura_90(elicitada, p_log.dp);
+        println!(
+            "largura 90% no log: elicitada {:.4} | implicada pela própria Normal {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
+            elicitada,
+            implicada,
+            razao,
+            RAZAO_LARGURA_MINIMA,
+            if excesso_de_confianca_ok(razao) { "ok" } else { "EXCESSO DE CONFIANÇA" }
+        );
+        println!(
+            "no log 0 é razão de chances 1 (tratamento igual): P(RC > 1) na própria priori = {:.4}",
+            p_acima_de(0.0, p_log.media, p_log.dp)
+        );
+        if let Some(s) = limiar {
+            println!(
+                "limiar da decisão em {s} (razão de chances): P(RC > {s}) na própria priori = {:.4}",
+                p_acima_de(s.ln(), p_log.media, p_log.dp)
+            );
+        }
+        let mediana = p_acima_de(logs[2], p_log.media, p_log.dp);
+        println!(
+            "âncora com S igual à mediana do próprio especialista: P(RC > {q50}) = {:.4} (esperado {:.2} +- {:.2})",
+            mediana, ANCORA_ESPERADA, ANCORA_TOLERANCIA
+        );
+        return;
+    }
     println!(
         "quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
     );
