@@ -4,7 +4,7 @@
 
 **Objetivos.** Ao fim deste capítulo você deve saber ler a definição $\mathcal{G} = (V, E_{\mathrm{tree}},
 E_{\mathrm{graph}}, H, \Phi)$, listar os cinco campos obrigatórios de um nó, reconhecer uma aresta de
-patologia e usar as cinco lentes — Fluxonomia, Crononomia, Escalonomia, Morfonomia e Crisonomia — como
+patologia e usar as cinco lentes (Fluxonomia, Crononomia, Escalonomia, Morfonomia e Crisonomia) como
 perguntas que se fazem a qualquer problema.
 
 ---
@@ -16,39 +16,39 @@ perguntas que se fazem a qualquer problema.
 de atendimento de 6,2 minutos e a aplicação da fórmula de Erlang C com 36 atendentes, o nível de serviço
 estimado é de 82% das chamadas atendidas em até 20 segundos, e recomenda-se manter a escala atual."* É uma
 frase longa, correta na aritmética e quase impossível de auditar. Se a conclusão estiver errada, o erro
-está escondido em algum lugar entre "considerando" e "recomenda-se" — e ninguém sabe em qual.
+está escondido em algum lugar entre "considerando" e "recomenda-se", e ninguém sabe em qual.
 
 A primeira providência de uma máquina auditável não é calcular melhor. É **proibir a frase longa** e
 obrigar cada alegação a virar um cartão com campos fixos. Um cartão que não preenche todos os campos não
 entra na biblioteca. Em cada 100 relatórios escritos em prosa, uma boa parte esconde o ponto frágil num
-adjetivo. Em 100 cartões com os mesmos cinco campos, o ponto frágil aparece no campo vazio.
+adjetivo. Em 100 cartões com esses cinco campos, o ponto frágil aparece no campo vazio.
 
-**O campo vazio que denuncia.** O relatório da central usa três coisas ao mesmo tempo: as chamadas que
+**O campo vazio que denuncia.** O relatório da central usa três coisas de uma vez: as chamadas que
 chegaram, a fórmula que prevê a espera e a decisão da escala. Se cada uma vira um cartão separado, três
-perguntas ficam visíveis de imediato: *de onde vem o número da demanda?*, *em que condições a fórmula
-vale?* e *quem paga se ela falhar?* A frase escondia as três. O cartão mostra as três que estão
-respondidas e as que não estão.
+perguntas ficam visíveis de imediato. *De onde vem o número da demanda?* *Em que condições a fórmula
+vale?* *Quem paga se ela falhar?* A frase escondia as três. O cartão mostra as três que estão respondidas
+e as que não estão.
 
-**Existem três tipos de ligação, e uma delas é um alarme.** Primeiro, ligações de dependência: o tempo de
-atendimento depende da demanda; a espera depende do tempo de atendimento. Segundo, ligações transversais:
-a mesma curva de Jensen aparece na fila, no cálculo de informação e na bolsa. Terceiro, **ligações de
-patologia**, que não são dependências: são desalinhamentos. A patologia mais comum desta história é a
-**falácia da média**: a fórmula é aplicada à taxa média do histórico quando deveria ser aplicada a cada
-dia e depois tirada a média dos resultados. Na central, os dois cálculos dão números muito diferentes —
-82% contra 57%.
+**Existem três tipos de ligação, e uma delas é um alarme.** Primeiro vêm as ligações de dependência. O
+tempo de atendimento depende da demanda, e a espera depende do tempo de atendimento. Depois vêm as
+ligações transversais. A curva de Jensen aparece na fila, no cálculo de informação e na bolsa. Por último,
+as **ligações de patologia**, que não são dependências e sim desalinhamentos. A patologia mais comum desta
+história é a **falácia da média**. A fórmula é aplicada à taxa média do histórico quando deveria ser
+aplicada a cada dia e depois tirada a média dos resultados. Na central, os dois cálculos dão números muito
+diferentes, 82% contra 57%.
 
 **As cinco perguntas que sempre se pode fazer.** Depois de montar o mapa, restam cinco jeitos de olhar
 para ele. *A conta fecha?* (informação não se cria do nada ao reprocessar). *De que tempo se fala: do
 processo, do observador ou da simulação?* *A cauda é tão pesada que a média nem existe?* *A estrutura
 encontrada sobrevive quando o ambiente muda?* *A informação vale o seu custo, e as previsões estão
-calibradas?* Cada pergunta tem uma grandeza própria e um número que se pode medir. As cinco juntas são as
-**cinco lentes**.
+calibradas?* Cada pergunta tem uma grandeza e um número que se pode medir. As cinco juntas são as **cinco
+lentes**.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**O mapa formal.** O conhecimento não fica guardado em texto ambíguo: fica guardado como um **hipergrafo
+**O mapa formal.** O conhecimento não fica guardado em texto ambíguo. Fica guardado como um **hipergrafo
 tipado**, isto é, um conjunto de cartões (nós) ligados por três famílias de linhas.
 
 $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
@@ -61,7 +61,7 @@ $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
 | $H$, hiperarestas | As cinco lentes, que envolvem grupos inteiros de nós | Crononomia sobre `L1_demanda` e `L2_erlang_c`: "a demanda tem calendário" |
 | $\Phi$, invariantes | Os invariantes que toda alegação cumpre para entrar no grafo | $\Phi_2$: a margem na unidade independente |
 
-**Cada alegação vira código executável.** O nó central do mapa, `N_Core`, carrega a definição em uma linha e o ponteiro para o artefato que a executa: quem afirma entrega o código que roda a afirmação. A frase do programa — cada alegação empírica vira código executável — é literal.
+**Cada alegação vira código executável.** O nó central do mapa, `N_Core`, carrega a definição em uma linha e o ponteiro para o artefato que a executa. Quem afirma entrega o código que roda a afirmação. A frase do programa, cada alegação empírica vira código executável, é literal.
 
 **Os cinco campos obrigatórios de um nó.** Um nó sem algum deles é recusado na gravação.
 
@@ -83,12 +83,12 @@ Um nó real, copiado da ficha do $H_0$ em domínio real:
   artefato_simulavel: estocologia/central.py::nivel_servico
 ```
 
-Repare que a fórmula de Erlang C está tipada como **incerteza knightiana**: ela supõe estacionariedade e
-ausência de abandono, e o Mundo não garante nenhuma das duas. O cartão está dizendo, em um campo, onde a
-fórmula pode falhar. A frase longa não dizia.
+Repare que a fórmula de Erlang C está tipada como **incerteza knightiana**. Ela supõe estacionariedade e
+ausência de abandono, e o Mundo não garante nenhuma das duas. O cartão diz, em um campo, onde a fórmula
+pode falhar. A frase longa não dizia.
 
-**As arestas de patologia.** Não são dependências: são desalinhamentos estruturais, o momento em que o
-Agente aplica um Modelo incompatível com o Mundo.
+**As arestas de patologia.** Estas não são dependências, e sim desalinhamentos estruturais, o momento em
+que o Agente aplica um Modelo incompatível com o Mundo.
 
 | Patologia | O que a aresta marca |
 | --- | --- |
@@ -108,11 +108,12 @@ navegável nos dois sentidos. O contrato dos agentes fixa quatro.
 | Informação como crescimento | $\Delta W \le I(X; Y)$ | A informação mútua ao ganho de crescimento de Kelly |
 | Ruído como temperatura | Ruído de minilote $\leftrightarrow$ temperatura $T$ | A mecânica estocástica à inferência ativa e ao aprendizado |
 
-A segunda ponte diz que penalizar coeficientes grandes é o mesmo que declarar uma priori que os acha
-improváveis: quem regulariza já calcula uma moda a posteriori, sem dizer qual priori usou. A terceira diz
+A segunda ponte diz que penalizar coeficientes grandes equivale a declarar uma priori que os acha
+improváveis. Quem regulariza já calcula uma moda a posteriori, sem dizer qual priori usou. A terceira diz
 que um apostador com informação lateral $Y$ sobre o resultado $X$ ganha, em taxa de crescimento, no máximo
-$I(X; Y)$ bits por rodada — bits viram crescimento, mas só para quem aposta por Kelly. A quarta diz que o
-ruído de estimar o gradiente num minilote age como uma temperatura, e ajuda a escapar de mínimos rasos.
+$I(X; Y)$ bits por rodada, e esses bits viram crescimento apenas para quem aposta por Kelly. A quarta diz
+que o ruído de estimar o gradiente num minilote age como uma temperatura, e ajuda a escapar de mínimos
+rasos.
 
 **As cinco lentes.** As hiperarestas funcionam como perguntas que se fazem a qualquer problema. Cada lente
 tem uma grandeza que mede e um hábito crítico, e atravessa os conceitos sem acrescentar objetos novos.
@@ -126,47 +127,48 @@ tem uma grandeza que mede e um hábito crítico, e atravessa os conceitos sem ac
 | Crisonomia | A informação vale o seu custo, e as previsões estão calibradas? | Perda, escore próprio, valor da informação | Cobrar de cada número o histórico de acertos na frequência que ele prometeu |
 
 Dois exemplos de como uma lente vira conta. Na **Fluxonomia**, a desigualdade do processamento de dados
-diz que, se $Z$ é obtido de $Y$, então $I(X; Z) \le I(X; Y)$: três jornais que publicam a mesma pesquisa
-valem um. Na **Morfonomia**, duas representações podem dar as mesmas previsões e ainda assim autorizar
-conclusões diferentes sob intervenção — e só o que se conserva entre ambientes serve fora deles.
+diz que, se $Z$ é obtido de $Y$, então $I(X; Z) \le I(X; Y)$. Três jornais que publicam a mesma pesquisa
+valem um. Na **Morfonomia**, duas representações podem dar previsões idênticas e ainda assim autorizar
+conclusões diferentes sob intervenção, e só a conclusão que se conserva entre ambientes serve fora deles.
 
-**Como um domínio novo aciona as lentes.** A regra prática é do próprio plano. É um processo financeiro,
-de carreira ou de seguro? Aciona a **Crononomia**. Envolve sinistros, rendas, viralização ou tamanho de
+**Como um domínio novo aciona as lentes.** A regra prática está no plano. É um processo financeiro, de
+carreira ou de seguro? Aciona a **Crononomia**. Envolve sinistros, rendas, viralização ou tamanho de
 empresas? Aciona a **Escalonomia**. Envolve recomendação, regulação ou previsão publicada? Aciona
 **Fluxonomia** e **Morfonomia**, com simulação com e sem a ação.
 
 **Onde ficam os dados.** O hipergrafo guarda só a topologia leve: nós, arestas, contratos YAML e hashes.
 Microdados e séries ficam em Parquet particionado, consultado com projeção explícita de colunas, poda de
-partição e um orçamento rígido de bytes varridos. A regra de escala é do próprio plano: um modelo que
+partição e um orçamento rígido de bytes varridos. O plano fixa também a regra de escala. Um modelo que
 exige uma varredura completa por previsão não escala, por melhor que seja o erro de teste.
 
-O tamanho do grafo cresceu com a pesquisa, mas abaixo das metas do plano: 85 nós no $H_1$ real e
+O tamanho do grafo cresceu com a pesquisa, mas abaixo das metas do plano. São 85 nós no $H_1$ real e
 **454 178** nós no $H_3$, dos quais 453 973 são previsões e só 205 são topologia. O $H_3$ chegou a 45% do
 milhão que o plano previa.
 
 O número do $H_2$ merece uma correção, porque mostra como é fácil inflar essa conta. Os "1 538 nós" que a
 primeira versão deste capítulo citava são de uma rodada antiga do gerador do grafo. Rodando o
-`grafo.py` do $H_{2g}$ sobre os resultados do próprio $H_{2g}$, o grafo tem **12 797 nós** — e
+`grafo.py` do $H_{2g}$ sobre os resultados do $H_{2g}$, o grafo tem **12 797 nós**, e
 12 288 deles, 96%, são hipóteses do ICP, uma por subconjunto testado, que crescem como $2^k$ e não são
 conhecimento novo.
 
 O teste de escala da auditoria de fundo rodou o funil em lote sobre **329** domínios gerados por regra a
 partir de um catálogo público (327 até o fim, a 3,8 segundos de processador por domínio) e levou o grafo a
 **26 634 nós**, 28 619 arestas de árvore, 26 795 pontes e 4 628 hiperarestas. Só **6 494** dos nós são de
-conceito — domínio, camadas, variáveis, ambientes, filtros, decisão — e só **554** vêm de pacotes curados;
-os outros 20 140 são a mesma família de hipóteses. O gargalo não é a máquina: é a curadoria semântica, que
-não escala por regra, a oferta de conjuntos com ambientes identificáveis (9% do catálogo passa), as pontes,
-que crescem com o quadrado do número de domínios, e manter tudo em memória.
+conceito (domínio, camadas, variáveis, ambientes, filtros, decisão), e só **554** vêm de pacotes curados;
+os outros 20 140 pertencem àquela família de hipóteses. O gargalo não está na máquina, e sim na curadoria
+semântica, que não escala por regra, na oferta de conjuntos com ambientes identificáveis (9% do catálogo
+passa), nas pontes, que crescem com o quadrado do número de domínios, e em manter tudo em memória.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 Três tarefas: montar um mini-hipergrafo com três nós e três lentes, provar que o validador morde em quatro
-casos, e rodar as lentes com número medido — a **Escalonomia** pelo estimador de Hill, a **Crisonomia**
-pelo valor esperado da informação perfeita (EVPI) e a **Morfonomia** pelo teste de invariância entre
-regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com `cargo run --release` no crate de rascunho
-`/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências externas):
+casos, e rodar as lentes com número medido. A **Escalonomia** entra pelo estimador de Hill, a
+**Crisonomia** pelo valor esperado da informação perfeita (EVPI), e a **Morfonomia** pelo teste de
+invariância entre regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com
+`cargo run --release` no crate de rascunho `/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências
+externas):
 
 ```text
 == Capitulo 12 :: o mapa do conhecimento ==
@@ -192,39 +194,40 @@ Morfonomia: regra 2, regime do meio com efeito 40 -> inclinacao marginal = 40.03
 Quatro leituras da saída, na ordem em que importam.
 
 **O validador recusa.** O grafo válido passa com zero problemas. As quatro provas mostram que a recusa não
-é decorativa: aresta para nó que não existe, ciclo dedutivo (a "volta" que faz a árvore virar roda), 
-hiperaresta com um membro só, e um nó órfão fora de toda lente. Note a prova 4: o validador estrutural
-**não** reprova o nó órfão — a validação `[]` continua vazia — mas `nos_sem_lente()` aponta
-`L2_orfao`. São dois crivos diferentes: um cuida da forma, o outro cuida da cobertura.
+é decorativa: aresta para nó que não existe, ciclo dedutivo (a "volta" que faz a árvore virar roda),
+hiperaresta com um membro só, e um nó órfão fora de toda lente. A prova 4 mostra o validador estrutural
+deixando o nó órfão passar: a validação `[]` continua vazia, enquanto `nos_sem_lente()` aponta `L2_orfao`.
+Os dois crivos cuidam de coisas distintas; um cuida da forma, o outro da cobertura.
 
-**Nem toda lente é acionada.** O mini-hipergrafo aciona três lentes — Crononomia, Escalonomia e Crisonomia
-— e deixa Fluxonomia e Morfonomia sem hiperaresta. Isso não é erro do validador: significaria erro se algum
-**nó** ficasse fora de toda lente, e nenhum fica. Uma lente sem uso é uma pergunta que ainda não foi feita.
+**Nem toda lente é acionada.** O mini-hipergrafo aciona três lentes (Crononomia, Escalonomia e
+Crisonomia) e deixa Fluxonomia e Morfonomia sem hiperaresta. A ausência não é erro do validador. Erro
+seria se algum **nó** ficasse fora de toda lente, e nenhum fica. Uma lente sem uso é uma pergunta que
+ainda não foi feita.
 
-**A Escalonomia dá o mesmo número do instrumento do repositório.** Com a mesma semente (1909), 20 000
+**A Escalonomia reproduz o número do instrumento do repositório.** Com a mesma semente (1909), 20 000
 valores de uma Pareto com $\alpha = 1{,}81$ e o corte em $k = 500$, o estimador de Hill devolve
-**1,7901**, e o portão do repositório publica 1,7901 para essa mesma conta. A cauda é selvagem
-($\hat\alpha < 2$): a variância teórica não existe. Nas pontas do corte o número anda — 1,8444 com
-$k = 250$ e 1,8032 com $k = 2\,000$ — e essa sensibilidade é a própria lição: o expoente de cauda é uma
-estimativa, não uma constante da natureza.
+**1,7901**, e o portão do repositório publica 1,7901 nessa conta. A cauda é selvagem
+($\hat\alpha < 2$), e por isso a variância teórica não existe. Nas pontas do corte o número anda, com
+1,8444 em $k = 250$ e 1,8032 em $k = 2\,000$, e a sensibilidade é a lição. O expoente de cauda é uma
+estimativa, e não uma constante da natureza.
 
 **A Crisonomia depende de quais ações existem.** O sensor perfeito diz se o ano será bom ou ruim, com
 probabilidade 0,70 de bom. Lucrar rende 10, perder custa 4. Quem pode *agir ou não agir* já age sem o
-sensor — o valor esperado de agir é 5,80, maior que zero — e então o sensor vale **0,0000**: ele nunca
-muda a decisão. Sem a opção de agir, restando *apostar metade* (valor 3,00) ou *não apostar* (0,00), o
-melhor sem informação cai para 2,1000 e o mesmo sensor passa a valer **3,7000**. Se o pagamento for igual
-nos dois estados, volta a valer 0,0000. **O valor da informação não é propriedade do dado: é propriedade
-do conjunto de ações disponíveis.**
+sensor, porque o valor esperado de agir é 5,80, maior que zero, e então o sensor vale **0,0000**, porque
+ele nunca muda a decisão. Sem a opção de agir, restando *apostar metade* (valor 3,00) ou *não apostar*
+(0,00), o melhor sem informação cai para 2,1000 e o sensor passa a valer **3,7000**. Se o pagamento for
+igual nos dois estados, volta a valer 0,0000. **O valor da informação não é propriedade do dado: é
+propriedade do conjunto de ações disponíveis.**
 
 **A Morfonomia prefere o mapa ao número.** Três regimes, bases 100, 140 e 120, efeito verdadeiro 10 nos
 três. Na primeira regra, a inclinação calculada sobre todos os dados juntos dá **24,37**, mais que o dobro
 do efeito verdadeiro, porque quem recebeu o tratamento está concentrado no regime de base alta. Trocando
-só a alocação, e mantendo o mesmo efeito de 10, a inclinação marginal vira **−4,60** — negativa, quando
-todo efeito dentro de cada regime é positivo. É o desalinhamento clássico que o Capítulo 9 chamou de
-confundimento. As inclinações por regime, essas, ficam em 9,96 / 10,09 / 10,15 e 10,34 / 9,92 / 10,15: as
+só a alocação, e mantendo o efeito de 10, a inclinação marginal vira **−4,60**, negativa, quando todo
+efeito dentro de cada regime é positivo. É o desalinhamento clássico que o Capítulo 9 chamou de
+confundimento. As inclinações por regime, essas, ficam em 9,96 / 10,09 / 10,15 e 10,34 / 9,92 / 10,15. As
 duas regras passam no teste de invariância com tolerância 0,5. Quando o regime do meio realmente responde
-40 em vez de 10, a invariância **falha** (9,96 contra 40,09, passo de 30,13). Resumindo: a inclinação
-marginal é um número; a inclinação por regime é uma estrutura.
+40 em vez de 10, a invariância **falha** (9,96 contra 40,09, passo de 30,13). A inclinação marginal é um
+número; a inclinação por regime é uma estrutura.
 
 **Declaração de divergência.** A edição anterior deste livro, no Capítulo 6, apresenta as três amostras de
 Hill com valores próximos de $1{,}81$; este instrumento mede 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949

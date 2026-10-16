@@ -24,7 +24,7 @@ costumam ser separados, e perdeu no total:
 A explicação está na coluna esquerda da tabela. Os casos difíceis iam para a cirurgia aberta.
 **Em cada 100 pacientes operados abertamente, 75 tinham cálculos grandes; na outra técnica, 23.**
 Comparar os totais é comparar dois grupos de pacientes diferentes. Se os dois procedimentos
-tivessem atendido à mesma mistura de casos, **51% pequenos e 49% grandes, a mistura da população
+tivessem atendido a casos com a **mesma mistura, 51% pequenos e 49% grandes, a da população
 inteira**, os números seriam 83,3% para a aberta e 77,9% para a outra. A vantagem volta para a
 aberta, agora por uma diferença maior do que a de qualquer estrato isolado.
 
@@ -44,15 +44,15 @@ primeiro degrau. Pearl separou os degraus pela pergunta que se faz:
 
 O primeiro degrau é o da correlação; o segundo exige um **do(x)**, a intervenção; o terceiro exige
 um mundo paralelo. Os dados sozinhos só sustentam o primeiro. A ponte para os outros dois é um
-grafo causal, **uma declaração humana sobre o mundo, não uma saída de software**.
+grafo causal, **uma declaração humana sobre o mundo, e nunca uma saída de software**.
 
 **O alarme que parece causa.** Numa unidade de terapia intensiva, o quadro da equipe acende um
 alarme quando a resistência bacteriana estimada passa de um limite. O alarme prevê o desfecho
 grave melhor do que qualquer outra variável do sistema. Em cada 100 pacientes que o alarme marca,
 muitos evoluem mal, e a equipe começa a tratar o alarme como se ele fosse a doença.
 
-Só que o alarme é **filho** da resistência, não pai. Quem o aciona é a resistência, e é ela que
-causa o desfecho. Trocar o alarme de lugar, desligá-lo ou calibrá-lo de outro jeito não muda o
+Só que o alarme é **filho** da resistência, e não o pai dela. Quem o aciona é a resistência, e é
+ela que causa o desfecho. Trocar o alarme de lugar, desligá-lo ou calibrá-lo de outro jeito não muda o
 desfecho de um paciente sequer, porque mexer no filho não é mexer no pai. A correlação entre o
 alarme e o desfecho é altíssima; o efeito causal do alarme é zero. Quando os dados vêm de três
 hospitais diferentes, o que separa os dois é a **invariância**. O efeito da resistência se repete
@@ -77,7 +77,7 @@ talento e simpatia têm correlação de $+0{,}002$ na população e de $-0{,}669
 um limiar. **"Controlar por tudo o que foi medido" não é neutro**. Ajustar um mediador apaga o
 efeito, ajustar um colisor o fabrica e ajustar um instrumento amplifica o viés que sobra.
 
-**A porta dos fundos.** O critério de Pearl lista o que ajustar. Um conjunto $Z$ fecha a porta dos
+**A porta dos fundos.** O critério de Pearl diz o que ajustar. Um conjunto $Z$ fecha a porta dos
 fundos quando bloqueia todos os caminhos que entram em $X$ por trás, sem conter nenhum descendente
 de $X$. Quando isso vale, a distribuição observada responde à pergunta de intervenção:
 
@@ -87,37 +87,37 @@ O caso trabalhado canônico é a terapia hormonal. Em 1991, a coorte do Nurses' 
 cerca de 48 mil mulheres, relatou risco relativo de **0,56** de doença coronariana grave entre as
 usuárias de estrogênio. Em 2002, o ensaio sorteado da Women's Health Initiative, com 16 608
 mulheres, encontrou razão de riscos de **1,29**. As usuárias da coorte tinham outros hábitos,
-outra renda e outro acesso a médicos, e havia uma porta dos fundos aberta, que o sorteio fechou.
+outra renda e outro acesso a médicos, e uma porta dos fundos seguia aberta, até o sorteio fechá-la.
 
 **Resultados potenciais.** Cada pessoa tem dois desfechos possíveis, $Y(1)$ com o tratamento e
-$Y(0)$ sem ele, e só um é observado. Comparar os tratados com os não tratados dá, exatamente:
+$Y(0)$ sem ele, e só um é observado. A comparação entre os tratados e os não tratados dá:
 
 $$\mathbb{E}[Y\mid D{=}1]-\mathbb{E}[Y\mid D{=}0] = \underbrace{\mathbb{E}[Y(1)-Y(0)\mid D{=}1]}_{\text{efeito nos tratados}} + \underbrace{\mathbb{E}[Y(0)\mid D{=}1]-\mathbb{E}[Y(0)\mid D{=}0]}_{\text{viés de seleção}}$$
 
 Quando o tratamento é **sorteado**, o segundo termo é zero por construção, porque quem foi sorteado
-para o tratamento tem o mesmo $Y(0)$ esperado que quem não foi. O Capítulo 17 encontra isso nos
-dados de LaLonde, onde o viés de seleção troca o sinal do efeito: a comparação crua dá $-8\,498$
+para o tratamento tem $Y(0)$ esperado igual ao de quem não foi. O Capítulo 17 encontra isso nos
+dados de LaLonde, onde o viés de seleção troca o sinal do efeito. A comparação crua dá $-8\,498$
 dólares de renda em 1978 e o experimento dá $+1\,794$; a diferença, $-10\,292$, é o termo do meio.
 
 **A diferença ingênua não é só efeito.** A decomposição dá um nome ao terceiro elemento, e ele não
 tem conserto estatístico. Nada nos dados observados diz quanto ele vale, porque um dos dois
 desfechos potenciais de cada pessoa está faltando por construção. Só o sorteio zera esse termo.
 
-**Invariância: o que sobrevive à troca de ambiente.** Uma relação causal sobrevive à troca de
-ambiente; uma correlação de conveniência, não. A Predição Causal Invariante, de Peters, Bühlmann e
-Meinshausen (2016), transforma isso num teste. Se $S$ é o conjunto das causas diretas de $Y$,
-$P(Y \mid X_S, E = e)$ é a mesma distribuição em todo ambiente $e$ que intervenha nas outras
-variáveis sem interferir na equação de $Y$.
+**Invariância: o que sobrevive à troca de ambiente.** Uma relação causal sobrevive à mudança de
+ambiente; uma correlação de conveniência não. A Predição Causal Invariante, de Peters,
+Bühlmann e Meinshausen (2016), transforma isso num teste. Se $S$ é o conjunto das causas diretas de
+$Y$, $P(Y \mid X_S, E = e)$ é a distribuição idêntica em todo ambiente $e$ que intervenha nas
+outras variáveis sem interferir na equação de $Y$.
 
 O procedimento tem três passos. (1) Para cada subconjunto candidato $S$, testar se a relação de
 $Y$ com $X_S$ é invariante entre os ambientes; (2) guardar todos os $S$ que passam; (3) devolver a
 interseção deles. **A garantia é assimétrica**. $\hat S$ só contém causas diretas, com
 probabilidade de pelo menos $1-\alpha$, mas nada garante que as contenha todas. Abster-se,
-devolvendo o conjunto vazio, é resultado, não falha. A abstenção acontece de dois modos. O teste
+devolvendo o conjunto vazio, é resultado, e não falha. A abstenção acontece de dois modos. O teste
 rejeita todos os conjuntos, ou aceita tantos que a interseção fica vazia.
 
-O teste trata cada linha como unidade independente. Quando o mesmo voluntário dá 16 medidas, ou a
-mesma escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o veredito muda de
+O teste trata cada linha como unidade independente. Quando um voluntário dá 16 medidas, ou uma
+escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o veredito muda de
 área para área. No H2 isso apareceu inteiro:
 
 | Leitura | O que aconteceu |
@@ -126,13 +126,13 @@ mesma escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o
 | 4 domínios | aceitou tanto que $\hat S$ ficou vazio: os ambientes mexem pouco em $X$ |
 | 1 domínio | $\hat S$ não vazio, e contra a alegação: cidadania e emprego, não a cor da pele |
 
-**Uma lição que o H2 acrescentou: o efeito transporta melhor que o conjunto.** Mesmo quando o ICP
+**Uma lição que o H2 acrescentou: o efeito transporta melhor que o conjunto.** Quando o ICP
 rejeita todos os conjuntos, o modelo ajustado nos ambientes de treino previu bem um ambiente nunca
 visto em 9 domínios, com habilidade de 0,04 a 0,88. Encontrar o conjunto exato de causas é mais
 exigente do que prever sob mudança.
 
 **Por que isso importa para decidir.** A invariância é também a resposta à crítica de Lucas
-(Capítulo 11): só o que é invariante entre regimes merece uso quando o regime muda. No H2g, com a
+(Capítulo 11). Só o que é invariante entre regimes merece uso quando o regime muda. No H2g, com a
 verdade de referência declarada antes, o ICP recuperou os pais verdadeiros da corrente elétrica
 numa câmara física, $\hat S = \{red, green, blue\}$, e deixou de fora sensores de luz fortemente
 correlacionados, porque eram filhos dos LEDs.
@@ -212,26 +212,26 @@ inclinação ingênua média (todos os sítios juntos): X = 4.0004  Z = 1.2029
 grandes (0,7300 contra 0,6875), e perde no bruto (0,7800 contra 0,8257). Ponderando os dois
 estratos pela população inteira, com pesos 0,5100 e 0,4900, a aberta fica com 0,8325 e a outra com
 0,7789. A vantagem inverte de novo, agora para o lado da aberta, com a diferença ampliada. Quem
-produziu o paradoxo foi a mistura de casos: **75% dos pacientes da aberta tinham cálculos grandes,
-contra 23% na outra técnica**. É a mesma lição dos 12 casos do Capítulo 2, agora com números de um
-ensaio real.
+produziu o paradoxo foi a mistura de casos. **75% dos pacientes da aberta tinham cálculos grandes,
+contra 23% na outra técnica**. Repete-se aqui a lição dos 12 casos do Capítulo 2, agora com números
+de um ensaio real.
 
 **(2) A correlação ingênua não consegue separar a causa do sintoma.** Com 12 000 linhas em três
 sítios, o desfecho $Y$ foi gerado por $Y = 2X + \text{ruído}$, o sintoma $Z$ por $Z = 2X +
-\text{ruído próprio do sítio}$ e $W$ é ruído puro. Olhando tudo junto, $\operatorname{corr}(X,Y) =
+\text{ruído do sítio}$ e $W$ é ruído puro. Olhando tudo junto, $\operatorname{corr}(X,Y) =
 0{,}9314$ e $\operatorname{corr}(Z,Y) = 0{,}7208$. A causa e o sintoma parecem duas variáveis
 explicativas, e a regressão ingênua dá inclinação **1,9885** para $X$ e **0,6003** para $Z$. Se o
-analista parasse aqui, concluiria que o alarme tem efeito próprio de 0,6.
+analista parasse aqui, atribuiria ao alarme um efeito de 0,6.
 
-**(3) O ICP separa os dois.** No teste de invariância, ajustando a mesma inclinação nos três sítios
-contra inclinações livres:
+**(3) O ICP separa os dois.** No teste de invariância, ajustando uma inclinação comum aos três
+sítios contra inclinações livres:
 
 | Candidato | F | p | Inclinação comum | Por sítio | Veredito |
 | --- | --- | --- | --- | --- | --- |
 | $\{X\}$ | 0,755 | 0,470 | 1,985 | 1,970 · 1,996 · 1,990 | aceito |
 | $\{Z\}$ | 976,809 | ~0 | 0,477 | 0,928 · 0,496 · 0,299 | rejeitado |
 
-A inclinação de $X$ é praticamente a mesma nos três sítios (1,970, 1,996, 1,990); a de $Z$ vai de
+A inclinação de $X$ é praticamente constante nos três sítios (1,970, 1,996, 1,990); a de $Z$ vai de
 0,928 a 0,299, quase triplicando de um sítio para o outro. O mecanismo que liga a causa ao desfecho
 não mudou; o que liga o sintoma ao desfecho mudou em cada lugar. A p de $Z$ é indistinguível de
 zero (F perto de mil) e a de $X$ é 0,470. Em outras palavras, os dados não têm como distinguir a
@@ -239,19 +239,19 @@ relação de $X$ de uma relação que valha em todo lugar.
 
 **(4) O que o teste acerta e onde ele se abstém.** Em 200 repetições com o mecanismo estável, o
 conjunto $\{X\}$ é aceito em **94,0%** das rodadas e $\{Z\}$ é rejeitado em **100%** delas. A
-interseção de todos os conjuntos aceitos, porém, só dá exatamente $\{X\}$ em **8,0%** dos casos, e
-sai vazia em 89,5%. A própria causa não sobreviveu em 0,5% das vezes, e em 2,5% sobrou só o ruído
-$W$, porque o teste aceitou os conjuntos que o continham e não os que continham $X$. Nos outros
-86,5% o ruído $W$ entrou em alguns conjuntos e não em outros, e a interseção ficou sem denominador
-comum. **Abster-se é resultado, não defeito do instrumento**, e o teste nunca devolveu
-$\hat S = \{Z\}$.
+interseção de todos os conjuntos aceitos, porém, só devolve $\{X\}$ em **8,0%** dos casos, e sai
+vazia em 89,5%. O conjunto da causa não sobreviveu em 0,5% das vezes, e em 2,5% sobrou só o ruído
+$W$, porque o teste aceitou os conjuntos que o continham e recusou os que continham $X$. Nos outros
+86,5% o ruído $W$ entrou em alguns conjuntos e ficou fora de outros, e a interseção perdeu o
+denominador comum. **Abster-se é resultado, e não defeito do instrumento**, e o teste nunca
+devolveu $\hat S = \{Z\}$.
 
 **(5) Quando o mecanismo é instável, a causa também cai.** Na segunda bateria, o coeficiente de
 $X$ em $Y$ muda de sítio para sítio. Os dados agora dizem a verdade sobre um mundo incoerente. A
 inclinação ingênua de $X$ sobe de 2,0004 para **4,0004**, porque o estimador está misturando o
 efeito verdadeiro com a variação entre sítios; $Z$ vai de 0,6015 para 1,2029, e $\{X\}$ deixa de
 ser uma relação estável. Quando os sítios intervêm no mecanismo, nenhum conjunto é a resposta
-certa, e o teste deve, e faz, rejeitar.
+certa, e o teste rejeita, como deve.
 
 **Exercícios.**
 
@@ -264,10 +264,10 @@ certa, e o teste deve, e faz, rejeitar.
    número de casos, e explique por que ela inverte os estratos. Qual é a variável confundidora?
 4. *(Conta)* No laboratório, a inclinação ingênua de $Z$ foi 0,6003 e as inclinações por sítio
    foram 0,928, 0,496 e 0,299. Explique em uma frase por que a média ingênua não é a média dessas
-   três, e o que isso diz sobre a leitura do coeficiente de uma regressão só.
+   três, e o que ela revela sobre a leitura do coeficiente de uma regressão só.
 5. *(Laboratório)* Faça o ruído de $Z$ ser igual nos três sítios no laboratório e mostre que
-   $\{Z\}$ passa a ser aceito. O que isso diz sobre a força do ICP: ele encontra a causa ou apenas
-   rejeita o que varia?
+   $\{Z\}$ passa a ser aceito. O que isso diz sobre a força do ICP? Ele encontra a causa ou apenas
+   rejeita aquilo que varia?
 6. *(Conceito)* Por que o ICP pode devolver o conjunto vazio quando tem dados demais? Relacione com
    a sensibilidade do teste a desvios do modelo.
 
@@ -275,9 +275,9 @@ certa, e o teste deve, e faz, rejeitar.
 
 - Associação, intervenção e contrafactual são perguntas diferentes; o grafo faz a ponte, e os dados
   sozinhos não a fazem.
-- O paradoxo de Simpson nasce de uma mistura de casos: a cirurgia aberta vence em cada estrato e
+- O paradoxo de Simpson nasce de uma mistura de casos. A cirurgia aberta vence em cada estrato e
   perde no bruto porque 75% dos seus pacientes eram os casos difíceis.
 - Confundidor, mediador e colisor pedem três reações opostas; ajustar tudo não é neutro.
 - Diferença ingênua = efeito nos tratados + viés de seleção, e só o sorteio zera o segundo termo.
 - O ICP separa a causa do sintoma pela invariância entre ambientes, e abster-se é um resultado
-  legítimo: no laboratório ele nunca devolveu o filho como causa.
+  legítimo. No laboratório ele nunca devolveu o filho como causa.

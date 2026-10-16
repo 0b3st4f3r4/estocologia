@@ -2,8 +2,8 @@
 
 ## Apêndice A. Dicionário visual da Estocologia
 
-Todos os termos do livro, em uma frase simples e com um exemplo do dia a dia. Os termos estão em ordem
-alfabética.
+O dicionário reúne todos os termos do livro, cada um definido em uma frase simples e ilustrado com um exemplo
+do dia a dia. A ordem é alfabética.
 
 | Termo | Em uma frase | Exemplo do dia a dia |
 | --- | --- | --- |
@@ -125,9 +125,9 @@ alfabética.
 | $\mathrm{CITL} = \bar{p} - \bar{y}$ | O desvio de nível: quanto a previsão média erra a taxa observada | `media(p) - media(y)` |
 
 **Uma advertência de leitura.** Em Rust, `f64` guarda cerca de 15 a 16 dígitos. Portanto $\approx$ nunca é
-igualdade: toda comparação de números medidos precisa de uma tolerância **declarada**, como a banda de 0,05 desvios
-padrão que a auditoria de fundo fixou para comparar duas rodadas do mesmo domínio. Banda escolhida depois de ver o
-resultado conta como declaração nova e entra no contador de tentativas.
+igualdade, e toda comparação de números medidos precisa de uma tolerância **declarada**, como a banda de 0,05
+desvios padrão que a auditoria de fundo fixou para comparar duas rodadas do mesmo domínio. Uma banda escolhida
+depois de ver o resultado conta como declaração nova e entra no contador de tentativas.
 
 ---
 
@@ -143,8 +143,11 @@ resultado conta como declaração nova e entra no contador de tentativas.
 | `cargo run --release --bin labs -- --cap 19` | Que os números citados no Degrau 3 do capítulo 19 saem de código, com semente fixa. Vale trocar 19 por qualquer capítulo; `--todos` roda todos |
 | `rustc -O crates/stochology-book/src/cap21.rs -o /tmp/cap21 && /tmp/cap21` | Que cada laboratório desta edição é autocontido: um arquivo, nenhuma dependência, o mesmo resultado |
 
-Os laboratórios desta edição vivem direto no crate, em `crates/stochology-book/src/capNN.rs`: são módulos testados (`cap01` a `cap04` com testes próprios) e **todos os 21** são servidos pelo binário `labs`. As cópias intermediárias foram apagadas depois da integração: arquivo de trabalho não fica no repositório. Nenhum laboratório usa relógio do sistema nem
-número aleatório sem semente, e é por isso que a conferência é possível.
+Os laboratórios desta edição vivem direto no crate, em `crates/stochology-book/src/capNN.rs`. São módulos
+testados (`cap01` a `cap04` trazem testes no arquivo) e **todos os 21** são servidos pelo binário `labs`. As
+cópias intermediárias foram apagadas depois da integração, porque arquivo de trabalho não fica no repositório.
+Nenhum laboratório usa relógio do sistema nem número aleatório sem semente, e é por isso que a conferência é
+possível.
 
 ### C.2 O registro empírico (o código Python foi aposentado)
 
@@ -169,12 +172,12 @@ cd fundo/p07-icp/codigo && python3 nulo_validacao.py          # a taxa nula da g
 ```
 
 **O código Python de simulação foi aposentado em 2026-10-16** (576 arquivos, cerca de 2,9 MB), porque o aparato
-de engenharia do projeto passou a ser o workspace Rust. O que fica na árvore é o registro: os dados e as somas, os
+de engenharia do projeto passou a ser o workspace Rust. Na árvore fica o registro. São os dados e as somas, os
 `README.md` de cada frente com os números publicados, as declarações, os pareceres e as saídas conferidas. O
 manifesto `python-removido.txt` traz o hash de blob de cada arquivo removido, e a declaração completa está em
 `DECLARACAO_REMOVIDO_PYTHON.md`.
 
-Com a mesma data saíram os artefatos que não sustentam resultado central — as extensões de escala, saúde e evento raro (pontos 9 e 10 da auditoria de fundo) e a edição anterior do livro. Os números dessas extensões continuam nos Capítulos 15 e 21, com a nota de aposentadoria na tabela. Depois saiu o andaime de medição em Python inteiro: as frentes `h0` a `h3`, com os seus READMEs, e os dados que só elas usavam. Os números ficaram em `REGISTRO_EMPIRICO.md`, com o commit `1bfec905` como âncora (`DECLARACAO_CONSOLIDACAO_RUST.md`).
+Naquele dia saíram os artefatos que não sustentam resultado central. São as extensões de escala, saúde e evento raro (pontos 9 e 10 da auditoria de fundo) e a edição anterior do livro. Os números dessas extensões continuam nos Capítulos 15 e 21, com a nota de aposentadoria na tabela. Depois saiu o andaime de medição em Python inteiro. Também saíram as frentes `h0` a `h3`, com os seus READMEs, e os dados que só elas usavam. Os números ficaram em `REGISTRO_EMPIRICO.md`, com o commit `1bfec905` como âncora (`DECLARACAO_CONSOLIDACAO_RUST.md`).
 
 Três conferências que continuam rodando sem Python, e que custam segundos:
 
@@ -189,17 +192,17 @@ cargo test --workspace               # os crates do livro e da arquitetura
 O registro do H3 é: **Python 3.13.7**, **numpy 2.5.1** (obtido com `PYTHONNOUSERSITE=1 python3`), pandas 3.0.5,
 scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7, com
 `export OMP_NUM_THREADS=1` e no máximo dois processos em paralelo. Duas dependências faltam nesta máquina, e o
-arquivo de ambiente diz como instalá-las: `statsmodels`, que só o gabarito do ponto 1 usa, e `pyreadr`, que só
+arquivo de ambiente diz como instalá-las. A primeira é `statsmodels`, que só o gabarito do ponto 1 usa, e a segunda é `pyreadr`, que só
 um passo do ponto 8 usa.
 
-O caso do numpy é o exemplo perfeito de por que o ambiente faz parte do número. O efeito estimado do laço
-performativo estava publicado como 0,5632 com 2.375 choques, e o mesmo código, com a mesma semente, dava 0,5529 e
-2.395 choques. Não havia duas versões do código: havia dois numpys no mesmo interpretador, e o caminho padrão
-importava o 2.4.6 antes do 2.5.1. O ponto exato da divergência foi isolado: com o mesmo estado do gerador, um
-sorteio binomial de 248 tentativas com probabilidade 0,6 devolve 171 em uma versão e 150 na outra, porque a 2.5
+O caso do numpy mostra por que o ambiente faz parte do número. O efeito estimado do laço performativo estava
+publicado como 0,5632 com 2.375 choques, e o código idêntico, rodado com a mesma semente, dava 0,5529 e 2.395
+choques. Não havia duas versões do código. Havia dois numpys no interpretador, e o caminho padrão importava o
+2.4.6 antes do 2.5.1. O ponto da divergência ficou isolado. Nas duas versões, o gerador partia do mesmo estado,
+e um sorteio binomial de 248 tentativas com probabilidade 0,6 devolve 171 em uma e 150 na outra, porque a 2.5
 corrigiu a série de Stirling do teste de aceitação do BTPE. Se você encontrar uma divergência assim, o caminho é
-sempre o mesmo: **primeiro o ambiente, depois o código**, e nenhum número publicado é trocado sem declaração
-escrita antes de rodar.
+sempre este. **Primeiro o ambiente, depois o código**, porque nenhum número publicado é trocado sem declaração escrita
+antes de rodar.
 
 ---
 
@@ -210,11 +213,10 @@ escrita antes de rodar.
 Esta bibliografia segue três regras, e as três são declarações.
 
 **1. Todo arquivo foi baixado para consulta.** O autor baixou os arquivos dos links desta lista em
-2026-10-16, para conferência direta. Os cinco documentos do próprio projeto foram **integrados** ao repositório
+2026-10-16, para conferência direta. Os cinco documentos do projeto foram **integrados** ao repositório
 (arquitetura, plano escalável, fundamentação e o artigo) e as cópias soltas foram apagadas, como manda a regra
-dos arquivos novos: o que ficou está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Os arquivos de
-terceiros não são versionados, por direito autoral: o que fica é a citação, o DOI e o número que o livro usa
-dele.
+dos arquivos novos. O material integrado está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Os arquivos de
+terceiros não são versionados, por direito autoral. Deles ficam a citação, o DOI e o número que o livro usa.
 
 **2. Cada item tem um estado de conferência.**
 
@@ -225,13 +227,13 @@ dele.
 | **[histórico]** | material aposentado, que fica só como registro de onde um número veio |
 
 **3. Todo experimento deste livro é Rust.** O Python aparece apenas como registro histórico aposentado
-(veja o Apêndice C): nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
+(veja o Apêndice C). Nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
 
 **Aviso: o curso foi aposentado.** O curso *Pensamento Crítico e Modelos Estocásticos*, de onde vinham
 vários números de simulação e boa parte da numeração interna (M0 a M15, ME1 a ME24, MB1 a MB8), foi
 **obsoleto em 2026-10-16**. As menções a "roteiro do curso" e a "material do curso" que ainda aparecem nos
-capítulos são **históricas**: dizem de onde um número veio, e não são material vigente. O que vale é o que
-está neste repositório: o registro empírico conferido, as declarações e os laboratórios em Rust.
+capítulos são **históricas**. Elas dizem de onde um número veio, e não são material vigente. Vale o que este
+repositório guarda. É o registro empírico conferido, as declarações e os laboratórios em Rust.
 
 ### D.1 Documentos do projeto
 
@@ -239,12 +241,12 @@ está neste repositório: o registro empírico conferido, as declarações e os 
   [PLAN.md](https://docs.google.com/document/d/1hXvDuJyckooL1_qx9gspkSkBqgjyhAUVQvQ3F-Crinc/edit),
   [AGENTS.md](https://docs.google.com/document/d/1hniAsjLqgNVGqR1wZ1845GVkS5lZTEjhlH7MaI3U2Xk/edit) e
   [Estocologia: Fundamentação, Três Camadas e Inferência sob Incerteza](https://docs.google.com/document/d/1L5ittj7-RiSacEvNrkR4IS6yrQUyhusFpcDIWazINLI/edit)
-  — o desenho da máquina, o plano diretor e a fundamentação.
+  são o desenho da máquina, o plano diretor e a fundamentação.
 - [Estocologia: Velhas Fronteiras, Novos Horizontes](https://claude.ai/code/artifact/69dbc377-114b-4cb7-a3c1-322387abc674)
-  — o artigo, com a lista completa de referências.
-- **[histórico]** O curso *Pensamento Crítico e Modelos Estocásticos* — **aposentado em 2026-10-16**. Fica citado porque vários números do livro vieram das suas simulações, com a fonte agora declarada nos capítulos; nada do livro depende dele.
-- `referencias/CONFERENCIA.md` — a conferência das referências, feita em 15 de outubro de 2026 contra a API do
-  Crossref, as páginas das editoras, o PubMed e o RePEc. É o modelo do que fazer com a sua própria bibliografia:
+  é o artigo, com a lista completa de referências.
+- **[histórico]** O curso *Pensamento Crítico e Modelos Estocásticos*, **aposentado em 2026-10-16**. Fica citado porque vários números do livro vieram das suas simulações, com a fonte agora declarada nos capítulos; nada do livro depende dele.
+- `referencias/CONFERENCIA.md`: a conferência das referências, feita em 15 de outubro de 2026 contra a API do
+  Crossref, as páginas das editoras, o PubMed e o RePEc. É o modelo do que fazer com a sua bibliografia. São
   25 referências conferidas uma a uma, uma correção aplicada (o artigo é de **Meyer**, Viscusi e Durbin, e não de
   Viscusi e Durbin), uma revista trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*), e a
   nota de que SHELF é um protocolo, não o livro de O'Hagan e colegas.
@@ -317,19 +319,19 @@ está neste repositório: o registro empírico conferido, as declarações e os 
 ### D.5 Como usar esta lista
 
 Leia na ordem em que a curiosidade pedir, e desconfie de quem apresenta qualquer um destes trabalhos como
-resposta final. Três conselhos práticos. Primeiro: leia os dados antes do método — quase todo erro de leitura
-nasce de não perguntar de onde veio a tabela. Segundo: quando um artigo cita um número, procure o número no
-código ou no apêndice, e não no resumo. Terceiro: guarde a versão do ambiente junto do número que reproduziu;
-este livro tem um capítulo inteiro que só existe porque alguém fez isso.
+resposta final. Três conselhos práticos. Primeiro, leia os dados antes do método, porque quase todo erro de
+leitura nasce de não perguntar de onde veio a tabela. Segundo, quando um artigo cita um número, procure o
+número no código ou no apêndice, e não no resumo. Terceiro, guarde a versão do ambiente junto do número que
+reproduziu; este livro tem um capítulo inteiro que só existe porque alguém fez isso.
 
 ### D.6 O que já foi conferido e o que falta conferir
 
-A conferência das referências do projeto está em `referencias/CONFERENCIA.md`: 25 referências checadas uma
-a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc, com uma correção aplicada (o
+A conferência das referências do projeto está em `referencias/CONFERENCIA.md`. São 25 referências checadas
+uma a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc, com uma correção aplicada (o
 artigo do teto do benefício é de **Meyer**, Viscusi e Durbin, e não de Viscusi e Durbin) e uma revista
 trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*).
 
-O que falta, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
-baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no próprio livro qualquer
-divergência que apareça — do mesmo modo que os capítulos declaram as divergências de número.
+Falta o seguinte, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
+baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no livro qualquer divergência que
+apareça, como os capítulos já fazem com as divergências de número.
 

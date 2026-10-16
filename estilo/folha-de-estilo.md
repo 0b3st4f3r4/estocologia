@@ -47,7 +47,7 @@ parar de se repetir, não o número chegar a zero.
 
 | Padrão | Antes | Alvo | Regra de exceção |
 | --- | --- | --- | --- |
-| travessão apostivo ` — ` | 430 | ≤ 170 (≈ 1 por 400 palavras) | fica só onde a interrupção é de fato abrupta |
+| travessão apostivo ` — ` | 430 | ≤ 170 (≈ 1 por 400 palavras) | fica só onde a interrupção é de fato abrupta. Piso estrutural: 3 por capítulo, nos cabeçalhos `### Degrau N — …`, mais o dos estilemas declarados |
 | `mesmo/mesma` | 302 | ≤ 90 | fica onde a identidade **é** o argumento, e aí a frase diz de que identidade se trata |
 | `o mesmo` | 90 | ≤ 20 | idem, com o substantivo repetido em vez de `o mesmo` |
 | `o que` relativo | 287 | ≤ 90 | nunca duas ocorrências no mesmo período, nem uma por período em parágrafo curto |
@@ -85,9 +85,102 @@ pendência em `estilo/decisoes.md` e a decisão é do autor.
 Piso de 700 palavras por capítulo, cobrado por `book/gerar.py --check`. A reescrita corta repetição, não
 conteúdo.
 
+## Passadas registradas
+
+### `book/cap05.md` — 2026-10-16
+
+Prosa fora das cercas: 2069 → 2083 palavras. Contagem depois: travessão apostivo 10 → 4 (das quais 3
+são cabeçalhos `### Degrau N — …`, fora da passada, e 1 fecha a frase de propósito: "sobra uma diferença
+— o pedágio"); `travessao_fecha_com_e` 1 → 0; `mesmo/mesma` 13 → 1; `o mesmo` 2 → 0; `o que` relativo
+5 → 4; `, não` 1 → 1 (a correção "A variabilidade, não a média, decide" é o contraste que o argumento
+usa); dois-pontos 29 → 18; `exatamente` 1 → 1 ("o posto é exatamente esse caso", onde o valor é o
+argumento). `python3 estilo/conferir-passada.py book/cap05.md` fecha com `com regressao: 0`.
+
+Decisões desta passada, para valerem nos capítulos seguintes:
+
+- Definição com aposto explicativo curto vira parêntese: `Numa função **convexa** (boca para cima, como
+  $x^2$),…`. Só o travessão de interrupção abrupta fica.
+- Comparação quantitativa dentro do mesmo cálculo carrega a conjunção e não o travessão: "29,3 minutos,
+  quase o triplo dos 10 minutos da alegação"; "prevê 0,185, quase igual".
+- Definição nominal perde o travessão para o `**negrito**` fazer a marcação: "sobra uma diferença — o
+  pedágio" fica; "A fórmula se lê como um preço — **curvatura vezes dispersão**" não ficou, porque o
+  alvo de travessão do capítulo é apertado e a vírgula dá conta.
+- Identidade que **é** o argumento conserva o adjetivo e diz de que identidade se trata: em `cap05` só
+  ficou uma ocorrência, "a média é a mesma" no `**Resumo.**` depois de o corpo do capítulo provar a
+  igualdade da demanda nos dois mundos.
+- `o que` relativo cede ao verbo direto ("O nulo mede o que a margem deve prever" já é verbo; "vê o que
+  a planilha esconde" fica porque o contraste é entre ver e esconder, não entre relativos).
+
+### `book/cap06.md` — 2026-10-16
+
+Prosa fora das cercas: 2311 → 2295 palavras. Contagem depois: travessão apostivo 19 → 7 (dos sete, um é
+célula de tabela no quadro do Rubin, um fecha a frase de propósito — "o erro-padrão de sempre" — e cinco
+são prosa convertida em vírgula, dois-pontos ou período); `travessao_fecha_com_e` 3 → 1; `mesmo/mesma`
+21 → 7 (seis fora do `**Declaração de divergência**`, que fica intacto); `o mesmo` 9 → 4, todas em
+igualdade numérica ("vale o mesmo que 81 observações"); `o que` relativo 10 → 7 (três em cabeçalho de
+tabela, um em exercício, três em exercício ou `**Resumo.**`); `, não` 8 → 2, as duas dentro de tabela;
+dois-pontos 30 → 16; `próprio` 2 → 1; `não é X, é Y` 1 → 1; `exatamente` 0 → 0.
+`python3 estilo/conferir-passada.py book/cap06.md` fecha com `com regressao: 0`.
+
+Decisões desta passada, para valerem nos capítulos seguintes:
+
+- Oposição retórica cabe dentro de célula de tabela sem `, não`: "Analisar os casos completos perde
+  precisão — nenhum viés entra". O travessão existe para não gastar o par travessão-ponto na única linha
+  da tabela que ainda trazia a vírgula.
+- `mesmo` que expressa igualdade numérica é argumento, não intensificador: "2,65 milhões de chamadas
+  valem o mesmo que **81** observações" fica; "na mesma proporção em que votam" vira "na proporção do
+  voto de cada um".
+- `o mesmo` que introduz uma unidade já nomeada vira artigo definido: "os pacientes de um mesmo dia"
+  vira "os pacientes de um dia"; onde o capítulo compara a própria unidade, a forma fica ("As chamadas
+  de um mesmo dia, porém, compartilham a demanda").
+
 ## O que ficou intacto de propósito
 
 - Todas as oito linhas da lista fechada acima, por contrato.
 - Os 24 blocos ` ```text `, conferidos contra o instrumento: `0` divergentes antes da passada.
 - Os valores da rampa, as declarações de divergência e os nomes de instrumento, porque são o contrato
   auditável do livro e não prosa.
+
+## Exceções registradas por capítulo
+
+- **`book/cap19.md` (2026-10-16).** O capítulo tinha 39 travessões apostivos, o maior valor do livro, com
+  alvo de ≤8: fechou em 6, dos quais 3 são títulos de degrau, 1 é célula de tabela, 1 é fecho de
+  exercício e 1 é prosa. `próprio` ficou em 8, contra o alvo de ≤4, porque as cinco ocorrências de prosa
+  são identidade reflexiva real (o eletrocardiograma que mede, o teste que se calibra, o gene que se
+  deleta, o grafo causal, a função principal do crate) e as três restantes estão em tabela. `virgula_nao`
+  ficou em 2: uma é qualificação (`não vazio`) e a outra é aposto, não oposição retórica. A decisão sobre
+  as três, com linha e citação, está em `estilo/decisoes.md`.
+
+## Decisões de contorno tomadas durante a passada
+
+1. **Prosa dentro de item de lista é prosa.** Item de `**Exercícios.**`, de `**Resumo.**` ou de lista
+   comum pode ser reescrito desde que o marcador, a ordem, a quantidade e a afirmação continuem iguais.
+   Célula de tabela segue congelada, porque a coluna manda no comprimento. Isso vale para as duas
+   passadas.
+2. **Piso do travessão apostivo.** Os 63 travessões dos cabeçalhos `### Degrau 1/2/3 — …` (3 por
+   capítulo) mais os dos parágrafos de **Declaração de divergência** são piso, não folga: o alvo de
+   densidade global (≤170) já os desconta.
+3. **Dois-pontos: a conta que vale é a de prosa.** `python3 estilo/dois_pontos.py` separa prosa, tabela e
+   cerca. O alvo de 60% de corte incide sobre a coluna de prosa; o piso de cada arquivo é o número de
+   dois-pontos que abrem lista, definição, equação, citação, quadro ou cerca.
+4. **Fala citada e pergunta de exercício** ficam na forma do autor: o `o que` interrogativo e o `, não`
+   dentro de citação direta não entram na reescrita.
+
+## Rulings da terceira rodada
+
+1. **Rótulo em negrito que abre parágrafo.** `**Monotonicidade:** com recurso total igual…` vira
+   `**Monotonicidade.** Com recurso total igual…`, que é o molde dos marcadores do livro
+   (`**Objetivos.**`, `**Resumo.**`) e o que o Capítulo 4 já fazia. Aplicado em
+   `book/horizontes-de-resolucao-da-pergunta.md` (nove rótulos), `book/README.md` e `book/cap02.md`.
+   Nome de seção que funciona como identificador de quadro continuou em pendência.
+2. **Dois-pontos que não é pontuação de prosa.** Endereço (`https://…`), par arquivo:linha
+   (`camada.rs:52`), referência com volume, número e páginas (`157(3):740–752`), hora e par de valor não
+   entram na conta de prosa nem na reescrita. Em `book/apendices.md` isso é a maior parte do resíduo.
+3. **Duas passadas por capítulo.** A primeira reescreve a prosa inteira; a segunda trata só os dois-pontos
+   de prosa que a primeira deixou passar. O alvo global do dois-pontos é 60% de corte sobre a coluna de
+   prosa, e o piso de cada arquivo é o número de colons que abrem lista, definição, equação, citação,
+   quadro ou cerca.
+4. **`o que` e `próprio` em célula de tabela, em título, em cabeçalho de bloco em negrito e em citação**
+   ficam: a varredura conta, a reescrita não toca. É o que fixa o piso de vários capítulos.
+5. **`mesmo` concessivo** (`pois mesmo o mundo que…`) e **`mesmo` idiomático de comparação**
+   (`valem o mesmo que X`) não são intensificadores: viraram `até` e `equivalem a`, e o padrão caiu junto.

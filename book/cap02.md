@@ -14,11 +14,11 @@ papel que representa a cidade, sempre incompleta e sempre desatualizada em algum
 motorista, você, com fome, com pressa, com atenção dividida, decidindo a cada cruzamento.
 
 Os três são coisas diferentes, e o mapa nunca é o território. Mas o motorista só age pelo mapa. Ali
-nasce quase todo erro que este livro estuda: **não no mapa, e sim na passagem do mundo para o
+nasce quase todo erro que este livro estuda. **Não no mapa, e sim na passagem do mundo para o
 mapa, e do mapa para a mão do motorista.**
 
-**A fila do posto de saúde.** Em cada 100 dias, o posto recebe pacientes assim: em metade dos dias,
-chegam 5 pessoas por hora; na outra metade, chegam 11. Em média, 8 pessoas por hora. O posto atende
+**A fila do posto de saúde.** Em cada 100 dias, o posto recebe pacientes de duas maneiras. Em metade
+dos dias chegam 5 pessoas por hora; na outra metade, chegam 11. Em média, 8 pessoas por hora. O posto atende
 12 por hora.
 
 A alegação do gestor é esta: *"a demanda média é 8, o posto atende 12, então a espera é de cerca de 10
@@ -51,10 +51,10 @@ números do repositório.
 | Agente | $L_3$ | Quem decide: pessoa, instituição ou algoritmo, com tempo e atenção limitados | Atalhos heurísticos, calibração, utilidade, laços em que a ação muda o Mundo |
 
 As três formam um laço. O Mundo gera dados, o Modelo os interpreta, o Agente age, e a ação volta a
-mudar o Mundo. Cada seta é uma **ponte** onde o erro entra: dados filtrados entre Mundo e Modelo,
-previsão mal lida entre Modelo e Agente, ação que deforma o Mundo que se queria medir.
+mudar o Mundo. Cada seta é uma **ponte** onde o erro entra. Os dados chegam filtrados entre Mundo e Modelo, a previsão
+é mal lida entre Modelo e Agente, e a ação deforma o Mundo que se queria medir.
 
-**A tese da ponte.** *Uma falácia, quase sempre, não é um erro de aritmética: é um desalinhamento
+**A tese da ponte.** *Uma falácia, quase sempre, não é um erro de aritmética, e sim um desalinhamento
 entre camadas.* Vale a pena dizer o que essa tese **não** afirma. Ela não diz que contas erradas não
 existem, nem que quem usa a arquitetura não erra. Ela diz onde procurar primeiro.
 
@@ -74,9 +74,9 @@ chamará de incerteza knightiana.
 **Os três sentidos de "viés".** A palavra é usada para três coisas que a disciplina separa para
 depois reunir. São o viés estatístico de um estimador (Modelo), o viés do processo que produziu os
 dados (Mundo) e o viés cognitivo de quem raciocina (Agente). Nos três casos o erro não é ruído que se
-cancela com mais dados: é uma distorção que se acumula.
+cancela com mais dados, e sim uma distorção que se acumula.
 
-**A tese tem uma versão operacional:** a maior parte dos vieses do catálogo clássico corresponde a um
+**A tese tem uma versão operacional.** A maior parte dos vieses do catálogo clássico corresponde a um
 modelo de acaso que foi ignorado.
 
 | Viés | Modelo de acaso ignorado |
@@ -91,18 +91,18 @@ modelo de acaso que foi ignorado.
 
 **A falácia do promotor.** O Agente lê a verossimilhança do Modelo, $P(\text{evidência} \mid
 \text{inocente})$, como se fosse a resposta sobre o Mundo, $P(\text{inocente} \mid \text{evidência})$.
-Os dois números são diferentes, e a diferença depende inteiramente da camada $L_1$: de quantas pessoas
-inocentes se está falando.
+Os dois números são diferentes, e a diferença depende inteiramente da camada $L_1$, ou seja, de quantas
+pessoas inocentes se está falando.
 
 **O paradoxo da inspeção.** O Agente impõe um Modelo estável a um Mundo que oscila, como o gestor do
 posto, que projetou a fila do dia médio para todos os dias.
 
 **A tese foi testada uma vez.** Doze casos foram montados a partir de uma lista externa de dez erros
-estatísticos comuns (Makin e Orban de Xivry, 2019): oito com um defeito plantado, quatro limpos,
-analisados às cegas por dois braços independentes, um com a arquitetura deste livro, outro com a
-instrução de analisar com rigor, sem agentes nem portões. Os dois apontaram os 8 defeitos e deram zero
+estatísticos comuns (Makin e Orban de Xivry, 2019). Oito casos tinham um defeito plantado e quatro
+estavam limpos; dois braços independentes os analisaram às cegas, um com a arquitetura deste livro,
+outro com a instrução de analisar com rigor, sem agentes nem portões. Os dois apontaram os 8 defeitos e deram zero
 alarme falso nos 4 casos limpos. A regra fixada de antemão dizia que **um empate no teto não sustenta a
-tese**, e foi isso que o resultado disse. O empate também não a refuta: mostra que, para os dez erros
+tese**, e foi isso que o resultado disse. O empate também não a refuta. Ele mostra que, para os dez erros
 dessa lista, um analista competente acha tudo o que o outro acha. Se a tese vale, vale para erros que a
 lista não cobre, e um teste justo disso precisa de casos mais difíceis, escolhidos fora do programa, de
 analistas humanos e de um juiz humano. O Capítulo 21 volta a esse ponto.
@@ -124,8 +124,8 @@ pub enum TipoIncerteza { Aleatoria, Epistemica, Knightiana }
 ```
 
 Quem escrever uma função que recebe `Camada::Modelo` não consegue passar um `Camada::Agente`
-sem escrever essa conversão à mão, e a conversão à mão é exatamente o lugar onde o leitor do código vai
-parar para pensar.
+sem escrever essa conversão à mão, e a conversão à mão é o lugar onde o leitor do código vai parar
+para pensar.
 
 **A ponte medida.** O laboratório do capítulo pergunta o seguinte. Uma coincidência de DNA ocorre por
 acaso em 1 pessoa em cada 1 milhão. Em três mundos diferentes, em que a chance prévia de o réu ser o
@@ -138,8 +138,8 @@ prevalencia 1e-3: P(evidencia|inocente)=0.00000100  P(inocente|evidencia)=0.0010
 prevalencia 1e-6: P(evidencia|inocente)=0.00000100  P(inocente|evidencia)=0.5000  fator da troca=499999.7
 ```
 
-A primeira coluna é a mesma nos três mundos: **0,000001**. É a verossimilhança, e é o número que o
-promotor cita. A segunda coluna é a resposta. Com a mesma evidência e a mesma verossimilhança, a chance
+A primeira coluna não muda nos três mundos, **0,000001**. É a verossimilhança, e é o número que o
+promotor cita. A segunda coluna é a resposta. Com evidência e verossimilhança idênticas, a chance
 de inocência vai de **0,0001** (0,01%) a **0,5** (50%). A terceira coluna mostra quanto a troca mente:
 99 vezes no primeiro mundo, 499.999,7 vezes no último. O erro não está na conta; está em responder
 sobre o Mundo com um número do Modelo.

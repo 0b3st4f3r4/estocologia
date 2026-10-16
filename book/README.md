@@ -26,7 +26,7 @@ cargo test --workspace                       # testes dos crates do livro e da a
 
 ## Dados reais nos laboratórios
 
-Os laboratórios dos capítulos 17 e 18 leem as bases do próprio repositório
+Os laboratórios dos capítulos 17 e 18 leem as bases guardadas no repositório
 (~dados-reais/djia_1885_2023.csv~, ~nsw_experimental.csv~, ~cps_observational.csv~,
 ~danish_fire.csv~). O caminho padrão é relativo à raiz do repositório; para apontar para outro lugar,
 use a variável de ambiente:
@@ -37,9 +37,9 @@ ESTOCOLOGIA_DADOS=/caminho/para/dados cargo run --release --bin labs -- --cap 17
 
 ## Regra dos arquivos novos
 
-Arquivo novo de trabalho — cópia intermediária, script de uma vez, rascunho de laboratório — é **apagado depois
-da integração**. O que fica no repositório é artefato com função contínua (o gerador, os dois conferidores, o
-crate) ou registro (capítulos, declarações, manifestos, relatórios).
+Arquivo novo de trabalho (cópia intermediária, script de uma vez, rascunho de laboratório) é **apagado depois
+da integração**. Fica no repositório artefato com função contínua (o gerador, os dois conferidores, o crate)
+ou registro (capítulos, declarações, manifestos, relatórios).
 
 ## Regra dos números
 

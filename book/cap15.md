@@ -11,29 +11,29 @@ por que o auditor ser parte interessada é um limite que nenhuma assinatura reso
 
 **Pintar o alvo depois do tiro.** Um atirador dispara dez tiros contra a parede de um celeiro. Depois olha os
 buracos, pega um pincel e desenha um alvo em volta do grupo mais apertado. Aí mostra o alvo e diz: "cinco
-acertos no centro". A conta de acertos está certa — e o alvo é falso. A única coisa que separa a ciência
+acertos no centro". A conta de acertos está certa, e o alvo é falso. A única coisa que separa a ciência
 desse atirador é **quando** o alvo foi desenhado.
 
-Não existe jeito de desfazer isso olhando o resultado. O que existe é uma senha: escrever e **congelar** o
+Não existe jeito de desfazer isso olhando o resultado. A senha consiste em escrever e **congelar** o
 alvo antes do tiro, de um jeito que ninguém consiga alterar depois sem que se perceba. Em cada 100
 resultados publicados, os que mais se parecem com trapaca são justamente os limpos, ajustados um pouquinho
 depois de ver os dados. A diferença entre "ajustei o modelo" e "ajustei o modelo depois de ver o resultado"
-não está no modelo: está na **ordem dos fatos**.
+não está no modelo, e sim na **ordem dos fatos**.
 
-**A senha é um número.** Como congelar? Publicando o **hash** do arquivo. O hash é uma impressão digital: pega
+**A senha é um número.** Como congelar? Publicando o **hash** do arquivo. O hash é uma impressão digital. Ele pega
 o conteúdo inteiro, do primeiro ao último caractere, e devolve uma linha de 64 caracteres. Trocar uma vírgula
-muda a impressão toda. Publicar o hash antes do tiro é como lacrar o envelope em cartório: você não precisa
+muda a impressão toda. Publicar o hash antes do tiro é como lacrar o envelope em cartório. Você não precisa
 mostrar o conteúdo agora, mas depois ninguém abre o envelope sem que apareça.
 
 **O cofre.** Imagine um banco que recebe um boleto de cada cliente. Um dia o banco decide construir um
 "cofre fora do tempo": uma pasta com os dados dos próximos três meses, que nenhum analista pode abrir. O
 modelo é construído com o passado; quando termina, alguém abre o cofre e roda o modelo contra dados que ele
 nunca viu. Abrir o cofre custa a única coisa que ele tinha: a surpresa. Na pesquisa, quando um cofre já foi
-aberto e o modelo precisa de correção, a correção só vale testada num **cofre novo**, que ninguém viu — e
-foram três cofres até acertar a calibração das prisões de Toronto.
+aberto e o modelo precisa de correção, a correção só vale testada num **cofre novo**, que ninguém viu. Foram
+três cofres até acertar a calibração das prisões de Toronto.
 
 **O diário de previsões.** Toda previsão probabilística emitida fica registrada num livro-razão contínuo, com
-a fonte, o filtro, se o próprio sistema pode influir no resultado, quantos fatores a justificativa tem e o
+a fonte, o filtro, se o sistema pode influir no resultado, quantos fatores a justificativa tem e o
 degrau de Pearl. E com um limite: **a previsão nunca é 0% nem 100%**, e sim algo entre "um em cem" e
 "noventa e nove em cem". Sem esse limite, quem aposta na certeza nunca perde pontos e nunca aprende; com o
 limite, cada previsor acumula um histórico que pode ser cobrado.
@@ -43,7 +43,7 @@ limite, cada previsor acumula um histórico que pode ser cobrado.
 ### Degrau 2 — A regra do jogo
 
 **O risco de escala é epistemológico.** Quando um sistema testa centenas de hipóteses e especificações em
-paralelo, o maior risco não é técnico: é o sobreajuste em escala industrial, o jardim dos caminhos que se
+paralelo, o maior risco não é técnico; é o sobreajuste em escala industrial, o jardim dos caminhos que se
 bifurcam percorrido por máquinas incansáveis. O plano impõe três mecanismos de contenção.
 
 **Pré-registro com hash e contador de tentativas.** Antes que qualquer agente acesse a partição de teste, a
@@ -53,29 +53,29 @@ da rodada a que se aplicava, mas cada rodada nova foi escrita sabendo das anteri
 depois de ver resultados ficaram registradas e **contam no $K$**.
 
 O sistema mantém um contador $K$ de especificações tentadas por pergunta. Toda tentativa falha fica
-registrada, e o relatório final é obrigado a declarar $K$. O plano pede mais: que $K$ penalize a
+registrada, e o relatório final é obrigado a declarar $K$. O plano vai mais longe e pede que $K$ penalize a
 complexidade, pelo comprimento mínimo de descrição (MDL) ou pelo fator de Occam, junto com a correção para
 comparações múltiplas. Na pesquisa, $K$ foi declarado, mas **nenhuma dessas penalidades foi aplicada**. Foi
 por esse contador que a respecificação dos domínios do $H_2$ parou em $K = 3$, e o passo seguinte foi buscar
-dados novos. O contador por domínio não registra, porém, que o portão foi tentado em sete rodadas — e
+dados novos. O contador por domínio não registra, porém, que o portão foi tentado em sete rodadas, e
 nenhuma correção por isso foi aplicada. A auditoria de fundo depois desse passo mediu o $K$ **honesto** do
 portão do $H_2$: **38 testes distintos** (com a faixa de 32 a 72 segundo o critério de contagem), e com
 Bonferroni o $H_{2g}$ mantém as quatro áreas de então, com os conjuntos $\hat S$ encolhendo.
 
 **O cofre fora do tempo.** A partição temporal futura fica sob custódia exclusiva do agente de ciclo de vida
 ($F_3$). Nenhum agente de modelagem a lê durante o desenvolvimento; ela é aberta uma única vez para pontuar
-calibração e verificar ausência de vazamento. A regra é dura e tem consequência: quando um cofre já foi
-aberto e o modelo precisa de correção, a correção só vale testada num cofre novo. Foi o que o $H_3$ fez três
-vezes — com os voos de 2023, com as prisões de Toronto de 2020–2021 e com as paradas de trânsito de Rhode
+calibração e verificar ausência de vazamento. A regra é dura e tem consequência. Quando um cofre já foi
+aberto e o modelo precisa de correção, a correção só vale testada num cofre novo. O $H_3$ fez isso três
+vezes: com os voos de 2023, com as prisões de Toronto de 2020–2021 e com as paradas de trânsito de Rhode
 Island.
 
 **O diário de previsões e o barramento.** Cada agente que emite previsões probabilísticas as grava num
 livro-razão contínuo, restrito ao intervalo $[1\%, 99\%]$. Agentes cujo escore de Brier perde para a
 taxa-base, ou cujo capital de Kelly colapsa, têm o peso reduzido pelo orquestrador. O barramento de fichas é
 **encadeado por hash**: cada mensagem carrega o hash da anterior, e a trilha não pode ser reescrita sem quebrar
-a cadeia. Uma lição de implementação veio cedo: no $H_1$, o placar do diário somava o mesmo previsor entre
-projetos diferentes, e o erro foi corrigido e declarado no README; os números do $H_1$ publicados depois
-disso já vêm da versão corrigida.
+a cadeia. Uma lição de implementação veio cedo. No $H_1$, o placar do diário somava num só o previsor
+que aparecia em projetos diferentes, e o erro foi corrigido e declarado no README; os números do $H_1$
+publicados depois disso já vêm da versão corrigida.
 
 **Pareceres de risco e o responsável nomeado.** O agente de governança ($F_5$) emite um parecer de risco para
 cada projeto avaliado, inclusive os que não chegam à decisão. Na pesquisa foram **21**: 18 do $H_2$ e 3 do
@@ -85,27 +85,27 @@ Educação (turmas do STAR), Saúde (o experimento de seguro da RAND) e o progra
 Os 21 pareceres foram assinados em 15 de outubro de 2026, depois de ler um resumo deles que destacava os
 quatro que envolvem pessoas. A assinatura fica num registro separado, em que cada parecer é identificado pelo
 SHA-256 do arquivo no momento da assinatura. Os arquivos de resultado **não foram reescritos**, para não mudar
-as saídas que a reprodução limpa compara. O parecer do Direito carrega uma ressalva factual: a recomendação de
+as saídas que a reprodução limpa compara. O parecer do Direito carrega uma ressalva factual. A recomendação de
 adotar um corte de 10% vem de uma decisão e de um custo **inventados** no $F_1$, e não é conselho de política.
 
-As assinaturas são nominais: cada parecer traz o nome curto do responsável (**sil**) e o resumo criptográfico do arquivo, em `governanca/ASSINATURAS.md`.
+As assinaturas são nominais. Cada parecer traz o nome curto do responsável (**sil**) e o resumo criptográfico do arquivo, em `governanca/ASSINATURAS.md`.
 
 **O limite: o auditor é parte interessada.** Os pareceres foram assinados por quem conduz o programa. Uma
 auditoria autorizada por quem é auditado tem valor limitado. O responsável nomeado responde à pergunta que
-uma auditoria precisa responder — quem decidiu usar, quem aprovou, quem olha o placar, quem desliga — mas
-nomear um responsável **não torna a auditoria independente**. O que o programa fez na direção que uma
-auditoria exige foi registrar o que a auditoria **não pôde olhar** e quais grupos afetados foram ouvidos: o
-registro declara que, nas sete decisões que envolvem pessoas — cortar o benefício em 10%, reduzir as turmas
+uma auditoria precisa responder (quem decidiu usar, quem aprovou, quem olha o placar, quem desliga), mas
+nomear um responsável **não torna a auditoria independente**. Na direção que uma auditoria exige, o programa
+registrou os pontos que a auditoria **não pôde olhar** e quais grupos afetados foram ouvidos. O registro
+declara que, nas sete decisões que envolvem pessoas (cortar o benefício em 10%, reduzir as turmas
 do STAR, trocar o cuidado gratuito por coparticipação, comparar o treino do NSW com controles do CPS e as
-três marcas de revisão dos fluxos de prisões — **nenhum dos sete grupos afetados foi ouvido**. Não há no
+três marcas de revisão dos fluxos de prisões), **nenhum dos sete grupos afetados foi ouvido**. Não há no
 repositório registro de consulta, entrevista, painel ou consentimento. Falta também o passo mais barato e
 mais óbvio da lista: a elicitação com especialistas humanos.
 
-**A auditoria de fundo: o que foi suposto e o que se mediu.** A governança também serve para marcar o que
-**não** foi medido, e para depois medir. A pesquisa se vira contra si mesma numa auditoria de fundo: dez
+**A auditoria de fundo: o que foi suposto e o que se mediu.** A governança também serve para marcar os pontos
+**não** medidos, e para depois medi-los. A pesquisa se vira contra si mesma numa auditoria de fundo. Dez
 pontos que o texto sustentava e que nunca haviam sido postos à prova viraram frentes de trabalho, às quais se
 somaram, depois, as extensões (evento raro, saúde, ficha e contrato) e a frente da elicitação humana, que
-espera gente. Cada frente segue a mesma regra dos horizontes: a declaração com hash vem **antes** de rodar, o
+espera gente. Cada frente repete a regra dos horizontes: a declaração com hash vem **antes** de rodar, o
 resultado é relatado com os limites, e mudança de critério depois de ver o resultado entra como declaração
 nova e conta no número de tentativas.
 
@@ -126,24 +126,24 @@ nova e conta no número de tentativas.
 
 **Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala saíram da árvore em 2026-10-16 por não sustentarem resultado central da teoria; os números acima continuam registrados aqui, e o material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
 
-Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o $H_3$ corrigiu é
-cerca de quatro vezes o que se mediu num caso real. A tolerância de 0,03 do erro de calibração é maior que o
-ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de
-transferência do $H_2$ depende de qual versão de cada escolha conta: a área da Educação não sobrevive à
+Três desses resultados apertam o alcance autorizado pelos capítulos anteriores. O laço de 0,6 que o $H_3$
+corrigiu é cerca de quatro vezes a medida de um caso real. A tolerância de 0,03 do erro de calibração é maior
+que o ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de
+transferência do $H_2$ depende de qual versão de cada escolha conta. A área da Educação não sobrevive à
 correção de agrupamento, e quem sustenta a terceira área agora é a Genética replicada. **Nenhum número
-publicado caiu por erro de conta; o que a auditoria estreita é o que esses números autorizam.**
+publicado caiu por erro de conta; a auditoria estreita o alcance autorizado desses números.**
 
-O que continua em aberto tem nome. A elicitação com especialistas humanos de verdade, porque a auditoria
-mediu a sensibilidade às prioris e isso não substitui um painel — o protocolo e os seis formulários estão
+As questões em aberto têm nome. A elicitação com especialistas humanos de verdade, porque a auditoria
+mediu a sensibilidade às prioris e isso não substitui um painel. O protocolo e os seis formulários estão
 escritos, com o critério de $K = 2$ pronto, e **nenhuma entrevista foi feita**. A taxa nula da validação por
-intervenção da Genética, que decide com um único gene em 27: ela saiu em $p = 0{,}001$, o piso de 999
-sorteios, e o que segue aberto ali é a **resolução**, não o $p$. E o tempo de atendimento e a paciência dos
+intervenção da Genética, que decide com um único gene em 27, saiu em $p = 0{,}001$, o piso de 999
+sorteios; a resolução segue em aberto ali, e não o $p$. E o tempo de atendimento e a paciência dos
 clientes da central, que a base não traz e que continuam supostos.
 
-Fica também o limite de o auditor ser parte interessada, que a auditoria não resolveu: um dos passos que ela
-mesma propõe é que a mesma pessoa releia por inteiro os 21 pareceres assinados, um a um, e confirme ou retire
+Fica também o limite de o auditor ser parte interessada, que a auditoria não resolveu. Um dos passos que ela
+propõe é que quem assinou releia por inteiro os 21 pareceres assinados, um a um, e confirme ou retire
 a assinatura registrando que leu o texto integral. O formulário de releitura das 21 linhas existe, com os
-hashes conferidos um a um — **21 de 21 batem** — e está **em branco de propósito**: nada foi relido, nada foi
+hashes conferidos um a um (**21 de 21 batem**), e está **em branco de propósito**. Nada foi relido, nada foi
 confirmado e nada foi assinado ali. Enquanto isso não acontece, a assinatura vale pelo que ela é: a
 declaração de quem conduz o programa de que leu um resumo.
 
@@ -176,18 +176,18 @@ trocar uma ficha do lote muda a raiz em 7 de 7 casos
 Quatro leituras.
 
 **A implementação está certa, e isso é a base de tudo.** Os dois vetores conhecidos do SHA-256 batem
-caractere a caractere: a string vazia dá `e3b0c442...b855` e `abc` dá `ba7816bf...15ad`. Sem essa
+caractere a caractere. A string vazia dá `e3b0c442...b855` e `abc` dá `ba7816bf...15ad`. Sem essa
 conferência, todo o resto da trilha seria um número inventado com aparência de segurança.
 
 **Um caractere no passado derruba a corrente.** A corrente de cinco eventos está íntegra. Mudando
-`canario=ok` para `canario=nok` no evento 2 e **recalculando o hash do próprio evento** — o ataque mais
-óbvio, em que conteúdo e hash concordam entre si — a verificação falha: o evento 3 guarda o hash antigo do
+`canario=ok` para `canario=nok` no evento 2 e **recalculando o hash daquele evento** (o ataque mais
+óbvio, em que conteúdo e hash concordam entre si), a verificação falha. O evento 3 guarda o hash antigo do
 evento 2 como "anterior", e a incompatibilidade aparece. Das cinco alterações testadas, uma por evento,
 **5 de 5** invalidam a corrente.
 
 **A corrente sozinha não basta: a raiz é a prova.** Se o atacante reescrever também os três eventos seguintes,
-a corrente volta a fechar localmente — a verificação passa —, mas a **raiz publicada** muda. Essa linha é o
-coração do capítulo: o que torna a trilha inviolável não é a corrente, é o hash publicado **antes**. Quem
+a corrente volta a fechar localmente (a verificação passa), mas a **raiz publicada** muda. Essa linha é o
+coração do capítulo. A trilha fica inviolável pelo hash publicado **antes**, e não pela corrente. Quem
 guarda só a corrente guarda um documento que pode ser reescrito por inteiro; quem guarda a raiz guarda o
 lacre.
 
@@ -224,12 +224,12 @@ Nenhum valor antigo foi apagado.
 
 **Resumo.**
 
-- O pré-registro com hash é a única senha contra o ajuste depois de ver o resultado: a hipótese é congelada
+- O pré-registro com hash é a única senha contra o ajuste depois de ver o resultado. A hipótese é congelada
   antes, e o hash publicado é o lacre.
 - O contador $K$ torna as tentativas visíveis; a auditoria de fundo mediu $K = 38$ no portão do $H_2$, contra
   o $K = 3$ por domínio.
-- O cofre fora do tempo só se abre uma vez; correções pedem cofre novo — foram três até acertar a calibração.
+- O cofre fora do tempo só se abre uma vez; correções pedem cofre novo, e foram três até acertar a calibração.
 - O diário pontua cada previsor com regra própria, dentro de $[1\%, 99\%]$, e pesa os agentes pelo placar; a
   corrente de fichas é encadeada por SHA-256.
-- Pareceres assinados nomeiam o responsável, mas não tornam a auditoria independente: nenhum dos sete grupos
+- Pareceres assinados nomeiam o responsável, mas não tornam a auditoria independente. Nenhum dos sete grupos
   afetados foi ouvido, e o formulário de releitura dos 21 pareceres está em branco de propósito.

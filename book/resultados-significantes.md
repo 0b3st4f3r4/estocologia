@@ -1,9 +1,9 @@
 # Quais resultados do livro são significantes para a teoria
 
 Triagem feita em 2026-10-16 sobre os 39 resultados levantados em
-`resultados-que-dependem-de-python.md`. A pergunta aqui não é "de onde vem o número", é outra: **o que, se
-caísse, derrubaria a teoria?** A resposta separa três camadas: o que sustenta um axioma, o que confirma um
-princípio conhecido com número próprio, e o que é ilustração didática.
+`resultados-que-dependem-de-python.md`. A pergunta aqui é outra. Em vez de "de onde vem o número", ela quer
+saber **o que, se caísse, derrubaria a teoria?** A resposta separa três camadas: a que sustenta um axioma, a
+que confirma um princípio conhecido com número medido neste programa, e a que serve de ilustração didática.
 
 ## Camada A — o que a teoria não pode perder
 
@@ -40,9 +40,9 @@ sustentam nada que caia se o número mudar.
 
 ## O que a triagem muda no plano
 
-- Os invariantes do $\Phi_1$ ao $\Phi_4$ ficam com fundamento declarado: $\Phi_2$ tem quatro escalas, $\Phi_3$
+- Os invariantes do $\Phi_1$ ao $\Phi_4$ ficam com fundamento declarado. $\Phi_2$ tem quatro escalas, $\Phi_3$
   tem o LaLonde, $\Phi_4$ tem os incêndios.
-- Duas entradas teóricas nasceram da própria pesquisa e não da literatura: **o portão que reprova o agente**
-  (Camada A, incêndios) e **a performatividade como grandeza** (Camada A, Goodhart).
+- Duas entradas teóricas nasceram da pesquisa deste programa e não da literatura: **o portão que reprova o
+  agente** (Camada A, incêndios) e **a performatividade como grandeza** (Camada A, Goodhart).
 - Um resultado negativo (o empate dos 12 casos) e um limite ético (nenhum grupo afetado ouvido) ficam no corpo
-  da teoria, porque delimitam o que ela promete.
+  da teoria, porque delimitam até onde ela promete.

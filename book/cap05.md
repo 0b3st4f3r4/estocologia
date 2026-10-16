@@ -11,15 +11,15 @@ unidade de fato independente.
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**O posto de saúde.** Em cada 100 dias, o posto recebe pacientes assim: em 50 dias chegam 5 pessoas por
-hora; nos outros 50, chegam 11. A média é 8 pessoas por hora. O posto consegue atender 12 por hora.
+**O posto de saúde.** Em cada 100 dias, o posto recebe pacientes de duas maneiras. Em 50 dias chegam 5
+pessoas por hora; nos outros 50, chegam 11. A média é 8 pessoas por hora. O posto consegue atender 12 por hora.
 
 O gestor olha a planilha e diz: *"a demanda média é 8, o posto atende 12, sobra folga; a espera média
 tem de ficar em torno de 10 minutos, e não há por que contratar"*. Nenhuma conta errada foi feita. E,
 ainda assim, o mundo que a planilha descreve não existe.
 
-A tabela abaixo retoma os dois mundos do Capítulo 1, repetidos aqui para medir o pedágio, e nos dois a
-demanda média é de 8 pacientes por hora.
+A tabela abaixo retoma os dois mundos do Capítulo 1, repetidos aqui para medir o pedágio, e a demanda
+média não muda de uma linha para a outra.
 
 | Mundo | Espera média por paciente | Em cada 100 pacientes, quantos esperam mais de 30 min |
 | --- | --- | --- |
@@ -29,14 +29,14 @@ demanda média é de 8 pacientes por hora.
 A média não mudou em nada. A espera média mais que dobrou, e o número de pessoas que esperam mais de meia hora
 triplicou. Uma decisão sobre contratar pessoal, tomada no primeiro mundo, é aplicada no segundo.
 
-**A curva.** Desenhe num papel a função $y = x^2$: uma parábola com a boca para cima. Marque dois
+**A curva.** Desenhe num papel a função $y = x^2$. Ela é uma parábola com a boca para cima. Marque dois
 pontos, $x = 0$ e $x = 2$. A média deles é 1, e a altura da curva em 1 é 1. Mas a média das alturas é
 $(0^2 + 2^2)/2 = 2$. Olhe o desenho. O ponto da curva no meio (1) fica **abaixo** da corda que liga os
 dois pontos (2). É essa a assimetria que este capítulo mede.
 
-Numa função **convexa** — boca para cima, como $x^2$ —, a média das alturas é sempre maior ou igual à
-altura da média. Numa função **côncava** — boca para baixo, como $-x^2$ ou a raiz quadrada —, vale o
-contrário: a média das alturas fica abaixo da altura da média.
+Numa função **convexa** (boca para cima, como $x^2$), a média das alturas é sempre maior ou igual à
+altura da média. Na **côncava** (boca para baixo, como $-x^2$ ou a raiz quadrada), vale o contrário, e a
+média das alturas fica abaixo da altura da média.
 
 **A fila é uma curva de boca para cima.** Quando a demanda chega perto da capacidade de atendimento, a
 espera não cresce em linha reta; cresce cada vez mais rápido. No mundo do posto, isso significa que o
@@ -45,7 +45,7 @@ devolve.
 
 **A turma de média 6,2.** Numa prova com nota mínima 6,0, a média da turma foi 6,2. Quem lê só a média
 conclui que "o aluno médio foi aprovado". A conclusão exigiria um aluno que não existe, e a contagem
-desmente o resumo: **em cada 100 alunos, 45 ficaram abaixo de 6,0**. A média de 6,2 convive sem nenhum
+desmente o resumo. **Em cada 100 alunos, 45 ficaram abaixo de 6,0**. A média de 6,2 convive sem nenhum
 problema com 45% de reprovação. Como no posto, a média não é um resumo errado; é um resumo **insuficiente** para a pergunta
 que importa.
 
@@ -62,7 +62,7 @@ coisas ao mesmo tempo, e é o único caso em que as duas coincidem.
 $$\mathbb{E}[f(X)] \;\ge\; f(\mathbb{E}[X])$$
 
 Em palavras, a média do resultado **não** é o resultado do caso médio. A igualdade vale em dois casos, e
-só neles: quando $f$ é uma reta, ou quando $X$ não varia. Fora desses dois, sobra uma diferença — o
+só neles, quando $f$ é uma reta, ou quando $X$ não varia. Fora desses dois, sobra uma diferença, o
 pedágio.
 
 Para uma função côncava, a desigualdade se inverte: $\mathbb{E}[f(X)] \le f(\mathbb{E}[X])$.
@@ -82,7 +82,7 @@ $\lambda$ por hora e serviço de taxa $\mu$ por hora, é
 $$W(\lambda)=\frac{\lambda}{\mu(\mu-\lambda)}$$
 
 Com $\mu = 12$ e $\lambda = 8$, isso dá 10 minutos. Aplicada aos dois dias do mundo que oscila,
-$W(5) = 3,57$ min e $W(11) = 55$ min, e a média dos dois é 29,3 minutos — quase o triplo dos 10
+$W(5) = 3,57$ min e $W(11) = 55$ min, e a média dos dois é 29,3 minutos, quase o triplo dos 10
 minutos da alegação. A derivada segunda de $W$ em $\lambda = 8$ é
 $f''(8) = 120/(\mu-8)^3 = 1,875$ minuto por (paciente/hora)². Com a variância de $X$ igual a 9, o pedágio de segunda ordem é
 $\tfrac{1}{2}\cdot 1,875\cdot 9 = 8,44$ minutos. É muito, mas é menos que os 19,3 minutos que faltam.
@@ -90,7 +90,7 @@ $\tfrac{1}{2}\cdot 1,875\cdot 9 = 8,44$ minutos. É muito, mas é menos que os 1
 afasta da parábola antes de o dia terminar.
 
 **A nota média e o limiar.** Nem toda função torta é uma curva do segundo grau. Reprovar é um
-**limiar**: o desfecho de cada aluno é um degrau em 6,0. A média da turma responde a pergunta "qual é a
+**limiar**, e o desfecho de cada aluno vira um degrau em 6,0. A média da turma responde a pergunta "qual é a
 nota típica?" e não responde a pergunta "quantos reprovam?". Quem precisa da segunda pergunta e usa a
 primeira está trocando o resumo pelo resultado, e a troca não tem conserto por mais alunos que se
 incluam.
@@ -98,7 +98,7 @@ incluam.
 **A unidade da margem.** Todo número deste livro vem com uma margem, e a margem só tem sentido se for
 calculada na **unidade de fato independente**. No posto, a pergunta é esta. Os 320 mil pacientes são 320
 mil observações independentes, ou os 4 mil dias são 4 mil observações independentes? Pacientes de um
-mesmo dia compartilham a mesma demanda, o mesmo servidor e a mesma fila. Tratá-los como independentes é
+dia compartilham a demanda do dia, o servidor e a fila. Tratá-los como independentes é
 **pseudorreplicação**, e ela faz a margem parecer cinco vezes menor do que é. O teste que decide, sem
 convenção nenhuma, é o **nulo de metades**: repartir os dias ao acaso em duas metades e medir o desvio
 da diferença entre as duas médias. O nulo mede o que a margem deve prever.
@@ -135,31 +135,31 @@ turma de 100000 alunos: media = 6.21, reprovados (nota < 6,0) = 45.1 em 100
 
 Cinco leituras. **(1)** A média da demanda é 8 nos quatro mundos e a espera média vai de 2,5 a 19,6
 minutos. A variabilidade, não a média, decide. **(2)** No mundo que oscila, **68,8% dos pacientes**
-chegam nos dias de surto, e é por isso que a média por paciente pesa os dias ruins: 27,0 minutos nos
+chegam nos dias de surto, e é por isso que a média por paciente pesa os dias ruins. São 27,0 minutos nos
 dias de surto contra 3,4 nos dias leves. **(3)** O pedágio de segunda ordem (8,44 min) captura menos da
 metade da diferença verdadeira (19,29 min entre 10,00 e 29,29). A fórmula é local, e o posto é um caso
 de dispersão grande. **(4)** O nulo de metades dá 0,201 minuto no mundo constante, e a margem calculada
-por dia prevê 0,185 — quase igual; a margem por paciente prevê 0,046, quatro vezes menor. No mundo que
-oscila a diferença entre as duas leituras é de 5,8 vezes: 0,563 contra 0,097. **(5)** A mediana do
+por dia prevê 0,185, quase igual; a margem por paciente prevê 0,046, quatro vezes menor. No mundo que
+oscila a diferença entre as duas leituras é de 5,8 vezes, com 0,563 contra 0,097. **(5)** A mediana do
 mundo que oscila é 8,6 minutos, praticamente a média de 9,1 min que a alegação prometia. Quem olha "o
 paciente típico" vê a promessa cumprida, e a diferença está toda na cauda. A diferença entre os mundos,
 10,6 minutos, fica a 52,7 desvios do nulo.
 
-**Declaração de divergência.** O material do curso e o README do H0 publicam, para estes mesmos mundos,
+**Declaração de divergência.** O material do curso e o README do H0 publicam, para estes mundos,
 9,3 min e 20,7 min de espera média, **8** e **25** pacientes em cada 100 acima de 30 minutos, margem de
 ±0,51 minuto por dia contra ±0,07 por paciente, e um nulo de metades de 0,216 minuto com margens
 previstas de 0,227 (por dia) e 0,047 (por paciente). Este instrumento mede **9,1** e **19,6** minutos,
 **7,6** e **23,7** em cada 100, um nulo de **0,201** minuto com margens de **0,185** (por dia) e
 **0,046** (por paciente) no mundo constante, e, no mundo que oscila, **0,742** de nulo com margens de
 **0,563** e **0,097**. O mundo uniforme dá 13,8 min aqui contra 12,3 no material. Os números estão
-todos na mesma vizinhança, e a diferença tem duas causas prováveis: o gerador (o material usa o PCG64
+todos numa vizinhança próxima. A diferença tem duas causas prováveis: o gerador (o material usa o PCG64
 do NumPy com `SeedSequence(1909)`; aqui, o SplitMix64 com a semente 1909) e o começo de cada dia, que
 aqui é sempre uma fila vazia. A identidade de Jensen, o sinal do pedágio e a conclusão sobre a unidade
 da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
 
 **Exercícios.**
 
-1. *(Conceito)* Para cada caso, diga se a média esconde um pedágio e de que sinal: (a) o tempo de
+1. *(Conceito)* Para cada caso, diga se a média esconde um pedágio e de que sinal. (a) O tempo de
    espera numa fila; (b) o saldo de uma conta com rendimento fixo; (c) o patrimônio de quem aposta 100%
    do capital a cada rodada; (d) a nota de uma turma com corte de aprovação.
 2. *(Conta)* Com $W(\lambda)$ e $\mu = 12$, calcule $W(6)$, $W(8)$ e $W(10)$. Depois calcule
@@ -180,10 +180,12 @@ da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
 
 **Resumo.**
 
-- A média da entrada não é a média da saída quando a função é curva: $\mathbb{E}[f(X)] \ge
+- A média da entrada não é a média da saída quando a função é curva. O resultado é $\mathbb{E}[f(X)] \ge
   f(\mathbb{E}[X])$ para $f$ convexa.
 - O pedágio cresce com a curvatura e com a variância, e a fórmula de segunda ordem **subestima** o
   pedágio quando a dispersão é grande.
-- Mesma demanda média, esperas muito diferentes: quem simula o mundo vê o que a planilha esconde.
-- A margem vale o que vale a unidade independente; o nulo de metades decide qual unidade é a certa.
+- A demanda média não se move, e as esperas não se parecem. Quem simula o mundo vê o que a planilha
+  esconde.
+- A margem só vale o que vale a unidade independente, e o nulo de metades decide qual unidade é a
+  certa.
 - Um limiar (reprovar, transbordar, falir) não se resume por média nenhuma.

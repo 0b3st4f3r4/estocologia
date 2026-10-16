@@ -1,88 +1,87 @@
 ## Capítulo 21. As sete lições, os dez pontos da auditoria e o que falta fazer
 
 **Objetivos.** Ao fim deste capítulo você deve saber resumir as sete lições do programa em situações do dia a dia,
-ler o balanço dos dez pontos da auditoria de fundo sabendo o que cada um mostrou, dizer em voz alta o que continua
-aberto e sem resposta, e conduzir o projeto final: escolher um problema da escola ou da cidade, preencher a ficha,
-simular o mundo e defender a conclusão.
+ler o balanço dos dez pontos da auditoria de fundo com o resultado de cada um na mão, nomear em voz alta as
+questões que seguem abertas e sem resposta, e conduzir o projeto final. Escolher um problema da escola ou da
+cidade, preencher a ficha, simular o mundo e defender a conclusão.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**A pergunta que fecha o curso.** No último encontro, alguém pergunta o que sobrou de útil para a vida. Não o que
-sobrou para quem vai fazer estatística: o que sobrou para quem vai decidir. A resposta do programa tem sete
-frases, e cada uma nasceu de um caso concreto. Estas são as sete, contadas do jeito que aconteceram.
+**A pergunta que fecha o curso.** No último encontro, alguém pergunta de que serviu o curso na vida real. Não de
+que serviu para quem vai fazer estatística, e sim para quem vai decidir. A resposta do programa tem sete frases, e
+cada uma nasceu de um caso concreto. As sete vêm contadas do jeito que aconteceram.
 
-1. **A média esconde o que importa.** No posto de saúde, a mesma demanda média dá 9,3 minutos de espera no mundo
-   constante e 20,7 minutos no mundo que oscila: em cada 100 pacientes, 25 esperam mais de meia hora no mundo que
-   oscila, contra 8 no mundo constante. Numa central de chamadas, a escala dimensionada pela média falha em
-   **26 de cada 100 dias**. E a riqueza média de quem apostou 3 vezes na bolsa aparece como 19 vezes, quando a
-   mediana é de 2,1.
+1. **A média esconde o essencial.** No posto de saúde, a demanda média é idêntica nos dois mundos, e a espera
+   salta de 9,3 minutos no mundo constante para 20,7 minutos no mundo que oscila. Em cada 100 pacientes, 25 esperam
+   mais de meia hora no mundo que oscila, contra 8 no mundo constante. Numa central de chamadas, a escala
+   dimensionada pela média falha em **26 de cada 100 dias**. E a riqueza média de quem apostou 3 vezes na bolsa
+   aparece como 19 vezes, quando a mediana é de 2,1.
 2. **A unidade independente decide a margem.** 2,65 milhões de chamadas valem **81 dias**; 225 mil voos valem
-   **364 dias**. Contar linha por linha onde a variação se repete é o que separa uma margem honesta de uma margem
-   que só parece estreita.
+   **364 dias**. Contar linha por linha, onde a variação se repete, separa uma margem honesta de uma margem que só
+   parece estreita.
 3. **Acertar não basta; é preciso ter podido errar.** O ajuste por propensão no experimento de LaLonde acertou o
-   número, e um tratamento inócuo teria dado quase o mesmo — no placebo de 1975 ele inventou um efeito fantasma de
-   $-12{,}3$ pontos percentuais. Um número que acerta sem poder errar não é evidência.
+   número, e um tratamento inócuo teria chegado a um valor parecido. No placebo de 1975 ele inventou um efeito
+   fantasma de $-12{,}3$ pontos percentuais. Um número que acerta sem poder errar não é evidência.
 4. **Reprovar o próprio modelo é resultado.** Nos incêndios dinamarqueses, 36 meses sem nenhum incêndio gigante
-   valem só **2,2 bits** de informação: a chance mensal continua perto de $1/38$ pela regra de Laplace, enquanto a
-   seguradora triplicava a aposta. Quando o modelo do próprio programa foi testado no cofre, ele perdeu para a média
+   valem só **2,2 bits** de informação. A chance mensal continua perto de $1/38$ pela regra de Laplace, enquanto a
+   seguradora triplicava a aposta. Quando o modelo do programa foi testado no cofre, ele perdeu para a média
    histórica simples (habilidade $-0{,}015$) e **não ganhou o direito de decidir**. A alegação da seguradora caiu.
 5. **O efeito transporta melhor que a lista de causas.** A invariância exata é rara. Quando ela aparece e é
-   conferida contra uma verdade conhecida — o túnel de luz e os bloqueadores de hERG —, protege contra a intervenção
-   nova, como o verapamil mostrou. Quando não aparece, a direção e o tamanho do efeito ainda costumam sobreviver:
+   conferida contra uma verdade conhecida (o túnel de luz e os bloqueadores de hERG), protege contra a intervenção
+   nova, como o verapamil mostrou. Quando não aparece, a direção e o tamanho do efeito ainda costumam sobreviver.
    9 domínios previram o ambiente nunca visto com habilidade de 0,04 a 0,88.
 6. **Calibração se conserta, resolução não.** Foram necessários três cofres para a calibração passar pela
-   tolerância de 0,03 — e a auditoria mostrou que essa tolerância era frouxa nos cofres grandes. A habilidade final
-   ficou em $+0{,}019$. Dizer "está bem calibrado" não é o mesmo que dizer "separa bem os casos".
-7. **Declarar antes de rodar é o que torna a falha útil.** Sete rodadas no H2 e três tentativas no H3 só contam
-   como ciência porque cada mudança foi escrita com hash **antes** de rodar, e porque cada ajuste feito depois de
-   ver um resultado ficou registrado e contado no contador $K$.
+   tolerância de 0,03, e a auditoria mostrou que essa tolerância era frouxa nos cofres grandes. A habilidade final
+   ficou em $+0{,}019$. Dizer "está bem calibrado" não assegura que o modelo separe bem os casos.
+7. **Declarar antes de rodar torna a falha útil.** Sete rodadas no H2 e três tentativas no H3 só contam como
+   ciência porque cada mudança foi escrita com hash **antes** de rodar, e porque cada ajuste feito depois de ver um
+   resultado ficou registrado e contado no contador $K$.
 
-**O programa virou o alvo.** Uma disciplina que exige teste severo das alegações alheias precisava aplicar o
-mesmo teste a si mesma. Foi o que a auditoria de fundo fez: dez suposições do programa — coisas que o texto
-afirmava e que nunca tinham sido postas à prova — viraram frentes de trabalho, cada uma com a mesma regra de casa:
+**O programa virou o alvo.** Uma disciplina que exige teste severo das alegações alheias precisava passar pelo
+teste que aplica aos outros. A auditoria de fundo fez isso. Dez suposições do programa, coisas que o texto
+afirmava e que nunca tinham sido postas à prova, viraram frentes de trabalho, cada uma submetida à regra de casa:
 declaração com hash antes de rodar, resultado relatado com os limites, e toda mudança de critério depois de ver o
 resultado entrando como declaração nova e contando no $K$.
 
-O resultado geral é desconfortável e vale a leitura: **nenhum número publicado caiu por erro de conta**, e a
-auditoria estreitou o que esses números autorizam. A tese central do livro empatou no teste direto. A tolerância
-de calibração era frouxa. O laço de Goodhart declarado era quatro vezes maior que o medido. E o portão do H2
-depende de qual versão de cada escolha conta.
+O resultado geral é desconfortável e vale a leitura. **Nenhum número publicado caiu por erro de conta**, e a
+auditoria encolheu a autorização desses números. A tese central do livro empatou no teste direto. A tolerância de
+calibração era frouxa. O laço de Goodhart declarado era quatro vezes maior que o medido. E o portão do H2 depende
+de qual versão de cada escolha conta.
 
-**A quem o programa não ouviu.** Em cada uma das sete decisões que envolvem pessoas — cortar o benefício de
+**A quem o programa não ouviu.** Em cada uma das sete decisões que envolvem pessoas (cortar o benefício de
 acidentados do trabalho no Kentucky, reduzir turmas no Tennessee, mudar a coparticipação no seguro de saúde,
-comparar o treino profissional do NSW com controles do CPS, marcar o detido em Toronto nos dois períodos e marcar
-o motorista em Rhode Island —, **nenhum grupo afetado foi ouvido**. Não há no repositório consulta, entrevista,
-painel nem consentimento. A lista é grande e tem nome e número: 11.598 alunos em 80 escolas; 5.226 detidos;
-65.276 prisões de 2020 e 2021; 86.113 paradas de trânsito; 185 participantes do treino do NSW e 15.992 controles.
-Assinar não é escutar: quem assina um parecer fica do lado de quem decide usar o artefato, não do lado de quem
-paga o erro.
+comparar o treino profissional do NSW com controles do CPS, marcar o detido em Toronto nos dois períodos e marcar o
+motorista em Rhode Island), **nenhum grupo afetado foi ouvido**. Não há no repositório consulta, entrevista, painel
+nem consentimento. A lista é grande e tem nome e número: 11.598 alunos em 80 escolas; 5.226 detidos; 65.276 prisões
+de 2020 e 2021; 86.113 paradas de trânsito; 185 participantes do treino do NSW e 15.992 controles. Assinar não é
+escutar. Quem assina um parecer fica do lado de quem decide usar o artefato; quem paga o erro fica do outro lado.
 
-**O que ficou só no papel.** Duas pontas continuam abertas, e as duas dependem de gente. A primeira é a
-elicitação de especialistas: o protocolo de painel e seis formulários estão escritos, com o critério de $K = 2$
-pronto, e **ninguém foi entrevistado** — nenhuma previsão foi corrigida, nada foi assinado. Sem esse painel,
-cinco dos 33 domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o
-erro: o registro dos grupos afetados existe e diz que nenhum foi ouvido.
+**Duas pontas ficaram no papel.** As duas continuam abertas e as duas dependem de gente. A primeira é a elicitação
+de especialistas. O protocolo de painel e seis formulários estão escritos, com o critério de $K = 2$ pronto, e
+**ninguém foi entrevistado**. Nenhuma previsão foi corrigida, nada foi assinado. Sem esse painel, cinco dos 33
+domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o erro. O
+registro dos grupos afetados existe e diz que nenhum foi ouvido.
 
 **E uma ponta que é só de resolução.** Na genética de levedura, a validação que sustenta a réplica decide com
-**um mutante por ambiente**: o menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
-o piso. O que falta não é o p: é resolução. Um efeito medido em uma linha é um efeito medido em uma linha.
+**um mutante por ambiente**. O menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
+o piso. Ali falta resolução, e o p não é o problema. Um efeito medido em uma linha é um efeito medido em uma linha.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**As sete lições, com a condição em que valem.** As três primeiras lições são aritmética de decisão: a média de
-uma função não é a função da média; a margem depende da unidade que se conta como independente; e um número só é
-evidência se o procedimento que o produziu podia ter dado errado. As duas seguintes são sobre o que se ganha ao
-perder: reprovar o próprio modelo é um resultado publicável, e a invariância protege contra a intervenção nova
-enquanto o efeito, sozinho, só promete transportar em média. As duas últimas são sobre processo: a decomposição de
-Murphy separa confiabilidade de resolução, e a declaração prévia é o que separa ciência de trapaça. Nenhuma das
-sete vale sem a sua condição: a sexta só vale para previsores que não podem ser melhorados por mais dados, e a
+**As sete lições, com a condição em que valem.** As três primeiras lições são aritmética de decisão. A média de
+uma função não é a função da média; a margem depende da unidade contada como independente; e um número só é
+evidência se o procedimento que o produziu podia ter dado errado. As duas seguintes tratam do ganho que vem da
+perda: reprovar o modelo que se construiu é um resultado publicável, e a invariância protege contra a intervenção
+nova, enquanto o efeito, sozinho, só promete transportar em média. As duas últimas dizem respeito ao processo. A
+decomposição de Murphy separa confiabilidade de resolução, e a declaração prévia separa ciência de trapaça. Nenhuma
+das sete vale sem a sua condição. A sexta só vale para previsores que não podem ser melhorados por mais dados, e a
 sétima só vale se a declaração for escrita antes e o contador $K$ for publicado depois.
 
-**O balanço dos dez pontos da auditoria de fundo.** A tabela diz o que cada ponto perguntou e o que ele respondeu.
+**O balanço dos dez pontos da auditoria de fundo.** A tabela traz a pergunta e a resposta de cada ponto.
 
 | Ponto | A suposição | O que foi medido | Resultado |
 | --- | --- | --- | --- |
@@ -99,16 +98,16 @@ sétima só vale se a declaração for escrita antes e o contador $K$ for public
 | Ficha e contrato | A pergunta que o modelo responde é a que o decisor fez; o contrato de dados não diz por que o dado falta | Campo obrigatório `pergunta_do_decisor` no pacote de domínio (18 do H2g, 12 do H2 e a ficha do H0) e o bloco de ausência com MCAR, MAR ou MNAR no contrato | Os dois campos entram validados no código; nos contratos de hoje a regra da ausência é vacuosa — nenhuma coluna tem um único valor ausente — e nenhum número publicado muda |
 | Elicitação humana | A priori simulada seria substituída por painel de especialistas | Protocolo do painel e seis formulários, com o critério de $K = 2$ fixado | Nada foi elicitado: nenhuma entrevista, nenhuma previsão corrigida, nenhuma linha de decisão assinada |
 
-**Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala (pontos 9 e 10) saíram da árvore em 2026-10-16: não sustentam resultado central da teoria, e os números continuam registrados na tabela acima. O material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
+**Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala (pontos 9 e 10) saíram da árvore em 2026-10-16. Não sustentam resultado central da teoria, e os números continuam registrados na tabela acima. O material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
 
-Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o H3 corrigiu é cerca
-de quatro vezes o que se mediu num caso real. A tolerância de 0,03 do erro de calibração é maior que o ruído em
-todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de transferência do H2
-depende de qual versão de cada escolha conta: a área da educação não sobrevive à correção de agrupamento, e quem
-sustenta a terceira área agora é a genética replicada, não a educação.
+Três desses resultados apertam a autorização dos capítulos anteriores. O laço de 0,6 que o H3 corrigiu é cerca de
+quatro vezes o valor medido num caso real. A tolerância de 0,03 do erro de calibração é maior que o ruído em todos
+os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de transferência do H2 depende de
+qual versão de cada escolha conta. A área da educação não sobrevive à correção de agrupamento, e a terceira área
+agora se sustenta na genética replicada.
 
-**As sete objeções, e o que se responde a elas.** Uma disciplina que exige teste severo precisa sobreviver às
-objeções contra si própria.
+**As sete objeções, e a resposta a cada uma.** Uma disciplina que exige teste severo precisa sobreviver às objeções
+que lhe fazem.
 
 | Objeção | Resposta |
 | --- | --- |
@@ -120,59 +119,60 @@ objeções contra si própria.
 | "A ergodicidade virou doutrina." | A lente do tempo se apoia no programa de Ole Peters, que é contestado, e a disciplina o ensina como debate. Pelo critério do crescimento, a aversão a perdas de cerca de 2,25 medida em laboratório só se justifica quando 56% da riqueza estão em jogo: a tese explica a recusa de arriscar meio patrimônio, não a aversão a apostas pequenas. Algo parecido vale para as caudas: Taleb pede que se suponha cauda pesada até prova em contrário; Clauset, Shalizi e Newman pedem prova antes de declarar uma lei de potência. A questão é de quem é o ônus da prova, e a resposta depende de quanto custa errar |
 | "O auditor é parte interessada." | Os 21 pareceres foram assinados por quem conduz o programa, e nomear um responsável não torna a auditoria independente. A auditoria de fundo acrescentou uma checagem mais barata e mais fraca: reimplementar do zero quatro resultados que sustentam as saídas aprovadas, a partir das especificações. Os quatro concordaram e nenhum erro foi achado — mas o teste tem um defeito declarado, porque várias escolhas que a especificação não fixa saíram iguais às do código original, três delas só no STAR. Independência real pede gente de fora, com o mesmo contrato |
 
-**O que a ficha exige.** O instrumento que transforma uma dúvida em alegação auditável tem cinco perguntas de
-cabeçalho e quatro proibições. As cinco perguntas: qual é o **processo gerador** dos dados, com semente; onde mora
-a **não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído** — se o ruído entra somado
-(Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive. As
-quatro proibições: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina, nenhuma
-autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
+**A ficha exige cinco perguntas e quatro proibições.** O instrumento que transforma uma dúvida em alegação
+auditável faz cinco perguntas de cabeçalho. Qual é o **processo gerador** dos dados, com semente; onde mora a
+**não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído**, se o ruído entra somado
+(Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive.
+Quatro proibições fecham a lista: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina,
+nenhuma autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
 automáticos verificam a ficha, e o binário de portões sai com código 0 ou 1.
 
-**O roteiro do projeto final.** O projeto vale como o curso inteiro: são quatro semanas de trabalho para um
+**O roteiro do projeto final.** O projeto vale como o curso inteiro. São quatro semanas de trabalho para um
 problema da escola ou da cidade. O roteiro tem oito passos, e o produto final é um memorando em frequências
 naturais, com cláusula de saída, defendido em banca.
 
-1. **Escolher o problema.** Serve um problema em que alguém decide algo e há uma ação concreta: reduzir turmas,
-   mudar o horário do intervalo, instalar um bebedouro, multar estacionamento em fila dupla, mudar o ponto de
-   ônibus. Não serve "entender a violência na cidade": falta decisor e falta ação.
+1. **Escolher o problema.** Serve um problema em que alguém decide algo e há uma ação concreta, como reduzir
+   turmas, mudar o horário do intervalo, instalar um bebedouro, multar estacionamento em fila dupla ou mudar o
+   ponto de ônibus. Não serve "entender a violência na cidade": falta decisor e falta ação.
 2. **Escrever a pergunta do decisor**, em três partes: *Quem decide*: nomeie a pessoa ou o órgão; *Ação que a
    decisão muda*: copie a ação literalmente; *A pergunta do decisor é*: termine com interrogação. Sem essas três
    partes a ficha é recusada, e o laboratório deste capítulo mostra o verificador que a recusa.
-3. **Preencher a ficha**: as cinco perguntas de cabeçalho, a alegação em uma frase, o termo de escopo (onde vale e
-   onde não vale), o que se mede e em que unidade.
-4. **Fixar o processo gerador** com semente numérica: o que é sorteado, o que é fixo, quantas linhas, quais
-   ambientes. A semente é o que permite a outra pessoa ver o mesmo mundo.
-5. **Construir o modelo nulo**: o que o acaso sozinho produziria naquele desenho, com a mesma semente. Sem nulo
-   não há contraste.
-6. **Pré-registrar com hash** e declarar o cofre: a partição de dados que ninguém viu fica guardada, e abre uma vez
+3. **Preencher a ficha.** As cinco perguntas de cabeçalho, a alegação em uma frase, o termo de escopo (onde vale e
+   onde não vale), a grandeza medida e a unidade.
+4. **Fixar o processo gerador** com semente numérica. Quais elementos são sorteados, quais são fixos, quantas
+   linhas, quais ambientes. A semente permite que outra pessoa veja aquele mundo.
+5. **Construir o modelo nulo.** Aquilo que o acaso sozinho produziria naquele desenho, com a semente repetida. Sem
+   nulo não há contraste.
+6. **Pré-registrar com hash** e declarar o cofre. A partição de dados que ninguém viu fica guardada, e abre uma vez
    só. Se o critério mudar depois de abrir, o novo critério é declaração nova e entra no contador de tentativas.
 7. **Rodar, medir e declarar.** Todos os números do memorando saem de código que outra pessoa roda; toda tentativa
    fica no placar; toda conta de cabeça é proibida.
 8. **Escrever o memorando e defender.** Frequências naturais ("em cada 100 alunos"), o gráfico dos resultados
-   hipotéticos, a cláusula objetiva de saída — aquela que diz quando a recomendação deixa de valer —, e a resposta
-   à pergunta final: quando um modelo é bom o bastante? A resposta do livro é: quando ele declara o que pode dar
-   errado, quando alguém de fora consegue reproduzir cada número, e quando a decisão que ele autoriza não depende
-   de nenhuma suposição que não tenha sido escrita.
+   hipotéticos, a cláusula objetiva de saída, aquela que diz quando a recomendação deixa de valer, e a resposta à
+   pergunta final, quando um modelo é bom o bastante. O livro responde com três condições. Um modelo é bom o
+   bastante quando ele declara os modos de falha, quando alguém de fora consegue reproduzir cada número, e quando a
+   decisão que ele autoriza não depende de nenhuma suposição que não tenha sido escrita.
 
-**O que fica aberto, com nome.** Três coisas, e nenhuma delas se resolve com mais código.
+**Três coisas ficam abertas, com nome.** Nenhuma delas se resolve com mais código.
 
 - **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
   foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
 - **A resolução da validação por intervenção da genética.** Um mutante por ambiente, $p = 0{,}001$, o piso de 999
-  sorteios: o que falta é a segunda linha, não o p-valor.
+  sorteios: falta a segunda linha, e o p-valor não é o problema.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
   releitura dos 21 pareceres assinados está preparada, com as 21 linhas e os 21 resumos criptográficos conferidos,
   e nenhuma decisão foi assinada.
 
-**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo — R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o mesmo recurso total, e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa não é o parágrafo, é o artefato executável — alegação, processo gerador, modelo nulo e teste, no mesmo lugar. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a mesma proibição de texto livre entre agentes. **Prazo de validade para a própria meta:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
+**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo. R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o recurso total idêntico e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa é o artefato executável, e não o parágrafo. Alegação, processo gerador, modelo nulo e teste ficam lado a lado. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a proibição de texto livre entre agentes que já vale na ficha. **Prazo de validade para a meta do livro:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 O laboratório deste capítulo é o **verificador da ficha do projeto final**: um portão pequeno que recusa uma ficha
-sem pergunta do decisor, sem semente e sem cláusula de saída — e que prova que sabe reprovar, porque cada uma das
-sete regras derruba ao menos uma ficha. O código está em `crates/stochology-book/src/cap21.rs`, autocontido e sem dependências:
+sem pergunta do decisor, sem semente e sem cláusula de saída, e prova que sabe reprovar, porque cada uma das sete
+regras derruba ao menos uma ficha. O código está em `crates/stochology-book/src/cap21.rs`, autocontido e sem
+dependências:
 
 ```bash
 cargo run --release
@@ -230,14 +230,14 @@ regras que reprovaram ao menos uma ficha: 7 de 7 | reprovacoes por regra: [1, 1,
 ```
 
 Leia linha por linha. **A ficha 01 é aceita** com quem decide nomeado, a ação copiada literalmente da decisão, a
-pergunta terminando em interrogação, a semente 2026 no processo gerador e no modelo nulo, o resumo criptográfico
-de 64 dígitos e a cláusula de saída ancorada num número ("acima de 0,10 dp em três anos seguidos"). **As outras
-onze são recusadas, e cada recusa é um defeito distinto**: R4 aparece quatro vezes porque a pergunta do decisor é
-a regra com mais partes — ausente, genérica ("o decisor" não nomeia ninguém), sem a ação literal e sem a
-interrogação. R7 aparece duas vezes: uma ficha sem cláusula nenhuma e outra com uma cláusula sem gatilho
-("enquanto o modelo continuar bom e ninguém reclamar"), que não diz quando a recomendação deixa de valer. A última
-linha é a conta que interessa: **7 de 7 regras reprovaram ao menos uma ficha**. Um portão que nunca reprova não é
-um portão; é um carimbo.
+pergunta terminando em interrogação, a semente 2026 no processo gerador e no modelo nulo, o resumo criptográfico de
+64 dígitos e a cláusula de saída ancorada num número ("acima de 0,10 dp em três anos seguidos"). **As outras onze
+são recusadas, e cada recusa é um defeito distinto.** R4 aparece quatro vezes porque a pergunta do decisor é a
+regra com mais partes: ausente, genérica ("o decisor" não nomeia ninguém), sem a ação literal e sem a interrogação.
+R7 aparece duas vezes: uma ficha sem cláusula nenhuma e outra com uma cláusula sem gatilho ("enquanto o modelo
+continuar bom e ninguém reclamar"), que não diz quando a recomendação deixa de valer. A última linha é a conta que
+interessa. **7 de 7 regras reprovaram ao menos uma ficha**. Um portão que nunca reprova não é um portão; é um
+carimbo.
 
 **Declaração de divergência.** O verificador do laboratório é uma reimplementação reduzida do validador do
 repositório. O validador da pesquisa exige, além das regras acima, no mínimo 60 caracteres no texto da pergunta,
@@ -257,19 +257,19 @@ literalmente e termina em pergunta.
 4. *(Conta)* No balanço da auditoria, cinco dos 33 domínios mudam de status ou de ação quando a priori de
    literatura substitui a do pacote. Escreva esse número como frequência natural ("em cada 100 domínios...") e
    diga por que ele é o tamanho do que ainda falta medir.
-5. *(Conceito)* O piloto cego empatou no teto: os dois braços acertaram os mesmos 8 defeitos. Explique, em quatro
-   frases, por que um empate no teto não sustenta a tese e também não a refuta.
+5. *(Conceito)* O piloto cego empatou no teto: cada braço apontou 8 defeitos, e as duas listas saíram idênticas.
+   Explique, em quatro frases, por que um empate no teto não sustenta a tese e também não a refuta.
 6. *(Ensaio)* Responda à pergunta que fecha o curso: quando um modelo é bom o bastante? Use pelo menos três
    números deste livro.
 
 **Resumo.**
 
 - As sete lições resumem o programa: a média esconde; a unidade independente decide a margem; acertar não basta
-  se o teste não podia falhar; reprovar o próprio modelo é resultado; o efeito transporta melhor que a lista de
-  causas; calibração se conserta e resolução não; declarar antes de rodar é o que torna a falha útil.
+  se o teste não podia falhar; reprovar o modelo que se construiu é resultado; o efeito transporta melhor que a
+  lista de causas; calibração se conserta e resolução não; declarar antes de rodar torna a falha útil.
 - A auditoria de fundo testou dez suposições do programa e as extensões. Nenhum número publicado caiu por erro
-  de conta; o que ela estreitou foi o que esses números autorizam — a tese central empatou, a tolerância de
-  calibração era frouxa, o laço declarado era quatro vezes o medido.
+  de conta; a auditoria estreitou a autorização desses números. A tese central empatou, a tolerância de calibração
+  era frouxa, o laço declarado era quatro vezes o medido.
 - Ficam em aberto, com nome: a elicitação com especialistas humanos (5 de 33 domínios dependem da priori), a
   resolução da validação da genética (um mutante por ambiente) e a voz de quem paga o erro (nenhum grupo afetado
   ouvido nas sete decisões que envolvem pessoas).

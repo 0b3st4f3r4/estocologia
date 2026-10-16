@@ -9,21 +9,21 @@ reconhecer um modelo que envelhece em silêncio.
 ### Degrau 1 — O mundo real e o paradoxo
 
 **O peru de Natal.** Um peru é alimentado todos os dias, pontualmente, às 9 horas da manhã. No dia 1,
-ele não sabe nada. No dia 10, desconfia que a comida tem algo a ver com o galinheiro. No dia 60, já tem
-uma teoria. No dia 100, ele faz a conta dos seus dias: *em 100 manhãs, a comida chegou em 100*. Na
+ele não sabe nada; no dia 10, desconfia que a comida tem algo a ver com o galinheiro. No dia 60, já
+tem uma teoria. No dia 100, ele faz a conta dos seus dias. *Em 100 manhãs, a comida chegou em 100.* Na
 véspera do dia 101, o peru está **99% confiante** de que amanhã, às 9 horas, a comida chega.
 
-O dia 101 é o Natal. E o Natal nunca esteve na lista de hipóteses do peru. Nenhum dado a mais o teria
-salvo: **mais observações só aumentaram a confiança no lugar errado.** (Bertrand Russell contou a
+O dia 101 é o Natal, e o Natal nunca esteve na lista de hipóteses do peru. Nenhum dado a mais o teria
+salvo. **Mais observações só aumentaram a confiança no lugar errado.** (Bertrand Russell contou a
 história com uma galinha; Nassim Taleb a recontou com o peru.)
 
 **Em cada 100 experimentos.** Imagine dois tipos de incerteza convivendo:
 
 - **A moeda.** Você joga uma moeda honesta 100 vezes. Em cada 100 experimentos de 100 lances, a
-  proporção de caras fica perto de 50%, mas nunca exatamente 50%. Jogar mais vezes **não** faz a
-  proporção virar exatamente 50%: o sorteio continua sorteio.
+  proporção de caras fica perto de 50%, mas nunca igual a 50%. Jogar mais vezes **não** faz a
+  proporção virar 50%. O sorteio continua sorteio.
 - **A moeda desconhecida.** Você joga uma moeda sem saber se é honesta. Depois de 10 lances, ainda não
-  sabe. Depois de 10.000 lances, sabe quase com certeza. Aqui, mais dados resolvem.
+  sabe; depois de 10.000 lances, sabe quase com certeza. Aqui, mais dados resolvem.
 
 Esses dois casos têm nomes diferentes, e confundi-los custa caro. Existe ainda um terceiro, o do peru.
 
@@ -35,8 +35,8 @@ Esses dois casos têm nomes diferentes, e confundi-los custa caro. Existe ainda 
 
 $$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{aleatória (Mundo)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistêmica (Modelo)}}$$
 
-A primeira parcela é o sorteio: existe mesmo com o parâmetro conhecido. A segunda é a ignorância sobre o
-parâmetro: desaparece quando o parâmetro é identificável e você tem dados.
+A primeira parcela nasce do sorteio e persiste quando o parâmetro é conhecido. A segunda nasce da
+ignorância sobre o parâmetro e desaparece quando você o identifica e tem dados.
 
 | Incerteza | Camada | O que mais dados fazem | Como se mitiga |
 | --- | --- | --- | --- |
@@ -45,11 +45,11 @@ parâmetro: desaparece quando o parâmetro é identificável e você tem dados.
 | Knightiana | Modelo e Agente | Nada — ou pior: falsa confiança | Cenários, robustez, estresse de premissas, ampliar o espaço de hipóteses |
 
 Frank Knight (1921) separou o **risco**, de probabilidades conhecidas, da **incerteza**, de
-probabilidades que não se podem medir. No caso extremo — que este livro chama de incerteza knightiana
-ou erro de especificação — o processo real está **fora** do espaço de hipóteses. É a mais perigosa,
-porque não aparece na equação: o intervalo estreita em volta da resposta errada.
+probabilidades que não se podem medir. No caso extremo, que este livro chama de incerteza knightiana
+ou erro de especificação, o processo real está **fora** do espaço de hipóteses. Essa incerteza é a mais
+perigosa das três, porque não aparece na equação. O intervalo estreita em volta da resposta errada.
 
-**A matriz de Stirling.** Duas perguntas organizam o diagnóstico: sabemos quais desfechos são
+**A matriz de Stirling.** Duas perguntas organizam o diagnóstico. Sabemos quais desfechos são
 possíveis? Sabemos suas probabilidades?
 
 |  | Probabilidades conhecidas | Probabilidades desconhecidas |
@@ -70,7 +70,7 @@ ao campo da ficha (Capítulo 14), e o nível diz se basta uma margem ou se é pr
 
 $$P(\text{sucesso amanhã}\mid s,n)=\frac{s+1}{n+2}$$
 
-A regra também não é neutra, porque deriva de uma priori uniforme: com sete sucessos em dez, a uniforme
+A regra também não é neutra, porque deriva de uma priori uniforme. Com sete sucessos em dez, a uniforme
 dá 0,667, uma uniforme sobre $\theta^2$ dá 0,692 e uma sobre $\sqrt{\theta}$ dá 0,652. **Até a
 ignorância tem forma**, e é por isso que a escolha de priori precisa ser declarada (Capítulo 13, faixa
 F7).
@@ -92,10 +92,10 @@ largura do intervalo fixo no passo 100 = 0.1564, no passo 6400 = 0.0240
 largura do intervalo com esquecimento no passo 6400 = 0.1360 (razao 5.7x o fixo final)
 ```
 
-O modelo fixo declara "95% de confiança" e **cobre a verdade em 12% dos passos**: o intervalo encolhe de
-0,1564 para 0,0240 enquanto o vício caminha para fora dele. O modelo que esquece o passado, com um
-intervalo **5,7 vezes mais largo**, cobre 93,98% — perto do nominal. O preço da honestidade é a largura
-do intervalo; o preço da teimosia é a confiança falsa.
+O modelo fixo declara "95% de confiança" e **cobre a verdade em 12% dos passos**. O intervalo encolhe
+de 0,1564 para 0,0240 enquanto o vício caminha para fora dele. Já o modelo que esquece o passado, com
+um intervalo **5,7 vezes mais largo**, cobre 93,98%, perto do nominal. O preço da honestidade é a
+largura do intervalo; o preço da teimosia é a confiança falsa.
 
 **Declaração de divergência.** A edição anterior deste livro (e o roteiro do curso) registra 11% de
 cobertura para o modelo fixo e 99% para o modelo com esquecimento, com larguras de 0,140 a 0,035. Este

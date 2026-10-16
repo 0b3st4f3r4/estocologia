@@ -8,21 +8,22 @@ Oct 16, 2026 · Silvano Neto
 
 ## Prefácio: como usar este livro
 
-Este livro ensina a Estocologia de ponta a ponta: o que ela é, com que conceitos trabalha, como se
-opera numa arquitetura auditável e como essa arquitetura se comporta quando é posta à prova em dados
+Este livro ensina a Estocologia de ponta a ponta. O texto apresenta os conceitos da área, o modo de
+operar numa arquitetura auditável e o comportamento dessa arquitetura quando posta à prova em dados
 reais, do horizonte H0 ao H3. A pesquisa que o sustenta foi encerrada em 15 de outubro de 2026.
 
 **O que mudou nesta edição.** A edição anterior tinha 14 capítulos e supunha cálculo e probabilidade
-de nível universitário já dominados. Esta edição desdobra o mesmo conteúdo em 21 capítulos, agrupados
-em cinco partes, e constrói uma **rampa pedagógica contínua**: o primeiro degrau de cada capítulo usa
-apenas matemática do Ensino Médio — proporções, conjuntos, médias, árvores de contagem, gráficos de
-funções do primeiro e do segundo grau. Nada da edição anterior foi jogado fora: toda ideia, todo
+de nível universitário já dominados. Esta edição desdobra esse conteúdo em 21 capítulos, agrupados
+em cinco partes, e constrói uma **rampa pedagógica contínua**. O primeiro degrau de cada capítulo usa
+apenas matemática do Ensino Médio (proporções, conjuntos, médias, árvores de contagem, gráficos de
+funções do primeiro e do segundo grau). Nada da edição anterior foi jogado fora. Toda ideia, todo
 teorema e todo número da pesquisa continuam aqui, redistribuídos em passos menores.
 
-**Para quem é.** O livro serve a quatro leitores. O estudante do Ensino Médio que quer entender
-decisão sob incerteza sem esperar a faculdade. O estudante de graduação ou pós que já viu
-probabilidade básica. O profissional de dados que quer saber por que um modelo que acerta no teste
-falha em produção. E o decisor que precisa ler um número e saber o que ele autoriza concluir.
+**Para quem é.** O livro serve a quatro leitores. O primeiro é o estudante do Ensino Médio, que quer
+entender decisão sob incerteza sem esperar a faculdade. O segundo é o estudante de graduação ou pós
+que já viu probabilidade básica. O terceiro é o profissional de dados, que precisa saber por que um
+modelo aprovado no teste falha em produção. O quarto é o decisor, que lê um número e precisa saber até
+onde ele o autoriza a concluir.
 
 **O que se supõe.** Nesta edição, para os Degraus 1 e 2, apenas aritmética, porcentagens, proporções
 e leitura de gráfico. Cálculo e álgebra linear aparecem só onde o texto avisa, e sempre depois da
@@ -33,15 +34,15 @@ texto, e pular os exercícios marcados como *Laboratório*.
 **Uma regra que vale para o livro inteiro.** Todo número citado aqui sai de um instrumento que o
 leitor pode rodar. Quando um número desta edição divergir do número publicado na edição anterior ou
 num roteiro do curso, a divergência é **declarada no texto**, com os dois valores, em vez de
-escondida. É a mesma regra que a pesquisa aplica a si própria (seção 9.7 da edição anterior, hoje
+escondida. É a regra que a pesquisa aplica a si própria (seção 9.7 da edição anterior, hoje
 Parte V, Capítulo 21).
 
 ---
 
 ## A rampa de três degraus
 
-Cada capítulo atravessa três degraus, sempre na mesma ordem. Os nomes são fixos e aparecem como
-títulos internos.
+Cada capítulo atravessa três degraus, sempre nesta ordem. Os nomes são fixos e aparecem como títulos
+internos.
 
 **Degrau 1 — O mundo real e o paradoxo.** Uma história concreta, com pessoas, números redondos e
 frequências naturais ("em cada 100 pessoas..."), tabelas de contagem e gráficos. Nenhum símbolo
@@ -54,11 +55,11 @@ Bayes, Jensen, Meng, Murphy, Pearl, Kelly e Chouldechova.
 
 **Degrau 3 — Mão na massa.** Um laboratório em Rust, autocontido, com semente fixa, seguido de
 exercícios de três tipos: *Conceito* (responder com palavras), *Conta* (responder com um número) e
-*Laboratório* (responder com código que outra pessoa rode e obtenha o mesmo resultado).
+*Laboratório* (responder com código que outra pessoa rode e obtenha resultado idêntico).
 
-**Por que três degraus.** Porque cada ideia deste livro tem duas falhas previsíveis de aprendizado: o
-estudante que aprende a fórmula sem ver o mundo aplica a fórmula no mundo errado; o estudante que vê
-o mundo sem formalizar não consegue auditar nada. O terceiro degrau existe para fechar o ciclo: se o
+**Por que três degraus.** Porque cada ideia deste livro tem duas falhas previsíveis de aprendizado. O
+estudante que aprende a fórmula sem ver o mundo aplica a fórmula no mundo errado. O estudante que vê o
+mundo sem formalizar não consegue auditar nada. O terceiro degrau existe para fechar o ciclo. Se o
 teorema está certo, ele roda.
 
 ---
@@ -123,10 +124,10 @@ cargo run --release --bin labs -- --cap 4     # um capítulo
 cargo run --release --bin labs -- --todos     # todos os laboratórios
 ```
 
-**Registro consolidado.** Em 2026-10-16 o andaime de medição em Python saiu da árvore: as frentes citadas
+**Registro consolidado.** Em 2026-10-16 o andaime de medição em Python saiu da árvore. As frentes citadas
 nos capítulos (`h0-real/`, `h1-real/`, `h2*/`, `h3/`) foram consolidadas em `REGISTRO_EMPIRICO.md`, que traz
 cada número com a marca do instrumento Rust que o reproduz, e o material original vive no commit `1bfec905`.
-As menções às frentes antigas no texto são **históricas**: dizem de onde o número veio, não um caminho vivo.
+As menções às frentes antigas no texto são **históricas**, e dizem de onde o número veio, não um caminho vivo.
 
 **Declaração de divergência.** Quando este livro cita um número do repositório da pesquisa e o
 instrumento desta edição devolve outro, os dois aparecem, com o motivo provável.
@@ -142,8 +143,8 @@ dela. O Apêndice B traduz cada símbolo do livro para o português e para o có
 
 ## Capítulo 1. O alvo invisível: o que é a Estocologia?
 
-**Objetivos.** Ao fim deste capítulo você deve saber dizer o que a Estocologia estuda, de onde vem o
-nome, quais três tradições ela costura e por que a conferência de um resultado depende de o sorteio
+**Objetivos.** Ao fim deste capítulo você deve saber dizer a que se dedica a Estocologia, de onde vem
+o nome, quais três tradições ela costura e por que a conferência de um resultado depende de o sorteio
 ser repetível.
 
 ---
@@ -151,15 +152,15 @@ ser repetível.
 ### Degrau 1 — O mundo real e o paradoxo
 
 **A decisão antes da resposta.** Numa terça-feira de manhã, uma médica atende um homem de 54 anos com
-dor no peito. Ela não sabe o que vai acontecer com aquele paciente. Ela tem um eletrocardiograma, a
-idade dele, o histórico, e quinze minutos. Ela decide: interna ou manda para casa. Se ela internar, o
+dor no peito, e não sabe como aquele caso vai terminar. Ela tem em mãos um eletrocardiograma, a idade
+dele, o histórico, e quinze minutos. A decisão é entre internar e mandar para casa. Se ela internar, o
 hospital gasta um leito que faltará para outro; se ela mandar para casa, e o pior acontecer, ninguém
 vai esquecer o nome dela.
 
-Repare no que aconteceu: **a decisão foi tomada antes de a resposta existir**. Isso não é descuido do
-sistema de saúde. É a condição de praticamente toda decisão que importa. O juiz decide sem ter visto o
-crime. O gestor contrata pessoal para uma demanda que ainda não chegou. Você escolhe um curso antes de
-saber se vai gostar dele.
+Repare no que acaba de acontecer. **A decisão foi tomada antes de a resposta existir.** Isso não é
+descuido do sistema de saúde. É a condição de praticamente toda decisão que importa. O juiz decide sem
+ter visto o crime. O gestor contrata pessoal para uma demanda que ainda não chegou. Você escolhe um
+curso antes de saber se vai gostar dele.
 
 Chamamos de **Estocologia** a ciência (e a arte) que estuda esse tipo de julgamento: **o julgamento e
 a decisão sob incerteza**.
@@ -167,15 +168,15 @@ a decisão sob incerteza**.
 **Em cada 100 decisões.** Para tornar a conversa concreta, o livro inteiro usa frequências naturais.
 Em vez de "a probabilidade de erro é de 9%", diga: *em cada 100 pacientes como este, cerca de 9
 recebem o diagnóstico errado*. Em vez de "a prevalência é de 1%", diga: *em cada 1.000 pessoas que
-entram na fila, 10 estão doentes*. Em vez de "o intervalo de confiança cobre a verdade em 95% dos
-casos", diga: *em cada 100 experimentos repetidos, 95 dão um intervalo que contém o valor real*. São
-os mesmos números, mas o segundo jeito de dizer já mostra quem paga a conta.
+entram na fila, 10 estão doentes*. E, em vez de "o intervalo de confiança cobre a verdade em 95% dos
+casos", diga: *em cada 100 experimentos repetidos, 95 dão um intervalo que contém o valor real*. Os
+números não mudam, mas o segundo jeito de dizer já mostra quem paga a conta.
 
 **De onde vem o nome.** *Stókhos* é a palavra grega para o alvo onde se mira, e também para a
-conjectura bem orientada — o palpite de quem mira no que não vê. Em 1713, três anos depois de sua
+conjectura bem orientada, o palpite de quem mira no que não vê. Em 1713, três anos depois de sua
 morte, foi publicado o *Ars Conjectandi*, de Jacob Bernoulli: a arte de conjecturar, que ele chamou de
 *stochastice*. Com o tempo, "estocástico" passou a significar apenas "aleatório", e perdeu justamente
-a parte interessante: **mirar bem quando não se vê o alvo**. Este livro quer recuperar esse sentido.
+a parte interessante, **mirar bem quando não se vê o alvo**. Este livro quer recuperar esse sentido.
 
 **A parte "arte".** A definição diz "ciência (ou arte)" de propósito. Há uma parte do julgamento sob
 incerteza que se formaliza, e o livro inteiro mostra como: a coerência das crenças (Capítulo 3), a
@@ -183,17 +184,17 @@ atualização pela evidência (Capítulo 3), a margem de erro na unidade certa (
 calibração (Capítulo 8), o custo do erro (Capítulo 11). E há uma parte que não se formaliza por
 completo: qual modelo vale a pena levar a sério, quando parar de coletar dados, quem paga se o erro
 acontecer. Uma disciplina honesta sobre incerteza precisa ser honesta sobre os limites do próprio
-formalismo — e é por isso que todo capítulo deste livro, no fim, declara onde pode falhar.
+formalismo. É por isso que todo capítulo deste livro, no fim, declara onde pode falhar.
 
 **Por que dois computadores precisam sortear os mesmos números.** Um experimento científico precisa
-ser **repetível**: outra pessoa, em outra máquina, no ano que vem, tem de obter o mesmo resultado. Se
-o programa sorteia números ao acaso a cada execução, nada se pode conferir: cada rodada dá uma
-resposta diferente e a discussão vira "no meu computador deu outro valor".
+ser **repetível**, e outra pessoa, em outra máquina, no ano que vem, tem de obter resultado idêntico.
+Se o programa sorteia números ao acaso a cada execução, nada se pode conferir, e cada rodada dá uma
+resposta diferente; a discussão vira "no meu computador deu outro valor".
 
-A solução é simples e é a base de todo laboratório deste livro: **a semente**. Um gerador de números
+A solução é simples, e **a semente** é a base de todo laboratório deste livro. Um gerador de números
 pseudoaleatórios é uma receita determinística. Dada a mesma semente de partida, a receita produz a
 mesma sequência de números, sempre, em qualquer máquina. O "acaso" do experimento é um acaso
-*reprodutível*: parece aleatório para quem olha o resultado, mas é auditável por quem sabe a semente.
+*reprodutível*, aleatório para quem olha o resultado e auditável por quem sabe a semente.
 
 ---
 
@@ -203,8 +204,8 @@ mesma sequência de números, sempre, em qualquer máquina. O "acaso" do experim
 Formalmente, ela estuda como um agente transforma informação incompleta em uma ação e responde pelas
 consequências.
 
-**Uma costura, não um ramo novo.** A disciplina não é um ramo novo da estatística; é uma costura entre
-três tradições que cresceram separadas e raramente se citam.
+**A costura de três tradições.** A disciplina costura três tradições que cresceram separadas e
+raramente se citam; não é um ramo novo da estatística.
 
 - **A filosofia da indução.** Hume mostrou que toda defesa da indução pressupõe que o futuro se
   parecerá com o passado. Popper trocou a confirmação pela refutação. Lakatos mostrou como as teorias
@@ -216,21 +217,21 @@ três tradições que cresceram separadas e raramente se citam.
 
 **Os ajustes de Lakatos.** Duhem e Quine lembraram que uma previsão frustrada refuta a teoria junto
 com suas hipóteses auxiliares, nunca sozinha. Lakatos separou dois modos de salvar a teoria. O ajuste
-**progressivo** prevê algo novo que depois se confirma: em 1846, a anomalia na órbita de Urano não
+**progressivo** prevê algo novo que depois se confirma; em 1846, a anomalia na órbita de Urano não
 derrubou Newton, porque Le Verrier postulou um planeta oculto e Netuno foi encontrado. O ajuste
-**degenerativo** apenas protege a teoria: a mesma manobra com o planeta Vulcano, para explicar
-Mercúrio, fracassou. Toda mudança de especificação depois de uma falha — e este livro relata várias —
-precisa responder a essa pergunta: o conserto previu algo novo, ou só escondeu o erro?
+**degenerativo** apenas protege a teoria, e a manobra equivalente, com o planeta Vulcano, fracassou
+ao explicar Mercúrio. Toda mudança de especificação depois de uma falha (e este livro relata várias)
+precisa responder a uma pergunta. O conserto previu algo novo, ou só escondeu o erro?
 
-**A pergunta que muda.** Em vez de perguntar "qual é a probabilidade?", a Estocologia pergunta três
-coisas: **em que camada esta afirmação pode falhar? Que tipo de incerteza a ameaça? Que teste ela
-teria de enfrentar para merecer confiança?** O resto do livro é a resposta a essas três perguntas.
+**A pergunta que muda.** Em vez de perguntar "qual é a probabilidade?", a Estocologia formula outras
+três. **Em que camada esta afirmação pode falhar? Que tipo de incerteza a ameaça? Que teste ela
+teria de enfrentar para merecer confiança?** O resto do livro responde a essas três perguntas.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
-O laboratório deste capítulo não calcula nada de interessante: ele mostra *por que* tudo o que vem
+O laboratório deste capítulo não calcula nada de interessante, mas mostra *por que* tudo que vem
 depois é conferível. O código está em `crates/stochology-book/src/cap01.rs`, e a saída abaixo
 foi medida com `cargo run --release --bin labs -- --cap 1`.
 
@@ -243,11 +244,11 @@ semente 1909: frequencia de caras em 100 mil jogadas = 0.4992
 semente 2026: frequencia de caras em 100 mil jogadas = 0.4987
 ```
 
-Leia linha por linha. **10000 de 10000**: duas "máquinas" independentes, com a mesma semente, produzem
-a mesma sequência — é isso que torna o experimento auditável. **0**: quando a semente muda, as
-sequências não têm nada em comum (zero coincidências em dez mil sorteios), o que mostra que a semente
-não foi escolhida para forçar um resultado: ela é só o ponto de partida. **0,5000, 0,4992 e 0,4987**:
-três sementes diferentes, três moedas honestas, frequências de caras a menos de 0,0013 de um meio em
+Leia linha por linha. **10000 de 10000**. Duas "máquinas" independentes, com a semente de partida em
+comum, produzem sequências idênticas, e é isso que torna o experimento auditável. **0**. Quando a
+semente muda, as sequências não têm nada em comum (zero coincidências em dez mil sorteios). A semente
+não foi escolhida para forçar um resultado; ela é só o ponto de partida. **0,5000, 0,4992 e 0,4987**.
+Três sementes diferentes, três moedas honestas, frequências de caras a menos de 0,0013 de um meio em
 100 mil jogadas. O acaso, quando se acumula, se comporta.
 
 **Exercícios.**
@@ -257,9 +258,10 @@ três sementes diferentes, três moedas honestas, frequências de caras a menos 
 2. *(Conceito)* Um jornal escreve: "o sorteio foi auditado e ninguém sabe o resultado antes da hora".
    Se o programa que faz o sorteio tem semente fixa, quem conhece a semente sabe o resultado? Por que
    isso não invalida o sorteio?
-3. *(Conta)* Você roda o mesmo experimento e obtém 0,53 de caras em 100 jogadas. Em 100 mil jogadas,
-   esperaria o mesmo desvio? Justifique com uma frase sobre o que o acaso faz quando se acumula.
-4. *(Laboratório)* Rode `labs --cap 1` e depois troque a semente de 1909 para 1909 no arquivo: o
+3. *(Conta)* Você repete o experimento e obtém 0,53 de caras em 100 jogadas. Em 100 mil jogadas,
+   esperaria desvio parecido? Justifique com uma frase sobre como o acaso se comporta quando se
+   acumula.
+4. *(Laboratório)* Rode `labs --cap 1` e depois troque a semente de 1909 para 1909 no arquivo. O
    resultado muda? Troque para 1910 e meça quantas coincidências aparecem em 100 mil sorteios.
 5. *(Conceito)* Cite uma decisão da sua vida em que a resposta só se conhece meses depois, e diga qual
    informação você gostaria de ter tido e não teve.
@@ -267,9 +269,10 @@ três sementes diferentes, três moedas honestas, frequências de caras a menos 
 **Resumo.**
 
 - Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob incerteza.
-- O nome vem do *stókhos* de Bernoulli (1713): mirar bem quando o alvo não se vê.
+- O nome vem do *stókhos* de Bernoulli (1713). Mirar bem quando o alvo não se vê.
 - Ela costura filosofia da indução, inferência estatística e processos estocásticos.
-- A conferência de um resultado depende de o acaso do experimento ser reprodutível: semente fixa.
+- A conferência de um resultado depende de o acaso do experimento ser reprodutível. Isso exige semente
+  fixa.
 
 ## Capítulo 2. Mundo, Modelo e Agente: onde moram os erros?
 
@@ -282,17 +285,17 @@ tese da ponte, aplicar as três formas de inferência de Peirce, distinguir os t
 ### Degrau 1 — O mundo real e o paradoxo
 
 **O território, o mapa e o motorista.** Você está num carro em uma cidade desconhecida. Existe a
-cidade de verdade — ruas, buracos, obras, o caminhão parado na esquina. Existe o mapa — uma folha de
+cidade de verdade: ruas, buracos, obras, o caminhão parado na esquina. Existe o mapa, uma folha de
 papel que representa a cidade, sempre incompleta e sempre desatualizada em algum ponto. E existe o
-motorista — você, com fome, com pressa, com atenção dividida, decidindo a cada cruzamento.
+motorista, você, com fome, com pressa, com atenção dividida, decidindo a cada cruzamento.
 
-Os três são coisas diferentes, e o mapa nunca é o território. Mas o motorista só age pelo mapa. É aí
-que nasce quase todo erro que este livro estuda: **não no mapa, e sim na passagem do mundo para o
+Os três são coisas diferentes, e o mapa nunca é o território. Mas o motorista só age pelo mapa. Ali
+nasce quase todo erro que este livro estuda. **Não no mapa, e sim na passagem do mundo para o
 mapa, e do mapa para a mão do motorista.**
 
-**A fila do posto de saúde.** Em cada 100 dias, o posto recebe pacientes assim: em metade dos dias,
-chegam 5 pessoas por hora; na outra metade, chegam 11. Em média, 8 pessoas por hora. O posto atende 12
-por hora.
+**A fila do posto de saúde.** Em cada 100 dias, o posto recebe pacientes de duas maneiras. Em metade
+dos dias chegam 5 pessoas por hora; na outra metade, chegam 11. Em média, 8 pessoas por hora. O posto atende
+12 por hora.
 
 A alegação do gestor é esta: *"a demanda média é 8, o posto atende 12, então a espera é de cerca de 10
 minutos e não há por que contratar".* A conta está certa para um mundo em que chegam exatamente 8
@@ -305,10 +308,10 @@ Só que o mundo é o outro. Simulados com a mesma semente, os dois mundos dão:
 | Sempre 8 por hora | 9,3 minutos | 8 |
 | Metade dos dias com 5, metade com 11 | 20,7 minutos | 25 |
 
-Nenhuma conta errou. A média da demanda é 8 nos dois casos. O que mudou foi o **mundo**: quando a
+Nenhuma conta errou. A média da demanda é 8 nos dois casos. O **mundo** mudou. Quando a
 demanda oscila, a fila do dia cheio cresce muito mais do que a fila do dia vazio encolhe, porque a
-espera cresce **em curva**. Quem olhou só a média — "o paciente médio espera 10 minutos" — decidiu por
-um mundo que não existe. O Capítulo 5 explica a curva; o Capítulo 16 refaz o caso inteiro com os
+espera cresce **em curva**. Quem olhou só a média, com a frase "o paciente médio espera 10 minutos",
+decidiu por um mundo que não existe. O Capítulo 5 explica a curva; o Capítulo 16 refaz o caso inteiro com os
 números do repositório.
 
 ---
@@ -323,12 +326,12 @@ números do repositório.
 | Modelo | $L_2$ | A representação formal, simplificada e simulável | Premissas ocultas, espaço de hipóteses, verossimilhança, sobreajuste |
 | Agente | $L_3$ | Quem decide: pessoa, instituição ou algoritmo, com tempo e atenção limitados | Atalhos heurísticos, calibração, utilidade, laços em que a ação muda o Mundo |
 
-As três formam um laço: o Mundo gera dados, o Modelo os interpreta, o Agente age, e a ação volta a
-mudar o Mundo. Cada seta é uma **ponte** onde o erro entra: dados filtrados entre Mundo e Modelo,
-previsão mal lida entre Modelo e Agente, ação que deforma o Mundo que se queria medir.
+As três formam um laço. O Mundo gera dados, o Modelo os interpreta, o Agente age, e a ação volta a
+mudar o Mundo. Cada seta é uma **ponte** onde o erro entra. Os dados chegam filtrados entre Mundo e Modelo, a previsão
+é mal lida entre Modelo e Agente, e a ação deforma o Mundo que se queria medir.
 
-**A tese da ponte.** *Uma falácia, quase sempre, não é um erro de aritmética: é um desalinhamento
-entre camadas.* Vale a pena dizer o que essa tese **não** afirma: ela não diz que contas erradas não
+**A tese da ponte.** *Uma falácia, quase sempre, não é um erro de aritmética, e sim um desalinhamento
+entre camadas.* Vale a pena dizer o que essa tese **não** afirma. Ela não diz que contas erradas não
 existem, nem que quem usa a arquitetura não erra. Ela diz onde procurar primeiro.
 
 **As três formas de inferência (Peirce).** Peirce obteve dedução, indução e abdução permutando as
@@ -340,16 +343,16 @@ mesmas três proposições: regra, caso e resultado.
 | Indução | Caso e resultado | Regra | Não: amplia e pode falhar |
 | Abdução | Regra e resultado | Caso (a melhor explicação) | Não: amplia e pode falhar |
 
-A abdução escolhe a hipótese que torna os dados menos surpreendentes — mas só entre as hipóteses
-consideradas. É a precursora da máxima verossimilhança e herda o mesmo limite, que o Capítulo 4
+A abdução escolhe a hipótese que torna os dados menos surpreendentes, mas só entre as hipóteses
+consideradas. É a precursora da máxima verossimilhança e herda o limite dela, que o Capítulo 4
 chamará de incerteza knightiana.
 
 **Os três sentidos de "viés".** A palavra é usada para três coisas que a disciplina separa para
-depois reunir: o viés estatístico de um estimador (Modelo), o viés do processo que produziu os dados
-(Mundo) e o viés cognitivo de quem raciocina (Agente). Nos três casos o erro não é ruído que se
-cancela com mais dados: é uma distorção que se acumula.
+depois reunir. São o viés estatístico de um estimador (Modelo), o viés do processo que produziu os
+dados (Mundo) e o viés cognitivo de quem raciocina (Agente). Nos três casos o erro não é ruído que se
+cancela com mais dados, e sim uma distorção que se acumula.
 
-**A tese tem uma versão operacional:** a maior parte dos vieses do catálogo clássico corresponde a um
+**A tese tem uma versão operacional.** A maior parte dos vieses do catálogo clássico corresponde a um
 modelo de acaso que foi ignorado.
 
 | Viés | Modelo de acaso ignorado |
@@ -364,20 +367,20 @@ modelo de acaso que foi ignorado.
 
 **A falácia do promotor.** O Agente lê a verossimilhança do Modelo, $P(\text{evidência} \mid
 \text{inocente})$, como se fosse a resposta sobre o Mundo, $P(\text{inocente} \mid \text{evidência})$.
-São números diferentes, e a diferença depende inteiramente da camada $L_1$: de quantas pessoas
-inocentes se está falando.
+Os dois números são diferentes, e a diferença depende inteiramente da camada $L_1$, ou seja, de quantas
+pessoas inocentes se está falando.
 
-**O paradoxo da inspeção.** O Agente impõe um Modelo estável a um Mundo que oscila — como o gestor do
+**O paradoxo da inspeção.** O Agente impõe um Modelo estável a um Mundo que oscila, como o gestor do
 posto, que projetou a fila do dia médio para todos os dias.
 
 **A tese foi testada uma vez.** Doze casos foram montados a partir de uma lista externa de dez erros
-estatísticos comuns (Makin e Orban de Xivry, 2019): oito com um defeito plantado, quatro limpos,
-analisados às cegas por dois braços independentes — um com a arquitetura deste livro, outro com a
-instrução de analisar com rigor, sem agentes nem portões. Os dois apontaram os 8 defeitos e deram zero
+estatísticos comuns (Makin e Orban de Xivry, 2019). Oito casos tinham um defeito plantado e quatro
+estavam limpos; dois braços independentes os analisaram às cegas, um com a arquitetura deste livro,
+outro com a instrução de analisar com rigor, sem agentes nem portões. Os dois apontaram os 8 defeitos e deram zero
 alarme falso nos 4 casos limpos. A regra fixada de antemão dizia que **um empate no teto não sustenta a
-tese**, e foi isso que o resultado disse. O empate também não a refuta: mostra que, para os dez erros
+tese**, e foi isso que o resultado disse. O empate também não a refuta. Ele mostra que, para os dez erros
 dessa lista, um analista competente acha tudo o que o outro acha. Se a tese vale, vale para erros que a
-lista não cobre — e um teste justo disso precisa de casos mais difíceis, escolhidos fora do programa, de
+lista não cobre, e um teste justo disso precisa de casos mais difíceis, escolhidos fora do programa, de
 analistas humanos e de um juiz humano. O Capítulo 21 volta a esse ponto.
 
 ---
@@ -397,12 +400,12 @@ pub enum TipoIncerteza { Aleatoria, Epistemica, Knightiana }
 ```
 
 Quem escrever uma função que recebe `Camada::Modelo` não consegue passar um `Camada::Agente`
-sem escrever essa conversão à mão — e a conversão à mão é exatamente o lugar onde o leitor do código vai
-parar para pensar.
+sem escrever essa conversão à mão, e a conversão à mão é o lugar onde o leitor do código vai parar
+para pensar.
 
-**A ponte medida.** O laboratório do capítulo pergunta: uma coincidência de DNA que ocorre por acaso em
-1 pessoa em cada 1 milhão. Em três mundos diferentes — em que a chance prévia de o réu ser o culpado é
-de 1%, de 0,1% e de 0,0001% — qual é a resposta correta sobre o réu?
+**A ponte medida.** O laboratório do capítulo pergunta o seguinte. Uma coincidência de DNA ocorre por
+acaso em 1 pessoa em cada 1 milhão. Em três mundos diferentes, em que a chance prévia de o réu ser o
+culpado é de 1%, de 0,1% e de 0,0001%, qual é a resposta correta sobre o réu?
 
 ```text
 == Capítulo 2 :: a falácia mora na ponte ==
@@ -411,8 +414,8 @@ prevalencia 1e-3: P(evidencia|inocente)=0.00000100  P(inocente|evidencia)=0.0010
 prevalencia 1e-6: P(evidencia|inocente)=0.00000100  P(inocente|evidencia)=0.5000  fator da troca=499999.7
 ```
 
-A primeira coluna é a mesma nos três mundos: **0,000001**. É a verossimilhança, e é o número que o
-promotor cita. A segunda coluna é a resposta: com a mesma evidência e a mesma verossimilhança, a chance
+A primeira coluna não muda nos três mundos, **0,000001**. É a verossimilhança, e é o número que o
+promotor cita. A segunda coluna é a resposta. Com evidência e verossimilhança idênticas, a chance
 de inocência vai de **0,0001** (0,01%) a **0,5** (50%). A terceira coluna mostra quanto a troca mente:
 99 vezes no primeiro mundo, 499.999,7 vezes no último. O erro não está na conta; está em responder
 sobre o Mundo com um número do Modelo.
@@ -437,7 +440,7 @@ sobre o Mundo com um número do Modelo.
 - Mundo ($L_1$), Modelo ($L_2$) e Agente ($L_3$) são camadas distintas, e a maior parte dos erros mora
   nas pontes entre elas.
 - Peirce: dedução preserva a verdade; indução e abdução ampliam e podem falhar.
-- "Viés" tem três sentidos — do dado, do estimador e da mente — e todos se acumulam.
+- "Viés" tem três sentidos, do dado, do estimador e da mente, e todos se acumulam.
 - A falácia do promotor troca $P(E \mid I)$ por $P(I \mid E)$; a troca mente por um fator que depende
   da prevalência no Mundo.
 
@@ -451,48 +454,48 @@ chances, medir a força de uma evidência em decibans e separar as três pergunt
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**"Há 70% de chance de chuva amanhã."** O que essa frase quer dizer?
+**"Há 70% de chance de chuva amanhã."** Qual é o sentido dessa frase?
 
-- Pode querer dizer: *dos 10 dias em que o céu esteve assim, choveu em 7*. Uma contagem do mundo.
-- Pode querer dizer: *o modelo numérico, rodado 10 vezes com pequenas perturbações, deu chuva em 7*. Um
+- Pode querer dizer que *dos 10 dias em que o céu esteve assim, choveu em 7*. Uma contagem do mundo.
+- Pode querer dizer que *o modelo numérico, rodado 10 vezes com pequenas perturbações, deu chuva em 7*. Um
   produto do modelo.
-- Pode querer dizer: *eu apostaria 7 contra 3 nisso*. Uma disposição de quem decide.
-- Pode querer dizer: *dos casos igualmente possíveis, 7 favorecem a chuva*. Uma contagem do modelo.
-- Pode querer dizer: *dado o que sei, o grau racional de apoio à chuva é 0,7*. Uma relação entre
+- Pode querer dizer que *eu apostaria 7 contra 3 nisso*. Uma disposição de quem decide.
+- Pode querer dizer que *dos casos igualmente possíveis, 7 favorecem a chuva*. Uma contagem do modelo.
+- Pode querer dizer que *dado o meu conhecimento, o grau racional de apoio à chuva é 0,7*. Uma relação entre
   proposições.
 
-São cinco coisas diferentes com o mesmo número em cima. Quando alguém lê uma como se fosse a outra, o
-erro não está na aritmética: está na ponte.
+São cinco coisas diferentes com um número igual em cima. Quando alguém lê uma como se fosse a outra, o
+erro não está na aritmética. Está na ponte.
 
 **O amigo que oferece dois bilhetes.** Seu amigo diz que a chance de chover é 60% e a chance de não
-chover é 50%. Você pode comprar dele dois bilhetes: um paga 1 real se chover, outro paga 1 real se não
-chover. Ele cobra 0,60 pelo primeiro e 0,50 pelo segundo — 1,10 no total. Aconteça o que acontecer,
-**um** dos dois bilhetes paga 1 real. Você recebe 1,00 e pagou 1,10. Perdeu 0,10 sem risco nenhum.
+chover é 50%. Você pode comprar dele dois bilhetes. Um paga 1 real se chover, outro paga 1 real se não
+chover. Ele cobra 0,60 pelo primeiro, 0,50 pelo segundo, 1,10 no total. Chova ou não chova, **um** dos
+dois bilhetes paga 1 real. Você recebe 1,00 e pagou 1,10. Perdeu 0,10 sem risco nenhum.
 
 Isso é um **livro holandês**: uma combinação de apostas em que se perde dinheiro com certeza. A regra
 da soma existe para impedir essa combinação. Crenças que obedecem à probabilidade não têm livro
 holandês contra elas.
 
-**Em cada 1.000 mulheres.** Um exame detecta uma doença. Em cada 10.000 mulheres: 100 têm a doença,
+**Em cada 1.000 mulheres.** Um exame detecta uma doença. Em cada 10.000 mulheres, 100 têm a doença e
 9.900 não têm. O exame acerta em 90 dos 100 casos da doença (90%) e dá positivo em 9% das saudáveis.
 Vamos contar quem dá positivo:
 
 - 90 doentes dão positivo.
-- Das 9.900 saudáveis, 9% dão positivo: 891 mulheres.
+- Das 9.900 saudáveis, 9% dão positivo. São 891 mulheres.
 - Total de positivos: 90 + 891 = 981.
 
-**Das 981 mulheres com exame positivo, apenas 90 estão doentes**: cerca de 1 em cada 11. É essa a
+**Das 981 mulheres com exame positivo, apenas 90 estão doentes**, cerca de 1 em cada 11. É essa a
 resposta que interessa a quem acabou de receber o exame, e não o "90%" que o laboratório anuncia.
 
 Quando Gigerenzer e colegas fizeram essa pergunta a 160 ginecologistas, **só 21% escolheram "cerca de 1
-em 10"**. Não é burrice: é a ponte entre a verossimilhança (o que o exame diz) e a posterior (o que a
-paciente quer saber).
+em 10"**. Não é burrice; é a ponte entre a verossimilhança que o exame declara e a posterior que a
+paciente quer saber.
 
-**A conta do tribunal.** No caso Sally Clark, a acusação apresentou o número "1 em 73 milhões" — obtido
-multiplicando 1/8.543 por si mesmo, como se as duas mortes fossem independentes — e o promotor tratou
-esse número como a chance de a mãe ser inocente. Aquele número era a chance de uma coincidência; a
-resposta sobre a inocência exigia a prevalência no Mundo. É a mesma ponte do Capítulo 2, agora com
-consequências fatais.
+**A conta do tribunal.** No caso Sally Clark, a acusação apresentou o número "1 em 73 milhões", obtido
+ao elevar 1/8.543 ao quadrado, como se as duas mortes fossem independentes. O promotor tratou esse
+número como a chance de a mãe ser inocente. Aquele número era a chance de uma coincidência; a resposta
+sobre a inocência exigia a prevalência no Mundo. Essa é a ponte do Capítulo 2, agora com consequências
+fatais.
 
 ---
 
@@ -500,7 +503,7 @@ consequências fatais.
 
 **Por que a crença obedece à probabilidade.** Dois argumentos independentes. Cox (1946) mostrou que
 qualquer medida de plausibilidade consistente obedece, depois de uma reescala, às regras da soma e do
-produto. Ramsey e de Finetti mediram a crença pelo preço de uma aposta: um conjunto de preços admite
+produto. Ramsey e de Finetti mediram a crença pelo preço de uma aposta. Um conjunto de preços admite
 livro holandês se e somente se viola os axiomas.
 
 **As cinco interpretações.** Cada um dos sentidos do "70%" tem um nome, e cada um mora numa camada.
@@ -513,32 +516,32 @@ livro holandês se e somente se viola os axiomas.
 | Lógica (Keynes, Carnap) | Um grau de apoio parcial entre proposições | Modelo |
 | Subjetiva (Ramsey, de Finetti) | O grau de crença de um agente, medido pelo preço de uma aposta | Agente |
 
-A Estocologia não escolhe uma: **tipa cada número pela camada de onde veio**. Muitos erros do Capítulo
+A Estocologia não escolhe uma. **Tipa cada número pela camada de onde veio**. Muitos erros do Capítulo
 2 são trocas de leitura.
 
 **Coerência é barata.** Um agente que comete a falácia da conjunção perde 0,05 por rodada para o
 apostador holandês e 0,60 para quem conhece o mundo. Torná-lo coerente reduz a perda só para 0,55. O
-erro mais visível não era o mais caro: **quem pune o desacordo com o Mundo é a calibração, não a
-coerência** (daí o Capítulo 8).
+erro mais visível não era o mais caro. **Quem pune o desacordo com o Mundo é a calibração** (daí o
+Capítulo 8).
 
-**Bayes em chances.** Escrita em chances, a regra de Bayes separa o que a evidência diz do que já se
-sabia:
+**Bayes em chances.** Escrita em chances, a regra de Bayes separa a razão de verossimilhança da chance
+anterior:
 
 $$\frac{P(H\mid E)}{P(\neg H\mid E)}=\frac{P(E\mid H)}{P(E\mid \neg H)}\times\frac{P(H)}{P(\neg H)}$$
 
 *Chance posterior = razão de verossimilhança × chance anterior.* Uma evidência é forte quando a razão
-está longe de 1, não quando $P(E \mid H)$ é alta.
+se afasta de 1; o valor de $P(E \mid H)$ não mede essa força.
 
 **Máxima entropia.** Quando a informação é incompleta, Jaynes (1957) manda escolher, entre as
-distribuições compatíveis com o que se sabe, a de maior entropia. Um dado de seis faces com média 4,5
-recebe então cerca de 5% na face 1 e 35% na face 6; qualquer outra escolha supõe algo que não foi
-declarado.
+distribuições compatíveis com a informação disponível, a de maior entropia. Um dado de seis faces com
+média 4,5 recebe então cerca de 5% na face 1 e 35% na face 6; qualquer outra escolha supõe algo que não
+foi declarado.
 
-**Decibans.** Turing e Good mediram a força da evidência em decibans: dez vezes o logaritmo decimal da
+**Decibans.** Turing e Good mediram a força da evidência em decibans, dez vezes o logaritmo decimal da
 razão de verossimilhança. Nessa escala, evidências independentes **se somam**. A independência é a
-condição que mais se esquece: dois exames positivos com uma causa comum de erro não valem o dobro.
+condição que mais se esquece. Dois exames positivos com uma causa comum de erro não valem o dobro.
 
-**Royall em três perguntas.** Royall separou três perguntas que costumam ser respondidas com o mesmo
+**Royall em três perguntas.** Royall separou três perguntas que costumam ser respondidas com um único
 número: *o que estes dados dizem sobre H contra H′?* (razão de verossimilhança); *no que devo acreditar
 agora?* (exige uma priori); *o que devo fazer?* (exige custos e perdas, Capítulo 11). O p-valor não
 responde bem a nenhuma das três.
@@ -549,7 +552,7 @@ nunca é negativa:
 $$D(P_1\,\|\,P_0)=\sum_x P_1(x)\log\frac{P_1(x)}{P_0(x)}\ \ge 0$$
 
 Para separar uma moeda de 60% de uma honesta com chances de 100 para 1, são precisos cerca de **229
-lances**. E a evidência engana pouco: se a hipótese nula é verdadeira, a chance de a razão de
+lances**. E a evidência engana pouco. Se a hipótese nula é verdadeira, a chance de a razão de
 verossimilhança alguma vez chegar a $k$ é no máximo $1/k$, qualquer que seja o tamanho da amostra:
 
 $$P_{H_0}\Big(\sup_n \mathrm{RV}_n \ge k\Big)\le \frac{1}{k}$$
@@ -573,18 +576,18 @@ segundo exame: independente = 10.0 dB, correlacionado (razao efetiva 4,2) = 6.23
 posterior com dois positivos: independentes = 0.5025, correlacionados = 0.2979
 ```
 
-Três lições em três linhas. **(1)** A árvore dá 981 positivas, das quais 90 doentes: 0,0917, ou uma em
-cada 10,9 — e não 90%. **(2)** O segundo exame vale 10 decibans se for independente do primeiro e 6,23
-decibans se houver uma causa comum de falso positivo (tecida densa, por exemplo), com razão efetiva
-caindo de 10 para 4,2. **(3)** Com dois positivos, a crença sai de 1% para 50,25% no caso independente e
-para 29,79% no caso correlacionado. A independência não era um detalhe: é quase a metade da conclusão.
-O número do repositório para o caso correlacionado é 30%, o mesmo valor arredondado que aparece no
-roteiro do curso.
+Três lições em três linhas. **(1)** A árvore dá 981 positivas, das quais 90 doentes. Isso é 0,0917, ou
+uma em cada 10,9, e não 90%. **(2)** O segundo exame vale 10 decibans se for independente do primeiro e
+6,23 decibans se houver uma causa comum de falso positivo (tecida densa, por exemplo), com razão
+efetiva caindo de 10 para 4,2. **(3)** Com dois positivos, a crença sai de 1% para 50,25% no caso
+independente e para 29,79% no caso correlacionado. A independência não era um detalhe. É quase a
+metade da conclusão. O número do repositório para o caso correlacionado é 30%, o valor arredondado que
+aparece no roteiro do curso.
 
 **Exercícios.**
 
 1. *(Conta)* Refaça a árvore da mamografia para 1.000 mulheres (em vez de 10.000) e confira que a
-   resposta é a mesma: quantas positivas, quantas doentes?
+   resposta é a mesma. Quantas positivas, quantas doentes?
 2. *(Conta)* Uma mulher dá positivo na segunda mamografia. Quantos decibans vale o segundo exame se ele
    for independente, e quantos com a razão efetiva de 4,2? Qual é a posterior em cada caso?
 3. *(Conceito)* Por que "1 em 73 milhões" cometeu dois erros diferentes? Nomeie a ponte ou a camada de
@@ -599,7 +602,7 @@ roteiro do curso.
 **Resumo.**
 
 - Cinco interpretações de probabilidade, tipadas por camada; a Estocologia não escolhe uma.
-- Coerência evita o livro holandês; calibração evita perder para o Mundo — e custa mais.
+- Coerência evita o livro holandês; calibração evita perder para o Mundo e custa mais.
 - Bayes em chances separa a força da evidência (razão de verossimilhança) da crença anterior; em
   frequências naturais, a mesma conta fica visível numa árvore.
 - Decibans somam quando as evidências são independentes; a independência é a hipótese mais frágil e a
@@ -616,21 +619,21 @@ reconhecer um modelo que envelhece em silêncio.
 ### Degrau 1 — O mundo real e o paradoxo
 
 **O peru de Natal.** Um peru é alimentado todos os dias, pontualmente, às 9 horas da manhã. No dia 1,
-ele não sabe nada. No dia 10, desconfia que a comida tem algo a ver com o galinheiro. No dia 60, já tem
-uma teoria. No dia 100, ele faz a conta dos seus dias: *em 100 manhãs, a comida chegou em 100*. Na
+ele não sabe nada; no dia 10, desconfia que a comida tem algo a ver com o galinheiro. No dia 60, já
+tem uma teoria. No dia 100, ele faz a conta dos seus dias. *Em 100 manhãs, a comida chegou em 100.* Na
 véspera do dia 101, o peru está **99% confiante** de que amanhã, às 9 horas, a comida chega.
 
-O dia 101 é o Natal. E o Natal nunca esteve na lista de hipóteses do peru. Nenhum dado a mais o teria
-salvo: **mais observações só aumentaram a confiança no lugar errado.** (Bertrand Russell contou a
+O dia 101 é o Natal, e o Natal nunca esteve na lista de hipóteses do peru. Nenhum dado a mais o teria
+salvo. **Mais observações só aumentaram a confiança no lugar errado.** (Bertrand Russell contou a
 história com uma galinha; Nassim Taleb a recontou com o peru.)
 
 **Em cada 100 experimentos.** Imagine dois tipos de incerteza convivendo:
 
 - **A moeda.** Você joga uma moeda honesta 100 vezes. Em cada 100 experimentos de 100 lances, a
-  proporção de caras fica perto de 50%, mas nunca exatamente 50%. Jogar mais vezes **não** faz a
-  proporção virar exatamente 50%: o sorteio continua sorteio.
+  proporção de caras fica perto de 50%, mas nunca igual a 50%. Jogar mais vezes **não** faz a
+  proporção virar 50%. O sorteio continua sorteio.
 - **A moeda desconhecida.** Você joga uma moeda sem saber se é honesta. Depois de 10 lances, ainda não
-  sabe. Depois de 10.000 lances, sabe quase com certeza. Aqui, mais dados resolvem.
+  sabe; depois de 10.000 lances, sabe quase com certeza. Aqui, mais dados resolvem.
 
 Esses dois casos têm nomes diferentes, e confundi-los custa caro. Existe ainda um terceiro, o do peru.
 
@@ -642,8 +645,8 @@ Esses dois casos têm nomes diferentes, e confundi-los custa caro. Existe ainda 
 
 $$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{aleatória (Mundo)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistêmica (Modelo)}}$$
 
-A primeira parcela é o sorteio: existe mesmo com o parâmetro conhecido. A segunda é a ignorância sobre o
-parâmetro: desaparece quando o parâmetro é identificável e você tem dados.
+A primeira parcela nasce do sorteio e persiste quando o parâmetro é conhecido. A segunda nasce da
+ignorância sobre o parâmetro e desaparece quando você o identifica e tem dados.
 
 | Incerteza | Camada | O que mais dados fazem | Como se mitiga |
 | --- | --- | --- | --- |
@@ -652,11 +655,11 @@ parâmetro: desaparece quando o parâmetro é identificável e você tem dados.
 | Knightiana | Modelo e Agente | Nada — ou pior: falsa confiança | Cenários, robustez, estresse de premissas, ampliar o espaço de hipóteses |
 
 Frank Knight (1921) separou o **risco**, de probabilidades conhecidas, da **incerteza**, de
-probabilidades que não se podem medir. No caso extremo — que este livro chama de incerteza knightiana
-ou erro de especificação — o processo real está **fora** do espaço de hipóteses. É a mais perigosa,
-porque não aparece na equação: o intervalo estreita em volta da resposta errada.
+probabilidades que não se podem medir. No caso extremo, que este livro chama de incerteza knightiana
+ou erro de especificação, o processo real está **fora** do espaço de hipóteses. Essa incerteza é a mais
+perigosa das três, porque não aparece na equação. O intervalo estreita em volta da resposta errada.
 
-**A matriz de Stirling.** Duas perguntas organizam o diagnóstico: sabemos quais desfechos são
+**A matriz de Stirling.** Duas perguntas organizam o diagnóstico. Sabemos quais desfechos são
 possíveis? Sabemos suas probabilidades?
 
 |  | Probabilidades conhecidas | Probabilidades desconhecidas |
@@ -677,7 +680,7 @@ ao campo da ficha (Capítulo 14), e o nível diz se basta uma margem ou se é pr
 
 $$P(\text{sucesso amanhã}\mid s,n)=\frac{s+1}{n+2}$$
 
-A regra também não é neutra, porque deriva de uma priori uniforme: com sete sucessos em dez, a uniforme
+A regra também não é neutra, porque deriva de uma priori uniforme. Com sete sucessos em dez, a uniforme
 dá 0,667, uma uniforme sobre $\theta^2$ dá 0,692 e uma sobre $\sqrt{\theta}$ dá 0,652. **Até a
 ignorância tem forma**, e é por isso que a escolha de priori precisa ser declarada (Capítulo 13, faixa
 F7).
@@ -699,10 +702,10 @@ largura do intervalo fixo no passo 100 = 0.1564, no passo 6400 = 0.0240
 largura do intervalo com esquecimento no passo 6400 = 0.1360 (razao 5.7x o fixo final)
 ```
 
-O modelo fixo declara "95% de confiança" e **cobre a verdade em 12% dos passos**: o intervalo encolhe de
-0,1564 para 0,0240 enquanto o vício caminha para fora dele. O modelo que esquece o passado, com um
-intervalo **5,7 vezes mais largo**, cobre 93,98% — perto do nominal. O preço da honestidade é a largura
-do intervalo; o preço da teimosia é a confiança falsa.
+O modelo fixo declara "95% de confiança" e **cobre a verdade em 12% dos passos**. O intervalo encolhe
+de 0,1564 para 0,0240 enquanto o vício caminha para fora dele. Já o modelo que esquece o passado, com
+um intervalo **5,7 vezes mais largo**, cobre 93,98%, perto do nominal. O preço da honestidade é a
+largura do intervalo; o preço da teimosia é a confiança falsa.
 
 **Declaração de divergência.** A edição anterior deste livro (e o roteiro do curso) registra 11% de
 cobertura para o modelo fixo e 99% para o modelo com esquecimento, com larguras de 0,140 a 0,035. Este
@@ -748,42 +751,43 @@ unidade de fato independente.
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**O posto de saúde.** Em cada 100 dias, o posto recebe pacientes assim: em 50 dias chegam 5 pessoas por
-hora; nos outros 50, chegam 11. A média é 8 pessoas por hora. O posto consegue atender 12 por hora.
+**O posto de saúde.** Em cada 100 dias, o posto recebe pacientes de duas maneiras. Em 50 dias chegam 5
+pessoas por hora; nos outros 50, chegam 11. A média é 8 pessoas por hora. O posto consegue atender 12 por hora.
 
 O gestor olha a planilha e diz: *"a demanda média é 8, o posto atende 12, sobra folga; a espera média
 tem de ficar em torno de 10 minutos, e não há por que contratar"*. Nenhuma conta errada foi feita. E,
 ainda assim, o mundo que a planilha descreve não existe.
 
-Comparemos os dois mundos do Capítulo 1 — é a mesma medição, repetida aqui para medir o pedágio —, com a mesma demanda média de 8 pacientes por hora:
+A tabela abaixo retoma os dois mundos do Capítulo 1, repetidos aqui para medir o pedágio, e a demanda
+média não muda de uma linha para a outra.
 
 | Mundo | Espera média por paciente | Em cada 100 pacientes, quantos esperam mais de 30 min |
 | --- | --- | --- |
 | Sempre 8 por hora | 9,3 minutos | 8 |
 | Metade dos dias com 5, metade com 11 | 20,7 minutos | 25 |
 
-Mesma média. A espera média mais que dobrou, e o número de pessoas que esperam mais de meia hora
+A média não mudou em nada. A espera média mais que dobrou, e o número de pessoas que esperam mais de meia hora
 triplicou. Uma decisão sobre contratar pessoal, tomada no primeiro mundo, é aplicada no segundo.
 
-**A curva.** Desenhe num papel a função $y = x^2$: uma parábola com a boca para cima. Marque dois
+**A curva.** Desenhe num papel a função $y = x^2$. Ela é uma parábola com a boca para cima. Marque dois
 pontos, $x = 0$ e $x = 2$. A média deles é 1, e a altura da curva em 1 é 1. Mas a média das alturas é
-$(0^2 + 2^2)/2 = 2$. Olhe o desenho: o ponto da curva no meio (1) fica **abaixo** da corda que liga os
+$(0^2 + 2^2)/2 = 2$. Olhe o desenho. O ponto da curva no meio (1) fica **abaixo** da corda que liga os
 dois pontos (2). É essa a assimetria que este capítulo mede.
 
-Numa função **convexa** — boca para cima, como $x^2$ —, a média das alturas é sempre maior ou igual à
-altura da média. Numa função **côncava** — boca para baixo, como $-x^2$ ou a raiz quadrada —, vale o
-contrário: a média das alturas fica abaixo da altura da média.
+Numa função **convexa** (boca para cima, como $x^2$), a média das alturas é sempre maior ou igual à
+altura da média. Na **côncava** (boca para baixo, como $-x^2$ ou a raiz quadrada), vale o contrário, e a
+média das alturas fica abaixo da altura da média.
 
 **A fila é uma curva de boca para cima.** Quando a demanda chega perto da capacidade de atendimento, a
-espera não cresce em linha reta: cresce cada vez mais rápido. No mundo do posto, isso significa que o
+espera não cresce em linha reta; cresce cada vez mais rápido. No mundo do posto, isso significa que o
 dia cheio não é apenas o espelho do dia vazio. O dia cheio cobra muito mais do que o dia vazio
 devolve.
 
 **A turma de média 6,2.** Numa prova com nota mínima 6,0, a média da turma foi 6,2. Quem lê só a média
-conclui que "o aluno médio foi aprovado". Mas, para isso, a média precisa descrever um aluno que não
-existe: **em cada 100 alunos, 45 ficaram abaixo de 6,0**. A média de 6,2 convive sem nenhum problema
-com 45% de reprovação. Como no posto, a média não é um resumo errado; é um resumo **insuficiente**
-para a pergunta que importa.
+conclui que "o aluno médio foi aprovado". A conclusão exigiria um aluno que não existe, e a contagem
+desmente o resumo. **Em cada 100 alunos, 45 ficaram abaixo de 6,0**. A média de 6,2 convive sem nenhum
+problema com 45% de reprovação. Como no posto, a média não é um resumo errado; é um resumo **insuficiente** para a pergunta
+que importa.
 
 ---
 
@@ -797,8 +801,8 @@ coisas ao mesmo tempo, e é o único caso em que as duas coincidem.
 
 $$\mathbb{E}[f(X)] \;\ge\; f(\mathbb{E}[X])$$
 
-Em palavras: a média do resultado **não** é o resultado do caso médio. A igualdade vale em dois casos, e
-só neles: quando $f$ é uma reta, ou quando $X$ não varia. Fora desses dois, sobra uma diferença — o
+Em palavras, a média do resultado **não** é o resultado do caso médio. A igualdade vale em dois casos, e
+só neles, quando $f$ é uma reta, ou quando $X$ não varia. Fora desses dois, sobra uma diferença, o
 pedágio.
 
 Para uma função côncava, a desigualdade se inverte: $\mathbb{E}[f(X)] \le f(\mathbb{E}[X])$.
@@ -808,9 +812,9 @@ proporcional à **curvatura** e à **variância**:
 
 $$\mathbb{E}[f(X)] - f(\mathbb{E}[X]) \;\approx\; \tfrac{1}{2}\, f''(\mu)\,\operatorname{Var}(X)$$
 
-Leia a fórmula como um preço: **curvatura vezes dispersão**. A condição em que ela vale é a de que a
+A fórmula se lê como um preço, **curvatura vezes dispersão**. A condição em que ela vale é a de que a
 variância seja pequena o bastante para a curva parecer uma parábola naquela vizinhança. Ela **falha**
-quando a dispersão é grande — e o posto é exatamente esse caso.
+quando a dispersão é grande, e o posto é exatamente esse caso.
 
 **A fila do posto.** A espera média de longo prazo de uma fila com um atendente, com chegadas de taxa
 $\lambda$ por hora e serviço de taxa $\mu$ por hora, é
@@ -818,26 +822,26 @@ $\lambda$ por hora e serviço de taxa $\mu$ por hora, é
 $$W(\lambda)=\frac{\lambda}{\mu(\mu-\lambda)}$$
 
 Com $\mu = 12$ e $\lambda = 8$, isso dá 10 minutos. Aplicada aos dois dias do mundo que oscila,
-$W(5) = 3,57$ min e $W(11) = 55$ min, e a média dos dois é 29,3 minutos — quase o triplo dos 10
+$W(5) = 3,57$ min e $W(11) = 55$ min, e a média dos dois é 29,3 minutos, quase o triplo dos 10
 minutos da alegação. A derivada segunda de $W$ em $\lambda = 8$ é
 $f''(8) = 120/(\mu-8)^3 = 1,875$ minuto por (paciente/hora)². Com a variância de $X$ igual a 9, o pedágio de segunda ordem é
-$\tfrac{1}{2}\cdot 1,875\cdot 9 = 8,44$ minutos. É muito, mas é menos que os 19,3 minutos que faltam:
-**a aproximação de segunda ordem subestima o pedágio quando a dispersão é grande**, porque a curva se
+$\tfrac{1}{2}\cdot 1,875\cdot 9 = 8,44$ minutos. É muito, mas é menos que os 19,3 minutos que faltam.
+**A aproximação de segunda ordem subestima o pedágio quando a dispersão é grande**, porque a curva se
 afasta da parábola antes de o dia terminar.
 
 **A nota média e o limiar.** Nem toda função torta é uma curva do segundo grau. Reprovar é um
-**limiar**: o desfecho de cada aluno é um degrau em 6,0. A média da turma responde a pergunta "qual é a
+**limiar**, e o desfecho de cada aluno vira um degrau em 6,0. A média da turma responde a pergunta "qual é a
 nota típica?" e não responde a pergunta "quantos reprovam?". Quem precisa da segunda pergunta e usa a
 primeira está trocando o resumo pelo resultado, e a troca não tem conserto por mais alunos que se
 incluam.
 
 **A unidade da margem.** Todo número deste livro vem com uma margem, e a margem só tem sentido se for
-calculada na **unidade de fato independente**. No posto, a pergunta é: os 320 mil pacientes são 320 mil
-observações independentes, ou os 4 mil dias são 4 mil observações independentes? Pacientes de um mesmo
-dia compartilham a mesma demanda, o mesmo servidor e a mesma fila. Tratá-los como independentes é
+calculada na **unidade de fato independente**. No posto, a pergunta é esta. Os 320 mil pacientes são 320
+mil observações independentes, ou os 4 mil dias são 4 mil observações independentes? Pacientes de um
+dia compartilham a demanda do dia, o servidor e a fila. Tratá-los como independentes é
 **pseudorreplicação**, e ela faz a margem parecer cinco vezes menor do que é. O teste que decide, sem
 convenção nenhuma, é o **nulo de metades**: repartir os dias ao acaso em duas metades e medir o desvio
-da diferença entre as duas médias. O que o nulo mede é o que a margem deve prever.
+da diferença entre as duas médias. O nulo mede o que a margem deve prever.
 
 **A proibição da média solitária.** Quando a função é não linear, a dinâmica multiplicativa ou a cauda
 pesada, é proibido reportar só a média. Reportam-se o caso médio $f(\mathbb{E}[X])$, a média simulada
@@ -848,7 +852,7 @@ ela nasce do pedágio que acabamos de medir.
 
 ### Degrau 3 — Mão na massa
 
-O laboratório roda quatro mundos do posto com a mesma demanda média, mede o nulo de metades em dois
+O laboratório roda quatro mundos do posto, todos com a demanda média de 8, mede o nulo de metades em dois
 deles e conta os reprovados da turma. Código em `crates/stochology-book/src/cap05.rs`; saída medida com
 `cargo run --release`:
 
@@ -870,32 +874,32 @@ turma de 100000 alunos: media = 6.21, reprovados (nota < 6,0) = 45.1 em 100
 ```
 
 Cinco leituras. **(1)** A média da demanda é 8 nos quatro mundos e a espera média vai de 2,5 a 19,6
-minutos: a variabilidade, não a média, decide. **(2)** No mundo que oscila, **68,8% dos pacientes**
-chegam nos dias de surto, e é por isso que a média por paciente pesa os dias ruins: 27,0 minutos nos
+minutos. A variabilidade, não a média, decide. **(2)** No mundo que oscila, **68,8% dos pacientes**
+chegam nos dias de surto, e é por isso que a média por paciente pesa os dias ruins. São 27,0 minutos nos
 dias de surto contra 3,4 nos dias leves. **(3)** O pedágio de segunda ordem (8,44 min) captura menos da
-metade da diferença verdadeira (19,29 min entre 10,00 e 29,29): a fórmula é local, e o posto é um caso
+metade da diferença verdadeira (19,29 min entre 10,00 e 29,29). A fórmula é local, e o posto é um caso
 de dispersão grande. **(4)** O nulo de metades dá 0,201 minuto no mundo constante, e a margem calculada
-por dia prevê 0,185 — quase igual; a margem por paciente prevê 0,046, quatro vezes menor. No mundo que
-oscila a diferença entre as duas leituras é de 5,8 vezes: 0,563 contra 0,097. **(5)** A mediana do
-mundo que oscila é 8,6 minutos, praticamente a média prometida pela alegação (9,1 min): quem olha "o
+por dia prevê 0,185, quase igual; a margem por paciente prevê 0,046, quatro vezes menor. No mundo que
+oscila a diferença entre as duas leituras é de 5,8 vezes, com 0,563 contra 0,097. **(5)** A mediana do
+mundo que oscila é 8,6 minutos, praticamente a média de 9,1 min que a alegação prometia. Quem olha "o
 paciente típico" vê a promessa cumprida, e a diferença está toda na cauda. A diferença entre os mundos,
 10,6 minutos, fica a 52,7 desvios do nulo.
 
-**Declaração de divergência.** O material do curso e o README do H0 publicam, para os mesmos mundos,
+**Declaração de divergência.** O material do curso e o README do H0 publicam, para estes mundos,
 9,3 min e 20,7 min de espera média, **8** e **25** pacientes em cada 100 acima de 30 minutos, margem de
 ±0,51 minuto por dia contra ±0,07 por paciente, e um nulo de metades de 0,216 minuto com margens
 previstas de 0,227 (por dia) e 0,047 (por paciente). Este instrumento mede **9,1** e **19,6** minutos,
 **7,6** e **23,7** em cada 100, um nulo de **0,201** minuto com margens de **0,185** (por dia) e
 **0,046** (por paciente) no mundo constante, e, no mundo que oscila, **0,742** de nulo com margens de
 **0,563** e **0,097**. O mundo uniforme dá 13,8 min aqui contra 12,3 no material. Os números estão
-todos na mesma vizinhança, e a diferença tem duas causas prováveis: o gerador (o material usa o PCG64
+todos numa vizinhança próxima. A diferença tem duas causas prováveis: o gerador (o material usa o PCG64
 do NumPy com `SeedSequence(1909)`; aqui, o SplitMix64 com a semente 1909) e o começo de cada dia, que
 aqui é sempre uma fila vazia. A identidade de Jensen, o sinal do pedágio e a conclusão sobre a unidade
 da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
 
 **Exercícios.**
 
-1. *(Conceito)* Para cada caso, diga se a média esconde um pedágio e de que sinal: (a) o tempo de
+1. *(Conceito)* Para cada caso, diga se a média esconde um pedágio e de que sinal. (a) O tempo de
    espera numa fila; (b) o saldo de uma conta com rendimento fixo; (c) o patrimônio de quem aposta 100%
    do capital a cada rodada; (d) a nota de uma turma com corte de aprovação.
 2. *(Conta)* Com $W(\lambda)$ e $\mu = 12$, calcule $W(6)$, $W(8)$ e $W(10)$. Depois calcule
@@ -910,18 +914,20 @@ da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
 5. *(Conceito)* Escreva o memorando de duas frases que o gestor do posto deveria receber, usando
    frequências naturais e sem citar nenhuma média sem o resto da distribuição.
 6. *(Laboratório)* No laboratório, o reforço só nos dias de surto dobra a capacidade do dia cheio e
-   derruba a espera média de 19,6 para 2,5 minutos. Meça o mesmo mundo com reforço de 1,5 vez e de
+   derruba a espera média de 19,6 para 2,5 minutos. Meça esse mundo com reforço de 1,5 vez e de
    3 vezes a capacidade e diga, em frequências naturais, quantos pacientes em cada 100 ainda esperam
    mais de 30 minutos.
 
 **Resumo.**
 
-- A média da entrada não é a média da saída quando a função é curva: $\mathbb{E}[f(X)] \ge
+- A média da entrada não é a média da saída quando a função é curva. O resultado é $\mathbb{E}[f(X)] \ge
   f(\mathbb{E}[X])$ para $f$ convexa.
 - O pedágio cresce com a curvatura e com a variância, e a fórmula de segunda ordem **subestima** o
   pedágio quando a dispersão é grande.
-- Mesma demanda média, esperas muito diferentes: quem simula o mundo vê o que a planilha esconde.
-- A margem vale o que vale a unidade independente; o nulo de metades decide qual unidade é a certa.
+- A demanda média não se move, e as esperas não se parecem. Quem simula o mundo vê o que a planilha
+  esconde.
+- A margem só vale o que vale a unidade independente, e o nulo de metades decide qual unidade é a
+  certa.
 - Um limiar (reprovar, transbordar, falir) não se resume por média nenhuma.
 
 ## Capítulo 6. O filtro invisível: por que 2,4 milhões de votos valem 7 pessoas?
@@ -938,48 +944,49 @@ fabrica relações que não existem no mundo.
 **A revista que ouviu 2,4 milhões de pessoas e errou o presidente.** Em 1936, a revista norte-americana
 *Literary Digest* fez a maior pesquisa eleitoral da história até então. Recebeu **2,38 milhões** de
 cédulas de leitores e anunciou, com estardalhaço, que Alfred Landon venceria Franklin Roosevelt com
-**57%** dos votos. Roosevelt ganhou com **60,8%**. Na mesma eleição, George Gallup acertou o vencedor
+**57%** dos votos. Roosevelt ganhou com **60,8%**. Naquela eleição, George Gallup acertou o vencedor
 com cerca de **50 mil** entrevistas.
 
 Em cada 100 cédulas que chegaram à redação, 57 diziam Landon. Em cada 100 votantes de verdade, 61
-diziam Roosevelt. A revista não errou a aritmética — errou a **porta**. As cédulas não chegaram de um
-sorteio do eleitorado: chegaram de quem tinha telefone, de quem era assinante, de quem estava
-disposto a preencher e devolver um formulário. Cada uma dessas etapas é uma tela, e a tela funcionou
+diziam Roosevelt. A revista não errou a aritmética, errou a **porta**. As cédulas não chegaram de um
+sorteio do eleitorado, chegaram de quem tinha telefone, de quem era assinante, de quem estava
+disposto a preencher e devolver um formulário. Cada uma dessas etapas é uma tela, com efeito
 diferente para eleitores de Roosevelt e de Landon.
 
 **Em cada 100 pessoas.** Vale a pena ver a conta em frequências naturais. Imagine 100 eleitores. Se a
-chance de responder à pesquisa fosse a mesma para todos, os 100 responderiam na mesma proporção em que
-votam. Não foi isso que aconteceu. Rodando o mundo de 1936 com 10 milhões de eleitores e uma chance de
-responder que depende do voto, este livro mede:
+chance de responder à pesquisa fosse igual para todos, os 100 responderiam na proporção do voto de cada
+um. Não foi isso que aconteceu. Rodando o mundo de 1936 com 10 milhões de eleitores e uma chance de
+responder que depende do voto, este livro mede assim:
 
 - dos apoiadores de Roosevelt, **16,8 em cada 100** responderam;
 - dos apoiadores de Landon, **35,2 em cada 100** responderam;
 - no conjunto, 24 em cada 100 responderam — 2,4 milhões de cédulas.
 
-O resultado é aritmética simples: 0,608 × 0,168 = 10,2% de Roosevelt contra 0,392 × 0,352 = 13,8% de
-Landon entre os respondentes. Roosevelt fica com 10,2 de 24, isto é, **42,6%** — e Landon, com 57,4%.
-A pesquisa recebeu milhões de votos e mediu a audiência da revista, não o país.
+O resultado é aritmética simples, 0,608 × 0,168 = 10,2% de Roosevelt contra 0,392 × 0,352 = 13,8% de
+Landon entre os respondentes. Roosevelt fica com 10,2 de 24, isto é, **42,6%**, e Landon, com 57,4%.
+A pesquisa recebeu milhões de votos e mediu a audiência da revista; não mediu o país.
 
-**A pergunta que dá nome ao capítulo.** Quantas pessoas *sorteadas na rua* valeriam o mesmo que aqueles
-2,4 milhões de cédulas? A resposta medida é **7**. Sete pessoas. O desvio de uma amostra aleatória de 7
-pessoas num mundo com 60,8% de Roosevelt é de 18,4 pontos, praticamente o mesmo tamanho do erro da
+**A pergunta que dá nome ao capítulo.** Quantas pessoas *sorteadas na rua* equivaleriam àqueles
+2,4 milhões de cédulas? A resposta medida é **7**, sete pessoas. O desvio de uma amostra aleatória de 7
+pessoas num mundo com 60,8% de Roosevelt é de 18,4 pontos, praticamente do tamanho do erro da
 pesquisa.
-Mais dados viciados não dão erro menor: dão mais certeza sobre a resposta errada. A margem de erro que a
-revista podia calcular era de 0,03 ponto, e o erro foi de 18,2 pontos — **661 margens**.
 
-**A unidade independente.** O mesmo veneno aparece sem nenhuma má-fé, em dados "internos". Uma central
+Mais dados viciados não dão erro menor. Eles dão mais certeza sobre a resposta errada. A margem de erro que
+a revista podia calcular era de 0,03 ponto, e o erro foi de 18,2 pontos, ou **661 margens**.
+
+**A unidade independente.** Esse veneno aparece sem nenhuma má-fé, em dados "internos". Uma central
 de chamadas registra 2,65 milhões de chamadas em 81 dias úteis. Um analista trata cada chamada como uma
-observação e calcula a margem. As chamadas de um mesmo dia, porém, compartilham a mesma demanda, a mesma
-escala de atendentes e o mesmo clima; elas se repetem, não se somam. A unidade independente ali é o
-**dia**, e 2,65 milhões de chamadas valem o mesmo que **81** observações. É por isso que um relatório
-que trate as chamadas como independentes promete uma precisão que a unidade real não sustenta.
+observação e calcula a margem. As chamadas de um dia, porém, compartilham a demanda, a escala de
+atendentes e o clima. Elas se repetem, não se somam. A unidade independente ali é o **dia**, e 2,65
+milhões de chamadas equivalem a **81** observações. É por isso que um relatório que trate as
+chamadas como independentes promete uma precisão que a unidade real não sustenta.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**A identidade de Meng.** Meng (2018) mostrou que o erro de qualquer média amostral é o produto exato de
-três fatores:
+**A identidade de Meng.** Meng (2018) mostrou que o erro de qualquer média amostral se decompõe em
+três fatores, cujo produto é exato:
 
 $$\bar Y_n - \bar Y_N \;=\; \underbrace{\rho_{R,Y}}_{\text{qualidade}}\times
 \underbrace{\sqrt{\tfrac{1-f}{f}}}_{\text{quantidade}}\times \underbrace{\sigma_Y}_{\text{dificuldade}}$$
@@ -992,33 +999,33 @@ $$\bar Y_n - \bar Y_N \;=\; \underbrace{\rho_{R,Y}}_{\text{qualidade}}\times
 
 Numa amostra **sorteada**, $\rho$ é da ordem de $1/\sqrt N$ — minúsculo — e a identidade devolve o
 erro-padrão de sempre. Quando a entrada na amostra depende do que se mede, $\rho$ **não** encolhe com
-$n$: o primeiro fator fica parado enquanto o segundo diminui. Com $\rho = -0,21$, $f = 0,24$ e
-$\sigma_Y = 0,488$, a identidade prevê um erro de $-0,1824$: 18,2 pontos, o mesmo que a simulação
-mede. Mais dados enviesados não consertam nada — eles **estreitam o intervalo em volta da resposta
+$n$. O primeiro fator fica parado enquanto o segundo diminui. Com $\rho = -0,21$, $f = 0,24$ e
+$\sigma_Y = 0,488$, a identidade prevê um erro de $-0,1824$, ou 18,2 pontos, o valor que a simulação
+mede. Mais dados enviesados não consertam nada; eles **estreitam o intervalo em volta da resposta
 errada**.
 
-**O que se pode e o que não se pode fazer com um dado ausente.** Rubin (1976) classificou a ausência
-pelo mecanismo que a produz, e a classe decide o que é legítimo fazer.
+**Como tratar um dado ausente.** Rubin (1976) classificou a ausência
+pelo mecanismo que a produz, e a classe decide o tratamento legítimo.
 
 | Mecanismo | A chance de faltar depende de | Exemplo | O que se pode fazer |
 | --- | --- | --- | --- |
-| MCAR, completamente ao acaso | Nada que importe | Um formulário perdido no correio | Analisar os casos completos perde precisão, não introduz viés |
+| MCAR, completamente ao acaso | Nada que importe | Um formulário perdido no correio | Analisar os casos completos perde precisão — nenhum viés entra |
 | MAR, ao acaso dado o observado | Variáveis que foram medidas | Jovens respondem menos, e a idade está na base | Ponderar ou imputar condicionando no observado |
 | MNAR, não ao acaso | O próprio valor que falta | Quem ganha mais declara menos a renda | Nenhuma correção sai só dos dados: exige um modelo da ausência e análise de sensibilidade |
 
-A distinção entre MAR e MNAR **não pode ser testada** com os dados observados: é uma premissa, e precisa
-ser declarada como tal. Na identidade de Meng, MNAR é o caso em que $\rho$ continua diferente de zero
-mesmo depois de condicionar no que foi observado. O valor sentinela — o ausente gravado como 0 ou 9999 —
-é pior que os três, porque nem se sabe que o dado falta.
+A distinção entre MAR e MNAR **não pode ser testada** com os dados observados. Trata-se de uma premissa,
+e ela precisa ser declarada como tal. Na identidade de Meng, MNAR é o caso em que $\rho$ continua
+diferente de zero depois de condicionar no que foi observado. O valor sentinela, o ausente gravado como
+0 ou 9999, é pior que os outros três, porque ninguém sabe que o dado falta.
 
 **O filtro fabrica relações.** Berkson (1946) mostrou que duas doenças independentes aparecem
 associadas entre internados, porque cada uma aumenta a chance de internação. Olhar só os selecionados é
 condicionar num **colisor**. Na simulação deste capítulo, talento e simpatia têm correlação $+0,001$ na
-população e $-0,679$ entre os selecionados. A relação não estava escondida nos dados: foi **criada**
-pelo filtro.
+população e $-0,679$ entre os selecionados. A relação não estava escondida nos dados; o filtro a
+**criou**.
 
 **A tabela que inverte.** Simpson mostrou o caso espelhado. Charig e colegas (1986) compararam duas
-cirurgias de cálculo renal:
+cirurgias de cálculo renal.
 
 | Grupo | Cirurgia aberta | Outra técnica |
 | --- | --- | --- |
@@ -1029,51 +1036,50 @@ cirurgias de cálculo renal:
 
 A cirurgia aberta vence nos dois estratos e perde no total, porque os casos difíceis iam para ela.
 Condicionar num confundidor fecha um caminho espúrio; condicionar num colisor abre um. "Controlar por
-tudo" não é neutro, e quem decide qual conta fazer é o grafo causal, não a tabela (Capítulo 9).
+tudo" não é neutro, e o grafo causal decide qual conta fazer, e não a tabela (Capítulo 9).
 
 **A unidade independente, formalizada.** O tamanho efetivo de uma amostra é uma propriedade do
-**processo**, não da contagem. Em 1913, Markov contou vogais e consoantes nas 20 000 primeiras letras do
-*Ievguêni Oniéguin* e mostrou que a lei dos grandes números sobrevive à dependência — mas a dependência
-muda quanto a amostra vale. Como as letras tendem a alternar, um bloco de 100 letras vale cerca de 330
-letras independentes; numa cadeia "pegajosa", em que cada estado tende a se repetir, 100 observações
-valem bem menos que 100.
+**processo**, e não da contagem. Em 1913, Markov contou vogais e consoantes nas 20 000 primeiras letras
+do *Ievguêni Oniéguin* e mostrou que a lei dos grandes números sobrevive à dependência, mas que a
+dependência muda quanto a amostra vale. Como as letras tendem a alternar, um bloco de 100 letras vale
+cerca de 330 letras independentes; numa cadeia "pegajosa", com cada estado tendendo a se repetir, 100
+observações valem bem menos que 100.
 
 $$n_{\text{ef}} \;=\; \frac{p(1-p)}{\operatorname{Var}(\bar X)}$$
 
-Em palavras: compare a dispersão que a média amostral **realmente tem** com a que ela teria se as
-observações fossem independentes. Em dados reais: 225 mil voos de Nova York valem, em informação
-independente, o mesmo que 364 dias; 2,65 milhões de chamadas valem o mesmo que 81 dias. Tratar os
-pacientes de um mesmo dia, ou as chamadas de uma mesma hora, como observações independentes é
-**pseudorreplicação**: a margem sai pequena demais e o teste aprova o que não deveria.
+Em palavras, compare a dispersão que a média amostral **realmente tem** com a que ela teria se as
+observações fossem independentes. Em dados reais, 225 mil voos de Nova York valem, em informação
+independente, a 364 dias; 2,65 milhões de chamadas equivalem a 81 dias. Tratar os
+pacientes de um dia, ou as chamadas de uma hora, como observações independentes é
+**pseudorreplicação**: a margem sai pequena demais e o teste aprova aquilo que não deveria.
 
-**O caso da central de chamadas, inteiro.** A alegação do setor era: escalar cada meia hora pelo
-Erlang C sobre a taxa média do histórico garante 82% das chamadas atendidas em até 20 segundos, todo
+**O caso da central de chamadas, inteiro.** O setor alegava o seguinte. Escalar cada meia hora pelo
+Erlang C sobre a taxa média do histórico garantiria 82% das chamadas atendidas em até 20 segundos, todo
 dia. Nos 81 dias do cofre, a regra padrão falha em **26 de cada 100 dias** e entrega 86%. A variação
-entre dias explica a maior parte: o mundo que mantém só o total real de cada dia, com o perfil médio,
-já perde 17% dos dias. Aplicado à taxa real de cada dia, o próprio Erlang C da alegação dá **57%**, não
-82%, e 65% dos dias ficam abaixo da meta — é Jensen dentro da fórmula (Capítulo 5), sem precisar de
-simulação. O nulo de metades arbitra a unidade: desvio de 0,0474, contra 0,0470 previsto pelo dia e
-0,0033 previsto pela chamada — a leitura por chamada promete uma margem catorze vezes menor. Em 400 dias simulados no
-mundo da alegação, nenhum ficou abaixo da meta; no real, cerca de um em quatro. A decisão que sai disso
-custa **+7,2% de agente-horas** — 2 428 por dia contra 2 264 — e derruba a falha de 26 para **menos de 4
-em cada 100 dias**. A malha de sensibilidade (declarada antes de rodar, em
-`h0-real/DECLARACAO_PACIENCIA.md`) varre atendimento de 3 a 6 minutos contra paciência de 1 a 10
-minutos, 24 pontos: a regra vencedora é a mesma em 20 deles, e nos quatro restantes — todos com 1
-minuto de paciência — as quatro regras empatam porque nenhuma deixa mais de 1 dia abaixo da meta. Não
-há ponto de virada. No pior canto da malha, nem a melhor regra segura a meta: 14,2% dos dias abaixo
-dela, contra 37,7% da regra da alegação.
+entre dias responde pela maior parte, pois até o mundo que mantém só o total real de cada dia, com o
+perfil médio, já perde 17% dos dias. Erlang C, aplicado à taxa real de cada dia, dá **57%**, no lugar dos 82% da alegação, e 65% dos dias ficam abaixo da meta; é Jensen dentro da fórmula (Capítulo 5), sem
+precisar de simulação. A unidade sai do nulo de metades. São desvios de 0,0474, contra 0,0470 previsto
+pelo dia e 0,0033 previsto pela chamada. A leitura por chamada promete uma margem catorze vezes menor.
+Em 400 dias simulados no mundo da alegação, nenhum ficou abaixo da meta; no real, cerca de um em quatro.
+A decisão que sai disso custa **+7,2% de agente-horas**, 2 428 por dia contra 2 264, e derruba a falha
+de 26 para **menos de 4 em cada 100 dias**. A malha de sensibilidade, declarada antes de rodar em
+`h0-real/DECLARACAO_PACIENCIA.md`, varre atendimento de 3 a 6 minutos contra paciência de 1 a 10
+minutos, 24 pontos. A regra vencedora acerta em 20 deles; nos quatro restantes, todos com 1 minuto de
+paciência, as quatro regras empatam porque nenhuma deixa mais de 1 dia abaixo da meta. Não há ponto de
+virada. No pior canto da malha, nem a melhor regra segura a meta. São 14,2% dos dias abaixo dela, contra
+37,7% da regra da alegação.
 
 **Como isso se confere.** Nada disso é uma questão de opinião sobre quem está certo. Os rastros da
 pesquisa (diários, hipergrafos, resultados) ficam fora do Git por tamanho, com as somas SHA-256
 publicadas em `FORA_DO_GIT.md` e no `SHA256SUMS` de cada frente; quem quiser refazer a conta baixa o
-dado bruto, regenera o rastro e confere byte a byte. O filtro é invisível no relatório, não arquivo.
+dado bruto, regenera o rastro e confere byte a byte. O filtro é invisível no relatório e no arquivo.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 O laboratório reconstrói a pesquisa de 1936, mede a correlação que o filtro cria, refaz a tabela de
-Simpson e mede o tamanho efetivo de uma cadeia com memória. Código em `crates/stochology-book/src/cap06.rs`; saída
+Simpson e mede o tamanho efetivo de uma cadeia com memória. Código em `crates/stochology-book/src/cap06.rs`, saída
 medida com `cargo run --release`:
 
 ```text
@@ -1093,19 +1099,19 @@ cadeia de dois estados com persistencia 0.235: variancia da media de 100 letras 
 ```
 
 Quatro leituras. **(1)** O erro medido (−18,2 pontos) coincide com a identidade de Meng (−18,24) e vale
-o desvio-padrão de uma amostra de **7,2 pessoas**: a simulação não é uma história, é uma conta
+o desvio-padrão de uma amostra de **7,2 pessoas**. A simulação não é uma história, é uma conta
 fechada. **(2)** A margem de erro da pesquisa (0,0276 ponto) não é margem nenhuma contra um veneno de
-18 pontos: são 661 margens de distância. **(3)** A correlação entre talento e simpatia sai de $+0,001$
-na população para **−0,679** entre os selecionados com o corte 1,5: o filtro **fabrica** a associação
+18 pontos; são 661 margens de distância. **(3)** A correlação entre talento e simpatia sai de $+0,001$
+na população para **−0,679** entre os selecionados com o corte 1,5. O filtro **fabrica** a associação
 negativa, e ela fica mais forte quanto mais estreita é a porta (−0,617 com 24% selecionados, −0,732 com
-7,9%). **(4)** O tamanho efetivo segue o processo: 100 letras valem 101 observações quando não há
+7,9%). **(4)** O tamanho efetivo segue o processo. São 100 letras que valem 101 observações quando não há
 memória, 25 quando a cadeia é pegajosa (persistência 0,8) e 327 quando as letras alternam (persistência
-0,235) — o mesmo número que Markov encontrou no *Oniéguin*.
+0,235), o número que Markov encontrou no *Oniéguin*.
 
 **Declaração de divergência.** A edição anterior deste livro registra, para a mesma simulação de Berkson,
 uma correlação de $+0,002$ na população e $−0,669$ entre os selecionados; este instrumento mede
 $+0,0012$ e $−0,679$ com o corte 1,5 (e $−0,617$ com o corte 1,0). A diferença é de um centésimo e vem
-do corte de seleção, que o texto antigo não declara. Os números de 1936 convergem sem ajuste: 2,4
+do corte de seleção, que o texto antigo não declara. Os números de 1936 convergem sem ajuste. São 2,4
 milhões de cédulas, 57,4% para Landon contra os 57% publicados, e a equivalência de 7 pessoas. Nenhum
 valor antigo foi apagado.
 
@@ -1120,8 +1126,8 @@ valor antigo foi apagado.
 3. *(Conta)* Com $\rho = -0,21$ e $\sigma_Y = 0,488$, qual $f$ faz o erro de Meng valer 10 pontos?
    E 5 pontos? Diga em uma frase por que a pesquisa de 1936 não conseguiria chegar lá nem com 50
    milhões de cédulas.
-4. *(Laboratório)* No laboratório, mude 0,168 e 0,3517 para um par em que a chance de responder seja a
-   mesma nos dois grupos e confirme que o erro desaparece. Depois escolha um par com correlação de
+4. *(Laboratório)* No laboratório, mude 0,168 e 0,3517 para um par em que a chance de responder seja
+   igual nos dois grupos e confirme que o erro desaparece. Depois escolha um par com correlação de
    $−0,05$ e diga quantas pessoas valeria a pesquisa inteira.
 5. *(Laboratório)* Rode a cadeia de dois estados com persistência 0,9 e com 0,1 e meça o tamanho
    efetivo nos dois casos. Explique, em uma frase para cada caso, o que isso faz com a margem de um
@@ -1131,7 +1137,7 @@ valor antigo foi apagado.
 
 **Resumo.**
 
-- O erro de uma média é qualidade × quantidade × dificuldade: tamanho não compensa seleção.
+- O erro de uma média é qualidade × quantidade × dificuldade, e tamanho não compensa seleção.
 - MCAR perde precisão, MAR se corrige condicionando no observado, MNAR só se corrige com um modelo da
   ausência declarado como premissa.
 - O filtro não só distorce a média: ele cria relações que não existem na população.
@@ -1155,57 +1161,58 @@ atalho que é erro de um atalho que é adaptação ao ambiente.
 maior sequência de caras que conseguiu. Ninguém trapaceia. Ainda assim, em **100 de cada 100
 experimentos** que este livro simula, alguém emenda 6 caras seguidas ou mais, e a maior sequência tem,
 em média, **9,5 caras**. Se o repórter escolher contar a história da pessoa com a sequência mais longa,
-o jornal de amanhã traz um talento que não existe. Não houve erro de medida: houve um **modelo nulo**
+o jornal de amanhã traz um talento que não existe. Não houve erro de medida, apenas um **modelo nulo**
 esquecido.
 
 **A mão quente.** O caso mais famoso é o da "mão quente" no basquete. Gilovich, Vallone e Tversky (1985)
-analisaram os arremessos de jogadores profissionais e concluíram que a crença de que quem acerta tende a
-acertar de novo era ilusão de padrão: a proporção de acertos depois de um acerto era igual à proporção
+analisaram os arremessos de jogadores profissionais e trataram a crença de que quem acerta tende a
+acertar de novo como ilusão de padrão. A proporção de acertos depois de um acerto era igual à proporção
 geral. Por três décadas o resultado foi citado como o exemplo canônico de ilusão.
 
 Em 2018, Miller e Sanjurjo mostraram que o **teste** estava viciado. A conta original agrupava todos os
 arremessos e comparava a proporção de "acerto depois de acerto" com um meio. Mas essa proporção, num
-processo sem memória nenhuma, **não vale um meio**: em três lances de uma moeda honesta, a média das
+processo sem memória nenhuma, **não vale um meio**. Em três lances de uma moeda honesta, a média das
 proporções por sequência é $5/12 = 0{,}4167$. O alvo estava no lugar errado. Corrigida a conta, a
 diferença nos dados de Cornell passa de $+3$ para $+13$ pontos percentuais. O fantasma não estava nos
-jogadores: estava no denominador.
+jogadores. Estava no denominador.
 
 **O jardim dos caminhos que se bifurcam.** Simmons, Nelson e Simonsohn (2011) pediram a
-pesquisadores que declarassem, antes de coletar, o que fariam. Quatro decisões comuns são:
+pesquisadores que declarassem o plano antes de coletar os dados. Quatro decisões comuns são:
 *quando parar de coletar*, *quais variáveis usar*, *quais casos excluir* e *quais comparações
 relatar*. Cada uma parece razoável isolada. Juntas, num experimento em que **não existe efeito
 nenhum**, elas levam a taxa de falsos positivos de 5% para **60,7%**. Em cada 100 estudos feitos
 assim, em 61 aparece um "efeito significativo" que não existe.
 
-**Cinquenta casos, cinquenta preditores, nada.** Um analista tem 50 casos e 50 variáveis medidas. Nada
-tem relação com a resposta. Ele ajusta 500 modelos diferentes e fica com o de menor erro de validação.
-O vencedor parece melhor que "prever zero" em **73% das repetições** — e, diante de dados novos, não é
-melhor. Nenhuma conta errada, nenhum dado inventado: apenas 500 tiros num alvo que não existe, e o
-melhor tiro escolhido depois de ver onde ele caiu.
+**Cinquenta casos, cinquenta preditores, nada.** Um analista tem 50 casos e 50 variáveis medidas, sem
+nenhuma relação com a resposta. Ele ajusta 500 modelos diferentes e fica com o de menor erro de
+validação. O vencedor parece melhor que "prever zero" em **73% das repetições**, e diante de dados
+novos a vantagem some, porque não há conta errada nem dado inventado: apenas 500 tiros num alvo que
+não existe, e o melhor tiro escolhido depois de ver onde ele caiu.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**O modelo nulo exato.** O primeiro passo de qualquer análise não é olhar os dados: é escrever, em
-código, o mundo em que **nada acontece** e medir o que ele produz. O modelo nulo precisa ter a mesma
-estrutura dos dados — o mesmo número de casos, o mesmo número de comparações, a mesma liberdade de
-escolha —, porque é ele que diz qual é o alvo certo.
+**O modelo nulo exato.** O primeiro passo de qualquer análise não é olhar os dados, e sim escrever, em
+código, o mundo em que **nada acontece**, e medir os resultados que ele produz. O modelo nulo precisa
+reproduzir a estrutura dos dados, com o número de casos, o número de comparações e a liberdade de
+escolha do experimento, porque dele sai o alvo certo.
 
 A mão quente é o exemplo mais limpo. Em três lances de uma moeda honesta, as oito sequências possíveis
 são igualmente prováveis. O estimador que a literatura usava é a **média das proporções por sequência**,
 e as sequências sem nenhum acerto não têm proporção definida e saem da conta. Sobram seis sequências,
-com proporções 1, 1/2, 0, 0, 1 e 0: a média é $2{,}5/6 = 5/12$. Já o estimador **agrupado** — total de
-acertos depois de acertos sobre total de transições depois de acerto — dá $4/8 = 1/2$. Os dois
+com proporções 1, 1/2, 0, 0, 1 e 0. A média é $2{,}5/6 = 5/12$. Já o estimador **agrupado**, total de
+acertos depois de acertos sobre total de transições depois de acerto, dá $4/8 = 1/2$. Os dois
 estimadores respondem a perguntas diferentes, e comparar o primeiro com 1/2 é comparar com o alvo
-errado. O erro é de 0,0833: oito pontos percentuais de "mão quente" inventada.
+errado. O erro é de 0,0833, oito pontos percentuais de "mão quente" inventada.
 
 **A severidade de Mayo.** Deborah Mayo propôs a pergunta que organiza tudo: *um resultado só é
 evidência se o procedimento provavelmente teria dado errado caso a afirmação fosse falsa.* Para um teste
-pré-registrado que produz $p = 0{,}04$, a severidade do resultado é $1 - p = 0{,}96$: se a hipótese
-fosse falsa, o teste teria dado um resultado menos extremo em 96 de cada 100 vezes. Quando o mesmo
-"$p = 0{,}04$" sai de um jardim de caminhos, a severidade que importa não é $1 - p$: é $1$ menos a taxa
-de falso positivo **do procedimento**, porque foi o procedimento inteiro que produziu o número.
+pré-registrado que produz $p = 0{,}04$, a severidade do resultado é $1 - p = 0{,}96$. Se a hipótese
+fosse falsa, o teste teria dado um resultado menos extremo em 96 de cada 100 vezes. Quando o
+"$p = 0{,}04$" sai de um jardim de caminhos, a severidade que importa deixa de ser $1 - p$, e sim $1$
+menos a taxa de falso positivo **do procedimento**, porque quem produziu o número foi o procedimento
+inteiro.
 
 **O teorema de Ioannidis.** O valor preditivo de um achado positivo depende do poder $1-\beta$, das
 chances $R$ de que uma hipótese da área seja verdadeira e do nível de significância $\alpha$:
@@ -1213,16 +1220,16 @@ chances $R$ de que uma hipótese da área seja verdadeira e do nível de signifi
 $$\text{VPP}=\frac{(1-\beta)R}{R-\beta R+\alpha}$$
 
 Em palavras: mesmo um estudo bem-feito pode ter pouca chance de estar certo, se a área testa muitas
-hipóteses falsas. Com poder 0,80 e $\alpha = 0{,}05$: se uma em cada dez hipóteses é verdadeira
+hipóteses falsas. Com poder 0,80 e $\alpha = 0{,}05$, se uma em cada dez hipóteses é verdadeira
 ($R = 1/10$), o VPP é 0,615; se uma em cada mil ($R = 1/1000$), cai para 0,016. Se $\alpha$ for o do
-jardim em vez de 0,05, os mesmos números desabam. A Open Science Collaboration (2015) replicou 100
-estudos de psicologia: **97% dos originais** tinham $p < 0{,}05$, contra **36% das replicações**.
+jardim em vez de 0,05, os dois valores desabam. A Open Science Collaboration (2015) replicou 100
+estudos de psicologia, e **97% dos originais** tinham $p < 0{,}05$, contra **36% das replicações**.
 
 **Um ajuste só é evidência se o modelo podia ter falhado.** Num espaço de duas dimensões, um
-semiplano separa ao acaso 50 pontos com probabilidade $2 \times 10^{-12}$ — cerca de **39 bits** de
-evidência. Uma tabela que guarda cada rótulo também separa os 50 pontos, e não traz bit nenhum: ela
-separaria **qualquer** conjunto de rótulos, com ou sem sinal. Mesma separação, evidência zero. O teste
-tem de poder errar para que acertar signifique algo.
+semiplano separa ao acaso 50 pontos com probabilidade $2 \times 10^{-12}$, cerca de **39 bits** de
+evidência. Uma tabela que guarda cada rótulo também separa os 50 pontos, e não traz bit nenhum. Ela
+separaria **qualquer** conjunto de rótulos, com ou sem sinal. A separação é idêntica, e a evidência é
+zero. O teste tem de poder errar para que acertar signifique algo.
 
 **Os cinco erros.** A estatística clássica nomeia dois, e a prática acrescentou outros três.
 
@@ -1234,11 +1241,11 @@ tem de poder errar para que acertar signifique algo.
 | Tipo S | Estimar um efeito com o sinal trocado | Gelman e Tuerlinckx (2000); Gelman e Carlin (2014) |
 | Tipo M | Exagerar a magnitude de um efeito verdadeiro | Gelman e Carlin (2014) |
 
-Os tipos S e M explicam por que estudos pequenos e "significativos" decepcionam na replicação: com
+Os tipos S e M explicam por que estudos pequenos e "significativos" decepcionam na replicação. Com
 pouco poder, só passam no filtro de $p < 0{,}05$ as estimativas que o acaso inflou, e algumas têm até o
-sinal errado. O tipo III é o mais estocológico de todos, porque não é erro de conta: é um desalinhamento
-entre a pergunta do Agente e a pergunta que o Modelo responde. O Capítulo 5 mostra o exemplo do gestor
-que perguntou pela espera média e recebeu a resposta de um mundo que não existe.
+sinal errado. O tipo III é o mais estocológico de todos, porque não se trata de erro de conta, mas de um
+desalinhamento entre a pergunta do Agente e a pergunta que o Modelo responde. O Capítulo 5 mostra o
+exemplo do gestor que perguntou pela espera média e recebeu a resposta de um mundo que não existe.
 
 **Atalho contra ambiente.** Kahneman e Tversky catalogaram como as pessoas se afastam das regras da
 probabilidade; Simon e Gigerenzer responderam que um atalho só é erro **relativo a um ambiente**. A
@@ -1248,11 +1255,11 @@ supõe uma informação que o ambiente não fornece de modo confiável.
 
 Os dois números que separam os casos. Num rastreamento com prevalência de 1%, quem ignora a taxa-base
 tem escore de Brier de **0,083**, contra **0,009** de quem a usa. Num ambulatório de referência, onde a
-prevalência real é de 33%, quem insiste em 1% tem **0,28**, contra **0,084** de quem a ignora. A mesma
+prevalência real é de 33%, quem insiste em 1% tem **0,28**, contra **0,084** de quem a ignora. Uma única
 heurística é erro num ambiente e acerto no outro. O escore de Brier é o assunto do Capítulo 8.
 
-**A banca adversarial.** Numa arquitetura de pesquisa, a defesa contra o jardim não é a boa intenção: é
-um ataque formal. Oito agentes tentam quebrar o artefato antes da aprovação, cada um numa faixa:
+**A banca adversarial.** Numa arquitetura de pesquisa, a defesa contra o jardim é um ataque formal, e não
+uma boa intenção. Oito agentes tentam quebrar o artefato antes da aprovação, cada um numa faixa:
 
 | Faixa atacada | O ataque |
 | --- | --- |
@@ -1269,10 +1276,10 @@ A aprovação exige que **todos** os oito atinjam severidade mínima:
 
 $$\text{Aprovado}(X) = \bigwedge_{i=1}^{8}\Big(A_i(X) \ge \text{Severidade}_{\min}\Big)$$
 
-com $\text{Severidade}_{\min} = 6$ numa escala de 0 a 10, e mesma ficha e mesma semente devolvendo
-sempre a mesma severidade. A regra é dura de propósito: a nota média da banca não aprova nada, e uma
+com $\text{Severidade}_{\min} = 6$ numa escala de 0 a 10, e a ficha repetida com a semente fixa devolve
+sempre a mesma severidade. A regra é dura de propósito. A nota média da banca não aprova nada, e uma
 faixa fraca declarada vale mais que um trabalho uniforme sem lacuna admitida. Nenhum agente aprova o
-próprio trabalho. Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento
+trabalho que produziu. Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento
 temporal, contrato de dados violado sem tratamento e ausência de um responsável humano nomeado.
 
 ---
@@ -1300,16 +1307,16 @@ a mesma ficha sem o cuidado de uma faixa: a menor severidade cai para 2 (reprova
 ```
 
 Cinco leituras. **(1)** O vencedor do jardim de modelos tem erro 0,814 na validação, contra 1,000 de
-"prever zero" — parece ótimo — e **1,191 em dados novos**: ele é pior que o zero, e por isso "bate
-zero" apenas 30% das vezes quando o juiz é novo. A validação foi usada como alvo, e o alvo virou
-veneno. **(2)** O modelo nulo exato da mão quente é 0,4167, e não 0,5: a média das proporções por
+"prever zero". Parece ótimo, e o erro sobe para **1,191 em dados novos**. Ele é pior que o zero, e por isso
+"bate zero" apenas 30% das vezes quando o juiz é novo. A validação foi usada como alvo, e o alvo virou
+veneno. **(2)** O modelo nulo exato da mão quente é 0,4167, e não 0,5; a média das proporções por
 sequência coincide com 5/12 na casa dos quatro decimais, enquanto o estimador agrupado fica em 0,5000.
-O fantasma é exatamente a diferença entre os dois. **(3)** As quatro liberdades clássicas levam o falso
-positivo de 5,2% (teste pré-registrado) para **21,5%**, e a família grande — com parada opcional em
-quatro pontos, três conjuntos de covariáveis, exclusão do caso extremo e dois subgrupos — leva para
-**47,0%**. **(4)** A severidade de Mayo do "$p = 0{,}04$" pré-registrado é 0,96; a do mesmo número
-saindo do jardim é 0,53, porque quem produz o número é o procedimento. **(5)** A banca A1–A8 com a
-semente 2026 dá severidades 9, 8, 10, 9, 8, 9, 8 e 10 numa ficha com os oito cuidados — aprovada —, e
+O fantasma é a diferença entre os dois. **(3)** As quatro liberdades clássicas levam o falso
+positivo de 5,2% (teste pré-registrado) para **21,5%**, e a família grande, com parada opcional em
+quatro pontos, três conjuntos de covariáveis, exclusão do caso extremo e dois subgrupos, leva para
+**47,0%**. **(4)** A severidade de Mayo do "$p = 0{,}04$" pré-registrado é 0,96; a do número que sai
+do jardim é 0,53, porque quem produz o número é o procedimento. **(5)** A banca A1–A8 com a
+semente 2026 dá severidades 9, 8, 10, 9, 8, 9, 8 e 10 numa ficha com os oito cuidados, aprovada, e
 basta uma faixa sem o cuidado para a menor severidade cair a 2 e a aprovação sumir. O AND das oito não
 perdoa.
 
@@ -1329,14 +1336,14 @@ dois valores ficam registrados; nenhum foi apagado.
 1. *(Conceito)* Explique, sem conta, por que a média das proporções por sequência ($5/12$) é menor que
    a proporção agrupada ($1/2$). Que sequências entram numa conta e não na outra?
 2. *(Conta)* Com $R = 1/20$, poder 0,80 e $\alpha = 0{,}05$, calcule o VPP. Refaça com o poder caindo
-   para 0,40 e diga, em uma frase, o que acontece com o valor de um achado positivo quando o estudo é
+   para 0,40 e diga, em uma frase, como muda o valor de um achado positivo quando o estudo é
    pequeno.
 3. *(Laboratório)* No laboratório, reduza os candidatos de 500 para 10 e depois para 5000. Meça a
    fração de vencedores que batem zero na validação e em dados novos. Desenhe os dois pontos e diga o
    que o número de tentativas faz com a aparência do vencedor.
-4. *(Laboratório)* Acrescente ao jardim a liberdade "usar a média ou a mediana do desfecho, o que der o
-   menor p" e meça a nova taxa de falso positivo. O que isso diz sobre declarar as liberdades antes de
-   rodar?
+4. *(Laboratório)* Acrescente ao jardim a liberdade "usar a média ou a mediana do desfecho, a que der o
+   menor p" e meça a nova taxa de falso positivo. Que consequência isso tem para declarar as liberdades
+   antes de rodar?
 5. *(Conta)* Na banca adversarial, a severidade de cada agente é sorteada entre 8 e 10 quando o cuidado
    existe e entre 2 e 4 quando não existe. Calcule a probabilidade de aprovação de uma ficha com os oito
    cuidados e de uma ficha com uma única faixa sem o cuidado. Depois explique por que o desenho escolheu
@@ -1347,13 +1354,13 @@ dois valores ficam registrados; nenhum foi apagado.
 **Resumo.**
 
 - Todo padrão precisa de um modelo nulo exato, com a mesma estrutura dos dados e do procedimento.
-- O alvo da mão quente é $5/12$, não $1/2$: o mesmo estimador, comparado com o alvo errado, inventa o
+- O alvo da mão quente é $5/12$, e não $1/2$: o estimador, comparado com o alvo errado, inventa o
   efeito.
 - Quatro liberdades de pesquisador levam o falso positivo de 5% a dezenas por cento sem nenhum efeito
   no mundo.
 - Ioannidis: o valor preditivo de um achado cai com $\alpha$ e com as chances de a hipótese ser falsa.
-- Cinco erros, não dois: I (alarme falso), II (cegueira), III (resposta certa à pergunta errada), S
-  (sinal trocado) e M (exagero) — e a defesa é institucional: a banca A1–A8 e a severidade de Mayo
+- Cinco erros, e não dois: I (alarme falso), II (cegueira), III (resposta certa à pergunta errada), S
+  (sinal trocado) e M (exagero). A defesa é institucional: a banca A1–A8 e a severidade de Mayo
   trocam a boa intenção por um teste que podia ter falhado.
 
 ## Capítulo 8. O termômetro do adivinho: calibração, resolução e o escore de Brier
@@ -1368,16 +1375,16 @@ amostra, e não por um número redondo.
 ### Degrau 1 — O mundo real e o paradoxo
 
 **Dois meteorologistas.** Numa cidade chove, em média, 20 dias em cada 100. O primeiro meteorologista,
-chamado aqui de *preguiçoso*, diz todos os dias a mesma coisa: *"chance de chuva: 20%"*. O segundo,
+chamado aqui de *preguiçoso*, diz todos os dias a mesma frase: *"chance de chuva: 20%"*. O segundo,
 chamado de *especialista*, olha o céu e diz: *"hoje, 70%"*.
 
 Quem é melhor?
 
-Nenhuma das duas respostas prontas serve. O preguiçoso está, no longo prazo, **certo na média**: em
-cada 100 dias em que ele anunciou 20%, choveu cerca de 20. Ele é calibrado — e não serve para levar
-guarda-chuva: em cada 100 avisos dele, 80 dias secos e 20 molhados, exatamente a taxa do lugar. O
-especialista **separa** os dias: num dia em que ele diz 70%, chove muito mais do que num dia em que ele
-diz 10%. Calibrado e sem resolução, de um lado; calibrado e com resolução, do outro.
+Nenhuma das duas respostas prontas serve. O preguiçoso está, no longo prazo, **certo na média**. Em
+cada 100 dias em que ele anunciou 20%, choveu cerca de 20. Ele é calibrado, e não serve para levar
+guarda-chuva. Em cada 100 avisos dele, 80 dias secos e 20 molhados, exatamente a taxa do lugar. O
+especialista **separa** os dias. Num dia em que ele diz 70%, chove muito mais do que num dia em que ele
+diz 10%. De um lado, um previsor calibrado e sem resolução; do outro, um calibrado com resolução.
 
 Medidos num mundo de 4 mil dias, os números são estes:
 
@@ -1386,31 +1393,31 @@ Medidos num mundo de 4 mil dias, os números são estes:
 | Preguiçoso (0,20 sempre) | 0,1858 | 0,0021 | 0,0002 |
 | Especialista | 0,1569 | 0,0012 | 0,0267 |
 
-O preguiçoso quase não tem erro de calibração — 0,0021 — e não tem resolução nenhuma: 0,0002. Ele
+O preguiçoso quase não tem erro de calibração (0,0021) e não tem resolução nenhuma (0,0002). Ele
 acerta a frequência e não distingue nada. O especialista tem erro de calibração ainda menor e uma
 resolução **133 vezes maior**. É por isso que ele vale mais, e é isso que a taxa de acerto não veria.
 
 **A pergunta que a taxa de acerto não responde.** Um terceiro meteorologista é avaliado por taxa de
-acerto: ele diz "vai chover" quando a chance passa de 50% e acerta 80% das vezes. Essa métrica não
-distingue o previsor que acredita em 51% do que acredita em 99%: para os dois, a ação é a mesma e a
-nota é a mesma. Uma métrica assim não pune quem mente sobre a própria crença — e é por isso que ela não
-serve para auditar ninguém.
+acerto. Ele diz "vai chover" quando a chance passa de 50% e acerta 80% das vezes. Essa métrica não
+distingue o previsor que acredita em 51% do que acredita em 99%. A ação é a mesma para os dois, e a
+nota também. Uma métrica assim não pune quem mente sobre a crença declarada, e por isso não serve para
+auditar ninguém.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
 **Regra de pontuação própria.** Uma regra de pontuação é **própria** (ou *estritamente própria*) quando
-quem realmente acredita em $q$ minimiza a penalidade esperada declarando exatamente $q$. A regra mais
+quem realmente acredita em $q$ minimiza a penalidade esperada declarando essa probabilidade. A regra mais
 conhecida é o **escore de Brier**:
 
 $$\text{BS} = \frac{1}{n}\sum_{i=1}^{n}(p_i - y_i)^2$$
 
 com $p_i$ a probabilidade declarada e $y_i$ o desfecho (1 se aconteceu, 0 se não). É a média do erro
-quadrático da probabilidade — e ser própria é o que faz dela uma métrica em que **mentir sobre a
-própria crença sempre piora a nota**. A taxa de acerto não é própria.
+quadrático da probabilidade, e é essa propriedade que faz dela uma métrica em que **mentir sobre a
+crença sempre piora a nota**. A taxa de acerto não é própria.
 
-**Passar na média não é passar.** A checagem preditiva de Box, Gelman e Shalizi compara os dados reais com réplicas do modelo ajustado. Um Poisson ajustado à demanda da central passa na média e falha na variância: a razão variância/média observada é **273**, e o modelo subestima em dezenas de vezes a chance de um dia de pico (**180 contra 2 900** chamadas, `h0-real/README.md`). Um modelo que acerta o valor médio e erra a dispersão erra o dia que importa.
+**Passar na média não é passar.** A checagem preditiva de Box, Gelman e Shalizi compara os dados reais com réplicas do modelo ajustado. Um Poisson ajustado à demanda da central passa na média e falha na variância. A razão variância/média observada é **273**, e o modelo subestima em dezenas de vezes a chance de um dia de pico (**180 contra 2 900** chamadas, `h0-real/README.md`). Um modelo que acerta o valor médio e erra a dispersão erra o dia que importa.
 
 **A decomposição de Murphy.** Murphy (1973) separou o Brier em três partes:
 
@@ -1424,28 +1431,29 @@ $$\text{BS} = \underbrace{\text{REL}}_{\text{erro de calibração}} -
 - **UNC** (incerteza): $\bar y(1-\bar y)$, o que o desfecho tem de imprevisível para quem só conhece a
   taxa-base.
 
-A identidade fecha exatamente quando as previsões são agrupadas em caixas (dez caixas, por exemplo) e o
-Brier é calculado sobre a média de cada caixa. O **ECE** — *expected calibration error* — é o parente
-não quadrático de REL: a média das distâncias absolutas entre previsto e observado por caixa.
+A identidade fecha quando as previsões são agrupadas em caixas (dez caixas, por exemplo) e o
+Brier é calculado sobre a média de cada caixa. O **ECE** (*expected calibration error*) é o parente
+não quadrático de REL, a média das distâncias absolutas entre previsto e observado por caixa.
 
 **A assimetria prática: a calibração se conserta depois, a resolução não.** A **recalibração de Platt**
 ajusta dois números, $a$ e $b$, e transforma $p$ em $\sigma(a + b\,\text{logit}(p))$. Ela conserta
-distorções monótonas — um previsor sistematicamente confiante demais, ou sistematicamente frouxo —, e é
-por isso que ela é barata. O que ela **não** faz é criar informação: um previsor ruidoso continua
+distorções monótonas, um previsor sistematicamente confiante demais ou sistematicamente frouxo, e é
+por isso que ela é barata. O que ela **não** faz é criar informação. Um previsor ruidoso continua
 ruidoso depois de recalibrado, porque o ruído não estava na escala, estava no sinal.
 
-Medido: um previsor confiante demais sai de Brier 0,1712 para **0,1559**, praticamente o do especialista
-honesto (0,1560) — toda a diferença era distorção de escala. Um previsor ruidoso sai de 0,2119 para
-**0,1755**: melhora, e não alcança o especialista. O preguiçoso recalibrado dá exatamente **0,1840**,
-que é o UNC do mundo: recalibrar um previsor constante só devolve a taxa-base.
+Medido no laboratório, um previsor confiante demais sai de Brier 0,1712 para **0,1559**, praticamente o
+valor do especialista honesto (0,1560), e toda a diferença era distorção de escala. Um previsor ruidoso
+sai de 0,2119 para **0,1755**, uma melhora que ainda não alcança o especialista. O preguiçoso
+recalibrado dá **0,1840**, que é o UNC do mundo. Recalibrar um previsor constante devolve só a
+taxa-base.
 
 **Quanto a calibração pode ser cobrada.** A tolerância do ECE é o ponto prático. A regra do tipo
-$\mathrm{ECE} \le 0{,}03$ parece austera, mas não é: o ECE de um previsor **perfeitamente calibrado**
-não é zero, é um número aleatório cuja escala anda com $1/\sqrt n$. A tolerância honesta é o quantil 95%
-desse nulo, calculado com as mesmas previsões e o mesmo $n$ — e ele encolhe com $n$. Num cofre de 1 488
-casos o ruído é de 0,03; num de 104 489, de 0,0035. Uma tolerância fixa é, então, duas coisas ao mesmo
-tempo: **apertada demais** nos cofres pequenos, onde reprova um previsor honesto, e **frouxa demais**
-nos grandes, onde deixa passar descalibração perfeitamente detectável.
+$\mathrm{ECE} \le 0{,}03$ parece austera, mas não é. O ECE de um previsor **perfeitamente calibrado**
+não é zero, e sim um número aleatório cuja escala anda com $1/\sqrt n$. A tolerância honesta é o quantil
+95% desse nulo, calculado com essas previsões no $n$ do cofre, e ele encolhe quando $n$ cresce. Num
+cofre de 1 488 casos o ruído é de 0,03; num de 104 489, de 0,0035. Uma tolerância fixa é, então, duas
+coisas. **Apertada demais** nos cofres pequenos, onde reprova um previsor honesto, e
+**frouxa demais** nos grandes, onde deixa passar descalibração perfeitamente detectável.
 
 O H3 mediu isso em seis cofres binários:
 
@@ -1458,35 +1466,36 @@ O H3 mediu isso em seis cofres binários:
 | voos NY 2023 | 104 489 | 0,0079 | 0,0035 | passa |
 | Rhode Island 2013–2015 | 24 466 | 0,0048 | 0,0034 | passa |
 
-Aplicada a tolerância que depende de $n$, **nenhum** cofre binário do H3 passa — nem os três que a regra
-fixa aprovava. O caso de Toronto 1997–2002 é o espelho: o ECE de 0,0363 era ruído da ordem da tolerância
-(o q95 nulo é 0,0320), mas o valor observado passa dele, e a reprovação se mantém.
+Aplicada a tolerância que depende de $n$, **nenhum** cofre binário do H3 passa, nem os três que a
+regra fixa aprovava. O caso de Toronto 1997–2002 é o espelho. Ali o ECE de 0,0363 era ruído da ordem
+da tolerância, porque o q95 nulo é 0,0320, mas o valor observado passa dele, e a reprovação se mantém.
 
 **A resolução é a parte difícil.** O fluxo de Rhode Island terminou com ECE 0,0048 e habilidade
-$+0{,}019$: calibração boa, resolução baixa. Prison numa parada de trânsito é um evento raro e pouco
-previsível pelas variáveis disponíveis — o modelo compensa isso com Platt (intercepto e inclinação) e
-com o disjuntor, que põe o reserva como previsão oficial em 12% do cofre. Uma previsão pode ser honesta
-e pouco informativa ao mesmo tempo, e as duas coisas se reportam **separadas**, porque a primeira se
-conserta e a segunda não.
+$+0{,}019$, isto é, calibração boa e resolução baixa. Prison numa parada de trânsito é um evento raro e
+pouco previsível pelas variáveis disponíveis, e o modelo compensa isso com Platt (intercepto e
+inclinação) e com o disjuntor, que põe o reserva como previsão oficial em 12% do cofre. Uma previsão
+pode ser honesta e pouco informativa ao mesmo tempo, e as duas coisas se reportam **separadas**, porque
+a primeira se conserta e a segunda não.
 
 **Pôr a calibração à prova exige cofre novo.** A correção de intercepto do H3b ($\delta \leftarrow
-\delta + 0{,}002(y - p')$) foi desenhada depois de ver o desvio de 2013; para ser honesta, ela precisou
-de um cofre que ninguém tinha visto — os 435 mil voos de Nova York em 2023, com o mesmo trimestre que
-havia falhado. Passou, com CITL 0,0015 e ECE 0,008, mas o modelo sem correção também teria passado,
-porque 2023 não repetiu o desvio de 2013. Isso fica declarado: a correção melhorou a calibração e **não
-foi decisiva** para o portão.
+\delta + 0{,}002(y - p')$) foi desenhada depois de ver o desvio de 2013. Para ser honesta, ela precisou
+de um cofre que ninguém tinha visto, os 435 mil voos de Nova York em 2023, no trimestre que havia
+falhado. Passou, com CITL 0,0015 e ECE 0,008, mas o modelo sem correção também teria passado, porque
+2023 não repetiu o desvio de 2013. Fica declarado que a correção melhorou a calibração e **não foi
+decisiva** para o portão.
 
 **Duas ferramentas que vêm de graça.** A **predição conforme** dá cobertura garantida sem supor a forma
-da distribuição, $P(Y \in C(X)) \ge 1-\alpha$, e foi o que o H3 usou em versão adaptativa sob deriva.
-E a regra que vale para qualquer uma delas: toda previsão é pontuada por regra própria **fora do
-ajuste**, e nenhuma previsão declara 0% ou 100%.
+da distribuição, $P(Y \in C(X)) \ge 1-\alpha$, e foi a que o H3 usou em versão adaptativa sob deriva.
+Uma regra vale para as duas. Toda previsão é pontuada por regra própria **fora do ajuste**, e nenhuma
+previsão declara 0% ou 100%.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 O laboratório pontua quatro previsores, recalibra todos com Platt e mede a tolerância do ECE em três
-tamanhos de cofre. Código em `crates/stochology-book/src/cap08.rs`; saída medida com `cargo run --release`:
+tamanhos de cofre. O código está em `crates/stochology-book/src/cap08.rs`, e a saída foi medida com
+`cargo run --release`:
 
 ```text
 == Capítulo 8 :: o termômetro do adivinho ==
@@ -1506,15 +1515,15 @@ n = 1 488, espalhamento 2.0: q50 nulo 0.0243, q95 nulo 0.0349
 ```
 
 Cinco leituras. **(1)** A identidade de Murphy fecha até $3{,}5\times10^{-15}$ quando as previsões são
-agrupadas nas dez caixas; a previsão crua tem Brier 0,1569 e o agrupamento custa 0,0015. **(2)** O
-preguiçoso tem REL 0,0021 e RES 0,0002: calibrado e inútil, e a recalibração de um previsor constante
-devolve exatamente o UNC (0,1840). **(3)** O confiante demais cai de 0,1712 para 0,1559, abaixo do
-especialista (0,1560): era só escala. O ruidoso cai de 0,2119 para 0,1755 e **não alcança** o
-especialista: era sinal, e sinal perdido não volta. **(4)** A tolerância de 0,03 é reprovada por um
-previsor honesto em **45,1%** das simulações quando $n = 1\,488$, e em **0,0%** quando $n$ é 24 466 ou
-104 489: nos cofres grandes ela não proíbe quase nada. **(5)** A nula depende das previsões, não só de
-$n$: no mesmo $n = 1\,488$, o q50 do ECE nulo vai de 0,0320 com previsões concentradas a 0,0243 com
-previsões espalhadas.
+agrupadas nas dez caixas; a previsão crua tem Brier 0,1569, e o agrupamento custa 0,0015. **(2)** O
+preguiçoso tem REL 0,0021 e RES 0,0002. Está calibrado e continua inútil, e a recalibração de um
+previsor constante devolve exatamente o UNC (0,1840). **(3)** O confiante demais cai de 0,1712 para
+0,1559, abaixo do especialista (0,1560), porque era só escala. O ruidoso cai de 0,2119 para 0,1755 e
+**não alcança** o especialista, porque era sinal, e sinal perdido não volta. **(4)** A tolerância de
+0,03 é reprovada por um previsor honesto em **45,1%** das simulações quando $n = 1\,488$, e em **0,0%**
+quando $n$ é 24 466 ou 104 489. Nos cofres grandes ela não proíbe quase nada. **(5)** A nula depende das
+previsões, não só de $n$. Com $n = 1\,488$, o q50 do ECE nulo vai de 0,0320 com previsões concentradas
+a 0,0243 com previsões espalhadas.
 
 **Declaração de divergência.** A edição anterior registra, para um exemplo de 4 000 eventos, um previsor
 confiante demais que vai de Brier 0,1956 a 0,1851 com Platt, um perito honesto em 0,1846 e um previsor
@@ -1533,7 +1542,7 @@ relatório. O que interessa não muda: o ruído do ECE anda com $1/\sqrt n$, e p
 1. *(Conceito)* Por que a taxa de acerto não é uma regra própria? Dê um exemplo de dois previsores
    com a mesma taxa de acerto e escores de Brier muito diferentes.
 2. *(Conta)* Um previsor declara 0,30 em 200 dias e chove em 48 deles. Calcule REL e RES naquela
-   caixa, supondo taxa-base 0,24, e diga o que aquele previsor deveria fazer com a própria escala.
+   caixa, supondo taxa-base 0,24, e diga o que aquele previsor deveria fazer com a escala.
 3. *(Conta)* O ECE nulo anda com $1/\sqrt n$. Se o q95 nulo é 0,0320 com $n = 1\,488$, qual você
    espera com $n = 148\,800$? Compare com o q95 medido de 104 489 e diga se o crescimento bate com a
    previsão.
@@ -1542,9 +1551,9 @@ relatório. O que interessa não muda: o ruído do ECE anda com $1/\sqrt n$, e p
    previsor a inclinação faz falta?
 5. *(Laboratório)* Mude a semente do mundo de 2026 para 1909 e para 2027 e meça o Brier do
    especialista nas três. A que distância os três ficam, e o que isso diz sobre comparar dois
-   previsores num mesmo mundo de 4 mil dias?
+   previsores num mundo de 4 mil dias?
 6. *(Conceito)* Escreva, em quatro linhas, o memorando que explica à diretoria por que o ECE de 0,0363
-   de Toronto 1997–2002 não pode ser lido com a mesma régua do ECE de 0,0079 dos voos de 2023.
+   de Toronto 1997–2002 não pode ser lido com a régua do ECE de 0,0079 dos voos de 2023.
 
 **Resumo.**
 
@@ -1579,17 +1588,17 @@ costumam ser separados, e perdeu no total:
 | Cálculos grandes | 73% (192 de 263) | 69% (55 de 80) |
 | Total bruto | 78% (273 de 350) | 83% (289 de 350) |
 
-A explicação está na coluna esquerda da tabela: os casos difíceis iam para a cirurgia aberta.
+A explicação está na coluna esquerda da tabela. Os casos difíceis iam para a cirurgia aberta.
 **Em cada 100 pacientes operados abertamente, 75 tinham cálculos grandes; na outra técnica, 23.**
 Comparar os totais é comparar dois grupos de pacientes diferentes. Se os dois procedimentos
-tivessem atendido à mesma mistura de casos — 51% pequenos e 49% grandes, que é a mistura da
-população inteira —, os números seriam 83,3% para a aberta e 77,9% para a outra: a vantagem volta
-a ser da aberta, agora por uma diferença maior do que em qualquer estrato isolado.
+tivessem atendido a casos com a **mesma mistura, 51% pequenos e 49% grandes, a da população
+inteira**, os números seriam 83,3% para a aberta e 77,9% para a outra. A vantagem volta para a
+aberta, agora por uma diferença maior do que a de qualquer estrato isolado.
 
-Nada nessa tabela está errado. O que muda entre a segunda e a quarta linha é **a pergunta**:
-*entre os operados, qual técnica foi melhor?* e *para o próximo paciente, qual técnica escolher?*
-são perguntas diferentes, e a resposta da primeira não serve à segunda. Essa distinção tem nome e
-tem uma escada.
+Nada nessa tabela está errado. Entre a segunda e a quarta linha muda **a pergunta**.
+*Entre os operados, qual técnica foi melhor?* e *para o próximo paciente, qual técnica escolher?*
+são duas perguntas, e a resposta da primeira não serve à segunda. Essa distinção tem nome e tem
+uma escada.
 
 **Os três degraus.** Em cada 100 manchetes com a palavra "causa", nove em cada dez estão no
 primeiro degrau. Pearl separou os degraus pela pergunta que se faz:
@@ -1600,28 +1609,28 @@ primeiro degrau. Pearl separou os degraus pela pergunta que se faz:
 | 2. Agir | Se eu mexer, o que muda? | Se dobrarmos o policiamento, o crime cai? |
 | 3. Imaginar | O que teria acontecido? | Esse assalto teria acontecido com uma viatura na esquina? |
 
-O primeiro degrau é o da correlação; o segundo exige um **do(x)** — a intervenção; o terceiro exige
+O primeiro degrau é o da correlação; o segundo exige um **do(x)**, a intervenção; o terceiro exige
 um mundo paralelo. Os dados sozinhos só sustentam o primeiro. A ponte para os outros dois é um
-grafo causal, que é uma declaração humana sobre o mundo e não uma saída de software.
+grafo causal, **uma declaração humana sobre o mundo, e nunca uma saída de software**.
 
 **O alarme que parece causa.** Numa unidade de terapia intensiva, o quadro da equipe acende um
 alarme quando a resistência bacteriana estimada passa de um limite. O alarme prevê o desfecho
 grave melhor do que qualquer outra variável do sistema. Em cada 100 pacientes que o alarme marca,
-muitos evoluem mal — e a equipe começa a tratar o alarme como se ele fosse a doença.
+muitos evoluem mal, e a equipe começa a tratar o alarme como se ele fosse a doença.
 
-Só que o alarme é **filho** da resistência, não pai. Ele é acionado pela resistência, e a
-resistência é que causa o desfecho. Trocar o alarme de lugar, desligá-lo ou calibrá-lo de outro
-jeito não muda o desfecho de um paciente sequer: mexer no filho não é mexer no pai. A correlação
-entre o alarme e o desfecho é altíssima, e o efeito causal do alarme é zero. Quando os dados vêm
-de três hospitais diferentes, o que separa os dois é a **invariância**: o efeito da resistência se
-repete em todo hospital; o do alarme, não.
+Só que o alarme é **filho** da resistência, e não o pai dela. Quem o aciona é a resistência, e é
+ela que causa o desfecho. Trocar o alarme de lugar, desligá-lo ou calibrá-lo de outro jeito não muda o
+desfecho de um paciente sequer, porque mexer no filho não é mexer no pai. A correlação entre o
+alarme e o desfecho é altíssima; o efeito causal do alarme é zero. Quando os dados vêm de três
+hospitais diferentes, o que separa os dois é a **invariância**. O efeito da resistência se repete
+em todo hospital, o do alarme não.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
 **Grafos.** Um grafo causal tem nós (variáveis) e setas (relações diretas). $X \to Y$ diz que $X$
-está na equação que gera $Y$. Três arranjos têm nomes que valem a pena decorar:
+está na equação que gera $Y$. Três arranjos recebem nomes que vale a pena decorar:
 
 | Arranjo | Forma | O que condicionar faz | Nome |
 | --- | --- | --- | --- |
@@ -1629,13 +1638,13 @@ está na equação que gera $Y$. Três arranjos têm nomes que valem a pena deco
 | Mediador | $X \to Z \to Y$ | Apaga o efeito que se quer medir | Ajustar apaga |
 | Colisor | $X \to Z \leftarrow Y$ | Abre um caminho falso | Ajustar piora |
 
-Berkson (1946) mostrou o terceiro caso com duas doenças independentes: se cada uma aumenta a
+Berkson (1946) mostrou o terceiro caso com duas doenças independentes. Se cada uma aumenta a
 chance de internação, olhar só os internados as faz parecer associadas. Numa simulação do curso,
 talento e simpatia têm correlação de $+0{,}002$ na população e de $-0{,}669$ entre os que passam de
-um limiar. **"Controlar por tudo o que foi medido" não é neutro**: ajustar um mediador apaga o
+um limiar. **"Controlar por tudo o que foi medido" não é neutro**. Ajustar um mediador apaga o
 efeito, ajustar um colisor o fabrica e ajustar um instrumento amplifica o viés que sobra.
 
-**A porta dos fundos.** O critério de Pearl lista o que ajustar. Um conjunto $Z$ fecha a porta dos
+**A porta dos fundos.** O critério de Pearl diz o que ajustar. Um conjunto $Z$ fecha a porta dos
 fundos quando bloqueia todos os caminhos que entram em $X$ por trás, sem conter nenhum descendente
 de $X$. Quando isso vale, a distribuição observada responde à pergunta de intervenção:
 
@@ -1645,37 +1654,37 @@ O caso trabalhado canônico é a terapia hormonal. Em 1991, a coorte do Nurses' 
 cerca de 48 mil mulheres, relatou risco relativo de **0,56** de doença coronariana grave entre as
 usuárias de estrogênio. Em 2002, o ensaio sorteado da Women's Health Initiative, com 16 608
 mulheres, encontrou razão de riscos de **1,29**. As usuárias da coorte tinham outros hábitos,
-outra renda e outro acesso a médicos: havia uma porta dos fundos aberta que o sorteio fechou.
+outra renda e outro acesso a médicos, e uma porta dos fundos seguia aberta, até o sorteio fechá-la.
 
 **Resultados potenciais.** Cada pessoa tem dois desfechos possíveis, $Y(1)$ com o tratamento e
-$Y(0)$ sem ele, e só um é observado. Comparar os tratados com os não tratados dá, exatamente:
+$Y(0)$ sem ele, e só um é observado. A comparação entre os tratados e os não tratados dá:
 
 $$\mathbb{E}[Y\mid D{=}1]-\mathbb{E}[Y\mid D{=}0] = \underbrace{\mathbb{E}[Y(1)-Y(0)\mid D{=}1]}_{\text{efeito nos tratados}} + \underbrace{\mathbb{E}[Y(0)\mid D{=}1]-\mathbb{E}[Y(0)\mid D{=}0]}_{\text{viés de seleção}}$$
 
-Quando o tratamento é **sorteado**, o segundo termo é zero por construção: quem foi sorteado para
-o tratamento tem o mesmo $Y(0)$ esperado que quem não foi. O Capítulo 17 encontra isso nos dados
-de LaLonde, onde o viés de seleção troca o sinal do efeito: a comparação crua dá $-8\,498$ dólares
-de renda em 1978 e o experimento dá $+1\,794$; a diferença, $-10\,292$, é o termo do meio.
+Quando o tratamento é **sorteado**, o segundo termo é zero por construção, porque quem foi sorteado
+para o tratamento tem $Y(0)$ esperado igual ao de quem não foi. O Capítulo 17 encontra isso nos
+dados de LaLonde, onde o viés de seleção troca o sinal do efeito. A comparação crua dá $-8\,498$
+dólares de renda em 1978 e o experimento dá $+1\,794$; a diferença, $-10\,292$, é o termo do meio.
 
 **A diferença ingênua não é só efeito.** A decomposição dá um nome ao terceiro elemento, e ele não
-tem conserto estatístico: nada nos dados observados diz quanto vale, porque um dos dois desfechos
-potenciais de cada pessoa está faltando por construção. Só o sorteio zera esse termo.
+tem conserto estatístico. Nada nos dados observados diz quanto ele vale, porque um dos dois
+desfechos potenciais de cada pessoa está faltando por construção. Só o sorteio zera esse termo.
 
-**Invariância: o que sobrevive à troca de ambiente.** Uma relação causal sobrevive à troca de
-ambiente; uma correlação de conveniência, não. A Predição Causal Invariante, de Peters, Bühlmann e
-Meinshausen (2016), transforma isso num teste. Se $S$ é o conjunto das causas diretas de $Y$,
-$P(Y \mid X_S, E = e)$ é a mesma distribuição em todo ambiente $e$ que intervenha nas outras
-variáveis sem interferir na equação de $Y$.
+**Invariância: o que sobrevive à troca de ambiente.** Uma relação causal sobrevive à mudança de
+ambiente; uma correlação de conveniência não. A Predição Causal Invariante, de Peters,
+Bühlmann e Meinshausen (2016), transforma isso num teste. Se $S$ é o conjunto das causas diretas de
+$Y$, $P(Y \mid X_S, E = e)$ é a distribuição idêntica em todo ambiente $e$ que intervenha nas
+outras variáveis sem interferir na equação de $Y$.
 
-O procedimento é: (1) para cada subconjunto candidato $S$, testar se a relação de $Y$ com $X_S$ é
-invariante entre os ambientes; (2) guardar todos os $S$ que passam; (3) devolver a interseção deles.
-**A garantia é assimétrica**: $\hat S$ só contém causas diretas, com probabilidade de pelo menos
-$1-\alpha$, mas nada garante que as contenha todas. Abster-se, devolvendo o conjunto vazio, é
-resultado, não falha. A abstenção acontece de dois modos — o teste rejeita todos os conjuntos, ou
-aceita tantos que a interseção fica vazia.
+O procedimento tem três passos. (1) Para cada subconjunto candidato $S$, testar se a relação de
+$Y$ com $X_S$ é invariante entre os ambientes; (2) guardar todos os $S$ que passam; (3) devolver a
+interseção deles. **A garantia é assimétrica**. $\hat S$ só contém causas diretas, com
+probabilidade de pelo menos $1-\alpha$, mas nada garante que as contenha todas. Abster-se,
+devolvendo o conjunto vazio, é resultado, e não falha. A abstenção acontece de dois modos. O teste
+rejeita todos os conjuntos, ou aceita tantos que a interseção fica vazia.
 
-O teste trata cada linha como unidade independente. Quando o mesmo voluntário dá 16 medidas, ou a
-mesma escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o veredito muda de
+O teste trata cada linha como unidade independente. Quando um voluntário dá 16 medidas, ou uma
+escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o veredito muda de
 área para área. No H2 isso apareceu inteiro:
 
 | Leitura | O que aconteceu |
@@ -1684,16 +1693,16 @@ mesma escola dá 403 alunos, a unidade honesta é o voluntário ou a escola, e o
 | 4 domínios | aceitou tanto que $\hat S$ ficou vazio: os ambientes mexem pouco em $X$ |
 | 1 domínio | $\hat S$ não vazio, e contra a alegação: cidadania e emprego, não a cor da pele |
 
-**Uma lição que o H2 acrescentou: o efeito transporta melhor que o conjunto.** Mesmo quando o ICP
+**Uma lição que o H2 acrescentou: o efeito transporta melhor que o conjunto.** Quando o ICP
 rejeita todos os conjuntos, o modelo ajustado nos ambientes de treino previu bem um ambiente nunca
 visto em 9 domínios, com habilidade de 0,04 a 0,88. Encontrar o conjunto exato de causas é mais
 exigente do que prever sob mudança.
 
 **Por que isso importa para decidir.** A invariância é também a resposta à crítica de Lucas
-(Capítulo 11): só o que é invariante entre regimes merece uso quando o regime muda. No H2g, com a
+(Capítulo 11). Só o que é invariante entre regimes merece uso quando o regime muda. No H2g, com a
 verdade de referência declarada antes, o ICP recuperou os pais verdadeiros da corrente elétrica
-numa câmara física — $\hat S = \{red, green, blue\}$ — e deixou de fora sensores de luz
-fortemente correlacionados, porque eram filhos dos LEDs.
+numa câmara física, $\hat S = \{red, green, blue\}$, e deixou de fora sensores de luz fortemente
+correlacionados, porque eram filhos dos LEDs.
 
 ---
 
@@ -1767,48 +1776,49 @@ inclinação ingênua média (todos os sítios juntos): X = 4.0004  Z = 1.2029
 **O que cada linha diz.**
 
 **(1) A conta de Charig fecha.** A cirurgia aberta vence nos pequenos (0,9310 contra 0,8667) e nos
-grandes (0,7300 contra 0,6875), e perde no bruto (0,7800 contra 0,8257). Ponderando os dois estratos
-pela população inteira — pesos 0,5100 e 0,4900 — a aberta fica com 0,8325 e a outra com 0,7789: a
-vantagem inverte de novo, e agora para o lado da aberta, com a diferença ampliada. O que produziu o
-paradoxo é a mistura de casos: **75% dos pacientes da aberta tinham cálculos grandes, contra 23% na
-outra técnica**. É a mesma lição dos 12 casos do Capítulo 2, agora com números de um ensaio real.
+grandes (0,7300 contra 0,6875), e perde no bruto (0,7800 contra 0,8257). Ponderando os dois
+estratos pela população inteira, com pesos 0,5100 e 0,4900, a aberta fica com 0,8325 e a outra com
+0,7789. A vantagem inverte de novo, agora para o lado da aberta, com a diferença ampliada. Quem
+produziu o paradoxo foi a mistura de casos. **75% dos pacientes da aberta tinham cálculos grandes,
+contra 23% na outra técnica**. Repete-se aqui a lição dos 12 casos do Capítulo 2, agora com números
+de um ensaio real.
 
 **(2) A correlação ingênua não consegue separar a causa do sintoma.** Com 12 000 linhas em três
 sítios, o desfecho $Y$ foi gerado por $Y = 2X + \text{ruído}$, o sintoma $Z$ por $Z = 2X +
-\text{ruído próprio do sítio}$ e $W$ é ruído puro. Olhando tudo junto, $\operatorname{corr}(X,Y) =
-0{,}9314$ e $\operatorname{corr}(Z,Y) = 0{,}7208$: a causa e o sintoma parecem duas variáveis
+\text{ruído do sítio}$ e $W$ é ruído puro. Olhando tudo junto, $\operatorname{corr}(X,Y) =
+0{,}9314$ e $\operatorname{corr}(Z,Y) = 0{,}7208$. A causa e o sintoma parecem duas variáveis
 explicativas, e a regressão ingênua dá inclinação **1,9885** para $X$ e **0,6003** para $Z$. Se o
-analista parasse aqui, concluiria que o alarme tem efeito próprio de 0,6.
+analista parasse aqui, atribuiria ao alarme um efeito de 0,6.
 
-**(3) O ICP separa os dois.** No teste de invariância, ajustando a mesma inclinação nos três sítios
-contra inclinações livres:
+**(3) O ICP separa os dois.** No teste de invariância, ajustando uma inclinação comum aos três
+sítios contra inclinações livres:
 
 | Candidato | F | p | Inclinação comum | Por sítio | Veredito |
 | --- | --- | --- | --- | --- | --- |
 | $\{X\}$ | 0,755 | 0,470 | 1,985 | 1,970 · 1,996 · 1,990 | aceito |
 | $\{Z\}$ | 976,809 | ~0 | 0,477 | 0,928 · 0,496 · 0,299 | rejeitado |
 
-A inclinação de $X$ é praticamente a mesma nos três sítios (1,970, 1,996, 1,990); a de $Z$ vai de
+A inclinação de $X$ é praticamente constante nos três sítios (1,970, 1,996, 1,990); a de $Z$ vai de
 0,928 a 0,299, quase triplicando de um sítio para o outro. O mecanismo que liga a causa ao desfecho
 não mudou; o que liga o sintoma ao desfecho mudou em cada lugar. A p de $Z$ é indistinguível de
-zero (F perto de mil) e a de $X$ é 0,470 — ou seja, os dados não têm como distinguir a relação de
-$X$ de uma relação que valha em todo lugar.
+zero (F perto de mil) e a de $X$ é 0,470. Em outras palavras, os dados não têm como distinguir a
+relação de $X$ de uma relação que valha em todo lugar.
 
 **(4) O que o teste acerta e onde ele se abstém.** Em 200 repetições com o mecanismo estável, o
 conjunto $\{X\}$ é aceito em **94,0%** das rodadas e $\{Z\}$ é rejeitado em **100%** delas. A
-interseção de todos os conjuntos aceitos, porém, só dá exatamente $\{X\}$ em **8,0%** dos casos, e
-sai vazia em 89,5%. Lendo as causas da abstenção: em 2,5% sobrou só o ruído $W$ (o teste aceitou os
-conjuntos que o continham e não os que continham $X$); em 0,5% a própria causa não sobreviveu; e
-nos outros 86,5% o ruído $W$ entrou em alguns conjuntos e não em outros, e a interseção ficou sem
-denominador comum. **Abster-se é resultado, não defeito do instrumento** — e o teste nunca devolveu
-$\hat S = \{Z\}$.
+interseção de todos os conjuntos aceitos, porém, só devolve $\{X\}$ em **8,0%** dos casos, e sai
+vazia em 89,5%. O conjunto da causa não sobreviveu em 0,5% das vezes, e em 2,5% sobrou só o ruído
+$W$, porque o teste aceitou os conjuntos que o continham e recusou os que continham $X$. Nos outros
+86,5% o ruído $W$ entrou em alguns conjuntos e ficou fora de outros, e a interseção perdeu o
+denominador comum. **Abster-se é resultado, e não defeito do instrumento**, e o teste nunca
+devolveu $\hat S = \{Z\}$.
 
 **(5) Quando o mecanismo é instável, a causa também cai.** Na segunda bateria, o coeficiente de
-$X$ em $Y$ muda de sítio para sítio. Os dados agora dizem a verdade sobre um mundo incoerente: a
-inclinação ingênua de $X$ sobe de 2,0004 para **4,0004** (o estimador está misturando o efeito
-verdadeiro com a variação entre sítios), $Z$ vai de 0,6015 para 1,2029, e $\{X\}$ deixa de ser uma
-relação estável. Quando os sítios intervêm no mecanismo, nenhum conjunto é a resposta certa, e o
-teste deve — e faz — rejeitar.
+$X$ em $Y$ muda de sítio para sítio. Os dados agora dizem a verdade sobre um mundo incoerente. A
+inclinação ingênua de $X$ sobe de 2,0004 para **4,0004**, porque o estimador está misturando o
+efeito verdadeiro com a variação entre sítios; $Z$ vai de 0,6015 para 1,2029, e $\{X\}$ deixa de
+ser uma relação estável. Quando os sítios intervêm no mecanismo, nenhum conjunto é a resposta
+certa, e o teste rejeita, como deve.
 
 **Exercícios.**
 
@@ -1821,10 +1831,10 @@ teste deve — e faz — rejeitar.
    número de casos, e explique por que ela inverte os estratos. Qual é a variável confundidora?
 4. *(Conta)* No laboratório, a inclinação ingênua de $Z$ foi 0,6003 e as inclinações por sítio
    foram 0,928, 0,496 e 0,299. Explique em uma frase por que a média ingênua não é a média dessas
-   três, e o que isso diz sobre a leitura do coeficiente de uma regressão só.
+   três, e o que ela revela sobre a leitura do coeficiente de uma regressão só.
 5. *(Laboratório)* Faça o ruído de $Z$ ser igual nos três sítios no laboratório e mostre que
-   $\{Z\}$ passa a ser aceito. O que isso diz sobre a força do ICP: ele encontra a causa ou apenas
-   rejeita o que varia?
+   $\{Z\}$ passa a ser aceito. O que isso diz sobre a força do ICP? Ele encontra a causa ou apenas
+   rejeita aquilo que varia?
 6. *(Conceito)* Por que o ICP pode devolver o conjunto vazio quando tem dados demais? Relacione com
    a sensibilidade do teste a desvios do modelo.
 
@@ -1832,12 +1842,12 @@ teste deve — e faz — rejeitar.
 
 - Associação, intervenção e contrafactual são perguntas diferentes; o grafo faz a ponte, e os dados
   sozinhos não a fazem.
-- O paradoxo de Simpson nasce de uma mistura de casos: a cirurgia aberta vence em cada estrato e
+- O paradoxo de Simpson nasce de uma mistura de casos. A cirurgia aberta vence em cada estrato e
   perde no bruto porque 75% dos seus pacientes eram os casos difíceis.
 - Confundidor, mediador e colisor pedem três reações opostas; ajustar tudo não é neutro.
 - Diferença ingênua = efeito nos tratados + viés de seleção, e só o sorteio zera o segundo termo.
 - O ICP separa a causa do sintoma pela invariância entre ambientes, e abster-se é um resultado
-  legítimo: no laboratório ele nunca devolveu o filho como causa.
+  legítimo. No laboratório ele nunca devolveu o filho como causa.
 
 ## Capítulo 10. O tempo e a ruína: a moeda de Peters, Kelly e caudas selvagens
 
@@ -1850,29 +1860,29 @@ de Laplace e reconhecer quando a média de uma distribuição não existe ou eng
 ### Degrau 1 — O mundo real e o paradoxo
 
 **A moeda que enriquece a multidão e arruína a pessoa.** Uma aposta oferece 50% de ganho contra 40% de
-perda, com chances iguais: cara multiplica o que foi apostado por 1,5, coroa por 0,6. Vamos supor que
+perda, com chances iguais; a cara multiplica o capital apostado por 1,5 e a coroa por 0,6. Vamos supor que
 alguém aposte toda a riqueza, rodada após rodada, começando com 1 real.
 
-- A conta de uma rodada média: metade das vezes ganha 0,5 e metade perde 0,4. Em média, $+0{,}05$ por
-  rodada. Cinco por cento por rodada.
+- A conta de uma rodada média. Metade das vezes ganha 0,5 e metade perde 0,4. Em média, $+0{,}05$ por
+  rodada, ou cinco por cento por rodada.
 - A conta de uma cara **e** uma coroa: $1{,}5 \times 0{,}6 = 0{,}90$. Quem vive as duas rodadas
   perdeu 10%. Uma cara e uma coroa não devolvem o ponto de partida, porque 50% para cima e 40% para
-  baixo **não são o mesmo número**.
+  baixo **são números diferentes**.
 
 Em cada 100 apostadores que apostam tudo, ao fim de **10 rodadas** 37 terminam acima do início, ao fim
 de **100 rodadas** 13, e ao fim de **1 000 rodadas** nenhum. A riqueza média, essa, explode. Numa
 simulação medida com 10 000 trajetórias de 1 000 rodadas, a mediana final de quem aposta tudo é
-A probabilidade de a coorte terminar naquele valor é $1{,}322 \times 10^{-23}$ — e nos módulos seguintes veremos por que a média amostral da mesma coorte
+A probabilidade de a coorte terminar naquele valor é $1{,}322 \times 10^{-23}$; nos módulos seguintes veremos por que a média amostral daquela coorte
 ainda assim cresce.
 
-O nome disso é **não-ergodicidade**, e a pergunta que ela obriga a fazer é simples: *de quem é a
-média?* A média de 10 000 pessoas num mesmo instante não é a média de uma pessoa ao longo de 10 000
+O nome disso é **não-ergodicidade**, e ela obriga a fazer uma pergunta simples. *De quem é a
+média?* A média de 10 000 pessoas num instante não é a média de uma pessoa ao longo de 10 000
 rodadas. Quem vive uma trajetória precisa da segunda; quem administra um fundo com muitos cotistas
-pode viver da primeira — e a primeira é justamente a que não paga a conta de quem aposta.
+pode viver da primeira, e a primeira é justamente a que não paga a conta de quem aposta.
 
-**A mesma aposta, duas respostas.** A aposta do parágrafo anterior não é ruim por si. Ela é boa para a
-multidão (a esperança cresce 5% por rodada) e péssima para a trajetória típica (a mediana cai). O que
-separa as duas leituras não é otimismo nem pessimismo: é **em que unidade se está contando**.
+**A mesma aposta, duas respostas.** Essa aposta não é ruim por si. Ela é boa para a
+multidão (a esperança cresce 5% por rodada) e péssima para a trajetória típica (a mediana cai). Aquilo que
+separa as duas leituras não é otimismo nem pessimismo. É **em que unidade se está contando**.
 
 ---
 
@@ -1882,15 +1892,15 @@ separa as duas leituras não é otimismo nem pessimismo: é **em que unidade se 
 
 $$X_t = X_0 \prod_{s=1}^{t} M_s$$
 
-a média de conjunto cresce quando $\mathbb{E}[M] > 1$, mas o que se acumula numa trajetória é o
+a média de conjunto cresce quando $\mathbb{E}[M] > 1$, mas numa trajetória acumula-se o
 logaritmo do produto, e pela lei dos grandes números ele vai para $\mathbb{E}[\ln M]$. Quando
 $$\mathbb{E}[M] > 1 \quad \text{e} \quad \mathbb{E}[\ln M] < 0,$$
 a multidão enriquece e quase toda trajetória decai. Na moeda de Peters:
 
 $$\ln \mathbb{E}[M] \approx +0{,}049, \qquad \mathbb{E}[\ln M] = \tfrac12\ln 1{,}5 + \tfrac12\ln 0{,}6 \approx -0{,}053$$
 
-O instrumento do capítulo mede $-0{,}052680$ por rodada, que é $-5{,}268\%$ de crescimento temporal.
-A diferença entre as duas contas — $+5{,}00\%$ e $-5{,}27\%$ — é a distância entre a linha de uma
+O instrumento do capítulo mede $-0{,}052680$ por rodada, o que dá $-5{,}268\%$ de crescimento temporal.
+A diferença entre as duas contas, $+5{,}00\%$ e $-5{,}27\%$, mede a distância entre a linha de uma
 planilha e a vida de quem aposta.
 
 | Rodadas | Trajetórias acima do ponto de partida |
@@ -1900,7 +1910,7 @@ planilha e a vida de quem aposta.
 | 1 000 | 0,01% |
 
 Em 1 000 rodadas a esperança vale $1{,}55 \times 10^{21}$ e a mediana $10^{-23}$. Os fatores são
-independentes e idênticos; **o que não é ergódico é o produto**. Até quem simula cai na armadilha: a
+independentes e idênticos; **o produto é que não é ergódico**. Até quem simula cai na armadilha, porque a
 média de $N$ trajetórias acompanha a esperança só por um tempo que cresce como $\ln N$, cerca de 12
 rodadas com 10 trajetórias e 112 com um milhão.
 
@@ -1909,11 +1919,11 @@ riqueza:
 
 $$f^* = \arg\max_f \; \mathbb{E}[\ln(1 + fR)]$$
 
-Numa aposta paga de igual para igual com chance $p$, a fração ótima é $f^* = 2p - 1$ — apostar 20% com
-chance de 0,6. Numa aposta que paga 5 contra 4, como a moeda de Peters, $f^* = p|b| - (1-p)a =
+Numa aposta paga de igual para igual com chance $p$, a fração ótima é $f^* = 2p - 1$, ou seja, apostar
+20% com chance de 0,6. Numa aposta que paga 5 contra 4, como a moeda de Peters, $f^* = p|b| - (1-p)a =
 0{,}9p - 0{,}4$, isto é, 14% da riqueza. Apostar tudo levaria a esperança, em 100 rodadas, a
 $8{,}3 \times 10^7$ vezes o capital, com chance de sobreviver de $0{,}6^{100}$, cerca de $10^{-22}$.
-O dobro da fração ótima já empobrece com a mesma vantagem: o instrumento mede $g(0{,}28)$ já abaixo de
+O dobro da fração ótima já empobrece com essa mesma vantagem, e o instrumento mede $g(0{,}28)$ já abaixo de
 zero e $g(0{,}70) = -0{,}0075$ por rodada.
 
 **A incerteza epistêmica é um argumento para apostar menos.** Com a probabilidade estimada em 25
@@ -1921,18 +1931,18 @@ rodadas, o Kelly cheio tem taxa de crescimento negativa em 16% das estimativas, 
 garante 75% do crescimento com um quarto da variância.
 
 **A suavização de Laplace.** O estimador mais simples de uma probabilidade é a frequência observada
-$k/n$. Ele tem um defeito fatal em eventos raros: com zero perdas em 250 semanas, ele diz que a
-probabilidade é **zero** — e nenhuma alavancagem é demais para uma chance nula. A regra de sucessão de
-Laplace responde:
+$k/n$. Ele tem um defeito fatal em eventos raros. Com zero perdas em 250 semanas, ele diz que a
+probabilidade é **zero**, e nenhuma alavancagem é demais para uma chance nula. A regra de sucessão de
+Laplace dá o valor corrigido.
 
 $$P(\text{sucesso amanhã} \mid s, n) = \frac{s+1}{n+2}$$
 
-Com 250 semanas limpas, a chance de perda não é zero: é $1/252 = 0{,}003968$. A regra não é neutra —
-ela vem de uma priori uniforme —, mas impede a conclusão absurda de que o risco acabou.
+Com 250 semanas limpas, a chance de perda não é zero. Ela é $1/252 = 0{,}003968$. A regra não é neutra,
+porque vem de uma priori uniforme, mas impede a conclusão absurda de que o risco acabou.
 
 **Seguro e cooperação.** No navio de Bernoulli, retomado por Peters e Adamou, um armador com riqueza
 de 100 000 paga 1 800 para cobrir uma perda de 34 000 que ocorre com chance de 5%. Em esperança, ele
-perde 100 por mês e a seguradora ganha 100. Em crescimento temporal, os dois ganham: o armador passa
+perde 100 por mês e a seguradora ganha 100. Em crescimento temporal, os dois saem ganhando, e o armador passa
 de 1,94% para 2,18% ao mês, e a seguradora, que detém muitas trajetórias independentes, de zero para
 +0,007%. Na moeda de Peters, três jogadores que repartem a riqueza a cada rodada crescem 1,6% por
 rodada, quando cada um sozinho decairia. **A pergunta que decide o caso é quem detém as trajetórias.**
@@ -1953,21 +1963,21 @@ comportam.
 | Lento | Lognormal | Todos os momentos existem, mas a convergência engana em amostras reais |
 | Selvagem | Pareto com $\alpha \le 2$ | Uma observação pode dominar a soma; a variância, ou a média, não existe |
 
-O nome disso é **Fisher–Tippett–Gnedenko**: o máximo de muitos sorteios só pode convergir para três famílias — Gumbel, Fréchet ou Weibull —, e é por isso que a cauda se estima pelo máximo, não pela média. No registro do curso, a perda de 1 em 100 anos sai em 17,4% pela GEV contra 3,9% da gaussiana: mais de quatro vezes.
+O nome disso é **Fisher–Tippett–Gnedenko**. O máximo de muitos sorteios só pode convergir para três famílias, Gumbel, Fréchet ou Weibull, e é por isso que a cauda se estima pelo máximo, não pela média. No registro do curso, a perda de 1 em 100 anos sai em 17,4% pela GEV contra 3,9% da gaussiana: mais de quatro vezes.
 
 Taleb chamou o primeiro de Mediocristão e o último de Extremistão, e acrescentou o tipo de
-consequência: o "quarto quadrante", onde a cauda é selvagem e a perda depende do tamanho do evento, é
+consequência. O "quarto quadrante", onde a cauda é selvagem e a perda depende do tamanho do evento, é
 onde os modelos falham mais e custam mais. O estimador de Hill estima o expoente da cauda a partir dos
-$k$ maiores valores: $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$. Os incêndios dinamarqueses, com
+$k$ maiores valores, $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$. Os incêndios dinamarqueses, com
 $\alpha$ estimado em 1,81 (intervalo de 1,41 a 2,56), estão nesse território (Capítulo 18).
 
 ---
 
 ### Degrau 3 — Mão na massa
 
-Quatro tarefas: medir a moeda de Peters com a fração ótima e com a aposta total, medir 10 000
-vendedores de seguro com e sem Laplace, estimar a cauda com Hill e medir o arrasto da volatilidade em
-$1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com o
+Quatro tarefas compõem o laboratório. Medir a moeda de Peters com a fração ótima e com a aposta total;
+medir 10 000 vendedores de seguro com e sem Laplace; estimar a cauda com Hill; e medir o arrasto da
+volatilidade em $1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com o
 crate de rascunho `labs_cap10`:
 
 ```text
@@ -2037,57 +2047,56 @@ com um crash de -22,6% num dia e 40 dias de -3% (20 mil sessões):
 **(1) As duas médias.** A média de conjunto da moeda de Peters é $1{,}0500$ por rodada, ou $+5{,}00\%$.
 A média no tempo é $-0{,}052680$, ou $-5{,}268\%$. O produto de uma cara e uma coroa é
 $1{,}5 \times 0{,}6 = 0{,}90$. A fração de Kelly é $0{,}14$ da riqueza; com ela, o crescimento no
-tempo é $+0{,}0175$ por rodada — positivo, pela primeira vez.
+tempo é $+0{,}0175$ por rodada, positivo pela primeira vez.
 
 **(2) A coorte de 10 000 trajetórias.** Apostando tudo, a riqueza cai para $< 10^{-6}$ do capital em
 $99{,}71\%$ das trajetórias, a mediana final é $1{,}322 \times 10^{-23}$ e o $\log_{10}$ da média
-final é $-5{,}6$. **A trajetória mais rica sozinha responde por 100% da média da coorte**: o 1% mais
-rico explica tudo o que a média tem de riqueza. Com **Kelly cheio** $(f = 0{,}70)$ a ruína aparece em
+final é $-5{,}6$. **A trajetória mais rica sozinha responde por 100% da média da coorte**, ou seja, o 1%
+mais rico explica tudo o que a média tem de riqueza. Com **Kelly cheio** $(f = 0{,}70)$ a ruína aparece em
 metade das trajetórias ($50{,}89\%$) e a mediana final despenca para $6{,}810 \times 10^{-7}$; com
 **meio Kelly** $(f = 0{,}35)$ a ruína é zero e a mediana final é $1{,}854 \times 10^2$; com
 **quarto de Kelly** $(f = 0{,}14)$ a ruína é zero e a mediana final é $1{,}506 \times 10^2$. O
-contraste entre $f = 0{,}70$ e $f = 0{,}35$ é o ponto do capítulo: **duas vezes a fração ótima já não
-é ótima de nada** — é uma aposta que perde na maioria das trajetórias, com a média ainda explodindo.
+contraste entre $f = 0{,}70$ e $f = 0{,}35$ é o ponto do capítulo. **Duas vezes a fração ótima já não
+é ótima de nada**, porque a aposta perde na maioria das trajetórias, com a média ainda explodindo.
 **(3) O vendedor de seguro.** Em 10 000 históricos de 250 semanas, **36,8%** não veem perda alguma —
-exatamente a probabilidade teórica $0{,}996^{250} = 0{,}3671$ — e são esses que apostam tudo ($f = 1$).
+exatamente a probabilidade teórica $0{,}996^{250} = 0{,}3671$, e são esses que apostam tudo ($f = 1$).
 Quem lê a probabilidade pela frequência crua tem mediana final de $3{,}531 \times 10^2$ e média de
 $1{,}255 \times 10^3$; quem usa a regra de Laplace estima $1/252 = 0{,}003968$ e trabalha com
-$f = 0{,}484$, com mediana de $8{,}983 \times 10^1$. As duas terminam acima do ponto de partida —
-a diferença não aparece no ganho e sim na **cauda**: quem ignorou o risco, num histórico ruim, não
+$f = 0{,}484$, com mediana de $8{,}983 \times 10^1$. As duas terminam acima do ponto de partida, e
+a diferença não aparece no ganho, e sim na **cauda**. Quem ignorou o risco, num histórico ruim, não
 tem de onde voltar.
 
 **(4) A cauda selvagem.** Com Pareto de $\alpha = 1{,}1$, cuja média verdadeira é 11, a média amostral
 de um milhão de observações tem mediana 8,39 e fica abaixo de 11 em 95% das amostras e o intervalo de
-95% cobre o valor verdadeiro em 26% delas. O estimador de Hill recupera o expoente: com $k = 1\,000$
+95% cobre o valor verdadeiro em 26% delas. O estimador de Hill recupera o expoente. Com $k = 1\,000$
 dá $\hat\alpha = 1{,}100$, com intervalo aproximado $[1{,}032; 1{,}168]$; com $k = 20\,000$ dá
 $1{,}095$ com $[1{,}080; 1{,}111]$. Um modelo gaussiano ajustado a essa cauda subestima a perda em
 todas as repetições.
 
-**(5) O arrasto da volatilidade.** Calibrando o modelo pelo H1 do repositório — arrasto de 0,14 ao ano
-em $3\times$ e crescimento de 0,051 ao ano em $1\times$ —, em 100 000 sessões o crescimento medido
+**(5) O arrasto da volatilidade.** Calibrando o modelo pelo H1 do repositório (arrasto de 0,14 ao ano
+em $3\times$ e crescimento de 0,051 ao ano em $1\times$), em 100 000 sessões o crescimento medido
 por sessão é $+0{,}000249$ em $1\times$, $+0{,}000267$ em $2\times$ e $+0{,}000053$ em $3\times$.
 O arrasto medido sobe de $0{,}0172$ ao ano em $1\times$ para $0{,}0926$ em $2\times$ e $0{,}2264$ em
-$3\times$ — **crescendo com o quadrado da alavancagem**, que é a assinatura de
+$3\times$; o arrasto **cresce com o quadrado da alavancagem**, que é a assinatura de
 $\mu - \tfrac12 \sigma^2 L^2$. O crash de 1987, sozinho, tira **67,8%** do capital em $3\times$ e
 22,6% em $1\times$; a ruína começa em $L = 4{,}4$. Com um crash plantado no meio de 20 000 sessões,
-o crescimento de $3\times$ fica em $-0{,}000274$ por sessão, abaixo de $1\times$ e de $2\times$:
-**um único dia muda a ordem**.
+o crescimento de $3\times$ fica em $-0{,}000274$ por sessão, abaixo de $1\times$ e de $2\times$. **Um único dia muda a ordem**.
 
 **Declaração de divergência.** A edição anterior registra 35,8% de ruína para quem aposta pelo próprio
 histórico e 0% com Laplace. Este instrumento mede 36,8% de "aposta tudo" e **0,00% de ruína** com
-qualquer uma das regras. O motivo é uma trava declarada: o Kelly é limitado a $f \le 1$ (não se
+qualquer uma das regras. Uma trava declarada explica o motivo. O Kelly é limitado a $f \le 1$ (não se
 aposta mais do que se tem), e com $f = 1$ um comerciante que ganha 1% por semana e perde no máximo
-metade por perda precisa de sete eventos extremos consecutivos para cair abaixo de $10^{-6}$ — que não
-acontecem em 1 000 semanas com chance de 0,004. O valor antigo fica registrado: os dois números medem
-a mesma coisa, com tetos de alavancagem diferentes. E o arrasto também diverge do roteiro do curso: a
-tabela de cinco regras do Capítulo 11 usa um modelo de cauda próprio, e os dois conjuntos de alturas
-não coincidem — os dois ficam relatados.
+metade por perda precisa de sete eventos extremos consecutivos para cair abaixo de $10^{-6}$, e esses
+eventos não acontecem em 1 000 semanas com chance de 0,004. O valor antigo fica registrado. Os dois números medem
+a mesma coisa, com tetos de alavancagem diferentes. E o arrasto também diverge do roteiro do curso.
+A tabela de cinco regras do Capítulo 11 usa um modelo de cauda que lhe é próprio, e os dois conjuntos de alturas
+não coincidem; os dois ficam relatados.
 
 Já a tabela de crescimento temporal do repositório (5,1% com $1\times$, 7,2% com $2\times$ e 6,0% com
-$3\times$, mais o arrasto de 0,14 ao ano em $3\times$ — os mesmos três portfólios aparecem em decimal
-no Capítulo 17, que mede 0,0515, 0,0719 e 0,0601) **não é reproduzida** por este instrumento: com
+$3\times$, mais o arrasto de 0,14 ao ano em $3\times$; os mesmos três portfólios aparecem em decimal
+no Capítulo 17, que mede 0,0515, 0,0719 e 0,0601) **não é reproduzida** por este instrumento, porque, com
 os parâmetros calibrados por aqueles dois números, o modelo dá $3\times$ maior que $2\times$, e não
-menor. O motivo provável é a cauda real: o Dow de 1885 a 2023 tem 19/10/1987 e a corrida de 1929-32,
+menor. O motivo provável é a cauda real. O Dow de 1885 a 2023 tem 19/10/1987 e a corrida de 1929-32,
 que o modelo gaussiano não tem. A linha do crash, medida, é a evidência de que o efeito existe; o
 valor exato do crescimento com $3\times$ depende de qual cauda entra na conta.
 
@@ -2112,21 +2121,21 @@ valor exato do crescimento com $3\times$ depende de qual cauda entra na conta.
 **Resumo.**
 
 - Em dinâmica multiplicativa, quem vive uma trajetória deve maximizar $\mathbb{E}[\ln M]$; a média de
-  conjunto responde a outra pergunta.
-- $+50\%$ contra $-40\%$ dá média de conjunto de $+5\%$ por rodada e deriva de $-5{,}27\%$: o produto
+  conjunto responde a uma pergunta diferente.
+- $+50\%$ contra $-40\%$ dá média de conjunto de $+5\%$ por rodada e deriva de $-5{,}27\%$; o produto
   de uma cara e uma coroa é 0,90.
 - Kelly dá a fração que maximiza o crescimento; a incerteza sobre o parâmetro manda apostar menos, e
   a regra de Laplace impede que zero perdas vire risco zero.
-- Com cauda pesada, a média amostral engana ou nem existe: com $\alpha = 1{,}1$, a média de um milhão
+- Com cauda pesada, a média amostral engana ou nem existe; com $\alpha = 1{,}1$, a média de um milhão
   de observações fica abaixo do valor verdadeiro em 95% das amostras.
-- O arrasto da volatilidade cresce com o quadrado da alavancagem: medido por sessão, 0,000068 em
+- O arrasto da volatilidade cresce com o quadrado da alavancagem. Medido por sessão, 0,000068 em
   $1\times$ e 0,000898 em $3\times$.
 
 ## Capítulo 11. O preço do erro, a lei de Goodhart e quem paga a conta
 
 **Objetivos.** Ao fim deste capítulo você deve saber decidir pelo limiar custo/perda, calcular o valor
 esperado da informação perfeita, usar os critérios robustos quando não há probabilidade em que
-confiar, reconhecer um laço em que a previsão muda o que prevê e declarar quem paga pelo erro.
+confiar, reconhecer um laço em que a previsão altera o previsto e declarar quem paga pelo erro.
 
 ---
 
@@ -2138,33 +2147,34 @@ custa 1 800 por mês e cobre uma perda de 34 000 que acontece com chance de 5%. 
 - **Em esperança**, o armador paga 1 800 e recebe, em média, $0{,}05 \times 34\,000 = 1\,700$. Perde
   100 por mês. A seguradora ganha 100 por mês. Quem olha só essa conta conclui que o seguro é caro.
 - **No tempo**, cada mês multiplica a riqueza por um fator. Sem seguro, em 95% dos meses ela é
-  multiplicada por 1,0 e em 5% por 0,66. Com seguro, é sempre multiplicada por 0,982 — o mesmo, todo
-  mês. As duas contas dão números diferentes.
+  multiplicada por 1,0 e em 5% por 0,66. Com seguro, a multiplicação é de 0,982 todo mês, sem
+  exceção. As duas contas dão números diferentes.
 
 O critério que resolve o impasse é uma regra de uma linha: **pague para se proteger quando a chance
 do evento é maior que o custo dividido pela perda**, isto é, $p > C/L$. Aqui $C/L = 1\,800/34\,000 =
-5{,}294\%$, e a chance é de 5%: a regra do limiar manda **não** segurar, porque a chance está abaixo do
-limiar por 0,294 ponto percentual. É um dos casos em que a resposta da esperança e a resposta do tempo
-não coincidem, e o capítulo mostra as duas.
+5{,}294\%$. A chance é de 5%, portanto abaixo do limiar por 0,294 ponto percentual, e a regra
+manda **não** segurar. É um dos casos em que a resposta da esperança e a resposta do tempo não
+coincidem, e o capítulo mostra as duas.
 
-**Em cada 100 semanas.** O vendedor de seguro do capítulo anterior tem a situação invertida: ganha 1%
-por semana e perde metade do capital com chance de 0,4%. Em 100 semanas, 67 terminam com lucro; o
-perigo mora nas outras 33. Um histórico de 250 semanas não mostra nenhuma perda em
+**Em cada 100 semanas.** O vendedor de seguro do capítulo anterior tem a situação invertida. Ele
+ganha 1% por semana e perde metade do capital com chance de 0,4%. Em 100 semanas, 67 terminam com
+lucro; o perigo mora nas outras 33. Um histórico de 250 semanas não mostra nenhuma perda em
 $0{,}996^{250} = 37\%$ das vezes, e quem estima a chance pela frequência observada conclui que ela é
 zero e alavanca. É o **evento raro que não aparece na amostra**, e o Capítulo 10 já mediu o custo.
 
-**A previsão que muda o que prevê.** Uma previsão publicada não é um termômetro: as pessoas reagem a
-ela. Um aplicativo de trânsito que manda todos os usuários para a rota mais rápida de ontem transfere
-o engarrafamento para a rota que recomendou. Com metade dos motoristas seguindo o aplicativo, quem
-usa leva 41,0 minutos e quem não usa, 36,8. O previsor que divide os usuários para igualar os tempos
-erra por 0,3 minuto, e todos levam 35,0. **A métrica virou meta e deixou de medir.** Essa é a lei de
-Goodhart, e o inverso da versão do capítulo: aqui o previsor *desenhou* o laço e o estabilizou.
+**A previsão que muda o que prevê.** Uma previsão publicada não é um termômetro, porque as pessoas
+reagem a ela. Um aplicativo de trânsito que manda todos os usuários para a rota mais rápida de ontem
+transfere o engarrafamento para a rota que recomendou. Com metade dos motoristas seguindo o
+aplicativo, quem usa leva 41,0 minutos e quem não usa, 36,8. O previsor que divide os usuários para
+igualar os tempos erra por 0,3 minuto, e todos levam 35,0. **A métrica virou meta e deixou de
+medir.** Essa é a lei de Goodhart e o inverso da versão do capítulo. Aqui o previsor *desenhou* o
+laço e o estabilizou.
 
 **Quem paga quando a taxa de erro é diferente para grupos diferentes.** Um sistema de triagem
-decide quem entra num programa. Ele acerta a probabilidade dentro de cada grupo — é calibrado — e, ao
-mesmo tempo, erra de modos diferentes para cada um: o grupo com mais casos reais é marcado com mais
-frequência sem precisar, e o grupo com menos casos é perdido com mais frequência. A saída fácil —
-"não use a cor no modelo" — não resolve, porque a cor entra pelos correlatos.
+decide quem entra num programa. Ele acerta a probabilidade dentro de cada grupo (é calibrado) e,
+ainda assim, erra de modos diferentes para cada um: o grupo com mais casos reais é marcado com mais
+frequência sem precisar, e o grupo com menos casos é perdido com mais frequência. A saída fácil
+("não use a cor no modelo") não resolve, porque a cor entra pelos correlatos.
 
 ---
 
@@ -2172,22 +2182,21 @@ frequência sem precisar, e o grupo com menos casos é perdido com mais frequên
 
 **O limiar e o valor da informação.** Se proteger custa $C$ e não proteger custa $L$ quando o evento
 ocorre, protege-se quando $p > C/L$. Uma informação vale pelo quanto pode mover a probabilidade para
-o outro lado desse limiar, não pelos bits que carrega. O valor de saber o estado do mundo antes de
-agir — o EVPI — é o teto do valor de qualquer informação:
+o outro lado desse limiar. Os bits que carrega não entram nessa conta. O valor de saber o estado do
+mundo antes de agir, o EVPI, é o teto do valor de qualquer informação:
 
 $$\mathrm{EVPI} = \mathbb{E}_\theta\big[\max_a U(a,\theta)\big] - \max_a \mathbb{E}_\theta\big[U(a,\theta)\big]$$
 
-O valor de qualquer exame real (EVSI) fica entre zero e ele. **Bits não são valor**: num exemplo do
+O valor de qualquer exame real (EVSI) fica entre zero e ele. **Bits não são valor.** Num exemplo do
 curso, uma doença tem prevalência de 0,3; tratar custa 1 e deixar um doente sem tratamento custa 10,
 de modo que se trata quando a chance passa de 0,10. Dois exames carregam a mesma informação mútua,
-0,319 bit. O exame sensível vale 0,419, num teto (o EVPI) de 0,70. O específico vale zero, porque
-mesmo o seu resultado negativo deixa a chance acima do limiar e não muda a ação.
+0,319 bit. O exame sensível vale 0,419, num teto (o EVPI) de 0,70. O específico vale zero, porque até
+o resultado negativo dele deixa a chance acima do limiar e não muda a ação.
 
 **Nem toda informação é bem-vinda.** Good (1967) provou que informação gratuita nunca piora a decisão
-de quem tem preferências sobre estados do mundo. Mas quem tem preferências sobre as próprias
-observações pode pagar para não saber: entre pessoas com risco de doença de Huntington, só uma
-minoria faz o exame genético antes dos sintomas — 17,4% no Reino Unido entre 1994 e 2014
-(Baig et al., 2016).
+de quem tem preferências sobre estados do mundo. Mas quem tem preferências sobre as observações
+futuras pode pagar para não saber. Entre pessoas com risco de doença de Huntington, só uma minoria
+faz o exame genético antes dos sintomas, 17,4% no Reino Unido entre 1994 e 2014 (Baig et al., 2016).
 
 **Critérios que dispensam probabilidades.** O limiar $C/L$ e o EVPI supõem uma distribuição sobre os
 estados do mundo. No canto da incerteza da matriz de Stirling (Capítulo 4), ela não existe de modo
@@ -2203,51 +2212,52 @@ declarar qual deles foi usado:
 
 **Os diques da Holanda.** Depois da enchente de 1953, a Comissão Delta adotou para a Holanda central
 um padrão de 1 em 10 000 anos, e van Dantzig (1956) tratou a altura do dique como um problema de
-decisão, equilibrando o custo da obra e o dano esperado. O laboratório refaz o problema com um modelo
-próprio: as máximas anuais seguem uma GEV de forma $\xi$ desconhecida, entre $-0{,}1$ e $0{,}2$, e o
+decisão, equilibrando o custo da obra e o dano esperado. O laboratório refaz o problema com um
+modelo. As máximas anuais seguem uma GEV de forma $\xi$ desconhecida, entre $-0{,}1$ e $0{,}2$, e o
 custo anual de uma altura $h$ é a obra, $h - 2$, mais o dano esperado, $3000 \times P(\text{máxima} > h)$.
 Cinco regras de decisão dão cinco alturas diferentes, e o critério e a lista de modelos têm de ser
 declarados antes de ver a resposta. Chernoff (1954) mostrou que o critério de Savage pode mudar de
-escolha só por acrescentar uma alternativa que ninguém escolheria; aqui o que se acrescenta é um
-modelo. **Os critérios robustos não são mais "corretos" que o esperado: são a escolha honesta quando
-a probabilidade de que a conta depende não merece confiança.**
+escolha só por acrescentar uma alternativa que ninguém escolheria; aqui se acrescenta um modelo.
+**Os critérios robustos não são mais "corretos" que o esperado: são a escolha honesta quando a
+probabilidade de que a conta depende não merece confiança.**
 
 **A previsão que muda o que prevê.** Quando um modelo é publicado, as pessoas reagem a ele. Lucas
-(1976) mostrou o mesmo na economia: os parâmetros de um modelo estimado sob uma política dependem das
-regras que os agentes esperam, e mudam quando a política muda. Num exemplo do curso, a curva de
+(1976) mostrou o fenômeno na economia. Os parâmetros de um modelo estimado sob uma política dependem
+das regras que os agentes esperam, e mudam quando a política muda. Num exemplo do curso, a curva de
 Phillips antiga promete 4,59% de desemprego e o regime novo entrega 5,88%. A resposta de Kuhn e
-Perdomo e colegas (2020) é conceitual: **performativamente estável** é o modelo que é ótimo para a
-distribuição que ele mesmo induz.
+Perdomo e colegas (2020) é conceitual: **performativamente estável** é o modelo ótimo para a
+distribuição que ele induz.
 
 **Aprender ou deformar?** Um agente que minimiza a energia livre variacional pode baixar a surpresa de
 três modos: mudando a crença, mudando o mundo ou deixando de olhar.
 
 $$F[q] = D\big(q \,\|\, p(s \mid o)\big) - \ln p(o) \;\ge\; -\ln p(o)$$
 
-Um termostato que "acredita" em 22 °C numa sala a 18 °C termina com o mesmo $F$ quando aprende que a
+Um termostato que "acredita" em 22 °C numa sala a 18 °C chega a um $F$ idêntico quando aprende que a
 sala está fria e quando a aquece até 22 °C. Só um contrafactual de fora separa os dois casos, e por
 isso a arquitetura exige rodar o modelo com e sem a ação.
 
-**O laço do H3, medido.** O H3 supôs que quem desiste da fila volta a chamar com probabilidade 0,6. O
-mesmo parâmetro foi medido em outra central real, de 1999, com um desenho quase experimental: a fila
-encontrada ao entrar, dentro da mesma data e hora, serve de instrumento para a desistência. Por esse
-desenho, desistir em vez de ser atendido aumenta em **0,145** a chance de o mesmo cliente ligar de novo
-em até quinze minutos, com intervalo de 90% de 0,132 a 0,157. O sinal confere e a ordem de grandeza
-não: o laço declarado é cerca de quatro vezes o observado, fora da faixa de um terço a três que estava
-fixada de antemão. O excesso de chegadas que o laço medido gera nessa central é de 2,3% das chegadas,
-contra o viés de 29% que o laço declarado produziu no H3 — comparação de ordem de grandeza, porque o
-viés do H3 depende também da taxa de desistência simulada, e não só do laço. E o valor medido é
-provavelmente um limite inferior, porque uma chamada nova só é visível quando entra na fila.
+**O laço do H3, medido.** O H3 supôs que quem desiste da fila volta a chamar com probabilidade 0,6.
+Esse parâmetro foi medido em outra central real, de 1999, com um desenho quase experimental. A fila
+encontrada ao entrar, em data e hora idênticas, serve de instrumento para a desistência. Por esse
+desenho, desistir em vez de ser atendido aumenta em **0,145** a chance de aquele cliente voltar a
+ligar em até quinze minutos, com intervalo de 90% de 0,132 a 0,157. O sinal confere e a ordem de
+grandeza não. O laço declarado é cerca de quatro vezes o observado, fora da faixa de um terço a três
+que estava fixada de antemão. O excesso de chegadas que o laço medido gera nessa central é de 2,3%
+das chegadas, contra o viés de 29% que o laço declarado produziu no H3; a comparação é de ordem de
+grandeza, porque o viés do H3 depende também da taxa de desistência simulada, e não só do laço. E o
+valor medido é provavelmente um limite inferior, porque uma chamada nova só é visível quando entra na
+fila.
 
-No H3, o controle do laço foi feito com um pequeno experimento embutido na operação: em 10% dos
-intervalos, um sorteio multiplicava a escala de atendentes por 0,7 ou 1,3. Como o sorteio independe da
-demanda, a regressão das chegadas seguintes no déficit sorteado identifica o efeito da ação. O
-previsor ingênuo, treinado nas chegadas observadas, **superestima a demanda exógena em 29%** e mesmo
-assim acerta o que observa com 1% de erro: a métrica do próprio alvo aprova um previsor errado sobre o
-mundo. Com o instrumento, $\hat r$ sai em 0,56 (intervalo de 90% de 0,51 a 0,61) e o erro da previsão
-corrigida cai para **1,7%**, dentro do limite de 3%.
+No H3, o controle do laço foi feito com um pequeno experimento embutido na operação. Em 10% dos
+intervalos, um sorteio multiplicava a escala de atendentes por 0,7 ou 1,3. Como o sorteio independe
+da demanda, a regressão das chegadas seguintes no déficit sorteado identifica o efeito da ação. O
+previsor ingênuo, treinado nas chegadas observadas, **superestima a demanda exógena em 29%** e ainda
+assim acerta os valores observados com 1% de erro. A métrica do alvo aprova um previsor errado sobre
+o mundo. Com o instrumento, $\hat r$ sai em 0,56 (intervalo de 90% de 0,51 a 0,61) e o erro da
+previsão corrigida cai para **1,7%**, dentro do limite de 3%.
 
-**Quem paga pelo erro.** Quando as taxas-base diferem entre grupos, o mesmo limiar produz taxas de
+**Quem paga pelo erro.** Quando as taxas-base diferem entre grupos, um limiar único produz taxas de
 erro diferentes. A identidade de Chouldechova (2017) mostra por quê:
 
 $$\text{FPR}=\frac{p}{1-p}\cdot\frac{1-\text{VPP}}{\text{VPP}}\cdot(1-\text{FNR})$$
@@ -2255,15 +2265,15 @@ $$\text{FPR}=\frac{p}{1-p}\cdot\frac{1-\text{VPP}}{\text{VPP}}\cdot(1-\text{FNR}
 Com valor preditivo (VPP) e falsos negativos iguais entre grupos, prevalências $p$ diferentes forçam
 taxas de falso positivo diferentes. **Igualar aprovações, igualar erros e igualar calibração por grupo
 são exigências incompatíveis quando as prevalências diferem e o preditor não é perfeito.** "Quero
-justiça" ainda não é uma decisão: é preciso declarar que igualdade se escolheu, quanto ela custa, para
+justiça" ainda não é uma decisão. É preciso declarar que igualdade se escolheu, quanto ela custa, para
 onde o erro migrou e quem passa a pagá-lo.
 
 **Comunicar é parte da decisão.** Um resultado mal comunicado falhou na camada do Agente. "30% de
-chance" não diz 30% de quê; "de cada 100 pessoas como você, 30" diz. As regras: denominadores fixos,
-risco absoluto antes do relativo e classe de referência explícita. Gráficos de resultados hipotéticos
-(HOPs), que mostram desfechos simulados um após o outro, fazem o leitor sentir a variação que uma
-barra de erro esconde. A recomendação declara o ponto em que a ação muda — agir se $p > C/L$ — e uma
-cláusula objetiva de quando deixa de valer.
+chance" não diz 30% de quê; "de cada 100 pessoas como você, 30" diz. As regras são denominadores
+fixos, risco absoluto antes do relativo e classe de referência explícita. Gráficos de resultados
+hipotéticos (HOPs), que mostram desfechos simulados um após o outro, fazem o leitor sentir a variação
+que uma barra de erro esconde. A recomendação declara o ponto em que a ação muda, agir se $p > C/L$,
+e uma cláusula objetiva de quando deixa de valer.
 
 ---
 
@@ -2338,52 +2348,55 @@ separa razoavelmente e nao se le como probabilidade de risco.
 
 **O que cada linha diz.**
 
-**(1) O navio de Bernoulli.** O limiar é $C/L = 0{,}05294$, ou 5,294%: a chance de 5% fica **abaixo**
-dele, e a regra do custo/perda manda não segurar. Em esperança a perda sem seguro é 1 700 e o
-resultado do seguro é $+100$ por mês para a seguradora. O crescimento no tempo inverte a leitura para o
-armador: com um navio, $-0{,}0208$ por mês sem seguro e $-0{,}0182$ com seguro — os dois negativos, e
-o seguro **melhora** o resultado apesar de a esperança dizer o contrário. Com **três** navios, o
-crescimento sem seguro é $\mathbf{-\infty}$: com três perdas simultâneas a riqueza não cobre o
-prejuízo, e a ruína não é uma probabilidade pequena, é um estado absorvente.
+**(1) O navio de Bernoulli.** O limiar é $C/L = 0{,}05294$, ou 5,294%, e a chance de 5% fica **abaixo**
+dele. A regra do custo/perda manda não segurar. Em esperança, a perda sem seguro é 1 700 e o
+resultado do seguro é $+100$ por mês para a seguradora. O crescimento no tempo inverte a leitura para
+o armador. Com um navio, $-0{,}0208$ por mês sem seguro e $-0{,}0182$ com seguro, os dois negativos,
+e o seguro **melhora** o resultado apesar de a esperança dizer o contrário. Com **três** navios, o
+crescimento sem seguro é $\mathbf{-\infty}$, porque três perdas simultâneas deixam a riqueza sem
+cobertura para o prejuízo; a ruína deixa de ser uma probabilidade pequena e vira um estado
+absorvente.
 
-**(2) Do outro lado do balcão.** A seguradora melhora quando acumula contratos independentes: com 1
-contrato o crescimento no tempo é $-0{,}000186$ por mês; com 10, $-0{,}001808$; com 100, $-0{,}013466$;
-com **1 000 contratos, $+0{,}100410$**. O prêmio é o mesmo em todos os casos — o que muda é o número de
-trajetórias independentes que ela detém. As primeiras linhas descem porque a fórmula usada é a
-aproximação média menos variância dividida por dois, e com poucos contratos a variância é grande demais
-para a aproximação valer; a partir de algumas centenas de contratos a lei funciona e o crescimento vira
-positivo. **Quem reparte o risco cobra o mesmo e cresce; quem carrega a trajetória sozinho afunda.** É a
-mesma resposta do Capítulo 10, agora com uma companhia de seguros no lugar de um apostador.
+**(2) Do outro lado do balcão.** A seguradora melhora quando acumula contratos independentes. Com 1
+contrato o crescimento no tempo é $-0{,}000186$ por mês; com 10, $-0{,}001808$; com 100,
+$-0{,}013466$; com **1 000 contratos, $+0{,}100410$**. O prêmio não muda em nenhum desses casos;
+muda o número de trajetórias independentes que ela detém. As primeiras linhas descem porque a
+fórmula usada é a aproximação média menos variância dividida por dois, e com poucos contratos a
+variância é grande demais para a aproximação valer; a partir de algumas centenas de contratos a lei
+funciona e o crescimento vira positivo. **Quem reparte o risco cobra o mesmo e cresce; quem carrega
+a trajetória sozinho afunda.** É a resposta do Capítulo 10, agora com uma companhia de seguros no
+lugar de um apostador.
 **(3) O EVPI.** Com prevalência de 0,3, tratar custa 1 e deixar um doente sem tratamento custa 10, o
 limiar de ação é $p > 0{,}10$ e a melhor ação sem informação é tratar, com ganho $-1{,}00$. Quem sabe
 o estado antes de agir tem $-0{,}30$, e a diferença é o **EVPI $= +0{,}70$**. Os dois exames do texto
-medem quase o mesmo: EVSI de $0{,}2400$ para o sensível $(0{,}90; 0{,}70)$ e $0{,}2450$ para o
-específico $(0{,}30; 0{,}95)$ — ambos abaixo do teto. Com prevalência 0,05 o EVPI cai para 0,450; com
+entregam valores próximos, EVSI de $0{,}2400$ para o sensível $(0{,}90; 0{,}70)$ e $0{,}2450$ para o
+específico $(0{,}30; 0{,}95)$, ambos abaixo do teto. Com prevalência 0,05 o EVPI cai para 0,450; com
 0,30, sobe a 0,700; com 0,60, cai de novo para 0,400. **O valor da informação é máximo quando a
 probabilidade está perto do limiar de ação**, e é aí que a informação muda a decisão.
 
 **(4) Os diques.** Os quatro modelos discordam pouco no nível de **100 anos** (de 1,26 a 7,01 m) e
-muito no de **10 000 anos** (de 1,26 a 21,49 m): a cauda é onde os modelos se separam. As cinco regras
-dão cinco alturas: valor esperado com o Gumbel, **3,06 m**; média dos modelos, **7,82 m**; maximin de
-Wald, **12,58 m**; arrependimento minimax de Savage, **9,81 m**; precaução de 1 em 10 000 no pior
-modelo, **21,49 m**. O valor esperado de um só modelo escolhe a altura mais barata e a mais frágil; a
-precaução escolhe a mais cara; Savage limita o quanto se pode lamentar. O EVPI do conjunto de modelos
-— a distância entre a precaução e o valor esperado — vale **18,427 m**, e é a medida de quanto custa
-não saber qual é a cauda certa.
+muito no de **10 000 anos** (de 1,26 a 21,49 m). A cauda é onde os modelos se separam. As cinco
+regras dão cinco alturas: valor esperado com o Gumbel, **3,06 m**; média dos modelos, **7,82 m**;
+maximin de Wald, **12,58 m**; arrependimento minimax de Savage, **9,81 m**; precaução de 1 em 10 000
+no pior modelo, **21,49 m**. O valor esperado de um só modelo escolhe a altura mais barata e a mais
+frágil; a precaução escolhe a mais cara; Savage limita o quanto se pode lamentar. O EVPI do conjunto
+de modelos, a distância entre a precaução e o valor esperado, vale **18,427 m**, e é a medida de
+quanto custa não saber qual é a cauda certa.
 
-**(5) A tabela do trilema.** Os dois grupos: White com taxa-base 0,069, FNR 0,24 e FPR 0,105; Black
-com taxa-base 0,111, FNR 0,36 e FPR 0,196. No limiar do sistema, são 467 e 832 falsos positivos e 79 e
-191 falsos negativos. Igualando o FNR **para baixo**, ao nível do White, os falsos positivos caem de
-1 299 para 659 e os falsos negativos de 270 para 206. Igualando **para cima**, ao nível do Black, os
-falsos positivos sobem de 1 299 para 1 927 ($+628$) e os falsos negativos de 270 para 309. **A
-escolha de qual igualdade perseguir não é neutra: cada direção move os dois erros em direções opostas
-e em magnitudes diferentes.**
+**(5) A tabela do trilema.** Os dois grupos são White, com taxa-base 0,069, FNR 0,24 e FPR 0,105, e
+Black, com taxa-base 0,111, FNR 0,36 e FPR 0,196. No limiar do sistema, são 467 e 832 falsos
+positivos e 79 e 191 falsos negativos. Igualando o FNR **para baixo**, ao nível do White, os falsos
+positivos caem de 1 299 para 659 e os falsos negativos de 270 para 206. Igualando **para cima**, ao
+nível do Black, os falsos positivos sobem de 1 299 para 1 927 ($+628$) e os falsos negativos de 270
+para 309. **A escolha de qual igualdade perseguir não é neutra: cada direção move os dois erros em
+direções opostas e em magnitudes diferentes.**
 
 **(6) A identidade fecha e acusa.** O valor preditivo positivo que a matriz de confusão entrega é
-0,3491 (White) e 0,2896 (Black). O que a identidade de Chouldechova exige, dadas a taxa-base, o FNR e
-o FPR observados, é 0,0592 e 0,0904 — de quatro a seis vezes menor. **O escore separa razoavelmente e
-não se lê como probabilidade de risco.** É a tradução numérica do que a identidade diz: com as três
-taxas observadas, o preditor não pode ser calibrado por grupo e ter os mesmos erros ao mesmo tempo.
+0,3491 (White) e 0,2896 (Black). A identidade de Chouldechova exige, dadas a taxa-base, o FNR e o
+FPR observados, 0,0592 e 0,0904, de quatro a seis vezes menor. **O escore separa razoavelmente e não
+se lê como probabilidade de risco.** É a tradução numérica do que a identidade diz. Com as três
+taxas observadas, o preditor não pode ser calibrado por grupo e manter as taxas de erro iguais nos
+dois.
 
 **Declaração de divergência.** A edição anterior registra 35,8% de ruína para quem aposta pelo próprio
 histórico e 0% com Laplace (Capítulo 10), e uma tabela de diques com alturas de 4,76 m (valor
@@ -2400,13 +2413,13 @@ foi apagado.
 **Exercícios.**
 
 1. *(Conta)* No navio de Bernoulli, o seguro custa 1 800 e cobre uma perda de 34 000 com chance de
-   5%. Pela regra do custo/perda, o armador deveria se segurar? O que diz o crescimento temporal?
+   5%. Pela regra do custo/perda, o armador deveria se segurar? Como responde o crescimento temporal?
    Explique as duas respostas numa frase cada.
 2. *(Conta)* Refaça o EVPI com prevalência de 0,10 (exatamente o limiar). O valor da informação
-   perfeita aumenta ou diminui? O que isso diz sobre onde gastar o orçamento de exames?
-3. *(Conceito)* No exemplo do aplicativo de duas rotas, quem erra mais: o previsor ingênuo ou o
+   perfeita aumenta ou diminui? Como isso orienta o gasto com exames?
+3. *(Conceito)* No exemplo do aplicativo de duas rotas, quem erra mais, o previsor ingênuo ou o
    previsor que iguala os tempos? Em que sentido o segundo é "performativamente estável"?
-4. *(Conta)* Com as taxas do laboratório (White: 0,069, 0,24, 0,105), verifique a identidade de
+4. *(Conta)* Com as taxas do laboratório (White com 0,069, 0,24, 0,105), verifique a identidade de
    Chouldechova e diga em quanto ela erra. O erro é de arredondamento ou de modelagem?
 5. *(Laboratório)* No laboratório, troque a taxa-base do segundo grupo de 0,111 para 0,20 e refaça a
    tabela do trilema. Que igualdade fica mais cara e por quê?
@@ -2415,27 +2428,27 @@ foi apagado.
 
 **Resumo.**
 
-- Decide-se pelo limiar $C/L$: com $C = 1\,800$ e $L = 34\,000$, o limiar é 5,294% e a chance de 5%
+- Decide-se pelo limiar $C/L$. Com $C = 1\,800$ e $L = 34\,000$, o limiar é 5,294% e a chance de 5%
   fica abaixo dele. O crescimento no tempo pode dizer o contrário, e os dois números precisam ser
   declarados.
-- A informação vale o quanto move a decisão: o EVPI é o teto, e bits não são valor.
+- A informação vale o quanto move a decisão. O EVPI é o teto, e bits não são valor.
 - Quando a probabilidade não merece confiança, os critérios de Wald, Savage e a precaução substituem o
-  valor esperado; o critério e a lista de modelos são escolhas, não deduções.
-- Previsões publicadas mudam o mundo: o Goodhart medido no H3 derruba o viés de 29% para 1,7%, e o
+  valor esperado; o critério e a lista de modelos são escolhas declaradas, nunca deduções.
+- Previsões publicadas mudam o mundo. O Goodhart medido no H3 derruba o viés de 29% para 1,7%, e o
   laço real medido é quatro vezes menor que o declarado.
-- Justiça exige escolher entre igualdades incompatíveis: igualar o FNR para cima custa $+628$ falsos
+- Justiça exige escolher entre igualdades incompatíveis. Igualar o FNR para cima custa $+628$ falsos
   positivos, para baixo economiza 640, e quem paga é declarado antes de rodar.
 
 ### Quem paga, na pesquisa
 
 A pesquisa fechou os sete pareceres de governança e os três fluxos de prisões. Em 15 de outubro de
-2026, `governanca/GRUPOS.md` registra: **nenhum dos sete grupos afetados foi ouvido, em nenhuma das
+2026, `governanca/GRUPOS.md` registra que **nenhum dos sete grupos afetados foi ouvido, em nenhuma das
 sete decisões.** O arquivo é a resposta da frente à objeção "o auditor é parte interessada".
-Assinatura do responsável não é escuta do grupo afetado: o responsável está do lado de quem decide
-usar o artefato, não de quem paga o erro. A lista inclui os 5 226 detidos de Toronto em 1997–2002, os
-65 276 de 2020–2021 e as 86 113 paradas de trânsito em Rhode Island 2005–2015, todas marcadas por cor
-percebida. A auditoria não pôde olhar três coisas: quem autoriza, o painel humano que nunca foi feito
-e as decisões que não chegaram a ninguém. O Capítulo 21 volta a esse ponto.
+Assinatura do responsável não é escuta do grupo afetado. O responsável está do lado de quem decide
+usar o artefato; quem paga o erro fica do outro lado. A lista inclui os 5 226 detidos de Toronto em
+1997–2002, os 65 276 de 2020–2021 e as 86 113 paradas de trânsito em Rhode Island 2005–2015, todas
+marcadas por cor percebida. A auditoria não pôde olhar três coisas: quem autoriza, o painel humano
+que nunca foi feito e as decisões que não chegaram a ninguém. O Capítulo 21 volta a esse ponto.
 
 # Parte IV. Construindo a máquina auditável
 
@@ -2443,7 +2456,7 @@ e as decisões que não chegaram a ninguém. O Capítulo 21 volta a esse ponto.
 
 **Objetivos.** Ao fim deste capítulo você deve saber ler a definição $\mathcal{G} = (V, E_{\mathrm{tree}},
 E_{\mathrm{graph}}, H, \Phi)$, listar os cinco campos obrigatórios de um nó, reconhecer uma aresta de
-patologia e usar as cinco lentes — Fluxonomia, Crononomia, Escalonomia, Morfonomia e Crisonomia — como
+patologia e usar as cinco lentes (Fluxonomia, Crononomia, Escalonomia, Morfonomia e Crisonomia) como
 perguntas que se fazem a qualquer problema.
 
 ---
@@ -2455,39 +2468,39 @@ perguntas que se fazem a qualquer problema.
 de atendimento de 6,2 minutos e a aplicação da fórmula de Erlang C com 36 atendentes, o nível de serviço
 estimado é de 82% das chamadas atendidas em até 20 segundos, e recomenda-se manter a escala atual."* É uma
 frase longa, correta na aritmética e quase impossível de auditar. Se a conclusão estiver errada, o erro
-está escondido em algum lugar entre "considerando" e "recomenda-se" — e ninguém sabe em qual.
+está escondido em algum lugar entre "considerando" e "recomenda-se", e ninguém sabe em qual.
 
 A primeira providência de uma máquina auditável não é calcular melhor. É **proibir a frase longa** e
 obrigar cada alegação a virar um cartão com campos fixos. Um cartão que não preenche todos os campos não
 entra na biblioteca. Em cada 100 relatórios escritos em prosa, uma boa parte esconde o ponto frágil num
-adjetivo. Em 100 cartões com os mesmos cinco campos, o ponto frágil aparece no campo vazio.
+adjetivo. Em 100 cartões com esses cinco campos, o ponto frágil aparece no campo vazio.
 
-**O campo vazio que denuncia.** O relatório da central usa três coisas ao mesmo tempo: as chamadas que
+**O campo vazio que denuncia.** O relatório da central usa três coisas de uma vez: as chamadas que
 chegaram, a fórmula que prevê a espera e a decisão da escala. Se cada uma vira um cartão separado, três
-perguntas ficam visíveis de imediato: *de onde vem o número da demanda?*, *em que condições a fórmula
-vale?* e *quem paga se ela falhar?* A frase escondia as três. O cartão mostra as três que estão
-respondidas e as que não estão.
+perguntas ficam visíveis de imediato. *De onde vem o número da demanda?* *Em que condições a fórmula
+vale?* *Quem paga se ela falhar?* A frase escondia as três. O cartão mostra as três que estão respondidas
+e as que não estão.
 
-**Existem três tipos de ligação, e uma delas é um alarme.** Primeiro, ligações de dependência: o tempo de
-atendimento depende da demanda; a espera depende do tempo de atendimento. Segundo, ligações transversais:
-a mesma curva de Jensen aparece na fila, no cálculo de informação e na bolsa. Terceiro, **ligações de
-patologia**, que não são dependências: são desalinhamentos. A patologia mais comum desta história é a
-**falácia da média**: a fórmula é aplicada à taxa média do histórico quando deveria ser aplicada a cada
-dia e depois tirada a média dos resultados. Na central, os dois cálculos dão números muito diferentes —
-82% contra 57%.
+**Existem três tipos de ligação, e uma delas é um alarme.** Primeiro vêm as ligações de dependência. O
+tempo de atendimento depende da demanda, e a espera depende do tempo de atendimento. Depois vêm as
+ligações transversais. A curva de Jensen aparece na fila, no cálculo de informação e na bolsa. Por último,
+as **ligações de patologia**, que não são dependências e sim desalinhamentos. A patologia mais comum desta
+história é a **falácia da média**. A fórmula é aplicada à taxa média do histórico quando deveria ser
+aplicada a cada dia e depois tirada a média dos resultados. Na central, os dois cálculos dão números muito
+diferentes, 82% contra 57%.
 
 **As cinco perguntas que sempre se pode fazer.** Depois de montar o mapa, restam cinco jeitos de olhar
 para ele. *A conta fecha?* (informação não se cria do nada ao reprocessar). *De que tempo se fala: do
 processo, do observador ou da simulação?* *A cauda é tão pesada que a média nem existe?* *A estrutura
 encontrada sobrevive quando o ambiente muda?* *A informação vale o seu custo, e as previsões estão
-calibradas?* Cada pergunta tem uma grandeza própria e um número que se pode medir. As cinco juntas são as
-**cinco lentes**.
+calibradas?* Cada pergunta tem uma grandeza e um número que se pode medir. As cinco juntas são as **cinco
+lentes**.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**O mapa formal.** O conhecimento não fica guardado em texto ambíguo: fica guardado como um **hipergrafo
+**O mapa formal.** O conhecimento não fica guardado em texto ambíguo. Fica guardado como um **hipergrafo
 tipado**, isto é, um conjunto de cartões (nós) ligados por três famílias de linhas.
 
 $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
@@ -2500,7 +2513,7 @@ $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
 | $H$, hiperarestas | As cinco lentes, que envolvem grupos inteiros de nós | Crononomia sobre `L1_demanda` e `L2_erlang_c`: "a demanda tem calendário" |
 | $\Phi$, invariantes | Os invariantes que toda alegação cumpre para entrar no grafo | $\Phi_2$: a margem na unidade independente |
 
-**Cada alegação vira código executável.** O nó central do mapa, `N_Core`, carrega a definição em uma linha e o ponteiro para o artefato que a executa: quem afirma entrega o código que roda a afirmação. A frase do programa — cada alegação empírica vira código executável — é literal.
+**Cada alegação vira código executável.** O nó central do mapa, `N_Core`, carrega a definição em uma linha e o ponteiro para o artefato que a executa. Quem afirma entrega o código que roda a afirmação. A frase do programa, cada alegação empírica vira código executável, é literal.
 
 **Os cinco campos obrigatórios de um nó.** Um nó sem algum deles é recusado na gravação.
 
@@ -2522,12 +2535,12 @@ Um nó real, copiado da ficha do $H_0$ em domínio real:
   artefato_simulavel: estocologia/central.py::nivel_servico
 ```
 
-Repare que a fórmula de Erlang C está tipada como **incerteza knightiana**: ela supõe estacionariedade e
-ausência de abandono, e o Mundo não garante nenhuma das duas. O cartão está dizendo, em um campo, onde a
-fórmula pode falhar. A frase longa não dizia.
+Repare que a fórmula de Erlang C está tipada como **incerteza knightiana**. Ela supõe estacionariedade e
+ausência de abandono, e o Mundo não garante nenhuma das duas. O cartão diz, em um campo, onde a fórmula
+pode falhar. A frase longa não dizia.
 
-**As arestas de patologia.** Não são dependências: são desalinhamentos estruturais, o momento em que o
-Agente aplica um Modelo incompatível com o Mundo.
+**As arestas de patologia.** Estas não são dependências, e sim desalinhamentos estruturais, o momento em
+que o Agente aplica um Modelo incompatível com o Mundo.
 
 | Patologia | O que a aresta marca |
 | --- | --- |
@@ -2547,11 +2560,12 @@ navegável nos dois sentidos. O contrato dos agentes fixa quatro.
 | Informação como crescimento | $\Delta W \le I(X; Y)$ | A informação mútua ao ganho de crescimento de Kelly |
 | Ruído como temperatura | Ruído de minilote $\leftrightarrow$ temperatura $T$ | A mecânica estocástica à inferência ativa e ao aprendizado |
 
-A segunda ponte diz que penalizar coeficientes grandes é o mesmo que declarar uma priori que os acha
-improváveis: quem regulariza já calcula uma moda a posteriori, sem dizer qual priori usou. A terceira diz
+A segunda ponte diz que penalizar coeficientes grandes equivale a declarar uma priori que os acha
+improváveis. Quem regulariza já calcula uma moda a posteriori, sem dizer qual priori usou. A terceira diz
 que um apostador com informação lateral $Y$ sobre o resultado $X$ ganha, em taxa de crescimento, no máximo
-$I(X; Y)$ bits por rodada — bits viram crescimento, mas só para quem aposta por Kelly. A quarta diz que o
-ruído de estimar o gradiente num minilote age como uma temperatura, e ajuda a escapar de mínimos rasos.
+$I(X; Y)$ bits por rodada, e esses bits viram crescimento apenas para quem aposta por Kelly. A quarta diz
+que o ruído de estimar o gradiente num minilote age como uma temperatura, e ajuda a escapar de mínimos
+rasos.
 
 **As cinco lentes.** As hiperarestas funcionam como perguntas que se fazem a qualquer problema. Cada lente
 tem uma grandeza que mede e um hábito crítico, e atravessa os conceitos sem acrescentar objetos novos.
@@ -2565,47 +2579,48 @@ tem uma grandeza que mede e um hábito crítico, e atravessa os conceitos sem ac
 | Crisonomia | A informação vale o seu custo, e as previsões estão calibradas? | Perda, escore próprio, valor da informação | Cobrar de cada número o histórico de acertos na frequência que ele prometeu |
 
 Dois exemplos de como uma lente vira conta. Na **Fluxonomia**, a desigualdade do processamento de dados
-diz que, se $Z$ é obtido de $Y$, então $I(X; Z) \le I(X; Y)$: três jornais que publicam a mesma pesquisa
-valem um. Na **Morfonomia**, duas representações podem dar as mesmas previsões e ainda assim autorizar
-conclusões diferentes sob intervenção — e só o que se conserva entre ambientes serve fora deles.
+diz que, se $Z$ é obtido de $Y$, então $I(X; Z) \le I(X; Y)$. Três jornais que publicam a mesma pesquisa
+valem um. Na **Morfonomia**, duas representações podem dar previsões idênticas e ainda assim autorizar
+conclusões diferentes sob intervenção, e só a conclusão que se conserva entre ambientes serve fora deles.
 
-**Como um domínio novo aciona as lentes.** A regra prática é do próprio plano. É um processo financeiro,
-de carreira ou de seguro? Aciona a **Crononomia**. Envolve sinistros, rendas, viralização ou tamanho de
+**Como um domínio novo aciona as lentes.** A regra prática está no plano. É um processo financeiro, de
+carreira ou de seguro? Aciona a **Crononomia**. Envolve sinistros, rendas, viralização ou tamanho de
 empresas? Aciona a **Escalonomia**. Envolve recomendação, regulação ou previsão publicada? Aciona
 **Fluxonomia** e **Morfonomia**, com simulação com e sem a ação.
 
 **Onde ficam os dados.** O hipergrafo guarda só a topologia leve: nós, arestas, contratos YAML e hashes.
 Microdados e séries ficam em Parquet particionado, consultado com projeção explícita de colunas, poda de
-partição e um orçamento rígido de bytes varridos. A regra de escala é do próprio plano: um modelo que
+partição e um orçamento rígido de bytes varridos. O plano fixa também a regra de escala. Um modelo que
 exige uma varredura completa por previsão não escala, por melhor que seja o erro de teste.
 
-O tamanho do grafo cresceu com a pesquisa, mas abaixo das metas do plano: 85 nós no $H_1$ real e
+O tamanho do grafo cresceu com a pesquisa, mas abaixo das metas do plano. São 85 nós no $H_1$ real e
 **454 178** nós no $H_3$, dos quais 453 973 são previsões e só 205 são topologia. O $H_3$ chegou a 45% do
 milhão que o plano previa.
 
 O número do $H_2$ merece uma correção, porque mostra como é fácil inflar essa conta. Os "1 538 nós" que a
 primeira versão deste capítulo citava são de uma rodada antiga do gerador do grafo. Rodando o
-`grafo.py` do $H_{2g}$ sobre os resultados do próprio $H_{2g}$, o grafo tem **12 797 nós** — e
+`grafo.py` do $H_{2g}$ sobre os resultados do $H_{2g}$, o grafo tem **12 797 nós**, e
 12 288 deles, 96%, são hipóteses do ICP, uma por subconjunto testado, que crescem como $2^k$ e não são
 conhecimento novo.
 
 O teste de escala da auditoria de fundo rodou o funil em lote sobre **329** domínios gerados por regra a
 partir de um catálogo público (327 até o fim, a 3,8 segundos de processador por domínio) e levou o grafo a
 **26 634 nós**, 28 619 arestas de árvore, 26 795 pontes e 4 628 hiperarestas. Só **6 494** dos nós são de
-conceito — domínio, camadas, variáveis, ambientes, filtros, decisão — e só **554** vêm de pacotes curados;
-os outros 20 140 são a mesma família de hipóteses. O gargalo não é a máquina: é a curadoria semântica, que
-não escala por regra, a oferta de conjuntos com ambientes identificáveis (9% do catálogo passa), as pontes,
-que crescem com o quadrado do número de domínios, e manter tudo em memória.
+conceito (domínio, camadas, variáveis, ambientes, filtros, decisão), e só **554** vêm de pacotes curados;
+os outros 20 140 pertencem àquela família de hipóteses. O gargalo não está na máquina, e sim na curadoria
+semântica, que não escala por regra, na oferta de conjuntos com ambientes identificáveis (9% do catálogo
+passa), nas pontes, que crescem com o quadrado do número de domínios, e em manter tudo em memória.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 Três tarefas: montar um mini-hipergrafo com três nós e três lentes, provar que o validador morde em quatro
-casos, e rodar as lentes com número medido — a **Escalonomia** pelo estimador de Hill, a **Crisonomia**
-pelo valor esperado da informação perfeita (EVPI) e a **Morfonomia** pelo teste de invariância entre
-regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com `cargo run --release` no crate de rascunho
-`/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências externas):
+casos, e rodar as lentes com número medido. A **Escalonomia** entra pelo estimador de Hill, a
+**Crisonomia** pelo valor esperado da informação perfeita (EVPI), e a **Morfonomia** pelo teste de
+invariância entre regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com
+`cargo run --release` no crate de rascunho `/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências
+externas):
 
 ```text
 == Capitulo 12 :: o mapa do conhecimento ==
@@ -2631,39 +2646,40 @@ Morfonomia: regra 2, regime do meio com efeito 40 -> inclinacao marginal = 40.03
 Quatro leituras da saída, na ordem em que importam.
 
 **O validador recusa.** O grafo válido passa com zero problemas. As quatro provas mostram que a recusa não
-é decorativa: aresta para nó que não existe, ciclo dedutivo (a "volta" que faz a árvore virar roda), 
-hiperaresta com um membro só, e um nó órfão fora de toda lente. Note a prova 4: o validador estrutural
-**não** reprova o nó órfão — a validação `[]` continua vazia — mas `nos_sem_lente()` aponta
-`L2_orfao`. São dois crivos diferentes: um cuida da forma, o outro cuida da cobertura.
+é decorativa: aresta para nó que não existe, ciclo dedutivo (a "volta" que faz a árvore virar roda),
+hiperaresta com um membro só, e um nó órfão fora de toda lente. A prova 4 mostra o validador estrutural
+deixando o nó órfão passar: a validação `[]` continua vazia, enquanto `nos_sem_lente()` aponta `L2_orfao`.
+Os dois crivos cuidam de coisas distintas; um cuida da forma, o outro da cobertura.
 
-**Nem toda lente é acionada.** O mini-hipergrafo aciona três lentes — Crononomia, Escalonomia e Crisonomia
-— e deixa Fluxonomia e Morfonomia sem hiperaresta. Isso não é erro do validador: significaria erro se algum
-**nó** ficasse fora de toda lente, e nenhum fica. Uma lente sem uso é uma pergunta que ainda não foi feita.
+**Nem toda lente é acionada.** O mini-hipergrafo aciona três lentes (Crononomia, Escalonomia e
+Crisonomia) e deixa Fluxonomia e Morfonomia sem hiperaresta. A ausência não é erro do validador. Erro
+seria se algum **nó** ficasse fora de toda lente, e nenhum fica. Uma lente sem uso é uma pergunta que
+ainda não foi feita.
 
-**A Escalonomia dá o mesmo número do instrumento do repositório.** Com a mesma semente (1909), 20 000
+**A Escalonomia reproduz o número do instrumento do repositório.** Com a mesma semente (1909), 20 000
 valores de uma Pareto com $\alpha = 1{,}81$ e o corte em $k = 500$, o estimador de Hill devolve
-**1,7901**, e o portão do repositório publica 1,7901 para essa mesma conta. A cauda é selvagem
-($\hat\alpha < 2$): a variância teórica não existe. Nas pontas do corte o número anda — 1,8444 com
-$k = 250$ e 1,8032 com $k = 2\,000$ — e essa sensibilidade é a própria lição: o expoente de cauda é uma
-estimativa, não uma constante da natureza.
+**1,7901**, e o portão do repositório publica 1,7901 nessa conta. A cauda é selvagem
+($\hat\alpha < 2$), e por isso a variância teórica não existe. Nas pontas do corte o número anda, com
+1,8444 em $k = 250$ e 1,8032 em $k = 2\,000$, e a sensibilidade é a lição. O expoente de cauda é uma
+estimativa, e não uma constante da natureza.
 
 **A Crisonomia depende de quais ações existem.** O sensor perfeito diz se o ano será bom ou ruim, com
 probabilidade 0,70 de bom. Lucrar rende 10, perder custa 4. Quem pode *agir ou não agir* já age sem o
-sensor — o valor esperado de agir é 5,80, maior que zero — e então o sensor vale **0,0000**: ele nunca
-muda a decisão. Sem a opção de agir, restando *apostar metade* (valor 3,00) ou *não apostar* (0,00), o
-melhor sem informação cai para 2,1000 e o mesmo sensor passa a valer **3,7000**. Se o pagamento for igual
-nos dois estados, volta a valer 0,0000. **O valor da informação não é propriedade do dado: é propriedade
-do conjunto de ações disponíveis.**
+sensor, porque o valor esperado de agir é 5,80, maior que zero, e então o sensor vale **0,0000**, porque
+ele nunca muda a decisão. Sem a opção de agir, restando *apostar metade* (valor 3,00) ou *não apostar*
+(0,00), o melhor sem informação cai para 2,1000 e o sensor passa a valer **3,7000**. Se o pagamento for
+igual nos dois estados, volta a valer 0,0000. **O valor da informação não é propriedade do dado: é
+propriedade do conjunto de ações disponíveis.**
 
 **A Morfonomia prefere o mapa ao número.** Três regimes, bases 100, 140 e 120, efeito verdadeiro 10 nos
 três. Na primeira regra, a inclinação calculada sobre todos os dados juntos dá **24,37**, mais que o dobro
 do efeito verdadeiro, porque quem recebeu o tratamento está concentrado no regime de base alta. Trocando
-só a alocação, e mantendo o mesmo efeito de 10, a inclinação marginal vira **−4,60** — negativa, quando
-todo efeito dentro de cada regime é positivo. É o desalinhamento clássico que o Capítulo 9 chamou de
-confundimento. As inclinações por regime, essas, ficam em 9,96 / 10,09 / 10,15 e 10,34 / 9,92 / 10,15: as
+só a alocação, e mantendo o efeito de 10, a inclinação marginal vira **−4,60**, negativa, quando todo
+efeito dentro de cada regime é positivo. É o desalinhamento clássico que o Capítulo 9 chamou de
+confundimento. As inclinações por regime, essas, ficam em 9,96 / 10,09 / 10,15 e 10,34 / 9,92 / 10,15. As
 duas regras passam no teste de invariância com tolerância 0,5. Quando o regime do meio realmente responde
-40 em vez de 10, a invariância **falha** (9,96 contra 40,09, passo de 30,13). Resumindo: a inclinação
-marginal é um número; a inclinação por regime é uma estrutura.
+40 em vez de 10, a invariância **falha** (9,96 contra 40,09, passo de 30,13). A inclinação marginal é um
+número; a inclinação por regime é uma estrutura.
 
 **Declaração de divergência.** A edição anterior deste livro, no Capítulo 6, apresenta as três amostras de
 Hill com valores próximos de $1{,}81$; este instrumento mede 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
@@ -2716,23 +2732,23 @@ distinguir o Sistema 1 (triagem rápida, probabilidades presas entre 1% e 99%) d
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**O grupo que se aprova.** Um estudante entrega um trabalho de estatística. Ele mesmo escolheu a amostra,
-limpou os dados, rodou o teste, olhou o resultado, mudou o teste, rodou de novo e escreveu a conclusão.
-Quando a conclusão finalmente agradou, ele parou. Ninguém trapaceou: cada passo pareceu razoável no momento
-em que foi dado.
+**O grupo que se aprova.** Um estudante entrega um trabalho de estatística. O estudante escolheu a
+amostra, limpou os dados, rodou o teste, olhou o resultado, mudou o teste, rodou de novo e escreveu
+a conclusão. Quando a conclusão finalmente agradou, ele parou. Ninguém trapaceou. Cada passo pareceu
+razoável no momento em que foi dado.
 
-Agora imagine que o mesmo trabalho seja dividido entre oito colegas, cada um responsável por uma coisa só,
-e que um nono colega receba os artefatos — não o relatório, os **artefatos**: o código, o arquivo de dados,
-o modelo salvo, a trilha de auditoria — e tente quebrá-los. Em cada 100 trabalhos feitos por uma pessoa só,
-a parte mais frágil é a que ninguém olhou de fora. Em 100 trabalhos com uma equipe que ataca, a parte frágil
-é a que sobreviveu ao ataque.
+Agora reparta o trabalho entre oito colegas, cada um responsável por uma coisa só, e entregue a um
+nono colega os **artefatos** no lugar do relatório: o código, o arquivo de dados, o modelo salvo, a
+trilha de auditoria, e a tarefa dele é quebrá-los. Em cada 100 trabalhos feitos por uma pessoa só, a
+parte mais frágil é a que ninguém olhou de fora. Em 100 trabalhos com uma equipe que ataca, a parte
+frágil é a que sobreviveu ao ataque.
 
 O nono colega tem uma regra: **não ler o relatório**. Ele roda o código com uma semente que o autor não
 escolheu, injeta um lote corrompido, adultera uma linha da trilha para ver se o verificador percebe. Quem
 só lê relatórios concorda com eles.
 
-**As oito faixas e o ponto cego de cada uma.** Cada faixa existe porque existe um jeito de errar que ela vê
-melhor do que as outras — um ponto cego que as demais não cobrem.
+**As oito faixas e o ponto cego de cada uma.** Cada faixa existe porque há um jeito de errar que ela
+vê melhor do que as outras, um ponto cego que as demais não cobrem.
 
 | Faixa | O que faz | O ponto cego que ela cobre | O que ela entrega |
 | --- | --- | --- | --- |
@@ -2746,21 +2762,23 @@ melhor do que as outras — um ponto cego que as demais não cobrem.
 | Faixa 8 Decisão | Converte o resultado em ação | Um número sem frequência natural não decide nada | Frequências naturais, HOPs, árvore C/L, cláusula de saída |
 | Orquestrador | Coordena e comanda a banca | Nenhum passo aprova o próprio resultado | Ficha da crítica de modelos e ataque ao artefato antes da aprovação |
 
-**O ofício de cada faixa, em um caso.** A faixa 2 começa por uma decisão que ninguém vê: **o que é uma linha**.
-Uma linha por pessoa, por dia ou por evento muda a média, a variância e a margem. Por isso o grão é
-declarado e provado com uma contagem. O mesmo agente caça o **valor sentinela** — o ausente gravado como 0,
-o −1 ou o 9 999 que entra na soma como se fosse dado — e exige ingestão idempotente: rodar a carga duas vezes
-tem de dar o mesmo número.
+**O ofício de cada faixa, em um caso.** A faixa 2 começa por uma decisão que ninguém vê: **o que é
+uma linha**. Uma linha por pessoa, por dia ou por evento muda a média, a variância e a margem, e por
+isso o grão é declarado e provado com uma contagem. Esse agente caça o **valor sentinela**, o
+ausente gravado como 0, o −1 ou o 9 999 que entra na soma como se fosse dado, e exige ingestão
+idempotente. Rodar a carga duas vezes não pode mudar o número.
 
-A faixa 5 lembra que dado pessoal não é um tipo de arquivo: é a **combinação de campos** que decide. CEP, data
-de nascimento e sexo, juntos, identificam provavelmente 87% das pessoas nos Estados Unidos, pelo censo de
-1990. A privacidade diferencial limita quanto a presença de uma pessoa pode mudar qualquer resposta: para
-duas bases que diferem no registro de uma única pessoa, o resultado de qualquer consulta não pode mudar
-mais do que um fator fixo. Esse fator é um orçamento, gasto a cada consulta. A medida mais barata continua sendo não coletar.
+A faixa 5 lembra que dado pessoal não é um tipo de arquivo: é a **combinação de campos** que decide.
+CEP, data de nascimento e sexo, juntos, identificam provavelmente 87% das pessoas nos Estados
+Unidos, pelo censo de 1990. A privacidade diferencial limita quanto a presença de uma pessoa pode
+mudar qualquer resposta. Em duas bases que diferem no registro de uma única pessoa, o resultado de
+qualquer consulta não pode mudar mais do que um fator fixo. Esse fator é um orçamento, gasto a cada
+consulta. A medida mais barata continua sendo não coletar.
 
-A faixa 3 exige que todo modelo em operação declare o que faz em três casos: entrada fora do domínio, campo
-ausente e confiança baixa. As opções são recusar, ativar um reserva determinístico seguro ou devolver
-incerteza calibrada. Um modelo em uso piora por motivos diferentes, que pedem respostas diferentes.
+Cabe à faixa 3 cobrar que todo modelo em operação declare o comportamento em três casos: entrada fora do
+domínio, campo ausente e confiança baixa. As opções são recusar, ativar um reserva determinístico
+seguro ou devolver incerteza calibrada. Um modelo em uso piora por motivos diferentes, que pedem
+respostas diferentes.
 
 | Situação | O que muda | A resposta certa |
 | --- | --- | --- |
@@ -2769,36 +2787,36 @@ incerteza calibrada. Um modelo em uso piora por motivos diferentes, que pedem re
 | Deriva de conceito | Muda a própria relação entre atributo e desfecho | Nenhuma reponderação salva: refazer o modelo |
 | População atendida mudou | A métrica cai porque o público mudou | Não é piora do modelo: ler a métrica com a taxa-base |
 
-A correção da deriva de rótulo tem forma fechada: se a distribuição do atributo dentro de cada classe não muda,
-a probabilidade corrigida é a antiga multiplicada pela razão entre a taxa-base nova e a antiga, depois
-renormalizada. Com dois desfechos, a correção soma uma constante ao logito — é uma **correção de
-intercepto**. A hierarquia de Van Calster e colegas (2016) separa dois níveis que o terceiro horizonte encontrou: a
-calibração na média, medida pelo intercepto, e a **calibração fraca**, que exige intercepto 0 e inclinação 1.
-No terceiro horizonte, os voos de 2023 passaram com a correção do intercepto e as prisões de Toronto não, porque o erro
-delas era de inclinação.
+A correção da deriva de rótulo tem forma fechada. Se a distribuição do atributo dentro de cada
+classe não muda, a probabilidade corrigida é a antiga multiplicada pela razão entre a taxa-base nova
+e a antiga, depois renormalizada. Com dois desfechos, a correção soma uma constante ao logito. É uma
+**correção de intercepto**. A hierarquia de Van Calster e colegas (2016) separa dois níveis que o
+terceiro horizonte encontrou. Um deles é a calibração na média, medida pelo intercepto; o outro é a
+**calibração fraca**, que exige intercepto 0 e inclinação 1. No terceiro horizonte, os voos de 2023 passaram com
+a correção do intercepto e as prisões de Toronto não, porque o erro delas era de inclinação.
 
-A faixa 7 não pede ao especialista uma média: o protocolo de Sheffield (SHELF) pede a **mediana**, os
-**quartis** e os **extremos plausíveis**, ajusta uma distribuição a esses quantis e a devolve para que ele a
-confirme, controlando a âncora do entrevistador, a ordem dos cenários e o excesso de confiança. Na pesquisa,
-nenhuma elicitação foi feita com especialista humano. O que a auditoria conseguiu medir foi a **sensibilidade
-à escolha da priori**: em 33 domínios, a priori do pacote foi trocada pela de literatura e por uma
-deliberadamente fraca; cinco domínios mudam de status ou de ação com a de literatura e dois com a fraca. A
-conclusão não é que as prioris simuladas estivessem erradas: é que em cinco de 33 domínios a decisão não
-sobrevive à troca da priori.
+A faixa 7 não pede ao especialista uma média. O protocolo de Sheffield (SHELF) pede a **mediana**,
+os **quartis** e os **extremos plausíveis**, ajusta uma distribuição a esses quantis e a devolve
+para que ele a confirme, controlando a âncora do entrevistador, a ordem dos cenários e o excesso de
+confiança. Na pesquisa, nenhuma elicitação foi feita com especialista humano. A auditoria conseguiu
+medir a **sensibilidade à escolha da priori**. Em 33 domínios, a priori do pacote foi trocada pela
+de literatura e por uma deliberadamente fraca, e cinco domínios mudam de status ou de ação com a de
+literatura e dois com a fraca. A conclusão não é que as prioris simuladas estivessem erradas. É que
+em cinco de 33 domínios a decisão não sobrevive à troca da priori.
 
-**Uma lacuna honesta.** Falta à arquitetura uma pergunta que a faixa 2 deveria fazer: **por que o dado está
-ausente?** O contrato de dados limita a nulidade, mas não classifica o mecanismo da ausência (MCAR, MAR ou
-MNAR, Capítulo 6), e é essa classe que decide se o descarte dos casos incompletos é inofensivo. A auditoria
-depois acrescentou um bloco `ausencia` ao contrato; e, nos três contratos do horizonte 1 real e nas 18
-tabelas do segundo horizonte, a regra é **vacuosa hoje** — nenhuma coluna tem um único valor ausente. A trava passa a
-morder no dia em que aparecer.
+**Uma lacuna honesta.** Falta à arquitetura uma pergunta que a faixa 2 deveria fazer. **Por que o
+dado está ausente?** O contrato de dados limita a nulidade, mas não classifica o mecanismo da
+ausência (MCAR, MAR ou MNAR, Capítulo 6), e é essa classe que decide se o descarte dos casos
+incompletos é inofensivo. A auditoria depois acrescentou um bloco `ausencia` ao contrato, e nos três
+contratos do horizonte 1 real e nas 18 tabelas do segundo horizonte a regra é **vacuosa hoje**, pois
+nenhuma coluna tem um único valor ausente. A trava passa a morder no dia em que aparecer.
 
-**Sistema 1 e Sistema 2.** O computador que ajuda a pensar tem dois modos. O **Sistema 1** triagem rápida,
-categórica, fecha a ficha com uma árvore de sufixos determinística — mesma entrada, mesma resposta — e emite
-probabilidades **presas ao intervalo de 1% a 99%**. O **Sistema 2** delibera: busca em árvore sobre o
-hipergrafo, síntese de código, inferência pesada, estresse adversarial. A regra do intervalo não é
-estética: uma probabilidade de 0% ou de 100% não pode ser pontuada por uma regra própria, nunca perde e
-nunca aprende.
+**Sistema 1 e Sistema 2.** O computador que ajuda a pensar tem dois modos. O **Sistema 1** faz
+triagem rápida e categórica e fecha a ficha com uma árvore de sufixos determinística (mesma entrada,
+mesma resposta), emitindo probabilidades **presas ao intervalo de 1% a 99%**. O **Sistema 2**
+delibera: busca em árvore sobre o hipergrafo, síntese de código, inferência pesada, estresse
+adversarial. A regra do intervalo não é estética. Uma probabilidade de 0% ou de 100% não pode ser
+pontuada por uma regra própria, nunca perde e nunca aprende.
 
 ---
 
@@ -2818,8 +2836,8 @@ até a decisão passa por todos.
 5. **Banca adversarial (o orquestrador).** Reprovado volta ao estágio que falhou; aprovado segue.
 6. **Decisão e fechamento (Faixa 8).** Memorando em frequências naturais, HOPs, árvore C/L e cláusula de saída.
 
-O único caminho até a decisão passa pela banca; um trabalho reprovado volta ao **estágio em que falhou**, não
-ao começo.
+O único caminho até a decisão passa pela banca. Um trabalho reprovado volta ao **estágio em que
+falhou**, em vez de voltar ao começo.
 
 **A banca adversarial.** Três falhas eliminam o trabalho antes de qualquer discussão de mérito: vazamento
 temporal, contrato de dados violado sem tratamento e ausência de um responsável humano nomeado. Depois, cada
@@ -2836,30 +2854,31 @@ faixa recebe o seu ataque, oito no total.
 | $A_7$ Domínio | Um cenário atípico do domínio, com priori alternativa | priori elicitada |
 | $A_8$ Decisão | Uma crise que viola a própria cláusula de saída | cláusula de saída declarada |
 
-Os oito ataques aparecem em registros antigos como **MB1–MB8**; é a mesma lista, com o nome novo $A_1$–$A_8$.
+Os oito ataques aparecem em registros antigos como **MB1–MB8**. O nome novo é $A_1$–$A_8$, e a lista é uma só.
 
-**Calibração por simulação (faixa 4).** $\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniforme}\{0, \dots, L\}$: se o posterior estiver calibrado, o posto do valor verdadeiro entre as $L$ réplicas é uniforme. É assim que a faixa 4 verifica se a inferência pesada devolve incerteza do tamanho certo — e não apenas um número.
+**Calibração por simulação (faixa 4).** $\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniforme}\{0, \dots, L\}$. Se o posterior estiver calibrado, o posto do valor verdadeiro entre as $L$ réplicas é uniforme. É assim que a faixa 4 verifica se a inferência pesada devolve incerteza do tamanho certo, em vez de apenas um número.
 
 **A condição de aprovação.** Cada agente $A_i$ devolve uma **severidade** na escala de 0 a 10, e o artefato
-$X$ só é aprovado se **todos** os oito atingirem o piso:
+$X$ só é aprovado se **todos** os oito atingirem o piso. A condição é esta:
 
 $$\mathrm{Aprovado}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \mathrm{Severidade}_{\min} \Big),\qquad
 \mathrm{Severidade}_{\min} = 6.$$
 
-O $\bigwedge$ é o "e" lógico: basta um agente abaixo do piso para o trabalho voltar. A severidade é
-determinística: sai do cuidado correspondente na ficha e de uma semente explícita, e a mesma ficha com a
-mesma semente devolve sempre o mesmo número. A condição **falha** exatamente quando um cuidado foi declarado
-como ausente; e é isso que a torna auditável — não há juízo subjetivo escondido na nota.
+O $\bigwedge$ é o "e" lógico. Basta um agente abaixo do piso para o trabalho voltar. A severidade é
+determinística. Ela sai do cuidado correspondente na ficha e de uma semente explícita, e repetir a
+ficha com a semente declarada devolve sempre o mesmo número. A condição **falha** quando um cuidado
+foi declarado como ausente, e é isso que a torna auditável. Não há juízo subjetivo escondido na
+nota.
 
 **A ficha da crítica de modelos.** O orquestrador só aprova depois de preencher cinco itens: checagem
 preditiva contra réplicas do modelo ajustado; comparação com pelo menos um modelo rival; separação entre
 parâmetros identificados pelos dados e trazidos de fora; análise de performatividade, Goodhart e Lucas; e
 defesa das premissas indecidíveis pelo **custo do erro**.
 
-**Um trabalho com lacuna declarada vale mais que um trabalho uniforme.** Um artefato completo com uma faixa
-fraca declarada vale mais que um artefato uniforme sem lacuna admitida. No horizonte 1 real, foi a banca que
-reprovou o projeto dos incêndios dinamarqueses: a alegação perdeu, mas o modelo rival **não ganhou o direito
-de decidir**.
+**Um trabalho com lacuna declarada vale mais que um trabalho uniforme.** O artefato completo com uma
+faixa fraca admitida supera o artefato uniforme que não admite lacuna nenhuma. No horizonte 1 real,
+foi a banca que reprovou o projeto dos incêndios dinamarqueses. A alegação perdeu, mas o modelo
+rival **não ganhou o direito de decidir**.
 
 ---
 
@@ -2905,33 +2924,35 @@ categoria=justica probabilidade=0.9117 produtos=[0.0177, 0.0177, 0.0177, 0.0177,
 categoria=outros probabilidade=0.8718 produtos=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] soma=1.0000 fora_de[0.01;0.99]=0 | probabilidade 0.8718 | soma 1.0000 | fora de [0.01;0.99] 0
 ```
 
-Seis linhas, e em todas o mesmo contrato: soma 1,0000 e nenhuma probabilidade fora de [0,01; 0,99]. A entrada
-desconhecida (`xyzzy plugh abracadabra`) cai em `outros` com 0,8718 — a priori declarada, não um palpite. Os
-limites ficam registrados: o vocabulário é fechado, o casamento é lexical e não entende negação, e isto é
-triagem, não julgamento — julgar é do Sistema 2.
+Seis linhas, e o contrato se repete em todas. A soma é 1,0000 e nenhuma probabilidade cai fora de
+[0,01; 0,99]. A entrada desconhecida (`xyzzy plugh abracadabra`) cai em `outros` com 0,8718. Esse
+valor é a priori declarada, e não um palpite. Os limites ficam registrados. O vocabulário é fechado,
+o casamento é lexical e não entende negação, e isto é triagem, e não julgamento. Julgar é do Sistema
+2.
 
 Quatro leituras.
 
-**A ficha completa passa, e passa com folga.** As oito severidades ficam entre 8 e 10, e a menor é 8 — dois
-pontos acima do piso 6. O portão do repositório, no horizonte `todos` com 12 fichas, também publica
-pior = 8, e muda a semente do laboratório (7, 2026, 999 983) não altera o veredito: a reprovação não é sorte
-de semente, é cuidado ausente.
+**A ficha completa passa, e passa com folga.** As oito severidades ficam entre 8 e 10, e a menor é
+8, dois pontos acima do piso 6. O portão do repositório, no horizonte `todos` com 12 fichas, também
+publica pior = 8, e mudar a semente do laboratório (7, 2026, 999 983) não altera o veredito. A
+reprovação vem de um cuidado ausente, e não de sorte de semente.
 
-**Cada cuidado removido derruba exatamente o agente que o cobra.** Nas oito linhas da varredura, o conjunto
-de reprovados tem sempre **um** elemento, e é sempre o agente correspondente: sem trilha íntegra reprova o
-$A_5$ (severidade 2), sem cláusula de saída reprova o $A_8$ (4), sem teste de propriedade reprova o $A_1$
-(3). Os outros sete ficam intactos. É exatamente o que o desenho promete: a banca não é uma nota média que
-dilui, é um "e" lógico que localiza a falha.
+**Cada cuidado removido derruba exatamente o agente que o cobra.** Nas oito linhas da varredura, o
+conjunto de reprovados tem sempre **um** elemento, e é sempre o agente correspondente. Sem trilha
+íntegra reprova o $A_5$ (severidade 2), sem cláusula de saída reprova o $A_8$ (4), sem teste de
+propriedade reprova o $A_1$ (3). Os outros sete ficam intactos. A banca não é uma nota média que
+dilui, mas um "e" lógico que localiza a falha.
 
-**Remover dois cuidados reprova a ficha inteira.** Com A5 e A6 removidos, as severidades caem para 2 e 3 e a
-ficha é reprovada — 8 de 8 fichas defeituosas falham, a menor severidade global é 2. Compare com o portão de
-verdade: `portoes --horizonte h3 --defeito h3.voos23` devolve `G6 reprovado banca A1-A8 com
-piso 6 e pior 2`. O laboratório reproduz o mesmo pior = 2 removendo o cuidado de governança e o de justiça.
+**Remover dois cuidados reprova a ficha inteira.** Com A5 e A6 removidos, as severidades caem para 2
+e 3 e a ficha é reprovada, com 8 reprovações em 8 fichas defeituosas e a menor severidade global em
+2. Compare com o portão de verdade. O comando `portoes --horizonte h3 --defeito h3.voos23` devolve
+`G6 reprovado banca A1-A8 com piso 6 e pior 2`. O laboratório reproduz o pior = 2 removendo o
+cuidado de governança e o de justiça.
 
-**O Sistema 1 respeita o intervalo.** A triagem devolve 0,06 e 0,94, soma 1,0000, e zero valores fora de
-entre 1% e 99%. Note o que o intervalo protege: uma probabilidade de 0% não seria pontuada por regra
-própria e nunca seria corrigida pelo placar — o limite é a diferença entre um previsor e uma afirmação
-dogmática.
+**O Sistema 1 respeita o intervalo.** A triagem devolve 0,06 e 0,94, soma 1,0000, e zero valores
+fora de entre 1% e 99%. O intervalo existe por um motivo prático. Uma probabilidade de 0% não seria
+pontuada por regra própria nem seria corrigida pelo placar. O limite separa um previsor de uma
+afirmação dogmática.
 
 **Declaração de divergência.** A edição anterior deste livro fala em "oito faixas e um orquestrador M15". O
 texto do repositório (`PLAN.md`) chama o orquestrador de o orquestrador e a implementação
@@ -2953,19 +2974,19 @@ valores 8, 9 e 10 aqui reproduzem o pior = 8 do portão, e não um relatório de
    parâmetro da priori, simule os dados com ele e rode o amostrador. Verifique que o posto do valor
    verdadeiro entre as amostras da posterior é uniforme. Depois introduza um erro no amostrador e veja o
    histograma deixar de ser plano.
-5. *(Conceito)* Dê um exemplo de cada um dos três modos de piora de um modelo em uso — deriva de covariável,
-   deriva de rótulo e deriva de conceito — e da quarta situação, que não é piora. Diga a resposta certa para
-   cada uma.
-6. *(Conceito)* Por que a resposta do Sistema 1 precisa ser determinística (mesma entrada, mesma
-   probabilidade)? Relacione com a semente fixa do Capítulo 1.
+5. *(Conceito)* Dê um exemplo de cada um dos três modos de piora de um modelo em uso: deriva de
+   covariável, deriva de rótulo e deriva de conceito; dê também um exemplo da quarta situação, que
+   não é piora. Diga a resposta certa para cada uma.
+6. *(Conceito)* Por que a resposta do Sistema 1 precisa ser determinística (entrada repetida,
+   probabilidade igual)? Relacione com a semente fixa do Capítulo 1.
 
 **Resumo.**
 
-- Oito faixas, cada uma ligada a um modo de errar, mais um orquestrador que ataca; os agentes trocam fichas
-  estruturadas, nunca texto livre, e ninguém aprova o próprio trabalho.
-- O ciclo tem seis estágios, e o laço de volta vai para o estágio que falhou, não para o começo.
-- A aprovação é um "e" lógico das oito severidades contra o piso 6; cada cuidado ausente derruba exatamente
-  o agente que o cobra.
+- Oito faixas, cada uma ligada a um modo de errar, mais um orquestrador que ataca; os agentes trocam
+  fichas estruturadas, nunca texto livre, e ninguém aprova o trabalho que produziu.
+- O ciclo tem seis estágios, e o laço de volta leva ao estágio que falhou, em vez do começo.
+- A aprovação é um "e" lógico das oito severidades contra o piso 6; cada cuidado ausente derruba o
+  agente que o cobra.
 - Sistema 1 triagem determinística com probabilidades entre 1% e 99%; Sistema 2 delibera sobre o
   hipergrafo.
 - Um artefato com faixa fraca declarada vale mais que um artefato uniforme sem lacuna admitida.
@@ -2974,7 +2995,7 @@ valores 8, 9 e 10 aqui reproduzem o pior = 8 do portão, e não um relatório de
 
 **Objetivos.** Ao fim deste capítulo você deve saber ler e escrever uma ficha epistemológica, preencher as
 cinco perguntas do cabeçalho, enunciar as quatro proibições e os cinco invariantes $\Phi_1$–$\Phi_5$,
-percorrer o funil de quatro filtros e dizer o que cada portão automático verifica.
+percorrer o funil de quatro filtros e dizer qual verificação cada portão automático faz.
 
 ---
 
@@ -2982,31 +3003,31 @@ percorrer o funil de quatro filtros e dizer o que cada portão automático verif
 
 **O formulário que recusa.** Todo mundo já preencheu um formulário que aceita qualquer coisa. Você escreve
 "sim" no campo de observações, o sistema aceita, e três semanas depois ninguém sabe quem autorizou o quê.
-O oposto existe e é chato, e é o que este capítulo trata: um formulário que **recusa** o envio quando um
+O oposto existe e é chato, e é disso que este capítulo trata. O formulário aqui **recusa** o envio quando um
 campo obrigatório está vazio.
 
-A ficha epistemológica é isso: uma lista fechada de perguntas. Não é um resumo do trabalho, é o **contrato**
-do trabalho. Em cada 100 fichas preenchidas com pressa, as que passam sem reclamação são as que tiveram todos
-os campos respondidos com algo conferível. Uma ficha sem o campo do processo gerador não diz "não sei": diz
+A ficha epistemológica é uma lista fechada de perguntas. Ela é o **contrato** do trabalho, e não o resumo
+dele. Em cada 100 fichas preenchidas com pressa, as que passam sem reclamação são as que tiveram todos
+os campos respondidos com algo conferível. Uma ficha sem o campo do processo gerador não diz "não sei". Diz
 "ninguém escreveu isso", e é por aí que o erro entra.
 
 **A pergunta que ninguém faz ao decisor.** Há um jeito específico de errar que tem nome e quase nunca é
-checado: o **erro de tipo III**. Nos testes comuns, o erro de tipo I é acusar quem é inocente e o erro de
-tipo II é absolver quem é culpado. O erro de tipo III é mais banal e mais frequente: **responder
+checado, o **erro de tipo III**. Nos testes comuns, o erro de tipo I é acusar quem é inocente e o erro de
+tipo II é absolver quem é culpado. O erro de tipo III é mais banal e mais frequente, e consiste em **responder
 brilhantemente a pergunta errada**. O estudo mede o efeito A com precisão impecável, e o gestor precisava
 saber sobre o efeito B.
 
 Imagine uma prefeitura que precisa decidir se abre uma segunda sala de atendimento nos dias cheios. O
-relatório responde, com rigor, à pergunta: *"qual é o nível de serviço médio do ano?"* A resposta é 82%, e o
-gestor lê isso como resposta à pergunta dele — *"devo abrir uma segunda sala?"*. Ninguém escreveu a pergunta
-do gestor em lugar nenhum. Em 100 decisões apressadas, uma parte respeitável morre assim: não por conta
-errada, mas por conta certa na pergunta trocada.
+relatório responde, com rigor, à pergunta *"qual é o nível de serviço médio do ano?"* A resposta é 82%, e o
+gestor lê isso como resposta à pergunta dele, *"devo abrir uma segunda sala?"*. Ninguém escreveu a pergunta
+do gestor em lugar nenhum. Em 100 decisões apressadas, uma parte respeitável morre por conta certa na
+pergunta trocada, e não por conta errada.
 
 **Como o contrato trava isso.** O pacote de domínio passa a carregar um campo obrigatório, o
 `pergunta_do_decisor`, com três partes na ordem: **quem decide**, **qual ação a decisão muda**
-(copiada literalmente do campo de decisão do próprio pacote) e **a pergunta que essa decisão usa**,
-terminada em interrogação. A validação é de código: texto genérico sem quem decide é recusado, e uma ação que
-não seja a do pacote é recusada. Depois disso, "a pergunta que o modelo responde é a que o decisor fez"
+(copiada literalmente do campo de decisão do pacote) e **a pergunta que essa decisão usa**,
+terminada em interrogação. Quem valida é o código, que recusa texto genérico sem quem decide e barra uma ação
+diferente da do pacote. Depois disso, "a pergunta que o modelo responde é a que o decisor fez"
 deixou de ser suposição e passou a ser uma frase conferível.
 
 **As quatro coisas que o contrato proíbe.** O contrato dos agentes começa por quatro proibições absolutas, e
@@ -3077,11 +3098,11 @@ trajetória típica cresce à taxa
 $$\frac{d}{dt}\,\mathbb{E}[\ln X_t] = \mu - \tfrac{1}{2}\sigma^2.$$
 
 É o arrasto da volatilidade do Dow Jones alavancado, e é Jensen outra vez. Lido à maneira de Stratonovich, o
-mesmo símbolo descreve outro processo, em que o termo $-\sigma^2/2$ não aparece. A escolha depende da física:
-ruído branco idealizado de um sistema discreto pede Itô; o limite de um ruído real com correlação curta pede
-Stratonovich. A ficha pede também um teste com passo de tempo menor: se o resultado muda quando $\Delta t$
-encolhe, a simulação estava medindo o integrador, não o Mundo. Esse teste **não** decide entre Itô e
-Stratonovich: o esquema de Euler converge para a leitura de Itô, e a de Stratonovich pede outro integrador.
+mesmo símbolo descreve outro processo, em que o termo $-\sigma^2/2$ não aparece. A escolha depende da física.
+Ruído branco idealizado de um sistema discreto pede Itô; o limite de um ruído real com correlação curta pede
+Stratonovich. A ficha pede também um teste com passo de tempo menor. Se o resultado muda quando $\Delta t$
+encolhe, a simulação estava medindo o integrador em vez do Mundo. Esse teste **não** decide entre Itô e
+Stratonovich, porque o esquema de Euler converge para a leitura de Itô, e a de Stratonovich pede outro integrador.
 
 O ruído também faz saltar entre estados estáveis. Num sistema com dois poços, o tempo médio até o salto
 segue a fórmula de Kramers e cresce exponencialmente com a altura da barreira $\Delta U$ em relação à
@@ -3089,10 +3110,10 @@ temperatura $T$:
 
 $$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
 
-Para barreiras altas, esse tempo quase não tem memória: quem esperou muito não está mais perto do salto.
-Olhado só nos saltos, porém, o ruído parece um empurrão: em 591 saltos simulados no curso, o ruído logo
+Para barreiras altas, esse tempo quase não tem memória. Quem esperou muito não está mais perto do salto.
+Olhado só nos saltos, porém, o ruído parece um empurrão. Em 591 saltos simulados no curso, o ruído logo
 antes do salto apontou no sentido dele em 99% dos casos, sem nenhuma força externa. Procurar a causa de um
-salto é erro de seleção; procurar a causa de uma mudança na frequência dos saltos, não.
+salto é erro de seleção; procurar a causa de uma mudança na frequência dos saltos não é.
 
 **Os cinco invariantes.** Nada entra no grafo sem passar pelos invariantes, que funcionam como travas de banco
 de dados. Os quatro primeiros são exigidos desde o começo; o quinto entrou com o eixo da resolução da pergunta
@@ -3106,41 +3127,41 @@ de dados. Os quatro primeiros são exigidos desde o começo; o quinto entrou com
 | $\Phi_4$ Escopo ecológico | Julgar a decisão no ambiente em que vai operar, com termo de escopo e cláusula objetiva de saída | Recomendação sem prazo de validade |
 | $\Phi_5$ Resolução da pergunta | A ação declarada tem de estar no mesmo grão da unidade independente: com o dado no dia ou mais grosso, resolução agregada (R0) reprova | Ação por dia com conta no agregado. Unidade mais fina que o dia fica fora desta trava, e isso está declarado |
 
-**O funil de quatro filtros.** Um sistema que simula tudo o que encontra colapsa por custo e por inflação de
-falsas descobertas. O funil, a poda por valor da informação e o contador de tentativas estão implementados em
-Rust, em `crates/stochology-core/src/funil.rs`, com 17 testes: os quatro filtros recusam pelo cabeçalho (sem
-pergunta, sem processo gerador, sem unidade ou nulo, sem ação com saída), a poda corta quando a cota do valor da
-informação não pode cruzar o limiar — com $C/L = 0{,}1$ a cota vale 0,0090 em $p = 0{,}001$ e o exame de 0,05 é
-podado, enquanto no limiar $p = 0{,}10$ a cota é 0,9000 — e o contador fecha a conta na forma
-`K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3`. O limite declarado é que a cota é o
-valor esperado da informação perfeita, exata no modelo de dois atos e dois estados. Cada frente é organizada como um funil em que a maior parte das hipóteses fracas cai
-antes de tocar em simulação pesada.
+**O funil de quatro filtros.** Um sistema que simula toda hipótese que encontra colapsa por custo e por
+inflação de falsas descobertas. O funil, a poda por valor da informação e o contador de tentativas vivem em
+Rust, em `crates/stochology-core/src/funil.rs`, com 17 testes. Os quatro filtros recusam pelo cabeçalho (sem
+pergunta, sem processo gerador, sem unidade ou nulo, sem ação com saída). A poda corta quando a cota do valor
+da informação não pode cruzar o limiar: com $C/L = 0{,}1$ a cota vale 0,0090 em $p = 0{,}001$ e o exame de
+0,05 é podado, enquanto no limiar $p = 0{,}10$ a cota é 0,9000. Por fim, o contador fecha a conta na forma
+`K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3`. O limite declarado é que a cota
+é o valor esperado da informação perfeita, exata no modelo de dois atos e dois estados. Cada frente se
+organiza como um funil, e nele a maior parte das hipóteses fracas cai antes de tocar em simulação pesada.
 
-1. **Valor da informação.** Corta-se o que, mesmo com resposta perfeita, não mudaria nenhuma decisão. O log
+1. **Valor da informação.** Corta-se a hipótese que não mudaria nenhuma decisão nem com resposta perfeita. O log
    padrão é "podado por Crisonomia: curiosidade sem uso operacional".
-2. **Poda topológica e unidade.** Corta-se, por d-separação, o que fica fora do cobertor de Markov da
+2. **Poda topológica e unidade.** Corta-se, por d-separação, todo nó que fica fora do cobertor de Markov da
    variável de interesse, inclusive os colisores que, se condicionados, criariam o viés de Berkson. Corta-se
-   também o que os dados não identificam ou cujo tamanho efetivo, contado na unidade independente pelo $F_2$,
-   não permite conclusão. O contrato de dados confere ainda um bloco `ausencia` para o mecanismo da
-   falta: MCAR, MAR, MNAR ou não declarado, com as colunas que a classificação cobre e a análise de
-   sensibilidade exigida quando a ausência pode depender do próprio valor. Ausência sem classificação é
-   recusada; nos três contratos do $H_1$ real e nas 18 tabelas do $H_{2g}$ a regra é vacuosa hoje, e passa a
-   morder no dia em que aparecer.
+   também a alegação que os dados não identificam, ou cujo tamanho efetivo, contado na unidade independente
+   pelo $F_2$, fica pequeno demais para concluir. O contrato de dados confere ainda um bloco `ausencia` para o
+   mecanismo da falta: MCAR, MAR, MNAR ou não declarado, com as colunas que a classificação cobre e a análise
+   de sensibilidade exigida quando a ausência pode depender do valor da variável. Ausência sem classificação
+   é recusada; nos três contratos do $H_1$ real e nas 18 tabelas do $H_{2g}$ a regra é vacuosa hoje, e passa
+   a morder no dia em que aparecer.
 3. **Teste severo contra o nulo.** Se o padrão alegado já aparece no modelo nulo, ou numa referência de um
    parâmetro só como a taxa-base, a pesquisa encerra ali. Quando a simulação é cara, o $F_4$ faz esse teste
    primeiro num emulador barato.
-4. **Inferência pesada, lentes e banca.** Só o que sobra recebe o tratamento caro.
+4. **Inferência pesada, lentes e banca.** Só o restante recebe o tratamento caro.
 
 **Caso trabalhado: a identificabilidade de $R_0$.** No início de uma epidemia, os casos crescem como
 $\exp((\beta - \gamma)t)$, e os dados determinam a **diferença** $\beta - \gamma$, não a razão
 $R_0 = \beta/\gamma$. Com 25 dias de casos simulados, em que a verdade é $R_0 = 2$, os valores compatíveis
 vão de **1,38 a 5,90**, e o tamanho final previsto vai de **50% a 100%** da população. Com 45 dias, $R_0$
-fica entre **2,00 e 2,24** — mas aí a curva já dobrou. Tomar a duração da infecção de outros estudos estreita
+fica entre **2,00 e 2,24**, mas aí a curva já dobrou. Tomar a duração da infecção de outros estudos estreita
 $R_0$ para **1,81 a 2,11**. Isso não é defeito, desde que se declare que a margem passou a ser a da fonte.
 
 **Os portões automáticos.** Nenhuma entrega é consolidada sem passar nos portões numa máquina limpa. Os
-agentes e o $\Phi$ já foram formalizados; o que os portões fazem é **repetir o trabalho e comparar**: a
-mesma entrada tem de produzir a mesma saída, e um defeito plantado tem de ser detectado. O binário
+agentes e o $\Phi$ já foram formalizados; os portões **repetem o trabalho e comparam**. Entrada repetida tem
+de produzir saída idêntica, e um defeito plantado tem de ser detectado. O binário
 `portoes` implementa sete.
 
 | Portão | Faixa | O que verifica |
@@ -3153,9 +3174,9 @@ mesma entrada tem de produzir a mesma saída, e um defeito plantado tem de ser d
 | G6 | $\mathcal{M}$ | Banca adversarial $A_1$–$A_8$ com o piso |
 | G7 | $F_8$ | Cláusula de saída declarada e $A_8$ acima do piso |
 
-Dois detalhes fazem o conjunto valer mais que a soma. O G5 não verifica só que a corrente está íntegra: ele
-**adultera de propósito** e exige que a verificação falhe com a corrente adulterada. E o G1 compara duas
-execuções do mesmo horizonte. Um portão que nunca falha não é portão (Capítulo 15).
+Dois detalhes fazem o conjunto valer mais que a soma. O G5 não verifica só que a corrente está íntegra. Ele
+**adultera de propósito** e exige que a verificação falhe com a corrente adulterada. O G1, por sua vez,
+compara duas execuções do horizonte declarado. Um portão que nunca falha não é portão (Capítulo 15).
 
 ---
 
@@ -3188,26 +3209,27 @@ Quatro leituras.
 
 **A ficha completa passa sem uma única falha.** Cinco campos de cabeçalho na ordem exigida, semente
 declarada, artefato simulável, margem com unidade independente, modelo nulo, escopo ecológico, quem paga
-pelo erro, cláusula de saída e a pergunta do decisor citando a ação. O total é zero. Vale notar que a trava
-de tipo III é **literal**: a pergunta precisa terminar em interrogação **e** conter a ação do pacote.
+pelo erro, cláusula de saída e a pergunta do decisor citando a ação. O total é zero. A trava
+de tipo III é **literal**, e a pergunta precisa terminar em interrogação **e** conter a ação do pacote.
 
 **Cada defeito cai no portão certo.** Sete defeitos plantados, sete reprovações, uma por portão, sem
 contaminação. Sem semente cai no $\Phi_1$; sem margem ou unidade cai no $\Phi_2$; sem definição ou sem
 modelo nulo cai no $\Phi_3$; sem escopo, sem quem paga ou sem cláusula de saída cai no $\Phi_4$. Os dois
-defeitos da pergunta do decisor caem os dois na trava de tipo III — mas por motivos diferentes: um perde o
-ponto de interrogação, o outro perde a ação. **Repare que a mensagem é a mesma nos dois casos**: o validador
-diz o que a regra exige, não qual parte faltou. É um detalhe pequeno que o exercício 4 pede para melhorar.
+defeitos da pergunta do decisor caem os dois na trava de tipo III, mas por motivos diferentes. Um perde o
+ponto de interrogação, o outro perde a ação. **A mensagem é idêntica nos dois casos.** O validador
+enuncia a exigência da regra, sem dizer qual parte faltou. É um detalhe pequeno que o exercício 4 pede
+para melhorar.
 
-**O validador de estrutura atravessa os capítulos.** As mesmas três recusas do Capítulo 12 aparecem aqui:
-aresta para nó fantasma, ciclo dedutivo e hiperaresta com um membro só. É de propósito: uma trava que só
+**O validador de estrutura atravessa os capítulos.** Reaparecem aqui as três recusas do Capítulo 12:
+aresta para nó fantasma, ciclo dedutivo e hiperaresta com um membro só. Isso é de propósito. Uma trava que só
 existe num capítulo é uma trava que ninguém usa.
 
 **O teste de propriedades e a semente.** Dez mil fichas simuladas com margem $1{,}96\sqrt{p(1-p)/n}$ para
-$n$ entre 100 e 999 e $p$ entre 0,01 e 0,99: **zero violações**, com margens entre 0,00617 e 0,09798. O
-intervalo de confiança nunca é negativo nem maior que meio. E os dois validadores rodados com a mesma
-semente divergem em **0 de 32** execuções — a reprodutibilidade que o Capítulo 1 exige.
+$n$ entre 100 e 999 e $p$ entre 0,01 e 0,99 dão **zero violações**, com margens entre 0,00617 e 0,09798. O
+intervalo de confiança nunca é negativo nem maior que meio. Os dois validadores rodados sobre a semente
+declarada divergem em **0 de 32** execuções, a reprodutibilidade que o Capítulo 1 exige.
 
-**A esteira por horizonte.** No repositório cada horizonte tem a sua: o $H_0$ aplica $\Phi_1$–$\Phi_4$, as rodadas $H_{2b}$ a $H_{2g}$ aplicam cinco critérios e o $H_3$ aplica sete. Cada `portoes.py` repete a execução, compara os resumos criptográficos e sai com 0 ou 1; os sete deste capítulo
+**A esteira por horizonte.** No repositório cada horizonte tem a sua esteira. O $H_0$ aplica $\Phi_1$–$\Phi_4$, as rodadas $H_{2b}$ a $H_{2g}$ aplicam cinco critérios e o $H_3$ aplica sete. Cada `portoes.py` repete a execução, compara os resumos criptográficos e sai com 0 ou 1; os sete deste capítulo
 são os do binário `portoes`. (O `portoes.py` de cada frente foi aposentado em 2026-10-16 e vive no commit
 `1bfec905`; o portão continua no binário.)
 
@@ -3228,20 +3250,20 @@ portão G4, no horizonte `todos`, reproduz aqui.
 2. *(Conceito)* Que filtro do funil deve cortar a pergunta "qual é a cor preferida dos clientes que compram
    seguro?" numa seguradora que não vai mudar o produto?
 3. *(Conta)* Por que 25 dias de crescimento exponencial identificam $\beta - \gamma$ e não $\beta/\gamma$?
-   Mostre que dois pares $(\beta, \gamma)$ com a mesma diferença geram a mesma curva inicial.
+   Mostre que dois pares $(\beta, \gamma)$ com diferenças iguais geram curvas iniciais idênticas.
 4. *(Laboratório)* Melhore a mensagem da trava de tipo III para distinguir "faltou o ponto de interrogação"
    de "a pergunta não cita a ação". Faça os dois defeitos caírem em mensagens diferentes e reproduza a
    tabela.
 5. *(Laboratório)* Escreva um teste de propriedades que verifique que a espera simulada de uma fila é sempre
-   não negativa e não diminui quando o tempo de atendimento aumenta, com as mesmas chegadas.
-6. *(Conceito)* Explique, em três frases, por que o G5 adulterar a própria corrente o torna mais forte que um
-   teste que só confere se a corrente está íntegra.
+   não negativa e não diminui quando o tempo de atendimento aumenta, mantidas as chegadas.
+6. *(Conceito)* Explique, em três frases, por que o G5 é mais forte que um teste que só confere se a corrente
+   está íntegra, já que ele adultera de propósito a corrente que produziu.
 
 **Resumo.**
 
 - A ficha é uma lista fechada de perguntas; cinco são obrigatórias em todo payload, e o campo
   `pergunta_do_decisor` trava o erro de tipo III.
-- Quatro proibições e cinco invariantes são travas, não recomendações; o $\Phi_5$ é o mais novo e o mais estreito.
+- As quatro proibições e os cinco invariantes são travas, e não recomendações; o $\Phi_5$ é o mais novo e o mais estreito.
 - O funil corta barato antes de gastar caro: valor da informação, poda topológica e de unidade, teste severo
   contra o nulo, e só então inferência pesada e banca.
 - O binário `portoes` implementa sete portões, com código de saída 0 ou 1, e um portão que nunca
@@ -3260,29 +3282,29 @@ por que o auditor ser parte interessada é um limite que nenhuma assinatura reso
 
 **Pintar o alvo depois do tiro.** Um atirador dispara dez tiros contra a parede de um celeiro. Depois olha os
 buracos, pega um pincel e desenha um alvo em volta do grupo mais apertado. Aí mostra o alvo e diz: "cinco
-acertos no centro". A conta de acertos está certa — e o alvo é falso. A única coisa que separa a ciência
+acertos no centro". A conta de acertos está certa, e o alvo é falso. A única coisa que separa a ciência
 desse atirador é **quando** o alvo foi desenhado.
 
-Não existe jeito de desfazer isso olhando o resultado. O que existe é uma senha: escrever e **congelar** o
+Não existe jeito de desfazer isso olhando o resultado. A senha consiste em escrever e **congelar** o
 alvo antes do tiro, de um jeito que ninguém consiga alterar depois sem que se perceba. Em cada 100
 resultados publicados, os que mais se parecem com trapaca são justamente os limpos, ajustados um pouquinho
 depois de ver os dados. A diferença entre "ajustei o modelo" e "ajustei o modelo depois de ver o resultado"
-não está no modelo: está na **ordem dos fatos**.
+não está no modelo, e sim na **ordem dos fatos**.
 
-**A senha é um número.** Como congelar? Publicando o **hash** do arquivo. O hash é uma impressão digital: pega
+**A senha é um número.** Como congelar? Publicando o **hash** do arquivo. O hash é uma impressão digital. Ele pega
 o conteúdo inteiro, do primeiro ao último caractere, e devolve uma linha de 64 caracteres. Trocar uma vírgula
-muda a impressão toda. Publicar o hash antes do tiro é como lacrar o envelope em cartório: você não precisa
+muda a impressão toda. Publicar o hash antes do tiro é como lacrar o envelope em cartório. Você não precisa
 mostrar o conteúdo agora, mas depois ninguém abre o envelope sem que apareça.
 
 **O cofre.** Imagine um banco que recebe um boleto de cada cliente. Um dia o banco decide construir um
 "cofre fora do tempo": uma pasta com os dados dos próximos três meses, que nenhum analista pode abrir. O
 modelo é construído com o passado; quando termina, alguém abre o cofre e roda o modelo contra dados que ele
 nunca viu. Abrir o cofre custa a única coisa que ele tinha: a surpresa. Na pesquisa, quando um cofre já foi
-aberto e o modelo precisa de correção, a correção só vale testada num **cofre novo**, que ninguém viu — e
-foram três cofres até acertar a calibração das prisões de Toronto.
+aberto e o modelo precisa de correção, a correção só vale testada num **cofre novo**, que ninguém viu. Foram
+três cofres até acertar a calibração das prisões de Toronto.
 
 **O diário de previsões.** Toda previsão probabilística emitida fica registrada num livro-razão contínuo, com
-a fonte, o filtro, se o próprio sistema pode influir no resultado, quantos fatores a justificativa tem e o
+a fonte, o filtro, se o sistema pode influir no resultado, quantos fatores a justificativa tem e o
 degrau de Pearl. E com um limite: **a previsão nunca é 0% nem 100%**, e sim algo entre "um em cem" e
 "noventa e nove em cem". Sem esse limite, quem aposta na certeza nunca perde pontos e nunca aprende; com o
 limite, cada previsor acumula um histórico que pode ser cobrado.
@@ -3292,7 +3314,7 @@ limite, cada previsor acumula um histórico que pode ser cobrado.
 ### Degrau 2 — A regra do jogo
 
 **O risco de escala é epistemológico.** Quando um sistema testa centenas de hipóteses e especificações em
-paralelo, o maior risco não é técnico: é o sobreajuste em escala industrial, o jardim dos caminhos que se
+paralelo, o maior risco não é técnico; é o sobreajuste em escala industrial, o jardim dos caminhos que se
 bifurcam percorrido por máquinas incansáveis. O plano impõe três mecanismos de contenção.
 
 **Pré-registro com hash e contador de tentativas.** Antes que qualquer agente acesse a partição de teste, a
@@ -3302,29 +3324,29 @@ da rodada a que se aplicava, mas cada rodada nova foi escrita sabendo das anteri
 depois de ver resultados ficaram registradas e **contam no $K$**.
 
 O sistema mantém um contador $K$ de especificações tentadas por pergunta. Toda tentativa falha fica
-registrada, e o relatório final é obrigado a declarar $K$. O plano pede mais: que $K$ penalize a
+registrada, e o relatório final é obrigado a declarar $K$. O plano vai mais longe e pede que $K$ penalize a
 complexidade, pelo comprimento mínimo de descrição (MDL) ou pelo fator de Occam, junto com a correção para
 comparações múltiplas. Na pesquisa, $K$ foi declarado, mas **nenhuma dessas penalidades foi aplicada**. Foi
 por esse contador que a respecificação dos domínios do $H_2$ parou em $K = 3$, e o passo seguinte foi buscar
-dados novos. O contador por domínio não registra, porém, que o portão foi tentado em sete rodadas — e
+dados novos. O contador por domínio não registra, porém, que o portão foi tentado em sete rodadas, e
 nenhuma correção por isso foi aplicada. A auditoria de fundo depois desse passo mediu o $K$ **honesto** do
 portão do $H_2$: **38 testes distintos** (com a faixa de 32 a 72 segundo o critério de contagem), e com
 Bonferroni o $H_{2g}$ mantém as quatro áreas de então, com os conjuntos $\hat S$ encolhendo.
 
 **O cofre fora do tempo.** A partição temporal futura fica sob custódia exclusiva do agente de ciclo de vida
 ($F_3$). Nenhum agente de modelagem a lê durante o desenvolvimento; ela é aberta uma única vez para pontuar
-calibração e verificar ausência de vazamento. A regra é dura e tem consequência: quando um cofre já foi
-aberto e o modelo precisa de correção, a correção só vale testada num cofre novo. Foi o que o $H_3$ fez três
-vezes — com os voos de 2023, com as prisões de Toronto de 2020–2021 e com as paradas de trânsito de Rhode
+calibração e verificar ausência de vazamento. A regra é dura e tem consequência. Quando um cofre já foi
+aberto e o modelo precisa de correção, a correção só vale testada num cofre novo. O $H_3$ fez isso três
+vezes: com os voos de 2023, com as prisões de Toronto de 2020–2021 e com as paradas de trânsito de Rhode
 Island.
 
 **O diário de previsões e o barramento.** Cada agente que emite previsões probabilísticas as grava num
 livro-razão contínuo, restrito ao intervalo $[1\%, 99\%]$. Agentes cujo escore de Brier perde para a
 taxa-base, ou cujo capital de Kelly colapsa, têm o peso reduzido pelo orquestrador. O barramento de fichas é
 **encadeado por hash**: cada mensagem carrega o hash da anterior, e a trilha não pode ser reescrita sem quebrar
-a cadeia. Uma lição de implementação veio cedo: no $H_1$, o placar do diário somava o mesmo previsor entre
-projetos diferentes, e o erro foi corrigido e declarado no README; os números do $H_1$ publicados depois
-disso já vêm da versão corrigida.
+a cadeia. Uma lição de implementação veio cedo. No $H_1$, o placar do diário somava num só o previsor
+que aparecia em projetos diferentes, e o erro foi corrigido e declarado no README; os números do $H_1$
+publicados depois disso já vêm da versão corrigida.
 
 **Pareceres de risco e o responsável nomeado.** O agente de governança ($F_5$) emite um parecer de risco para
 cada projeto avaliado, inclusive os que não chegam à decisão. Na pesquisa foram **21**: 18 do $H_2$ e 3 do
@@ -3334,27 +3356,27 @@ Educação (turmas do STAR), Saúde (o experimento de seguro da RAND) e o progra
 Os 21 pareceres foram assinados em 15 de outubro de 2026, depois de ler um resumo deles que destacava os
 quatro que envolvem pessoas. A assinatura fica num registro separado, em que cada parecer é identificado pelo
 SHA-256 do arquivo no momento da assinatura. Os arquivos de resultado **não foram reescritos**, para não mudar
-as saídas que a reprodução limpa compara. O parecer do Direito carrega uma ressalva factual: a recomendação de
+as saídas que a reprodução limpa compara. O parecer do Direito carrega uma ressalva factual. A recomendação de
 adotar um corte de 10% vem de uma decisão e de um custo **inventados** no $F_1$, e não é conselho de política.
 
-As assinaturas são nominais: cada parecer traz o nome curto do responsável (**sil**) e o resumo criptográfico do arquivo, em `governanca/ASSINATURAS.md`.
+As assinaturas são nominais. Cada parecer traz o nome curto do responsável (**sil**) e o resumo criptográfico do arquivo, em `governanca/ASSINATURAS.md`.
 
 **O limite: o auditor é parte interessada.** Os pareceres foram assinados por quem conduz o programa. Uma
 auditoria autorizada por quem é auditado tem valor limitado. O responsável nomeado responde à pergunta que
-uma auditoria precisa responder — quem decidiu usar, quem aprovou, quem olha o placar, quem desliga — mas
-nomear um responsável **não torna a auditoria independente**. O que o programa fez na direção que uma
-auditoria exige foi registrar o que a auditoria **não pôde olhar** e quais grupos afetados foram ouvidos: o
-registro declara que, nas sete decisões que envolvem pessoas — cortar o benefício em 10%, reduzir as turmas
+uma auditoria precisa responder (quem decidiu usar, quem aprovou, quem olha o placar, quem desliga), mas
+nomear um responsável **não torna a auditoria independente**. Na direção que uma auditoria exige, o programa
+registrou os pontos que a auditoria **não pôde olhar** e quais grupos afetados foram ouvidos. O registro
+declara que, nas sete decisões que envolvem pessoas (cortar o benefício em 10%, reduzir as turmas
 do STAR, trocar o cuidado gratuito por coparticipação, comparar o treino do NSW com controles do CPS e as
-três marcas de revisão dos fluxos de prisões — **nenhum dos sete grupos afetados foi ouvido**. Não há no
+três marcas de revisão dos fluxos de prisões), **nenhum dos sete grupos afetados foi ouvido**. Não há no
 repositório registro de consulta, entrevista, painel ou consentimento. Falta também o passo mais barato e
 mais óbvio da lista: a elicitação com especialistas humanos.
 
-**A auditoria de fundo: o que foi suposto e o que se mediu.** A governança também serve para marcar o que
-**não** foi medido, e para depois medir. A pesquisa se vira contra si mesma numa auditoria de fundo: dez
+**A auditoria de fundo: o que foi suposto e o que se mediu.** A governança também serve para marcar os pontos
+**não** medidos, e para depois medi-los. A pesquisa se vira contra si mesma numa auditoria de fundo. Dez
 pontos que o texto sustentava e que nunca haviam sido postos à prova viraram frentes de trabalho, às quais se
 somaram, depois, as extensões (evento raro, saúde, ficha e contrato) e a frente da elicitação humana, que
-espera gente. Cada frente segue a mesma regra dos horizontes: a declaração com hash vem **antes** de rodar, o
+espera gente. Cada frente repete a regra dos horizontes: a declaração com hash vem **antes** de rodar, o
 resultado é relatado com os limites, e mudança de critério depois de ver o resultado entra como declaração
 nova e conta no número de tentativas.
 
@@ -3375,24 +3397,24 @@ nova e conta no número de tentativas.
 
 **Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala saíram da árvore em 2026-10-16 por não sustentarem resultado central da teoria; os números acima continuam registrados aqui, e o material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
 
-Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o $H_3$ corrigiu é
-cerca de quatro vezes o que se mediu num caso real. A tolerância de 0,03 do erro de calibração é maior que o
-ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de
-transferência do $H_2$ depende de qual versão de cada escolha conta: a área da Educação não sobrevive à
+Três desses resultados apertam o alcance autorizado pelos capítulos anteriores. O laço de 0,6 que o $H_3$
+corrigiu é cerca de quatro vezes a medida de um caso real. A tolerância de 0,03 do erro de calibração é maior
+que o ruído em todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de
+transferência do $H_2$ depende de qual versão de cada escolha conta. A área da Educação não sobrevive à
 correção de agrupamento, e quem sustenta a terceira área agora é a Genética replicada. **Nenhum número
-publicado caiu por erro de conta; o que a auditoria estreita é o que esses números autorizam.**
+publicado caiu por erro de conta; a auditoria estreita o alcance autorizado desses números.**
 
-O que continua em aberto tem nome. A elicitação com especialistas humanos de verdade, porque a auditoria
-mediu a sensibilidade às prioris e isso não substitui um painel — o protocolo e os seis formulários estão
+As questões em aberto têm nome. A elicitação com especialistas humanos de verdade, porque a auditoria
+mediu a sensibilidade às prioris e isso não substitui um painel. O protocolo e os seis formulários estão
 escritos, com o critério de $K = 2$ pronto, e **nenhuma entrevista foi feita**. A taxa nula da validação por
-intervenção da Genética, que decide com um único gene em 27: ela saiu em $p = 0{,}001$, o piso de 999
-sorteios, e o que segue aberto ali é a **resolução**, não o $p$. E o tempo de atendimento e a paciência dos
+intervenção da Genética, que decide com um único gene em 27, saiu em $p = 0{,}001$, o piso de 999
+sorteios; a resolução segue em aberto ali, e não o $p$. E o tempo de atendimento e a paciência dos
 clientes da central, que a base não traz e que continuam supostos.
 
-Fica também o limite de o auditor ser parte interessada, que a auditoria não resolveu: um dos passos que ela
-mesma propõe é que a mesma pessoa releia por inteiro os 21 pareceres assinados, um a um, e confirme ou retire
+Fica também o limite de o auditor ser parte interessada, que a auditoria não resolveu. Um dos passos que ela
+propõe é que quem assinou releia por inteiro os 21 pareceres assinados, um a um, e confirme ou retire
 a assinatura registrando que leu o texto integral. O formulário de releitura das 21 linhas existe, com os
-hashes conferidos um a um — **21 de 21 batem** — e está **em branco de propósito**: nada foi relido, nada foi
+hashes conferidos um a um (**21 de 21 batem**), e está **em branco de propósito**. Nada foi relido, nada foi
 confirmado e nada foi assinado ali. Enquanto isso não acontece, a assinatura vale pelo que ela é: a
 declaração de quem conduz o programa de que leu um resumo.
 
@@ -3425,18 +3447,18 @@ trocar uma ficha do lote muda a raiz em 7 de 7 casos
 Quatro leituras.
 
 **A implementação está certa, e isso é a base de tudo.** Os dois vetores conhecidos do SHA-256 batem
-caractere a caractere: a string vazia dá `e3b0c442...b855` e `abc` dá `ba7816bf...15ad`. Sem essa
+caractere a caractere. A string vazia dá `e3b0c442...b855` e `abc` dá `ba7816bf...15ad`. Sem essa
 conferência, todo o resto da trilha seria um número inventado com aparência de segurança.
 
 **Um caractere no passado derruba a corrente.** A corrente de cinco eventos está íntegra. Mudando
-`canario=ok` para `canario=nok` no evento 2 e **recalculando o hash do próprio evento** — o ataque mais
-óbvio, em que conteúdo e hash concordam entre si — a verificação falha: o evento 3 guarda o hash antigo do
+`canario=ok` para `canario=nok` no evento 2 e **recalculando o hash daquele evento** (o ataque mais
+óbvio, em que conteúdo e hash concordam entre si), a verificação falha. O evento 3 guarda o hash antigo do
 evento 2 como "anterior", e a incompatibilidade aparece. Das cinco alterações testadas, uma por evento,
 **5 de 5** invalidam a corrente.
 
 **A corrente sozinha não basta: a raiz é a prova.** Se o atacante reescrever também os três eventos seguintes,
-a corrente volta a fechar localmente — a verificação passa —, mas a **raiz publicada** muda. Essa linha é o
-coração do capítulo: o que torna a trilha inviolável não é a corrente, é o hash publicado **antes**. Quem
+a corrente volta a fechar localmente (a verificação passa), mas a **raiz publicada** muda. Essa linha é o
+coração do capítulo. A trilha fica inviolável pelo hash publicado **antes**, e não pela corrente. Quem
 guarda só a corrente guarda um documento que pode ser reescrito por inteiro; quem guarda a raiz guarda o
 lacre.
 
@@ -3473,14 +3495,14 @@ Nenhum valor antigo foi apagado.
 
 **Resumo.**
 
-- O pré-registro com hash é a única senha contra o ajuste depois de ver o resultado: a hipótese é congelada
+- O pré-registro com hash é a única senha contra o ajuste depois de ver o resultado. A hipótese é congelada
   antes, e o hash publicado é o lacre.
 - O contador $K$ torna as tentativas visíveis; a auditoria de fundo mediu $K = 38$ no portão do $H_2$, contra
   o $K = 3$ por domínio.
-- O cofre fora do tempo só se abre uma vez; correções pedem cofre novo — foram três até acertar a calibração.
+- O cofre fora do tempo só se abre uma vez; correções pedem cofre novo, e foram três até acertar a calibração.
 - O diário pontua cada previsor com regra própria, dentro de $[1\%, 99\%]$, e pesa os agentes pelo placar; a
   corrente de fichas é encadeada por SHA-256.
-- Pareceres assinados nomeiam o responsável, mas não tornam a auditoria independente: nenhum dos sete grupos
+- Pareceres assinados nomeiam o responsável, mas não tornam a auditoria independente. Nenhum dos sete grupos
   afetados foi ouvido, e o formulário de releitura dos 21 pareceres está em branco de propósito.
 
 # Parte V. A máquina no mundo real
@@ -3488,65 +3510,65 @@ Nenhum valor antigo foi apagado.
 ## Capítulo 16. Horizonte H0: o posto de saúde e os 2,65 milhões de chamadas do banco
 
 **Objetivos.** Ao fim deste capítulo você deve saber por que a mesma demanda média pode produzir duas esperas
-muito diferentes, o que a convexidade da fila cobra de quem decide, por que a unidade independente de uma margem
-pode ser o paciente ou o dia e o que a fórmula que o setor usa prometia a uma central de chamadas que ela não
+muito diferentes, quanto a convexidade da fila cobra de quem decide, por que a unidade independente de uma margem
+pode ser o paciente ou o dia e o que a fórmula do setor prometia a uma central de chamadas que ela não
 entregou.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**O posto de saúde.** Num posto com um só enfermeiro, o atendimento leva em média 5 minutos por paciente, o que dá
-12 atendimentos por hora. A demanda é que oscila: em metade dos dias chegam 5 pacientes por hora, e na outra metade
-chegam 11. A média é 8 — e 8 é menos que 12, então a fila não cresce sem fim.
+**O posto de saúde.** Num posto com um só enfermeiro, o atendimento leva em média 5 minutos por paciente, e a conta
+fecha em 12 atendimentos por hora. A demanda é que oscila. Em metade dos dias chegam 5 pacientes por hora, e na
+outra metade chegam 11. A média é 8, e 8 é menos que 12, então a fila não cresce sem fim.
 
 O gestor olha a planilha e escreve a frase de sempre: *"a demanda média é 8 e o posto atende 12; a espera é de uns
-10 minutos e não há por que contratar"*. A conta por trás dessa frase está certa, e vale 10 minutos — para um mundo
-em que chegam exatamente 8 pacientes por hora, toda hora. O problema é que esse mundo não é o mundo.
+10 minutos e não há por que contratar"*. A conta por trás dessa frase está certa, e vale 10 minutos, mas só num
+mundo em que chegam exatamente 8 pacientes por hora, toda hora. O problema é que esse mundo não é o mundo.
 
 Simulados os dois mundos com a mesma semente (2 000 dias de 10 horas cada, um atendente, semente 1909), a
-diferença aparece inteira:
+diferença aparece inteira.
 
 | Mundo (pacientes por hora) | Espera média por paciente | O paciente típico espera | 90 em 100 esperam menos de | Em cada 100 pacientes, mais de 30 min |
 | --- | --- | --- | --- | --- |
 | Sempre 8, todo dia | 9,3 min | 3,8 min | 26,7 min | 8 |
 | Metade dos dias com 5, metade com 11 | 20,7 min | 9,3 min | 59,3 min | 25 |
 
-Nenhuma média mudou: 8 nos dois casos. O que mudou foi o mundo, e a espera é **curva** na demanda. Quem chega num
+Nenhuma média mudou. São 8 nos dois casos. O que mudou foi o mundo, e a espera é **curva** na demanda. Quem chega num
 dia calmo espera pouco, mas quem chega num dia de surto espera muito, e o ganho do dia calmo não compensa o
-estrago do dia cheio. O dia de surto responde por cerca de 70 em cada 100 pacientes — são 110 pacientes contra 50
-—, de modo que a média por paciente pesa justamente os dias ruins.
+estrago do dia cheio. O dia de surto responde por cerca de 70 em cada 100 pacientes (são 110 pacientes contra 50),
+de modo que a média por paciente pesa justamente os dias ruins.
 
-**A armadilha da mediana.** Leia a segunda linha da tabela de novo: no mundo que oscila, **o paciente típico
+**A armadilha da mediana.** Leia a segunda linha da tabela de novo. No mundo que oscila, **o paciente típico
 espera 9,3 minutos**. É o mesmo número que a alegação prometia como média. Quem olha o "paciente típico" vê a
 promessa cumprida; a diferença inteira está na cauda, onde 25 em cada 100 pacientes passam de meia hora de espera.
 
 **Reforço só nos dias de surto.** Com dois enfermeiros nos
 dias de 11 pacientes e um nos dias de 5, a espera média cai para 2,5 minutos e menos de 1 paciente em cada 100
-passa de 30 minutos. A folga não precisa ser maior: precisa estar onde está o risco.
+passa de 30 minutos. A folga não precisa ser maior; precisa estar onde está o risco.
 
-**A pergunta escondida: quantos pacientes valem uma margem?** Cada margem de erro precisa de uma unidade. Se o
+**A pergunta escondida é quantos pacientes valem uma margem.** Cada margem de erro precisa de uma unidade. Se o
 posto mede a espera média e trata cada paciente como uma observação independente, a margem fica em torno de
-±0,07 minuto; se trata cada *dia* como a unidade, ela fica em ±0,51 minuto — sete vezes maior. Qual das duas vale
-não é questão de gosto: é o mundo que decide. O teste é direto. Pegue 4 000 dias do mundo da alegação, reparta-os
+±0,07 minuto; se trata cada *dia* como a unidade, ela fica em ±0,51 minuto, sete vezes maior. Qual das duas vale
+não é questão de gosto. É o mundo que decide. O teste é direto. Pegue 4 000 dias do mundo da alegação, reparta-os
 ao acaso em duas metades e meça a diferença de espera média entre elas. Se os pacientes fossem independentes, essa
-diferença deveria andar na casa de 0,047 minuto. Ela anda em 0,216 — e a previsão pela unidade *dia*, 0,227, acerta
+diferença deveria andar na casa de 0,047 minuto. Ela anda em 0,216, e a previsão pela unidade *dia*, 0,227, acerta
 na mosca. Os pacientes de um mesmo dia compartilham a mesma demanda, e compartilhar não é ser independente.
 
-**O caso real: a central de um banco.** O posto era uma suposição; a central é observação. São 2,65 milhões de
+**O caso real é a central de um banco.** O posto era uma suposição; a central é observação. São 2,65 milhões de
 chamadas reais de uma central bancária norte-americana, contadas a cada 5 minutos, ao longo de 164 dias úteis de
 2003. A escala é construída nos 83 dias de treino (março a junho), com pico de 234 atendentes e 2 264
 agente-horas por dia, e aplicada aos 81 dias de cofre (julho a outubro). A alegação é a prática padrão do
 setor: *escalar cada meia hora pela fórmula de Erlang C sobre a taxa média do histórico garante 82% das chamadas
 atendidas em até 20 segundos, todo dia.*
 
-O que a base mostrou:
+A base mostrou isto.
 
 - **A demanda não é Poisson.** Entre dias, o desvio é de cerca de 2 900 chamadas, onde o modelo Poisson preveria
   180; a razão variância/média é 273. Parte disso é calendário (segunda-feira tem +15%), e o resíduo depois do dia
   da semana ainda tem coeficiente de variação de 6%.
 - **Jensen mora dentro da própria fórmula.** Aplicado à taxa real de cada dia, o Erlang C da alegação dá 57% em
-  média, e não 82%: o nível de serviço é côncavo na carga.
+  média, e não 82%. O nível de serviço é côncavo na carga.
 - **A unidade é o dia.** O nulo de metades dá desvio de 0,0474, contra 0,0470 previsto pelo dia e 0,0033 previsto
   pela chamada.
 - **Teste severo.** Em 400 dias simulados no mundo que a alegação descreve, nenhum ficou abaixo da meta. No mundo
@@ -3563,7 +3585,7 @@ A decisão também está medida no cofre, contra as chegadas reais:
 | Perfil do dia da semana + margem para a variação residual | 2 428 | 4 (3,7) | 96% |
 | A alegação + 12 atendentes por igual | 2 433 | 7 (7,4) | 94% |
 
-As duas últimas regras custam quase o mesmo — cerca de 7% a mais de agente-horas — e colocam a folga em lugares
+As duas últimas regras custam quase o mesmo (cerca de 7% a mais de agente-horas) e colocam a folga em lugares
 diferentes. A que põe a folga onde está o risco derruba a falha de 26 para menos de 4 dias em cada 100; a que
 espalha atendentes por igual derruba só até 7.
 
@@ -3572,25 +3594,25 @@ espalha atendentes por igual derruba só até 7.
 ### Degrau 2 — A regra do jogo
 
 **A fila, em palavras.** Um posto tem uma taxa de chegada (pacientes por hora) e uma taxa de atendimento
-(pacientes por hora). Se a chegada fica abaixo do atendimento, a fila não explode para o infinito: ela oscila em
+(pacientes por hora). Se a chegada fica abaixo do atendimento, a fila não explode para o infinito; oscila em
 torno de um tamanho médio. A espera média de longo prazo de uma fila com um atendente, chegadas sem memória e
 atendimento sem memória é
 
 $$W(\lambda)=\frac{\lambda}{\mu\,(\mu-\lambda)},$$
 
 em que $\lambda$ é a taxa de chegada e $\mu$ a de atendimento, ambas na mesma unidade de tempo. Com $\lambda = 8$,
-$\mu = 12$ e a hora como unidade, $W = 8/(12 \cdot 4) = 1/6$ de hora: 10 minutos. A condição em que a fórmula
-vale está escrita na própria expressão: $0 \le \lambda < \mu$, demanda que não muda e um horizonte longo. Quando
-$\lambda$ se aproxima de $\mu$, o denominador vai a zero e a espera explode — é a curvatura que o Degrau 1 mostrou,
+$\mu = 12$ e a hora como unidade, $W = 8/(12 \cdot 4) = 1/6$ de hora, ou 10 minutos. A condição em que a fórmula
+vale está escrita na expressão: $0 \le \lambda < \mu$, demanda que não muda e um horizonte longo. Quando
+$\lambda$ se aproxima de $\mu$, o denominador vai a zero e a espera explode; é a curvatura que o Degrau 1 mostrou,
 agora em fórmula.
 
 **Onde a fórmula falha.** Aplicada a dias que alternam entre 5 e 11 pacientes por hora, ela daria
 $(W(5)+W(11))/2 = 29,3$ minutos. A simulação dá 20,7. A diferença ensina três coisas. Primeiro, um dia de 10 horas
-não é o longo prazo da fórmula: nos dias de surto a espera fica em 28,2 minutos, não nos 55 que $W(11)$ prevê,
+não é o longo prazo da fórmula. Nos dias de surto a espera fica em 28,2 minutos, não nos 55 que $W(11)$ prevê,
 porque a fila começa vazia e tem só 10 horas para crescer. Segundo, cerca de 70% dos pacientes chegam nos dias de
-surto, e por isso a média *por paciente* pesa mais os dias ruins. Terceiro, a fórmula não está errada: ela responde
+surto, e por isso a média *por paciente* pesa mais os dias ruins. Terceiro, a fórmula não está errada; ela responde
 à espera de longo prazo com demanda constante quando o gestor perguntou quantos pacientes esperam demais nos dias
-ruins. É um erro de tipo III — a resposta certa à pergunta errada (Capítulo 7).
+ruins. É um erro de tipo III. A resposta é certa para a pergunta errada (Capítulo 7).
 
 **Jensen na fila.** A espera é convexa na demanda, e a desigualdade de Jensen (Capítulo 5) diz o que acontece com
 qualquer função convexa:
@@ -3599,8 +3621,8 @@ $$\mathbb{E}\big[W(\lambda)\big] \;\ge\; W\big(\mathbb{E}[\lambda]\big), \qquad
 \mathbb{E}[W(\lambda)] - W(\mathbb{E}[\lambda]) \approx \tfrac{1}{2} W''(\mu)\,\operatorname{Var}(\lambda).$$
 
 O lado esquerdo é a espera que quem chega realmente sente; o lado direito é a espera do dia médio. Quanto maior a
-oscilação da demanda, maior a conta — e ela não se cancela, porque o ganho e a perda não são simétricos. Cinco
-mundos com a mesma média 8 dão esperas muito diferentes:
+oscilação da demanda, maior a conta, porque o ganho e a perda não são simétricos. Cinco mundos com a mesma média 8
+dão esperas muito diferentes:
 
 | Mundo (pacientes por hora) | Espera média | Em cada 100 pacientes, mais de 30 min |
 | --- | --- | --- |
@@ -3613,34 +3635,33 @@ mundos com a mesma média 8 dão esperas muito diferentes:
 **A unidade independente decide a margem.** O tamanho efetivo de uma amostra é uma propriedade do processo, não da
 contagem (Capítulo 6). Chamadas de um mesmo dia compartilham a taxa e a fila; tratá-las como observações
 independentes é **pseudorreplicação**, e a margem sai pequena demais. Os 2,65 milhões de chamadas do cofre valem,
-em informação independente, o que valem 81 dias. O modelo nulo de metades arbitra a questão sem convenção: ele
+em informação independente, o que valem 81 dias. O modelo nulo de metades arbitra a questão sem convenção. Ele
 reparte ao acaso os dias de um mundo conhecido em duas metades, mede a diferença entre elas e diz qual das duas
-margens previstas descreve o que se viu. A margem por dia descreve; a margem por paciente é refutada pelos
-próprios dados.
+margens previstas descreve o que se viu. A margem por dia descreve; os dados refutam a margem por paciente.
 
 **O teste severo (Mayo).** Uma diferença entre dois mundos só é evidência se o procedimento teria acusado a
-diferença caso ela não existisse. A diferença entre o mundo de 8 e o mundo de 5 ou 11 é de 11,4 minutos, o que fica
+diferença caso ela não existisse. A diferença entre o mundo de 8 e o mundo de 5 ou 11 é de 11,4 minutos, e fica
 a 53 desvios do nulo; em 2 000 repartições ao acaso, o nulo nunca passou de 0,81 minuto. É a definição de um
 resultado que podia ter dado errado.
 
 **O que ficou suposto no caso real, e como se mediu o tamanho da suposição.** Nem o tempo de atendimento nem a
-paciência dos clientes estão na base — o arquivo traz contagens de chamadas, nada mais. O atendimento foi suposto
+paciência dos clientes estão na base; o arquivo traz contagens de chamadas, nada mais. O atendimento foi suposto
 exponencial com média de 4 minutos, e a paciência exponencial com média de 3. A auditoria transformou as duas
 suposições numa malha declarada de 4 × 6 pontos (atendimento de 3, 4, 5 e 6 minutos contra paciência de 1, 2, 3,
-5, 7 e 10 minutos) e reescalou as quatro regras ponto a ponto. O resultado: a regra do perfil do dia da semana com
-margem vence em 20 dos 24 pontos, e nos outros quatro — todos com paciência de 1 minuto — as quatro regras empatam
-sem que nenhuma deixe mais de 1 dia abaixo da meta. **Não há ponto de virada.** O pior caso é o canto da malha (5
-minutos de atendimento, 10 de paciência): nem a melhor das quatro regras segura a meta, com 14,2% dos dias abaixo
-dela contra 37,7% da regra da alegação — em cada 100 dias, 38 falham com a escala da alegação e 14 com a regra
+5, 7 e 10 minutos) e reescalou as quatro regras ponto a ponto. Por isso a regra do perfil do dia da semana com
+margem vence em 20 dos 24 pontos, e nos outros quatro (todos com paciência de 1 minuto) as quatro regras empatam
+sem que nenhuma deixe mais de 1 dia abaixo da meta. **Não há ponto de virada.** O canto da malha é o pior caso,
+com 5 minutos de atendimento e 10 de paciência. Nem a melhor das quatro regras segura a meta, com 14,2% dos dias abaixo
+dela contra 37,7% da regra da alegação. Em cada 100 dias, 38 falham com a escala da alegação e 14 com a regra
 certa, que custa 7,2% a mais de agente-horas. A paciência governa o tamanho do efeito; o tempo de atendimento
 quase não mexe (com a paciência fixada, a fração da regra vencedora anda no máximo 0,9 ponto percentual em toda a
-faixa). O que a malha **não** mede: a família das distribuições (as duas continuam exponenciais, com coeficiente
+faixa). O que a malha **não** mede é a família das distribuições (as duas continuam exponenciais, com coeficiente
 de variação 1) e a dependência entre paciência e atendimento. E o domínio de saúde do exemplo original ficou de
 fora, porque os portais públicos de dados estavam fora do alcance da rede.
 
-**A reprodução.** O ciclo inteiro passou pelos invariantes vigentes naquele momento e reproduziu os seis números que o material do
-curso publicava, com a mesma contagem de pacientes nos dois mundos (161 867 e 160 220) e o mesmo hash nas duas
-execuções — o que faz de cada número acima uma medida conferível, e não uma narrativa.
+**A reprodução.** O ciclo inteiro passou pelos invariantes vigentes naquele momento e reproduziu os seis números
+que o material do curso publicava, com contagens idênticas de pacientes nos dois mundos (161 867 e 160 220) e o
+mesmo hash nas duas execuções, e isso faz de cada número acima uma medida conferível, e não uma narrativa.
 
 ---
 
@@ -3671,12 +3692,12 @@ teste severo: diferenca observada = 10.2 min, 49.4 desvios do nulo, fracao do nu
 cauda: 8 em 100 pacientes esperam mais de 30 min no mundo 8; 24 em 100 no mundo 5 ou 11
 ```
 
-Leia linha por linha. **9,1 contra 19,3**: a mesma demanda média de 8 pacientes por hora, e mais que o dobro da
-espera, só porque o mundo oscila. **8% contra 24%** e **8,1 contra 55,8** no percentil 90: a média separa os dois
-mundos, e a cauda separa muito mais. **Reforço no surto: 2,5 min e 0%** — a folga onde está o risco zera a cauda.
-**0,2062, 0,1928 e 0,0473**: o desvio medido no nulo de metades é cinco vezes maior que a margem da unidade
+Leia linha por linha. **9,1 contra 19,3.** A demanda média é a mesma, 8 pacientes por hora, e a espera mais que
+dobra só porque o mundo oscila. **8% contra 24%** e **8,1 contra 55,8** no percentil 90. A média separa os dois
+mundos, e a cauda separa muito mais. **Reforço no surto é 2,5 min e 0%**, e a folga onde está o risco zera a cauda.
+**0,2062, 0,1928 e 0,0473.** O desvio medido no nulo de metades é cinco vezes maior que a margem da unidade
 "paciente". Quem medisse a espera tratando cada paciente como independente declararia uma precisão que o mundo não
-tem. **10,2 min, 49,4 desvios, 0,0000**: a diferença entre os mundos é grande demais para vir do acaso — o
+tem. **10,2 min, 49,4 desvios, 0,0000.** A diferença entre os mundos é grande demais para vir do acaso, e o
 procedimento podia ter dado errado e não deu.
 
 **Declaração de divergência.** A edição anterior deste livro e o `h0-lab0/README.md` registram 9,3 min e 20,7 min
@@ -3688,7 +3709,7 @@ em cada 100, medianas de **3,7 e 8,1**, percentis 90 de **26,1 e 55,8**, e, no n
 margem por paciente coincide até a terceira casa, porque é uma conta de desvio padrão sobre o número de pacientes.
 
 **A base real também roda em Rust.** O laboratório acima é o mundo simulado; a central do banco é medida pelo
-mesmo crate, lendo `dados-reais/bank_calls.csv` com `cargo run --release --bin labs -- --banco`. Saída medida:
+crate `labs`, lendo `dados-reais/bank_calls.csv` com `cargo run --release --bin labs -- --banco`. Saída medida.
 
 ```text
 == H0 real :: a central de chamadas do banco, em Rust ==
@@ -3699,9 +3720,9 @@ dispersao entre dias: Var/media = 246.7 no cofre, 272.6 no treino, 261.1 em todo
 nulo de metades: por dia = 0.0441 | por chamada = 0.0006
 ```
 
-A **fila com desistência** e as quatro regras de escala (R0 a R3) também rodam em Rust, em
+A **fila com desistência** e as quatro regras de escala (R0 a R3) rodam em Rust também, em
 `crates/stochology-book/src/fila.rs`, com atendimento exponencial de 240 s, paciência exponencial de 180 s, alvo
-de 20 s, meta de 80% e semente 2003. Saída medida com `cargo run --release --bin labs -- --fila`:
+de 20 s, meta de 80% e semente 2003. Saída medida com `cargo run --release --bin labs -- --fila`.
 
 ```text
 == H0 real :: a fila com desistencia e as quatro regras de escala (R0 a R3) ==
@@ -3725,32 +3746,33 @@ R2                 2428    287             95.0%                   4.9%         
 R3                 2433    246             92.4%                   8.6%                 2.2               4            0           0
 ```
 
-Quatro leituras, com as duas divergências declaradas. **(1)** Os agente-horas batem exatamente com o registro:
+Quatro leituras, com as duas divergências declaradas. **(1)** Os agente-horas batem com o registro:
 2 264, 2 261, 2 428 e 2 433 por dia nas quatro regras. **(2)** A ordem é a do registro: R2 é a melhor, R3 perde
 para R2 gastando o mesmo, e a alegação (R0) é a pior. **(3)** Os níveis de serviço saem um pouco abaixo do
-publicado — 83,9% contra 86% em R0, 91,6% contra 96% em R2 — e as falhas por dia um pouco acima: 30,9% contra
+publicado (83,9% contra 86% em R0, 91,6% contra 96% em R2) e as falhas por dia um pouco acima: 30,9% contra
 26% em R0, 19,8% contra 12% em R1, 4,9% contra 3,7% em R2, 9,9% contra 7,4% em R3. **(4)** A verificação
 independente, com chegadas de Poisson evento a evento, chega a R2 com 95,0% e 4,9% de dias falhos, encostando no
 publicado. O registro mediu com outro motor de simulação e outra semente; a diferença fica declarada, e o que
-importa para a decisão — R2 ganha com o mesmo custo — se sustenta nos dois motores. O instrumento foi
+importa para a decisão, R2 ganha com o mesmo custo, se sustenta nos dois motores. O instrumento foi
 reconstruído a partir do código aposentado, que continua no histórico (`git show HEAD:h0-real/estocologia/central.py`),
 com duas verificações extras provando o motor: a espera média sem desistência de R0 sai em **1 040 s** contra os
 956 s publicados, e o mundo da alegação dá **96,3%** e zero dia falho em 81, contra 97% e zero. Uma diferença de
-grade fica registrada: este instrumento inclui o intervalo das 21:00, e por isso conta 2 654 950 chamadas no
+grade fica registrada. Este instrumento inclui o intervalo das 21:00, e por isso conta 2 654 950 chamadas no
 cofre contra as 2 649 354 do instrumento de Erlang C, que corta essa linha.
 
-O instrumento da Tabela de Erlang C reproduz em Rust os números centrais do $H_0$ real: **82%** no perfil médio (0,8193), **57%** quando
-a mesma escala encontra o dia real (0,5683) e **65%** dos dias abaixo da meta (0,6543); o desvio entre dias de
-**2 841** contra os **181** que Poisson previria; e a `Var/média` de **272,6 no treino**, que é o 273 publicado —
-no cofre ela é 246,7 e na série toda 261,1, e o motivo é o recorte da janela. O nulo de metades por dia sai em
+O instrumento da Tabela de Erlang C reproduz em Rust os números centrais do $H_0$ real. O perfil médio fica em
+**82%** (0,8193), a escala da alegação encontra o dia real em **57%** (0,5683) e **65%** dos dias ficam abaixo da
+meta (0,6543); o desvio entre dias de
+**2 841** contra os **181** que Poisson previria; e a `Var/média` de **272,6 no treino**, que é o 273 publicado.
+No cofre ela é 246,7 e na série toda 261,1, e o motivo é o recorte da janela. O nulo de metades por dia sai em
 0,0441 contra os 0,0474 publicados (esquema de repartição diferente), e o nulo por chamada desta conta é 0,0006
 pela binomial, contra os 0,0033 do roteiro, que usavam outro desenho de correlação intradiária. As duas
 divergências ficam declaradas, e o que segue vindo do registro antigo é a tabela de decisão com os esquemas R0 a
 R3, que é simulação de fila com desistência e não tem instrumento em Rust ainda.
 Os outros valores diferem porque o gerador de números é outro (SplitMix64 aqui, PCG64 no material original) e
-porque a espera média por paciente no mundo oscilante é razão de somas de cauda pesada: rodando o mesmo
-instrumento com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença
-está dentro da variação do próprio instrumento, e os dois conjuntos de números ficam registrados.
+porque a espera média por paciente no mundo oscilante é razão de somas de cauda pesada. Rodando o instrumento
+com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença
+está dentro da variação do instrumento, e os dois conjuntos de números ficam registrados.
 
 **Exercícios.**
 
@@ -3773,9 +3795,9 @@ está dentro da variação do próprio instrumento, e os dois conjuntos de núme
 
 - A mesma demanda média pode dar 9 ou 20 minutos de espera: a espera é convexa na demanda, e quem olha só a média
   escolhe um mundo que não existe.
-- A mediana engana: no mundo que oscila, o paciente típico espera exatamente o número que a alegação prometia como
+- A mediana engana. No mundo que oscila, o paciente típico espera justo o número que a alegação prometia como
   média, e a diferença inteira fica na cauda.
-- A margem se calcula na unidade independente, que é o dia, não o paciente; o modelo nulo de metades arbitra a
+- A margem se calcula na unidade independente, que é o dia, e não o paciente; o modelo nulo de metades arbitra a
   escolha e refuta a pseudorreplicação.
 - Em 2,65 milhões de chamadas reais, a escala padrão do setor falha em 26 de cada 100 dias, e gastar cerca de 7% a
   mais de agente-horas onde está o risco reduz isso a menos de 4.
@@ -3784,19 +3806,19 @@ está dentro da variação do próprio instrumento, e os dois conjuntos de núme
 
 **Objetivos.** Ao fim deste capítulo você deve saber medir o arrasto da volatilidade, distinguir a média do
 conjunto da trajetória típica, calcular a alavancagem em que um único dia destrói o capital e reconhecer um viés de
-seleção — inclusive no caso incômodo em que o ajuste acerta o número e continua sem valer como evidência.
+seleção, inclusive no caso incômodo em que o ajuste acerta o número e continua sem valer como evidência.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
 **A promessa da alavancagem.** Um investidor abre 115 anos de cotações do Dow Jones (de 1885 ao fim de 1999,
-31 919 pregões) e calcula a média dos retornos diários: 0,0668 ao ano, em soma aritmética. A conclusão parece
+31 919 pregões) e calcula a média dos retornos diários, 0,0668 ao ano em soma aritmética. A conclusão parece
 inevitável: *"o índice rende 0,07 por ano; alavancado 3 vezes, rende 0,20 por ano, e quem segura por décadas
 sempre ganha."*
 
-Só que 0,20 é o número do dia médio visto de fora. O que uma **trajetória** vive, ao longo do tempo, é outra
-coisa. Medidos nos mesmos 31 919 pregões, com rebalanceamento diário:
+Só que 0,20 é o número do dia médio visto de fora. Ao longo do tempo, uma **trajetória** vive outra
+coisa. Medidos nesses 31 919 pregões, com rebalanceamento diário:
 
 | Alavancagem | A soma aritmética promete | O crescimento realizado no tempo | O que a volatilidade cobra |
 | --- | --- | --- | --- |
@@ -3805,8 +3827,8 @@ coisa. Medidos nos mesmos 31 919 pregões, com rebalanceamento diário:
 | 3× | 0,2004 ao ano | 0,0601 ao ano | 0,1403 ao ano |
 
 A alavancagem de 3 vezes promete 20% ao ano e entrega 6%. A diferença, 14 pontos por ano, é o **arrasto da
-volatilidade**: um pedágio que se paga todos os dias, sem exceção, e que cresce mais rápido que a alavancagem
-(mais adiante: com o quadrado dela). Note também que alavancar 3 vezes rende **menos** que alavancar 2: existe um
+volatilidade**, um pedágio que se paga todos os dias, sem exceção, e cresce mais rápido que a alavancagem
+(mais adiante, com o quadrado dela). Alavancar 3 vezes rende **menos** que alavancar 2. Existe um
 ponto ótimo, e passar dele destrói crescimento.
 
 **A sexta-feira que apagou 68%.** Em 19 de outubro de 1987 o índice caiu 22,61% num único dia. Em cada 100 reais
@@ -3814,8 +3836,8 @@ de capital:
 
 - sem alavancagem, restam 77 reais;
 - com 2 vezes, restam 55 reais;
-- com 3 vezes, restam **32 reais** — 68 reais destruídos em uma sessão;
-- com 4,42 vezes, restam zero. Acima dessa alavancagem, um único dia basta: o capital vai a zero e não volta,
+- com 3 vezes, restam **32 reais**, 68 reais destruídos em uma sessão;
+- com 4,42 vezes, restam zero. Acima dessa alavancagem basta um único dia, e o capital vai a zero sem volta,
   porque não se ganha nada de zero.
 
 **Quem segura por 20 anos.** O teste mais generoso para a alegação é o horizonte longo. Em cada 100 coortes de 20
@@ -3827,19 +3849,19 @@ anos (o investidor compra no primeiro pregão de um mês e vende 20 anos depois)
 | 2× | 78 | 2,67× | 7,8× |
 | 3× | 64 | 2,10× | **19,1×** |
 
-A média de 19 vezes convive com uma mediana de 2,1: o número médio é puxado por um punhado de inícios felizes, e
-a coorte típica — a que o investidor tem na mão — mal dobra. Da mesma forma, cerca de 35,7 em cada 100 coortes alavancadas
-acabam abaixo do ponto de partida: o complemento exato dos 64,3% que terminam acima.
+A média de 19 vezes convive com uma mediana de 2,1. O número médio é puxado por um punhado de inícios felizes, e
+a coorte típica que o investidor tem na mão mal dobra. Cerca de 35,7 em cada 100 coortes alavancadas
+acabam abaixo do ponto de partida, o complemento exato dos 64,3% que terminam acima.
 
-**Quantas observações independentes são?** As coortes se sobrepõem — o mesmo ano entra em dezenas de
-janelas de 20 anos —, e por isso as 1 134 coortes do treino valem só cerca de **5,8 blocos
-independentes** (`h1-real/README.md`). Contar coortes não é contar observações: uma margem calculada
+**Quantas observações independentes são?** As coortes se sobrepõem, já que um ano entra em dezenas de
+janelas de 20 anos, e por isso as 1 134 coortes do treino valem só cerca de **5,8 blocos
+independentes** (`h1-real/README.md`). Contar coortes não é contar observações. Uma margem calculada
 sobre 1 134 seria cerca de 14 vezes menor que a honesta ($\sqrt{1\,134/5{,}8}$). É a lição de unidade
 independente do Capítulo 6, agora no tempo.
 
 **A Grande Depressão, em frequências naturais.** Do pico de 3 de setembro de 1929 ao fundo de 8 de julho de 1932,
-cada 100 reais investidos viram **11 reais** sem alavancagem — e **2,5 centavos** com 3 vezes. Não é um número de
-simulação: é a série real, e é o tipo de dia que o arrasto médio não registra.
+cada 100 reais investidos viram **11 reais** sem alavancagem, e **2,5 centavos** com 3 vezes. Nenhum desses números
+sai de simulação. A série é real, e o arrasto médio não registra um dia assim.
 
 **O programa de emprego que parecia um desastre.** Em 1976 e 1977, um programa americano de treinamento
 profissional (NSW) inscreveu trabalhadores em situação difícil. Para saber se funcionou, o caminho óbvio é
@@ -3851,11 +3873,11 @@ comparar os participantes com trabalhadores de uma pesquisa nacional (CPS), em 1
 | Sorteio: 260 controles, também candidatos, fora do programa | 65 | 4 555 dólares |
 | Pesquisa nacional (15 992 pessoas) | 86 | 14 847 dólares |
 
-Lida crua, a tabela condena o programa: os participantes estão 10,7 pontos percentuais **menos** empregados que a
-população e ganham 8 498 dólares menos. Lida pelo sorteio, a tabela absolve o programa: entre candidatos
-parecidos, quem entrou ficou 11,1 pontos mais empregado e ganhou 1 794 dólares a mais. A distância entre as duas
-leituras — 10 292 dólares por pessoa — não é efeito do treino. É a diferença entre quem se candidata a um programa
-de treinamento e o trabalhador médio do país.
+Lida crua, a tabela condena o programa. Os participantes estão 10,7 pontos percentuais **menos** empregados que a
+população e ganham 8 498 dólares menos. Lida pelo sorteio, a tabela absolve o programa. Entre candidatos
+parecidos, quem entrou ficou 11,1 pontos mais empregado e ganhou 1 794 dólares a mais. Entre as duas
+leituras há uma distância de 10 292 dólares por pessoa, e essa distância não é efeito do treino. É a diferença
+entre quem se candidata a um programa de treinamento e o trabalhador médio do país.
 
 **O placebo que revela a diferença.** Antes de existir o programa, em 1975, em cada 100 participantes 40 tinham
 emprego, contra 89 em cada 100 da pesquisa nacional. Toda a diferença que o ajuste vai tentar consertar já estava
@@ -3868,52 +3890,52 @@ lá, três anos antes de o programa começar.
 **Alavancagem rebalanceada.** Manter alavancagem constante $L$ significa multiplicar a riqueza por $1 + L r_t$
 a cada pregão, em que $r_t$ é o retorno simples do índice. Duas quantidades ficam separadas:
 
-- a **média aritmética** do retorno, $\mu = \mathbb{E}[r]$, que é o que a soma dos retornos promete;
-- a **taxa de crescimento temporal**, $g_L = \mathbb{E}\big[\ln(1 + L r)\big]$, que é o que uma trajetória
+- a **média aritmética** do retorno, $\mu = \mathbb{E}[r]$, que a soma dos retornos promete;
+- a **taxa de crescimento temporal**, $g_L = \mathbb{E}\big[\ln(1 + L r)\big]$, que uma trajetória
   experimenta no longo prazo.
 
-Elas não são a mesma coisa em nenhum mundo com volatilidade:
+Elas não coincidem em nenhum mundo com volatilidade:
 
 $$g_L \;\approx\; L\mu \;-\; \frac{L^2\sigma^2}{2}, \qquad
 \text{arrasto}_L \;=\; L\mu - g_L \;\approx\; \frac{L^2\sigma^2}{2}.$$
 
 O arrasto cresce com o **quadrado** da alavancagem. Medido no treino (desvio diário $\sigma = 0,010496$, ou
-0,1749 ao ano): os arrastos observados são 0,0153, 0,0617 e 0,1403, contra 0,0153, 0,0612 e 0,1377 previstos pela
-fórmula — a conta de segunda ordem já pega o essencial, e sobra pouco para os momentos mais altos da distribuição.
-A condição em que a aproximação vale é retornos pequenos e nenhum salto grande; num dia de −22,6% ela deixa de
-descrever o que aconteceu e passa só a subestimar o estrago.
+0,1749 ao ano), os arrastos observados são 0,0153, 0,0617 e 0,1403, contra 0,0153, 0,0612 e 0,1377 previstos pela
+fórmula. A conta de segunda ordem já pega o essencial, e sobra pouco para os momentos mais altos da distribuição.
+A aproximação vale para retornos pequenos e nenhum salto grande; num dia de −22,6% ela deixa de
+descrever o acontecido e passa só a subestimar o estrago.
 
 **Não ergodicidade, em uma frase.** A média do conjunto de todos os investidores não é a média do tempo de
-nenhum deles. A média de 19 vezes no 3× é uma média de conjunto: ela é feita de um punhado de inícios muito
-felizes e de muitas coortes que mal dobraram, e ninguém vive a média. Quando existe um **estado absorvente** — a
-ruína, de onde não se sai —, a média do conjunto deixa de ser uma descrição útil da vida real.
+nenhum deles. A média de 19 vezes no 3× é uma média de conjunto, feita de um punhado de inícios muito
+felizes e de muitas coortes que mal dobraram, e ninguém vive a média. Quando existe um **estado absorvente** (a
+ruína, de onde não se sai), a média do conjunto deixa de ser uma descrição útil da vida real.
 
 **Ruína em um dia.** Num mundo de retornos diários, a alavancagem que zera a riqueza num único pregão é
 
 $$L_{\text{ruína}} = \frac{1}{\min_t |r_t|},$$
 
-e no treino ela vale 4,42. Acima disso, a ruína não é questão de probabilidade: é uma data marcada no calendário.
+e no treino ela vale 4,42. Acima disso, a ruína deixa de ser questão de probabilidade e passa a ser uma data marcada no calendário.
 
 **Kelly.** A alavancagem que maximiza a taxa temporal é $L^* = \arg\max_L g_L$. Na posterior do projeto, o
 intervalo de 90% vai de **1,26 a 3,44**, com mediana **2,35**; no dia a dia, o Kelly empírico da série é 2,14.
-Alavancar 3 vezes está dentro do intervalo, mas no seu extremo superior — e o projeto A decidiu por bem menos que
-isso (uma alavancagem de 0,26 no exercício simulado da mesma lente).
+Alavancar 3 vezes está dentro do intervalo, mas no seu extremo superior; o projeto A decidiu por bem menos que
+isso, uma alavancagem de 0,26 no exercício simulado dessa lente.
 
-**O teste severo.** O mundo da alegação diz: a riqueza cresce 3 vezes a soma aritmética anual, sem arrasto. Nele,
+**O teste severo.** O mundo da alegação afirma que a riqueza cresce 3 vezes a soma aritmética anual, sem arrasto. Nele,
 a fração das coortes de 20 anos que terminam acima do ponto de partida tem média **0,933** (com o quantil 1% em
 0,656). No índice real, a fração é **0,646**, e o procedimento teria acusado esse valor? Só em 0,95% das réplicas
-(p = 0,0095): o resultado é severo.
+(p = 0,0095). O resultado é severo.
 
-**O que a refutação não alcança.** Delimitar o que caiu é parte do resultado. A alegação refutada é "rende 3
-vezes a média" e "sempre ganha", não "alavancar nunca compensa": sem custo de financiamento, 2× e 3× ainda
-crescem mais que 1× no tempo (0,0719 e 0,0601 contra 0,0515), e o cofre de 2000 a 2023 até favoreceu a alegação —
-o previsor sem arrasto teve habilidade 0,44, contra 0,40 do modelo. Duas ausências da base favorecem a alegação e
-estão declaradas: a série é só de preço (sem dividendos, o que subestima o retorno total em cerca de 3% a 4% ao
-ano no século XX) e não há custo de financiamento da alavancagem.
+**O que a refutação não alcança.** Delimitar o alvo que caiu é parte do resultado. A alegação refutada é "rende 3
+vezes a média" e "sempre ganha". "Alavancar nunca compensa" sobrevive à refutação. Sem custo de financiamento, 2× e 3× ainda
+crescem mais que 1× no tempo (0,0719 e 0,0601 contra 0,0515), e o cofre de 2000 a 2023 até favoreceu a alegação.
+O previsor sem arrasto teve habilidade 0,44, contra 0,40 do modelo. Duas ausências da base favorecem a alegação e
+estão declaradas. A série é só de preço (sem dividendos, e isso subestima o retorno total em cerca de 3% a 4% ao
+ano no século XX), e não há custo de financiamento da alavancagem.
 
 **Quem paga o erro.** Os 65,5% da riqueza somada das coortes vêm dos 10% melhores inícios; as piores datas de
 entrada são todas de 1929 (3 de setembro, 1º de julho, 1º de agosto). Em cada 100 coortes de 20 anos, terminam
-abaixo do início: 4 sem alavancagem, 22 com 2× e 36 com 3×. Quem entrou no pior mês teve o mesmo retorno médio do
+abaixo do início 4 sem alavancagem, 22 com 2× e 36 com 3×. Quem entrou no pior mês teve retorno médio igual ao do
 mercado e não sobreviveu para vê-lo.
 
 **A decomposição do LaLonde.** Comparar participantes com não participantes dá:
@@ -3922,39 +3944,39 @@ $$\underbrace{\bar Y_{\text{trat}} - \bar Y_{\text{não trat}}}_{\text{diferenç
 = \underbrace{Y_1 - Y_0}_{\text{efeito causal}}
 + \underbrace{\mathbb{E}[Y_0 \mid T=1] - \mathbb{E}[Y_0 \mid T=0]}_{\text{viés de seleção}}.$$
 
-O cofre — os 260 controles sorteados do NSW — é fora da amostra **por construção**, não fora do tempo: essas 260
-pessoas estiveram fora do ajuste desde o primeiro dia. O sorteio zera o segundo termo por construção: os controles
-foram sorteados entre os candidatos, então $\mathbb{E}[Y_0 \mid T=1] = \mathbb{E}[Y_0 \mid T=0]$. O ajuste por
-escore de propensão não zera nada: ele
+O cofre, os 260 controles sorteados do NSW, fica fora da amostra **por construção**, e esse afastamento não é
+temporal. Essas 260 pessoas estiveram fora do ajuste desde o primeiro dia. O sorteio zera o segundo termo por
+construção. Os controles foram sorteados entre os candidatos, então $\mathbb{E}[Y_0 \mid T=1] = \mathbb{E}[Y_0 \mid T=0]$. O ajuste por
+escore de propensão não zera nada. Ele
 **estima** esse termo a partir do que é observável, e o placebo de 1975 mostra que a estimativa erra. Com o
-emprego de 1975 como desfecho — um desfecho que o programa não podia ter causado —, o ajuste dá −12,3 pontos
+emprego de 1975 como desfecho (um desfecho que o programa não podia ter causado), o ajuste dá −12,3 pontos
 (p = 0,04), enquanto o experimento dá +8,5, com intervalo de −0,6 a +17,5, compatível com zero.
 
-**Acertar o número não é ter evidência.** Os três números, cada um com seu intervalo de 95%: a comparação crua dá
+**Acertar o número não é ter evidência.** Os três números trazem cada um o seu intervalo de 95%. A comparação crua dá
 −10,7 pontos [−17,0; −4,5]; o ajuste por propensão dá +9,6 [−0,6; +20,8]; o experimento sorteado dá +11,1
-[+2,6; +19,6]. O ajuste chega perto do experimento — e continua sem valer como evidência. Mas um tratamento **inerte** teria dado +9,0, dentro da faixa do nulo, de −10,3 a +11,9 (p = 0,08): o
+[+2,6; +19,6]. O ajuste chega perto do experimento e continua sem valer como evidência. Mas um tratamento **inerte** teria dado +9,0, dentro da faixa do nulo, de −10,3 a +11,9 (p = 0,08). O
 procedimento não podia ter dado errado de forma grosseira, e por isso o acerto não conta como evidência (Mayo). O
-ajuste se apoia em cerca de 103 controles efetivos, e 72% do CPS está abaixo do menor escore dos tratados: na
-prática, ele compara os tratados com um punhado de pessoas do CPS que se parecem com eles — e essas pessoas são
+ajuste se apoia em cerca de 103 controles efetivos, e 72% do CPS está abaixo do menor escore dos tratados. Na
+prática, ele compara os tratados com um punhado de pessoas do CPS que se parecem com eles; essas pessoas são
 diferentes em coisas que o modelo não vê.
 
 **O que o cofre mostrou.** Com os 260 controles sorteados, a habilidade do modelo é +0,18 (previu 0,655 de
 emprego, o observado foi 0,646); a regressão logística fica em +0,09 e o contrafactual cru do CPS, em −0,002. O
 k-anonimato das linhas vai de 1 a 11 depois da generalização de quase identificadores.
 
-**Justiça, medida.** As taxas de falso negativo diferem por grupo: 0,72 para hispânicos, 0,50 para negros e 0,57
+**Justiça, medida.** As taxas de falso negativo diferem por grupo. São 0,72 para hispânicos, 0,50 para negros e 0,57
 para os demais. Igualá-las capta mais 22 desempregados e custa 87 falsos positivos. É o trilema de Chouldechova
-com números: não há como acertar as três coisas ao mesmo tempo, e alguém vai pagar a escolha (Capítulo 11).
+medido em números. Não há como acertar as três coisas de uma vez, e alguém vai pagar a escolha (Capítulo 11).
 
 **Os dois projetos deste capítulo passaram.** O da bolsa e o do emprego atravessaram os cinco portões do H1 em
 domínio real e foram aprovados pela banca adversarial, com os números acima registrados no momento em que foram
-produzidos. O terceiro projeto do horizonte — os incêndios dinamarqueses — é o Capítulo 18, e ele foi reprovado.
+produzidos. O terceiro projeto do horizonte, os incêndios dinamarqueses, é o Capítulo 18, e ele foi reprovado.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
-O laboratório lê as três bases públicas e mede tudo o que foi citado acima: o crescimento temporal e o arrasto,
+O laboratório lê as três bases públicas e mede todas as quantidades citadas acima: o crescimento temporal e o arrasto,
 as coortes de 20 anos de início mensal, o choque de 1987, a Depressão, o mundo da alegação por reamostragem de
 anos e a decomposição crua do NSW contra o CPS. O código está em `crates/stochology-book/src/cap17.rs`; a saída abaixo foi
 medida com `cargo run --release` no crate de rascunho `~/tmp/labs-cap17`.
@@ -3995,11 +4017,11 @@ placebo de 1975 (emprego): NSW tratados 0.400, NSW controles 0.315, CPS 0.891; d
 ```
 
 Leia linha por linha. **0,2004, 0,0601, 0,1403**: a soma aritmética do 3× paga 20% ao ano e a volatilidade fica com
-14 — o arrasto é maior que o próprio ganho. **0,678** e **4,42**: um dia basta para destruir 68% do capital
+14, mais do que o ganho. **0,678** e **4,42**: um dia basta para destruir 68% do capital
 alavancado 3 vezes, e acima de 4,42 vezes basta para zerá-lo. **2,10 contra 19,1**: no 3×, a coorte típica mal
 dobra enquanto a média do conjunto chega a 19 vezes. **0,6429 e 0,9286**: no índice real, 64 em cada 100 coortes
-de 20 anos terminam acima do ponto de partida; no mundo em que a alegação é verdadeira, 93 em cada 100 — e a
-diferença é o arrasto. **−0,107 e +0,111**: a mesma pergunta sobre o mesmo programa dá dois sinais opostos, e a
+de 20 anos terminam acima do ponto de partida; no mundo em que a alegação é verdadeira, 93 em cada 100, e a
+diferença é o arrasto. **−0,107 e +0,111**: a pergunta sobre o programa dá dois sinais opostos, e a
 diferença de −10 292 dólares é o viés de seleção, medido e não suposto.
 
 **Declaração de divergência.** O `h1-real/README.md` registra 0,051, 0,072 e 0,060 de crescimento ao ano;
@@ -4022,11 +4044,11 @@ aparecem agora, com a data de cada uma.
    prever o arrasto de 1×, 2× e 3× e compare com 0,0153, 0,0617 e 0,1403 medidos. Em que alavancagem o arrasto
    começa a superar o ganho aritmético?
 2. *(Conta)* Qual alavancagem zera o capital no dia de −22,61%? E no pior dia de 1929? Explique por que "ruína"
-   é um estado absorvente e o que isso faz com a média do conjunto.
-3. *(Conceito)* Explique a frase "quem segura por décadas sempre ganha" e diga exatamente o que a refutação
-   alcança e o que ela deixa de pé.
+   é um estado absorvente e o efeito disso sobre a média do conjunto.
+3. *(Conceito)* Explique a frase "quem segura por décadas sempre ganha" e distinga o que a refutação
+   derruba daquilo que ela deixa de pé.
 4. *(Laboratório)* Rode `crates/stochology-book/src/cap17.rs` e refaça a tabela de coortes com horizonte de 10 anos
-   (troque a constante `HORIZONTE`). O que acontece com a fração de coortes 3× acima do início? E com a
+   (troque a constante `HORIZONTE`). Como fica a fração de coortes 3× acima do início? E a
    mediana?
 5. *(Conceito)* Por que o placebo com o emprego de 1975 mede o viés de seleção? Escreva a resposta usando a
    decomposição da diferença crua.
@@ -4035,34 +4057,34 @@ aparecem agora, com a data de cada uma.
 
 **Resumo.**
 
-- A alavancagem multiplica a média aritmética, mas o tempo cobra o arrasto $\tfrac{1}{2}L^2\sigma^2$: 3× promete
+- A alavancagem multiplica a média aritmética, mas o tempo cobra o arrasto $\tfrac{1}{2}L^2\sigma^2$. O 3× promete
   0,20 ao ano e entrega 0,06.
 - Um único dia pode destruir 68% do capital alavancado 3 vezes; acima de $1/\min|r|$ (4,42 aqui) a ruína é
   questão de calendário, não de probabilidade.
-- Média de conjunto e trajetória típica se separam: 19,1× de média convivem com 2,10× de mediana, e cerca de 35,7 em cada 100
+- Média de conjunto e trajetória típica se separam. Os 19,1× de média convivem com 2,10× de mediana, e cerca de 35,7 em cada 100
   coortes 3× terminam abaixo do início.
-- Uma refutação precisa dizer o que refuta: "rende 3 vezes" e "sempre ganha" caem; "alavancar nunca compensa" não.
-- Acertar o número não basta: no LaLonde, o ajuste por propensão dá +9,6 pontos, e um tratamento inerte teria dado
+- Uma refutação precisa declarar o alvo: "rende 3 vezes" e "sempre ganha" caem; "alavancar nunca compensa" não.
+- Acertar o número não basta. No LaLonde, o ajuste por propensão dá +9,6 pontos, e um tratamento inerte teria dado
   +9,0; o placebo de 1975 mostra que o viés de seleção continua lá, valendo 10 292 dólares por pessoa.
 
 ## Capítulo 18. Horizonte H1, parte 2: os incêndios dinamarqueses e a arte de reprovar o próprio modelo
 
-**Objetivos.** Ao fim deste capítulo você deve saber por que uma janela limpa é evidência fraca, o que uma cauda
-com $\alpha$ abaixo de 2 faz com qualquer média, como a regra de Laplace transforma "nunca aconteceu" em "uma
-chance em 38" e por que reprovar o próprio modelo é um resultado, não um fracasso.
+**Objetivos.** Ao fim deste capítulo você deve saber por que uma janela limpa é evidência fraca, qual é o efeito de
+uma cauda com $\alpha$ abaixo de 2 sobre qualquer média, como a regra de Laplace transforma "nunca aconteceu" em "uma
+chance em 38" e por que reprovar o seu modelo conta como resultado.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
 **A resseguradora que viu três anos calmos.** No fim de 1988, uma resseguradora olha a série de sinistros de
-incêndio da Copenhagen Re e o trecho que lhe interessa: a camada que ela vende, "100 acima de 50". Em palavras: ela
+incêndio da Copenhagen Re e o trecho que lhe interessa, a camada que ela vende, "100 acima de 50". Em palavras, ela
 paga a parte de cada sinistro que fica **entre 50 e 150 milhões de coroas dinamarquesas** de 1985. A retenção de 50
-milhões fica no percentil 99,7 das perdas — é a ponta da distribuição.
+milhões fica no percentil 99,7 das perdas, na ponta da distribuição.
 
-O que o analista vê é isto: **36 meses seguidos, de 1986 a 1988, sem um único sinistro sequer tocar a camada.**
-A conclusão que ele escreve é a de sempre: *"o risco é desprezível — algo como um mês atingido por século — e
-podemos vender três vezes o nosso capital."*
+O analista vê **36 meses seguidos, de 1986 a 1988, sem um único sinistro sequer tocar a camada.** A conclusão que
+ele escreve repete a de sempre: *"o risco é desprezível (algo como um mês atingido por século) e podemos vender três
+vezes o nosso capital."*
 
 **O que a série inteira diz.** A história da camada, contada em meses atingidos:
 
@@ -4074,43 +4096,43 @@ podemos vender três vezes o nosso capital."*
 | 1989-1990 (o cofre) | 24 | 2 | 152,4 M |
 
 Os dois meses do cofre têm nome e data: **agosto de 1989, 152,4 milhões**, e outubro de 1990, 144,7 milhões. O
-primeiro cai oito meses depois de a decisão de alavancar ser tomada.
+primeiro cai oito meses depois da decisão de alavancar.
 
 **Em cada 100 janelas.** Aqui está o erro central da alegação, e ele é de contagem. No treino inteiro, a camada
-foi atingida em 5 dos 108 meses — cerca de 4,6 meses em cada 100. Nesse mundo, **cerca de 18 em cada 100 janelas
-de três anos saem limpas** por puro acaso. Ver uma janela limpa não é ver um mundo seguro: é ver o que se espera
-ver num mundo perigoso com mais frequência do que se imagina.
+foi atingida em 5 dos 108 meses, cerca de 4,6 meses em cada 100. Nesse mundo, **cerca de 18 em cada 100 janelas
+de três anos saem limpas** por puro acaso. Ver uma janela limpa não é ver um mundo seguro. É ver o resultado
+esperado num mundo perigoso, com mais frequência do que se imagina.
 
 **A regra de Laplace.** Quantas chances por mês sobram depois de 36 meses limpos? A regra de sucessão responde:
 
 $$\frac{0+1}{36+2} = \frac{1}{38} \approx 0{,}0263.$$
 
-Em cada 100 meses, 2,6 meses atingidos — não zero. "Nunca aconteceu" não é "não pode acontecer": é "não
+Em cada 100 meses, 2,6 meses atingidos, nunca zero. "Nunca aconteceu" não é "não pode acontecer". É "não
 aconteceu ainda".
 
 **A cauda.** O estimador de Hill, aplicado às 1 714 perdas do treino, dá para o índice de cauda
-$\hat\alpha = 1{,}81$, com intervalo de 95% de 1,41 a 2,56 (bootstrap por blocos mensais). Isso importa porque
-O índice abaixo de $2$ significa **variância indefinida**: a média de longo prazo do prejuízo não converge. Um único
-sinistro pode ser tão grande que domina todos os outros somados — e é exatamente o que acontece em agosto de 1989.
+$\hat\alpha = 1{,}81$, com intervalo de 95% de 1,41 a 2,56 (bootstrap por blocos mensais). Isso importa porque um
+índice abaixo de $2$ significa **variância indefinida**, e a média de longo prazo do prejuízo não converge. Um único
+sinistro pode ser tão grande que domina todos os outros somados, e agosto de 1989 é o caso.
 
-**A ruína.** Com a exposição que a alegação justificaria — vender limite equivalente a 3 vezes o capital —, um
+**A ruína.** Com a exposição que a alegação justificaria (vender limite equivalente a 3 vezes o capital), um
 sinistro que consome o limite inteiro leva o capital a **1 − 3 = −2**, isto é, a zero. Aconteceu em agosto de 1989:
-a resseguradora está arruinada, e a ruína é um estado absorvente: de zero não se sai. Quem usou a regra de Laplace
+a resseguradora está arruinada, e a ruína é um estado absorvente, do qual não se sai. Quem usou a regra de Laplace
 na janela limpa (exposição bem menor) termina 1989-1990 com **19% do capital**; quem usou a taxa da cauda ajustada
 O ajuste de cauda (POT/GPD) cobre 78%. O Kelly da posterior, no ponto ótimo, é $f^* = 0{,}46$.
 
 **A arte de reprovar o próprio modelo.** O projeto levou a alegação aos portões e o resultado foi incômodo para
-todos: no cofre, **nenhum previsor venceu a frequência histórica simples**. A habilidade de Brier do modelo
+todos, porque no cofre **nenhum previsor venceu a frequência histórica simples**. A habilidade de Brier do modelo
 (que é a diferença entre prever bem e prever a constante histórica, Capítulo 8) ficou em **−0,015**; a do POT,
 em −0,003; a da regra de Laplace, em −0,024; e a da alegação, em −0,052. Além disso, a frequência de sinistros
-crescia **4,6% ao ano** (p = 2·10⁻⁶): o mundo não era estacionário, e a priori elicitada — simulada — dominava a
+crescia **4,6% ao ano** (p = 2·10⁻⁶), e o mundo não era estacionário. A priori elicitada (simulada) dominava a
 posterior.
 
-A banca adversarial reprovou o projeto, e os testes não foram ajustados para que ele passasse. A frase que resume
-o veredito é: **a alegação perde, mas o modelo não ganha o direito de decidir.** O F8 não emitiu decisão, os
+A banca adversarial reprovou o projeto, e os testes não foram ajustados para que ele passasse. Uma frase resume
+o veredito: **a alegação perde, mas o modelo não ganha o direito de decidir.** O F8 não emitiu decisão, os
 portões 4 e 5 falharam por causa desse projeto, e é isso que o horizonte publica.
 
-**A janela limpa em toda a série.** O projeto testou a regra em todas as janelas limpas da história: sempre que os
+**A janela limpa em toda a série.** O projeto testou a regra em todas as janelas limpas da história. Sempre que os
 últimos 36 meses não tinham tocado a camada, a decisão teria sido alavancar no teto. Foram 5 decisões assim, e as
 **5 terminaram arruinadas em até 24 meses**.
 
@@ -4124,18 +4146,18 @@ observações:
 
 $$\hat\alpha = \left[\frac{1}{k}\sum_{i=1}^{k}\ln\frac{x_{(i)}}{x_{(k+1)}}\right]^{-1}.$$
 
-A leitura é direta: quanto mais lentamente as maiores observações decrescem, menor o $\hat\alpha$. A condição em
-que ele vale: a cauda é realmente de potência e existe um patamar em $k$ onde a estimativa não muda. Quando ela
-falha: em amostras pequenas, e quando a escolha de $k$ decide a resposta — aqui, $\hat\alpha = 1{,}96$ com
-$k = 25$, $1{,}81$ com $k = 50$ e $1{,}41$ com $k = 100$. O intervalo por bootstrap de blocos mensais
-(1,41 a 2,56) é a forma honesta de dizer: "sabemos que a cauda é pesada; não sabemos exatamente quanto". Um ajuste
+A leitura é direta. Quanto mais lentamente as maiores observações decrescem, menor o $\hat\alpha$. Ele vale quando
+a cauda é realmente de potência e existe um patamar em $k$ onde a estimativa não muda. Falha em amostras pequenas e
+quando a escolha de $k$ decide a resposta (aqui, $\hat\alpha = 1{,}96$ com $k = 25$, $1{,}81$ com $k = 50$ e
+$1{,}41$ com $k = 100$). O intervalo por bootstrap de blocos mensais
+(1,41 a 2,56) é a forma honesta de dizer: "sabemos que a cauda é pesada; não sabemos quanto". Um ajuste
 alternativo da cauda (POT, com distribuição de Pareto generalizada acima de 10 M) dá $\xi = 0{,}41$ [0,02; 0,72],
-isto é, $\alpha \approx 2{,}46$ — mais leve que o Hill. Os dois métodos discordam, e a discordância está no
+isto é, $\alpha \approx 2{,}46$, mais leve que o Hill. Os dois métodos discordam, e a discordância está no
 resultado.
 
 **Por que $\alpha < 2$ muda tudo.** A variância de uma variável com cauda de potência é finita apenas se
-$\alpha > 2$. Com $\alpha = 1{,}81$, a variância não existe: não há "desvio padrão" do prejuízo anual, e
-qualquer margem calculada a partir de uma variância estimada será pequena. É a mesma lição do Capítulo 4: um
+$\alpha > 2$. Com $\alpha = 1{,}81$, a variância não existe, e não há "desvio padrão" do prejuízo anual, de modo que
+qualquer margem calculada a partir de uma variância estimada será pequena. O caso repete a lição do Capítulo 4. Um
 processo pode estar fora do espaço de hipóteses do modelo, e os dados não avisam com um gráfico bonito.
 
 **A regra de sucessão de Laplace.** Depois de $s$ sucessos em $n$ tentativas, a probabilidade do próximo
@@ -4143,48 +4165,50 @@ sucesso é
 
 $$P(\text{sucesso} \mid s, n) = \frac{s+1}{n+2}.$$
 
-Ela vem de uma priori uniforme sobre a probabilidade e trata cada mês como permutável com os outros. A condição
-em que vale: meses trocáveis, sem memória, sem tendência. Onde ela falha: quando o mundo tem deriva. E tem: a
-frequência de sinistros cresce 4,6% ao ano, com um p-valor de $2 \times 10^{-6}$. Ou seja, Laplace não é uma
-previsão — é um **piso**: depois de 36 meses limpos, o mínimo defensável é 1 em 38 por mês, e não zero.
+Ela vem de uma priori uniforme sobre a probabilidade e trata cada mês como permutável com os outros. Vale quando os
+meses são trocáveis, sem memória e sem tendência, e falha quando o mundo tem deriva. E tem. A frequência de
+sinistros cresce 4,6% ao ano, com um p-valor de $2 \times 10^{-6}$. Laplace, portanto, entrega um **piso**. Depois
+de 36 meses limpos, o mínimo defensável é 1 em 38 por mês, nunca zero.
 
 **Quanto vale uma janela limpa.** Aqui a conta deixa de ser sobre a frequência e passa a ser sobre a evidência.
-Compare duas hipóteses: "o risco é desprezível" (1 mês atingido por século, $p = 1/1200$) e "o risco é o que a
-cauda do treino diz" ($p \approx 1/23$ por mês). A probabilidade de ver 36 meses limpos sob cada hipótese:
+Compare duas hipóteses: "o risco é desprezível" (1 mês atingido por século, $p = 1/1200$) e "o risco é o da
+cauda do treino" ($p \approx 1/23$ por mês). A probabilidade de ver 36 meses limpos sob cada hipótese:
 
 $$P(\text{janela limpa} \mid \text{desprezível}) = \left(1 - \tfrac{1}{1200}\right)^{36} = 0{,}9704, \qquad
 P(\text{janela limpa} \mid \text{perigoso}) = \left(1 - p\right)^{36} = 0{,}2058.$$
 
-A razão de verossimilhança é 4,72, o que vale **2,2 bits** de evidência. Dois bits é muito pouco para decidir
-vender três vezes o capital. O critério de severidade diz quanto seria preciso: para que o procedimento "a camada
-não foi tocada" tivesse 95% de chance de acusar o perigo, seriam necessários **69 meses limpos** — quase seis anos.
-A evidência também pode ser medida do outro jeito, como informação mútua entre o resultado da janela e a hipótese
-perigoso-contra-desprezível: **0,51 bits**, praticamente nada. E, para comparar, se o mundo real fosse o do cofre
-(2 meses atingidos em 24, $p = 1/12$), a mesma janela limpa valeria 4,5 bits — três anos limpos são evidência
-razoável contra uma taxa mensal de 8%, e evidência ridícula contra uma taxa de 4%.
+A razão de verossimilhança é 4,72, ou **2,2 bits** de evidência. Dois bits é muito pouco para decidir
+vender três vezes o capital. O critério de severidade diz quanto seria preciso. Para que o procedimento "a camada
+não foi tocada" tivesse 95% de chance de acusar o perigo, seriam necessários **69 meses limpos**, quase seis anos.
+A evidência também se mede do outro jeito, como informação mútua entre o resultado da janela e a hipótese
+perigoso-contra-desprezível, **0,51 bits**, praticamente nada. E, para comparar, se o mundo real fosse o do cofre
+(2 meses atingidos em 24, $p = 1/12$), essa janela limpa valeria 4,5 bits. Três anos limpos são evidência
+razoável contra uma taxa mensal de 8% e evidência ridícula contra uma de 4%.
 
-**Habilidade de Brier.** Um previsor se avalia por uma regra própria, e a referência é a constante histórica:
+**Habilidade de Brier.** A nota de um previsor vem de uma regra de pontuação, e a referência é a constante
+histórica:
 
 $$\text{habilidade} = 1 - \frac{\text{BS}_{\text{previsor}}}{\text{BS}_{\text{climatologia}}}.$$
 
-Positiva significa que o previsor bate a constante; **negativa, que ele perde para a constante**. O modelo
+Habilidade positiva significa que o previsor bate a constante; **negativa, que ele perde para a constante**. O modelo
 (−0,015), o POT (−0,003) e o Laplace (−0,024) perderam; a alegação (−0,052) perdeu mais. Nenhum previsor ganhou o
-direito de decidir, e o portão de governança registra exatamente isso.
+direito de decidir, e o portão de governança registra isso.
 
-**O análogo do curso.** O mesmo padrão aparece numa lente irmã: uma estratégia que vende seguro. Em 37% dos
-históricos de 250 semanas simulados não aparece perda nenhuma — "nunca perdi" vale 1,3 bit de evidência, e um
-teste severo exigiria 14 anos limpos. Dos investidores que apostam pelo Kelly estimado do próprio histórico, 35,8%
-se arruínam. É a mesma história com outro ativo: a janela limpa é o argumento mais sedutor e mais fraco que existe.
+**O análogo do curso.** O padrão reaparece numa lente irmã, uma estratégia que vende seguro. Em 37% dos
+históricos de 250 semanas simulados não aparece perda nenhuma. "Nunca perdi" vale 1,3 bit de evidência, e um
+teste severo exigiria 14 anos limpos. Dos investidores que apostam pelo Kelly estimado a partir do seu histórico,
+35,8% se arruínam. A história se repete com outro ativo, e a janela limpa segue como o argumento mais sedutor e
+mais fraco que existe.
 
 **Um limite declarado do desenho.** A retenção de 50 milhões foi escolhida olhando a série inteira, e não antes de
-vê-la: por isso o cofre **não é cego** para o analista. O horizonte traz uma tabela de sensibilidade para retenções
-de 20 a 50 milhões, e o desenho fica registrado como o que é: uma análise de um caso escolhido com o desfecho à
-vista, útil para aprender sobre o método e não para estimar o risco do seguro.
+vê-la, e por isso o cofre **não é cego** para o analista. O horizonte traz uma tabela de sensibilidade para retenções
+de 20 a 50 milhões, e o desenho fica registrado como análise de um caso escolhido com o desfecho à vista, útil para
+aprender sobre o método e não para estimar o risco do seguro.
 
 **Lakatos, de novo.** Um ajuste depois de uma falha pode ser **progressivo** (prevê algo novo que se confirma) ou
-**degenerativo** (só protege a teoria). O projeto C tinha todas as razões para escolher o caminho degenerativo:
-bastava trocar a retenção, mexer na priori ou mudar o período do cofre. Nada disso foi feito. Os números ficaram
-como estavam, o projeto foi reprovado, e o horizonte registra a reprovação com o mesmo cuidado com que registra as
+**degenerativo** (só protege a teoria). O projeto C tinha todas as razões para escolher o caminho degenerativo.
+Bastava trocar a retenção, mexer na priori ou mudar o período do cofre. Nada disso foi feito. Os números ficaram
+como estavam, o projeto foi reprovado, e o horizonte registra a reprovação com o cuidado com que registra as
 duas aprovações.
 
 ---
@@ -4223,14 +4247,14 @@ p mensal da cauda do treino (ajuste POT/GPD publicado: xi = 0.406, sigma = 7.387
 referencia: sob a taxa que o cofre mostrou (2 meses atingidos em 24, p = 1/12), a mesma janela limpa valeria 4.48 bits (razao 22.3)
 ```
 
-Leia linha por linha. **4, 1, 0**: os meses atingidos em cada triênio do treino — a janela limpa que a alegação
-leu era real, e era cercada de anos com quatro e um mês atingidos. **1,9625 / 1,8109 / 1,4100**: a mesma série dá
+Leia linha por linha. **4, 1, 0**: os meses atingidos em cada triênio do treino; a janela limpa que a alegação
+leu era real, cercada de anos com quatro e um mês atingidos. **1,9625 / 1,8109 / 1,4100**: a série dá
 três índices de cauda conforme o número de observações usadas; a cauda é pesada com folga, e o valor exato dela
-não é estável. **1,900 com desvio 0,265**: numa cauda simulada com $\alpha = 1{,}81$, o próprio estimador de Hill
-tem essa incerteza em amostras desse tamanho — é a tradução honesta do intervalo [1,41; 2,56]. **0,1815**: em cada
-100 janelas de três anos, 18 saem limpas mesmo no mundo perigoso. **0,02632**: a regra de Laplace dá 1 em 38, não
-zero. **2,24 bits e 69 meses**: a janela limpa é 4,7 vezes mais provável no mundo desprezível — 2,2 bits de
-evidência, e quase seis anos limpos para um teste severo. **4,48 bits**: contra a taxa do cofre, a mesma janela
+não é estável. **1,900 com desvio 0,265**: numa cauda simulada com $\alpha = 1{,}81$, o estimador de Hill
+tem essa incerteza em amostras desse tamanho, a tradução honesta do intervalo [1,41; 2,56]. **0,1815**: em cada
+100 janelas de três anos, 18 saem limpas no mundo perigoso. **0,02632**: a regra de Laplace põe o piso em 1 em 38.
+**2,24 bits e 69 meses**: a janela limpa é 4,7 vezes mais provável no mundo desprezível, isto é, 2,2 bits de
+evidência, e quase seis anos limpos para um teste severo. **4,48 bits**: contra a taxa do cofre, essa janela
 valeria o dobro.
 
 **Declaração de divergência.** O `h1-real/README.md` registra $\hat\alpha = 1{,}81$ com intervalo [1,41;
@@ -4263,34 +4287,34 @@ exige mais meses limpos. Os dois valores ficam registrados; nenhum foi apagado.
 
 **Resumo.**
 
-- 36 meses limpos entre 50 e 150 milhões de coroas não são um mundo seguro: com a taxa do treino, 18 em cada 100
+- 36 meses limpos entre 50 e 150 milhões de coroas não são um mundo seguro. Com a taxa do treino, 18 em cada 100
   janelas de três anos saem limpas por acaso.
-- A cauda é pesada ($\hat\alpha = 1{,}81$, intervalo 1,41 a 2,56): com $\alpha < 2$ a variância não existe, e um
-  único mês — agosto de 1989, 152 milhões — decide o destino da empresa.
+- A cauda é pesada ($\hat\alpha = 1{,}81$, intervalo 1,41 a 2,56). Com $\alpha < 2$ a variância não existe, e um
+  único mês (agosto de 1989, 152 milhões) decide o destino da empresa.
 - A janela limpa vale 2,2 bits de evidência; a regra de Laplace dá 1 chance em 38 por mês; um teste severo
   precisaria de 69 meses limpos.
 - No cofre, nenhum previsor venceu a frequência histórica simples: modelo −0,015, POT −0,003, Laplace −0,024,
-  alegação −0,052 — e a alegação perde sem que o modelo ganhe o direito de decidir.
-- Reprovar o próprio modelo, sem mexer nos testes para que ele passe, é um resultado do programa.
+  alegação −0,052, e a alegação perde sem que o modelo ganhe o direito de decidir.
+- Reprovar o modelo que se escreveu, sem mexer nos testes para que ele passe, é um resultado do programa.
 
 ## Capítulo 19. Horizonte H2: sete rodadas para encontrar causas verdadeiras na ciência
 
-**Objetivos.** Ao fim deste capítulo você deve saber o que é um ambiente que *intervém* numa variável, por que uma
+**Objetivos.** Ao fim deste capítulo você deve saber como se define um ambiente que *intervém* numa variável, por que uma
 causa só merece esse nome se sobrevive à troca de ambiente, por que o portão do H2 falhou cinco vezes antes de
-passar, e como se lê um resultado aprovado com ressalva — e outro que passou por pouco e depois encolheu.
+passar, e como se lê um resultado aprovado com ressalva. E também um resultado que passou por pouco e depois encolheu.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**A pergunta que vale em toda parte.** Uma equipe quer saber quais causas continuam valendo quando o mundo muda.
-Não "a causa nesta escola", nem "a causa neste ano": a causa que aparece na escola A, na escola B e na escola C, no
-ano bom e no ano ruim, no hospital de Toronto e no de Rhode Island. Esse é o horizonte H2 da pesquisa, e ele tem um
-portão único e exigente: encontrar um conjunto de causas invariantes, não vazio, em pelo menos três áreas
+**A pergunta que continua valendo em toda parte.** Uma equipe quer saber quais causas continuam valendo quando o mundo muda.
+Não "a causa nesta escola", nem "a causa neste ano". A causa aparece na escola A, na escola B e na escola C, no
+ano bom e no ano ruim, no hospital de Toronto e no de Rhode Island. Esse é o horizonte H2 da pesquisa, e o seu portão é
+único e exigente. Ele pede um conjunto de causas invariantes, não vazio, em pelo menos três áreas
 diferentes da ciência.
 
-**Primeira tentativa: usar o ano como "ambiente".** Doze áreas entraram de uma vez — educação, clima, crédito,
-energia, saúde, direito, logística e outras. Em cada área, o ambiente era algo fácil de achar: o ano, a região, o
+**Primeira tentativa: usar o ano como "ambiente".** Doze áreas entraram de uma vez: educação, clima, crédito,
+energia, saúde, direito, logística e outras. Em cada área, o ambiente era algo fácil de achar. Servia o ano, a região, o
 aeroporto, o tipo de escola. Em cada 12 áreas, o resultado foi assim:
 
 | O que aconteceu | Em quantas das 12 áreas |
@@ -4301,14 +4325,14 @@ aeroporto, o tipo de escola. Em cada 12 áreas, o resultado foi assim:
 | Foi podado antes, por outro filtro | 1 |
 
 A única área que deu resposta apontou cidadania e emprego como causas invariantes da decisão de libertar um detido,
-e deixou a cor da pele de fora. O resultado não diz que a cor não importa: o método só promete devolver um
-subconjunto das causas verdadeiras, e promete isso sob condições que o ano e a região violam — porque o ano age
+e deixou a cor da pele de fora. O resultado não diz que a cor não importa. O método só promete devolver um
+subconjunto das causas verdadeiras, e tal promessa só vale sob condições que o ano e a região violam. O ano age
 **direto** no resultado, e não só nas variáveis de entrada. Um ambiente que muda o mundo inteiro não é um
 experimento.
 
-**Da segunda à sétima tentativa: procurar ambientes que sejam intervenções.** A equipe decidiu manter o portão
+**Da segunda à sétima tentativa: buscar ambientes que sejam intervenções.** A equipe decidiu manter o portão
 forte em vez de afrouxá-lo, e foi buscar dados em que o ambiente fosse uma intervenção documentada sobre uma
-variável: uma lei que muda um benefício, um sorteio que muda um plano de saúde, uma câmara física em que um
+variável: uma lei que muda um benefício, um sorteio que muda um plano de saúde, uma câmara física onde um
 pesquisador gira um botão. Sete rodadas foram necessárias, e cada correção foi escrita e travada com hash **antes**
 de rodar. O contador de tentativas, chamado $K$, é o placar honesto dessa busca.
 
@@ -4324,44 +4348,45 @@ de rodar. O contador de tentativas, chamado $K$, é o placar honesto dessa busca
 
 **O túnel de luz.** Numa câmara física construída na Suíça para estudar causalidade (Gamella, Peters e Bühlmann,
 2025), um pesquisador gira um botão que controla uma corrente elétrica, três LEDs de cores diferentes acendem, e
-sensores de luz medem o que acontece. De 1.024 combinações possíveis de causas candidatas, o método aceitou 128, e
-a interseção delas — o conjunto que todas têm em comum — foi exatamente $\{\text{vermelho},\ \text{verde},\ \text{azul}\}$: os três LEDs. Os sensores de luz ficaram de fora, apesar de estarem fortemente correlacionados com
+sensores de luz medem a resposta. De 1.024 combinações possíveis de causas candidatas, o método aceitou 128, e
+a interseção delas (o conjunto que todas têm em comum) foi $\{\text{vermelho},\ \text{verde},\ \text{azul}\}$. São os
+três LEDs. Os sensores de luz ficaram de fora, apesar de estarem fortemente correlacionados com
 a corrente, porque são **filhos** dos LEDs. Foi a primeira vez no projeto que o método foi conferido contra uma
 verdade conhecida, e ele acertou.
 
-**O túnel de vento, na mesma bateria, reprovou tudo** — inclusive o conjunto dos pais verdadeiros. As causas
+**O túnel de vento, nesta bateria, reprovou tudo.** O conjunto dos pais verdadeiros caiu junto. As causas
 prováveis foram declaradas antes: os barômetros medem pressão absoluta e o clima muda o resultado entre regimes; a
 autocorrelação que sobra depois do desbaste; e um ajuste aditivo onde a física é quadrática, com interação entre os
-dois ventiladores. O melhor p-valor entre os conjuntos ficou em $7\times10^{-5}$: nem com a pressão ambiente como
-proxy algum conjunto se sustentou. Um método que falha num caso e acerta no outro, com as causas plausíveis
-declaradas, ensina mais que um método que sempre acerta.
+dois ventiladores. O melhor p-valor entre os conjuntos ficou em $7\times10^{-5}$. Nem com a pressão ambiente como
+proxy algum conjunto se sustentou. Um método que falha num caso e acerta no outro, desde que as causas plausíveis
+estejam declaradas, ensina mais que um método que sempre acerta.
 
 **O coração.** Num ensaio do FDA em que voluntários receberam quatro drogas e tiveram o eletrocardiograma medido 16
-vezes cada um, o método apontou como causas do alongamento do intervalo QT exatamente as concentrações das três
+vezes cada um, o método apontou como causas do alongamento do intervalo QT as concentrações das três
 drogas que bloqueiam o canal hERG: dofetilida, quinidina e ranolazina. Todos os 35 conjuntos aceitos, de 512,
 continham as três, e medidas do próprio eletrocardiograma ficaram de fora. A inclinação do QTcF na dofetilida foi
 de $25{,}2$ ms por ng/mL, com intervalo de 90% da posterior de $23{,}0$ a $27{,}5$. E o teste mais duro veio
-depois: na droga que o modelo **nunca viu**, o verapamil, o modelo invariante previu bem (habilidade $+0{,}57$). O
+depois. Na droga que o modelo **nunca viu**, o verapamil, o modelo invariante previu bem (habilidade $+0{,}57$). O
 modelo que usava *todas* as variáveis explodiu, com perda da ordem de $10^{15}$, porque o verapamil empurra uma
 medida do eletrocardiograma para fora de tudo o que havia no treino.
 
 **A levedura.** Com dados de 2014 sobre deleções de genes em levedura, o método deu um conjunto invariante num
-domínio entre dez sorteados: ele rejeitou 1.022 dos 1.024 conjuntos, aceitou dois, e o melhor p-valor ficou em
-$0{,}0072$ — logo acima do limiar de $0{,}005$.
+domínio entre dez sorteados. Ele rejeitou 1.022 dos 1.024 conjuntos, aceitou dois, e o melhor p-valor ficou em
+$0{,}0072$, logo acima do limiar de $0{,}005$.
 A validação por intervenção, que confere gene por gene, não confirmou dois dos três genes do conjunto; só o
 primeiro movia o alvo na direção prevista. A saída foi aprovada **com ressalva registrada**. Uma réplica declarada
 depois sorteou 40 genes novos de um conjunto de 4.681, com nível de $0{,}05/40 = 0{,}00125$ por gene, e achou um
-gene que passa na validação estrita, com taxa nula de $p = 0{,}001$ — o piso de 999 sorteios. O que ela replica é
-*um gene num mutante*, não um efeito medido com resolução: cada mutante é um ambiente de uma linha só, e o menor
+gene que passa na validação estrita, com taxa nula de $p = 0{,}001$. É o piso de 999 sorteios. A réplica mostra
+*um gene num mutante*, e não um efeito medido com resolução. Cada mutante é um ambiente de uma linha só, e o menor
 p-valor possível ali é $1/1\,000$.
 
-**A queda da educação.** A educação era a área mais confortável: turmas pequenas sorteadas no experimento STAR do
+**A queda da educação.** A educação era a área mais confortável. Eram turmas pequenas sorteadas no experimento STAR do
 Tennessee, 11.598 alunos. Quando os alunos deixaram de ser contados como 11.598 observações independentes e
 passaram a ser contados como **80 escolas**, os conjuntos aceitos não tiveram nenhuma variável em comum, e o
 conjunto invariante virou vazio. Isso não quer dizer que turma pequena não tenha efeito. Quer dizer que, com 80
-unidades de verdade, o teste perdeu o poder de apontar um conjunto — que é o único produto que ele entrega.
+unidades de verdade, o teste perdeu o poder de apontar um conjunto, que é o único produto que ele entrega.
 
-**Cinco falhas, três causas nomeadas.** O portão falhou cinco vezes seguidas. Três dessas falhas têm nome: usar o
+**Cinco falhas, três causas nomeadas.** O portão falhou cinco vezes seguidas. Três dessas falhas têm nome — usar o
 ano ou a região como ambiente invalida a premissa; um erro de código ficou escondido no teste de invariância da
 rodada H2b; e a regra de saturação, que só apareceu na rodada H2d, tirou do placar um conjunto que se sustentava
 por construção. As outras duas foram a troca de régua da rodada H2c, que perdeu o direito e ganhou a saúde só por
@@ -4374,53 +4399,53 @@ saturação, e a rodada H2e, que chegou a duas áreas e não a três porque o t�
 **O pacote de domínio, e o teste de plugabilidade.** Cada área entrou por um pacote padronizado: pergunta
 substantiva, alegação, glossário de dez termos, fontes, unidade independente, ambientes e cofre, grafo causal,
 conjunto de ajuste, elicitação, decisão e escopo. O validador recusa o pacote incompleto **antes** de ler qualquer
-dado, e dez dos doze primeiros pacotes foram escritos por agentes que só tinham lido o contrato e dois exemplos:
-era o teste de saber se a máquina era plugável, e ela era.
+dado, e dez dos doze primeiros pacotes foram escritos por agentes que só tinham lido o contrato e dois exemplos.
+A máquina se mostrou plugável.
 
-**O que é um ambiente.** Ambiente é a etiqueta que diz de onde veio cada linha da tabela: a escola, o ano, o regime
+**Definição de ambiente.** Ambiente é a etiqueta que diz de onde veio cada linha da tabela: a escola, o ano, o regime
 de intervenção. Escrevemos $E$ para essa etiqueta, $X$ para o conjunto de variáveis candidatas e $Y$ para o
 desfecho que se quer explicar.
 
 **A condição de invariância.** Um conjunto $S$ de candidatas é **invariante** se a distribuição de $Y$, uma vez
-conhecidas as variáveis de $S$, for a mesma em todos os ambientes:
+conhecidas as variáveis de $S$, for igual em todos os ambientes:
 
 $$Y \perp E \mid X_S .$$
 
-Em palavras: depois de olhar as variáveis do conjunto, saber de que ambiente veio a linha não muda mais nada na
-previsão. O método — Predição Causal Invariante, ICP — testa essa condição para todos os $2^p$ subconjuntos e
-devolve a **interseção** dos subconjuntos aceitos, chamada $\hat{S}$.
+Dito de outro modo, depois de olhar as variáveis do conjunto, saber de que ambiente veio a linha não muda mais nada na
+previsão. Quem testa essa condição para todos os $2^p$ subconjuntos é a Predição Causal Invariante, ou ICP, e
+ele devolve a **interseção** dos subconjuntos aceitos, chamada $\hat{S}$.
 
-**O que o método garante, e sob quais condições.** Se o modelo estatístico estiver correto, se as linhas dentro de
+**O que o método garante e sob quais condições.** Se o modelo estatístico estiver correto, se as linhas dentro de
 cada ambiente forem independentes e se houver poder suficiente, então $\hat{S} \subseteq \text{pa}(Y)$ com
-probabilidade de pelo menos $1 - \alpha$: o conjunto devolvido só contém causas verdadeiras. O método **não**
+probabilidade de pelo menos $1 - \alpha$. O conjunto devolvido só contém causas verdadeiras. O método **não**
 garante que todas as causas apareçam, e não diz nada sobre o tamanho dos efeitos.
 
 **Onde ele falha.** Três situações apareceram na pesquisa, e cada uma virou uma regra.
 
 1. **O ambiente age direto em $Y$.** Se o ano muda o resultado por si, então $Y \perp E \mid X_S$ é falso para todo
-   $S$: o método rejeita tudo, e $\hat{S} = \emptyset$. Foi o que aconteceu nas 6 áreas da primeira rodada.
-2. **O ambiente é função determinística das variáveis de $S$.** Nesse caso a condição vale *por construção*:
-   condicionado a $X_S$, o ambiente é constante, e o teste tem poder zero. Um teste sem poder não certifica nada;
+   $S$. O método rejeita tudo, e $\hat{S} = \emptyset$. Foi esse o caso nas 6 áreas da primeira rodada.
+2. **O ambiente é função determinística das variáveis de $S$.** Nesse caso a condição vale *por construção*.
+   Condicionado a $X_S$, o ambiente é constante, e o teste tem poder zero. Um teste sem poder não certifica nada;
    aceitar um conjunto saturado não é evidência. A **regra de saturação** passou a excluir esses conjuntos da
-   família: eles não contam como aceitos nem como rejeitados. A medida é o acerto do vizinho mais próximo,
+   família. Eles não contam como aceitos nem como rejeitados. A medida é o acerto do vizinho mais próximo,
    deixando a linha de fora (1-NN LOO), ao prever o ambiente pelas colunas de $S$; acerto médio $\ge 0{,}99$
    significa saturado. No experimento de seguro da RAND, a coparticipação é constante dentro de cada regime de
-   plano: o conjunto que dependia dela saiu no H2d, como a declaração previa.
+   plano. O conjunto que dependia dela saiu no H2d, como a declaração previa.
 3. **As linhas não são independentes.** 16 instantes por voluntário no ensaio cardíaco, até 403 alunos por escola
    no STAR, 225 mil voos em 364 dias. Tratar linhas dependentes como independentes estreita a margem. A correção
    foi o Wald agrupado por voluntário ou por escola e a permutação de blocos inteiros.
 
 **A falha de código que a leitura encontrou.** No H2b, antes de qualquer execução, a leitura do código achou um
-erro no teste de invariância: os graus de liberdade eram contados pelo número de **colunas** da matriz de ajuste em
+erro no teste de invariância. Os graus de liberdade eram contados pelo número de **colunas** da matriz de ajuste em
 vez do seu **posto**. Com ambientes que são intervenções, um candidato costuma ser constante dentro do ambiente, e
-essas colunas colineares somavam graus de liberdade sem reduzir a soma dos quadrados — o teste ficava permissivo e
-aceitava demais. A correção passou a usar o posto e ganhou um teste próprio: sob a hipótese nula de invariância o
+essas colunas colineares somavam graus de liberdade sem reduzir a soma dos quadrados. O teste ficava permissivo e
+aceitava demais. A correção passou a usar o posto e ganhou um teste próprio. Sob a hipótese nula de invariância o
 teste rejeita 7% das vezes (a meta era menos de 9%), e sob a hipótese de quebra, 100%. A reexecução mostrou que o
 erro **não** tinha mudado nenhum resultado do H2.
 
 **As duas réguas.** A primeira régua era um teste linear gaussiano: F aninhado contra coeficientes por ambiente,
-mais Levene dos resíduos. Com amostras grandes ele rejeita qualquer desvio do modelo linear — massa em zero,
-resposta côncava, cauda pesada —, e em simulação rejeitava de 72% a 100% das vezes mesmo quando a lei era
+mais Levene dos resíduos. Com amostras grandes ele rejeita qualquer desvio do modelo linear, como massa em zero,
+resposta côncava, cauda pesada, e em simulação rejeitava de 72% a 100% das vezes mesmo quando a lei era
 invariante. A segunda régua (a partir do H2c) ajusta um único modelo agrupado, padroniza o resíduo pela escala
 estimada sem olhar o ambiente, e testa locação (Kruskal–Wallis) e escala (Brown–Forsythe) do resíduo padronizado
 entre ambientes, com Bonferroni sobre dois testes. Candidato numérico com mais de 10 valores distintos entra como
@@ -4428,17 +4453,17 @@ termo linear mais spline cúbica restrita com 4 nós nos quantis 5, 35, 65 e 95%
 distintos entra como fator. A troca de régua mudou o veredito de três domínios: o direito perdeu o conjunto, a
 educação ganhou, a saúde ganhou só por saturação.
 
-**A validação por intervenção, e o seu limite.** A conferência externa de um gene é direta: deleta-se o gene $x$ e
+**A validação por intervenção, e o seu limite.** A conferência externa de um gene é direta. Deleta-se o gene $x$ e
 vê-se se o alvo $Y$ se move na direção que o coeficiente prevê. O critério estrito pede duas coisas: que a deleção
 tenha funcionado (o próprio gene deletado é o menor valor da sua coluna) e que $Y$ caia fora da faixa das outras
 1.740 amostras. Nos 27 genes dos 10 conjuntos com gene da réplica, a deleção funcionou em 26 e **um** gene passou
-no critério estrito: o par do domínio n34, com $Y = $ YLR354C e $x_6 = $ YIL033C, cujo mutante põe $Y$ no mínimo
+no critério estrito. É o par do domínio n34, com $Y = $ YLR354C e $x_6 = $ YIL033C, cujo mutante põe $Y$ no mínimo
 das 1.741 linhas, na direção do coeficiente positivo $+0{,}053$. A taxa nula foi fixada depois, por permutação do
-rótulo do mutante entre as 1.741 linhas, com 999 sorteios e semente 20261015: o observado é 1 par em 27, a média
-nula é 0, e $p = 0{,}001$ — o piso do teste. A leitura tem duas metades, e elas não dizem a mesma coisa. Contra o
-acaso do rótulo a evidência é forte. Contra ler isso como efeito medido, a evidência é nula: quase todo o p vem da
-metade que é fato dos dados — deletar um gene tira a expressão dele, então o mínimo da coluna está na linha do
-mutante —, e permutar o rótulo destrói exatamente essa metade. A metade que sobra, o alvo fora da faixa das outras
+rótulo do mutante entre as 1.741 linhas, com 999 sorteios e semente 20261015. O observado é 1 par em 27, a média
+nula é 0, e $p = 0{,}001$, o piso do teste. A leitura tem duas metades, e elas apontam para lados opostos. Contra o
+acaso do rótulo a evidência é forte. Contra ler isso como efeito medido, a evidência é nula. Quase todo o p vem da
+metade que é fato dos dados. Deletar um gene tira a expressão dele, então o mínimo da coluna está na linha do
+mutante, e permutar o rótulo destrói exatamente essa metade. A metade que sobra, o alvo fora da faixa das outras
 1.740 linhas, sozinha dá $p = 0{,}031$, marginal.
 
 **O que a invariância compra.** No verapamil, a droga que o modelo nunca viu, o modelo invariante previu com
@@ -4446,43 +4471,43 @@ habilidade $+0{,}57$ e cobertura conforme $0{,}89$. O modelo ajustado pela chave
 Prever bem dentro do treino e falhar sob uma intervenção nova é o modo de falha que a invariância existe para
 evitar.
 
-**O que ficou registrado e contou no $K$.** Além das sete rodadas, o placar guarda o arcabouço v2 com as suas
+**O que ficou registrado e entrou no contador $K$.** Além das sete rodadas, o placar guarda o arcabouço v2 com as suas
 quatro correções, o critério do G2 (o erro do ajuste da elicitação era pedido abaixo de $10^{-6}$, impossível para
 quartis assimétricos, e passou a ser 10% do desvio padrão ajustado, com erro máximo medido de 5%), a mudança de
-unidade do experimento de sinalização — a célula, e não a condição, passou a ser a unidade, o que levou aquele
-domínio até o teste de invariância e derrubou o efeito de desenho de 67 para 1,13 — e o efeito fixo de estado do
+unidade do experimento de sinalização (a célula, e não a condição, passou a ser a unidade, mudança que levou aquele
+domínio até o teste de invariância e derrubou o efeito de desenho de 67 para 1,13) e o efeito fixo de estado do
 fluxo de cintos de segurança, que cortou o efeito de desenho de 6,1 para 1,85.
 
-**A multiplicidade, contada.** O contador honesto do portão do H2 é de **38 testes distintos** — 32 a 72, conforme
+**A multiplicidade, contada.** O contador honesto do portão do H2 é de **38 testes distintos**, entre 32 e 72 conforme
 o que se conta. O inventário do caminho conta ainda **onze aberturas de cofre**, isto é, onze vezes em que um
 resultado foi visto antes de uma decisão de desenho. Com Bonferroni sobre 38, o nível por teste cai para $\alpha = 0{,}05/38 = 0{,}0013$, ao custo de
 9,6 bits de parcimônia, e o portão ainda passa em quatro áreas. Os conjuntos encolhem: no STAR,
 $\{\text{anos\_pequena\_antes}, \text{turma\_pequena}\}$ vira $\{\text{turma\_pequena}\}$; na levedura,
-$\{\text{plate}, x_1, x_5, x_9\}$ vira $\{\text{plate}, x_5\}$, e $x_1$ — o único gene que a validação por
-intervenção confirmava — sai.
+$\{\text{plate}, x_1, x_5, x_9\}$ vira $\{\text{plate}, x_5\}$, e $x_1$ sai, o único gene que a validação por
+intervenção confirmava.
 
 **Duas ressalvas que pesam mais que a correção.** A primeira: dividir $\alpha$ não é monótono no ICP. Com um nível
 menor, domínios que rejeitavam tudo passam a aceitar algum conjunto, e aparecem conjuntos invariantes em modelos
 quase rejeitados. A segunda: a aprovação depende da versão do arcabouço. Com o arcabouço v1 reconstruído, o STAR é
-podado antes do teste de invariância — a chave é constante dentro do ambiente — e o H2g cai para três áreas, uma
-delas a genética frágil. E se valesse só a primeira versão declarada de cada escolha, o H2 não estaria aprovado: a
+podado antes do teste de invariância, pois a chave é constante dentro do ambiente, e o H2g cai para três áreas, uma
+delas a genética frágil. E se valesse só a primeira versão declarada de cada escolha, o H2 não estaria aprovado, e a
 rodada 1 dá uma área só.
 
 **O resultado final, depois da auditoria de fundo.** A farmacologia sobreviveu intacta às duas correções de
-agrupamento: o conjunto continua sendo $\{c_{\text{dof}}, c_{\text{qui}}, c_{\text{ran}}\}$, e o que encolhe é a
+agrupamento. O conjunto continua sendo $\{c_{\text{dof}}, c_{\text{qui}}, c_{\text{ran}}\}$, e encolhe a
 evidência contra o conjunto vazio, de $6{,}3\times10^{-104}$ para $2{,}2\times10^{-15}$ no teste agrupado e
-$0{,}002$ na permutação de blocos — de cerca de 340 bits para 49 e 9. A educação não sobreviveu: com as 80 escolas
+$0{,}002$ na permutação de blocos, de cerca de 340 bits para 49 e 9. A educação não sobreviveu. Com as 80 escolas
 como unidades, são 266 conjuntos aceitos de 512 no teste agrupado e 512 na permutação, sem nenhuma variável em
 comum, e o conjunto publicado $\{\text{anos\_pequena\_antes}, \text{turma\_pequena}\}$ tem $p = 0{,}76$. Mesmo
-antes da correção de agrupamento, a educação já era a área frágil: o maior p entre os conjuntos não saturados era
-$0{,}075$, perto do limiar, e $\{\text{turma\_pequena}\}$ sozinho era rejeitado ($p = 0{,}010$). A
-genética se replicou. A contagem de áreas fecha assim: a educação sai, a física fica como estava, a farmacologia
-fica e a genética se replica — e o portão fica de pé com exatamente três áreas, agora com a terceira sustentada
+antes da correção de agrupamento, a educação já era a área frágil, com o maior p entre os conjuntos não saturados
+em $0{,}075$, perto do limiar, e $\{\text{turma\_pequena}\}$ sozinho era rejeitado ($p = 0{,}010$). A
+genética se replicou. A contagem de áreas fecha assim. A educação sai, a física fica como estava, a farmacologia
+fica e a genética se replica. O portão fica de pé com três áreas, agora com a terceira sustentada
 por um domínio novo, e não pela área que já era frágil.
 
-**O efeito transporta melhor que o conjunto.** Mesmo com o ICP rejeitado, o modelo ajustado previu o ambiente
-nunca visto com habilidade positiva em **9 domínios**, de $0{,}04$ a $0{,}88$. A alegação forte — "vale em qualquer
-escola, aeroporto ou região" — cai; a direção e o tamanho do efeito sobrevivem. Para decidir, é essa versão fraca
+**O efeito transporta melhor que o conjunto.** Ainda com o ICP rejeitado, o modelo ajustado previu o ambiente
+nunca visto com habilidade positiva em **9 domínios**, de $0{,}04$ a $0{,}88$. A alegação forte ("vale em qualquer
+escola, aeroporto ou região") cai; a direção e o tamanho do efeito sobrevivem. Para decidir, é essa versão fraca
 que importa.
 
 **A arquitetura também errou.** A revisão dos agentes de domínio achou **quatro** falhas no arcabouço, corrigidas
@@ -4490,12 +4515,12 @@ de uma vez na versão 2: o nulo do filtro F3 permutava num nível diferente daqu
 permutar entre unidades, dentro da unidade quando o sorteio é declarado; a verossimilhança tratava as linhas como
 independentes e saía estreita demais, e passou a ser temperada por $1/\text{efeito de desenho}$; a predição
 conforme era calibrada num quinto sorteado do treino, e passou a deixar um ambiente de fora; e os rótulos do ICP
-não separavam "rejeitado" de "vazio aceito". A versão 2 mudou o status de quatro domínios, e as quatro correções
-vieram depois de ver resultados: contam no $K$.
+não separavam "rejeitado" de "vazio aceito". A versão 2 mudou o status de quatro domínios. As quatro correções
+vieram depois de ver resultados, e contam no $K$.
 
 Na primeira rodada, com ambientes de conveniência, o efeito de desenho chegou a $11{,}5$ nos voos (225 mil voos
 valem 364 dias), $22{,}8$ nos ciclones e $9{,}8$ no estudo de desenvolvimento; e a literatura errou para os dois
-lados — a priori dos voos ficou abaixo do dado (razão de chances de $1{,}08$ por hora contra $1{,}14$), a dos
+lados: a priori dos voos ficou abaixo do dado (razão de chances de $1{,}08$ por hora contra $1{,}14$), a dos
 ciclones ficou acima (15 nós por raiz de hectopascal contra $11{,}8$), e a dos currículos previa "um terço a menos"
 onde o dado deu $2{,}3$ pontos percentuais. O filtro F2 barrou a primeira especificação dos voos por incluir a
 temperatura, descendente da hora no próprio grafo causal ($K = 2$), e o F3 podou o imposto sobre a cerveja, que com
@@ -4568,30 +4593,30 @@ mundo C: mundo A mais x5, a coluna que e o proprio ambiente (5 candidatos)
   S_hat com a regra de saturacao = {x1 estudo, x2 sono}  | sem a regra = {}  | portao: PASSA (S_hat nao vazio)
 ```
 
-Leia linha por linha. **No mundo A**, o conjunto vazio e todos os conjuntos de uma variável só são rejeitados: o
+Leia linha por linha. **No mundo A**, o conjunto vazio e todos os conjuntos de uma variável só são rejeitados. O
 p-valor de locação bate no piso da permutação, $0{,}0010 = 1/1\,000$, porque o deslocamento que a escola faz em
 $x_1$ e $x_2$ deixa marca na média do resíduo. Só os conjuntos que contêm **as duas** causas verdadeiras são
-aceitos — 4 dos 16 — e a interseção deles é $\{x_1, x_2\}$. A coluna 1-NN mostra por que nenhum deles é saturado:
-o acerto do vizinho mais próximo ao adivinhar a escola pelas variáveis do conjunto fica entre $0{,}74$ e $0{,}87$,
+aceitos, 4 dos 16, e a interseção deles é $\{x_1, x_2\}$. A coluna 1-NN mostra por que nenhum deles é saturado.
+O acerto do vizinho mais próximo ao adivinhar a escola pelas variáveis do conjunto fica entre $0{,}74$ e $0{,}87$,
 muito abaixo do limiar $0{,}99$.
 
-**No mundo B**, o ambiente soma um deslocamento direto ao desfecho, e **nenhum** dos 8 conjuntos passa: a
+**No mundo B**, o ambiente soma um deslocamento direto ao desfecho, e **nenhum** dos 8 conjuntos passa. A
 invariância não existe para ser achada, e o portão falha honestamente. É a simulação da primeira rodada do H2.
 
-**No mundo C**, o acréscimo de $x_5$ — uma coluna constante dentro de cada escola e diferente entre elas, como a
-coparticipação de um plano de saúde — muda tudo. Dezesseis dos 32 conjuntos são saturados, e dezesseis desses são
-aceitos: aceitar não é evidência, porque o teste não tem poder nenhum ali, e o acerto 1-NN de $x_5$ é $1{,}000$.
+**No mundo C**, o acréscimo de $x_5$, uma coluna constante dentro de cada escola e diferente entre elas, como a
+coparticipação de um plano de saúde, muda tudo. Dezesseis dos 32 conjuntos são saturados, e dezesseis desses são
+aceitos. Aceitar não é evidência, porque o teste não tem poder nenhum ali, e o acerto 1-NN de $x_5$ é $1{,}000$.
 Sem a regra de saturação, o conjunto $\{x_5\}$ entra na família, a interseção com $\{x_1, x_2\}$ fica vazia e o
-método devolve $\hat{S} = \emptyset$ — o oposto da verdade, com cara de rigor. Com a regra, a família volta a ter 4
-conjuntos aceitos e o $\hat{S}$ é $\{x_1, x_2\}$. É exatamente o que aconteceu no experimento de seguro da RAND no
+método devolve $\hat{S} = \emptyset$, o oposto da verdade, com cara de rigor. Com a regra, a família volta a ter 4
+conjuntos aceitos e o $\hat{S}$ é $\{x_1, x_2\}$. Foi isso que aconteceu no experimento de seguro da RAND no
 H2d, onde a saúde saiu do placar por saturação.
 
 **Declaração de divergência.** Os números acima são de dados **simulados** por este laboratório, e não do
-repositório da pesquisa; as três simulações mostram o mesmo mecanismo, em escala de brinquedo. Os valores do
-repositório citados neste capítulo — 128 de 1.024 conjuntos aceitos no túnel de luz com $p = 0{,}29$ para
+repositório da pesquisa; as três simulações mostram um mecanismo único, em escala de brinquedo. Os valores do
+repositório citados neste capítulo (128 de 1.024 conjuntos aceitos no túnel de luz com $p = 0{,}29$ para
 $\{$vermelho, verde, azul$\}$; 35 de 512 no ensaio do FDA; 57 conjuntos aceitos no STAR no H2d; 2 de 1.024 na
-levedura com melhor $p = 0{,}0072$ — não são reproduzidos aqui, e não podem ser: eles exigem os dados reais e o
-arcabouço em Python dos horizontes, cujos comandos estão no Apêndice C. O laboratório mede o que se pode medir com
+levedura com melhor $p = 0{,}0072$) não são reproduzidos aqui, e não podem ser: eles exigem os dados reais e o
+arcabouço em Python dos horizontes, cujos comandos estão no Apêndice C. O laboratório mede o que pode com
 dados próprios: que o método acha as duas causas no mundo A, que devolve vazio no mundo B e que a regra de
 saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
 
@@ -4618,10 +4643,10 @@ saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
   contra a alegação, porque o ano e a região agem direto no resultado.
 - O portão só passou na sexta rodada, com ressalva registrada na genética, e as cinco falhas ficaram no contador
   $K$: ambientes de conveniência, um erro de código no teste, a troca de régua e a regra de saturação.
-- Duas rodadas conferiram o método contra verdade conhecida: o túnel de luz recuperou os três LEDs e o ensaio do
+- Duas rodadas conferiram o método contra verdade conhecida. O túnel de luz recuperou os três LEDs e o ensaio do
   FDA recuperou as três drogas que bloqueiam o hERG, com o verapamil previsto a $+0{,}57$.
 - Depois da auditoria de fundo, a educação sai, a genética se replica e o portão fica de pé com três áreas:
-  física, farmacologia e genética. O efeito transporta melhor que o conjunto: 9 domínios previram o ambiente novo
+  física, farmacologia e genética. O efeito transporta melhor que o conjunto. Os 9 domínios previram o ambiente novo
   com habilidade de $0{,}04$ a $0{,}88$.
 
 ## Capítulo 20. Horizonte H3: o relógio ao vivo, o canário de vazamento e a polícia no cofre
@@ -4638,34 +4663,34 @@ instrumento sorteado, e por que corrigir a calibração de um modelo não cria a
 acontecendo agora: a demanda de energia elétrica da região de Victoria, de meia em meia hora; as chamadas de um
 banco, de cinco em cinco minutos; o retorno diário da bolsa de Nova York; os atrasos de aviões em Nova York; a
 chance de um furacão ganhar força; e a decisão de liberar um detento em Toronto. Em cada fluxo, cada fato é um
-**evento com carimbo**: a hora em que ele se torna conhecível. Um voo que parte às 10h e chega atrasado só
+**evento com carimbo**, isto é, a hora em que ele se torna conhecível. Um voo que parte às 10h e chega atrasado só
 "existe" para o sistema quando o atraso é publicado; uma previsão emitida às 8h não pode usar esse dado, porque
 ele ainda não tinha acontecido.
 
 O armazém recusa quatro coisas, e recusar é o trabalho dele: ler o futuro, abrir um cofre antes do pré-registro
 escrito, abrir o mesmo cofre duas vezes e voltar o relógio. Em todo o replay foram 453.973 previsões, e nenhuma
-delas usou estado do futuro: **zero violações**, com a contagem feita previsão por previsão.
+delas usou estado do futuro; **zero violações**, com a contagem feita previsão por previsão.
 
 **O paradoxo do canário.** "Zero violações" parece ótimo, e é quase nada. Só vale se o teste *podia* ter
-encontrado uma violação. Por isso o sistema plantou de propósito um **canário**: uma coluna idêntica ao rótulo,
-publicada no instante em que o rótulo se torna conhecível. Com o relógio honesto, essa coluna não aparece em
-nenhuma emissão, e um previsor que a usa não ganha nada: **ganho 0,000**. Com o relógio desligado — o controle
-positivo —, a mesma coluna dá ganhos de $+0{,}86$ a $+0{,}92$ no fluxo de voos, $+0{,}85$ no ano novo de voos,
+encontrado uma violação. Por isso o sistema plantou de propósito um **canário**. É uma coluna idêntica ao rótulo,
+publicada nesse instante, quando o rótulo se torna conhecível. Com o relógio honesto, essa coluna não aparece em
+nenhuma emissão, e um previsor que a usa não ganha nada, com **ganho 0,000**. Desligado o relógio, o controle
+positivo, a coluna rende ganhos de $+0{,}86$ a $+0{,}92$ no fluxo de voos, $+0{,}85$ no ano novo de voos,
 $+0{,}55$ no de prisões de 2020 e $+0{,}97$ no de Rhode Island. É o teste severo de Mayo aplicado ao próprio
-teste: o alarme toca quando há vazamento, e fica quieto quando não há.
+teste. O alarme toca quando há vazamento, e fica quieto quando não há.
 
 **O paradoxo do bom previsor que erra o mundo.** Numa central de chamadas, quem não é atendido liga de novo. A
-previsão passa a medir o próprio efeito: se o modelo prevê fila e o gestor escala mais gente, as chamadas
-observadas mudam. Um previsor ingênuo, treinado no que se observa, acertou o que observa com **1%** de erro e
-**superestimou a demanda verdadeira em 29%**. A métrica do próprio alvo aprovava um modelo errado sobre o mundo.
-Esse é o laço de Goodhart em estado puro, e a única saída foi plantar um experimento dentro do laço: em 10% dos
+previsão passa a medir o efeito dela mesma; se o modelo prevê fila e o gestor escala mais gente, as chamadas
+observadas mudam. Um previsor ingênuo, treinado naquilo que se observa, acertou o observado com **1%** de erro e
+**superestimou a demanda verdadeira em 29%**. A métrica do alvo aprovava um modelo errado sobre o mundo.
+Esse é o laço de Goodhart em estado puro, e a única saída foi plantar um experimento dentro do laço. Em 10% dos
 intervalos, um sorteio mudava a escala para 0,7 vezes ou 1,3 vezes. Com os choques sorteados como instrumento, o
 efeito estimado caiu para 0,56 e a previsão corrigida errou a demanda verdadeira em **1,7%**, dentro do limite de
 3% declarado antes.
 
 **O paradoxo do cofre.** Calibração é a promessa de que "quando o modelo diz 30%, acontece em cerca de 30% dos
 casos". Ela foi testada em cofres fora do tempo, abertos uma única vez, e o erro esperado de calibração é a
-distância média entre o previsto e o observado, medida faixa por faixa. A tabela abaixo é a história das três
+distância média entre o previsto e o observado, medida faixa por faixa. A tabela abaixo conta a história das três
 tentativas.
 
 | Fluxo | O que prevê | Cofre | Calibração no cofre | Portão |
@@ -4679,27 +4704,27 @@ tentativas.
 
 **A lição de desenho da primeira falha.** Nos voos, o último trimestre de 2013 teve mais atrasos que o modelo de
 60 dias esperava, e o erro na média ficou 2,7 pontos acima do previsto, para uma tolerância de 2. Nas prisões, o
-erro de calibração foi 0,036, para uma tolerância de 0,03, com só 1.488 casos. E a causa ficou clara: **o disjuntor
-comparava o modelo com o reserva, não com a calibração**. O modelo continuava vencendo o reserva — e por isso o
-disjuntor quase não abriu —, só que estava descalibrado na média. Ser melhor que o rival não é o mesmo que estar
-certo.
+erro de calibração foi 0,036, para uma tolerância de 0,03, com só 1.488 casos. E a causa ficou clara. **O disjuntor
+comparava o modelo com o reserva, e não com a calibração**. O modelo continuava vencendo o reserva, e por isso o
+disjuntor quase não abriu, só que estava descalibrado na média. Ser melhor que o rival e estar certo são coisas
+diferentes.
 
-**Segunda tentativa: consertar o nível.** A correção foi uma recalibração contínua do intercepto, declarada antes
-e testada num cofre novo: o mesmo trimestre de outubro a dezembro, agora em 2023, com 104.489 previsões. Os voos
-passaram: erro na média de 0,0015 e ECE de 0,008. Mas o trimestre de 2023 não repetiu o desvio de 2013 — o modelo
-cru, sem correção nenhuma, também teria passado, com ECE 0,014. A correção melhorou a calibração e **não foi posta
-à prova**.
+**Segunda tentativa: consertar o nível.** A correção foi uma recalibração contínua do intercepto, declarada
+antes e testada num cofre novo. O cofre foi o trimestre de outubro a dezembro repetido, agora em 2023, com
+104.489 previsões. Os voos passaram, com erro na média de 0,0015 e ECE de 0,008. Mas o trimestre de 2023 não
+repetiu o desvio de 2013. O modelo cru, sem correção nenhuma, também teria passado, com ECE 0,014. A correção
+melhorou a calibração e **não foi posta à prova**.
 
-Nas prisões, os dados novos de Toronto, de 2020 e 2021 — 65.276 prisões, cofre no segundo semestre de 2021 com
-16.933 casos —, mudaram a pergunta: registrar na delegacia em vez de liberar. O modelo acertou a média (0,0002) e
-separou bem os casos, mas era **pouco confiante**: nas faixas de baixo previa 0,12 onde a taxa observada era 0,04,
-e nas de cima previa 0,82 a 0,90 onde a taxa era 0,91 a 0,94. É um erro de **inclinação**, e mexer no intercepto
-não alcança isso.
+Nas prisões, os dados novos de Toronto, de 2020 e 2021, com 65.276 prisões e cofre no segundo semestre de 2021
+sobre 16.933 casos, mudaram a pergunta. Ela passou a ser registrar na delegacia em vez de liberar. O modelo
+acertou a média (0,0002) e separou bem os casos, mas era **pouco confiante**. Nas faixas de baixo previa 0,12
+onde a taxa observada era 0,04, e nas de cima previa 0,82 a 0,90 onde a taxa era 0,91 a 0,94. É um erro de
+**inclinação**, e mexer no intercepto não alcança isso.
 
-**Terceira tentativa: Rhode Island.** A especificação nova — uma recalibração de Platt, que ajusta intercepto *e*
-inclinação — foi declarada antes e testada num cofre novo: 24.466 paradas da polícia estadual de Rhode Island,
-entre 2013 e 2015, com taxa de prisão de 2,26%. A pergunta mudou de "liberação depois da prisão" para "prisão numa
-parada de trânsito", e essa troca foi confirmada por um humano.
+**Terceira tentativa: Rhode Island.** O programa declarou antes uma especificação nova, uma recalibração de Platt
+que ajusta intercepto *e* inclinação, e a testou num cofre novo, com 24.466 paradas da polícia estadual de Rhode
+Island, entre 2013 e 2015, e taxa de prisão de 2,26%. A pergunta mudou de "liberação depois da prisão" para
+"prisão numa parada de trânsito", e essa troca foi confirmada por um humano.
 
 | Cofre 2013–2015 | Erro na média | ECE | Habilidade contra a taxa-base |
 | --- | --- | --- | --- |
@@ -4707,21 +4732,21 @@ parada de trânsito", e essa troca foi confirmada por um humano.
 | Modelo cru, em sombra | 0,013 | 0,013 | $+0{,}004$ |
 
 Passou, com ECE de $0{,}21\,\bar{y}$ contra o limite de $0{,}3\,\bar{y}$. O cofre tinha esse critério relativo à
-taxa, e o modelo cru — que superestimava a taxa em **58%** — teria falhado: é isso que mostra o valor de Platt. A
+taxa, e o modelo cru, que superestimava a taxa em **58%**, teria falhado. É isso que mostra o valor de Platt. A
 recalibração terminou com inclinação 1,07 e intercepto $-0{,}30$, e o disjuntor pôs o reserva como oficial em 12%
-do cofre. Ficam duas ressalvas, e a primeira é a mais importante: **a habilidade é pequena** ($+0{,}019$). Prisão
+do cofre. Ficam duas ressalvas, e a primeira é a mais importante. **A habilidade é pequena** ($+0{,}019$). Prisão
 numa parada de trânsito é um evento raro (2 em cada 100 paradas) e pouco previsível pelas variáveis disponíveis.
-A calibração é boa; a **resolução**, não. É a decomposição de Murphy em dados reais: a recalibração consertou a
-calibração, mas não podia criar a resolução que os dados não tinham.
+A calibração é boa, e a **resolução** não se conserta por recalibração. É a decomposição de Murphy em dados reais.
+A recalibração consertou a calibração, e não podia criar a resolução ausente nos dados.
 
-**Quem paga pelo erro.** A auditoria de justiça foi informativa nos três fluxos de prisões, e o padrão não foi o
-mesmo nos três. Em Toronto, de 1997 a 2002, a taxa de falso positivo dos negros foi cerca do **dobro** da dos
-brancos em todos os anos (0,16 a 0,23 contra 0,06 a 0,11), num modelo que **não usa a cor** — ela entra pelos
+**Quem paga pelo erro.** A auditoria de justiça foi informativa nos três fluxos de prisões, e o padrão não foi
+igual nos três. Em Toronto, de 1997 a 2002, a taxa de falso positivo dos negros foi cerca do **dobro** da dos
+brancos em todos os anos (0,16 a 0,23 contra 0,06 a 0,11), num modelo que **não usa a cor**; ela entra pelos
 correlatos. Em Toronto, em 2020 e 2021, as taxas-base ficaram próximas e a calibração, os falsos positivos e os
 falsos negativos ficaram a menos de 0,05 entre os grupos. Em Rhode Island, a taxa de prisão dos motoristas negros
 foi o dobro da dos brancos (3,0–3,8% contra 1,4–1,7%), e a taxa de falso positivo foi quase o dobro em 2013 e 2014
 (0,019 contra 0,011; 0,025 contra 0,013), de novo num modelo cego à cor. Em Toronto, em 2002, as taxas de não
-liberação eram próximas (21% contra 19%) e o falso positivo dos negros continuou cerca do dobro: não usar a cor no
+liberação eram próximas (21% contra 19%) e o falso positivo dos negros continuou cerca do dobro. Não usar a cor no
 modelo não dá paridade, porque a cor entra pelos correlatos.
 
 ---
@@ -4730,18 +4755,18 @@ modelo não dá paridade, porque a cor entra pelos correlatos.
 
 **O relógio.** Cada fato carrega o seu instante de disponibilidade, escrito $t_{\mathrm{disp}}$. O armazém só
 entrega uma linha se $t_{\mathrm{disp}} \le$ instante do pedido, e cada agente lê apenas a janela entre o último
-tique e agora. Antes de acessar o cofre, a especificação é congelada num hash de pré-registro; o cofre abre uma vez
-por fluxo e não abre de novo. Os grupos de linhas do arquivo em disco têm o tamanho de um tique, e é por isso que
-cada tabela é varrida no máximo 3 vezes no replay inteiro — medido: 2,03 vezes no H3, 1,8 no H3b, 2,35 no H3c e
-1,53 no H3d.
+tique e agora. Antes de acessar o cofre, a especificação é congelada num hash de pré-registro, e o cofre abre uma
+vez por fluxo e não abre de novo. Os grupos de linhas do arquivo em disco têm o tamanho de um tique, e é por isso
+que cada tabela é varrida no máximo 3 vezes no replay inteiro, medido em 2,03 vezes no H3, 1,8 no H3b, 2,35 no H3c
+e 1,53 no H3d.
 
 **As regras do portão de calibração.** Para um previsor binário, no cofre:
 
 $$|\bar{p} - \bar{y}| \le 0{,}02, \qquad \mathrm{ECE} \le 0{,}03, \qquad \text{habilidade de Brier} > 0 .$$
 
 A habilidade de Brier compara o escore do modelo com o do climatologista, que sempre repete a taxa do passado:
-$1 - \text{Brier}_{\text{modelo}}/\text{Brier}_{\text{climatologia}}$. Zero significa "não sabe nada além da
-taxa-base"; a referência é uma climatologia **móvel**, isto é, a taxa-base do passado disponível no instante da
+$1 - \text{Brier}_{\text{modelo}}/\text{Brier}_{\text{climatologia}}$. Zero significa que o modelo nada sabe
+além da taxa-base; a referência é uma climatologia **móvel**, isto é, a taxa-base do passado disponível no instante da
 emissão. O erro esperado de calibração é a distância média entre o previsto e o observado, ponderada pelo tamanho
 de cada faixa:
 
@@ -4749,51 +4774,51 @@ $$\mathrm{ECE} = \sum_{k=1}^{10} \frac{n_k}{n}\, \left| \bar{p}_k - \bar{y}_k \r
 
 com 10 faixas de massa igual. Para os fluxos de quantis, o critério é a cobertura do intervalo de 90% ficar entre
 0,86 e 0,94; para o valor em risco da bolsa, a frequência de violações ficar entre 0,5% e 1,5% e o teste de Kupiec
-dar $p > 0{,}05$. Abster-se não tira a previsão do placar: quando o modelo é recusado, pontua-se o reserva no lugar
-dele. Sem essa regra, um modelo poderia melhorar o escore simplesmente desistindo nos dias difíceis.
+dar $p > 0{,}05$. Abster-se não tira a previsão do placar, porque quando o modelo é recusado pontua-se o reserva no
+lugar dele. Sem essa regra, um modelo poderia melhorar o escore simplesmente desistindo nos dias difíceis.
 
 **A decomposição de Murphy, em uma frase.** O erro quadrático médio se separa em confiabilidade (o quanto as
 previsões erraram a frequência), resolução (o quanto elas souberam separar os casos) e incerteza do desfecho
 (quanto o evento é raro e imprevisível). A recalibração de Platt só move a **confiabilidade**. A resolução mora
-nos dados e nas variáveis; nenhuma correção de saída a inventa. Por isso o veredito de Rhode Island é
-"calibração boa, resolução baixa" — e por isso ele é honesto: $\mathrm{REL} - \mathrm{RES}$ fica positivo, mas a
+nos dados e nas variáveis, e nenhuma correção de saída a inventa. Por isso o veredito de Rhode Island é
+"calibração boa, resolução baixa", e por isso ele é honesto. $\mathrm{REL} - \mathrm{RES}$ fica positivo, mas a
 habilidade final é $+0{,}019$, longe do $+0{,}05$ que o programa havia pedido.
 
 **O canário como teste severo.** Mayo pede que um teste seja capaz de errar. O canário é a versão operacional
-desse pedido: uma coluna que *é* o rótulo, mas só se torna disponível quando o rótulo se torna disponível. Com o
+desse pedido, uma coluna que *é* o rótulo, mas só se torna disponível quando o rótulo se torna disponível. Com o
 relógio honesto ela não entra em nenhuma emissão, e o ganho é 0,000; com o relógio desligado, o ganho é de 0,55 a
-0,97. O teste de vazamento vale exatamente o que o controle positivo dele vale.
+0,97. O valor do teste de vazamento está no controle positivo dele.
 
-**O laço performativo, declarado e depois medido.** Nenhum dos fluxos reais registra as ações do próprio sistema,
-então o laço foi simulado sobre as chegadas reais da central: a escala sai da previsão, quem desiste redisca com
+**O laço performativo, declarado e depois medido.** Nenhum dos fluxos reais registra as ações do sistema,
+então o laço foi simulado sobre as chegadas reais da central. A escala sai da previsão, quem desiste redisca com
 probabilidade $r$, e as rediscagens entram na contagem observada. Com $r = 0{,}6$ declarado, o sensor detecta a
-dependência ($t = -6{,}4$, $p = 1{,}5\times10^{-10}$); com $r = 0$, não detecta ($p = 0{,}70$). O parâmetro
+dependência ($t = -6{,}4$, $p = 1{,}5\times10^{-10}$); com $r = 0$, o sensor não detecta ($p = 0{,}70$). O parâmetro
 declarado era um chute. Medido depois numa central real de 1999, o mesmo laço vale
-$0{,}145$ [0,132; 0,157] — **quatro vezes menos** que o declarado. A correção foi, portanto, testada num mundo
-mais hostil que o mundo observado, e essa assimetria é o que a torna frágil como prova. E o estimador do laço teve
+$0{,}145$ [0,132; 0,157], **quatro vezes menos** que o declarado. A correção foi, portanto, testada num mundo
+mais hostil que o mundo observado, e essa assimetria enfraquece a correção como prova. E o estimador do laço teve
 **quatro versões** antes de passar, todas registradas: viés de $+4{,}7\%$, $-5{,}9\%$, $-8{,}4\%$ e $+1{,}7\%$,
-para um limite de 3%. Só a quarta passa. A primeira falha por desenho, não por conta: escalar pela demanda
-corrigida alimenta a espiral de desistências. É ajuste de estimador depois de ver resultado — o ponto mais fraco
+para um limite de 3%. Só a quarta passa. A primeira falha por desenho, e não por conta, porque escalar pela demanda
+corrigida alimenta a espiral de desistências. É ajuste de estimador depois de ver resultado, o ponto mais fraco
 desse portão, dito sem enfeite.
 
-**A banca contra o placar.** Três ataques foram tentados e neutralizados: o previsor que se abstém na zona
-incerta recebe exatamente o escore do reserva e fica atrás do previsor honesto nos três fluxos binários; o
-previsor constante na taxa-base recebe peso 0 no diário; e a segunda abertura do cofre é recusada. O índice de
-Goodhart — habilidade no desenvolvimento menos habilidade no cofre — foi relatado por fluxo, e é pequeno: $+0{,}14$
-na energia, $+0{,}02$ nos voos, e negativo nos outros, onde o cofre ficou acima do desenvolvimento.
+**A banca contra o placar.** Três ataques foram tentados e neutralizados. O previsor que se abstém na zona
+incerta recebe o escore do reserva e fica atrás do previsor honesto nos três fluxos binários; o previsor constante
+na taxa-base recebe peso 0 no diário; e a segunda abertura do cofre é recusada. O índice de Goodhart, habilidade no
+desenvolvimento menos habilidade no cofre, foi relatado por fluxo, e é pequeno: $+0{,}14$ na energia, $+0{,}02$ nos
+voos, e negativo nos outros, onde o cofre ficou acima do desenvolvimento.
 
 **O que a malha produziu, em números de operação.** Alarmes de deriva no cofre: 1 na energia, 2 na central, 1 nos
 voos, 1 nas prisões. Aberturas do disjuntor: 10 no desenvolvimento e 6 no cofre na energia; 4 e 1 nos voos. O
 limiar de custo por perda mudou a decisão em relação ao reserva em 21% dos instantes nos voos, 18% na bolsa e 13%
-na energia. O k-anonimato da base de prisões é 1: 11% das linhas são únicas nos quase-identificadores, e 2%
+na energia. O k-anonimato da base de prisões é 1. Nessa base, 11% das linhas são únicas nos quase-identificadores, e 2%
 continuam únicas com a idade em faixas de 5 anos; nenhuma coorte liberada passou de orçamento $\varepsilon = 2$ por
 pessoa, e o disjuntor de privacidade retirou a coorte de 1997 da publicação de 2001. O hipergrafo do horizonte tem
-454.178 nós — 453.973 previsões e 205 de topologia —, 51 hiperarestas e 7 pontes: 45% da meta de $10^6$ que o
+454.178 nós, 453.973 previsões e 205 de topologia, 51 hiperarestas e 7 pontes, isto é, 45% da meta de $10^6$ que o
 plano pedia.
 
 **A tolerância de calibração, medida depois.** O valor 0,03 da tolerância era uma escolha. A auditoria de fundo
-perguntou qual é o ruído de verdade: para cada cofre, 2.000 simulações de rótulos com as mesmas previsões e o mesmo
-$n$, e o quantil 95% do erro esperado de calibração sob calibração perfeita. O ruído cresce quando o cofre encolhe:
+perguntou qual é o ruído de verdade. Para cada cofre, 2.000 simulações de rótulos com as previsões e o $n$ do
+cofre, e o quantil 95% do erro esperado de calibração sob calibração perfeita. O ruído cresce quando o cofre encolhe.
 
 | Cofre | $n$ | ECE observado | Quantil 95% do ruído | Veredito com tolerância que depende de $n$ |
 | --- | --- | --- | --- | --- |
@@ -4804,44 +4829,44 @@ $n$, e o quantil 95% do erro esperado de calibração sob calibração perfeita.
 | Voos 2023 | 104.489 | 0,0079 | 0,0035 | Falha |
 | Rhode Island | 24.466 | 0,0048 | 0,0034 | Falha |
 
-Nenhum cofre binário passa por essa regra — **nem os três aprovados**. A lição é que 0,03 não é "o ruído": nos
+Nenhum cofre binário passa por essa regra, **nem os três aprovados**. A lição é que 0,03 não é "o ruído". Nos
 cofres grandes o ruído é de 0,002 a 0,006, e 0,03 é uma tolerância prática que deixa passar descalibração
-detectável. Pela regra secundária, que exige $\max(0{,}03;\ \text{quantil 95\%})$, o quadro do H3 volta ao que era:
-os três aprovados continuam aprovados e os dois de Toronto continuam reprovados. E a reprovação de Toronto de
-1997–2002 deixa de parecer ruído: ela era sinal.
+detectável. Pela regra secundária, que exige $\max(0{,}03;\ \text{quantil 95\%})$, o quadro do H3 volta ao que era
+antes. Os três aprovados continuam aprovados e os dois de Toronto continuam reprovados. E a reprovação de Toronto
+de 1997–2002 deixa de parecer ruído. Ela era sinal.
 
 **A deriva de rótulo que não avisou.** A auditoria também perguntou se dois testes clássicos de deriva de rótulo
 teriam visto o desvio de 2013 antes do sensor original. Não viram. O teste que compara a taxa realizada com a média
 prevista ligou no cofre em 6 de novembro de 2013, e o sensor original já havia ligado em 16 de outubro; pior, ele
 ficou ligado em 95% das verificações do desenvolvimento de 2013, porque com uma janela de três mil voos a taxa de
-atraso oscila mais de 0,02 de um dia para o outro — um alarme permanente não avisa nada. A correção segurou o único
-desvio real que apareceu: no terceiro trimestre de 2017, o modelo cru marcava $+0{,}028$ e o corrigido, $+0{,}001$.
-Mas o estresse declarado não discriminou, porque o reajuste diário absorve a deriva sozinho no nível do trimestre:
-o modelo cru também passou. Isto é estresse, não prova.
+atraso oscila mais de 0,02 de um dia para o outro. Um alarme permanente não avisa nada. A correção segurou o único
+desvio real que apareceu, no terceiro trimestre de 2017, quando o modelo cru marcava $+0{,}028$ e o corrigido,
+$+0{,}001$. Mas o estresse declarado não discriminou, porque o reajuste diário absorve a deriva sozinho no nível do
+trimestre. O modelo cru também passou. Isto é estresse, não prova.
 
-**A auditoria invertida, e quem paga.** A pergunta do quarto invariante — "quem paga pelo erro?" — foi rodada ao
+**A auditoria invertida, e quem paga.** A pergunta do quarto invariante, "quem paga pelo erro?", foi rodada ao
 avesso nos três fluxos de prisões. A métrica **escolhida** é a taxa de falso positivo do marcador,
 $P(\text{marcado} \mid \text{não sofre o desfecho})$; a **invertida** é a taxa de falso negativo,
 $P(\text{não marcado} \mid \text{sofre o desfecho})$. O grupo menos favorecido sai da maior taxa-base, o pagador é
-o de maior taxa sob a métrica em vigor, e empate é o que tem intervalos de confiança sobrepostos. A varredura de
+o de maior taxa sob a métrica em vigor, e empate fica para os casos com intervalos de confiança sobrepostos. A varredura de
 limiares vai de 0,05 a 0,95, mais o limiar declarado de cada fluxo: 0,70 nos dois fluxos de Toronto e 0,90 em
 Rhode Island.
 
-Em Toronto, de 1997 a 2002, o grupo menos favorecido é o que tem a **menor** taxa de falso negativo: no limiar
+Em Toronto, de 1997 a 2002, o grupo menos favorecido é o de **menor** taxa de falso negativo. No limiar
 declarado de 0,70, o negro perde 0,64 dos casos em 1998 contra 0,70 do branco, enquanto pela métrica escolhida
-quem paga é o negro (0,196 de falso positivo contra 0,105) e pela invertida o negro sai e fica o empate ou o
+quem paga é o negro (0,196 de falso positivo contra 0,105) e pela invertida o negro sai, ficando o empate ou o
 branco. Quem é marcado com mais frequência sem sofrer o desfecho é o negro; quem é perdido com mais frequência é o
 branco. Trocar a métrica troca quem paga, e nesse fluxo isso acontece num limiar do grid por ano, todos **acima**
-do declarado: 0,85 em 1998, 0,50 em 2000 e 0,80 em 2001 — e em nenhum em 1999 e 2002. No fluxo de 2020 e 2021 a
+do declarado: 0,85 em 1998, 0,50 em 2000 e 0,80 em 2001, e em nenhum em 1999 e 2002. No fluxo de 2020 e 2021 a
 troca aparece no segundo semestre de 2020, em 5 dos 19 limiares varridos (0,35 a 0,55), todos abaixo do declarado;
 no limiar de 0,70 do fluxo, os quatro semestres empatam sob as duas métricas. Em Rhode Island não há troca em
-limiar nenhum da varredura: o grupo menos favorecido paga sob a métrica escolhida em 2014 e empata em 2013 e 2015,
+limiar nenhum da varredura. O grupo menos favorecido paga sob a métrica escolhida em 2014 e empata em 2013 e 2015,
 e a taxa de falso negativo dele fica entre 0,850 e 0,927 no limiar de 0,90.
 
 Duas ressalvas de desenho fecham o capítulo. A primeira: em Rhode Island a pergunta mudou de "liberação depois da
-prisão" para "prisão numa parada de trânsito", e a troca foi confirmada por quem conduz o programa, não pelo grupo
-que passou a ser o alvo da decisão. A segunda: o registro dos grupos afetados é curto e não é bom — em sete
-decisões que envolvem pessoas, **nenhum grupo afetado foi ouvido**. O Capítulo 21 volta a esse ponto.
+prisão" para "prisão numa parada de trânsito", e a troca foi confirmada por quem conduz o programa, e não pelo
+grupo que passou a ser o alvo da decisão. A segunda: o registro dos grupos afetados é curto e não é bom, porque em
+sete decisões que envolvem pessoas **nenhum grupo afetado foi ouvido**. O Capítulo 21 volta a esse ponto.
 
 **Declaração de divergência (o balanço de Platt).** O registro do H3 diz que, no fluxo de voos de 2023, o
 intercepto da correção variou de $-0{,}52$ a $+0{,}43$ ao longo do ano. O diário de 2023 mostra que esse é o
@@ -4849,20 +4874,20 @@ intervalo **dentro do cofre**; no ano inteiro, o mesmo intercepto vai de $-1{,}0
 estão certos e medem coisas diferentes: um é o cofre, o outro é o ano. Fica registrado em vez de escondido.
 
 **Declaração de divergência (o caso do numpy).** O número publicado do laço performativo — efeito estimado
-$0{,}5632$ com 2.375 choques — foi contestado uma vez, e vale contar como terminou. O mesmo código, com a mesma
-semente, dava $0{,}5529$ e 2.395 choques quando rodava com o `python3` padrão da máquina. Não havia duas versões
-do código: o arquivo é um só, com o mesmo resumo criptográfico nas quatro cópias da árvore. O que havia eram dois
-pacotes numéricos no mesmo interpretador: o numpy 2.5.1 do registro e o numpy 2.4.6 que o caminho padrão importa
-antes. O ponto exato da divergência foi encontrado: com o mesmo estado do gerador, um sorteio binomial de 248
-tentativas com probabilidade 0,6 devolve 171 em uma versão e 150 na outra, porque a versão 2.5 corrigiu a série de
-Stirling do teste de aceitação do BTPE — o terceiro e o quarto termos eram somados em vez de subtraídos, e o
+$0{,}5632$ com 2.375 choques — foi contestado uma vez, e vale contar como terminou. O código, com a semente
+declarada, dava $0{,}5529$ e 2.395 choques quando rodava com o `python3` padrão da máquina. Não havia duas versões
+do código. O arquivo é um só, e as quatro cópias da árvore trazem o resumo criptográfico idêntico. O que havia eram
+dois pacotes numéricos dentro de um só interpretador: o numpy 2.5.1 do registro e o numpy 2.4.6 que o caminho padrão
+importa antes. O ponto exato da divergência foi encontrado: com o estado do gerador idêntico, um sorteio binomial
+de 248 tentativas com probabilidade 0,6 devolve 171 em uma versão e 150 na outra, porque a versão 2.5 corrigiu a
+série de Stirling do teste de aceitação do BTPE — o terceiro e o quarto termos eram somados em vez de subtraídos, e o
 coeficiente principal dizia 13680 onde devia dizer 13860. Daí em diante as duas simulações descorrelacionam, e o
 sorteio de exploração muda de padrão. **Nenhum número publicado mudou**: o r̂ de 0,5632 com 2.375 choques reproduz
 no ambiente de registro, e o outro valor é o do outro pacote. A lição para quem for conferir: registre a versão do
 ambiente junto com o número, porque um número sem ambiente é um número que ninguém consegue auditar.
 
 **O que fica aberto.** O tempo de atendimento e a paciência dos clientes da central continuam supostos, porque a
-base não traz nenhum dos dois. O laço performativo é um laço declarado sobre chegadas reais, não uma medida do
+base não traz nenhum dos dois. O laço performativo é um laço declarado sobre chegadas reais, e não uma medida do
 mundo. A latência do boletim de ciclones (3 horas) e a do táxi dos voos (20 minutos) são suposições. E o horizonte
 não é um serviço rodando: é um replay sob relógio.
 
@@ -4870,8 +4895,8 @@ não é um serviço rodando: é um replay sob relógio.
 
 ### Degrau 3 — Mão na massa
 
-O laboratório deste capítulo monta as três peças de que o H3 depende — o escalonamento de Platt, o erro esperado de
-calibração e o canário — sobre previsões simuladas, com o acaso embutido em dez linhas de SplitMix64. A logística é
+O laboratório deste capítulo monta as três peças de que o H3 depende, o escalonamento de Platt, o erro esperado de
+calibração e o canário, sobre previsões simuladas, com o acaso embutido em dez linhas de SplitMix64. A logística é
 ajustada por mínimos quadrados reponderados, que é determinístico e não precisa de biblioteca. O código está em
 `crates/stochology-book/src/cap20.rs`, e no rascunho de escrita rodou assim:
 
@@ -4879,11 +4904,11 @@ ajustada por mínimos quadrados reponderados, que é determinístico e não prec
 cargo run --release
 ```
 
-O mundo é uma parada de trânsito. O desfecho é "houve prisão", com três covariáveis — noite, velocidade alta,
-placa de outro estado — e um modelo aditivo em log-razão de chances. O período de treino (2005–2012) tem taxa-base
-mais alta; o desenvolvimento (o período antes do cofre) e o cofre (2013–2015, 24.466 paradas) têm a **mesma**
-distribuição e a mesma taxa, cerca de 2,2%. O modelo cru é treinado no período antigo e aplicado ao cofre; a
-correção de Platt é ajustada no desenvolvimento, onde os rótulos já são conhecidos.
+O mundo é uma parada de trânsito. O desfecho é "houve prisão", com três covariáveis (noite, velocidade alta,
+placa de outro estado) e um modelo aditivo em log-razão de chances. O período de treino (2005–2012) tem taxa-base
+mais alta; o desenvolvimento (o período antes do cofre) e o cofre (2013–2015, 24.466 paradas) têm distribuição e
+taxa iguais, cerca de 2,2%. O modelo cru é treinado no período antigo e aplicado ao cofre, e a correção de Platt é
+ajustada no desenvolvimento, onde os rótulos já são conhecidos.
 
 ```text
 == Capítulo 20 :: o relogio, o canario e o cofre ==
@@ -4899,18 +4924,17 @@ canario: uma coluna igual ao rotulo, publicada no instante do rotulo
   relogio desligado: canario disponivel em 24466 de 24466 emissoes | beta_canario = +9.23 | ganho de habilidade = +0.6521
 ```
 
-Leia linha por linha. **O modelo cru** prevê, em média, 0,0351 onde a taxa do cofre é 0,0220: 60% acima. Esse
-excesso aparece nas duas métricas ao mesmo tempo — o erro na média vale $+0{,}0132$ e o erro esperado de
-calibração vale 0,0132 —, porque o desvio é quase todo de **nível**: o modelo aprendeu a taxa-base do período
-antigo e não percebeu que o mundo mudou. A habilidade de Brier fica negativa ($-0{,}0020$): o modelo perde para o
-climatologista que só repete a taxa do passado. **O modelo oficial**, com Platt ($a = 0{,}98$, $b = -0{,}54$),
-volta ao nível certo: erro na média $+0{,}0002$ e ECE 0,0022, com habilidade $+0{,}0098$. Note o que a correção
-**não** fez: a habilidade subiu de $-0{,}0020$ para $+0{,}0098$, e não para $+0{,}5$. A inclinação quase não mudou
-(o ajuste ficou em 0,98), e a resolução continua sendo a dos dados. Calibração se conserta; resolução, não.
-**O canário** fecha o laboratório: com o relógio honesto, a coluna do canário está disponível em **0** das 24.466
-emissões, o coeficiente dela fica em zero e o ganho de habilidade é exatamente 0,0000; com o relógio desligado,
-ela está disponível nas 24.466 emissões e o ganho é $+0{,}6521$. O teste de vazamento vale o que vale o controle
-positivo dele.
+Leia linha por linha. **O modelo cru** prevê, em média, 0,0351 onde a taxa do cofre é 0,0220, isto é, 60% acima.
+Esse excesso aparece nas duas métricas a um só tempo, já que o erro na média vale $+0{,}0132$ e o erro esperado de
+calibração vale 0,0132, e o desvio é quase todo de **nível**. O modelo aprendeu a taxa-base do período
+antigo e não percebeu que o mundo mudou. A habilidade de Brier fica negativa ($-0{,}0020$), pois o modelo perde
+para o climatologista que só repete a taxa do passado. **O modelo oficial**, com Platt ($a = 0{,}98$, $b =
+-0{,}54$), volta ao nível certo, com erro na média $+0{,}0002$ e ECE 0,0022, e habilidade $+0{,}0098$. Note o ponto em que
+a correção **não** fez nada. A habilidade subiu de $-0{,}0020$ para $+0{,}0098$, e não para $+0{,}5$. A inclinação
+quase não mudou (o ajuste ficou em 0,98), e a resolução continua sendo a dos dados. A calibração se conserta;
+a resolução não. **O canário** fecha o laboratório. Com o relógio honesto, a coluna do canário fica disponível em
+**0** das 24.466 emissões, o coeficiente dela fica em zero e o ganho de habilidade é 0,0000; com o relógio
+desligado, ela está disponível nas 24.466 emissões e o ganho é $+0{,}6521$.
 
 **Declaração de divergência.** O experimento acima é simulado e foi calibrado para ter a estrutura do cofre de
 Rhode Island — taxa de 2,26%, 24.466 paradas, correção ajustada no período anterior —, não para reproduzir os
@@ -4919,7 +4943,7 @@ aqui contra $0{,}013$ lá; erro na média com Platt, $+0{,}0002$ aqui contra $0{
 aqui contra **0,0048** lá; habilidade com Platt, $+0{,}0098$ aqui contra **$+0{,}019$** lá; excesso da taxa pelo
 modelo cru, 60% aqui contra 58% lá. A ordem de grandeza e o sinal de todas elas coincidem, e o motivo das
 diferenças é o dado: o de cá é gerado por um modelo aditivo simples, com três covariáveis e sem o ruído de um
-registro policial real. O ganho do canário com o relógio desligado — $+0{,}6521$ — cai dentro da faixa medida nos
+registro policial real. O ganho do canário com o relógio desligado, $+0{,}6521$, cai dentro da faixa medida nos
 cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode Island).
 
 **Exercícios.**
@@ -4947,7 +4971,7 @@ cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode 
   dentro do laço desfaz a espiral, e o laço declarado em 0,6 é quatro vezes o medido, 0,145.
 - Cada correção de calibração só foi aceita num cofre novo: voos de 2023 com ECE 0,008, prisões de 2020–2021
   reprovadas por inclinação (0,067) e Rhode Island aprovada com Platt, ECE 0,0048 e habilidade $+0{,}019$.
-- Calibração se conserta; resolução, não. E com uma tolerância que depende do tamanho do cofre, nenhum dos seis
+- Calibração se conserta; resolução fica onde está. E com uma tolerância que depende do tamanho do cofre, nenhum dos seis
   cofres binários passa — nem os três aprovados.
 - Trocar a métrica de justiça troca quem paga pelo erro; e nenhum dos grupos afetados foi ouvido nas sete
   decisões que envolvem pessoas.
@@ -4955,88 +4979,87 @@ cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode 
 ## Capítulo 21. As sete lições, os dez pontos da auditoria e o que falta fazer
 
 **Objetivos.** Ao fim deste capítulo você deve saber resumir as sete lições do programa em situações do dia a dia,
-ler o balanço dos dez pontos da auditoria de fundo sabendo o que cada um mostrou, dizer em voz alta o que continua
-aberto e sem resposta, e conduzir o projeto final: escolher um problema da escola ou da cidade, preencher a ficha,
-simular o mundo e defender a conclusão.
+ler o balanço dos dez pontos da auditoria de fundo com o resultado de cada um na mão, nomear em voz alta as
+questões que seguem abertas e sem resposta, e conduzir o projeto final. Escolher um problema da escola ou da
+cidade, preencher a ficha, simular o mundo e defender a conclusão.
 
 ---
 
 ### Degrau 1 — O mundo real e o paradoxo
 
-**A pergunta que fecha o curso.** No último encontro, alguém pergunta o que sobrou de útil para a vida. Não o que
-sobrou para quem vai fazer estatística: o que sobrou para quem vai decidir. A resposta do programa tem sete
-frases, e cada uma nasceu de um caso concreto. Estas são as sete, contadas do jeito que aconteceram.
+**A pergunta que fecha o curso.** No último encontro, alguém pergunta de que serviu o curso na vida real. Não de
+que serviu para quem vai fazer estatística, e sim para quem vai decidir. A resposta do programa tem sete frases, e
+cada uma nasceu de um caso concreto. As sete vêm contadas do jeito que aconteceram.
 
-1. **A média esconde o que importa.** No posto de saúde, a mesma demanda média dá 9,3 minutos de espera no mundo
-   constante e 20,7 minutos no mundo que oscila: em cada 100 pacientes, 25 esperam mais de meia hora no mundo que
-   oscila, contra 8 no mundo constante. Numa central de chamadas, a escala dimensionada pela média falha em
-   **26 de cada 100 dias**. E a riqueza média de quem apostou 3 vezes na bolsa aparece como 19 vezes, quando a
-   mediana é de 2,1.
+1. **A média esconde o essencial.** No posto de saúde, a demanda média é idêntica nos dois mundos, e a espera
+   salta de 9,3 minutos no mundo constante para 20,7 minutos no mundo que oscila. Em cada 100 pacientes, 25 esperam
+   mais de meia hora no mundo que oscila, contra 8 no mundo constante. Numa central de chamadas, a escala
+   dimensionada pela média falha em **26 de cada 100 dias**. E a riqueza média de quem apostou 3 vezes na bolsa
+   aparece como 19 vezes, quando a mediana é de 2,1.
 2. **A unidade independente decide a margem.** 2,65 milhões de chamadas valem **81 dias**; 225 mil voos valem
-   **364 dias**. Contar linha por linha onde a variação se repete é o que separa uma margem honesta de uma margem
-   que só parece estreita.
+   **364 dias**. Contar linha por linha, onde a variação se repete, separa uma margem honesta de uma margem que só
+   parece estreita.
 3. **Acertar não basta; é preciso ter podido errar.** O ajuste por propensão no experimento de LaLonde acertou o
-   número, e um tratamento inócuo teria dado quase o mesmo — no placebo de 1975 ele inventou um efeito fantasma de
-   $-12{,}3$ pontos percentuais. Um número que acerta sem poder errar não é evidência.
+   número, e um tratamento inócuo teria chegado a um valor parecido. No placebo de 1975 ele inventou um efeito
+   fantasma de $-12{,}3$ pontos percentuais. Um número que acerta sem poder errar não é evidência.
 4. **Reprovar o próprio modelo é resultado.** Nos incêndios dinamarqueses, 36 meses sem nenhum incêndio gigante
-   valem só **2,2 bits** de informação: a chance mensal continua perto de $1/38$ pela regra de Laplace, enquanto a
-   seguradora triplicava a aposta. Quando o modelo do próprio programa foi testado no cofre, ele perdeu para a média
+   valem só **2,2 bits** de informação. A chance mensal continua perto de $1/38$ pela regra de Laplace, enquanto a
+   seguradora triplicava a aposta. Quando o modelo do programa foi testado no cofre, ele perdeu para a média
    histórica simples (habilidade $-0{,}015$) e **não ganhou o direito de decidir**. A alegação da seguradora caiu.
 5. **O efeito transporta melhor que a lista de causas.** A invariância exata é rara. Quando ela aparece e é
-   conferida contra uma verdade conhecida — o túnel de luz e os bloqueadores de hERG —, protege contra a intervenção
-   nova, como o verapamil mostrou. Quando não aparece, a direção e o tamanho do efeito ainda costumam sobreviver:
+   conferida contra uma verdade conhecida (o túnel de luz e os bloqueadores de hERG), protege contra a intervenção
+   nova, como o verapamil mostrou. Quando não aparece, a direção e o tamanho do efeito ainda costumam sobreviver.
    9 domínios previram o ambiente nunca visto com habilidade de 0,04 a 0,88.
 6. **Calibração se conserta, resolução não.** Foram necessários três cofres para a calibração passar pela
-   tolerância de 0,03 — e a auditoria mostrou que essa tolerância era frouxa nos cofres grandes. A habilidade final
-   ficou em $+0{,}019$. Dizer "está bem calibrado" não é o mesmo que dizer "separa bem os casos".
-7. **Declarar antes de rodar é o que torna a falha útil.** Sete rodadas no H2 e três tentativas no H3 só contam
-   como ciência porque cada mudança foi escrita com hash **antes** de rodar, e porque cada ajuste feito depois de
-   ver um resultado ficou registrado e contado no contador $K$.
+   tolerância de 0,03, e a auditoria mostrou que essa tolerância era frouxa nos cofres grandes. A habilidade final
+   ficou em $+0{,}019$. Dizer "está bem calibrado" não assegura que o modelo separe bem os casos.
+7. **Declarar antes de rodar torna a falha útil.** Sete rodadas no H2 e três tentativas no H3 só contam como
+   ciência porque cada mudança foi escrita com hash **antes** de rodar, e porque cada ajuste feito depois de ver um
+   resultado ficou registrado e contado no contador $K$.
 
-**O programa virou o alvo.** Uma disciplina que exige teste severo das alegações alheias precisava aplicar o
-mesmo teste a si mesma. Foi o que a auditoria de fundo fez: dez suposições do programa — coisas que o texto
-afirmava e que nunca tinham sido postas à prova — viraram frentes de trabalho, cada uma com a mesma regra de casa:
+**O programa virou o alvo.** Uma disciplina que exige teste severo das alegações alheias precisava passar pelo
+teste que aplica aos outros. A auditoria de fundo fez isso. Dez suposições do programa, coisas que o texto
+afirmava e que nunca tinham sido postas à prova, viraram frentes de trabalho, cada uma submetida à regra de casa:
 declaração com hash antes de rodar, resultado relatado com os limites, e toda mudança de critério depois de ver o
 resultado entrando como declaração nova e contando no $K$.
 
-O resultado geral é desconfortável e vale a leitura: **nenhum número publicado caiu por erro de conta**, e a
-auditoria estreitou o que esses números autorizam. A tese central do livro empatou no teste direto. A tolerância
-de calibração era frouxa. O laço de Goodhart declarado era quatro vezes maior que o medido. E o portão do H2
-depende de qual versão de cada escolha conta.
+O resultado geral é desconfortável e vale a leitura. **Nenhum número publicado caiu por erro de conta**, e a
+auditoria encolheu a autorização desses números. A tese central do livro empatou no teste direto. A tolerância de
+calibração era frouxa. O laço de Goodhart declarado era quatro vezes maior que o medido. E o portão do H2 depende
+de qual versão de cada escolha conta.
 
-**A quem o programa não ouviu.** Em cada uma das sete decisões que envolvem pessoas — cortar o benefício de
+**A quem o programa não ouviu.** Em cada uma das sete decisões que envolvem pessoas (cortar o benefício de
 acidentados do trabalho no Kentucky, reduzir turmas no Tennessee, mudar a coparticipação no seguro de saúde,
-comparar o treino profissional do NSW com controles do CPS, marcar o detido em Toronto nos dois períodos e marcar
-o motorista em Rhode Island —, **nenhum grupo afetado foi ouvido**. Não há no repositório consulta, entrevista,
-painel nem consentimento. A lista é grande e tem nome e número: 11.598 alunos em 80 escolas; 5.226 detidos;
-65.276 prisões de 2020 e 2021; 86.113 paradas de trânsito; 185 participantes do treino do NSW e 15.992 controles.
-Assinar não é escutar: quem assina um parecer fica do lado de quem decide usar o artefato, não do lado de quem
-paga o erro.
+comparar o treino profissional do NSW com controles do CPS, marcar o detido em Toronto nos dois períodos e marcar o
+motorista em Rhode Island), **nenhum grupo afetado foi ouvido**. Não há no repositório consulta, entrevista, painel
+nem consentimento. A lista é grande e tem nome e número: 11.598 alunos em 80 escolas; 5.226 detidos; 65.276 prisões
+de 2020 e 2021; 86.113 paradas de trânsito; 185 participantes do treino do NSW e 15.992 controles. Assinar não é
+escutar. Quem assina um parecer fica do lado de quem decide usar o artefato; quem paga o erro fica do outro lado.
 
-**O que ficou só no papel.** Duas pontas continuam abertas, e as duas dependem de gente. A primeira é a
-elicitação de especialistas: o protocolo de painel e seis formulários estão escritos, com o critério de $K = 2$
-pronto, e **ninguém foi entrevistado** — nenhuma previsão foi corrigida, nada foi assinado. Sem esse painel,
-cinco dos 33 domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o
-erro: o registro dos grupos afetados existe e diz que nenhum foi ouvido.
+**Duas pontas ficaram no papel.** As duas continuam abertas e as duas dependem de gente. A primeira é a elicitação
+de especialistas. O protocolo de painel e seis formulários estão escritos, com o critério de $K = 2$ pronto, e
+**ninguém foi entrevistado**. Nenhuma previsão foi corrigida, nada foi assinado. Sem esse painel, cinco dos 33
+domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o erro. O
+registro dos grupos afetados existe e diz que nenhum foi ouvido.
 
 **E uma ponta que é só de resolução.** Na genética de levedura, a validação que sustenta a réplica decide com
-**um mutante por ambiente**: o menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
-o piso. O que falta não é o p: é resolução. Um efeito medido em uma linha é um efeito medido em uma linha.
+**um mutante por ambiente**. O menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
+o piso. Ali falta resolução, e o p não é o problema. Um efeito medido em uma linha é um efeito medido em uma linha.
 
 ---
 
 ### Degrau 2 — A regra do jogo
 
-**As sete lições, com a condição em que valem.** As três primeiras lições são aritmética de decisão: a média de
-uma função não é a função da média; a margem depende da unidade que se conta como independente; e um número só é
-evidência se o procedimento que o produziu podia ter dado errado. As duas seguintes são sobre o que se ganha ao
-perder: reprovar o próprio modelo é um resultado publicável, e a invariância protege contra a intervenção nova
-enquanto o efeito, sozinho, só promete transportar em média. As duas últimas são sobre processo: a decomposição de
-Murphy separa confiabilidade de resolução, e a declaração prévia é o que separa ciência de trapaça. Nenhuma das
-sete vale sem a sua condição: a sexta só vale para previsores que não podem ser melhorados por mais dados, e a
+**As sete lições, com a condição em que valem.** As três primeiras lições são aritmética de decisão. A média de
+uma função não é a função da média; a margem depende da unidade contada como independente; e um número só é
+evidência se o procedimento que o produziu podia ter dado errado. As duas seguintes tratam do ganho que vem da
+perda: reprovar o modelo que se construiu é um resultado publicável, e a invariância protege contra a intervenção
+nova, enquanto o efeito, sozinho, só promete transportar em média. As duas últimas dizem respeito ao processo. A
+decomposição de Murphy separa confiabilidade de resolução, e a declaração prévia separa ciência de trapaça. Nenhuma
+das sete vale sem a sua condição. A sexta só vale para previsores que não podem ser melhorados por mais dados, e a
 sétima só vale se a declaração for escrita antes e o contador $K$ for publicado depois.
 
-**O balanço dos dez pontos da auditoria de fundo.** A tabela diz o que cada ponto perguntou e o que ele respondeu.
+**O balanço dos dez pontos da auditoria de fundo.** A tabela traz a pergunta e a resposta de cada ponto.
 
 | Ponto | A suposição | O que foi medido | Resultado |
 | --- | --- | --- | --- |
@@ -5053,16 +5076,16 @@ sétima só vale se a declaração for escrita antes e o contador $K$ for public
 | Ficha e contrato | A pergunta que o modelo responde é a que o decisor fez; o contrato de dados não diz por que o dado falta | Campo obrigatório `pergunta_do_decisor` no pacote de domínio (18 do H2g, 12 do H2 e a ficha do H0) e o bloco de ausência com MCAR, MAR ou MNAR no contrato | Os dois campos entram validados no código; nos contratos de hoje a regra da ausência é vacuosa — nenhuma coluna tem um único valor ausente — e nenhum número publicado muda |
 | Elicitação humana | A priori simulada seria substituída por painel de especialistas | Protocolo do painel e seis formulários, com o critério de $K = 2$ fixado | Nada foi elicitado: nenhuma entrevista, nenhuma previsão corrigida, nenhuma linha de decisão assinada |
 
-**Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala (pontos 9 e 10) saíram da árvore em 2026-10-16: não sustentam resultado central da teoria, e os números continuam registrados na tabela acima. O material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
+**Nota de aposentadoria.** Os artefatos das extensões de evento raro, saúde e escala (pontos 9 e 10) saíram da árvore em 2026-10-16. Não sustentam resultado central da teoria, e os números continuam registrados na tabela acima. O material volta com `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
 
-Três desses resultados apertam o que os capítulos anteriores autorizam. O laço de 0,6 que o H3 corrigiu é cerca
-de quatro vezes o que se mediu num caso real. A tolerância de 0,03 do erro de calibração é maior que o ruído em
-todos os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de transferência do H2
-depende de qual versão de cada escolha conta: a área da educação não sobrevive à correção de agrupamento, e quem
-sustenta a terceira área agora é a genética replicada, não a educação.
+Três desses resultados apertam a autorização dos capítulos anteriores. O laço de 0,6 que o H3 corrigiu é cerca de
+quatro vezes o valor medido num caso real. A tolerância de 0,03 do erro de calibração é maior que o ruído em todos
+os cofres grandes, e nenhum deles passa na regra que depende de $n$. E o portão de transferência do H2 depende de
+qual versão de cada escolha conta. A área da educação não sobrevive à correção de agrupamento, e a terceira área
+agora se sustenta na genética replicada.
 
-**As sete objeções, e o que se responde a elas.** Uma disciplina que exige teste severo precisa sobreviver às
-objeções contra si própria.
+**As sete objeções, e a resposta a cada uma.** Uma disciplina que exige teste severo precisa sobreviver às objeções
+que lhe fazem.
 
 | Objeção | Resposta |
 | --- | --- |
@@ -5074,59 +5097,60 @@ objeções contra si própria.
 | "A ergodicidade virou doutrina." | A lente do tempo se apoia no programa de Ole Peters, que é contestado, e a disciplina o ensina como debate. Pelo critério do crescimento, a aversão a perdas de cerca de 2,25 medida em laboratório só se justifica quando 56% da riqueza estão em jogo: a tese explica a recusa de arriscar meio patrimônio, não a aversão a apostas pequenas. Algo parecido vale para as caudas: Taleb pede que se suponha cauda pesada até prova em contrário; Clauset, Shalizi e Newman pedem prova antes de declarar uma lei de potência. A questão é de quem é o ônus da prova, e a resposta depende de quanto custa errar |
 | "O auditor é parte interessada." | Os 21 pareceres foram assinados por quem conduz o programa, e nomear um responsável não torna a auditoria independente. A auditoria de fundo acrescentou uma checagem mais barata e mais fraca: reimplementar do zero quatro resultados que sustentam as saídas aprovadas, a partir das especificações. Os quatro concordaram e nenhum erro foi achado — mas o teste tem um defeito declarado, porque várias escolhas que a especificação não fixa saíram iguais às do código original, três delas só no STAR. Independência real pede gente de fora, com o mesmo contrato |
 
-**O que a ficha exige.** O instrumento que transforma uma dúvida em alegação auditável tem cinco perguntas de
-cabeçalho e quatro proibições. As cinco perguntas: qual é o **processo gerador** dos dados, com semente; onde mora
-a **não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído** — se o ruído entra somado
-(Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive. As
-quatro proibições: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina, nenhuma
-autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
+**A ficha exige cinco perguntas e quatro proibições.** O instrumento que transforma uma dúvida em alegação
+auditável faz cinco perguntas de cabeçalho. Qual é o **processo gerador** dos dados, com semente; onde mora a
+**não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído**, se o ruído entra somado
+(Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive.
+Quatro proibições fecham a lista: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina,
+nenhuma autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
 automáticos verificam a ficha, e o binário de portões sai com código 0 ou 1.
 
-**O roteiro do projeto final.** O projeto vale como o curso inteiro: são quatro semanas de trabalho para um
+**O roteiro do projeto final.** O projeto vale como o curso inteiro. São quatro semanas de trabalho para um
 problema da escola ou da cidade. O roteiro tem oito passos, e o produto final é um memorando em frequências
 naturais, com cláusula de saída, defendido em banca.
 
-1. **Escolher o problema.** Serve um problema em que alguém decide algo e há uma ação concreta: reduzir turmas,
-   mudar o horário do intervalo, instalar um bebedouro, multar estacionamento em fila dupla, mudar o ponto de
-   ônibus. Não serve "entender a violência na cidade": falta decisor e falta ação.
+1. **Escolher o problema.** Serve um problema em que alguém decide algo e há uma ação concreta, como reduzir
+   turmas, mudar o horário do intervalo, instalar um bebedouro, multar estacionamento em fila dupla ou mudar o
+   ponto de ônibus. Não serve "entender a violência na cidade": falta decisor e falta ação.
 2. **Escrever a pergunta do decisor**, em três partes: *Quem decide*: nomeie a pessoa ou o órgão; *Ação que a
    decisão muda*: copie a ação literalmente; *A pergunta do decisor é*: termine com interrogação. Sem essas três
    partes a ficha é recusada, e o laboratório deste capítulo mostra o verificador que a recusa.
-3. **Preencher a ficha**: as cinco perguntas de cabeçalho, a alegação em uma frase, o termo de escopo (onde vale e
-   onde não vale), o que se mede e em que unidade.
-4. **Fixar o processo gerador** com semente numérica: o que é sorteado, o que é fixo, quantas linhas, quais
-   ambientes. A semente é o que permite a outra pessoa ver o mesmo mundo.
-5. **Construir o modelo nulo**: o que o acaso sozinho produziria naquele desenho, com a mesma semente. Sem nulo
-   não há contraste.
-6. **Pré-registrar com hash** e declarar o cofre: a partição de dados que ninguém viu fica guardada, e abre uma vez
+3. **Preencher a ficha.** As cinco perguntas de cabeçalho, a alegação em uma frase, o termo de escopo (onde vale e
+   onde não vale), a grandeza medida e a unidade.
+4. **Fixar o processo gerador** com semente numérica. Quais elementos são sorteados, quais são fixos, quantas
+   linhas, quais ambientes. A semente permite que outra pessoa veja aquele mundo.
+5. **Construir o modelo nulo.** Aquilo que o acaso sozinho produziria naquele desenho, com a semente repetida. Sem
+   nulo não há contraste.
+6. **Pré-registrar com hash** e declarar o cofre. A partição de dados que ninguém viu fica guardada, e abre uma vez
    só. Se o critério mudar depois de abrir, o novo critério é declaração nova e entra no contador de tentativas.
 7. **Rodar, medir e declarar.** Todos os números do memorando saem de código que outra pessoa roda; toda tentativa
    fica no placar; toda conta de cabeça é proibida.
 8. **Escrever o memorando e defender.** Frequências naturais ("em cada 100 alunos"), o gráfico dos resultados
-   hipotéticos, a cláusula objetiva de saída — aquela que diz quando a recomendação deixa de valer —, e a resposta
-   à pergunta final: quando um modelo é bom o bastante? A resposta do livro é: quando ele declara o que pode dar
-   errado, quando alguém de fora consegue reproduzir cada número, e quando a decisão que ele autoriza não depende
-   de nenhuma suposição que não tenha sido escrita.
+   hipotéticos, a cláusula objetiva de saída, aquela que diz quando a recomendação deixa de valer, e a resposta à
+   pergunta final, quando um modelo é bom o bastante. O livro responde com três condições. Um modelo é bom o
+   bastante quando ele declara os modos de falha, quando alguém de fora consegue reproduzir cada número, e quando a
+   decisão que ele autoriza não depende de nenhuma suposição que não tenha sido escrita.
 
-**O que fica aberto, com nome.** Três coisas, e nenhuma delas se resolve com mais código.
+**Três coisas ficam abertas, com nome.** Nenhuma delas se resolve com mais código.
 
 - **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
   foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
 - **A resolução da validação por intervenção da genética.** Um mutante por ambiente, $p = 0{,}001$, o piso de 999
-  sorteios: o que falta é a segunda linha, não o p-valor.
+  sorteios: falta a segunda linha, e o p-valor não é o problema.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
   releitura dos 21 pareceres assinados está preparada, com as 21 linhas e os 21 resumos criptográficos conferidos,
   e nenhuma decisão foi assinada.
 
-**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo — R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o mesmo recurso total, e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa não é o parágrafo, é o artefato executável — alegação, processo gerador, modelo nulo e teste, no mesmo lugar. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a mesma proibição de texto livre entre agentes. **Prazo de validade para a própria meta:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
+**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo. R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o recurso total idêntico e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa é o artefato executável, e não o parágrafo. Alegação, processo gerador, modelo nulo e teste ficam lado a lado. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a proibição de texto livre entre agentes que já vale na ficha. **Prazo de validade para a meta do livro:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
 
 ---
 
 ### Degrau 3 — Mão na massa
 
 O laboratório deste capítulo é o **verificador da ficha do projeto final**: um portão pequeno que recusa uma ficha
-sem pergunta do decisor, sem semente e sem cláusula de saída — e que prova que sabe reprovar, porque cada uma das
-sete regras derruba ao menos uma ficha. O código está em `crates/stochology-book/src/cap21.rs`, autocontido e sem dependências:
+sem pergunta do decisor, sem semente e sem cláusula de saída, e prova que sabe reprovar, porque cada uma das sete
+regras derruba ao menos uma ficha. O código está em `crates/stochology-book/src/cap21.rs`, autocontido e sem
+dependências:
 
 ```bash
 cargo run --release
@@ -5184,14 +5208,14 @@ regras que reprovaram ao menos uma ficha: 7 de 7 | reprovacoes por regra: [1, 1,
 ```
 
 Leia linha por linha. **A ficha 01 é aceita** com quem decide nomeado, a ação copiada literalmente da decisão, a
-pergunta terminando em interrogação, a semente 2026 no processo gerador e no modelo nulo, o resumo criptográfico
-de 64 dígitos e a cláusula de saída ancorada num número ("acima de 0,10 dp em três anos seguidos"). **As outras
-onze são recusadas, e cada recusa é um defeito distinto**: R4 aparece quatro vezes porque a pergunta do decisor é
-a regra com mais partes — ausente, genérica ("o decisor" não nomeia ninguém), sem a ação literal e sem a
-interrogação. R7 aparece duas vezes: uma ficha sem cláusula nenhuma e outra com uma cláusula sem gatilho
-("enquanto o modelo continuar bom e ninguém reclamar"), que não diz quando a recomendação deixa de valer. A última
-linha é a conta que interessa: **7 de 7 regras reprovaram ao menos uma ficha**. Um portão que nunca reprova não é
-um portão; é um carimbo.
+pergunta terminando em interrogação, a semente 2026 no processo gerador e no modelo nulo, o resumo criptográfico de
+64 dígitos e a cláusula de saída ancorada num número ("acima de 0,10 dp em três anos seguidos"). **As outras onze
+são recusadas, e cada recusa é um defeito distinto.** R4 aparece quatro vezes porque a pergunta do decisor é a
+regra com mais partes: ausente, genérica ("o decisor" não nomeia ninguém), sem a ação literal e sem a interrogação.
+R7 aparece duas vezes: uma ficha sem cláusula nenhuma e outra com uma cláusula sem gatilho ("enquanto o modelo
+continuar bom e ninguém reclamar"), que não diz quando a recomendação deixa de valer. A última linha é a conta que
+interessa. **7 de 7 regras reprovaram ao menos uma ficha**. Um portão que nunca reprova não é um portão; é um
+carimbo.
 
 **Declaração de divergência.** O verificador do laboratório é uma reimplementação reduzida do validador do
 repositório. O validador da pesquisa exige, além das regras acima, no mínimo 60 caracteres no texto da pergunta,
@@ -5211,19 +5235,19 @@ literalmente e termina em pergunta.
 4. *(Conta)* No balanço da auditoria, cinco dos 33 domínios mudam de status ou de ação quando a priori de
    literatura substitui a do pacote. Escreva esse número como frequência natural ("em cada 100 domínios...") e
    diga por que ele é o tamanho do que ainda falta medir.
-5. *(Conceito)* O piloto cego empatou no teto: os dois braços acertaram os mesmos 8 defeitos. Explique, em quatro
-   frases, por que um empate no teto não sustenta a tese e também não a refuta.
+5. *(Conceito)* O piloto cego empatou no teto: cada braço apontou 8 defeitos, e as duas listas saíram idênticas.
+   Explique, em quatro frases, por que um empate no teto não sustenta a tese e também não a refuta.
 6. *(Ensaio)* Responda à pergunta que fecha o curso: quando um modelo é bom o bastante? Use pelo menos três
    números deste livro.
 
 **Resumo.**
 
 - As sete lições resumem o programa: a média esconde; a unidade independente decide a margem; acertar não basta
-  se o teste não podia falhar; reprovar o próprio modelo é resultado; o efeito transporta melhor que a lista de
-  causas; calibração se conserta e resolução não; declarar antes de rodar é o que torna a falha útil.
+  se o teste não podia falhar; reprovar o modelo que se construiu é resultado; o efeito transporta melhor que a
+  lista de causas; calibração se conserta e resolução não; declarar antes de rodar torna a falha útil.
 - A auditoria de fundo testou dez suposições do programa e as extensões. Nenhum número publicado caiu por erro
-  de conta; o que ela estreitou foi o que esses números autorizam — a tese central empatou, a tolerância de
-  calibração era frouxa, o laço declarado era quatro vezes o medido.
+  de conta; a auditoria estreitou a autorização desses números. A tese central empatou, a tolerância de calibração
+  era frouxa, o laço declarado era quatro vezes o medido.
 - Ficam em aberto, com nome: a elicitação com especialistas humanos (5 de 33 domínios dependem da priori), a
   resolução da validação da genética (um mutante por ambiente) e a voz de quem paga o erro (nenhum grupo afetado
   ouvido nas sete decisões que envolvem pessoas).
@@ -5235,8 +5259,8 @@ literalmente e termina em pergunta.
 
 ## Apêndice A. Dicionário visual da Estocologia
 
-Todos os termos do livro, em uma frase simples e com um exemplo do dia a dia. Os termos estão em ordem
-alfabética.
+O dicionário reúne todos os termos do livro, cada um definido em uma frase simples e ilustrado com um exemplo
+do dia a dia. A ordem é alfabética.
 
 | Termo | Em uma frase | Exemplo do dia a dia |
 | --- | --- | --- |
@@ -5358,9 +5382,9 @@ alfabética.
 | $\mathrm{CITL} = \bar{p} - \bar{y}$ | O desvio de nível: quanto a previsão média erra a taxa observada | `media(p) - media(y)` |
 
 **Uma advertência de leitura.** Em Rust, `f64` guarda cerca de 15 a 16 dígitos. Portanto $\approx$ nunca é
-igualdade: toda comparação de números medidos precisa de uma tolerância **declarada**, como a banda de 0,05 desvios
-padrão que a auditoria de fundo fixou para comparar duas rodadas do mesmo domínio. Banda escolhida depois de ver o
-resultado conta como declaração nova e entra no contador de tentativas.
+igualdade, e toda comparação de números medidos precisa de uma tolerância **declarada**, como a banda de 0,05
+desvios padrão que a auditoria de fundo fixou para comparar duas rodadas do mesmo domínio. Uma banda escolhida
+depois de ver o resultado conta como declaração nova e entra no contador de tentativas.
 
 ---
 
@@ -5376,8 +5400,11 @@ resultado conta como declaração nova e entra no contador de tentativas.
 | `cargo run --release --bin labs -- --cap 19` | Que os números citados no Degrau 3 do capítulo 19 saem de código, com semente fixa. Vale trocar 19 por qualquer capítulo; `--todos` roda todos |
 | `rustc -O crates/stochology-book/src/cap21.rs -o /tmp/cap21 && /tmp/cap21` | Que cada laboratório desta edição é autocontido: um arquivo, nenhuma dependência, o mesmo resultado |
 
-Os laboratórios desta edição vivem direto no crate, em `crates/stochology-book/src/capNN.rs`: são módulos testados (`cap01` a `cap04` com testes próprios) e **todos os 21** são servidos pelo binário `labs`. As cópias intermediárias foram apagadas depois da integração: arquivo de trabalho não fica no repositório. Nenhum laboratório usa relógio do sistema nem
-número aleatório sem semente, e é por isso que a conferência é possível.
+Os laboratórios desta edição vivem direto no crate, em `crates/stochology-book/src/capNN.rs`. São módulos
+testados (`cap01` a `cap04` trazem testes no arquivo) e **todos os 21** são servidos pelo binário `labs`. As
+cópias intermediárias foram apagadas depois da integração, porque arquivo de trabalho não fica no repositório.
+Nenhum laboratório usa relógio do sistema nem número aleatório sem semente, e é por isso que a conferência é
+possível.
 
 ### C.2 O registro empírico (o código Python foi aposentado)
 
@@ -5402,12 +5429,12 @@ cd fundo/p07-icp/codigo && python3 nulo_validacao.py          # a taxa nula da g
 ```
 
 **O código Python de simulação foi aposentado em 2026-10-16** (576 arquivos, cerca de 2,9 MB), porque o aparato
-de engenharia do projeto passou a ser o workspace Rust. O que fica na árvore é o registro: os dados e as somas, os
+de engenharia do projeto passou a ser o workspace Rust. Na árvore fica o registro. São os dados e as somas, os
 `README.md` de cada frente com os números publicados, as declarações, os pareceres e as saídas conferidas. O
 manifesto `python-removido.txt` traz o hash de blob de cada arquivo removido, e a declaração completa está em
 `DECLARACAO_REMOVIDO_PYTHON.md`.
 
-Com a mesma data saíram os artefatos que não sustentam resultado central — as extensões de escala, saúde e evento raro (pontos 9 e 10 da auditoria de fundo) e a edição anterior do livro. Os números dessas extensões continuam nos Capítulos 15 e 21, com a nota de aposentadoria na tabela. Depois saiu o andaime de medição em Python inteiro: as frentes `h0` a `h3`, com os seus READMEs, e os dados que só elas usavam. Os números ficaram em `REGISTRO_EMPIRICO.md`, com o commit `1bfec905` como âncora (`DECLARACAO_CONSOLIDACAO_RUST.md`).
+Naquele dia saíram os artefatos que não sustentam resultado central. São as extensões de escala, saúde e evento raro (pontos 9 e 10 da auditoria de fundo) e a edição anterior do livro. Os números dessas extensões continuam nos Capítulos 15 e 21, com a nota de aposentadoria na tabela. Depois saiu o andaime de medição em Python inteiro. Também saíram as frentes `h0` a `h3`, com os seus READMEs, e os dados que só elas usavam. Os números ficaram em `REGISTRO_EMPIRICO.md`, com o commit `1bfec905` como âncora (`DECLARACAO_CONSOLIDACAO_RUST.md`).
 
 Três conferências que continuam rodando sem Python, e que custam segundos:
 
@@ -5422,17 +5449,17 @@ cargo test --workspace               # os crates do livro e da arquitetura
 O registro do H3 é: **Python 3.13.7**, **numpy 2.5.1** (obtido com `PYTHONNOUSERSITE=1 python3`), pandas 3.0.5,
 scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 e hypothesis 6.165.7, com
 `export OMP_NUM_THREADS=1` e no máximo dois processos em paralelo. Duas dependências faltam nesta máquina, e o
-arquivo de ambiente diz como instalá-las: `statsmodels`, que só o gabarito do ponto 1 usa, e `pyreadr`, que só
+arquivo de ambiente diz como instalá-las. A primeira é `statsmodels`, que só o gabarito do ponto 1 usa, e a segunda é `pyreadr`, que só
 um passo do ponto 8 usa.
 
-O caso do numpy é o exemplo perfeito de por que o ambiente faz parte do número. O efeito estimado do laço
-performativo estava publicado como 0,5632 com 2.375 choques, e o mesmo código, com a mesma semente, dava 0,5529 e
-2.395 choques. Não havia duas versões do código: havia dois numpys no mesmo interpretador, e o caminho padrão
-importava o 2.4.6 antes do 2.5.1. O ponto exato da divergência foi isolado: com o mesmo estado do gerador, um
-sorteio binomial de 248 tentativas com probabilidade 0,6 devolve 171 em uma versão e 150 na outra, porque a 2.5
+O caso do numpy mostra por que o ambiente faz parte do número. O efeito estimado do laço performativo estava
+publicado como 0,5632 com 2.375 choques, e o código idêntico, rodado com a mesma semente, dava 0,5529 e 2.395
+choques. Não havia duas versões do código. Havia dois numpys no interpretador, e o caminho padrão importava o
+2.4.6 antes do 2.5.1. O ponto da divergência ficou isolado. Nas duas versões, o gerador partia do mesmo estado,
+e um sorteio binomial de 248 tentativas com probabilidade 0,6 devolve 171 em uma e 150 na outra, porque a 2.5
 corrigiu a série de Stirling do teste de aceitação do BTPE. Se você encontrar uma divergência assim, o caminho é
-sempre o mesmo: **primeiro o ambiente, depois o código**, e nenhum número publicado é trocado sem declaração
-escrita antes de rodar.
+sempre este. **Primeiro o ambiente, depois o código**, porque nenhum número publicado é trocado sem declaração escrita
+antes de rodar.
 
 ---
 
@@ -5443,11 +5470,10 @@ escrita antes de rodar.
 Esta bibliografia segue três regras, e as três são declarações.
 
 **1. Todo arquivo foi baixado para consulta.** O autor baixou os arquivos dos links desta lista em
-2026-10-16, para conferência direta. Os cinco documentos do próprio projeto foram **integrados** ao repositório
+2026-10-16, para conferência direta. Os cinco documentos do projeto foram **integrados** ao repositório
 (arquitetura, plano escalável, fundamentação e o artigo) e as cópias soltas foram apagadas, como manda a regra
-dos arquivos novos: o que ficou está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Os arquivos de
-terceiros não são versionados, por direito autoral: o que fica é a citação, o DOI e o número que o livro usa
-dele.
+dos arquivos novos. O material integrado está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Os arquivos de
+terceiros não são versionados, por direito autoral. Deles ficam a citação, o DOI e o número que o livro usa.
 
 **2. Cada item tem um estado de conferência.**
 
@@ -5458,13 +5484,13 @@ dele.
 | **[histórico]** | material aposentado, que fica só como registro de onde um número veio |
 
 **3. Todo experimento deste livro é Rust.** O Python aparece apenas como registro histórico aposentado
-(veja o Apêndice C): nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
+(veja o Apêndice C). Nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
 
 **Aviso: o curso foi aposentado.** O curso *Pensamento Crítico e Modelos Estocásticos*, de onde vinham
 vários números de simulação e boa parte da numeração interna (M0 a M15, ME1 a ME24, MB1 a MB8), foi
 **obsoleto em 2026-10-16**. As menções a "roteiro do curso" e a "material do curso" que ainda aparecem nos
-capítulos são **históricas**: dizem de onde um número veio, e não são material vigente. O que vale é o que
-está neste repositório: o registro empírico conferido, as declarações e os laboratórios em Rust.
+capítulos são **históricas**. Elas dizem de onde um número veio, e não são material vigente. Vale o que este
+repositório guarda. É o registro empírico conferido, as declarações e os laboratórios em Rust.
 
 ### D.1 Documentos do projeto
 
@@ -5472,12 +5498,12 @@ está neste repositório: o registro empírico conferido, as declarações e os 
   [PLAN.md](https://docs.google.com/document/d/1hXvDuJyckooL1_qx9gspkSkBqgjyhAUVQvQ3F-Crinc/edit),
   [AGENTS.md](https://docs.google.com/document/d/1hniAsjLqgNVGqR1wZ1845GVkS5lZTEjhlH7MaI3U2Xk/edit) e
   [Estocologia: Fundamentação, Três Camadas e Inferência sob Incerteza](https://docs.google.com/document/d/1L5ittj7-RiSacEvNrkR4IS6yrQUyhusFpcDIWazINLI/edit)
-  — o desenho da máquina, o plano diretor e a fundamentação.
+  são o desenho da máquina, o plano diretor e a fundamentação.
 - [Estocologia: Velhas Fronteiras, Novos Horizontes](https://claude.ai/code/artifact/69dbc377-114b-4cb7-a3c1-322387abc674)
-  — o artigo, com a lista completa de referências.
-- **[histórico]** O curso *Pensamento Crítico e Modelos Estocásticos* — **aposentado em 2026-10-16**. Fica citado porque vários números do livro vieram das suas simulações, com a fonte agora declarada nos capítulos; nada do livro depende dele.
-- `referencias/CONFERENCIA.md` — a conferência das referências, feita em 15 de outubro de 2026 contra a API do
-  Crossref, as páginas das editoras, o PubMed e o RePEc. É o modelo do que fazer com a sua própria bibliografia:
+  é o artigo, com a lista completa de referências.
+- **[histórico]** O curso *Pensamento Crítico e Modelos Estocásticos*, **aposentado em 2026-10-16**. Fica citado porque vários números do livro vieram das suas simulações, com a fonte agora declarada nos capítulos; nada do livro depende dele.
+- `referencias/CONFERENCIA.md`: a conferência das referências, feita em 15 de outubro de 2026 contra a API do
+  Crossref, as páginas das editoras, o PubMed e o RePEc. É o modelo do que fazer com a sua bibliografia. São
   25 referências conferidas uma a uma, uma correção aplicada (o artigo é de **Meyer**, Viscusi e Durbin, e não de
   Viscusi e Durbin), uma revista trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*), e a
   nota de que SHELF é um protocolo, não o livro de O'Hagan e colegas.
@@ -5550,18 +5576,18 @@ está neste repositório: o registro empírico conferido, as declarações e os 
 ### D.5 Como usar esta lista
 
 Leia na ordem em que a curiosidade pedir, e desconfie de quem apresenta qualquer um destes trabalhos como
-resposta final. Três conselhos práticos. Primeiro: leia os dados antes do método — quase todo erro de leitura
-nasce de não perguntar de onde veio a tabela. Segundo: quando um artigo cita um número, procure o número no
-código ou no apêndice, e não no resumo. Terceiro: guarde a versão do ambiente junto do número que reproduziu;
-este livro tem um capítulo inteiro que só existe porque alguém fez isso.
+resposta final. Três conselhos práticos. Primeiro, leia os dados antes do método, porque quase todo erro de
+leitura nasce de não perguntar de onde veio a tabela. Segundo, quando um artigo cita um número, procure o
+número no código ou no apêndice, e não no resumo. Terceiro, guarde a versão do ambiente junto do número que
+reproduziu; este livro tem um capítulo inteiro que só existe porque alguém fez isso.
 
 ### D.6 O que já foi conferido e o que falta conferir
 
-A conferência das referências do projeto está em `referencias/CONFERENCIA.md`: 25 referências checadas uma
-a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc, com uma correção aplicada (o
+A conferência das referências do projeto está em `referencias/CONFERENCIA.md`. São 25 referências checadas
+uma a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc, com uma correção aplicada (o
 artigo do teto do benefício é de **Meyer**, Viscusi e Durbin, e não de Viscusi e Durbin) e uma revista
 trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*).
 
-O que falta, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
-baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no próprio livro qualquer
-divergência que apareça — do mesmo modo que os capítulos declaram as divergências de número.
+Falta o seguinte, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
+baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no livro qualquer divergência que
+apareça, como os capítulos já fazem com as divergências de número.

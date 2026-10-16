@@ -2,7 +2,7 @@
 
 **Objetivos.** Ao fim deste capítulo você deve saber ler e escrever uma ficha epistemológica, preencher as
 cinco perguntas do cabeçalho, enunciar as quatro proibições e os cinco invariantes $\Phi_1$–$\Phi_5$,
-percorrer o funil de quatro filtros e dizer o que cada portão automático verifica.
+percorrer o funil de quatro filtros e dizer qual verificação cada portão automático faz.
 
 ---
 
@@ -10,31 +10,31 @@ percorrer o funil de quatro filtros e dizer o que cada portão automático verif
 
 **O formulário que recusa.** Todo mundo já preencheu um formulário que aceita qualquer coisa. Você escreve
 "sim" no campo de observações, o sistema aceita, e três semanas depois ninguém sabe quem autorizou o quê.
-O oposto existe e é chato, e é o que este capítulo trata: um formulário que **recusa** o envio quando um
+O oposto existe e é chato, e é disso que este capítulo trata. O formulário aqui **recusa** o envio quando um
 campo obrigatório está vazio.
 
-A ficha epistemológica é isso: uma lista fechada de perguntas. Não é um resumo do trabalho, é o **contrato**
-do trabalho. Em cada 100 fichas preenchidas com pressa, as que passam sem reclamação são as que tiveram todos
-os campos respondidos com algo conferível. Uma ficha sem o campo do processo gerador não diz "não sei": diz
+A ficha epistemológica é uma lista fechada de perguntas. Ela é o **contrato** do trabalho, e não o resumo
+dele. Em cada 100 fichas preenchidas com pressa, as que passam sem reclamação são as que tiveram todos
+os campos respondidos com algo conferível. Uma ficha sem o campo do processo gerador não diz "não sei". Diz
 "ninguém escreveu isso", e é por aí que o erro entra.
 
 **A pergunta que ninguém faz ao decisor.** Há um jeito específico de errar que tem nome e quase nunca é
-checado: o **erro de tipo III**. Nos testes comuns, o erro de tipo I é acusar quem é inocente e o erro de
-tipo II é absolver quem é culpado. O erro de tipo III é mais banal e mais frequente: **responder
+checado, o **erro de tipo III**. Nos testes comuns, o erro de tipo I é acusar quem é inocente e o erro de
+tipo II é absolver quem é culpado. O erro de tipo III é mais banal e mais frequente, e consiste em **responder
 brilhantemente a pergunta errada**. O estudo mede o efeito A com precisão impecável, e o gestor precisava
 saber sobre o efeito B.
 
 Imagine uma prefeitura que precisa decidir se abre uma segunda sala de atendimento nos dias cheios. O
-relatório responde, com rigor, à pergunta: *"qual é o nível de serviço médio do ano?"* A resposta é 82%, e o
-gestor lê isso como resposta à pergunta dele — *"devo abrir uma segunda sala?"*. Ninguém escreveu a pergunta
-do gestor em lugar nenhum. Em 100 decisões apressadas, uma parte respeitável morre assim: não por conta
-errada, mas por conta certa na pergunta trocada.
+relatório responde, com rigor, à pergunta *"qual é o nível de serviço médio do ano?"* A resposta é 82%, e o
+gestor lê isso como resposta à pergunta dele, *"devo abrir uma segunda sala?"*. Ninguém escreveu a pergunta
+do gestor em lugar nenhum. Em 100 decisões apressadas, uma parte respeitável morre por conta certa na
+pergunta trocada, e não por conta errada.
 
 **Como o contrato trava isso.** O pacote de domínio passa a carregar um campo obrigatório, o
 `pergunta_do_decisor`, com três partes na ordem: **quem decide**, **qual ação a decisão muda**
-(copiada literalmente do campo de decisão do próprio pacote) e **a pergunta que essa decisão usa**,
-terminada em interrogação. A validação é de código: texto genérico sem quem decide é recusado, e uma ação que
-não seja a do pacote é recusada. Depois disso, "a pergunta que o modelo responde é a que o decisor fez"
+(copiada literalmente do campo de decisão do pacote) e **a pergunta que essa decisão usa**,
+terminada em interrogação. Quem valida é o código, que recusa texto genérico sem quem decide e barra uma ação
+diferente da do pacote. Depois disso, "a pergunta que o modelo responde é a que o decisor fez"
 deixou de ser suposição e passou a ser uma frase conferível.
 
 **As quatro coisas que o contrato proíbe.** O contrato dos agentes começa por quatro proibições absolutas, e
@@ -105,11 +105,11 @@ trajetória típica cresce à taxa
 $$\frac{d}{dt}\,\mathbb{E}[\ln X_t] = \mu - \tfrac{1}{2}\sigma^2.$$
 
 É o arrasto da volatilidade do Dow Jones alavancado, e é Jensen outra vez. Lido à maneira de Stratonovich, o
-mesmo símbolo descreve outro processo, em que o termo $-\sigma^2/2$ não aparece. A escolha depende da física:
-ruído branco idealizado de um sistema discreto pede Itô; o limite de um ruído real com correlação curta pede
-Stratonovich. A ficha pede também um teste com passo de tempo menor: se o resultado muda quando $\Delta t$
-encolhe, a simulação estava medindo o integrador, não o Mundo. Esse teste **não** decide entre Itô e
-Stratonovich: o esquema de Euler converge para a leitura de Itô, e a de Stratonovich pede outro integrador.
+mesmo símbolo descreve outro processo, em que o termo $-\sigma^2/2$ não aparece. A escolha depende da física.
+Ruído branco idealizado de um sistema discreto pede Itô; o limite de um ruído real com correlação curta pede
+Stratonovich. A ficha pede também um teste com passo de tempo menor. Se o resultado muda quando $\Delta t$
+encolhe, a simulação estava medindo o integrador em vez do Mundo. Esse teste **não** decide entre Itô e
+Stratonovich, porque o esquema de Euler converge para a leitura de Itô, e a de Stratonovich pede outro integrador.
 
 O ruído também faz saltar entre estados estáveis. Num sistema com dois poços, o tempo médio até o salto
 segue a fórmula de Kramers e cresce exponencialmente com a altura da barreira $\Delta U$ em relação à
@@ -117,10 +117,10 @@ temperatura $T$:
 
 $$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
 
-Para barreiras altas, esse tempo quase não tem memória: quem esperou muito não está mais perto do salto.
-Olhado só nos saltos, porém, o ruído parece um empurrão: em 591 saltos simulados no curso, o ruído logo
+Para barreiras altas, esse tempo quase não tem memória. Quem esperou muito não está mais perto do salto.
+Olhado só nos saltos, porém, o ruído parece um empurrão. Em 591 saltos simulados no curso, o ruído logo
 antes do salto apontou no sentido dele em 99% dos casos, sem nenhuma força externa. Procurar a causa de um
-salto é erro de seleção; procurar a causa de uma mudança na frequência dos saltos, não.
+salto é erro de seleção; procurar a causa de uma mudança na frequência dos saltos não é.
 
 **Os cinco invariantes.** Nada entra no grafo sem passar pelos invariantes, que funcionam como travas de banco
 de dados. Os quatro primeiros são exigidos desde o começo; o quinto entrou com o eixo da resolução da pergunta
@@ -134,41 +134,41 @@ de dados. Os quatro primeiros são exigidos desde o começo; o quinto entrou com
 | $\Phi_4$ Escopo ecológico | Julgar a decisão no ambiente em que vai operar, com termo de escopo e cláusula objetiva de saída | Recomendação sem prazo de validade |
 | $\Phi_5$ Resolução da pergunta | A ação declarada tem de estar no mesmo grão da unidade independente: com o dado no dia ou mais grosso, resolução agregada (R0) reprova | Ação por dia com conta no agregado. Unidade mais fina que o dia fica fora desta trava, e isso está declarado |
 
-**O funil de quatro filtros.** Um sistema que simula tudo o que encontra colapsa por custo e por inflação de
-falsas descobertas. O funil, a poda por valor da informação e o contador de tentativas estão implementados em
-Rust, em `crates/stochology-core/src/funil.rs`, com 17 testes: os quatro filtros recusam pelo cabeçalho (sem
-pergunta, sem processo gerador, sem unidade ou nulo, sem ação com saída), a poda corta quando a cota do valor da
-informação não pode cruzar o limiar — com $C/L = 0{,}1$ a cota vale 0,0090 em $p = 0{,}001$ e o exame de 0,05 é
-podado, enquanto no limiar $p = 0{,}10$ a cota é 0,9000 — e o contador fecha a conta na forma
-`K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3`. O limite declarado é que a cota é o
-valor esperado da informação perfeita, exata no modelo de dois atos e dois estados. Cada frente é organizada como um funil em que a maior parte das hipóteses fracas cai
-antes de tocar em simulação pesada.
+**O funil de quatro filtros.** Um sistema que simula toda hipótese que encontra colapsa por custo e por
+inflação de falsas descobertas. O funil, a poda por valor da informação e o contador de tentativas vivem em
+Rust, em `crates/stochology-core/src/funil.rs`, com 17 testes. Os quatro filtros recusam pelo cabeçalho (sem
+pergunta, sem processo gerador, sem unidade ou nulo, sem ação com saída). A poda corta quando a cota do valor
+da informação não pode cruzar o limiar: com $C/L = 0{,}1$ a cota vale 0,0090 em $p = 0{,}001$ e o exame de
+0,05 é podado, enquanto no limiar $p = 0{,}10$ a cota é 0,9000. Por fim, o contador fecha a conta na forma
+`K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3`. O limite declarado é que a cota
+é o valor esperado da informação perfeita, exata no modelo de dois atos e dois estados. Cada frente se
+organiza como um funil, e nele a maior parte das hipóteses fracas cai antes de tocar em simulação pesada.
 
-1. **Valor da informação.** Corta-se o que, mesmo com resposta perfeita, não mudaria nenhuma decisão. O log
+1. **Valor da informação.** Corta-se a hipótese que não mudaria nenhuma decisão nem com resposta perfeita. O log
    padrão é "podado por Crisonomia: curiosidade sem uso operacional".
-2. **Poda topológica e unidade.** Corta-se, por d-separação, o que fica fora do cobertor de Markov da
+2. **Poda topológica e unidade.** Corta-se, por d-separação, todo nó que fica fora do cobertor de Markov da
    variável de interesse, inclusive os colisores que, se condicionados, criariam o viés de Berkson. Corta-se
-   também o que os dados não identificam ou cujo tamanho efetivo, contado na unidade independente pelo $F_2$,
-   não permite conclusão. O contrato de dados confere ainda um bloco `ausencia` para o mecanismo da
-   falta: MCAR, MAR, MNAR ou não declarado, com as colunas que a classificação cobre e a análise de
-   sensibilidade exigida quando a ausência pode depender do próprio valor. Ausência sem classificação é
-   recusada; nos três contratos do $H_1$ real e nas 18 tabelas do $H_{2g}$ a regra é vacuosa hoje, e passa a
-   morder no dia em que aparecer.
+   também a alegação que os dados não identificam, ou cujo tamanho efetivo, contado na unidade independente
+   pelo $F_2$, fica pequeno demais para concluir. O contrato de dados confere ainda um bloco `ausencia` para o
+   mecanismo da falta: MCAR, MAR, MNAR ou não declarado, com as colunas que a classificação cobre e a análise
+   de sensibilidade exigida quando a ausência pode depender do valor da variável. Ausência sem classificação
+   é recusada; nos três contratos do $H_1$ real e nas 18 tabelas do $H_{2g}$ a regra é vacuosa hoje, e passa
+   a morder no dia em que aparecer.
 3. **Teste severo contra o nulo.** Se o padrão alegado já aparece no modelo nulo, ou numa referência de um
    parâmetro só como a taxa-base, a pesquisa encerra ali. Quando a simulação é cara, o $F_4$ faz esse teste
    primeiro num emulador barato.
-4. **Inferência pesada, lentes e banca.** Só o que sobra recebe o tratamento caro.
+4. **Inferência pesada, lentes e banca.** Só o restante recebe o tratamento caro.
 
 **Caso trabalhado: a identificabilidade de $R_0$.** No início de uma epidemia, os casos crescem como
 $\exp((\beta - \gamma)t)$, e os dados determinam a **diferença** $\beta - \gamma$, não a razão
 $R_0 = \beta/\gamma$. Com 25 dias de casos simulados, em que a verdade é $R_0 = 2$, os valores compatíveis
 vão de **1,38 a 5,90**, e o tamanho final previsto vai de **50% a 100%** da população. Com 45 dias, $R_0$
-fica entre **2,00 e 2,24** — mas aí a curva já dobrou. Tomar a duração da infecção de outros estudos estreita
+fica entre **2,00 e 2,24**, mas aí a curva já dobrou. Tomar a duração da infecção de outros estudos estreita
 $R_0$ para **1,81 a 2,11**. Isso não é defeito, desde que se declare que a margem passou a ser a da fonte.
 
 **Os portões automáticos.** Nenhuma entrega é consolidada sem passar nos portões numa máquina limpa. Os
-agentes e o $\Phi$ já foram formalizados; o que os portões fazem é **repetir o trabalho e comparar**: a
-mesma entrada tem de produzir a mesma saída, e um defeito plantado tem de ser detectado. O binário
+agentes e o $\Phi$ já foram formalizados; os portões **repetem o trabalho e comparam**. Entrada repetida tem
+de produzir saída idêntica, e um defeito plantado tem de ser detectado. O binário
 `portoes` implementa sete.
 
 | Portão | Faixa | O que verifica |
@@ -181,9 +181,9 @@ mesma entrada tem de produzir a mesma saída, e um defeito plantado tem de ser d
 | G6 | $\mathcal{M}$ | Banca adversarial $A_1$–$A_8$ com o piso |
 | G7 | $F_8$ | Cláusula de saída declarada e $A_8$ acima do piso |
 
-Dois detalhes fazem o conjunto valer mais que a soma. O G5 não verifica só que a corrente está íntegra: ele
-**adultera de propósito** e exige que a verificação falhe com a corrente adulterada. E o G1 compara duas
-execuções do mesmo horizonte. Um portão que nunca falha não é portão (Capítulo 15).
+Dois detalhes fazem o conjunto valer mais que a soma. O G5 não verifica só que a corrente está íntegra. Ele
+**adultera de propósito** e exige que a verificação falhe com a corrente adulterada. O G1, por sua vez,
+compara duas execuções do horizonte declarado. Um portão que nunca falha não é portão (Capítulo 15).
 
 ---
 
@@ -216,26 +216,27 @@ Quatro leituras.
 
 **A ficha completa passa sem uma única falha.** Cinco campos de cabeçalho na ordem exigida, semente
 declarada, artefato simulável, margem com unidade independente, modelo nulo, escopo ecológico, quem paga
-pelo erro, cláusula de saída e a pergunta do decisor citando a ação. O total é zero. Vale notar que a trava
-de tipo III é **literal**: a pergunta precisa terminar em interrogação **e** conter a ação do pacote.
+pelo erro, cláusula de saída e a pergunta do decisor citando a ação. O total é zero. A trava
+de tipo III é **literal**, e a pergunta precisa terminar em interrogação **e** conter a ação do pacote.
 
 **Cada defeito cai no portão certo.** Sete defeitos plantados, sete reprovações, uma por portão, sem
 contaminação. Sem semente cai no $\Phi_1$; sem margem ou unidade cai no $\Phi_2$; sem definição ou sem
 modelo nulo cai no $\Phi_3$; sem escopo, sem quem paga ou sem cláusula de saída cai no $\Phi_4$. Os dois
-defeitos da pergunta do decisor caem os dois na trava de tipo III — mas por motivos diferentes: um perde o
-ponto de interrogação, o outro perde a ação. **Repare que a mensagem é a mesma nos dois casos**: o validador
-diz o que a regra exige, não qual parte faltou. É um detalhe pequeno que o exercício 4 pede para melhorar.
+defeitos da pergunta do decisor caem os dois na trava de tipo III, mas por motivos diferentes. Um perde o
+ponto de interrogação, o outro perde a ação. **A mensagem é idêntica nos dois casos.** O validador
+enuncia a exigência da regra, sem dizer qual parte faltou. É um detalhe pequeno que o exercício 4 pede
+para melhorar.
 
-**O validador de estrutura atravessa os capítulos.** As mesmas três recusas do Capítulo 12 aparecem aqui:
-aresta para nó fantasma, ciclo dedutivo e hiperaresta com um membro só. É de propósito: uma trava que só
+**O validador de estrutura atravessa os capítulos.** Reaparecem aqui as três recusas do Capítulo 12:
+aresta para nó fantasma, ciclo dedutivo e hiperaresta com um membro só. Isso é de propósito. Uma trava que só
 existe num capítulo é uma trava que ninguém usa.
 
 **O teste de propriedades e a semente.** Dez mil fichas simuladas com margem $1{,}96\sqrt{p(1-p)/n}$ para
-$n$ entre 100 e 999 e $p$ entre 0,01 e 0,99: **zero violações**, com margens entre 0,00617 e 0,09798. O
-intervalo de confiança nunca é negativo nem maior que meio. E os dois validadores rodados com a mesma
-semente divergem em **0 de 32** execuções — a reprodutibilidade que o Capítulo 1 exige.
+$n$ entre 100 e 999 e $p$ entre 0,01 e 0,99 dão **zero violações**, com margens entre 0,00617 e 0,09798. O
+intervalo de confiança nunca é negativo nem maior que meio. Os dois validadores rodados sobre a semente
+declarada divergem em **0 de 32** execuções, a reprodutibilidade que o Capítulo 1 exige.
 
-**A esteira por horizonte.** No repositório cada horizonte tem a sua: o $H_0$ aplica $\Phi_1$–$\Phi_4$, as rodadas $H_{2b}$ a $H_{2g}$ aplicam cinco critérios e o $H_3$ aplica sete. Cada `portoes.py` repete a execução, compara os resumos criptográficos e sai com 0 ou 1; os sete deste capítulo
+**A esteira por horizonte.** No repositório cada horizonte tem a sua esteira. O $H_0$ aplica $\Phi_1$–$\Phi_4$, as rodadas $H_{2b}$ a $H_{2g}$ aplicam cinco critérios e o $H_3$ aplica sete. Cada `portoes.py` repete a execução, compara os resumos criptográficos e sai com 0 ou 1; os sete deste capítulo
 são os do binário `portoes`. (O `portoes.py` de cada frente foi aposentado em 2026-10-16 e vive no commit
 `1bfec905`; o portão continua no binário.)
 
@@ -256,20 +257,20 @@ portão G4, no horizonte `todos`, reproduz aqui.
 2. *(Conceito)* Que filtro do funil deve cortar a pergunta "qual é a cor preferida dos clientes que compram
    seguro?" numa seguradora que não vai mudar o produto?
 3. *(Conta)* Por que 25 dias de crescimento exponencial identificam $\beta - \gamma$ e não $\beta/\gamma$?
-   Mostre que dois pares $(\beta, \gamma)$ com a mesma diferença geram a mesma curva inicial.
+   Mostre que dois pares $(\beta, \gamma)$ com diferenças iguais geram curvas iniciais idênticas.
 4. *(Laboratório)* Melhore a mensagem da trava de tipo III para distinguir "faltou o ponto de interrogação"
    de "a pergunta não cita a ação". Faça os dois defeitos caírem em mensagens diferentes e reproduza a
    tabela.
 5. *(Laboratório)* Escreva um teste de propriedades que verifique que a espera simulada de uma fila é sempre
-   não negativa e não diminui quando o tempo de atendimento aumenta, com as mesmas chegadas.
-6. *(Conceito)* Explique, em três frases, por que o G5 adulterar a própria corrente o torna mais forte que um
-   teste que só confere se a corrente está íntegra.
+   não negativa e não diminui quando o tempo de atendimento aumenta, mantidas as chegadas.
+6. *(Conceito)* Explique, em três frases, por que o G5 é mais forte que um teste que só confere se a corrente
+   está íntegra, já que ele adultera de propósito a corrente que produziu.
 
 **Resumo.**
 
 - A ficha é uma lista fechada de perguntas; cinco são obrigatórias em todo payload, e o campo
   `pergunta_do_decisor` trava o erro de tipo III.
-- Quatro proibições e cinco invariantes são travas, não recomendações; o $\Phi_5$ é o mais novo e o mais estreito.
+- As quatro proibições e os cinco invariantes são travas, e não recomendações; o $\Phi_5$ é o mais novo e o mais estreito.
 - O funil corta barato antes de gastar caro: valor da informação, poda topológica e de unidade, teste severo
   contra o nulo, e só então inferência pesada e banca.
 - O binário `portoes` implementa sete portões, com código de saída 0 ou 1, e um portão que nunca
