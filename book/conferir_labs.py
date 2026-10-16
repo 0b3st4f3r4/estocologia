@@ -47,6 +47,7 @@ def main() -> int:
         ("labs --fila", saida([str(BIN), "--fila"])),
         ("labs --genetica", saida([str(BIN), "--genetica"])),
         ("labs --escuta", saida([str(BIN), "--escuta"])),
+        ("labs --h3", saida([str(BIN), "--h3"])),
     ]
 
     total = 0

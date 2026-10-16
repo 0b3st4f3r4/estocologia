@@ -80,6 +80,7 @@ def main() -> int:
         "| BTlabs --pretesteBT | o nulo do pre-teste de calibracao do painel SHELF |\n"
         "| BTlabs --geneticaBT | a resolucao da validacao por intervencao: o que a segunda linha muda |\n"
         "| BTlabs --escutaBT | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |\n"
+        "| BTlabs --h3BT | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -130,6 +131,15 @@ def main() -> int:
         "O desenho da replica: 40 mutantes, um deles o mover verdadeiro (o efeito aparece nas duas linhas) e\n"
         "outro o artefato de linha (o efeito aparece numa linha so). O mesmo mundo e validado com uma linha por\n"
         "mutante e com duas, e o que se mede e quantos mutantes passam e qual e o piso do desenho em cada arranjo.",
+    ))
+    partes.append(bloco(
+        "A cadeia do H3, re-executada ate onde a arvore deixa",
+        [str(BIN), "--h3"],
+        "Le o registro do ponto 14 (BTfundo/p14-h3/registro.tsvBT) com as quatro linhas do H3 e da a classe de cada\n"
+        "uma: medida (o dado bruto esta na arvore), derivada (o numero esta num arquivo versionado e a conta e o\n"
+        "veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do\n"
+        "BTresultados.jsonBT do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda\n"
+        "declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.",
     ))
     partes.append(bloco(
         "O lacre das sete decisoes que mexem com pessoas",

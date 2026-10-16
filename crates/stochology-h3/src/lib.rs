@@ -8,6 +8,7 @@
 //! seguem como registro; o que existe aqui e o mecanismo, nao a base.
 
 pub mod beta;
+pub mod cadeia;
 pub mod preteste;
 pub mod shelf;
 

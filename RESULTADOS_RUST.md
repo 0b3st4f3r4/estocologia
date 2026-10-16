@@ -14,6 +14,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --preteste` | o nulo do pre-teste de calibracao do painel SHELF |
 | `labs --genetica` | a resolucao da validacao por intervencao: o que a segunda linha muda |
 | `labs --escuta` | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |
+| `labs --h3` | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -171,6 +172,41 @@ plantados pelo instrumento: mover verdadeiro = mutante 7 | artefato de linha = m
   efeito na segunda linha: artefato  +0.028 (nao se reproduz) | mover  +1.016 (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero
 
 leitura: com uma linha o piso de 0.001000 e o limiar de 0.001250 deixam passar 4 dos 40 mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para 0.000001000: passa 1 dos 40 mutantes. O p nunca foi o problema: o problema era a linha ser uma so.
+~~~
+
+### A cadeia do H3, re-executada ate onde a arvore deixa
+
+Le o registro do ponto 14 (`fundo/p14-h3/registro.tsv`) com as quatro linhas do H3 e da a classe de cada
+uma: medida (o dado bruto esta na arvore), derivada (o numero esta num arquivo versionado e a conta e o
+veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do
+`resultados.json` do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda
+declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --h3
+~~~
+
+~~~text
+== Ponto 14 :: a cadeia do H3, re-executada ate onde a arvore deixa ==
+carimbo do registro: 2026-10-16
+linha            classe    marca registro versionado                o que o instrumento faz
+h3.fluxos        registro  P    -                                  declara: o dado bruto nao esta na arvore
+h3.ri            registro  D    -                                  declara: o dado bruto nao esta na arvore
+h3.laco          derivada  V    fundo/p06-laco/resultados.json     re-deriva a conta e o veredito
+h3.hipergrafo    registro  P    -                                  declara: o dado bruto nao esta na arvore
+
+-- o laco performativo, re-derivado do registro em arvore --
+estimativa 2SLS: r = 0.1446378859 | IC90 de 0.1319811884 a 0.1568385251 | F do primeiro estagio = 5523.46
+razao r declarado / r medido: 4.1482907207 (o registro traz 4.1482907207) | banda declarada: 0.3333 a 3.0000
+sinal confere: true | ordem de grandeza confere: false | compativel no sentido estrito: false (o registro diz false)
+vies do previsor ingenuo contra a demanda exogena: 0.2912
+divergencias entre a conta e o registro: nenhuma
+veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (razao 4.1483, banda de 0.3333 a 3.0000)
+
+-- prova negativa: um registro em que a razao cai dentro da banda declarada --
+  com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
+-- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
+  divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
 ~~~
 
 ### O lacre das sete decisoes que mexem com pessoas
@@ -996,7 +1032,7 @@ test testes::sem_area_a_rodada_devolve_area_vazia ... ok
 
 test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 33 tests
+running 40 tests
 test beta::testes::a_incompleta_bate_com_a_forma_fechada_da_beta_2_2 ... ok
 test beta::testes::a_incompleta_bate_com_a_uniforme ... ok
 test beta::testes::o_ajuste_da_uniforme_fica_simetrico ... ok
@@ -1004,6 +1040,13 @@ test beta::testes::o_ajuste_e_deterministico ... ok
 test beta::testes::o_ajuste_recupera_a_beta_que_gerou_os_quartis ... ok
 test beta::testes::o_log_gama_bate_com_fatoriais ... ok
 test beta::testes::o_quantil_recupera_os_quartis_conhecidos ... ok
+test cadeia::testes::a_cadeia_tem_quatro_linhas_com_as_marcas_do_registro ... ok
+test cadeia::testes::o_instrumento_fraco_indecide ... ok
+test cadeia::testes::o_laco_e_re_derivado_do_registro_versionado ... ok
+test cadeia::testes::o_leitor_de_json_le_o_registro_real ... ok
+test cadeia::testes::o_registro_que_mente_na_razao_e_reprovado ... ok
+test cadeia::testes::o_veredito_vira_quando_a_razao_entra_na_banda ... ok
+test cadeia::testes::uma_linha_derivada_sem_registro_versionado_reprova ... ok
 test preteste::testes::a_caixa_na_media_tem_p_proximo_de_um ... ok
 test preteste::testes::a_identidade_de_murphy_fecha_exata ... ok
 test preteste::testes::o_criterio_4_do_protocolo_nao_sabe_reprovar ... ok
@@ -1031,7 +1074,7 @@ test testes::a_tolerancia_da_ece_depende_de_n ... ok
 test testes::o_canario_pega_a_leitura_do_futuro ... ok
 test testes::o_laco_mede_o_que_a_acao_faz_com_o_indicador ... ok
 
-test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 12 tests
 test lentes::testes::arrasto_da_volatilidade_desconta_variacao ... ok

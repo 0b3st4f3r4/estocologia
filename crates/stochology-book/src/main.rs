@@ -3,7 +3,7 @@
 //! Uso: ~cargo run --release --bin labs -- --cap 4~
 //!      ~cargo run --release --bin labs -- --todos~
 
-use stochology_book::{banco, escuta, fila, genetica};
+use stochology_book::{banco, cadeia, escuta, fila, genetica};
 use stochology_core::s1::{Categoria, S1};
 use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
@@ -28,6 +28,7 @@ fn main() {
     let mut fila_flag = false;
     let mut genetica_flag = false;
     let mut escuta_flag = false;
+    let mut cadeia_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -76,6 +77,7 @@ fn main() {
             "--fila" => fila_flag = true,
             "--genetica" => genetica_flag = true,
             "--escuta" => escuta_flag = true,
+            "--h3" => cadeia_flag = true,
             _ => {}
         }
         i += 1;
@@ -114,6 +116,10 @@ fn main() {
     }
     if escuta_flag {
         escuta::rodar(escuta::REGISTRO);
+        return;
+    }
+    if cadeia_flag {
+        cadeia::rodar(cadeia::REGISTRO, cadeia::RESULTADOS_DO_LACO, cadeia::POSTHOC_DO_LACO);
         return;
     }
     if todos {

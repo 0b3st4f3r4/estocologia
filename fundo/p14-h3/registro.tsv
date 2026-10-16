@@ -1,0 +1,11 @@
+# registros	2026-10-16
+# fonte_do_criterio	fundo/p06-laco/DECLARACAO.md
+# r_declarado	0.6
+# razao_minima	0.3333333333333333
+# razao_maxima	3
+# f_minimo	10
+linha	afirmacao	classe	marca	registro	numeros	comando
+h3.fluxos	seis fluxos sob relogio estrito, zero vazamento com canario plantado	registro	P	-	453973 previsoes, canario com ganho +0.00 honesto e +0.6521 com o relogio desligado	labs --cap 20 (mecanismo, nao os seis fluxos)
+h3.ri	cofre de Rhode Island: 24466 paradas, ECE 0.0048, habilidade +0.019	registro	D	-	24466 paradas, ECE 0.0048, laboratorio 0.0022	labs --cap 20 (laboratorio)
+h3.laco	Goodhart medido: r = 0.145 [0.132; 0.157] contra os 0.6 declarados	derivada	V	fundo/p06-laco/resultados.json	r = 0.1446378859145094, IC90 [0.131981188365084; 0.15683852512801463], F = 5523.46, vies do ingenuo 0.2912	labs --h3
+h3.hipergrafo	hipergrafo do H3 com 454178 nos, 453973 previsoes e 205 de topologia	registro	P	-	454178 nos, 453973 previsoes, 205 de topologia	-

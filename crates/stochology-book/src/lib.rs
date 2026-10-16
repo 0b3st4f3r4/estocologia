@@ -8,6 +8,9 @@ pub mod cap01;
 pub mod fila;
 pub mod genetica;
 pub mod escuta;
+
+/// A cadeia do H3 vive no crate do H3; aqui fica só a ponte para o laboratório.
+pub use stochology_h3::cadeia;
 pub mod cap02;
 pub mod cap03;
 pub mod cap04;

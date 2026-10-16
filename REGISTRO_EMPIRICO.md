@@ -7,7 +7,8 @@ andaime de medição foi apagado e o número ficou aqui e no livro. O original v
 arquivo removido.
 
 Legenda: **R** o instrumento Rust mede de novo; **D** divergência declarada no capítulo, com os dois valores;
-**P** só registro (o número está aqui e no capítulo, sem instrumento em Rust).
+**P** só registro (o número está aqui e no capítulo, sem instrumento em Rust); **V** o veredito é re-derivado em
+Rust a partir do registro versionado (a medida continua sem instrumento — declaração 2 de `fundo/p14-h3/`).
 
 ## H0 — a fila e a central de chamadas
 
@@ -45,10 +46,10 @@ Legenda: **R** o instrumento Rust mede de novo; **D** divergência declarada no 
 
 | Resultado | Marca | Fonte / instrumento |
 | --- | --- | --- |
-| Seis fluxos sob relógio estrito, zero vazamento com canário plantado de propósito | **P** | registro |
-| Cofre de Rhode Island: 24 466 paradas, ECE 0,0048, habilidade +0,019 | **D** | `labs --cap 20` mede o mecanismo em simulação (ECE 0,0022) e o capítulo declara a diferença |
-| Goodhart medido por instrumento: 0,145 [0,132; 0,157], quatro vezes menos que os 0,6 declarados | **P** | registro; é resultado de campo, não de simulação |
-| Hipergrafo: 454 178 nós no H3, dos quais 453 973 previsões e 205 de topologia | **P** | registro; o hipergrafo do Rust é o validador, não o grafo do H3 |
+| Seis fluxos sob relógio estrito, zero vazamento com canário plantado de propósito | **P** | o dado bruto dos fluxos saiu com o andaime `h3/`; o **mecanismo** é medido em `labs --cap 20` (canário com o relógio honesto e com o relógio desligado) e a classe está declarada em `fundo/p14-h3/registro.tsv` |
+| Cofre de Rhode Island: 24 466 paradas, ECE 0,0048, habilidade +0,019 | **D** | `labs --cap 20` mede o mecanismo em simulação (ECE 0,0022), o capítulo declara a diferença e `labs --h3` declara a classe: o diário de Rhode Island saiu da árvore |
+| Goodhart medido por instrumento: 0,145 [0,132; 0,157], quatro vezes menos que os 0,6 declarados | **P** / **V** | a medida é registro (é resultado de campo e o dado bruto não está versionado); o veredito do critério declarado e a razão de 4,1483 são **re-derivados** de `fundo/p06-laco/resultados.json` por `labs --h3`, com zero divergência |
+| Hipergrafo: 454 178 nós no H3, dos quais 453 973 previsões e 205 de topologia | **P** | o grafo do H3 saiu com o andaime; o hipergrafo do Rust é o validador, não o grafo do H3. Classe declarada em `fundo/p14-h3/registro.tsv` |
 
 ## Auditoria de fundo
 

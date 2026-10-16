@@ -285,6 +285,50 @@ a resolução não. **O canário** fecha o laboratório. Com o relógio honesto,
 **0** das 24.466 emissões, o coeficiente dela fica em zero e o ganho de habilidade é 0,0000; com o relógio
 desligado, ela está disponível nas 24.466 emissões e o ganho é $+0{,}6521$.
 
+**A cadeia do H3, re-executada até onde a árvore deixa.** O que acontece com as quatro linhas deste horizonte
+quando o andaime Python sai da árvore? Cada uma recebe uma classe, e o instrumento **sabe reprovar** uma linha que
+se declare de uma classe que o dado não sustenta: **medida**, quando o dado bruto está na árvore e a coisa é medida
+de novo; **derivada**, quando o número está num arquivo versionado e o instrumento refaz a conta e o veredito; e
+**registro**, quando o dado bruto não está aqui e só resta declarar o que se mediu. O código está em
+`crates/stochology-h3/src/cadeia.rs` e o registro em `fundo/p14-h3/registro.tsv`:
+
+```bash
+cargo run --release --bin labs -- --h3
+```
+
+```text
+== Ponto 14 :: a cadeia do H3, re-executada ate onde a arvore deixa ==
+carimbo do registro: 2026-10-16
+linha            classe    marca registro versionado                o que o instrumento faz
+h3.fluxos        registro  P    -                                  declara: o dado bruto nao esta na arvore
+h3.ri            registro  D    -                                  declara: o dado bruto nao esta na arvore
+h3.laco          derivada  V    fundo/p06-laco/resultados.json     re-deriva a conta e o veredito
+h3.hipergrafo    registro  P    -                                  declara: o dado bruto nao esta na arvore
+
+-- o laco performativo, re-derivado do registro em arvore --
+estimativa 2SLS: r = 0.1446378859 | IC90 de 0.1319811884 a 0.1568385251 | F do primeiro estagio = 5523.46
+razao r declarado / r medido: 4.1482907207 (o registro traz 4.1482907207) | banda declarada: 0.3333 a 3.0000
+sinal confere: true | ordem de grandeza confere: false | compativel no sentido estrito: false (o registro diz false)
+vies do previsor ingenuo contra a demanda exogena: 0.2912
+divergencias entre a conta e o registro: nenhuma
+veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (razao 4.1483, banda de 0.3333 a 3.0000)
+
+-- prova negativa: um registro em que a razao cai dentro da banda declarada --
+  com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
+-- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
+  divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+```
+
+Leia o cabeçalho da tabela de cada linha. **Os seis fluxos** e **o hipergrafo** ficam na classe registro: os
+diários e o grafo saíram da árvore com o andaime, e o que existe em Rust para eles é o **mecanismo** — o canário
+deste capítulo, que mede o relógio, e não os seis fluxos. **O cofre de Rhode Island** também é registro, e por isso
+segue com a marca **D**: o laboratório mede o mecanismo, e a divergência contra o cofre real está declarada três
+parágrafos acima. **O laço performativo** é a única linha derivável, porque o registro da medida dele está
+versionado: o instrumento lê o `resultados.json`, refaz a conta do critério que foi declarado antes de rodar e
+chega ao mesmo veredito — o laço declarado em 0,6 é **4,1483 vezes** o medido, fora da banda de 1/3 a 3, com zero
+divergência entre a conta e o registro. É a diferença entre "confie no número que está no capítulo" e "rode o
+comando e veja a conta refeita".
+
 **Declaração de divergência.** O experimento acima é simulado e foi calibrado para ter a estrutura do cofre de
 Rhode Island — taxa de 2,26%, 24.466 paradas, correção ajustada no período anterior —, não para reproduzir os
 números dele. Os valores medidos aqui e os do repositório, lado a lado: erro na média do modelo cru, $+0{,}0132$
@@ -315,7 +359,9 @@ cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode 
 **Resumo.**
 
 - Zero vazamento só vale com um canário que prove que o teste acharia o vazamento: 0,000 com o relógio honesto,
-  de $+0{,}55$ a $+0{,}97$ com o relógio desligado.
+  de $+0{,}55$ a $+0{,}97$ com o relógio desligado. E das quatro linhas deste horizonte, só o laço performativo
+  pode ter a conta refeita hoje: as outras três perderam o dado bruto com o andaime, e o que sobra delas é o
+  mecanismo medido aqui.
 - Um previsor pode acertar o que observa (1% de erro) e errar o mundo (29% de excesso); o instrumento sorteado
   dentro do laço desfaz a espiral, e o laço declarado em 0,6 é quatro vezes o medido, 0,145.
 - Cada correção de calibração só foi aceita num cofre novo: voos de 2023 com ECE 0,008, prisões de 2020–2021
