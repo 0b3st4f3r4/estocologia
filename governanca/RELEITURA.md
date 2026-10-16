@@ -195,6 +195,10 @@ levantado (`GRUPOS.md` e os `resultados.json` do commit). Cada um dos quatro doc
 `ASSINATURAS.md`: o hash dele só se registra com a nota fechada, e é por isso que `ASSINATURAS.md` segue
 intocado.
 
+*(Fechado no mesmo dia: as quatro notas foram confirmadas, com dois microajustes de redação que o signatário
+escreveu — ver "Fecho da confirmação", abaixo —, os quatro hashes entraram em `ASSINATURAS.md` e o rótulo de
+pendência saiu dos quatro pareceres.)*
+
 **Fecho da confirmação, no mesmo dia.** O signatário revisou os quatro pareceres novos e: confirmou o **3** e o **17**
 na íntegra; confirmou o **2** com um microajuste de redação no primeiro ponto da nota ("o efeito da mudança sobre
 quem está abaixo do teto", e não "o efeito do corte"); e confirmou o **20** com um microajuste na cláusula final
