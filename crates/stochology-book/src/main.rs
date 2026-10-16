@@ -19,6 +19,7 @@ fn main() {
     let mut banco = false;
     let mut sistema1 = false;
     let mut sistema2 = false;
+    let mut pre_teste_flag = false;
     let mut fila_flag = false;
     let mut i = 0;
     while i < args.len() {
@@ -34,6 +35,7 @@ fn main() {
             "--banco" => banco = true,
             "--s1" => sistema1 = true,
             "--s2" => sistema2 = true,
+            "--preteste" => pre_teste_flag = true,
             "--fila" => fila_flag = true,
             _ => {}
         }
@@ -53,6 +55,10 @@ fn main() {
     }
     if sistema2 {
         sistema_2();
+        return;
+    }
+    if pre_teste_flag {
+        pre_teste_do_painel();
         return;
     }
     if fila_flag {
@@ -97,6 +103,34 @@ fn sistema_1() {
     }
 }
 
+
+/// Pré-teste de calibração do painel SHELF: o nulo declarado do desenho do protocolo.
+fn pre_teste_do_painel() {
+    use stochology_h3::preteste::{BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO, nulo_do_pre_teste};
+
+    println!("== Pré-teste SHELF :: calibração do painel ==");
+    println!(
+        "desenho do protocolo: 20 itens, 10 caixas de massa igual; limiar do ECE {}",
+        ECE_MAXIMO_DO_PROTOCOLO
+    );
+    println!(
+        "limites medidos do desenho: o critério 3 (caixa com n >= 4) fica vacuoso, porque 20 itens em 10 caixas dão 2 por caixa; o critério 4, na letra do protocolo, é inerte: as caixas são cortadas por p ordenado e a média prevista da de cima supera a da de baixo por construção"
+    );
+    for (itens, baldes) in [(20usize, BALDES_DO_PROTOCOLO), (20, 5), (20, 20), (200, 10)] {
+        let nulo = nulo_do_pre_teste(2026, 20_000, itens, baldes);
+        println!(
+            "nulo calibrado, {itens} itens em {baldes} caixas: ECE p50 {:.4} | p90 {:.4} | p95 {:.4} | maximo {:.4} | habilidade p50 {:.4} | p10 {:.4} | Brier p50 {:.4} | fracao que passa no limiar: {:.4}",
+            nulo.ece_p50,
+            nulo.ece_p90,
+            nulo.ece_p95,
+            nulo.ece_maximo,
+            nulo.habilidade_p50,
+            nulo.habilidade_p10,
+            nulo.brier_p50,
+            nulo.quantos_passam
+        );
+    }
+}
 
 /// Sistema 2: deliberação sobre o hipergrafo, crença da banca, inferência e eixo R.
 fn sistema_2() {

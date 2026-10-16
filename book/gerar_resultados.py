@@ -75,6 +75,10 @@ def main() -> int:
         "| BTlabs --todosBT | os 21 laboratorios em sequencia |\n"
         "| BTlabs --bancoBT | o H0 real: a base de 2,65 milhoes de chamadas, escala de Erlang C, unidade independente e nulo de metades |\n"
         "| BTlabs --resolucaoBT | o horizonte R: quanto custa perguntar grosso, com o mesmo recurso total |\n"
+        "| BTlabs --s1BT | a triagem deterministica do Sistema 1 |\n"
+        "| BTlabs --s2BT | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |\n"
+        "| BTlabs --pretesteBT | o nulo do pre-teste de calibracao do painel SHELF |\n"
+        "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
     )
@@ -102,6 +106,13 @@ def main() -> int:
         [str(BIN), "--s1"],
         "Vocabulario fechado de 6 categorias e 35 temas, arvore de sufixos de 136 entradas, probabilidade presa em\n"
         "[0,01; 0,99] e soma conferida a cada rodada. Sem casamento, a resposta e a priori declarada de outros.",
+    ))
+    partes.append(bloco(
+        "O pre-teste de calibracao do painel SHELF",
+        [str(BIN), "--preteste"],
+        "O nulo declarado: um especialista perfeitamente calibrado, com a priori uniforme, no desenho do\n"
+        "protocolo. Mede o que o limiar de ECE de 0,10 aprova e mostra os dois limites do desenho (o criterio 3\n"
+        "vacuoso com 20 itens em 10 caixas e o criterio 4 inerte como escrito).",
     ))
     partes.append(bloco(
         "O Sistema 2 deliberativo",

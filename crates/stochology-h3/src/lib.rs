@@ -7,6 +7,8 @@
 //! Declarado e nao implementado: a leitura dos seis fluxos reais e o cofre de Rhode Island, que
 //! seguem como registro; o que existe aqui e o mecanismo, nao a base.
 
+pub mod preteste;
+
 use stochology_core::Rng;
 
 fn uniforme(rng: &mut Rng) -> f64 {

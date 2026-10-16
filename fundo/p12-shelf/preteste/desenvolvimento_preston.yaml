@@ -1,0 +1,200 @@
+dominio: h2/desenvolvimento_preston
+area: desenvolvimento economico (curva de Preston)
+gerado_por: pool de itens do pre-teste (subagente executor, conferencia item a item por API e CSV publicos)
+fonte_do_pool: pesquisa em fonte publica, cada item com URL conferida
+itens:
+  - id: P01
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer do Japão era maior que 80 anos?"
+    resolucao: sim
+    numero: "84,356 anos (SP.DYN.LE00.IN, Japão, 2019; a mesma série no Our World in Data, UN WPP, dá 84,418)"
+    fonte_url: "https://api.worldbank.org/v2/country/JPN/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Japão, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P02
+    enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra da China era maior que 20.000 dólares internacionais?"
+    resolucao: nao
+    numero: "17.600,89 dólares internacionais correntes (NY.GDP.PCAP.PP.CD, China, 2019; a série em preços constantes do Our World in Data dá 18.820,59, também abaixo do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.PCAP.PP.CD?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — GDP per capita, PPP (current international $), China, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P03
+    enunciado: "No ano-base 2019, o gasto total em saúde como porcentagem do PIB dos Estados Unidos era maior que 10%?"
+    resolucao: sim
+    numero: "16,5449% do PIB (SH.XPD.CHEX.GD.ZS, Estados Unidos, 2019; é o valor da base GHED da OMS para o ano)"
+    fonte_url: "https://api.worldbank.org/v2/country/USA/indicator/SH.XPD.CHEX.GD.ZS?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Current health expenditure (% of GDP), Estados Unidos, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P04
+    enunciado: "No ano-base 2019, a parcela da população com 65 anos ou mais no Japão era maior que 30%?"
+    resolucao: nao
+    numero: "28,6288% da população (SP.POP.65UP.TO.ZS, Japão, 2019; estimativa oficial japonesa de setembro de 2019, 35,89 milhões de pessoas, 28,4%)"
+    fonte_url: "https://api.worldbank.org/v2/country/JPN/indicator/SP.POP.65UP.TO.ZS?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Population ages 65 and above (% of total population), Japão, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P05
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer da Nigéria era menor que 55 anos?"
+    resolucao: sim
+    numero: "53,009 anos (SP.DYN.LE00.IN, Nigéria, 2019; a mesma série no Our World in Data, UN WPP, dá 53,009)"
+    fonte_url: "https://api.worldbank.org/v2/country/NGA/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Nigéria, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P06
+    enunciado: "No ano-base 2019, a taxa de mortalidade de menores de 5 anos da Índia era maior que 40 óbitos por mil nascidos vivos?"
+    resolucao: nao
+    numero: "34,9 óbitos por mil nascidos vivos (SH.DYN.MORT, Índia, 2019; o grupo interagencial UN IGME, via Our World in Data, dá 34,9)"
+    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/SH.DYN.MORT?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Mortality rate, under-5 (per 1,000 live births), Índia, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: facil
+  - id: P07
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer do Brasil era maior que 75 anos?"
+    resolucao: sim
+    numero: "75,809 anos (SP.DYN.LE00.IN, Brasil, 2019; a tábua de mortalidade do IBGE para 2019 dá 76,6 anos, também acima do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/BRA/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Brasil, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P08
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer da Índia era maior que 72 anos?"
+    resolucao: nao
+    numero: "70,746 anos (SP.DYN.LE00.IN, Índia, 2019; a série UN WPP do Our World in Data dá 70,746 e o sistema indiano SRS, 69,7 para 2015-2019)"
+    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Índia, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P09
+    enunciado: "No ano-base 2020, a queda da expectativa de vida ao nascer dos Estados Unidos em relação a 2019 era maior que 1 ano?"
+    resolucao: sim
+    numero: "78,788 anos em 2019 contra 76,980 anos em 2020, queda de 1,807 ano (SP.DYN.LE00.IN, Estados Unidos; o CDC/NCHS publica 78,8 e 77,0, queda de 1,8)"
+    fonte_url: "https://api.worldbank.org/v2/country/USA/indicator/SP.DYN.LE00.IN?format=json&date=2019:2020"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Estados Unidos, 2019 e 2020 (API v2)"
+    ano_base: 2020
+    dificuldade: media
+  - id: P10
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer da Rússia era maior que 75 anos?"
+    resolucao: nao
+    numero: "73,084 anos (SP.DYN.LE00.IN, Rússia, 2019; o Rosstat publica 73,34 anos para 2019, também abaixo do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/RUS/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Rússia, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P11
+    enunciado: "No ano-base 2019, a expectativa de vida ao nascer de Bangladesh era maior que 70 anos?"
+    resolucao: sim
+    numero: "72,625 anos (SP.DYN.LE00.IN, Bangladesh, 2019; a série UN WPP do Our World in Data dá 72,625)"
+    fonte_url: "https://api.worldbank.org/v2/country/BGD/indicator/SP.DYN.LE00.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Bangladesh, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P12
+    enunciado: "No ano-base 2019, o gasto total em saúde como porcentagem do PIB do Brasil era maior que 10%?"
+    resolucao: nao
+    numero: "9,6145% do PIB (SH.XPD.CHEX.GD.ZS, Brasil, 2019; a base GHED da OMS traz o mesmo 9,6 para o ano)"
+    fonte_url: "https://api.worldbank.org/v2/country/BRA/indicator/SH.XPD.CHEX.GD.ZS?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Current health expenditure (% of GDP), Brasil, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P13
+    enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra da Índia era menor que 9.000 dólares internacionais?"
+    resolucao: sim
+    numero: "6.945,40 dólares internacionais correntes (NY.GDP.PCAP.PP.CD, Índia, 2019; a série em preços constantes do Our World in Data dá 7.702,18, também abaixo do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/NY.GDP.PCAP.PP.CD?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — GDP per capita, PPP (current international $), Índia, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P14
+    enunciado: "No ano-base 2019, o PIB per capita a preços correntes do Brasil era maior que 10.000 dólares?"
+    resolucao: nao
+    numero: "9.029,83 dólares correntes (NY.GDP.PCAP.CD, Brasil, 2019)"
+    fonte_url: "https://api.worldbank.org/v2/country/BRA/indicator/NY.GDP.PCAP.CD?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — GDP per capita (current US$), Brasil, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: media
+  - id: P15
+    enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra do Catar era maior que 100.000 dólares internacionais?"
+    resolucao: sim
+    numero: "107.502,47 dólares internacionais correntes (NY.GDP.PCAP.PP.CD, Catar, 2019; a série em preços constantes do Our World in Data dá 113.160,98, também acima do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/QAT/indicator/NY.GDP.PCAP.PP.CD?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — GDP per capita, PPP (current international $), Catar, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: dificil
+  - id: P16
+    enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra da Irlanda era maior que 100.000 dólares internacionais?"
+    resolucao: nao
+    numero: "92.042,26 dólares internacionais correntes (NY.GDP.PCAP.PP.CD, Irlanda, 2019; a série em preços constantes do Our World in Data dá 96.205,80, também abaixo do limiar)"
+    fonte_url: "https://api.worldbank.org/v2/country/IRL/indicator/NY.GDP.PCAP.PP.CD?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — GDP per capita, PPP (current international $), Irlanda, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: dificil
+  - id: P17
+    enunciado: "No ano-base 2019, a taxa de mortalidade de menores de 5 anos de Serra Leoa era maior que 100 óbitos por mil nascidos vivos?"
+    resolucao: sim
+    numero: "108,3 óbitos por mil nascidos vivos (SH.DYN.MORT, Serra Leoa, 2019; o grupo interagencial UN IGME, via Our World in Data e via OMS, dá 108,27)"
+    fonte_url: "https://api.worldbank.org/v2/country/SLE/indicator/SH.DYN.MORT?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Mortality rate, under-5 (per 1,000 live births), Serra Leoa, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: dificil
+  - id: P18
+    enunciado: "No ano-base 2019, a parcela da população da Nigéria com pelo menos serviços básicos de água potável era maior que 80%?"
+    resolucao: nao
+    numero: "74,599% da população (SH.H2O.BASW.ZS, Nigéria, 2019, estimativa do JMP OMS/UNICEF)"
+    fonte_url: "https://api.worldbank.org/v2/country/NGA/indicator/SH.H2O.BASW.ZS?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — People using at least basic drinking water services (% of population), Nigéria, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: dificil
+  - id: P19
+    enunciado: "No ano-base 2021, a expectativa de vida ao nascer da Índia era menor que 68 anos?"
+    resolucao: sim
+    numero: "67,282 anos (SP.DYN.LE00.IN, Índia, 2021; a série UN WPP do Our World in Data dá 67,282)"
+    fonte_url: "https://api.worldbank.org/v2/country/IND/indicator/SP.DYN.LE00.IN?format=json&date=2021"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), Índia, 2021 (API v2)"
+    ano_base: 2021
+    dificuldade: dificil
+  - id: P20
+    enunciado: "No ano-base 2019, a diferença entre a expectativa de vida das mulheres e a dos homens na Rússia era maior que 11 anos?"
+    resolucao: nao
+    numero: "9,93 anos: mulheres 78,17 e homens 68,24 (SP.DYN.LE00.FE.IN e SP.DYN.LE00.MA.IN, Rússia, 2019); o Rosstat publica 78,17 e 68,24, mesma diferença"
+    fonte_url: "https://api.worldbank.org/v2/country/RUS/indicator/SP.DYN.LE00.FE.IN?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, female (years), Rússia, 2019 (API v2), confrontado com a série masculina na mesma data"
+    ano_base: 2019
+    dificuldade: dificil
+  - id: P21
+    enunciado: "No ano-base 2021, a expectativa de vida ao nascer do mundo era menor que 72 anos?"
+    resolucao: sim
+    numero: "71,216 anos (SP.DYN.LE00.IN, agregado mundial WLD, 2021; as estimativas da UN WPP no Our World in Data dão 70,865 para o mesmo ano)"
+    fonte_url: "https://api.worldbank.org/v2/country/WLD/indicator/SP.DYN.LE00.IN?format=json&date=2021"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Life expectancy at birth, total (years), agregado mundial, 2021 (API v2)"
+    ano_base: 2021
+    dificuldade: dificil
+  - id: P22
+    enunciado: "No ano-base 2019, o gasto total em saúde como porcentagem do PIB da África do Sul era maior que 10%?"
+    resolucao: nao
+    numero: "8,2465% do PIB (SH.XPD.CHEX.GD.ZS, África do Sul, 2019, base GHED da OMS)"
+    fonte_url: "https://api.worldbank.org/v2/country/ZAF/indicator/SH.XPD.CHEX.GD.ZS?format=json&date=2019"
+    fonte_titulo: "Banco Mundial, World Development Indicators — Current health expenditure (% of GDP), África do Sul, 2019 (API v2)"
+    ano_base: 2019
+    dificuldade: dificil
+itens_descartados:
+  - enunciado: "No ano-base 2019, a expectativa de vida ao nascer do Brasil era maior que 76 anos?"
+    motivo: "Duas fontes publicadas discordam da resposta: o Banco Mundial dá 75,809 (não) e a tábua de mortalidade do IBGE dá 76,6 anos para 2019 (sim)."
+  - enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra da Nigéria era menor que 8.000 dólares internacionais?"
+    motivo: "Duas séries do próprio Banco Mundial discordam da resposta: preços correntes 7.551,39 (sim) contra a série em preços constantes publicada pelo Our World in Data, 8.361,79 (não)."
+  - enunciado: "No ano-base 2019, o PIB per capita em paridade de poder de compra do Catar era maior que 110.000 dólares internacionais?"
+    motivo: "Correntes 107.502,47 (não) contra constantes 113.160,98 (sim): o item fecha em uma base de preços e não na outra."
+  - enunciado: "No ano-base 2019, a parcela da população com 65 anos ou mais na Coreia do Sul era maior que 15%?"
+    motivo: "15,0635% da população: margem de 0,06 ponto percentual, qualquer revisão da série inverte a resposta."
+  - enunciado: "No ano-base 2019, a expectativa de vida ao nascer da China era maior que 78 anos?"
+    motivo: "77,940 anos: margem de 0,06 ano; a revisão da UN WPP já desloca esse valor em mais de uma década de fração de ano."
+  - enunciado: "No ano-base 2019, a expectativa de vida ao nascer de Cuba era maior que 77 anos?"
+    motivo: "77,413 anos: margem de 0,41 ano e séries divergentes para Cuba na década de 2010 (WPP contra OOPS/OMS)."
+  - enunciado: "No ano-base 2019, a taxa de mortalidade infantil da Índia era menor que 30 por mil nascidos vivos?"
+    motivo: "29,8 no Banco Mundial e 29,76 no UN IGME: a margem de 0,2 a 0,3 óbito por mil é menor que a revisão anual da série."
+  - enunciado: "No ano-base 2019, o número de médicos por mil habitantes na Rússia era maior que 4,5?"
+    motivo: "Série instável: 4,097 em 2018, 4,165 em 2019, 3,807 em 2020 e 5,087 em 2021 no mesmo indicador, sem quebra documentada."
+  - enunciado: "No ano-base 2021, a expectativa de vida ao nascer da Rússia era menor que 70 anos?"
+    motivo: "69,900 anos: margem de 0,1 ano, abaixo da revisão entre edições da UN WPP."

@@ -11,4 +11,6 @@ path = "src/main.rs"
 
 [dependencies]
 stochology-s2 = { path = "../stochology-s2" }
+stochology-h0 = { path = "../stochology-h0" }
+stochology-h3 = { path = "../stochology-h3" }
 stochology-core = { path = "../stochology-core" }

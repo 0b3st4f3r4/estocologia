@@ -9,6 +9,10 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --todos` | os 21 laboratorios em sequencia |
 | `labs --banco` | o H0 real: a base de 2,65 milhoes de chamadas, escala de Erlang C, unidade independente e nulo de metades |
 | `labs --resolucao` | o horizonte R: quanto custa perguntar grosso, com o mesmo recurso total |
+| `labs --s1` | a triagem deterministica do Sistema 1 |
+| `labs --s2` | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |
+| `labs --preteste` | o nulo do pre-teste de calibracao do painel SHELF |
+| `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
 
@@ -87,6 +91,26 @@ categoria=cauda probabilidade=0.9117 produtos=[0.0177, 0.0177, 0.9117, 0.0177, 0
 categoria=calibracao probabilidade=0.9361 produtos=[0.0128, 0.0128, 0.0128, 0.9361, 0.0128, 0.0128] soma=1.0000 fora_de[0.01;0.99]=0 | probabilidade 0.9361 | soma 1.0000 | fora de [0.01;0.99] 0
 categoria=justica probabilidade=0.9117 produtos=[0.0177, 0.0177, 0.0177, 0.0177, 0.9117, 0.0177] soma=1.0000 fora_de[0.01;0.99]=0 | probabilidade 0.9117 | soma 1.0000 | fora de [0.01;0.99] 0
 categoria=outros probabilidade=0.8718 produtos=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] soma=1.0000 fora_de[0.01;0.99]=0 | probabilidade 0.8718 | soma 1.0000 | fora de [0.01;0.99] 0
+~~~
+
+### O pre-teste de calibracao do painel SHELF
+
+O nulo declarado: um especialista perfeitamente calibrado, com a priori uniforme, no desenho do
+protocolo. Mede o que o limiar de ECE de 0,10 aprova e mostra os dois limites do desenho (o criterio 3
+vacuoso com 20 itens em 10 caixas e o criterio 4 inerte como escrito).
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --preteste
+~~~
+
+~~~text
+== Pré-teste SHELF :: calibração do painel ==
+desenho do protocolo: 20 itens, 10 caixas de massa igual; limiar do ECE 0.1
+limites medidos do desenho: o critério 3 (caixa com n >= 4) fica vacuoso, porque 20 itens em 10 caixas dão 2 por caixa; o critério 4, na letra do protocolo, é inerte: as caixas são cortadas por p ordenado e a média prevista da de cima supera a da de baixo por construção
+nulo calibrado, 20 itens em 10 caixas: ECE p50 0.2272 | p90 0.3002 | p95 0.3218 | maximo 0.5474 | habilidade p50 0.3076 | p10 0.0370 | Brier p50 0.1645 | fracao que passa no limiar: 0.0008
+nulo calibrado, 20 itens em 5 caixas: ECE p50 0.1584 | p90 0.2316 | p95 0.2559 | maximo 0.4487 | habilidade p50 0.3076 | p10 0.0370 | Brier p50 0.1645 | fracao que passa no limiar: 0.1072
+nulo calibrado, 20 itens em 20 caixas: ECE p50 0.3325 | p90 0.4017 | p95 0.4222 | maximo 0.5968 | habilidade p50 0.3076 | p10 0.0370 | Brier p50 0.1645 | fracao que passa no limiar: 0.0000
+nulo calibrado, 200 itens em 10 caixas: ECE p50 0.0694 | p90 0.0932 | p95 0.1002 | maximo 0.1470 | habilidade p50 0.3316 | p10 0.2583 | Brier p50 0.1663 | fracao que passa no limiar: 0.9486
 ~~~
 
 ### O Sistema 2 deliberativo
@@ -865,7 +889,16 @@ test testes::sem_area_a_rodada_devolve_area_vazia ... ok
 
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 6 tests
+running 15 tests
+test preteste::testes::a_identidade_de_murphy_fecha_exata ... ok
+test preteste::testes::o_criterio_4_do_protocolo_nao_sabe_reprovar ... ok
+test preteste::testes::o_desenho_do_protocolo_poe_dois_itens_por_caixa ... ok
+test preteste::testes::o_exagerado_reprova_por_ece_e_por_caixa ... ok
+test preteste::testes::o_nulo_do_pre_teste_cresce_quando_a_amostra_encolhe ... ok
+test preteste::testes::o_nulo_e_deterministico ... ok
+test preteste::testes::o_p_e_a_unidade_do_protocolo ... ok
+test preteste::testes::probabilidade_invertida_reprova_por_monotonia ... ok
+test preteste::testes::um_pre_teste_calibrado_passa_nos_quatro_criterios ... ok
 test testes::a_correlacao_passiva_segue_a_conta_exata ... ok
 test testes::a_ece_e_zero_no_calibrado_e_alta_no_exagerado ... ok
 test testes::a_habilidade_de_brier_premeia_o_bom_e_pune_o_mau ... ok
@@ -873,7 +906,7 @@ test testes::a_tolerancia_da_ece_depende_de_n ... ok
 test testes::o_canario_pega_a_leitura_do_futuro ... ok
 test testes::o_laco_mede_o_que_a_acao_faz_com_o_indicador ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 12 tests
 test lentes::testes::arrasto_da_volatilidade_desconta_variacao ... ok
