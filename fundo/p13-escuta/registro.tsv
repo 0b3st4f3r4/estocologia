@@ -1,0 +1,11 @@
+# prazo	2026-12-15
+# grupos_minimos	2
+# registros	2026-10-16
+decisao	grupos	titulares	ouvidos	registro	pode_emitir
+h2g/saida/direito_teto_beneficio	trabalhadores acidentados cobertos pelo teto (Kentucky 1980, Michigan 1982)	-	nenhum	-	nao
+h2g/saida/educacao_star_turmas	criancas do jardim a 3a serie do STAR no Tennessee	11598	nenhum	-	nao
+h2g/saida/saude_rand	familias nao idosas do RAND HIE (anos 1970)	-	nenhum	-	nao
+h1-real/saida/b	participantes do NSW e controles do CPS	16177	nenhum	-	nao
+h3/prisoes	detidos de Toronto 1997-2002	5226	nenhum	-	nao
+h3/prisoes20	prisoes de Toronto 2020-2021	65276	nenhum	-	nao
+h3/prisoes_ri	paradas de Rhode Island 2005-2015	86113	nenhum	-	nao

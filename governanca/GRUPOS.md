@@ -17,6 +17,18 @@ Uma linha por decisão que envolve pessoas: as quatro dos 21 pareceres e os trê
 **Nenhum dos sete grupos afetados foi ouvido, em nenhuma das sete decisões.** Não há no repositório registro de
 consulta, entrevista, painel ou consentimento.
 
+## O lacre (2026-10-16)
+
+O programa parou de tratar a escuta como pendência de opinião. O protocolo do ponto 13 está congelado com hash
+([`fundo/p13-escuta/`](../fundo/p13-escuta/DECLARACAO.md)), o registro em máquina tem as sete decisões e o
+instrumento `labs --escuta` dá o veredito: com **0 de 7** grupos ouvidos e cobertura mínima de **2 de 7**, a caixa
+fica **lacrada**. As sete decisões ficam como análise de sensibilidade ($n = 1$) e **não** viram diretriz de política
+pública nem decisão de portão F8 até a cobertura mínima ser atingida, ou até **2026-12-15**; vencido o prazo sem
+cobertura, o artefato fica arquivado como exercício metodológico de sensibilidade, com o lacre em hash.
+
+A coluna "ouvidos" desta tabela continua **nenhum** nas sete linhas, e é isso que o instrumento confere: nenhuma
+decisão pode se dizer emitida sem alguém ouvido — o caso sintético que mente é reprovado no relatório do portão.
+
 ## O que a auditoria não pôde olhar
 
 - **Quem autoriza.** Os 21 pareceres foram assinados por sil em 2026-10-15T03:53:28Z

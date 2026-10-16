@@ -165,8 +165,11 @@ naturais, com cláusula de saída, defendido em banca.
   4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
   Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
-  releitura dos 21 pareceres assinados está preparada, com as 21 linhas e os 21 resumos criptográficos conferidos,
-  e nenhuma decisão foi assinada.
+  releitura dos 21 pareceres foi feita (17 confirmados, 4 retirados e reemitidos), e ela não substitui a escuta:
+  a assinatura do responsável é de quem decide usar o artefato, não de quem paga o erro. A frente tem agora
+  protocolo congelado com hash (`fundo/p13-escuta/`) e a caixa lacrada por instrumento: as sete decisões ficam
+  como análise de sensibilidade ($n = 1$) e não viram diretriz de política pública nem decisão de portão F8 até a
+  cobertura mínima de 2 dos 7 grupos ser atingida, ou até 2026-12-15 (`labs --escuta`).
 
 **Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo. R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o recurso total idêntico e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa é o artefato executável, e não o parágrafo. Alegação, processo gerador, modelo nulo e teste ficam lado a lado. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a proibição de texto livre entre agentes que já vale na ficha. **Prazo de validade para a meta do livro:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
 
@@ -251,6 +254,42 @@ nenhum número publicado mude; o do laboratório roda sobre 12 fichas de teste e
 que os dois têm em comum é o essencial: a pergunta do decisor só vale se nomeia quem decide, copia a ação
 literalmente e termina em pergunta.
 
+**O lacre da escuta.** O segundo instrumento do capítulo é o portão de quem paga o erro. Ele lê o registro em
+máquina das sete decisões que mexem com pessoas reais, conta a cobertura de escuta, confere se alguma decisão se diz
+emitida sem ninguém ouvido e dá o veredito do lacre. O protocolo está em `fundo/p13-escuta/protocolo.md`, congelado
+com hash antes da primeira tentativa de contato:
+
+```bash
+cargo run --release --bin labs -- --escuta
+```
+
+```text
+== Ponto 13 :: a escuta de quem paga o erro ==
+decisoes: 7 | carimbo do registro: 2026-10-16 | prazo da janela: 2026-12-15 | cobertura minima: 2 de 7
+decisao                              titulares ouvidos      registro   pode emitir
+h2g/saida/direito_teto_beneficio             - nenhum       -          nao
+h2g/saida/educacao_star_turmas           11598 nenhum       -          nao
+h2g/saida/saude_rand                         - nenhum       -          nao
+h1-real/saida/b                          16177 nenhum       -          nao
+h3/prisoes                                5226 nenhum       -          nao
+h3/prisoes20                             65276 nenhum       -          nao
+h3/prisoes_ri                            86113 nenhum       -          nao
+
+cobertura de escuta: 0 de 7 grupos ouvidos
+divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido
+veredito: CAIXA LACRADA — a cobertura de 0 fica abaixo do minimo de 2; as decisoes ficam como analise de sensibilidade (n = 1) e nao viram diretriz de politica publica nem decisao de portao F8 ate 2026-12-15 ou ate a cobertura minima
+```
+
+**Nenhuma das sete coortes históricas está ao alcance** — são crianças do STAR dos anos 1980, famílias do RAND HIE,
+detidos de Toronto de 1997, motoristas de Rhode Island de 2005 —, e o programa declara isso em vez de inventar
+consulta que não houve. O que a escuta procura é equivalente estrutural: quem hoje ocupa a mesma posição de quem
+pagou o erro então. O roteiro tem três perguntas em linguagem comum (pior cenário plausível, o que faria recusar,
+quem de fato arca com o custo), quem conduz é de fora do programa ou com protocolo cego, e o operador **não conta**
+como grupo ouvido. O prazo é 2026-12-15, a cobertura mínima é de 2 dos 7 grupos com registro assinado, e o que não
+for coberto fica arquivado como exercício de sensibilidade. A prova negativa está no próprio instrumento: uma
+decisão que se diz emitida com a coluna "ouvidos" em nenhum é reprovada, e a caixa só abre quando a cobertura chega
+ao mínimo.
+
 **Exercícios.**
 
 1. *(Conceito)* Escolha um problema da sua escola e escreva a pergunta do decisor nas três partes exigidas. Depois
@@ -277,7 +316,8 @@ literalmente e termina em pergunta.
   era frouxa, o laço declarado era quatro vezes o medido.
 - Ficam em aberto, com nome: a elicitação com especialistas humanos (5 de 33 domínios dependem da priori), a
   segunda linha nos 40 genes reais da genética (o desenho já tem instrumento: 4 de 40 passam com uma linha, 1 de
-  40 com duas) e a voz de quem paga o erro (nenhum grupo afetado ouvido nas sete decisões que envolvem pessoas).
+  40 com duas) e a voz de quem paga o erro (nenhum grupo afetado ouvido nas sete decisões que envolvem pessoas, com
+  a caixa lacrada por instrumento e prazo em 2026-12-15).
 - O projeto final fecha o curso: escolher um problema da escola ou da cidade, escrever a pergunta do decisor,
   preencher a ficha, fixar a semente, construir o nulo, pré-registrar, rodar e defender um memorando em frequências
   naturais com cláusula de saída.

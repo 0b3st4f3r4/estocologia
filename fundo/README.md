@@ -19,7 +19,8 @@ o resultado. Dado grande e rastro pesado ficam fora do Git, com `FONTES.md` e `S
 
 | 9 e 10 · dados de saúde | [`p10-saude`](p10-saude/README.md) | em andamento | Primeiro domínio real de saúde no espelho aberto da PhysioNet, no formato do H2g e com o portão de calibração do p08. |
 | 9 e 10 · resolução em evento raro | [`p11-eventos-raros`](p11-eventos-raros/README.md) | fechada | Nos três casos de evento raro, nenhum caminho vence: em Rhode Island a resolução bate a confiabilidade com IC90 acima de zero, mas a habilidade (+1,9%) fica 40 vezes abaixo do +5% declarado; no painel COVID a ordenação é boa (AUC 0,77) e a previsão perde para a constante. |
-| 11 · elicitação humana (SHELF) | [`p12-shelf`](p12-shelf/README.md) | preparada, depende de gente | Protocolo, seis formulários, prioris de partida e critério de K = 2 prontos; nenhuma entrevista feita e o protocolo ainda não congelado. |
+| 11 · elicitação humana (SHELF) | [`p12-shelf`](p12-shelf/README.md) | protocolo congelado, painel faltando | Protocolo congelado com hash, pré-teste ajustado e a trilha do primeiro especialista (E1, o autor do programa) fechada em cinco domínios: pré-testes aprovados, quantis confirmados na rodada 1, controles lidos e a comparação preenchida até o funil, com a marca **P**. Falta o painel: as outras duas pessoas por domínio e o especialista de fora do programa. |
+| 13 · a voz de quem paga o erro (frente nova) | [`p13-escuta`](p13-escuta/README.md) | protocolo congelado, escuta não executada | Nas sete decisões que mexem com pessoas, **0 de 7** grupos ouvidos, cobertura mínima de **2 de 7** e prazo em **2026-12-15**: a caixa está lacrada por instrumento (`labs --escuta`) e nenhuma decisão vira diretriz de política pública ou decisão de portão F8 até a cobertura. |
 
 ## O que falta
 
@@ -28,8 +29,11 @@ o resultado. Dado grande e rastro pesado ficam fora do Git, com `FONTES.md` e `S
   `FORA_DO_GIT.reconstruido.sha256`), e o ambiente de reprodução está em [`AMBIENTE.md`](AMBIENTE.md) e
   [`requirements.txt`](requirements.txt) — onde `statsmodels` (usado só pelo gabarito do p01) e `pyreadr` (um passo do
   p08) aparecem como ausentes, e por isso esses dois passos não rodam aqui.
-- **Depende de gente, e só disso:** a elicitação SHELF do `p12-shelf` (protocolo pronto, nenhuma entrevista) e a
-  releitura dos 21 pareceres em [`governanca/RELEITURA.md`](../governanca/RELEITURA.md), que espera a leitura de sil.
+- **Depende de gente, e só disso:** a escuta de quem paga o erro ([p13-escuta](p13-escuta/README.md): protocolo
+  congelado, caixa lacrada, 0 de 7 grupos ouvidos, prazo em 2026-12-15) e o painel completo do SHELF
+  ([p12-shelf](p12-shelf/README.md): a trilha do primeiro especialista está fechada em cinco domínios, faltam as
+  outras duas pessoas por domínio e o especialista de fora do programa). A releitura dos 21 pareceres saiu em
+  [`governanca/RELEITURA.md`](../governanca/RELEITURA.md): 17 confirmados, 4 retirados e reemitidos com nota assinada.
 - **Divergência do G4 do H3, resolvida: era o numpy do caminho.** O G4 publicado (`h3/saida/portoes.json`: r̂ 0,5632 com 2375 choques) **reproduz** — no numpy **2.5.1** do `pyenv`, que só entra no `sys.path` com `PYTHONNOUSERSITE=1`. Com o `python3` padrão, que importa o numpy **2.4.6** de `~/.local`, o mesmo código dá r̂ 0,5529 com 2395 choques. O MRE: com o **mesmo** estado do PCG64, `binomial(248, 0.6)` devolve **171** no 2.4.6 e **150** no 2.5.1 — o numpy 2.5 corrigiu a série de Stirling do teste de aceitação do BTPE (o 3º e o 4º termos eram somados, e o coeficiente principal dizia `13680` em vez de `13860`). Não foi ponto aberto por muito tempo e **nenhum número publicado mudou**: diagnóstico e prova em `h3/DECLARACAO_G4_REGENERACAO_2.md`.
 - **Levar o resumo ao livro, feito para as dez frentes originais.** Os pontos estão na seção 8 do artigo e na seção 9.7
   do livro didático; as extensões (saúde, evento raro, ficha, contrato) entram na mesma seção quando fecharem.

@@ -13,6 +13,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --s2` | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |
 | `labs --preteste` | o nulo do pre-teste de calibracao do painel SHELF |
 | `labs --genetica` | a resolucao da validacao por intervencao: o que a segunda linha muda |
+| `labs --escuta` | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -170,6 +171,64 @@ plantados pelo instrumento: mover verdadeiro = mutante 7 | artefato de linha = m
   efeito na segunda linha: artefato  +0.028 (nao se reproduz) | mover  +1.016 (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero
 
 leitura: com uma linha o piso de 0.001000 e o limiar de 0.001250 deixam passar 4 dos 40 mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para 0.000001000: passa 1 dos 40 mutantes. O p nunca foi o problema: o problema era a linha ser uma so.
+~~~
+
+### O lacre das sete decisoes que mexem com pessoas
+
+Le o registro em maquina do ponto 13 (`fundo/p13-escuta/registro.tsv`): as sete decisoes, quem paga o erro
+de cada uma, quem foi ouvido e a cobertura minima declarada. Da o veredito do lacre e mostra, com dois casos
+sinteticos, que o portao sabe reprovar uma decisao que se diz emitida sem ninguem ouvido e que sabe abrir a
+caixa quando a cobertura chega ao minimo.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --escuta
+~~~
+
+~~~text
+== Ponto 13 :: a escuta de quem paga o erro ==
+decisoes: 7 | carimbo do registro: 2026-10-16 | prazo da janela: 2026-12-15 | cobertura minima: 2 de 7
+decisao                              titulares ouvidos      registro   pode emitir
+h2g/saida/direito_teto_beneficio             - nenhum       -          nao
+h2g/saida/educacao_star_turmas           11598 nenhum       -          nao
+h2g/saida/saude_rand                         - nenhum       -          nao
+h1-real/saida/b                          16177 nenhum       -          nao
+h3/prisoes                                5226 nenhum       -          nao
+h3/prisoes20                             65276 nenhum       -          nao
+h3/prisoes_ri                            86113 nenhum       -          nao
+
+cobertura de escuta: 0 de 7 grupos ouvidos
+divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido
+veredito: CAIXA LACRADA — a cobertura de 0 fica abaixo do minimo de 2; as decisoes ficam como analise de sensibilidade (n = 1) e nao viram diretriz de politica publica nem decisao de portao F8 ate 2026-12-15 ou ate a cobertura minima
+
+sem escuta, uma por uma:
+  h2g/saida/direito_teto_beneficio   | trabalhadores acidentados cobertos pelo teto (Kentucky 1980, Michigan 1982)
+  h2g/saida/educacao_star_turmas     | criancas do jardim a 3a serie do STAR no Tennessee
+  h2g/saida/saude_rand               | familias nao idosas do RAND HIE (anos 1970)
+  h1-real/saida/b                    | participantes do NSW e controles do CPS
+  h3/prisoes                         | detidos de Toronto 1997-2002
+  h3/prisoes20                       | prisoes de Toronto 2020-2021
+  h3/prisoes_ri                      | paradas de Rhode Island 2005-2015
+
+-- prova negativa: a decisao que se diz emitida sem ninguem ouvido --
+decisoes: 3 | carimbo do registro: 2026-10-16 | prazo da janela: 2026-12-15 | cobertura minima: 2 de 3
+decisao                              titulares ouvidos      registro   pode emitir
+h3/prisoes                                5226 nenhum       -          sim
+h3/prisoes20                             65276 nenhum       -          nao
+h3/prisoes_ri                            86113 nenhum       -          nao
+
+cobertura de escuta: 0 de 3 grupos ouvidos
+divergencias: REPROVADO em ["h3/prisoes"]
+veredito: CAIXA LACRADA — a cobertura de 0 fica abaixo do minimo de 2; as decisoes ficam como analise de sensibilidade (n = 1) e nao viram diretriz de politica publica nem decisao de portao F8 ate 2026-12-15 ou ate a cobertura minima
+
+-- prova positiva: dois grupos ouvidos, com registro assinado --
+decisoes: 2 | carimbo do registro: 2026-10-16 | prazo da janela: 2026-12-15 | cobertura minima: 2 de 2
+decisao                              titulares ouvidos      registro   pode emitir
+h3/prisoes                                5226 associacao de defesa publica de TORONTO registro-01.md sim
+h3/prisoes20                             65276 coletivo de ex-detentos registro-02.md sim
+
+cobertura de escuta: 2 de 2 grupos ouvidos
+divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido
+veredito: CAIXA ABERTA para as decisoes cobertas — a cobertura de 2 alcancou o minimo de 2
 ~~~
 
 ### O horizonte R: a resolucao da pergunta
@@ -784,7 +843,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 23 tests
+running 28 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -800,6 +859,11 @@ test cap03::testes::mamografia_da_uma_em_dez ... ok
 test cap04::testes::intervalo_fixo_encolhe_e_o_descontado_fica_largo ... ok
 test cap04::testes::modelo_fixo_erra_quase_sempre_e_o_modelo_com_esquecimento_cobre ... ok
 test cap04::testes::o_vies_muda_de_dois_decimos_a_seis_decimos ... ok
+test escuta::testes::a_cobertura_minima_abre_a_caixa ... ok
+test escuta::testes::a_decisao_emitida_sem_ninguem_ouvido_reprova ... ok
+test escuta::testes::a_escuta_sem_registro_assinado_nao_conta ... ok
+test escuta::testes::o_prazo_e_a_cobertura_minima_saem_do_registro ... ok
+test escuta::testes::o_registro_do_programa_tem_sete_decisoes_e_nenhum_ouvido ... ok
 test fila::testes::a_margem_de_r2_e_o_p90_do_cv_residual ... ok
 test fila::testes::dia_da_semana_de_datas_conhecidas ... ok
 test fila::testes::faixas_do_registro_e_divergencia_declarada ... ok
@@ -809,7 +873,7 @@ test fila::testes::impressao_de_trabalho ... ok
 test fila::testes::instrumento_roda_com_semente_fixa ... ok
 test fila::testes::monotonicidade_r2_melhor_que_r0 ... ok
 
-test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

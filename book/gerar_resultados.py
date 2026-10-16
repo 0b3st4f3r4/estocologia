@@ -79,6 +79,7 @@ def main() -> int:
         "| BTlabs --s2BT | o Sistema 2: a busca sobre o hipergrafo, a crenca da banca, a inferencia e o eixo R |\n"
         "| BTlabs --pretesteBT | o nulo do pre-teste de calibracao do painel SHELF |\n"
         "| BTlabs --geneticaBT | a resolucao da validacao por intervencao: o que a segunda linha muda |\n"
+        "| BTlabs --escutaBT | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -129,6 +130,14 @@ def main() -> int:
         "O desenho da replica: 40 mutantes, um deles o mover verdadeiro (o efeito aparece nas duas linhas) e\n"
         "outro o artefato de linha (o efeito aparece numa linha so). O mesmo mundo e validado com uma linha por\n"
         "mutante e com duas, e o que se mede e quantos mutantes passam e qual e o piso do desenho em cada arranjo.",
+    ))
+    partes.append(bloco(
+        "O lacre das sete decisoes que mexem com pessoas",
+        [str(BIN), "--escuta"],
+        "Le o registro em maquina do ponto 13 (BTfundo/p13-escuta/registro.tsvBT): as sete decisoes, quem paga o erro\n"
+        "de cada uma, quem foi ouvido e a cobertura minima declarada. Da o veredito do lacre e mostra, com dois casos\n"
+        "sinteticos, que o portao sabe reprovar uma decisao que se diz emitida sem ninguem ouvido e que sabe abrir a\n"
+        "caixa quando a cobertura chega ao minimo.",
     ))
     partes.append(bloco(
         "O horizonte R: a resolucao da pergunta",
