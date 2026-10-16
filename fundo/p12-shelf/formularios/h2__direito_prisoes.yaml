@@ -90,8 +90,8 @@ especialistas:
       observacao_do_facilitador: "o especialista usou seis valores distintos de p (0,05 0,15 0,20 0,85 0,90 0,95), contra dois no primeiro dominio, e por isso a curva tem forma utilizavel: REL 0,00675 contra RES 0,2500, com a identidade de Murphy fechando exata. Acertou a direcao dos 20 itens, incluindo os tres do Mexico que exigem numero de comunicado oficial"
     elicitacao:
       q50: 0.65   # elicitado em 2026-10-16, mediana primeiro, na escala da razao de chances
-      q25: null
-      q75: null
+      q25: 0.45   # elicitado em 2026-10-16, passo dos quartis
+      q75: 0.85   # elicitado em 2026-10-16, passo dos quartis
       q05: null
       q95: null
       justificativa: ""
