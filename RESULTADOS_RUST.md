@@ -10,7 +10,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --banco` | o H0 real: a base de 2,65 milhoes de chamadas, escala de Erlang C, unidade independente e nulo de metades |
 | `labs --resolucao` | o horizonte R: quanto custa perguntar grosso, com o mesmo recurso total |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
-| `cargo test --workspace` | os testes dos cinco crates |
+| `cargo test --workspace` | os testes dos quinze crates |
 
 ## 1. O H0 real, em Rust
 
@@ -679,7 +679,7 @@ veredito: 1 portoes reprovados
 
 ## 4. Os testes
 
-### Os cinco crates
+### Os quinze crates
 
 Cada crate com o seu bloco de testes.
 
@@ -787,9 +787,70 @@ test s1::tests::sufixo_longo_vence_tema_curto ... ok
 
 test result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
+running 5 tests
+test testes::a_kl_e_zero_contra_si_mesma_e_cresce_com_a_distancia ... ok
+test testes::a_vigilancia_e_deterministica ... ok
+test testes::o_nulo_nao_dispara_em_cem_mil_pontos ... ok
+test testes::o_salto_dispara_o_alarme_depois_de_acontecer ... ok
+test testes::o_salto_para_baixo_tambem_dispara ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 4 tests
+test testes::a_calibracao_acha_a_regiao_descalibrada ... ok
+test testes::a_paridade_mede_o_gap_injetado ... ok
+test testes::a_tolerancia_da_ece_cai_com_a_raiz_de_n ... ok
+test testes::grupos_iguais_nao_tem_amplitude ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 9 tests
+test testes::a_cauda_pesada_estoura_o_indice_de_dispersao ... ok
+test testes::a_recorrencia_e_a_soma_logaritmica_concordam ... ok
+test testes::a_serie_do_nulo_e_deterministica ... ok
+test testes::erlang_bate_com_a_referencia_exata ... ok
+test testes::erlang_c_cai_com_mais_servidores_e_fica_entre_b_e_um ... ok
+test testes::escala_minima_entrega_a_meta_e_uma_a_menos_nao ... ok
+test testes::nulo_de_poisson_bate_media_e_variancia ... ok
+test testes::o_resumo_traz_mediana_e_quantis_junto_com_a_media ... ok
+test testes::quantil_interpola_e_nao_sai_da_amostra ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 6 tests
+test testes::a_mediana_e_a_media_contam_historias_diferentes ... ok
+test testes::arrasto_cresce_com_a_alavancagem ... ok
+test testes::arrasto_de_serie_simetrica_tem_valor_exato ... ok
+test testes::hill_recupera_o_alfa_de_uma_pareto ... ok
+test testes::o_dia_de_1987_derruba_quem_esta_a_tres_vezes ... ok
+test testes::o_vies_de_selecao_inverte_o_sinal_do_ganho ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 7 tests
+test testes::a_rodada_guarda_a_area_e_a_contagem_de_conjuntos ... ok
+test testes::bonferroni_derruba_uma_area_e_conta_o_k ... ok
+test testes::dez_candidatos_dao_mil_e_vinte_e_quatro_conjuntos ... ok
+test testes::o_contador_k_junta_especificacoes_repetidas ... ok
+test testes::o_grao_da_unidade_muda_a_familia_aceita ... ok
+test testes::o_nulo_embaralhado_mostra_o_poder_do_teste ... ok
+test testes::sem_area_a_rodada_devolve_area_vazia ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 6 tests
+test testes::a_correlacao_passiva_segue_a_conta_exata ... ok
+test testes::a_ece_e_zero_no_calibrado_e_alta_no_exagerado ... ok
+test testes::a_habilidade_de_brier_premeia_o_bom_e_pune_o_mau ... ok
+test testes::a_tolerancia_da_ece_depende_de_n ... ok
+test testes::o_canario_pega_a_leitura_do_futuro ... ok
+test testes::o_laco_mede_o_que_a_acao_faz_com_o_indicador ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 12 tests
 test lentes::testes::arrasto_da_volatilidade_desconta_variacao ... ok
@@ -806,6 +867,87 @@ test testes::grafo_completo_valida ... ok
 test testes::no_sem_lente_e_apontado ... ok
 
 test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 8 tests
+test testes::a_unidade_de_grupo_encolhe_a_familia ... ok
+test testes::alvo_como_preditor_reprova ... ok
+test testes::area_vazia_quando_nada_e_invariante ... ok
+test testes::contagem_de_conjuntos_bate_com_a_enumeracao ... ok
+test testes::ks_conhece_o_proprio_limiar ... ok
+test testes::limiar_cai_com_o_tamanho_da_amostra ... ok
+test testes::preditor_invariante_e_aceito_e_confundido_e_recusado ... ok
+test testes::preditores_colineares_reprovam ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 5 tests
+test testes::a_decisao_e_deterministica_na_semente ... ok
+test testes::a_deliberacao_bate_o_ganancioso ... ok
+test testes::evidencia_invalida_nao_zera_o_estado ... ok
+test testes::mundo_sem_acao_nao_decide ... ok
+test testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 9 tests
+test testes::cadeia_aplica_renomeacao_descarte_e_acrescimo ... ok
+test testes::cadeia_com_buraco_reprova ... ok
+test testes::campo_ausente_vira_none ... ok
+test testes::documento_sem_versao_reprova ... ok
+test testes::etapa_ausente_reprova_com_a_versao_do_buraco ... ok
+test testes::quebra_de_linha_na_definicao_sobrevive ... ok
+test testes::texto_e_de_texto_preservam_a_ficha ... ok
+test testes::valor_invalido_reprova ... ok
+test testes::versao_de_texto_reprova_texto_livre ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 3 tests
+test testes::a_moeda_bate_a_probabilidade_e_nao_depende_do_relogio ... ok
+test testes::a_ponte_entrega_os_mesmos_numeros_da_funcao_pura ... ok
+test testes::a_probabilidade_nunca_bate_nos_extremos ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

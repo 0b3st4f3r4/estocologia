@@ -139,8 +139,9 @@ tenta quebrar o artefato antes da aprovação (seção 8).
 
 ## 7. Workspace Técnico em Rust (Edition 2024)
 
-O ecossistema é modularizado em crates dedicados e determinísticos. Cinco existem e passam em teste hoje; os
-demais estão no roteiro declarado, e a triagem do Sistema 1 já vive como módulo de `core`.
+O ecossistema é modularizado em crates dedicados e determinísticos. **Quinze existem e passam em teste hoje**
+(2026-10-16), e nenhum nome do roteiro ficou para trás: os dez que faltavam nasceram com teste próprio, e a
+triagem do Sistema 1 continua como módulo de `core`.
 
 | Crate | Estado | Conteúdo |
 |---|---|---|
@@ -149,11 +150,16 @@ demais estão no roteiro declarado, e a triagem do Sistema 1 já vive como módu
 | `crates/stochology-hypergraph` | vivo | hipergrafo $\mathcal{G}$, validador de estrutura, ordem topológica e as cinco lentes |
 | `crates/stochology-audit` | vivo | SHA-256 sem dependências, livro-razão encadeado e raiz de Merkle |
 | `crates/stochology-gates` | vivo | binário `portoes`: 7 portões determinísticos por horizonte |
-| `crates/stochology-schema` | roteiro | schemas YAML/JSON e migrações de contratos |
-| `crates/stochology-s2` | roteiro | deliberativo de Sistema 2 (o Sistema 1 entrou como módulo `stochology-core/src/s1.rs`; decisão de 2026-10-16: `stochology-s1` não volta como crate) |
-| `crates/stochology-h0` … `crates/stochology-h3` | roteiro | motores e simuladores de cada horizonte; o andaime Python saiu da árvore em 2026-10-16 (`DECLARACAO_REMOVIDO_PYTHON.md`) |
-| `crates/stochology-icp`, `-drift`, `-fairness` | roteiro | motores de causalidade, deriva e justiça |
-| `crates/stochology-wasm` | roteiro | playground WebAssembly |
+| `crates/stochology-schema` | vivo | o contrato em arquivo: texto canônico da ficha, versão e cadeia de migrações |
+| `crates/stochology-s2` | vivo | deliberativo: LATS e o motor de estado de crença (o Sistema 1 entrou como módulo `stochology-core/src/s1.rs`; decisão de 2026-10-16: `stochology-s1` não volta como crate) |
+| `crates/stochology-h0` | vivo | Erlang B e C, escala mínima, nulo de Poisson e o resumo obrigatório (media, mediana, quantis) |
+| `crates/stochology-h1` | vivo | arrasto da alavancagem, viés de seleção e o estimador de Hill da cauda |
+| `crates/stochology-h2` | vivo | as rodadas de invariância causal, o contador $K$ e Bonferroni, com nulo por embaralhamento |
+| `crates/stochology-h3` | vivo | relógio estrito com canário, ECE, habilidade de Brier e o laço performativo |
+| `crates/stochology-icp` | vivo | predição causal invariante: ambientes, mínimos quadrados, Kolmogorov-Smirnov e a área que sobrevive |
+| `crates/stochology-drift` | vivo | CUSUM bilateral com o nulo estacionário medido e a divergência de Kullback-Leibler |
+| `crates/stochology-fairness` | vivo | paridade demográfica, igualdade de oportunidades e calibração por subgrupo |
+| `crates/stochology-wasm` | vivo | playground WebAssembly: ponte C mínima e a página de `www/` |
 
 Verificação dos portões determinísticos em máquina limpa:
 
@@ -476,7 +482,7 @@ simular o mundo e defender a conclusão.
 | `crates/estocologia-audit` | `crates/stochology-audit` |
 | `crates/estocologia-livro` | `crates/stochology-book` |
 | `crates/portoes-cli` | `crates/stochology-gates` |
-| crates do roteiro (`estocologia-schema`, `-s1`, `-s2`, `-h0` … `-h3`, `-icp`, `-drift`, `-fairness`, `-wasm`) | mesmo prefixo `stochology-` |
+| crates do roteiro (`estocologia-schema`, `-s1`, `-s2`, `-h0` … `-h3`, `-icp`, `-drift`, `-fairness`, `-wasm`) | mesmo prefixo `stochology-`, e os dez nomes passaram a viver em 2026-10-16 |
 
 **Os binários não mudaram de nome**: `labs` e `portoes`. Motivo: o livro, este plano e os
 `portoes.py` das frentes em Python chamam por esses nomes, e o comando que o leitor digita fica o mesmo
@@ -521,7 +527,7 @@ de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **zero** onde não oscila. O tipo
 cinco previsões falsificáveis e o estado da regra estão em `book/horizontes-de-resolucao-da-pergunta.md`. O
 campo entrou na ficha como `Ficha.resolucao` e a regra virou $\Phi_5$, contado pelo binário de portões; as
 previsões 3 e 5 seguem sem frente que as meça. O inventário completo do que
-segue como proposta declarada — teoria, crates do roteiro, método, pesquisa em aberto e limites — está em
+segue como proposta declarada — teoria, método, pesquisa em aberto e limites — está em
 `PROPOSTAS_DECLARADAS.md`.
 
 ---

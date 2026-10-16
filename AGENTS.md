@@ -63,7 +63,7 @@ modos, o **Sistema 2** segue declarado e não implementado, e o **Sistema 1** j�
 ## V. Verificação obrigatória antes de consolidar
 
 ~~~bash
-cargo test --workspace                              # os cinco crates
+cargo test --workspace                              # os quinze crates
 cargo run --release --bin labs -- --todos           # os 21 laboratórios do livro
 cargo run --release --bin labs -- --banco           # o H0 real, lendo dados-reais/bank_calls.csv
 cargo run --release --bin labs -- --resolucao       # o horizonte R
@@ -92,11 +92,11 @@ gerador do registro, os crates) ou registro (capítulos, declarações, manifest
 | Camada | Onde | Estado |
 | --- | --- | --- |
 | Livro | `estocologia-livro-didatico.md`, escrito em `book/` | 21 capítulos, 5 partes, montado e conferido |
-| Aparato | `crates/stochology-*` | cinco crates vivos; dez nomes ainda no roteiro |
+| Aparato | `crates/stochology-*` | quinze crates vivos; nenhum nome do roteiro ficou para trás (2026-10-16) |
 | Resultados | `RESULTADOS_RUST.md` | registro gerado dos próprios instrumentos |
 | Registro empírico | `REGISTRO_EMPIRICO.md`, `fundo/`, `governanca/`, `dados-reais/` | cada número com a marca do instrumento que o reproduz; o andaime Python saiu em 2026-10-16 |
 | Aposentado | commit `1bfec905` | o código Python de simulação e os artefatos não significativos para a teoria |
-| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | os doze itens vivos de §1: crates do roteiro (dez nomes, com `stochology-s1` fora, como módulo de `core`), Sistema 2, SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a tese da ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião. O Phi5, o campo de resolução, o Sistema 1, o funil, o cofre e a fila saíram da lista em 2026-10-16, ao serem implementados |
+| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | os onze itens vivos de §1: Sistema 2 (deliberativo além do LATS e do estado de crença), SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a tese da ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião. O Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila e os dez crates do roteiro saíram da lista em 2026-10-16, ao serem implementados |
 
 ## VIII. O que não entra neste repositório
 

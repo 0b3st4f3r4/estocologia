@@ -6,6 +6,16 @@ members = [
     "crates/stochology-audit",
     "crates/stochology-book",
     "crates/stochology-gates",
+    "crates/stochology-schema",
+    "crates/stochology-s2",
+    "crates/stochology-h0",
+    "crates/stochology-h1",
+    "crates/stochology-h2",
+    "crates/stochology-h3",
+    "crates/stochology-icp",
+    "crates/stochology-drift",
+    "crates/stochology-fairness",
+    "crates/stochology-wasm",
 ]
 
 [workspace.package]

@@ -1,0 +1,13 @@
+[package]
+name = "stochology-wasm"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }
+stochology-h0 = { path = "../stochology-h0" }

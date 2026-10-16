@@ -18,6 +18,21 @@ name = "stochology-core"
 version = "0.1.0"
 
 [[package]]
+name = "stochology-drift"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
+name = "stochology-fairness"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+ "stochology-h3",
+]
+
+[[package]]
 name = "stochology-gates"
 version = "0.1.0"
 dependencies = [
@@ -27,8 +42,67 @@ dependencies = [
 ]
 
 [[package]]
+name = "stochology-h0"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
+name = "stochology-h1"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+ "stochology-h0",
+]
+
+[[package]]
+name = "stochology-h2"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+ "stochology-icp",
+]
+
+[[package]]
+name = "stochology-h3"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
 name = "stochology-hypergraph"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
+]
+
+[[package]]
+name = "stochology-icp"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
+name = "stochology-s2"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
+name = "stochology-schema"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+]
+
+[[package]]
+name = "stochology-wasm"
+version = "0.1.0"
+dependencies = [
+ "stochology-core",
+ "stochology-h0",
 ]

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Estocologia — playground</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 46rem; line-height: 1.5; }
+  h1 { font-size: 1.3rem; }
+  fieldset { border: 1px solid #bbb; margin: 1rem 0; padding: .8rem 1rem; }
+  legend { font-weight: 600; }
+  label { display: inline-block; min-width: 11rem; }
+  output { font-family: ui-monospace, monospace; font-weight: 600; }
+  code { background: #f2f2f2; padding: .1rem .3rem; }
+  p.nota { color: #444; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Estocologia — playground WebAssembly</h1>
+<p class="nota">Os instrumentos do projeto rodando no navegador, sem servidor e sem dependencia externa.
+Toda saida e deterministica: a mesma semente da o mesmo numero.</p>
+
+<fieldset id="moeda">
+  <legend>Moeda</legend>
+  <label for="lances">lances</label><input id="lances" type="number" value="10000" min="1"><br>
+  <label for="semente">semente</label><input id="semente" type="number" value="2026"><br>
+  <label for="cara">probabilidade de cara (centesimos)</label><input id="cara" type="number" value="50" min="0" max="100"><br>
+  <p>caras: <output id="saida-moeda">—</output></p>
+</fieldset>
+
+<fieldset>
+  <legend>Erlang C</legend>
+  <label for="agentes">agentes</label><input id="agentes" type="number" value="10" min="1"><br>
+  <label for="carga">carga (centesimos)</label><input id="carga" type="number" value="500" min="1"><br>
+  <p>probabilidade de esperar: <output id="saida-erlang">—</output></p>
+</fieldset>
+
+<fieldset>
+  <legend>Nulo de Poisson</legend>
+  <label for="passos">passos</label><input id="passos" type="number" value="20000" min="2"><br>
+  <label for="media">media (centesimos)</label><input id="media" type="number" value="400" min="1"><br>
+  <p>indice de dispersao (milesimos): <output id="saida-dispersao">—</output></p>
+  <p class="nota">Poisson fica perto de 1000. O mundo de dois regimes do Capitulo 16 passa de 3000.</p>
+</fieldset>
+
+<p class="nota">Compile com <code>cargo build --release --target wasm32-unknown-unknown -p stochology-wasm</code>,
+sirva a raiz do repositorio com <code>python3 -m http.server</code> e abra esta pagina.</p>
+
+<script>
+const modulo = fetch("../../../target/wasm32-unknown-unknown/release/stochology_wasm.wasm")
+  .then(r => { if (!r.ok) throw new Error("wasm ausente: compile primeiro"); return r.arrayBuffer(); })
+  .then(b => WebAssembly.instantiate(b, {}))
+  .then(r => r.instance.exports);
+
+const valor = id => Number(document.getElementById(id).value);
+
+modulo.then(ex => {
+  const atualizar = () => {
+    document.getElementById("saida-moeda").textContent =
+      ex.estocologia_moeda(valor("semente"), valor("lances"), valor("cara"));
+    const decimilessimos = ex.estocologia_erlang_c(valor("agentes"), valor("carga"));
+    document.getElementById("saida-erlang").textContent =
+      (decimilessimos / 10000).toFixed(4);
+    document.getElementById("saida-dispersao").textContent =
+      ex.estocologia_dispersao_do_nulo(valor("semente"), valor("passos"), valor("media"));
+  };
+  document.querySelectorAll("input").forEach(i => i.addEventListener("input", atualizar));
+  atualizar();
+  document.title = "Estocologia — playground (contrato v" + ex.estocologia_versao() + ")";
+}).catch(erro => {
+  document.body.insertAdjacentHTML("beforeend", "<p>sem wasm: " + erro.message + "</p>");
+});
+</script>
+</body>
+</html>

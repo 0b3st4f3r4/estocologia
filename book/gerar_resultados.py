@@ -76,7 +76,7 @@ def main() -> int:
         "| BTlabs --bancoBT | o H0 real: a base de 2,65 milhoes de chamadas, escala de Erlang C, unidade independente e nulo de metades |\n"
         "| BTlabs --resolucaoBT | o horizonte R: quanto custa perguntar grosso, com o mesmo recurso total |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
-        "| BTcargo test --workspaceBT | os testes dos cinco crates |\n"
+        "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
     )
     partes.append("## 1. O H0 real, em Rust\n")
     partes.append(bloco(
@@ -123,7 +123,7 @@ def main() -> int:
         "Com um defeito plantado, o G6 reprova e o binario sai com codigo 1.",
     ))
     partes.append("## 4. Os testes\n")
-    partes.append(bloco("Os cinco crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))
+    partes.append(bloco("Os quinze crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))
 
     texto = "\n".join(partes).replace("BT", chr(96))
     if args.check:
