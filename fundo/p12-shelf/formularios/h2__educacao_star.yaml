@@ -89,8 +89,8 @@ especialistas:
       medida_do_vicio_do_portao: "no nulo calibrado do desenho (20 itens, 5 caixas, limiar de ECE 0,25): aprovados 0,2935 | reprovados pelo criterio 3 como escrito 0,7052 | pelo criterio 3 corrigido 0,0031 | pelo criterio 2 0,0592. Ou seja: o criterio 3 como escrito reprova 7 calibrados em 10, e a reprovacao do E1 neste dominio diz mais sobre a regua do que sobre ele"
     elicitacao:
       q50: 12.0   # elicitado em 2026-10-16, mediana primeiro, em pontos SAT
-      q25: null
-      q75: null
+      q25: 6.0   # elicitado em 2026-10-16, passo dos quartis
+      q75: 18.0   # elicitado em 2026-10-16, passo dos quartis
       q05: null
       q95: null
       justificativa: ""
