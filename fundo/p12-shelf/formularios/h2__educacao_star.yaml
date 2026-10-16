@@ -98,15 +98,15 @@ especialistas:
     controles:
       ordem_recebida: "mediana_primeiro"
       ancora_S: null
-      ancora_p_com_S_mediana_propria: null
+      ancora_p_com_S_mediana_propria: 0.50   # declarado; previsto pela priori 0,5000; desvio 0,0000
       ancora_deslocamento_dp: null
       razao_largura_90_elicitada_sobre_implicada: 0.9910
       excesso_de_confianca_ok: "sim"
     devolucao:
       rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
-      rodada_1_confirmacao: ""     # confirma / ajusta (aguardando a resposta do especialista)
+      rodada_1_confirmacao: "confirma"     # rodada 1: confirmado, com motivo escrito
       rodada_1_ajuste_q05_q95: []
-      rodada_1_motivo: ""
+      rodada_1_motivo: "a divergencia em relacao a releitura de Krueger (1999) e intencional: a literatura estrita da mesma base foca a estimativa central do experimento controlado, e a distribuicao mais ampla e com mediana superior absorve o peso de que os ganhos do STAR foram significativos mas que projeta-los fora daquele ambiente carrega incerteza muito maior, incluindo atrito e efeitos de substituicao que podem atenuar ou, nas caudas, anular o efeito"
       rodada_1_mostrado:
         numeros_do_especialista: "q05 -2,5 | q25 6,0 | q50 12,0 | q75 18,0 | q95 26,5, em pontos SAT"
         faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 12,0"
@@ -115,14 +115,14 @@ especialistas:
         ajuste_da_literatura_pelo_mesmo_instrumento: "media 7,333191 | dp 3,666596 | erro maximo nos quartis 4,4e-16 | razao da largura 90% 1,0000"
         comparacao: "mediana do especialista 12,0 contra 7,333191 da literatura, 63% acima; dp 8,895613 contra 3,666734, ou seja, 2,4 vezes mais largo; e o q05 negativo (-2,5) contra 1,302 da literatura, que nao admite efeito negativo em nenhuma das duas pontas"
       rodada_2_em: ""
-      rodada_2_confirmacao: ""
+      rodada_2_confirmacao: "nao houve"     # nada ficou em divergencia
       rodada_2_motivo: ""
     quartis_confirmados:
-      q05: null
-      q25: null
-      q50: null
-      q75: null
-      q95: null
+      q05: -2.5   # confirmado na rodada 1
+      q25: 6.0   # confirmado na rodada 1
+      q50: 12.0   # confirmado na rodada 1
+      q75: 18.0   # confirmado na rodada 1
+      q95: 26.5   # confirmado na rodada 1
     ajuste:
       familia: "gaussiana"
       media: 12.000000
