@@ -891,7 +891,14 @@ test testes::sem_area_a_rodada_devolve_area_vazia ... ok
 
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 26 tests
+running 33 tests
+test beta::testes::a_incompleta_bate_com_a_forma_fechada_da_beta_2_2 ... ok
+test beta::testes::a_incompleta_bate_com_a_uniforme ... ok
+test beta::testes::o_ajuste_da_uniforme_fica_simetrico ... ok
+test beta::testes::o_ajuste_e_deterministico ... ok
+test beta::testes::o_ajuste_recupera_a_beta_que_gerou_os_quartis ... ok
+test beta::testes::o_log_gama_bate_com_fatoriais ... ok
+test beta::testes::o_quantil_recupera_os_quartis_conhecidos ... ok
 test preteste::testes::a_caixa_na_media_tem_p_proximo_de_um ... ok
 test preteste::testes::a_identidade_de_murphy_fecha_exata ... ok
 test preteste::testes::o_criterio_4_do_protocolo_nao_sabe_reprovar ... ok
@@ -919,7 +926,7 @@ test testes::a_tolerancia_da_ece_depende_de_n ... ok
 test testes::o_canario_pega_a_leitura_do_futuro ... ok
 test testes::o_laco_mede_o_que_a_acao_faz_com_o_indicador ... ok
 
-test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 12 tests
 test lentes::testes::arrasto_da_volatilidade_desconta_variacao ... ok

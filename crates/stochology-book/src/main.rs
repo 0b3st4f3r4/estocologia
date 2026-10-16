@@ -163,6 +163,50 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
     }
     let [q05, q25, q50, q75, q95] = [valores[0], valores[1], valores[2], valores[3], valores[4]];
     println!("== Elicitação SHELF :: ajuste pelos quartis e controles ==");
+    if escala == Some("beta") {
+        // domínio de frequência em (0, 1): o ajuste é Beta, e o protocolo declara isso
+        use stochology_h3::beta::{ajustar_beta, beta_quantil};
+        println!(
+            "escala declarada: Beta (frequência em (0, 1)) | quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
+        );
+        let p_beta = ajustar_beta(q25, q50, q75);
+        println!(
+            "Beta ajustada aos três quartis centrais: a = {:.6} | b = {:.6} | erro máximo nos quartis {:.3e}",
+            p_beta.a, p_beta.b, p_beta.erro_max_quartis
+        );
+        println!(
+            "quantis que ela implica: q05 {:.4} | q25 {:.4} | q50 {:.4} | q75 {:.4} | q95 {:.4}",
+            beta_quantil(0.05, p_beta.a, p_beta.b),
+            beta_quantil(0.25, p_beta.a, p_beta.b),
+            beta_quantil(0.50, p_beta.a, p_beta.b),
+            beta_quantil(0.75, p_beta.a, p_beta.b),
+            beta_quantil(0.95, p_beta.a, p_beta.b)
+        );
+        let elicitada = q95 - q05;
+        let implicada =
+            beta_quantil(0.95, p_beta.a, p_beta.b) - beta_quantil(0.05, p_beta.a, p_beta.b);
+        let razao = if implicada > 0.0 { elicitada / implicada } else { f64::NAN };
+        println!(
+            "largura 90%: elicitada {:.4} | implicada pela própria Beta {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
+            elicitada,
+            implicada,
+            razao,
+            RAZAO_LARGURA_MINIMA,
+            if excesso_de_confianca_ok(razao) { "ok" } else { "EXCESSO DE CONFIANÇA" }
+        );
+        let na_mediana = 1.0 - stochology_h3::beta::beta_incompleta(p_beta.a, p_beta.b, q50);
+        println!(
+            "âncora: P(theta > mediana) pela própria Beta = {:.4} | esperado {:.2} +- {:.2}",
+            na_mediana, ANCORA_ESPERADA, ANCORA_TOLERANCIA
+        );
+        if let Some(s) = limiar {
+            println!(
+                "limiar da decisão em {s}: P(theta > {s}) pela Beta = {:.4}",
+                1.0 - stochology_h3::beta::beta_incompleta(p_beta.a, p_beta.b, s)
+            );
+        }
+        return;
+    }
     if escala == Some("log") {
         // domínio binomial em razão de chances: os quantis viram log antes do ajuste
         let logs: Vec<f64> = valores.iter().map(|v| v.ln()).collect();

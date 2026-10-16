@@ -7,6 +7,7 @@
 //! Declarado e nao implementado: a leitura dos seis fluxos reais e o cofre de Rhode Island, que
 //! seguem como registro; o que existe aqui e o mecanismo, nao a base.
 
+pub mod beta;
 pub mod preteste;
 pub mod shelf;
 
