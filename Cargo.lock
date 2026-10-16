@@ -15,6 +15,7 @@ dependencies = [
  "stochology-h2",
  "stochology-h3",
  "stochology-s2",
+ "stochology-schema",
 ]
 
 [[package]]

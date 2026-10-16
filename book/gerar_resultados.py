@@ -82,6 +82,7 @@ def main() -> int:
         "| BTlabs --escutaBT | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |\n"
         "| BTlabs --h3BT | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |\n"
         "| BTlabs --ponteBT | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |\n"
+        "| BTlabs --schemaBT | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -141,6 +142,13 @@ def main() -> int:
         "veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do\n"
         "BTresultados.jsonBT do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda\n"
         "declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.",
+    ))
+    partes.append(bloco(
+        "O contrato da ficha: a cadeia de migracoes em arquivo",
+        [str(BIN), "--schema"],
+        "Le a cadeia declarada em BTcrates/stochology-schema/migracoes.tsvBT, embutida na compilacao, e imprime os dois\n"
+        "elos com a nota de cada um. Depois demonstra a migracao de um documento da versao 1.0 ate a versao da ficha:\n"
+        "os dois campos que a cadeia acrescenta entram com os valores declarados e o resto do documento fica intacto.",
     ))
     partes.append(bloco(
         "A tese da ponte em escala, com o teste justo por fazer",

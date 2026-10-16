@@ -16,6 +16,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --escuta` | o lacre das sete decisoes que mexem com pessoas: quem foi ouvido |
 | `labs --h3` | a cadeia do H3: o que se refaz, o que se re-deriva e o que so resta declarar |
 | `labs --ponte` | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |
+| `labs --schema` | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -208,6 +209,30 @@ veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (raza
   com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
 -- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
   divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+~~~
+
+### O contrato da ficha: a cadeia de migracoes em arquivo
+
+Le a cadeia declarada em `crates/stochology-schema/migracoes.tsv`, embutida na compilacao, e imprime os dois
+elos com a nota de cada um. Depois demonstra a migracao de um documento da versao 1.0 ate a versao da ficha:
+os dois campos que a cadeia acrescenta entram com os valores declarados e o resto do documento fica intacto.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --schema
+~~~
+
+~~~text
+== O contrato :: a ficha em arquivo, a versao e a cadeia de migracoes ==
+versao da ficha: 1.2 | cadeia declarada em crates/stochology-schema/migracoes.tsv
+  etapa 1: de 1.0 para 1.1: acrescenta resolucao = R0-agregada | a resolucao da pergunta entrou no contrato com o Phi5; a migracao nao inventa pergunta mais fina que a declarada no documento
+  etapa 2: de 1.1 para 1.2: acrescenta priori_elicitada = false | o campo nasceu com a frente SHELF; um documento anterior nao tem priori elicitada de painel
+  versoes da cadeia: 1.0 -> 1.1 -> 1.2
+
+-- demonstracao: um documento da versao 1.0 migra ate a versao da ficha --
+  o documento da 1.0 nao declara os dois campos que a cadeia acrescenta
+  migrou: resolucao = R0-agregada (o valor de acrescimo declarado) | priori_elicitada = false | definicao intacta = true
+  a ficha migrada validou: id lab.schema.1 | camada L2 | acao "dimensionar a escala do dia"
+  a ficha na versao atual nao passa pela cadeia: true
 ~~~
 
 ### A tese da ponte em escala, com o teste justo por fazer
@@ -1220,7 +1245,9 @@ test planejamento::testes::sem_oscilacao_a_perda_e_zero_e_o_agregado_basta ... o
 
 test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 9 tests
+running 13 tests
+test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok
+test testes::a_cadeia_nao_mexe_num_documento_ja_na_versao_da_ficha ... ok
 test testes::cadeia_aplica_renomeacao_descarte_e_acrescimo ... ok
 test testes::cadeia_com_buraco_reprova ... ok
 test testes::campo_ausente_vira_none ... ok
@@ -1228,10 +1255,12 @@ test testes::documento_sem_versao_reprova ... ok
 test testes::etapa_ausente_reprova_com_a_versao_do_buraco ... ok
 test testes::quebra_de_linha_na_definicao_sobrevive ... ok
 test testes::texto_e_de_texto_preservam_a_ficha ... ok
+test testes::um_documento_da_versao_1_0_migra_com_os_padroes_declarados ... ok
+test testes::uma_cadeia_com_buraco_ou_operacao_desconhecida_reprova ... ok
 test testes::valor_invalido_reprova ... ok
 test testes::versao_de_texto_reprova_texto_livre ... ok
 
-test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test testes::a_moeda_bate_a_probabilidade_e_nao_depende_do_relogio ... ok

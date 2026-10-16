@@ -45,7 +45,7 @@ impl Versao {
 }
 
 /// Versao que este crate emite.
-pub const VERSAO_DA_FICHA: Versao = Versao::nova(1, 0);
+pub const VERSAO_DA_FICHA: Versao = Versao::nova(1, 2);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Erro {
@@ -344,6 +344,26 @@ impl Cadeia {
             })
     }
 
+    /// Uma linha por etapa, para o relatório: o que a etapa faz e por quê.
+    pub fn descricao(&self) -> Vec<String> {
+        self.migracoes
+            .iter()
+            .map(|m| {
+                let mut ops = Vec::new();
+                for (de, para) in &m.renomeia {
+                    ops.push(format!("renomeia {de} -> {para}"));
+                }
+                for campo in &m.descarta {
+                    ops.push(format!("descarta {campo}"));
+                }
+                for (campo, valor) in &m.acrescenta {
+                    ops.push(format!("acrescenta {campo} = {valor}"));
+                }
+                format!("de {} para {}: {} | {}", m.de.texto(), m.para.texto(), ops.join("; "), m.nota)
+            })
+            .collect()
+    }
+
     /// Leva o documento da versao `de` ate `para`, etapa por etapa.
     pub fn de_para(
         &self,
@@ -373,9 +393,59 @@ impl Cadeia {
     }
 }
 
-/// Cadeia viva do contrato. Vazia por ora: a ficha nasceu na 1.0 e nenhuma migracao foi declarada.
-pub static PADRAO: std::sync::LazyLock<Cadeia> =
-    std::sync::LazyLock::new(|| Cadeia { migracoes: Vec::new() });
+/// Le a cadeia declarada em arquivo: linhas `de<TAB>para<TAB>operacao<TAB>campo<TAB>valor<TAB>nota`,
+/// com `#` para comentario. Várias linhas com o mesmo par (de, para) formam uma etapa só.
+pub fn cadeia_de_texto(texto: &str) -> Result<Cadeia, Erro> {
+    let mut etapas: Vec<Migracao> = Vec::new();
+    for (i, linha) in texto.lines().enumerate() {
+        let l = linha.trim_end();
+        if l.trim().is_empty() || l.trim_start().starts_with('#') {
+            continue;
+        }
+        let campos: Vec<&str> = l.split('\t').collect();
+        if campos.len() < 6 {
+            return Err(Erro::ValorInvalido { campo: "migracoes.tsv".into(), valor: format!("linha {} com {} campos", i + 1, campos.len()) });
+        }
+        let de = Versao::de_texto(campos[0].trim())?;
+        let para = Versao::de_texto(campos[1].trim())?;
+        let operacao = campos[2].trim();
+        let campo = campos[3].trim();
+        let valor = campos[4].trim();
+        let nota: &'static str = Box::leak(campos[5].trim().to_string().into_boxed_str());
+        let posicao = match etapas.iter().position(|m| m.de == de && m.para == para) {
+            Some(p) => p,
+            None => {
+                etapas.push(Migracao::simples(de, para, nota));
+                etapas.len() - 1
+            }
+        };
+        match operacao {
+            "acrescenta" => {
+                let campo: &'static str = Box::leak(campo.to_string().into_boxed_str());
+                let valor: &'static str = Box::leak(valor.to_string().into_boxed_str());
+                etapas[posicao].acrescenta.push((campo, valor));
+            }
+            "renomeia" => {
+                let de_campo: &'static str = Box::leak(campo.to_string().into_boxed_str());
+                let para_campo: &'static str = Box::leak(valor.to_string().into_boxed_str());
+                etapas[posicao].renomeia.push((de_campo, para_campo));
+            }
+            "descarta" => {
+                let campo: &'static str = Box::leak(campo.to_string().into_boxed_str());
+                etapas[posicao].descarta.push(campo);
+            }
+            outra => {
+                return Err(Erro::ValorInvalido { campo: "operacao".into(), valor: outra.to_string() });
+            }
+        }
+    }
+    Cadeia::nova(etapas)
+}
+
+/// A cadeia declarada em `migracoes.tsv`, embutida no binário na compilação: o contrato é o arquivo.
+pub static PADRAO: std::sync::LazyLock<Cadeia> = std::sync::LazyLock::new(|| {
+    cadeia_de_texto(include_str!("../migracoes.tsv")).expect("a cadeia declarada carrega")
+});
 
 #[cfg(test)]
 mod testes {
@@ -495,5 +565,53 @@ mod testes {
         assert!(Versao::de_texto("um.zero").is_err());
         assert!(Versao::de_texto("1").is_err());
         assert_eq!(Versao::de_texto(" 1.0 ").expect("le"), Versao::nova(1, 0));
+    }
+
+    #[test]
+    fn a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha() {
+        let versoes: Vec<String> = PADRAO.versoes().iter().map(|v| v.texto()).collect();
+        assert_eq!(versoes, vec!["1.0", "1.1", "1.2"], "a cadeia declarada em arquivo");
+        assert_eq!(PADRAO.versoes().last().copied(), Some(VERSAO_DA_FICHA), "a cadeia termina na versão da ficha");
+    }
+
+    #[test]
+    fn uma_cadeia_com_buraco_ou_operacao_desconhecida_reprova() {
+        let buraco = "1.0\t1.1\tacrescenta\tresolucao\tR0-agregada\tnota\n1.2\t1.3\tacrescenta\tx\ty\tnota\n";
+        assert!(cadeia_de_texto(buraco).is_err(), "buraco na cadeia");
+        let desconhecida = "1.0\t1.1\tinventa\tresolucao\tR0-agregada\tnota\n";
+        assert!(cadeia_de_texto(desconhecida).is_err(), "operação desconhecida");
+        let para_tras = "1.1\t1.0\tacrescenta\tx\ty\tnota\n";
+        assert!(cadeia_de_texto(para_tras).is_err(), "etapa que anda para trás");
+        let sem_valor = "1.0\t1.1\tacrescenta\tresolucao\n";
+        assert!(cadeia_de_texto(sem_valor).is_err(), "linha curta");
+    }
+
+    #[test]
+    fn um_documento_da_versao_1_0_migra_com_os_padroes_declarados() {
+        let ficha = ficha_cheia();
+        assert_eq!(ficha.resolucao, Resolucao::R3Subpergunta, "a ficha de teste declara R3");
+        let atual = texto(&ficha);
+        let mut antigo = String::from("versao = 1.0\n");
+        for linha in atual.lines().skip(1) {
+            if linha.starts_with("resolucao ") || linha.starts_with("priori_elicitada ") {
+                continue;
+            }
+            antigo.push_str(linha);
+            antigo.push('\n');
+        }
+        let migrada = de_texto(&antigo).expect("migra da 1.0 para a versão da ficha");
+        assert_eq!(migrada.resolucao, Resolucao::R0Agregada, "o valor de acréscimo declarado");
+        assert!(!migrada.priori_elicitada, "o valor de acréscimo declarado");
+        let mut esperada = ficha.clone();
+        esperada.resolucao = Resolucao::R0Agregada;
+        esperada.priori_elicitada = false;
+        assert_eq!(migrada, esperada, "o resto do documento fica intacto");
+    }
+
+    #[test]
+    fn a_cadeia_nao_mexe_num_documento_ja_na_versao_da_ficha() {
+        let ficha = ficha_cheia();
+        let volta = de_texto(&texto(&ficha)).expect("sem migração");
+        assert_eq!(ficha, volta, "a versão atual não passa pela cadeia");
     }
 }

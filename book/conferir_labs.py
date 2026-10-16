@@ -49,6 +49,7 @@ def main() -> int:
         ("labs --escuta", saida([str(BIN), "--escuta"])),
         ("labs --h3", saida([str(BIN), "--h3"])),
         ("labs --ponte", saida([str(BIN), "--ponte"])),
+        ("labs --schema", saida([str(BIN), "--schema"])),
     ]
 
     total = 0

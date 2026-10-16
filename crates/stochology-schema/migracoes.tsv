@@ -1,0 +1,5 @@
+# formato	de	para	operacao	campo	valor	nota
+# congelado	2026-10-16
+# nota	a cadeia e o contrato: cada etapa e uma declaracao, com o valor de acrescimo declarado e a razao dele
+1.0	1.1	acrescenta	resolucao	R0-agregada	a resolucao da pergunta entrou no contrato com o Phi5; a migracao nao inventa pergunta mais fina que a declarada no documento
+1.1	1.2	acrescenta	priori_elicitada	false	o campo nasceu com a frente SHELF; um documento anterior nao tem priori elicitada de painel

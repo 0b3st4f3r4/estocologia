@@ -156,7 +156,7 @@ triagem do Sistema 1 continua como módulo de `core`.
 | `crates/stochology-hypergraph` | vivo | hipergrafo $\mathcal{G}$, validador de estrutura, ordem topológica e as cinco lentes |
 | `crates/stochology-audit` | vivo | SHA-256 sem dependências, livro-razão encadeado e raiz de Merkle |
 | `crates/stochology-gates` | vivo | binário `portoes`: 7 portões determinísticos por horizonte |
-| `crates/stochology-schema` | vivo | o contrato em arquivo: texto canônico da ficha, versão e cadeia de migrações |
+| `crates/stochology-schema` | vivo | o contrato em arquivo: texto canônico da ficha, versão 1.2 e a **cadeia de migrações em `migracoes.tsv`**, embutida na compilação |
 | `crates/stochology-s2` | vivo | deliberativo: LATS e o motor de estado de crença (o Sistema 1 entrou como módulo `stochology-core/src/s1.rs`; decisão de 2026-10-16: `stochology-s1` não volta como crate) |
 | `crates/stochology-h0` | vivo | Erlang B e C, escala mínima, nulo de Poisson e o resumo obrigatório (media, mediana, quantis) |
 | `crates/stochology-h1` | vivo | arrasto da alavancagem, viés de seleção e o estimador de Hill da cauda |

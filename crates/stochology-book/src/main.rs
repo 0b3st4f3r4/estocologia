@@ -30,6 +30,7 @@ fn main() {
     let mut escuta_flag = false;
     let mut cadeia_flag = false;
     let mut ponte_flag = false;
+    let mut schema_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -80,6 +81,7 @@ fn main() {
             "--escuta" => escuta_flag = true,
             "--h3" => cadeia_flag = true,
             "--ponte" => ponte_flag = true,
+            "--schema" => schema_flag = true,
             _ => {}
         }
         i += 1;
@@ -126,6 +128,10 @@ fn main() {
     }
     if ponte_flag {
         ponte::rodar(ponte::REGISTRO, ponte::NOTAS);
+        return;
+    }
+    if schema_flag {
+        contrato();
         return;
     }
     if todos {
@@ -645,6 +651,64 @@ fn horizonte_r() {
         t.perfis, t.limiar, t.violacoes, t.contraexemplos, t.conservacao_conferida
     );
     println!("  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia", t.contraexemplos);
+}
+
+fn contrato() {
+    println!("== O contrato :: a ficha em arquivo, a versao e a cadeia de migracoes ==");
+    println!(
+        "versao da ficha: {} | cadeia declarada em crates/stochology-schema/migracoes.tsv",
+        stochology_schema::VERSAO_DA_FICHA.texto()
+    );
+    for (i, etapa) in stochology_schema::PADRAO.descricao().iter().enumerate() {
+        println!("  etapa {}: {}", i + 1, etapa);
+    }
+    println!(
+        "  versoes da cadeia: {}",
+        stochology_schema::PADRAO
+            .versoes()
+            .iter()
+            .map(|v| v.texto())
+            .collect::<Vec<_>>()
+            .join(" -> ")
+    );
+
+    println!("\n-- demonstracao: um documento da versao 1.0 migra ate a versao da ficha --");
+    let mut ficha = stochology_core::Ficha::nova("lab.schema.1", stochology_core::Camada::Modelo, stochology_core::TipoIncerteza::Epistemica)
+        .com_resolucao(stochology_core::Resolucao::R3Subpergunta)
+        .completa()
+        .com_cuidados();
+    ficha.definicao = "ficha de demonstracao do contrato".into();
+    ficha.pergunta_do_decisor = "cada dia, o servico da conta?".into();
+    ficha.acao_do_pacote = "dimensionar a escala do dia".into();
+
+    let atual = stochology_schema::texto(&ficha);
+    let mut antigo = String::from("versao = 1.0\n");
+    for linha in atual.lines().skip(1) {
+        if linha.starts_with("resolucao ") || linha.starts_with("priori_elicitada ") {
+            continue;
+        }
+        antigo.push_str(linha);
+        antigo.push('\n');
+    }
+    println!("  o documento da 1.0 nao declara os dois campos que a cadeia acrescenta");
+    match stochology_schema::de_texto(&antigo) {
+        Ok(migrada) => {
+            println!(
+                "  migrou: resolucao = {} (o valor de acrescimo declarado) | priori_elicitada = {} | definicao intacta = {}",
+                migrada.resolucao.codigo(),
+                migrada.priori_elicitada,
+                migrada.definicao == ficha.definicao
+            );
+            println!(
+                "  a ficha migrada validou: id {} | camada {} | acao \"{}\"",
+                migrada.id,
+                migrada.camada.codigo(),
+                migrada.acao_do_pacote
+            );
+        }
+        Err(erro) => println!("  REPROVADO: {erro:?}"),
+    }
+    println!("  a ficha na versao atual nao passa pela cadeia: {}", stochology_schema::de_texto(&atual).is_ok());
 }
 
 fn rodar(cap: usize) {
