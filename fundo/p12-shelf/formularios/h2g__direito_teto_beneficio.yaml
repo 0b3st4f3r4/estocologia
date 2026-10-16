@@ -93,7 +93,7 @@ especialistas:
       criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito; a curva observada tambem e fracamente monotonona"
       resultado: "APROVADO pela regua em vigor"
     elicitacao:
-      q50: null
+      q50: 0.35   # elicitado em 2026-10-16, mediana primeiro, coeficiente log-log
       q25: null
       q75: null
       q05: null
