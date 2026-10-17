@@ -1,6 +1,6 @@
 # Tudo o que ainda está como proposta declarada
 
-Inventário revisto em 2026-10-16. A revisão conferiu cada linha no código desta árvore, e não na redação
+Inventário revisto em 2026-10-16, e **a edição congelada em 2026-10-17**: a declaração do fecho está em `DECLARACAO_DA_EDICAO.md`, com o manifesto gerado em `RESULTADOS_RUST.md` §5. Inventário revisto em 2026-10-16. A revisão conferiu cada linha no código desta árvore, e não na redação
 anterior: o que já existe aparece com o arquivo, a linha e o teste que o sustentam, e o que falta aparece com
 o que precisaria existir para fechar. Cada ponteiro foi aberto antes de entrar na tabela, e um deles não
 existia, o que gerou §6 e o conserto das linhas que dependiam dele.

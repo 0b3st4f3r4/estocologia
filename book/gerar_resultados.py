@@ -9,6 +9,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import subprocess
 import sys
@@ -53,6 +54,37 @@ def bloco(titulo: str, comando: list[str], nota: str) -> str:
     texto = rodar(comando)
     cmd = " ".join(comando)
     return f"### {titulo}\n\n{nota}\n\n~~~bash\n{cmd}\n~~~\n\n~~~text\n{texto}\n~~~\n"
+
+
+def manifesto() -> str:
+    """O manifesto da edicao: cada declaracao de ponto com o hash, e as contagens da arvore."""
+    linhas = [
+        "Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com o `sha256sum -c` do "
+        "`DECLARACAO.sha256` de cada pasta, e a lista abaixo e gerada, nao transcrita.",
+        "",
+        "| ponto | declaracao | SHA-256 |",
+        "| --- | --- | --- |",
+    ]
+    total = 0
+    reemitidas = 0
+    for pasta in sorted((RAIZ / "fundo").glob("p*")):
+        for arq in sorted(pasta.glob("DECLARACAO*.md")):
+            linhas.append(f"| {pasta.name} | {arq.name} | {hashlib.sha256(arq.read_bytes()).hexdigest()} |")
+            total += 1
+            if arq.name != "DECLARACAO.md":
+                reemitidas += 1
+    fonte = (RAIZ / "crates" / "stochology-book" / "src" / "main.rs").read_text(encoding="utf-8")
+    instrumentos = sorted(set(re.findall(r'"(--[a-z0-9]+)"', fonte)))
+    capitulos = len(list((RAIZ / "book").glob("cap*.md")))
+    pontos = len(list((RAIZ / "fundo").glob("p*")))
+    crates = len(list((RAIZ / "crates").glob("stochology-*")))
+    linhas.append("")
+    linhas.append(
+        f"Declaracoes de ponto: {total}, das quais {reemitidas} sao declaracoes 2 ou mais (retificacao declarada, "
+        f"com os dois valores) | pontos de fundo: {pontos} | instrumentos do `labs`: {len(instrumentos)} "
+        f"({chr(44).join(instrumentos)}) | capitulos: {capitulos} | crates: {crates}"
+    )
+    return "\n".join(linhas) + "\n"
 
 
 def main() -> int:
@@ -204,6 +236,8 @@ def main() -> int:
     ))
     partes.append("## 4. Os testes\n")
     partes.append(bloco("Os quinze crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))
+    partes.append("## 5. O manifesto da edicao\n")
+    partes.append(manifesto())
 
     texto = "\n".join(partes).replace("BT", chr(96))
     if args.check:

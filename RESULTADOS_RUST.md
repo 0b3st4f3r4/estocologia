@@ -1442,3 +1442,32 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 ~~~
+
+## 5. O manifesto da edicao
+
+Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com o `sha256sum -c` do `DECLARACAO.sha256` de cada pasta, e a lista abaixo e gerada, nao transcrita.
+
+| ponto | declaracao | SHA-256 |
+| --- | --- | --- |
+| p01-tese | DECLARACAO.md | 32c69192d74fad3dda05dbcf0725eb7c85840a5ee2309659059ed6cd586272f2 |
+| p02-independencia | DECLARACAO.md | 5cd635e3ddb73577b51c5f4f6d545a7b999745f0380435a73e3ebd47ccf1665a |
+| p03-multiplicidade | DECLARACAO.md | f62c84b7a2f3a31ad53cbf159e07dc17bed9cf4abe10942183877987505b2fe0 |
+| p05-prioris | DECLARACAO.md | 167fbd6af83940f298adb3ed7d32334a5655d3e203694b403e46fcf86770d273 |
+| p05-prioris | DECLARACAO_2.md | 6e2b59023b075d86fec4fce4a4b2be4ea395272ad65edc0fd930972a6835dd63 |
+| p06-laco | DECLARACAO.md | fe0c7338e33f037476c8c130ff21a50dea783035569f54869844de7b87d9e9d9 |
+| p07-icp | DECLARACAO.md | 05ab9ff1f5591683463184b5b111b2c5df36589b345e86f4ee6203849ca20a9e |
+| p07-icp | DECLARACAO_2.md | dbcb13f8b6c66d06fcae417769ba61611adcfbe0070adc79364af0e374c75a3f |
+| p08-calibracao | DECLARACAO.md | 13dbcd38dd203ca50145d235a624db2e9c94152e540494fb033cb273c4af1726 |
+| p12-shelf | DECLARACAO.md | 0d9f50d4c7f880114cf34143cfcfe4db666636763639ea082cdb6145d90c3b8f |
+| p13-escuta | DECLARACAO.md | 3631bb81ef17b2e3e04b521bd6e2a08e510a4b974881f08c35e40f17d047a51b |
+| p13-escuta | DECLARACAO_2.md | 0b607266138c097c8380df7f840f1797187f89b917f19d65675f257c83c02b62 |
+| p14-h3 | DECLARACAO.md | e0daa581dab4d166ad2a2cd00231efc1dc8d8c0c397ff9063deef3d61fab936d |
+| p15-previsoes-r | DECLARACAO.md | 896595eacc751800c34d8736e5f48ffbec76fa87dc3b647793a946f6c8db4bea |
+| p16-ponte | DECLARACAO.md | 109910beac758a052676c928da9ef7e890d4bf60fa165b22262441795b5fa96a |
+| p16-ponte | DECLARACAO_2.md | 94045a420ab204bc21e2cc95e32faf01a64d192b626e17c850a9cd6723a2bfc7 |
+| p17-schema | DECLARACAO.md | 02b743a308b951b78b63554f860702ff7d50df0e1842504ea4388c3bb875884e |
+| p18-eixo-r | DECLARACAO.md | 4ac060b41d70dcc4097c426691a293d8b60a95aea677e4fce20e02fb03b14ed4 |
+| p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
+| p20-jev | DECLARACAO.md | 0ee9163a58b8b3f8ab25a9b1bbdf853387cff332afb95b4219d3c742f125013e |
+
+Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 20 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
