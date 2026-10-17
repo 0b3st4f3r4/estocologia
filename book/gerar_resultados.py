@@ -52,9 +52,15 @@ def rodar(comando: list[str]) -> str:
     return saida if saida else "(sem saida)"
 
 
+def do_repositorio(caminho: str) -> str:
+    """O comando entra no registro relativo a raiz: caminho absoluto amarra o arquivo a uma maquina."""
+    prefixo = str(RAIZ) + "/"
+    return "./" + caminho[len(prefixo):] if caminho.startswith(prefixo) else caminho
+
+
 def bloco(titulo: str, comando: list[str], nota: str) -> str:
     texto = rodar(comando)
-    cmd = " ".join(comando)
+    cmd = " ".join(do_repositorio(p) for p in comando)
     return f"### {titulo}\n\n{nota}\n\n~~~bash\n{cmd}\n~~~\n\n~~~text\n{texto}\n~~~\n"
 
 

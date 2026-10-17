@@ -41,7 +41,7 @@ reparticao diferente); e o nulo por chamada e 0,0006 pela binomial, contra os 0,
 usavam outro desenho de correlacao intradiaria.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --banco
+./target/release/labs --banco
 ~~~
 
 ~~~text
@@ -61,7 +61,7 @@ agente-horas batem com o registro; os niveis e as falhas por dia divergem para b
 divergencia fica declarada no Capitulo 16.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --fila
+./target/release/labs --fila
 ~~~
 
 ~~~text
@@ -92,7 +92,7 @@ Vocabulario fechado de 6 categorias e 35 temas, arvore de sufixos de 136 entrada
 [0,01; 0,99] e soma conferida a cada rodada. Sem casamento, a resposta e a priori declarada de outros.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --s1
+./target/release/labs --s1
 ~~~
 
 ~~~text
@@ -113,7 +113,7 @@ protocolo. Mede o que o limiar de ECE de 0,10 aprova e mostra os dois limites do
 vacuoso com 20 itens em 10 caixas e o criterio 4 inerte como escrito).
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --preteste
+./target/release/labs --preteste
 ~~~
 
 ~~~text
@@ -136,7 +136,7 @@ pelo proprio instrumento do eixo R. O no que nenhuma lente cobre e a frente decl
 implementada (f1.sintese-de-codigo).
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --s2
+./target/release/labs --s2
 ~~~
 
 ~~~text
@@ -158,7 +158,7 @@ outro o artefato de linha (o efeito aparece numa linha so). O mesmo mundo e vali
 mutante e com duas, e o que se mede e quantos mutantes passam e qual e o piso do desenho em cada arranjo.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --genetica
+./target/release/labs --genetica
 ~~~
 
 ~~~text
@@ -193,7 +193,7 @@ veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o lac
 declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --h3
+./target/release/labs --h3
 ~~~
 
 ~~~text
@@ -227,7 +227,7 @@ dois modelos de ensaio, o custo por chamada e a adequacao do espaco de hipoteses
 Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e publicado.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --jev
+./target/release/labs --jev
 ~~~
 
 ~~~text
@@ -275,7 +275,7 @@ o vies do laco em duas fontes independentes, a base do banco recontada em Rust, 
 reproducao do p05, onde a divergencia entre o campo em maquina e a frase publicada fica declarada.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --segunda
+./target/release/labs --segunda
 ~~~
 
 ~~~text
@@ -316,7 +316,7 @@ elos com a nota de cada um. Depois demonstra a migracao de um documento da versa
 os dois campos que a cadeia acrescenta entram com os valores declarados e o resto do documento fica intacto.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --schema
+./target/release/labs --schema
 ~~~
 
 ~~~text
@@ -340,7 +340,7 @@ discordantes, empate no teto) e da o veredito do portao: enquanto faltar escolhe
 humanos, juiz humano e os 12 casos, a tese fica nao sustentada e nenhuma linha do registro pode dizer o contrario.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --ponte
+./target/release/labs --ponte
 ~~~
 
 ~~~text
@@ -379,7 +379,7 @@ sinteticos, que o portao sabe reprovar uma decisao que se diz emitida sem ningue
 caixa quando a cobertura chega ao minimo.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --escuta
+./target/release/labs --escuta
 ~~~
 
 ~~~text
@@ -435,7 +435,7 @@ Bracos pareados, mesmo recurso total. A perda de resolucao mede quanto custa per
 vez de pelo dia que existe.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --resolucao
+./target/release/labs --resolucao
 ~~~
 
 ~~~text
@@ -508,7 +508,7 @@ capítulo 21 | limiar de oscilacao na amplitude 2.5 (plano calibrado) | o capít
 Uma execucao, semente fixa, sem rede.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --todos
+./target/release/labs --todos
 ~~~
 
 ~~~text
@@ -1008,7 +1008,7 @@ regras que reprovaram ao menos uma ficha: 7 de 7 | reprovacoes por regra: [1, 1,
 Sete portoes (G1 a G7), reproducao identica e raiz de Merkle da trilha. O portao G6 e a banca A1-A8.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/portoes --horizonte todos --reproducao
+./target/release/portoes --horizonte todos --reproducao
 ~~~
 
 ~~~text
@@ -1045,7 +1045,7 @@ veredito: 7 portoes ok
 Com um defeito plantado, o G6 reprova e o binario sai com codigo 1.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/portoes --horizonte h3 --defeito h3.voos23
+./target/release/portoes --horizonte h3 --defeito h3.voos23
 ~~~
 
 ~~~text
@@ -1076,7 +1076,7 @@ aprendida pelo STDP entre as cinco lentes. E instrumento de construcao, nao labo
 numeros dele nao entram em capitulo nenhum.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/onda --check
+./target/release/onda --check
 ~~~
 
 ~~~text
@@ -1093,7 +1093,7 @@ numeros dele nao entram em capitulo nenhum.
 Com 0,001 plantado no ultimo estado, a cadeia recusa o salto e o binario sai com codigo 1.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/onda --defeito mutacao
+./target/release/onda --defeito mutacao
 ~~~
 
 ~~~text
@@ -1113,7 +1113,7 @@ Com 0,001 plantado no ultimo estado, a cadeia recusa o salto e o binario sai com
 Com um elo da matriz sinaptica invertido, o G6 reprova e o binario sai com codigo 1.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/onda --defeito inversao
+./target/release/onda --defeito inversao
 ~~~
 
 ~~~text
@@ -1136,7 +1136,7 @@ painel real precisa bater, e o respondente fluente (p = 0,75 sem informacao) fic
 negativa. Divergencia declarada: o oraculo perfeito reprova por 0/0 na guarda de habilidade.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-shelf
+./target/release/labs --ensaio-shelf
 ~~~
 
 ~~~text
@@ -1192,7 +1192,7 @@ vocabulario proibido e o limite do portao: ele confere campo, nao proveniencia, 
 fabricados abrem a caixa. Fica declarado que a cobertura real precisa de hash da transcricao assinada.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-escuta
+./target/release/labs --ensaio-escuta
 ~~~
 
 ~~~text
@@ -1228,7 +1228,7 @@ declarado. Status sustentada com zero caso e reprovado, e o teste justo so abre 
 papeis designados e os doze casos.
 
 ~~~bash
-/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-ponte
+./target/release/labs --ensaio-ponte
 ~~~
 
 ~~~text
