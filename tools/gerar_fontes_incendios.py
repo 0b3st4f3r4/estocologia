@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.request
@@ -80,16 +81,90 @@ unidade_independente = dia
 """
 
 
+EXEMPLO_DE_FICHA = """versao = 1.2
+acao_do_pacote = abster e pedir vistoria
+artefato_simulavel = crates/stochology-core#jev.incendio.1
+camada = L2
+clausula_de_saida = parar-se-ECE>0.10
+definicao = caso de exemplo: Cerrado com 30 C, 40% de umidade, 12 km/h de vento e 10 dias secos
+deriva_declarada = true
+escopo_ecologico = true
+id = jev.incendio.1
+incerteza = epistemica
+margem = 0.42
+modelo_nulo = media-historica
+patologias_cobertas = true
+pergunta_do_decisor = o foco aparece nas proximas 24 horas?
+priori_elicitada = true
+quem_paga_pelo_erro = brigada-local
+resolucao = R1-dia
+semente = 2026
+subgrupos_auditados = true
+teste_de_propriedade = true
+trata_ausentes = true
+trilha_integra = true
+unidade_independente = dia"""
+
+
 def construir_prompt(bioma: str, temp: float, umidade: int, vento: int, dias_secos: int) -> str:
-    """O pedido exato: parametros observados e o esquema da ficha, nada de preambulo."""
+    """O pedido exato: um documento inteiro preenchido, e o caso a preencher na mesma forma.
+
+    O exemplo e completo de proposito. Modelo pequeno copia forma, nao instrucao abstrata: com campos vazios ou
+    marcados ele inventa; com um documento inteiro a frente, ele troca os valores e mantem os nomes. Nenhum numero
+    do exemplo e aproveitado — a margem que vale e a que ele declarar para o caso.
+    """
     return (
-        "Preencha a ficha canonica de calibracao com uma linha por campo, no formato 'campo = valor', "
-        "sem preambulo, sem comentario e sem cercas de codigo. "
+        "Voce preenche a ficha canonica de calibracao. Responda com o documento e nada mais: "
+        "uma linha por campo, no formato 'campo = valor', sem preambulo, sem comentario, sem cercas de codigo.\n\n"
+        f"{EXEMPLO_DE_FICHA}\n\n"
+        "Agora responda para este caso com o DOCUMENTO COMPLETO: as 24 linhas, na mesma ordem do exemplo, "
+        "incluindo os campos que nao dependem do caso. Troque so os valores de id, definicao, acao_do_pacote "
+        "e margem; repita os outros como estao.\n"
         f"Bioma: {bioma}. Temperatura: {temp} C. Umidade relativa: {umidade}%. "
-        f"Vento: {vento} km/h. Dias sem precipitacao mensuravel: {dias_secos}. "
-        "A pergunta do decisor e se havera foco de incendio nas proximas 24 horas. "
-        "O campo margem e a probabilidade declarada, obrigatoriamente entre 0.01 e 0.99."
+        f"Vento: {vento} km/h. Dias sem precipitacao mensuravel: {dias_secos}.\n"
+        "margem e a sua probabilidade declarada de foco nas proximas 24 horas, entre 0.01 e 0.99."
     )
+
+
+def construir_prompt_do_numero(bioma: str, temp: float, umidade: int, vento: int, dias_secos: int) -> str:
+    """Etapa 1 do protocolo em duas etapas: so a probabilidade, para o modelo nao copiar a do exemplo."""
+    return (
+        "Responda apenas com um numero entre 0.0100 e 0.9900, com quatro casas decimais, representando a "
+        "probabilidade de haver foco de incendio nas proximas 24 horas. Nada de texto antes ou depois. "
+        f"Bioma: {bioma}. Temperatura: {temp} C. Umidade relativa: {umidade}%. "
+        f"Vento: {vento} km/h. Dias sem precipitacao mensuravel: {dias_secos}."
+    )
+
+
+def construir_prompt_do_documento(
+    bioma: str, temp: float, umidade: int, vento: int, dias_secos: int, margem: float, indice: int
+) -> str:
+    """Etapa 2: o documento completo, com a margem da etapa 1 ja dentro, para o modelo so preencher o resto."""
+    exemplo = EXEMPLO_DE_FICHA.replace("margem = 0.42", f"margem = {margem:.4f}").replace(
+        "id = jev.incendio.1", f"id = jev.incendio.{indice}"
+    )
+    return (
+        "Responda com o DOCUMENTO COMPLETO, as 24 linhas na mesma ordem, sem preambulo, sem comentario e sem "
+        "cercas de codigo. Troque so definicao e acao_do_pacote; repita todos os outros campos exatamente "
+        "como estao.\n\n"
+        f"{exemplo}\n\n"
+        "Caso a descrever: "
+        f"bioma {bioma}, temperatura {temp} C, umidade relativa {umidade}%, vento {vento} km/h, "
+        f"{dias_secos} dias sem precipitacao mensuravel."
+    )
+
+
+def extrair_numero(texto: str) -> float:
+    """Le a probabilidade da etapa 1 e recusa extremo dogmatico."""
+    achados = re.findall(r"0?[.,][0-9]+|1[.,]0+|0", texto)
+    for bruto in achados:
+        try:
+            p = float(bruto.replace(",", "."))
+        except ValueError:
+            continue
+        if 0.0 < p < 1.0:
+            return p
+    raise ValueError(f"etapa 1 nao devolveu probabilidade em (0, 1): {texto[:120]!r}")
 
 
 def escapar(texto: str) -> str:
@@ -100,7 +175,12 @@ def escapar(texto: str) -> str:
 def validar_ficha(texto: str) -> float:
     """Valida o esquema antes de serializar e devolve a probabilidade declarada."""
     campos: dict[str, str] = {}
-    for linha in texto.replace("\\n", "\n").splitlines():
+    linhas = texto.replace("\\n", "\n").splitlines()
+    # Modelo pequeno as vezes abre com uma frase antes do documento. O parser comeca no primeiro campo
+    # canonico e ignora o que vem antes; o que vem depois tambem e ignorado se nao tiver a forma campo = valor.
+    if any(l.strip().startswith("versao =") for l in linhas):
+        linhas = linhas[next(i for i, l in enumerate(linhas) if l.strip().startswith("versao =")):]
+    for linha in linhas:
         if "=" not in linha:
             continue
         chave, valor = linha.split("=", 1)
@@ -167,7 +247,6 @@ def runner_vllm(prompt: str, url: str, modelo: str, seed: int, max_tokens: int) 
         "temperature": 0,
         "seed": seed,
         "max_tokens": max_tokens,
-        "stop": ["\n\n"],
     }
     dados = json.dumps(corpo).encode("utf-8")
     pedido = urllib.request.Request(url, data=dados, headers={"Content-Type": "application/json"})
@@ -281,6 +360,7 @@ def main() -> int:
     p_in.add_argument("--url-api", default="https://api.openai.com/v1/chat/completions")
     p_in.add_argument("--chave-env", default="JEV_API_KEY")
     p_in.add_argument("--repetir", type=int, default=1, help="repeticoes por caso, para medir determinismo")
+    p_in.add_argument("--duas-etapas", action="store_true", help="elicita o numero antes do documento")
     p_in.add_argument("--respostas", default="", help="arquivo caso_id<TAB>resposta, para o runner arquivo")
     p_in.add_argument("--seed", type=int, default=2026)
     p_in.add_argument("--max-tokens", type=int, default=400)
@@ -320,7 +400,57 @@ def main() -> int:
             int(caso["vento_kmh"]),
             int(caso["dias_sem_chuva"]),
         )
-        if args.runner == "demo":
+        if args.duas_etapas:
+            # Etapa 1: o numero. Etapa 2: o documento, com a margem da etapa 1 dentro. Sem isso o modelo
+            # pequeno copia a margem do exemplo e todas as previsoes saem iguais — calibracao constante nao
+            # mede nada.
+            prompt_numero = construir_prompt_do_numero(
+                caso["bioma"],
+                float(caso["temp_c"]),
+                int(caso["umid_rel"]),
+                int(caso["vento_kmh"]),
+                int(caso["dias_sem_chuva"]),
+            )
+            if args.runner in ("llama-cli",):
+                bruto = runner_llama_cli(prompt_numero, args.modelo, args.binario, args.seed, 32)
+            elif args.runner == "vllm":
+                bruto = runner_vllm(prompt_numero, args.url, args.modelo, args.seed, 32)
+            elif args.runner == "api":
+                chave = os.environ.get(args.chave_env, "")
+                if not chave:
+                    print(f"runner api exige a chave em {args.chave_env}", file=sys.stderr)
+                    return 1
+                bruto = runner_api(prompt_numero, args.url_api, args.modelo, chave, args.seed, 32)
+            else:
+                print("--duas-etapas nao se aplica a demo nem a arquivo", file=sys.stderr)
+                return 1
+            try:
+                margem = extrair_numero(bruto)
+            except ValueError as erro:
+                raise SystemExit(f"{caso['caso_id']}: {erro}") from None
+            prompt = construir_prompt_do_documento(
+                caso["bioma"],
+                float(caso["temp_c"]),
+                int(caso["umid_rel"]),
+                int(caso["vento_kmh"]),
+                int(caso["dias_sem_chuva"]),
+                margem,
+                indice,
+            )
+            if args.runner == "llama-cli":
+                resposta = runner_llama_cli(prompt, args.modelo, args.binario, args.seed, args.max_tokens)
+            elif args.runner == "vllm":
+                resposta = runner_vllm(prompt, args.url, args.modelo, args.seed, args.max_tokens)
+            else:
+                resposta = runner_api(
+                    prompt,
+                    args.url_api,
+                    args.modelo,
+                    os.environ.get(args.chave_env, ""),
+                    args.seed,
+                    args.max_tokens,
+                )
+        elif args.runner == "demo":
             resposta = runner_demo(caso, indice)
         elif args.runner == "arquivo":
             if caso["caso_id"] not in colhidas:

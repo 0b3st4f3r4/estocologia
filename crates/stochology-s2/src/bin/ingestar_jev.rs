@@ -69,7 +69,14 @@ fn ler_inferencias(caminho: &Path) -> Vec<(String, String)> {
         // A resposta pode ter mais de uma linha (o documento canonico da ficha tem). Na fonte, que e
         // linha a linha, a quebra vem escapada como a sequencia de dois caracteres barra-n, e o ingestor
         // desfaz o escape aqui. Sem escape nao ha duas linhas ambiguas.
-        pares.push((campos[0].to_string(), campos[1].replace("\\n", "\n")));
+        // As duas colunas vem escapadas da fonte. O pedido tambem: se so a resposta for desescapada, a chave
+        // do artefato (sha do texto do pedido) deixa de casar com o texto guardado, e a ponte abstem em 100%
+        // dos casos sem dizer por que. Foi assim que a primeira rodada com o modelo real saiu 32 de 32 validas
+        // na conferencia e 100% de abstencao no instrumento.
+        pares.push((
+            campos[0].replace("\\n", "\n"),
+            campos[1].replace("\\n", "\n"),
+        ));
     }
     if pares.is_empty() {
         morrer(format!("{} nao tem nenhuma inferencia", caminho.display()));

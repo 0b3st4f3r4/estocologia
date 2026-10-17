@@ -19,6 +19,17 @@ desacopladas: `conferir-casos` valida o catálogo sem chamar modelo nenhum, e `i
 `JEV_API_KEY`, `arquivo` para respostas já colhidas e `demo` para atestar o encanamento com ficha determinística —,
 valida o esquema e grava as duas fontes com a quebra escapada.
 
+**Duas etapas, e por quê.** Com modelo pequeno, um exemplo completo no prompt faz o modelo copiar a margem do
+exemplo e todas as previsões saem iguais — calibração constante não mede nada. O protocolo então elicita em duas
+etapas: `--duas-etapas` pergunta primeiro só o número ("responda apenas com um número entre 0.0100 e 0.9900") e
+depois pede o documento completo com essa margem já dentro, para o modelo preencher só `definicao` e
+`acao_do_pacote`. A probabilidade declarada é a da etapa 1, e é ela que entra no Brier.
+
+**A fonte escapa as duas colunas.** Pedido e resposta vêm com a quebra escapada como `\n`, e o ingestor desescapa
+as duas. Desescapar só a resposta deixa a chave do artefato apontando para o texto escapado: a ponte procura, não
+acha e abstém em 100% dos casos, com a conferência dizendo 32 de 32 válidas. Aconteceu na primeira rodada com
+modelo real, e o teste `a_escape_do_pedido_nao_quebra_a_chave_do_artefato` existe para não repetir.
+
 **A rota por API não entrega peso congelado.** Provedor remoto não publica `sha256` dos pesos e pode trocar o modelo
 sem avisar, então dois critérios da fase 3 mudam de natureza: o portão dos pesos passa a ser a **revisão declarada do
 modelo** (identificador de versão, data e, quando houver, o `sha256` que o provedor publicar), e o G1 deixa de ser

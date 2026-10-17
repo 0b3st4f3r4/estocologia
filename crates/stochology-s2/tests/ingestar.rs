@@ -194,3 +194,32 @@ fn o_modo_conferir_recusa_resposta_fora_do_esquema() {
     assert!(erro.contains("fora do esquema"), "{erro}");
     std::fs::remove_dir_all(&d).ok();
 }
+
+#[test]
+fn a_escape_do_pedido_nao_quebra_a_chave_do_artefato() {
+    // A fonte escapa as duas colunas. Se o ingestor desescapar so a resposta, a chave do artefato passa a
+    // ser o sha do texto escapado e o pedido guardado o texto cru: a ponte procura, nao acha, e abstem em
+    // 100% dos casos. Este teste existe porque foi exatamente isso que aconteceu na primeira rodada real.
+    let d = temp("escape-pedido");
+    let inf = d.join("inferencias.tsv");
+    let pedido = "linha um\nlinha dois";
+    let resposta = ficha("caso-escape", 0.4).replace('\n', "\\n");
+    std::fs::write(&inf, format!("{}\t{}\n", pedido.replace('\n', "\\n"), resposta)).expect("escreve");
+    let desf = d.join("desfechos.tsv");
+    std::fs::write(&desf, "C-001\t0.4000\t1\tregistro\n").expect("escreve");
+    let pesos = d.join("pesos");
+    let cal = d.join("calibracao");
+    let saida = Command::new(bin())
+        .arg(&pesos)
+        .arg(&inf)
+        .arg(&cal)
+        .arg(&desf)
+        .output()
+        .expect("roda o ingestor");
+    assert!(saida.status.success(), "{}", String::from_utf8_lossy(&saida.stderr));
+    let runner = stochology_s2::runner::RunnerLocal::carregar(&pesos.to_string_lossy()).expect("carrega");
+    let guardados = runner.pedidos();
+    assert_eq!(guardados.len(), 1, "um pedido guardado");
+    assert_eq!(guardados[0], pedido, "o pedido guardado e o texto cru, nao o escapado");
+    std::fs::remove_dir_all(&d).ok();
+}
