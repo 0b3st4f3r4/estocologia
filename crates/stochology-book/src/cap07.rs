@@ -15,11 +15,7 @@ impl SplitMix64 {
         Self { estado: semente }
     }
     fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo() >> 11) as f64 / ((1u64 << 53) as f64)
@@ -506,3 +502,19 @@ pub fn rodar() {
         pior
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn jardim_inflaciona_falso_positivo_e_mao_quente_tem_vies_negativo() {
+        let (exato, ing) = mao_quente();
+        assert!((ing - 0.5).abs() < 1e-9);
+        assert!(exato < 0.42);
+        let c = jardim_dos_caminhos(2026, 200);
+        assert!(c.pre_registrado < 10.0);
+        assert!(c.grande > c.pequeno && c.pequeno > c.pre_registrado);
+    }
+}
+

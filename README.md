@@ -5,7 +5,7 @@ Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob inc
 Este repositório guarda a pesquisa conduzida segundo a arquitetura do projeto (hipergrafo tipado, camadas
 Mundo/Modelo/Agente, banca adversarial A1–A8, orquestrador M, fichas estruturadas, invariantes Φ1–Φ5), do H0 ao
 H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenharia é **Rust** (Edition 2024):
-**dezesseis crates**, **350 testes**, **dezenove instrumentos** (e 5 flags modificadoras) no binário `labs` e **sete portões** (G1 a G7) no binário `portoes` (distintos dos seis portões G1 a G6 do motor ondulatório `onda`)
+**dezesseis crates**, **371 testes**, **dezenove instrumentos** (e 5 flags modificadoras) no binário `labs` e **sete portões** (G1 a G7) no binário `portoes` (distintos dos seis portões G1 a G6 do motor ondulatório `onda`)
 que sabem reprovar.
 
 ## O que está aqui
@@ -27,7 +27,7 @@ que sabem reprovar.
 | `referencias/` | A conferência das referências bibliográficas |
 | `artigo/` | O artigo "Estocologia: Velhas Fronteiras, Novos Horizontes", com as figuras |
 | `estilo/` | O instrumental da passada de prosa: `conferir-passada.py` compara cada arquivo com a versão dele no `HEAD` |
-| `conferir_lacres.py` | O conferidor dos 26 lacres SHA-256 da árvore, de um comando e de um diretório |
+| `conferir_lacres.py` | O conferidor dos 28 lacres SHA-256 da árvore, de um comando e de um diretório |
 | `INTEGRACAO_JEV.md` | A auditoria da transcrição *Integração de Modelos Jev à Estocologia*: cada alegação conferida contra o código, com as divergências declaradas — a numeração do roteiro antigo contra a vigente ($M_{15}$ e $MB_1$–$MB_8$ de um lado, $\mathcal{M}$ e $A_1$–$A_8$ do outro), quatro filtros contra cinco, $\Phi_1$–$\Phi_4$ contra $\Phi_1$–$\Phi_5$, e o *LLM-as-Jev* — e a ponte Jev-LLM como proposta declarada |
 | `DECLARACAO_REMOVIDO_PYTHON.md`, `DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md` | O que saiu da árvore em 2026-10-16, com o commit de recuperação e os manifestos de hash de blob |
 
@@ -37,13 +37,13 @@ Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz
 
 | Medida | Valor | Comando |
 |---|---|---|
-| Testes | **350 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
+| Testes | **371 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
 | Instrumentos | **19** no `labs` (mais 5 flags modificadoras), todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
 | Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
 | Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |
 | Livro montado | **5 927 linhas**, **75 289 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
 | Blocos citados | **48**, nenhum divergente | `book/conferir_labs.py` |
-| Lacres | **26 arquivos**, **70 alvos conferidos**, 8 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
+| Lacres | **28 arquivos**, **82 alvos conferidos**, 9 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
 
 ## Como verificar
 

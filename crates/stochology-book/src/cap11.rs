@@ -12,11 +12,7 @@ impl SplitMix64 {
         SplitMix64(semente)
     }
     pub fn proximo(&mut self) -> u64 {
-        self.0 = self.0.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.0;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.0)
     }
     pub fn uniforme(&mut self) -> f64 {
         (self.proximo() >> 11) as f64 / (1u64 << 53) as f64
@@ -461,3 +457,18 @@ pub fn rodar() {
     diques();
     bloco_do_trilema();
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn dique_gev_subestima_com_gumbel_e_chouldechova_fecha() {
+        let h_gumbel = altura_otima(0.0, 1.2567, 0.762);
+        let h_frechet = altura_otima(0.2, 1.2567, 0.762);
+        assert!(h_frechet > h_gumbel + 2.0);
+        let v1 = vpp_da_matriz(0.111, 0.36, 0.196);
+        assert!(v1 > 0.2 && v1 < 0.5);
+    }
+}
+

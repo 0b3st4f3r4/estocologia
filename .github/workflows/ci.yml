@@ -1,0 +1,35 @@
+name: Verificacao Obrigatoria (AGENTS.md §V)
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  verificacao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Compilar instrumentos em release
+        run: cargo build --release --workspace
+      - name: Testes dos 16 crates
+        run: cargo test --workspace
+      - name: Portoes deterministicos e provas negativas
+        run: |
+          ./target/release/portoes --horizonte todos --reproducao
+          ! ./target/release/portoes --horizonte h3 --defeito h3.voos23
+          ./target/release/onda --check
+          ! ./target/release/onda --defeito mutacao
+          ! ./target/release/onda --defeito inversao
+          ! ./target/release/labs --flag-desconhecida
+      - name: Conferidores do livro, blocos, resultados e lacres
+        run: |
+          python3 book/gerar.py --check
+          python3 book/conferir_labs.py
+          python3 book/conferir_livro.py
+          python3 book/gerar_resultados.py --check
+          python3 conferir_lacres.py
+          python3 estilo/conferir-passada.py
+

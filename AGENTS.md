@@ -84,7 +84,7 @@ python3 book/gerar.py --check                       # a rampa E o disco: o arqui
 python3 book/conferir_labs.py                       # cada bloco citado contra o instrumento
 python3 book/conferir_livro.py                      # partes, capítulos, cercas e ordem
 python3 book/gerar_resultados.py --check            # o registro RESULTADOS_RUST.md
-python3 conferir_lacres.py                          # os 26 lacres SHA-256, caminho relativo à raiz
+python3 conferir_lacres.py                          # os 28 lacres SHA-256, caminho relativo à raiz
 python3 estilo/conferir-passada.py                  # a passada de prosa contra HEAD:book/, arquivo por arquivo
 ~~~
 

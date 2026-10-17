@@ -12,11 +12,7 @@ impl SplitMix64 {
         SplitMix64(semente)
     }
     pub fn proximo(&mut self) -> u64 {
-        self.0 = self.0.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.0;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.0)
     }
     pub fn uniforme(&mut self) -> f64 {
         (self.proximo() >> 11) as f64 / (1u64 << 53) as f64
@@ -563,3 +559,19 @@ pub fn rodar() {
     cauda_selvagem();
     alavancagem_do_dow();
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn moeda_de_peters_cresce_no_conjunto_e_decai_no_tempo() {
+        let (conjunto, tempo) = moeda_de_peters_com_f(0.5, 1.0);
+        assert!(conjunto > 0.0);
+        assert!(tempo < 0.0);
+        let f_otimo = kelly_moeda_de_peters(0.5);
+        let (_, tempo_kelly) = moeda_de_peters_com_f(0.5, f_otimo);
+        assert!(tempo_kelly > 0.0);
+    }
+}
+

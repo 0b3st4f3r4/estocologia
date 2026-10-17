@@ -14,11 +14,7 @@ impl SplitMix64 {
         Self { estado: semente }
     }
     fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo() >> 11) as f64 / ((1u64 << 53) as f64)
@@ -218,3 +214,19 @@ pub fn rodar() {
         );
     }
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn berkson_induz_correlacao_negativa_e_persistencia_reduz_n_efetivo() {
+        let (pop, sel, _) = berkson(2026, 20_000, 1.5);
+        assert!(pop.abs() < 0.03);
+        assert!(sel < -0.30);
+        let (_, n_indep) = tamanho_efetivo(2026, 0.5, 100, 2_000);
+        let (_, n_pers) = tamanho_efetivo(2026, 0.8, 100, 2_000);
+        assert!(n_pers < n_indep * 0.4);
+    }
+}
+

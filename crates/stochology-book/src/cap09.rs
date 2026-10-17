@@ -13,11 +13,7 @@ impl SplitMix64 {
         SplitMix64(semente)
     }
     pub fn proximo(&mut self) -> u64 {
-        self.0 = self.0.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.0;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.0)
     }
     /// Uniforme em [0,1).
     pub fn uniforme(&mut self) -> f64 {
@@ -680,3 +676,17 @@ pub fn rodar() {
     muitas_rodadas(200, 0.0, "mecanismo estavel: Y = 2X + ruido em todo sitio");
     muitas_rodadas(200, 1.0, "mecanismo instavel: o coeficiente de X em Y muda de sitio para sitio");
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn degraus_de_pearl_e_intersecao_icp_funcionam() {
+        assert!(degrau_de_pearl("P(Y | X)").contains("associação"));
+        assert!(degrau_de_pearl("P(Y | do(X))").contains("intervenção"));
+        assert!(degrau_de_pearl("esse assalto teria acontecido?").contains("contrafactual"));
+        assert_eq!(intersecao(&[vec!["x", "z"], vec!["x"]]), vec!["x".to_string()]);
+    }
+}
+

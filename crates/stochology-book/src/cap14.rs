@@ -6,11 +6,7 @@
 //! Semente fixa. Sem dependencias externas. SplitMix64 embutido.
 
 fn splitmix64(estado: &mut u64) -> u64 {
-    *estado = estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-    let mut z = *estado;
-    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-    z ^ (z >> 31)
+    stochology_core::rng::passo_splitmix64(estado)
 }
 
 fn uniforme(estado: &mut u64, limite: u64) -> u64 {
@@ -415,3 +411,16 @@ pub fn rodar() {
         diferentes, repeticoes
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn ficha_completa_passa_e_defeito_aciona_portao() {
+        assert!(avaliar(&ficha_completa()).is_empty());
+        assert!(!avaliar(&com_defeito(Defeito::SemSemente)).is_empty());
+        assert!(grafo_bom().validar().is_empty());
+    }
+}
+

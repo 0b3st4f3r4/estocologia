@@ -94,7 +94,10 @@ fn main() {
             "--ensaio-shelf" => ensaio_shelf = true,
             "--ensaio-escuta" => ensaio_escuta = true,
             "--ensaio-ponte" => ensaio_ponte = true,
-            _ => {}
+            outra => {
+                eprintln!("flag desconhecida: {outra} (uso: labs --cap N (1..21) ou --todos)");
+                std::process::exit(1);
+            }
         }
         i += 1;
     }
@@ -161,21 +164,30 @@ fn main() {
     if ensaio_shelf {
         match ensaio::shelf() {
             Ok(texto) => print!("{texto}"),
-            Err(e) => println!("ensaio do painel nao rodou: {e}"),
+            Err(e) => {
+                eprintln!("ensaio do painel nao rodou: {e}");
+                std::process::exit(1);
+            }
         }
         return;
     }
     if ensaio_escuta {
         match ensaio::escuta() {
             Ok(texto) => print!("{texto}"),
-            Err(e) => println!("ensaio da escuta nao rodou: {e}"),
+            Err(e) => {
+                eprintln!("ensaio da escuta nao rodou: {e}");
+                std::process::exit(1);
+            }
         }
         return;
     }
     if ensaio_ponte {
         match ensaio::ponte() {
             Ok(texto) => print!("{texto}"),
-            Err(e) => println!("ensaio da ponte nao rodou: {e}"),
+            Err(e) => {
+                eprintln!("ensaio da ponte nao rodou: {e}");
+                std::process::exit(1);
+            }
         }
         return;
     }
@@ -815,7 +827,10 @@ fn rodar(cap: usize) {
         19 => cap19::rodar(),
         20 => cap20::rodar(),
         21 => cap21::rodar(),
-        _ => println!("uso: labs --cap N (1..21) ou --todos"),
+        _ => {
+            eprintln!("uso: labs --cap N (1..21) ou --todos");
+            std::process::exit(1);
+        }
     }
 }
 

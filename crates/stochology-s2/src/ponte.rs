@@ -17,7 +17,6 @@
 //! Rodar: ~labs --jev~
 
 use stochology_core::s1::Categoria;
-use std::time::Instant;
 
 /// O que a ponte precisa de um modelo congelado.
 pub trait ModeloCongelado {
@@ -26,6 +25,10 @@ pub trait ModeloCongelado {
     fn decodificar(&mut self, pedido: &str) -> String;
     /// Os tokens gastos na última chamada.
     fn tokens(&self) -> usize;
+    /// O custo de tempo declarado por chamada, em milissegundos (0 na tabela em memória, sem relógio).
+    fn ms(&self) -> u128 {
+        0
+    }
 }
 
 /// O pedido que a ponte manda ao modelo: a pergunta do decisor, no esquema.
@@ -105,11 +108,10 @@ pub fn provar_determinismo(
     let correr = |modelo: &mut dyn ModeloCongelado, contabilidade: &mut Contabilidade| -> String {
         let mut saidas = Vec::new();
         for p in pedidos {
-            let t0 = Instant::now();
             let s = modelo.decodificar(p);
             contabilidade.chamadas += 1;
             contabilidade.tokens += modelo.tokens();
-            contabilidade.ms += t0.elapsed().as_millis();
+            contabilidade.ms += modelo.ms();
             saidas.push(s);
         }
         stochology_audit::sha256_hex(saidas.join("\n").as_bytes())
@@ -140,11 +142,10 @@ pub fn adequacao_do_espaco(
 ) -> Adequacao {
     let mut abstencoes = 0usize;
     for p in pedidos {
-        let t0 = Instant::now();
         let saida = modelo.decodificar(p);
         contabilidade.chamadas += 1;
         contabilidade.tokens += modelo.tokens();
-        contabilidade.ms += t0.elapsed().as_millis();
+        contabilidade.ms += modelo.ms();
         if validar_saida(&saida).is_err() {
             abstencoes += 1;
         }

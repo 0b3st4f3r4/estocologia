@@ -20,19 +20,12 @@ pub struct Dia {
     pub total: f64,
 }
 
-/// Probabilidade de esperar (Erlang C) para carga oferecida a e c atendentes.
+/// Probabilidade de esperar (Erlang C) para carga oferecida a e c atendentes (delega ao nucleo H0).
 pub fn erlang_c(c: f64, a: f64) -> f64 {
     if c <= a {
         return 1.0;
     }
-    // termo de Erlang B por recursao estavel
-    let mut b = 1.0_f64;
-    for k in 1..=(c as usize) {
-        b = (a * b) / (k as f64 + a * b);
-    }
-    let rho = a / c;
-    let p = b / (1.0 - rho * (1.0 - b));
-    p.clamp(0.0, 1.0)
+    stochology_h0::erlang_c(c as u32, a)
 }
 
 /// Nivel de servico: fracao atendida em ate alvo segundos.
@@ -113,7 +106,6 @@ pub struct MedidaBanco {
     pub agentes_por_dia: f64,
     pub nulo_metades_dia: f64,
     pub nulo_metades_chamada: f64,
-    pub teste_severo_fracao_simulada: f64,
 }
 
 /// Escala pelo Erlang C sobre a taxa media do treino, fatia a fatia.
@@ -226,27 +218,11 @@ pub fn medir(caminho: &str, semente: u64, replicas: usize) -> MedidaBanco {
         agentes_por_dia: escala.iter().map(|c| *c as f64).sum::<f64>() / 2.0,
         nulo_metades_dia: nulo_dia,
         nulo_metades_chamada: nulo_chamada,
-        teste_severo_fracao_simulada: 0.0,
     }
 }
 
-/// Gerador determinista, sem dependências.
-pub struct Rng(u64);
-
-impl Rng {
-    pub fn novo(semente: u64) -> Self {
-        Rng(semente)
-    }
-
-    pub fn uniforme(&mut self, limite: u64) -> u64 {
-        self.0 = self.0.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.0;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        let v = z ^ (z >> 31);
-        if limite == 0 { 0 } else { v % limite }
-    }
-}
+/// Gerador determinista re-exportado do núcleo, sem duplicação.
+pub use stochology_core::Rng;
 
 #[cfg(test)]
 mod testes {

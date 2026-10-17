@@ -8,6 +8,9 @@ use stochology_audit::{LivroRazao, sha256_hex};
 use stochology_core::{
     AgenteA, Camada, Ficha, OrquestradorM, Rng, SEVERIDADE_MINIMA, TipoIncerteza, avaliar,
 };
+use stochology_drift::{Opcoes as OpcoesDeriva, cusum, nulo_estacionario};
+use stochology_fairness::{Grupo as GrupoJustica, paridade_demografica};
+use stochology_h1::hill;
 use stochology_hypergraph::lentes;
 
 struct Config {
@@ -39,7 +42,10 @@ fn config() -> Config {
                     i += 1;
                 }
             }
-            _ => {}
+            outra => {
+                eprintln!("flag desconhecida: {outra}");
+                std::process::exit(1);
+            }
         }
         i += 1;
     }
@@ -285,8 +291,17 @@ fn executar(cfg: &Config) -> Execucao {
     }
     let trilha_ok = livro.verificar() && !adulterado.verificar();
 
-    // G6 banca adversarial A1-A8.
-    let banca_portao_ok = banca_ok && pior >= SEVERIDADE_MINIMA.0;
+    // G6 banca adversarial A1-A8, com vigilancia de deriva (A3), paridade de subgrupos (A6) e Hill de H1 (A4).
+    let alfa_h1 = hill(&serie, 500);
+    let vigilancia_nula = cusum(&nulo_estacionario(2026, 500, 0.0, 1.0), &OpcoesDeriva::default());
+    let paridade_nula = paridade_demografica(&[
+        GrupoJustica::novo("coorte-a", 100, 30, 24, 6),
+        GrupoJustica::novo("coorte-b", 100, 30, 24, 6),
+    ]);
+    let modulos_banca_ok = (alfa - alfa_h1).abs() < 1e-12
+        && vigilancia_nula.alarme.is_none()
+        && paridade_nula.abs() < 1e-12;
+    let banca_portao_ok = banca_ok && pior >= SEVERIDADE_MINIMA.0 && modulos_banca_ok;
 
     // G7 cláusula de saída declarada e A8 acima do piso.
     let saida_ok = lista.iter().all(|f| f.clausula_de_saida.is_some())
@@ -399,3 +414,51 @@ fn main() {
     println!("veredito: {} portoes reprovados", exec.falhas);
     std::process::exit(1);
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn sete_portoes_aprovam_horizonte_todos_com_reproducao_identica() {
+        let cfg = Config {
+            horizonte: "todos".to_string(),
+            reproducao: true,
+            defeito: None,
+        };
+        let a = executar(&cfg);
+        let b = executar(&cfg);
+        assert_eq!(a.falhas, 0);
+        assert_eq!(a.portoes.len(), 7);
+        assert_eq!(a.relatorio, b.relatorio);
+        assert_eq!(a.raiz, b.raiz);
+        assert!(a.raiz.starts_with("9716e28a87bec9cf"));
+    }
+
+    #[test]
+    fn defeito_em_h3_voos23_reprova_portao_g6() {
+        let cfg = Config {
+            horizonte: "h3".to_string(),
+            reproducao: false,
+            defeito: Some("h3.voos23".to_string()),
+        };
+        let exec = executar(&cfg);
+        assert_eq!(exec.falhas, 1);
+        let g6 = exec.portoes.iter().find(|(n, _, _)| n == "G6").expect("G6");
+        assert!(!g6.1, "G6 deve reprovar quando h3.voos23 perde trilha e subgrupos");
+    }
+
+    #[test]
+    fn cada_horizonte_individual_fecha_os_sete_portoes() {
+        for h in ["h0", "h1", "h2", "h3"] {
+            let cfg = Config {
+                horizonte: h.to_string(),
+                reproducao: false,
+                defeito: None,
+            };
+            let exec = executar(&cfg);
+            assert_eq!(exec.falhas, 0, "horizonte {h} falhou");
+        }
+    }
+}
+

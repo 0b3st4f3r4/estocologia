@@ -62,7 +62,7 @@ o runner já está escrito; falta o arquivo. O critério de cada um está declar
 | o campo em máquina das prioris | marca `true` em 8 dos 33 domínios, e a frase publicada fala de 33 de 33 | `labs --segunda` |
 | a escuta de quem paga | **0 de 7** grupos ouvidos, e a caixa lacrada por instrumento | `labs --escuta` |
 | o lacre do `p01-tese/CEGAMENTO.md` | **re-selado**: o hash gravado às 12:42 de 2026-10-15 (`fcf8da5a…`) parou de valer quando o adendo do commit `935807e`, às 15:36, mudou o arquivo, e o lacre seguiu apontando para o texto de antes; agora vale `d92afa7c…` | `python3 conferir_lacres.py` |
-| a convenção dos lacres | **uma só**: os 26 arquivos passaram a usar caminho relativo à raiz, as 8 linhas que apontavam para o Python removido ou para a pasta de casos que saiu da árvore viraram comentário declarado, e `sha256sum -c` deixou de depender da pasta de onde se roda | `python3 conferir_lacres.py` |
+| a convenção dos lacres | **uma só**: os 28 arquivos passaram a usar caminho relativo à raiz (incluindo `dados-reais/SHA256SUMS` e `governanca/DECLARACAO.sha256`), as 9 linhas que apontavam para o Python removido, para a pasta de casos que saiu da árvore ou para `crsp_day_1989_1998.csv` viraram comentário declarado, e `sha256sum -c` deixou de depender da pasta de onde se roda | `python3 conferir_lacres.py` |
 
 ## 4. O que mudaria cada veredito
 
@@ -80,7 +80,7 @@ o runner já está escrito; falta o arquivo. O critério de cada um está declar
 ## 5. A reprodução
 
 ~~~bash
-cargo test --workspace                                  # 350 testes aprovados, nenhum reprovado
+cargo test --workspace                                  # 371 testes aprovados, nenhum reprovado
 cargo run --release --bin labs -- --todos               # os 21 laboratórios
 cargo run --release --bin portoes -- --horizonte todos --reproducao
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23   # sai com 1, como declarado
@@ -88,7 +88,7 @@ python3 book/gerar.py --check                           # a rampa dos 21 capítu
 python3 book/conferir_labs.py                           # 48 blocos citados, 0 divergentes
 python3 book/conferir_livro.py
 python3 book/gerar_resultados.py --check                # o registro e o manifesto do estado
-python3 conferir_lacres.py                              # os 26 lacres: 70 alvos, 8 fora da árvore, 0 problemas
+python3 conferir_lacres.py                              # os 28 lacres: 82 alvos, 9 fora da árvore, 0 problemas
 python3 estilo/conferir-passada.py                      # a passada de prosa contra HEAD:book/
 ~~~
 
@@ -106,8 +106,8 @@ cargo run --release --bin labs -- --jev         # a ponte Jev-LLM: os portões f
 cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
 ~~~
 
-Cada pasta de ponto tem o seu `DECLARACAO.sha256`, e os 26 lacres da árvore se conferem de um só comando,
-rodado da raiz: `python3 conferir_lacres.py` devolve **70 alvos conferidos**, **8 linhas declaradas fora da
+Cada pasta de ponto tem o seu `DECLARACAO.sha256`, e os 28 lacres da árvore se conferem de um só comando,
+rodado da raiz: `python3 conferir_lacres.py` devolve **82 alvos conferidos**, **9 linhas declaradas fora da
 árvore** e **0 problemas**. Dois lacres ficam sem alvo vivo, e aparecem como declarados em vez de aprovados:
 `p01-tese/CASOS.sha256` (o banco de 12 casos saiu da árvore) e `p01-tese/GERADORES.sha256` (o gerador era
 Python).

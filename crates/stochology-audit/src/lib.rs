@@ -128,7 +128,7 @@ impl LivroRazao {
         }
     }
 
-    fn hash_do_evento(
+    pub fn hash_do_evento(
         id_sessao: &str,
         indice: u64,
         ficha_id: &str,

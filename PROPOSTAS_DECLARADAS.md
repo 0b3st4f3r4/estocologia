@@ -120,10 +120,10 @@ apontam agora para o que ficou.
 ### Estado corrente da verificação (2026-10-17)
 
 Na árvore atual (16 crates, após a entrada de `stochology-wave`, `banca`, `runner`, `calibracao`, `ingestar-jev` e dos 21 blocos do eixo R):
-- `cargo test --workspace`: **350 testes aprovados**, 0 reprovados (`s2` 81 unitários + 7 de integração, `core` 64, `book` 54, `wave` 39, `h3` 34, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 13, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0).
+- `cargo test --workspace`: **371 testes aprovados**, 0 reprovados (`s2` 81 unitários + 7 de integração, `book` 66, `core` 60, `h3` 40, `wave` 28 unitários + 4 de integração, `h2` 13, `schema` 13, `hypergraph` 12, `audit` 9, `h0` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `gates` 3, `wasm` 3).
 - `python3 book/conferir_labs.py`: **48 blocos citados**, 0 divergentes.
 - `python3 book/gerar.py --check`: **5 927 linhas** e **75 289 palavras**, disco idêntico ao texto montado.
-- `python3 conferir_lacres.py`: **26 lacres**, **70 alvos conferidos**, 8 declarados fora da árvore, 0 problemas.
+- `python3 conferir_lacres.py`: **28 lacres**, **82 alvos conferidos**, 9 declarados fora da árvore, 0 problemas.
 
 As duas tabelas abaixo são o registro histórico das duas passadas de 2026-10-16 que fecharam os itens 1, 2 e 4 (quando a árvore tinha 181 e 214 testes e 24 e 25 blocos citados).
 
@@ -134,7 +134,7 @@ entre parênteses.
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test --workspace` | 214 testes aprovados naquela passada (hoje 350), nenhum reprovado: `core` 51, `h3` 33, `s2` 29, `book` 23, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` e `labs` 0 (0) |
+| `cargo test --workspace` | 214 testes aprovados naquela passada (hoje 371), nenhum reprovado: `core` 51, `h3` 33, `s2` 29, `book` 23, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` e `labs` 0 (0) |
 | `labs --genetica` | 40 mutantes com dois casos plantados: uma linha por mutante aprova 4 de 40 no piso de $0{,}001$; duas linhas aprovam 1 de 40, o piso cai para $10^{-6}$ e o artefato de linha sai da lista porque o efeito não se reproduz na segunda (0) |
 | `python3 book/gerar.py --check` | a rampa de três degraus dos 21 capítulos confere (0) |
 | `python3 book/conferir_labs.py` | 25 blocos citados naquela passada (hoje 48), 0 divergentes — o bloco 2 do Capítulo 19 confere em `labs --genetica` (0) |
@@ -149,7 +149,7 @@ passada do dia fechou os itens 1 e 2: os números de `cargo test`, a linha do al
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test --workspace` | 181 testes aprovados naquela passada (hoje 350), nenhum reprovado: `core` 51, `s2` 29, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
+| `cargo test --workspace` | 181 testes aprovados naquela passada (hoje 371), nenhum reprovado: `core` 51, `s2` 29, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
 | `labs --s2` | o Sistema 2 roda: o grafo declarado valida com 8 nós e 5 hiperarestas, o LATS chega em `f1.sintese-de-codigo` (o nó que nenhuma lente cobre) onde o ganancioso para em `h0.fila`, a crença da banca acerta A5 de primeira contra 5 ataques da ordem declarada, a posterior da Beta(4, 8) dá 0,3346 contra a forma fechada 1/3 e o eixo R escolhe R1-dia com a perda de 46,24 min (0) |
 | `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm` | o playground compila: `stochology_wasm.wasm`, 30 606 bytes (0) |
 | `labs --todos` | os 21 laboratórios rodam (0) |

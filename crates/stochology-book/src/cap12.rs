@@ -7,11 +7,7 @@
 //! Semente fixa. Sem dependencias externas. SplitMix64 embutido.
 
 fn splitmix64(estado: &mut u64) -> u64 {
-    *estado = estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-    let mut z = *estado;
-    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-    z ^ (z >> 31)
+    stochology_core::rng::passo_splitmix64(estado)
 }
 
 fn uniforme(estado: &mut u64, limite: u64) -> u64 {
@@ -221,20 +217,13 @@ impl Grafo {
 
 // ---------------------------------------------------------------- lentes
 
-/// Escalonomia: estimador de Hill sobre a cauda superior.
+/// Escalonomia: estimador de Hill sobre a cauda superior (delega a `stochology-hypergraph`).
 fn indice_hill(valores: &[f64], k: usize) -> f64 {
-    let mut v: Vec<f64> = valores.iter().copied().filter(|x| *x > 0.0).collect();
-    v.sort_by(|a, b| b.partial_cmp(a).unwrap());
-    if v.len() <= k || k == 0 {
-        return f64::NAN;
-    }
-    let corte = v[k];
-    let soma: f64 = v[..k].iter().map(|x| (x / corte).ln()).sum();
-    (soma / k as f64).recip()
+    stochology_hypergraph::lentes::indice_hill(valores, k)
 }
 
 fn cauda_selvagem(alfa: f64) -> bool {
-    alfa < 2.0
+    stochology_hypergraph::lentes::cauda_selvagem(alfa)
 }
 
 /// Crisonomia: valor esperado da informacao perfeita, em unidades do pagamento.
@@ -248,18 +237,11 @@ fn evpi(pagamentos: &[f64], probabilidades: &[f64], melhor_sem_info: f64) -> f64
 }
 
 fn inclinacao(xs: &[f64], ys: &[f64]) -> f64 {
-    let n = xs.len() as f64;
-    let mx = xs.iter().sum::<f64>() / n;
-    let my = ys.iter().sum::<f64>() / n;
-    let num: f64 = xs.iter().zip(ys).map(|(x, y)| (x - mx) * (y - my)).sum();
-    let den: f64 = xs.iter().map(|x| (x - mx) * (x - mx)).sum();
-    num / den
+    stochology_hypergraph::lentes::inclinacao(xs, ys)
 }
 
 fn invariante(inclinacoes: &[f64], tolerancia: f64) -> bool {
-    let maior = inclinacoes.iter().cloned().fold(f64::MIN, f64::max);
-    let menor = inclinacoes.iter().cloned().fold(f64::MAX, f64::min);
-    (maior - menor).abs() <= tolerancia
+    stochology_hypergraph::lentes::invariante_entre_regimes(inclinacoes, tolerancia)
 }
 
 // ------------------------------------------------------------- a bancada
@@ -527,3 +509,19 @@ pub fn rodar() {
         q.por_regime[1] - q.por_regime[0]
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn grafo_valido_passa_e_lentes_concordam_com_hypergraph() {
+        let g = grafo_valido();
+        assert!(g.validar().is_empty());
+        assert!(g.ordem_topologica().is_ok());
+        let xs = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+        assert_eq!(indice_hill(&xs, 3), stochology_hypergraph::lentes::indice_hill(&xs, 3));
+        assert_eq!(cauda_selvagem(1.8), stochology_hypergraph::lentes::cauda_selvagem(1.8));
+    }
+}
+

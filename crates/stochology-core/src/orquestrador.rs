@@ -22,6 +22,11 @@ impl OrquestradorM {
         if ficha.id.trim().is_empty() {
             return Err("ficha sem identificador".to_string());
         }
+        if !self.hash_trilha.is_empty()
+            && (self.hash_trilha.len() != 64 || !self.hash_trilha.chars().all(|c| c.is_ascii_hexdigit()))
+        {
+            return Err("hash_trilha fora do formato SHA-256 (64 hex)".to_string());
+        }
         let semente = ficha.semente.unwrap_or(2026);
         Ok(estressar(agente, ficha, semente))
     }
@@ -46,9 +51,13 @@ mod testes {
     }
 
     #[test]
-    fn ataque_unico_roda() {
+    fn ataque_unico_roda_e_recusa_hash_trilha_corrompido() {
         let m = OrquestradorM::novo("sessao-h1", "1".repeat(64).as_str());
         let f = Ficha::nova("h1.a", Camada::Modelo, TipoIncerteza::Epistemica);
         assert!(m.conduzir_ataque(AgenteA::A3CicloVida, &f).is_ok());
+
+        let corrompido = OrquestradorM::novo("sessao-h1", "nao-e-sha256");
+        assert!(corrompido.conduzir_ataque(AgenteA::A5Governanca, &f).is_err());
     }
 }
+

@@ -193,3 +193,28 @@ pub fn rodar() {
         reprovacoes
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn verificador_aceita_ficha_completa_e_recusa_decisor_generico() {
+        let mut f = Ficha {
+            nome: "01 completa",
+            gerador: "sorteio por escola, semente fixa 2026, ruido gaussiano",
+            unidade: "a escola, nao o aluno",
+            nulo: "o mesmo mundo com a semente 2026 e sem o efeito",
+            decisor: "a secretaria municipal de educacao",
+            acao: "reduzir as turmas das series iniciais para 15 alunos",
+            pergunta: "Quem decide: a secretaria municipal de educacao. Ação que a decisão muda: reduzir as turmas das series iniciais para 15 alunos. A pergunta do decisor e: reduzir a turma para 15 alunos melhora a nota de leitura um ano depois?",
+            semente: "2026",
+            hash: "0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c4b5a69788796a5b4c3d2e1f0",
+            saida: "vale enquanto o efeito medido ficar acima de 0,10 dp em tres anos seguidos",
+        };
+        assert!(verificar(&f).is_empty());
+        f.pergunta = "Quem decide: o decisor. Ação que a decisão muda: reduzir as turmas das series iniciais para 15 alunos. A pergunta do decisor e: reduzi-las melhora a leitura?";
+        assert!(!verificar(&f).is_empty());
+    }
+}
+

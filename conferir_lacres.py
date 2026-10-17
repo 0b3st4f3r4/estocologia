@@ -5,7 +5,7 @@ Uso:
     python3 conferir_lacres.py          # todos os lacres, relatorio por arquivo
     python3 conferir_lacres.py --quieto # so o resumo
 
-Regra do formato, a mesma para os 26 lacres: cada linha util e
+Regra do formato, a mesma para os 28 lacres: cada linha util e
 
     <64 hex>  <caminho relativo a raiz do repositorio>
 
@@ -28,7 +28,11 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent
 LINHA = re.compile(r"^([0-9a-f]{64})  (\S.*)$")
-EXTRAS = ["DECLARACAO_DO_ESTADO.sha256"]
+EXTRAS = [
+    "DECLARACAO_DO_ESTADO.sha256",
+    "dados-reais/SHA256SUMS",
+    "governanca/DECLARACAO.sha256",
+]
 
 
 def lacres() -> list[Path]:

@@ -26,11 +26,7 @@ impl Sm64 {
         }
     }
     fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         ((self.proximo() >> 11) as f64) / ((1u64 << 53) as f64)
@@ -498,3 +494,21 @@ pub fn rodar() {
         );
     }
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn mqo_recupera_reta_e_kruskal_zera_em_grupos_identicos() {
+        let x = vec![vec![1.0, 1.0, 1.0, 1.0], vec![1.0, 2.0, 3.0, 4.0]];
+        let y = vec![3.0, 5.0, 7.0, 9.0];
+        let b = mqo(&x, &y);
+        assert!((b[0] - 1.0).abs() < 1e-6);
+        assert!((b[1] - 2.0).abs() < 1e-6);
+        let u = [1.0, 2.0, 3.0, 1.0, 2.0, 3.0];
+        let g = [0, 0, 0, 1, 1, 1];
+        assert!(kruskal(&u, &g, 2).abs() < 1e-9);
+    }
+}
+

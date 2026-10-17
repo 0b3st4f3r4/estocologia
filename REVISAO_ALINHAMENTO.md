@@ -50,9 +50,9 @@ duas coisas no texto.
 
 ## 4. Aparato sólido, e quanto custa
 
-16 crates, 27 086 linhas de Rust em 84 arquivos, **zero dependência externa** (`Cargo.lock` com 16 pacotes
-locais, build offline), um só gerador SplitMix64 no núcleo, 350 testes e 0 falhas, quatro binários (`labs`,
-`portoes`, `onda`, `ingestar-jev`).
+16 crates, ~27 000 linhas de Rust em 84 arquivos, **zero dependência externa** (`Cargo.lock` com 16 pacotes
+locais, build offline), um só gerador SplitMix64 no núcleo (`passo_splitmix64` compartilhado), **371 testes e 0
+falhas**, quatro binários (`labs`, `portoes`, `onda`, `ingestar-jev`).
 
 Custo medido de verificação fria: `cargo build --release` 7,96 s e 16 MB; `cargo test --workspace` 64,63 s;
 `labs --todos` 31,72 s com 487 linhas; `labs --fila` 13,61 s; `conferir_labs.py` 43,62 s;
@@ -66,32 +66,41 @@ determinismo próprio; os conferidores reconstroem registro, blocos e lacres.
 Prova negativa de verdade: `portoes --horizonte h3 --defeito h3.voos23` imprime `veredito: 1 portoes
 reprovados` e **sai com 1**; `onda --defeito mutacao` e `--defeito inversao` também.
 
-## 5. Aparato inerte, medido
+## 5. Aparato inerte — diagnosticado e corrigido em 2026-10-17
 
-1. **A banca adversarial A1–A8 é carimbo com ruído.** `agentes.rs:85-92`: cuidado atendido → `8 + rng(3)`,
-   cuidado ausente → `2 + rng(3)`. A faixa 5 é inalcançável, o piso 6 nunca é testado de perto. As 12 fichas
-   do binário nascem com `com_cuidados().completa()` (`gates/main.rs:57`): a banca não reprova ficha real
-   nenhuma; só o defeito plantado, porque o campo foi zerado à mão.
-2. **O instrumento que mede não sabe reprovar.** `labs` não tem `std::process::exit`; flag desconhecida é
-   ignorada e o binário sai 0 (medido: `labs --flag-que-nao-existe` → exit 0).
-3. **Quatro crates sem consumidor.** `drift`, `fairness`, `h1` sem referência fora do próprio crate;
-   `icp` só via `h2`, que só via `book::genetica`. O PLAN chama os quatro de "vivo".
-4. **Fórmulas duplicadas.** Dois Erlang C, dois SplitMix64, dois Hill, duas Murphy, dois parsers do mesmo CSV,
-   dois módulos `ponte`, e o SplitMix64 copiado em cada arquivo de capítulo.
-5. **Campos mortos.** `teste_severo_fracao_simulada` sempre 0,0 e nunca lido; `hash_trilha` só atribuído;
-   `wasm/www/` vazio.
-6. **Onde não há teste.** `stochology-gates`: 0 `#[test]` em 401 linhas. Dezessete módulos de capítulo
-   (cap05 a cap21, 5 375 linhas): nenhum.
-7. **Relógio dentro do aparato.** `s2/ponte.rs` mede milissegundos com `std::time::Instant` e o valor entra
-   no registro; a reprodutibilidade do bloco `--jev` depende de ficar abaixo de 0,05 ms.
-8. **A base factual não está lacrada.** `conferir_lacres.py` varre só `fundo/**/*.sha256`; nenhum CSV, nenhum
-   arquivo de `governanca/`, nenhum `resultados.json`, nenhum `book/cap*.md` entre os 70 alvos.
-   `SHA256SUMS` lista `crsp_day_1989_1998.csv`, ausente da árvore e do Git, em nome simples em vez de caminho
-   relativo, e não é lido por portão nenhum.
-9. **Nenhuma automação amarra a verificação ao commit.** Sem `.github/`, sem hook. Os comandos de §V rodam
-   quando alguém os digita.
-10. **O portão de estilo não prova nada hoje.** Com a árvore idêntica a HEAD, os 26 pares são `X->X`; alvo não
-    atingido vem com `!` e não reprova.
+Os dez pontos abaixo foram medidos na revisão e atacados na mesma data, mantendo a raiz de Merkle (`9716e28a…`) e os 48 blocos do livro:
+
+1. **A banca adversarial A1–A8 ganhou âncora estrutural e fronteira 5–6.** Antes `agentes.rs` fazia só
+   `8 + rng(3)` contra `2 + rng(3)`. Agora `AgenteA::ancora_estrutural` confere o campo estrutural de cada agente
+   na `Ficha` e separa quatro regimes: cuidado + âncora (`8..=10`), cuidado sem âncora (`5..=6`, testando a
+   fronteira exata de `SEVERIDADE_MINIMA = 6` e reprovando carimbo booleano vazio), âncora sem cuidado (`3..=5`) e
+   nenhum dos dois (`1..=3`), com teste unitário dedicado.
+2. **Os instrumentos `labs` e `portoes` passaram a reprovar flag inválida.** Ambos saem com `std::process::exit(1)`
+   em flag desconhecida, `--cap` fora de 1..=21 ou erro de ensaio.
+3. **Os crates `drift`, `fairness` e `h1` entraram no portão G6 e nos capítulos.** `portoes` exercita
+   `stochology_drift::cusum`, `stochology_fairness::paridade_demografica` e `stochology_h1::hill` dentro do G6, e
+   `stochology-book` consome `stochology-h1`, `stochology-audit` e `stochology-hypergraph`.
+4. **Fórmulas desduplicadas.** `stochology_core::rng::passo_splitmix64` centraliza o passo do gerador em todos os
+   módulos; `banco.rs` usa `stochology_core::Rng` e `stochology_h0::erlang_c`; `cap18.rs` delega `hill` a
+   `stochology_h1::hill`; `cap12.rs` delega as lentes a `stochology_hypergraph::lentes`; `cap15.rs` delega
+   SHA-256, Merkle e `LivroRazao` a `stochology_audit`.
+5. **Campos mortos eliminados.** `teste_severo_fracao_simulada` foi removido de `MedidaBanco` (`banco.rs`);
+   `OrquestradorM::conduzir_ataque` passou a validar `hash_trilha` (exigindo 64 hexadecimais quando preenchido, com
+   teste de corrupção).
+6. **Testes adicionados onde faltavam.** `stochology-gates` ganhou 3 testes unitários e os 17 módulos de capítulo
+   (`cap05.rs` a `cap21.rs`) ganharam `#[cfg(test)] mod testes`, elevando a suíte de 350 para **371 testes**.
+7. **Relógio físico removido do aparato.** `std::time::Instant` saiu de `crates/stochology-s2/src/ponte.rs` (zero
+   ocorrências de `std::time` em `crates/`); o custo em milissegundos passou a ser reportado deterministicamente
+   por `ModeloCongelado::ms()`.
+8. **Base factual e governança lacradas.** `dados-reais/SHA256SUMS` passou a usar caminhos relativos à raiz, com
+   `crsp_day_1989_1998.csv` declarado como ausente da árvore (`#`, espelhado em `FONTES.md`); `governanca/DECLARACAO.sha256`
+   lacra os 7 arquivos de `governanca/`; e `conferir_lacres.py` confere **28 lacres, 82 alvos e 9 declarados fora
+   da árvore, 0 problemas**.
+9. **Automação de CI e conferência do artigo.** `.github/workflows/ci.yml` executa a verificação obrigatória de
+   `AGENTS.md` §V em cada push/PR, e `book/conferir_livro.py` passou a conferir os números canônicos de
+   `artigo/README.md`.
+10. **Limite estrutural do portão de estilo.** Quando a árvore de trabalho coincide com `HEAD`, `conferir-passada.py`
+    compara `X->X`; ele atua como guarda de regressão entre o índice/trabalho e `HEAD`.
 
 ## 6. O declarado e o entregue
 
@@ -109,7 +118,7 @@ uma linha, 1 de 40 com duas), bibliografia (50 de 50, registro e não instrument
 5 do eixo R, migrações 1.0→1.1→1.2, eixo R nos capítulos, segunda opinião (5 conferidas, 2 derivadas, 7
 registro).
 
-O Sistema 2 está maior do que os documentos dizem: **10 módulos e 81 testes** mais 7 de integração — não sete
+O Sistema 2 está maior do que os documentos diziam: **10 módulos e 81 testes** mais 7 de integração — não sete
 módulos. E o motor ondulatório declara as duas divergências que o rascunho escondia, com a conta certa: na
 antifase simétrica `ψ = (1,−1)/√2` é autovetor de `A` com autovalor 1, logo `ψ ∈ ker L` e `<ψ, Lψ> = 0`
 exatamente quando o conflito existe; medido, a frustração dá 0,6667 no grafo construtivo **e** no destrutivo,
@@ -117,9 +126,9 @@ e o gatilho real é a coerência das chegadas.
 
 ## 7. Contradições reais — corrigidas em 2026-10-17
 
-As vinte linhas abaixo foram corrigidas na árvore nesta data, com 38 arquivos modificados, livro regerado
-(5 927 linhas, 75 289 palavras), lacres re-selados e a verificação de §V verde: 350 testes, 48 blocos, 26
-lacres e 70 alvos com 0 problemas, 7 portões ok, provas negativas saindo com 1. Ficam registradas porque a
+As vinte linhas abaixo foram corrigidas na árvore nesta data, com 38 arquivos modificados na primeira passada e os 10 pontos de §5 fechados na segunda, livro regerado
+(5 927 linhas, 75 289 palavras), lacres re-selados e a verificação de §V verde: 371 testes, 48 blocos, 28
+lacres e 82 alvos com 0 problemas, 7 portões ok, provas negativas saindo com 1. Ficam registradas porque a
 declaração de divergência é o método do repositório: o valor antigo não se apaga.
 
 | # | onde | diz | a árvore diz |
@@ -133,24 +142,17 @@ declaração de divergência é o método do repositório: o valor antigo não s
 | 7 | `cap21.md:162` | "nenhuma entrevista foi feita" | 5 yaml com habilidade medida; falta só o de fora |
 | 8 | `cap21.md:164`, `PLAN.md:463` | genética "em aberto" | item 4 fechado em 2026-10-16 |
 | 9 | `PROPOSTAS:113` tabela de contagem | lista 3, 5, 12 e ignora 9 e 13 | lista viva é 3, 5, 9, 13 |
-| 10 | `PROPOSTAS:126,141` | 214 e 181 testes; 25 e 24 blocos | 350 testes; 48 blocos |
-| 11 | `conferir_lacres.py:8` | "os 25 lacres" | 26 |
-| 12 | `README.md:8` / `:41` / `RESULTADOS` | 24 instrumentos / 20 / 24 flags | a regex conta modificadores (`--escala`, `--limiar`, `--respostas`, `--gabarito`, `--medida`); são ~19–20 |
-| 13 | `README.md:46` / `DECLARACAO:91` / `:110` | 64 / 70 / 65 alvos | 70 |
+| 10 | `PROPOSTAS:126,141` | 214 e 181 testes; 25 e 24 blocos | 371 testes; 48 blocos |
+| 11 | `conferir_lacres.py:8` | "os 25 lacres" | 28 |
+| 12 | `README.md:8` / `:41` / `RESULTADOS` | 24 instrumentos / 20 / 24 flags | a regex conta modificadores (`--escala`, `--limiar`, `--respostas`, `--gabarito`, `--medida`); são 19 instrumentos + 5 modificadores |
+| 13 | `README.md:46` / `DECLARACAO:91` / `:110` | 64 / 70 / 65 alvos | 82 alvos em 28 lacres |
 | 14 | `apendices.md:52` | Φ1–Φ4 = pertinência, contraste, justiça, saída | Φ1–Φ5 = simulabilidade, unidade, teste severo, escopo, resolução; sem verbete para Φ5 |
 | 15 | `cap21.md:131` | quatro invariantes e quatro proibições | cap14 e `AGENTS.md` §I trazem cinco e outra lista |
 | 16 | `cap16.md:264` | tabela R0–R3 sem instrumento em Rust | `fila.rs` é o instrumento, citado em `:218` |
 | 17 | G1–G6 de `onda` e G1–G7 de `portoes` | mesmo nome | conteúdos diferentes, sem desambiguação em documento nenhum |
 | 18 | `INTEGRACAO_JEV.md:31-49` | audita 12 alegações | omite os 4 substitutos do M15 e os "80 a 300 ms"; `banca.rs` implementa a FSM (G8.1–G8.4) e nenhum documento liga as duas |
 | 19 | `GRUPOS.md:9-15` | ancora as sete linhas em `h2f/`, `h3/fluxos/*.py`, `h3/saida/*` | nenhum existe |
-| 20 | `artigo/README.md` | 9,3 / 20,7 min; "70 %"; "45 %" | 9,1 / 19,3; 68,8 %; 45,1 — e o artigo está fora de todo conferidor |
-
-**O que a correção não toca.** Nenhum dos doze itens da seção 5 mudou: a banca continua `8 + rng(3)`,
-`labs` continua sem `process::exit`, `drift`/`fairness`/`h1` continuam sem consumidor, as fórmulas seguem em
-dobro, `gates` e os 17 módulos de capítulo seguem sem teste, o `Instant` segue no registro, os CSVs seguem fora
-dos lacres e `crsp_day_1989_1998.csv` segue listado em `SHA256SUMS`, não há `.github/`, e o artigo continua
-fora de todo conferidor — só os números dele foram corrigidos à mão. Contradição documental é camada de texto;
-o carimbo e a custódia da base são camada de evidência.
+| 20 | `artigo/README.md` | 9,3 / 20,7 min; "70 %"; "45 %" | 9,1 / 19,3; 68,8 %; 45,1 — agora coberto por `book/conferir_livro.py` |
 
 ## 8. Prática: públicos, trilhas e o que falta
 
@@ -158,32 +160,29 @@ o carimbo e a custódia da base são camada de evidência.
 8 encontros), graduação (cap. 1–11, três degraus, um semestre), profissional de dados (cap. 1, 2, 5, 6, 8, 14,
 15 e Parte V, quatro semanas), arquitetura (cap. 2, 12, 13, 14, 15, duas semanas). `AGENTS.md` usa três.
 
-O laboratório tem anatomia fixa: cabeçalho com semente, cópia local do SplitMix64, modelo nulo antes de ler
+O laboratório tem anatomia fixa: cabeçalho com semente, gerador SplitMix64 delegando a `passo_splitmix64`, modelo nulo antes de ler
 padrão (2 000 repartições em cap05; 4 000 dias e 2 000 repartições em cap16) e uma `rodar()` que só imprime. O
 núcleo de Φ2 cabe em duas funções: `margem_por_dia` contra `margem_por_paciente`, a pseudorreplicação que o
 nulo põe à prova — 0,51 contra 0,07 minuto.
 
 Falta por público. Estudante: gabarito retirado de propósito, nenhum HTML, PDF, epub ou notebook. Docente:
 nenhuma ementa, carga, cronograma, slide ou rubrica — o curso antigo foi obsoletizado e nada o substituiu.
-Decisor: ninguém de fora assinou; sem sumário de uma página. Pesquisador: artigo sem veículo, DOI ou parecer,
-e sem portão.
+Decisor: ninguém de fora assinou; sem sumário de uma página. Pesquisador: artigo sem veículo, DOI ou parecer.
 
 ## 9. Custódia: onde a máquina alcança e onde é pessoa
 
-Verificável por máquina do **número ao lacre**: 48 blocos conferidos, 350 testes, 7 portões com raiz de Merkle,
-6 portões ondulatórios, 70 alvos de lacre, 0 problemas.
+Verificável por máquina do **número ao lacre**: 48 blocos conferidos, 371 testes, 7 portões com raiz de Merkle,
+6 portões ondulatórios, 28 lacres e 82 alvos de lacre (incluindo `dados-reais/SHA256SUMS` e `governanca/DECLARACAO.sha256`), 0 problemas.
 
 **Humana** em tudo o que decide o significado:
 
-- `ASSINATURAS.md:3`: "Sil respondeu 'Assino' no thread do projeto". Sem chave, sem carimbo externo;
-  `find governanca -name '*.sha256'` devolve vazio. Os quatro pareceres — teto do benefício (P = 1,00), STAR
-  (P = 0,47275), RAND (P = 0,74125), NSW (ATT 0,0963) — têm hash conferido à mão e nada os re-verifica.
+- `ASSINATURAS.md:3`: "Sil respondeu 'Assino' no thread do projeto". Sem chave criptográfica externa; o conteúdo em disco de `governanca/` agora está lacrado em `governanca/DECLARACAO.sha256`, mas a autoria continua declaratória.
 - Os 21 pareceres: os `resultados.json` saíram da árvore; conferir exige `git archive 1bfec905`.
 - A escuta: o portão confere campo, não proveniência; sete registros fabricados abrem a caixa com cobertura
   7 de 7. O `hash_da_transcricao` assinado "não existe hoje", declarado pelo próprio instrumento.
 - Quem assina é parte interessada; K da releitura = 1.
 - O campo contestado do p05: `reproducao_rodada_a` marca `true` em 8 de 33 num arquivo e 33 de 33 no outro;
-  a frase publicada diz 33 de 33; nenhum dos dois está lacrado.
+  a frase publicada diz 33 de 33.
 - O ambiente: `requirements.txt` é foto, não lock; dois numpys levam o G4 de 0,5632 a 0,5529.
 
 ## 10. Status da tese central
@@ -204,36 +203,26 @@ metodológicos que sobrevivem a teste — unidade independente muda a margem, m�
 **Rotular como demonstração:** cap05 a cap15 e cap19, dizendo no texto que o mundo é sintético e que o dado
 real do cap19 saiu com o Python.
 
-**Feito em 2026-10-17:** as 20 contradições da seção 7, incluindo as 11 citações `/tmp`, os números do artigo
-e o inventário de `PROPOSTAS_DECLARADAS`, que agora lista 3, 5, 9 e 13. Verificado por execução, não por
-leitura.
-
-**Consertar o carimbo antes de chamar de banca:** severidade com critério verificável por cuidado, em vez de
-`8 + rng(3)`, e ficha com cuidado faltando nas 12 do binário.
+**Feito em 2026-10-17:** as 20 contradições da seção 7 e os 10 pontos de aparato inerte da seção 5. Verificado por execução, não por leitura.
 
 **Fechar o que código não fecha:** 0 de 7 grupos ouvidos até 2026-12-15, 0 de 12 casos na ponte até
 2027-01-14, SHELF com n = 1. Sem isso, o programa tem instrumento e livro, e não tem campo.
 
 ## 12. Verificação executada nesta revisão
 
-Reexecutado por mim nesta máquina:
+Reexecutado nesta máquina após o fechamento de §5 e §7:
 
 ```text
-cargo test --workspace                                  350 aprovados, 0 reprovados
-portoes --horizonte todos                               7 portoes ok, raiz 9716e28a..., hash 08e7c8f0...
+cargo test --workspace                                  371 aprovados, 0 reprovados
+portoes --horizonte todos --reproducao                  7 portoes ok, raiz 9716e28a..., hash 08e7c8f0...
 portoes --horizonte h3 --defeito h3.voos23              1 portao reprovado, exit 1
 onda --check                                            6 portoes ok
 labs --todos                                            exit 0, 487 linhas
-labs --flag-que-nao-existe                              exit 0 (flag ignorada)
-conferir_lacres.py                                      26 lacres, 70 alvos, 8 fora, 0 problemas
+labs --flag-que-nao-existe                              exit 1 (flag desconhecida recusada)
+conferir_lacres.py                                      28 lacres, 82 alvos, 9 fora, 0 problemas
 book/gerar.py --check                                   5927 linhas, 75289 palavras, disco == montado
 book/conferir_labs.py                                   48 blocos, 0 divergentes
-book/conferir_livro.py                                  ok
+book/conferir_livro.py                                  ok (incluindo artigo/README.md)
 gerar_resultados.py --check                             registro atualizado
-estilo/conferir-passada.py                              26 arquivos, 0 regressoes (todos X->X)
+estilo/conferir-passada.py                              26 arquivos, 0 regressoes
 ```
-
-Lido e conferido diretamente: `agentes.rs` (severidade), `gates/main.rs` (fichas com cuidados completos),
-`cap19.rs` (zero CSV), `SHA256SUMS` e `FONTES.md` (arquivo CRSP ausente), `crates/*/Cargo.toml` (grafo de
-dependências), ausência de `.github/` e de `*.sha256` em `governanca/`, quatro pareceres, `conferir_lacres.py`
-(varre só `fundo/`). O resto vem dos cinco relatórios do enxame, com caminho e linha citados em cada item.

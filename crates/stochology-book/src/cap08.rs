@@ -14,11 +14,7 @@ impl SplitMix64 {
         Self { estado: semente }
     }
     fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo() >> 11) as f64 / ((1u64 << 53) as f64)
@@ -266,3 +262,17 @@ pub fn rodar() {
         );
     }
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn identidade_de_murphy_fecha_e_platt_reduz_rel() {
+        let p = vec![0.1, 0.2, 0.8, 0.9, 0.15, 0.85, 0.25, 0.75];
+        let y = vec![0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0];
+        let d = decompor(&p, &y);
+        assert!((d.rel - d.res + d.unc - d.brier_caixa).abs() < 1e-12);
+    }
+}
+

@@ -10,10 +10,16 @@ version = "0.1.0"
 name = "stochology-book"
 version = "0.1.0"
 dependencies = [
+ "stochology-audit",
  "stochology-core",
+ "stochology-drift",
+ "stochology-fairness",
  "stochology-h0",
+ "stochology-h1",
  "stochology-h2",
  "stochology-h3",
+ "stochology-hypergraph",
+ "stochology-icp",
  "stochology-s2",
  "stochology-schema",
 ]
@@ -43,6 +49,9 @@ version = "0.1.0"
 dependencies = [
  "stochology-audit",
  "stochology-core",
+ "stochology-drift",
+ "stochology-fairness",
+ "stochology-h1",
  "stochology-hypergraph",
 ]
 

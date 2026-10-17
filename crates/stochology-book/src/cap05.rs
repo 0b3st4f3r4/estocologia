@@ -14,11 +14,7 @@ impl SplitMix64 {
         Self { estado: semente }
     }
     fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     /// Uniforme em [0,1).
     fn uniforme(&mut self) -> f64 {
@@ -277,3 +273,17 @@ pub fn rodar() {
         100.0 * abaixo as f64 / n as f64
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn jensen_na_fila_varia_acima_da_constante() {
+        let constante = simular(1909, 200, 10.0, |_| 12.0, |_| 8.0);
+        let variavel = simular(1909, 200, 10.0, |_| 12.0, |d| if d % 2 == 0 { 5.0 } else { 11.0 });
+        assert!(variavel.espera_media_min > constante.espera_media_min);
+        assert!((w_formula(8.0, 12.0) - 10.0).abs() < 1e-9);
+    }
+}
+

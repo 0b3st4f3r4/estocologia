@@ -245,12 +245,11 @@ fn exponencial(rng: &mut banco::Rng, media: f64) -> f64 {
 
 /// Semente de um dia e uma replica, pela finalizacao do SplitMix64.
 fn semente_do_dia(base: u64, dia: usize, replica: usize) -> u64 {
-    let mut z = base
+    let mut z = (base
         ^ (dia as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
-        ^ (replica as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
-    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-    z ^ (z >> 31)
+        ^ (replica as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F))
+        .wrapping_sub(0x9E37_79B9_7F4A_7C15);
+    stochology_core::rng::passo_splitmix64(&mut z)
 }
 
 /// Primeiro e ultimo intervalo de cada grupo de escala.

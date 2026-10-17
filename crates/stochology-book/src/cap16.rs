@@ -21,11 +21,7 @@ impl Sm64 {
         Sm64 { estado: semente }
     }
     fn proximo_u64(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo_u64() >> 11) as f64 * (1.0 / 9007199254740992.0)
@@ -240,3 +236,17 @@ pub fn rodar() {
         100.0 * variavel.esperas.iter().filter(|e| **e > 30.0).count() as f64 / variavel.esperas.len() as f64
     );
 }
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn margem_por_dia_e_maior_que_pseudorreplicacao_por_paciente() {
+        let m = mundo(SEMENTE, 100, |_| 8.0, |_| MU);
+        let m_dia = margem_por_dia(&m.soma_dia, &m.n_dia);
+        let m_pac = margem_por_paciente(&m.esperas);
+        assert!(m_dia > m_pac * 1.5);
+    }
+}
+

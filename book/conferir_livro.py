@@ -49,9 +49,18 @@ for marca in ["### Degrau 1", "### Degrau 2", "### Degrau 3", "**Exercícios.**"
     if n != 21:
         problemas.append(f"{marca}: {n} ocorrências, esperado 21")
 
+artigo = Path("artigo/README.md")
+if artigo.is_file():
+    texto_artigo = artigo.read_text(encoding="utf-8")
+    marcas_artigo = ["9,1", "19,3", "68,8%", "45,1%", "2,65 milhões", "0,0474", "−10,7", "+11,1", "1 chance em 38", "0,15", "8 de 8"]
+    for m in marcas_artigo:
+        if m not in texto_artigo:
+            problemas.append(f"artigo/README.md: marca canônica ausente: {m!r}")
+
 if problemas:
     print("problemas no livro montado:")
     for p in problemas:
         print(f"  - {p}")
     sys.exit(1)
 print(f"livro montado ok: {len(linhas)} linhas, {len(capitulos)} capítulos, 5 partes, cercas equilibradas")
+

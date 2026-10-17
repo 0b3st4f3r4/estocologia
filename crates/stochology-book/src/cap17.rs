@@ -22,11 +22,7 @@ impl Sm64 {
         Sm64 { estado: s }
     }
     fn proximo_u64(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo_u64() >> 11) as f64 * (1.0 / 9007199254740992.0)
@@ -407,4 +403,19 @@ pub fn rodar() {
         emprego(&todos_cps, 75),
         emprego(&tratados, 75) - emprego(&todos_cps, 75)
     );
+}
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn arrasto_alavancado_e_vies_de_selecao_batem_com_stochology_h1() {
+        let r = [-0.10, 0.10];
+        let ac1 = acumulado(&r, 1.0);
+        let ac3 = acumulado(&r, 3.0);
+        assert!(ac3.last().unwrap() < ac1.last().unwrap());
+        assert!(stochology_h1::arrasto(3.0, &r) > stochology_h1::arrasto(1.0, &r));
+        assert!(bissexto(2000) && !bissexto(1900));
+    }
 }

@@ -13,3 +13,6 @@ path = "src/main.rs"
 stochology-core = { path = "../stochology-core" }
 stochology-hypergraph = { path = "../stochology-hypergraph" }
 stochology-audit = { path = "../stochology-audit" }
+stochology-drift = { path = "../stochology-drift" }
+stochology-fairness = { path = "../stochology-fairness" }
+stochology-h1 = { path = "../stochology-h1" }

@@ -12,7 +12,13 @@ path = "src/main.rs"
 [dependencies]
 stochology-s2 = { path = "../stochology-s2" }
 stochology-h0 = { path = "../stochology-h0" }
-stochology-h3 = { path = "../stochology-h3" }
+stochology-h1 = { path = "../stochology-h1" }
 stochology-h2 = { path = "../stochology-h2" }
+stochology-h3 = { path = "../stochology-h3" }
+stochology-icp = { path = "../stochology-icp" }
+stochology-drift = { path = "../stochology-drift" }
+stochology-fairness = { path = "../stochology-fairness" }
+stochology-hypergraph = { path = "../stochology-hypergraph" }
+stochology-audit = { path = "../stochology-audit" }
 stochology-schema = { path = "../stochology-schema" }
 stochology-core = { path = "../stochology-core" }

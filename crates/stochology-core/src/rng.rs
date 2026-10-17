@@ -1,5 +1,14 @@
 //! Gerador determinístico SplitMix64 (semente fixa, sem dependências externas).
 
+/// Um passo de SplitMix64 sobre o estado mutável: único lugar onde residem as constantes de mistura.
+pub fn passo_splitmix64(estado: &mut u64) -> u64 {
+    *estado = estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
+    let mut z = *estado;
+    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+    z ^ (z >> 31)
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Rng {
     estado: u64,
@@ -11,11 +20,7 @@ impl Rng {
     }
 
     pub fn proximo(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        passo_splitmix64(&mut self.estado)
     }
 
     /// Inteiro em [0, limite).

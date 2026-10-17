@@ -26,24 +26,17 @@ impl Sm64 {
         Sm64 { estado: s }
     }
     fn proximo_u64(&mut self) -> u64 {
-        self.estado = self.estado.wrapping_add(0x9E37_79B9_7F4A_7C15);
-        let mut z = self.estado;
-        z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
-        z ^ (z >> 31)
+        stochology_core::rng::passo_splitmix64(&mut self.estado)
     }
     fn uniforme(&mut self) -> f64 {
         (self.proximo_u64() >> 11) as f64 * (1.0 / 9007199254740992.0)
     }
 }
 
-/// Estimador de Hill com as k maiores observações positivas (mesma definição de estat.hill).
+/// Estimador de Hill com as k maiores observações positivas (delega a `stochology-h1`).
 fn hill(x: &[f64], k: usize) -> f64 {
-    let mut s: Vec<f64> = x.iter().cloned().filter(|v| *v > 0.0).collect();
-    s.sort_by(|a, b| b.partial_cmp(a).unwrap());
-    let k = k.min(s.len() - 1);
-    let soma: f64 = (0..k).map(|i| (s[i] / s[k]).ln()).sum();
-    1.0 / (soma / k as f64)
+    let n_pos = x.iter().filter(|v| **v > 0.0).count();
+    stochology_h1::hill(x, k.min(n_pos.saturating_sub(1)))
 }
 
 fn quantil(mut v: Vec<f64>, p: f64) -> f64 {
@@ -289,4 +282,18 @@ pub fn rodar() {
         "referencia: sob a taxa que o cofre mostrou (2 meses atingidos em 24, p = 1/12), a mesma janela limpa valeria {:.2} bits (razao {:.1})",
         bits_cofre, rv_cofre
     );
+}
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    #[test]
+    fn laplace_evita_zero_e_hill_recupera_cauda() {
+        assert!((laplace(0, 36) - 1.0 / 38.0).abs() < 1e-12);
+        let (_, bits, _) = bits_evidencia(36, 5.0 / 108.0);
+        assert!((bits - 2.42).abs() < 0.02);
+        let xs = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+        assert!(hill(&xs, 3).is_finite());
+    }
 }

@@ -1051,7 +1051,7 @@ Com um defeito plantado, o G6 reprova e o binario sai com codigo 1.
 ~~~text
 == Estocologia :: portoes deterministicos ==
 horizonte=h3 fichas=4 defeito=h3.voos23
-  ficha h3.voos23 severidade_min=2 aprovada=false
+  ficha h3.voos23 severidade_min=3 aprovada=false
   ficha h3.bolsa severidade_min=8 aprovada=true
   ficha h3.energia severidade_min=8 aprovada=true
   ficha h3.prisoes severidade_min=8 aprovada=true
@@ -1062,9 +1062,9 @@ G2 ok       semente fixa em 4 fichas
 G3 ok       escopo declarado: so artefato simulado
 G4 ok       Phi1-Phi5 e tipo III (falhas=0)
 G5 ok       corrente SHA-256 integra e adulteracao detectada
-G6 reprovado banca A1-A8 com piso 6 e pior 2
+G6 reprovado banca A1-A8 com piso 6 e pior 3
 G7 ok       clausula de saida declarada e A8 acima do piso
-hash_do_relatorio=bb012a0c50679cdd1d58b9717c5e94e40a005a6727d0bd0713a9b2f749718277
+hash_do_relatorio=52e0695281e1e000d084c763bead4adcde85b77930e1977e60340ef38a83fb22
 veredito: 1 portoes reprovados
 ~~~
 
@@ -1271,7 +1271,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 49 tests
+running 66 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -1287,6 +1287,23 @@ test cap03::testes::mamografia_da_uma_em_dez ... ok
 test cap04::testes::intervalo_fixo_encolhe_e_o_descontado_fica_largo ... ok
 test cap04::testes::modelo_fixo_erra_quase_sempre_e_o_modelo_com_esquecimento_cobre ... ok
 test cap04::testes::o_vies_muda_de_dois_decimos_a_seis_decimos ... ok
+test cap05::testes::jensen_na_fila_varia_acima_da_constante ... ok
+test cap06::testes::berkson_induz_correlacao_negativa_e_persistencia_reduz_n_efetivo ... ok
+test cap07::testes::jardim_inflaciona_falso_positivo_e_mao_quente_tem_vies_negativo ... ok
+test cap08::testes::identidade_de_murphy_fecha_e_platt_reduz_rel ... ok
+test cap09::testes::degraus_de_pearl_e_intersecao_icp_funcionam ... ok
+test cap10::testes::moeda_de_peters_cresce_no_conjunto_e_decai_no_tempo ... ok
+test cap11::testes::dique_gev_subestima_com_gumbel_e_chouldechova_fecha ... ok
+test cap12::testes::grafo_valido_passa_e_lentes_concordam_com_hypergraph ... ok
+test cap13::testes::banca_aprova_ficha_completa_e_reprova_quando_falta_cuidado ... ok
+test cap14::testes::ficha_completa_passa_e_defeito_aciona_portao ... ok
+test cap15::testes::livro_razao_detecta_adulteracao_no_passado ... ok
+test cap16::testes::margem_por_dia_e_maior_que_pseudorreplicacao_por_paciente ... ok
+test cap17::testes::arrasto_alavancado_e_vies_de_selecao_batem_com_stochology_h1 ... ok
+test cap18::testes::laplace_evita_zero_e_hill_recupera_cauda ... ok
+test cap19::testes::mqo_recupera_reta_e_kruskal_zera_em_grupos_identicos ... ok
+test cap20::testes::sigmoide_inverte_logito_e_brier_mede_erro_quadratico ... ok
+test cap21::testes::verificador_aceita_ficha_completa_e_recusa_decisor_generico ... ok
 test ensaio::testes::a_ponte_sintetica_so_abre_com_tudo_e_reprova_status_forjado ... ok
 test ensaio::testes::fluente_e_vies_de_sim_ficam_abaixo_do_oraculo ... ok
 test ensaio::testes::moeda_nao_tem_habilidade ... ok
@@ -1322,13 +1339,14 @@ test segunda::testes::o_registro_declara_as_classes ... ok
 test segunda::testes::o_vies_do_laco_concorda_em_duas_fontes ... ok
 test segunda::testes::os_limiares_da_multiplicidade_batem_com_alfa_sobre_m ... ok
 
-test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 66 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 59 tests
+running 60 tests
+test agentes::testes::cuidado_sem_ancora_estrutural_testa_a_fronteira_5_e_6_e_reprova_carimbo_vazio ... ok
 test agentes::testes::falta_de_cuidado_reprova_o_agente_da_faixa ... ok
 test agentes::testes::oito_agentes_aprovam_ficha_com_cuidados ... ok
 test agentes::testes::severidade_reproduz_com_a_mesma_semente ... ok
@@ -1363,7 +1381,7 @@ test invariantes::testes::sem_semente_reprova_phi1 ... ok
 test invariantes::testes::sem_unidade_o_phi5_nao_acusa_e_o_phi2_sim ... ok
 test invariantes::testes::unidade_de_semana_tambem_reprova_com_r0_agregada ... ok
 test invariantes::testes::unidade_mais_fina_que_o_dia_fica_fora_do_phi5_declarado ... ok
-test orquestrador::testes::ataque_unico_roda ... ok
+test orquestrador::testes::ataque_unico_roda_e_recusa_hash_trilha_corrompido ... ok
 test orquestrador::testes::banca_reprova_ficha_incompleta ... ok
 test resolucao::testes::a_checagem_da_implicacao_acha_o_contraexemplo_e_nao_a_violacao ... ok
 test resolucao::testes::a_conservacao_reprova_um_agregado_que_nao_bate ... ok
@@ -1389,7 +1407,7 @@ test s1::tests::reprojecao_do_teto_preserva_a_soma ... ok
 test s1::tests::soma_um_depois_do_ajuste ... ok
 test s1::tests::sufixo_longo_vence_tema_curto ... ok
 
-test result: ok. 59 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 60 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 5 tests
 test testes::a_kl_e_zero_contra_si_mesma_e_cresce_com_a_distancia ... ok
@@ -1408,9 +1426,12 @@ test testes::grupos_iguais_nao_tem_amplitude ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 0 tests
+running 3 tests
+test testes::cada_horizonte_individual_fecha_os_sete_portoes ... ok
+test testes::defeito_em_h3_voos23_reprova_portao_g6 ... ok
+test testes::sete_portoes_aprovam_horizonte_todos_com_reproducao_identica ... ok
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 9 tests
 test testes::a_cauda_pesada_estoura_o_indice_de_dispersao ... ok
