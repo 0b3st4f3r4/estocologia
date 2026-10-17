@@ -1466,10 +1466,10 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p16-ponte | DECLARACAO.md | 109910beac758a052676c928da9ef7e890d4bf60fa165b22262441795b5fa96a |
 | p16-ponte | DECLARACAO_2.md | 94045a420ab204bc21e2cc95e32faf01a64d192b626e17c850a9cd6723a2bfc7 |
 | p17-schema | DECLARACAO.md | 02b743a308b951b78b63554f860702ff7d50df0e1842504ea4388c3bb875884e |
-| p18-eixo-r | DECLARACAO.md | 4ac060b41d70dcc4097c426691a293d8b60a95aea677e4fce20e02fb03b14ed4 |
+| p18-eixo-r | DECLARACAO.md | a768543c6ee8f855ca47406567cc2010ef6278a4ed74b27e4c201c77a3f77ffa |
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
 | p20-jev | DECLARACAO.md | 0ee9163a58b8b3f8ab25a9b1bbdf853387cff332afb95b4219d3c742f125013e |
 
 Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 20 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
 
-Edicao montada: `estocologia-livro-didatico.md` com **5903 linhas** e **74847 palavras**, sha256 `03654a63abbbb94f3aa62f7a08ad97049fe646217f90328792d221386b698bac`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.
+Edicao montada: `estocologia-livro-didatico.md` com **5904 linhas** e **74861 palavras**, sha256 `98c69359c92cba3ec0bfeb4d41f87085ccb770f0bcbb0b8556f14f284c0a617f`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

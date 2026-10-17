@@ -228,7 +228,7 @@ uma semente explícita — mesma ficha e mesma semente devolvem a mesma severida
 ```rust
 use stochology_core::{AgenteA, Ficha, OrquestradorM, Severidade, SEVERIDADE_MINIMA};
 
-/// Orquestrador mestre (substitui o antigo M15).
+/// Orquestrador M: conduz o ciclo de seis estágios e a banca adversarial.
 pub struct OrquestradorM {
     pub id_sessao: String,
     pub hash_trilha: String,
@@ -503,7 +503,7 @@ A edição é escrita em `book/`, um arquivo por capítulo, e só substitui
 | Parte | Capítulos | Estado |
 | --- | --- | --- |
 | I. A arte de mirar no escuro | 1 a 4 | escritos, com laboratórios medidos |
-| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 903 linhas, 74 847 palavras, conferida caractere por caractere contra `book/` por `gerar.py --check`) |
+| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 904 linhas, 74 861 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
 | II. As armadilhas do mundo e dos dados | 5 a 8 | escritos, com laboratórios medidos |
 | III. Causa, tempo e sobrevivência | 9 a 11 | escritos, com laboratórios medidos |
 | IV. Construindo a máquina auditável | 12 a 15 | escritos, com laboratórios medidos |
@@ -562,7 +562,7 @@ regra dos arquivos novos. O que cada um virou:
 | *Plano escalável de pesquisa* (5 eixos) | eixos de maturidade, funil com poda por EVSI, escala horizontal, governança anti-sobreajuste e infraestrutura | tabela abaixo |
 | *Fundamentação: três camadas e inferência* | taxonomia de incerteza e as três camadas | Capítulos 2 e 4 do livro; seções 1 e 3 deste plano |
 | Artigo *Velhas Fronteiras, Novos Horizontes* | já era o texto canônico de `artigo/README.md` (mais novo e mais longo); a cópia baixada era versão anterior | `artigo/` |
-| *Integração de Modelos Jev à Estocologia* (conversa do Gemini) | a conferência de cada alegação contra o código: o que já existe com arquivo e comando, as divergências ($M_{15}$ e $MB_1$–$MB_8$, quatro filtros, $\Phi_1$–$\Phi_4$, *LLM-as-Jev*) e a ponte Jev-LLM como proposta declarada | `INTEGRACAO_JEV.md`; item 13 de `PROPOSTAS_DECLARADAS.md` |
+| *Integração de Modelos Jev à Estocologia* (conversa do Gemini) | a conferência de cada alegação contra o código: o que já existe com arquivo e comando, as divergências — a numeração do roteiro antigo ($M_{15}$ e $MB_1$–$MB_8$) contra a vigente ($\mathcal{M}$ e $A_1$–$A_8$), quatro filtros contra cinco, $\Phi_1$–$\Phi_4$ contra $\Phi_1$–$\Phi_5$, o *LLM-as-Jev* — e a ponte Jev-LLM como proposta declarada | `INTEGRACAO_JEV.md`; item 13 de `PROPOSTAS_DECLARADAS.md` |
 
 | Eixo de escala | O que pede | Estado no repositório |
 | --- | --- | --- |

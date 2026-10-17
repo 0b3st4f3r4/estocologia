@@ -29,6 +29,13 @@ Data da passada: **2026-10-16** (contexto de execução da sessão).
    os itens do `**Resumo.**` em `cap11.md`, `cap13.md`, `cap16.md` e `cap17.md`, o bullet do
    `**Resumo.**` em `cap03.md`, e `**A tese tem uma versão operacional.**` em `cap02.md`. Marca, número,
    ordem e afirmação continuam iguais; números e fórmulas intactos.
+9. **Instrumental de estilo, declarado por inteiro.** Os cinco scripts de `estilo/` têm função contínua e
+   nenhum é rascunho: `varredura.py` conta os maneirismos e é a base dos outros quatro; `dois_pontos.py` separa
+   prosa, tabela e cerca; `ocorrencias.py` lista as ocorrências de cada padrão com o número da linha, que é o
+   que transforma contagem em reescrita; `atualizar-indice.py` troca um dos dois blocos marcados de
+   `estilo/indice-de-repeticao.md` pela tabela recalculada, para o índice não ser transcrito à mão; e
+   `conferir-passada.py` é o portão, o único que entra na verificação obrigatória de `AGENTS.md` §V. Os quatro
+   primeiros instrumentam a passada; o quinto a cobra.
 
 ## Pendências do autor
 

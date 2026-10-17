@@ -72,3 +72,10 @@ Rodada em 2026-10-16, depois do congelamento. Código de saída entre parêntese
 | `python3 book/conferir_labs.py` | **48 blocos citados, 0 divergentes** — as 21 linhas novas conferem em `labs --resolucao`, e o bloco do eixo é o único de cada capítulo que veio do instrumento do eixo (0) |
 | `python3 book/gerar.py --check` | a rampa de três degraus dos 21 capítulos confere, com 5 903 linhas e 74 847 palavras (0) |
 | `python3 book/conferir_livro.py` | partes, capítulos, cercas e ordem conferem (0) |
+
+**Declaração de divergência (2026-10-17T08:10Z).** A linha do `gerar.py --check` acima é registro datado de
+2026-10-16 e fica como está: naquele dia o livro montado tinha mesmo **5 903 linhas e 74 847 palavras**. O
+registro deixou de reproduzir em 2026-10-17, quando `book/cap13.md` ganhou duas linhas na retificação do trecho
+sobre o rótulo M15 — o mesmo comando imprime hoje **5 904 linhas e 74 861 palavras**, com código 0. A diferença é
+de duas linhas de prosa, não de medição: nenhum número deste ponto muda. O arquivo foi re-selado nesta data, e o
+hash anterior da declaração (`4ac060b4…`) fica registrado aqui em vez de sumir com a linha do lacre.

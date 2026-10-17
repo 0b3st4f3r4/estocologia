@@ -6,9 +6,18 @@ Uso:
     python3 book/gerar.py              # escreve estocologia-livro-didatico.md (so se os 21 existirem)
     python3 book/gerar.py --saida x.md # escreve em outro caminho
 
-O --check tem duas cobrancas: os 21 capitulos na rampa de 3 degraus, e o texto montado
-igual, caractere por caractere, ao arquivo em disco. A segunda e a que impede a edicao
-de envelhecer atras de book/: um livro que monta na memoria e nao esta no disco reprova.
+O --check tem tres cobrancas: os 21 capitulos na rampa de 3 degraus, o texto montado
+igual, caractere por caractere, ao arquivo em disco, e as contagens declaradas nos arquivos
+canonicos iguais as que o mesmo montar() calcula. A segunda impede a edicao de envelhecer
+atras de book/; a terceira impede o numero escrito a mao (README, PLAN, declaracao, registro)
+de sobreviver ao crescimento do livro — que foi exatamente o defeito da retificacao de
+2026-10-17: o livro ganhou duas linhas e tres documentos seguiram afirmando a contagem velha,
+sem instrumento nenhum reprovando.
+
+O que a terceira cobranca le sao os pares "N linhas ... N palavras" dos arquivos canonicos.
+Registro datado nao entra na lista: um documento que diz "rodada em 2026-10-16, com 5 652
+linhas" esta afirmando o passado, e reescreve-lo seria apagar a data. Por isso o conferidor
+olha o presente e a declaracao datada declara a divergencia.
 """
 
 from __future__ import annotations
@@ -24,6 +33,13 @@ LIVRO = RAIZ / "book"
 DESTINO = RAIZ / "estocologia-livro-didatico.md"
 
 EXIGIDOS = ["## Capítulo ", "### Degrau 1", "### Degrau 2", "### Degrau 3", "**Exercícios.**", "**Resumo.**"]
+
+# Onde o numero da edicao e afirmacao sobre esta arvore, e nao registro de uma rodada datada.
+CANONICOS = ["README.md", "PLAN.md", "DECLARACAO_DA_EDICAO.md", "RESULTADOS_RUST.md"]
+
+# O par "N linhas ... N palavras" e a forma em que a contagem e declarada: a linha sozinha
+# aparece em outros contextos ("353 linhas atras"), e o par nao.
+CONTAGEM = re.compile(r"(?P<linhas>\d[\d\s.]*)\s*linhas[^.;:\n]{0,60}?(?P<palavras>\d[\d\s.]*)\s*palavras")
 
 
 def arquivos() -> list[Path]:
@@ -91,6 +107,39 @@ def conferir_destino(texto: str, destino: Path) -> list[str]:
     return problemas
 
 
+def numero(bruto: str) -> int:
+    """A contagem escrita como o texto a escreve: "5 904", "5904" e "5.904" sao o mesmo numero."""
+    return int(re.sub(r"[\s.]", "", bruto))
+
+
+def conferir_contagens(texto: str) -> list[str]:
+    """O portao que olha o numero declarado: o que os documentos afirmam e o que o montar() mede."""
+    medido_linhas = len(texto.splitlines())
+    medido_palavras = len(re.findall(r"\w+", texto))
+    problemas: list[str] = []
+    for nome in CANONICOS:
+        caminho = RAIZ / nome
+        if not caminho.is_file():
+            problemas.append(f"{nome}: arquivo canonico ausente da arvore")
+            continue
+        achados = 0
+        for numero_linha, linha in enumerate(caminho.read_text(encoding="utf-8").splitlines(), 1):
+            for achado in CONTAGEM.finditer(linha):
+                achados += 1
+                declarado = (numero(achado.group("linhas")), numero(achado.group("palavras")))
+                if declarado != (medido_linhas, medido_palavras):
+                    problemas.append(
+                        f"{nome}:{numero_linha}: declara {declarado[0]} linhas e {declarado[1]} palavras; "
+                        f"o texto montado tem {medido_linhas} linhas e {medido_palavras} palavras"
+                    )
+        if not achados:
+            problemas.append(
+                f"{nome}: nenhuma contagem declarada (o par 'N linhas ... N palavras') encontrada — "
+                "documento canonico sem a medida que afirma"
+            )
+    return problemas
+
+
 def rotulo(caminho: Path) -> str:
     try:
         return str(caminho.resolve().relative_to(RAIZ))
@@ -122,6 +171,17 @@ def main() -> int:
             print("remonte com: python3 book/gerar.py")
             return 1
         print(f"{rotulo(DESTINO)} confere caractere por caractere com o texto montado")
+        contagens = conferir_contagens(texto)
+        if contagens:
+            print("a contagem declarada nao e a contagem montada:")
+            for c in contagens:
+                print(f"  - {c}")
+            print("consertar o numero no documento (reverter o livro para o numero velho nao e conserto)")
+            return 1
+        print(
+            f"contagem declarada confere em {', '.join(CANONICOS)}: "
+            f"{len(texto.splitlines())} linhas e {len(re.findall(r'\w+', texto))} palavras"
+        )
         return 0
 
     if problemas:

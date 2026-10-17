@@ -234,8 +234,9 @@ afirmação dogmática.
 
 **Declaração de divergência.** A edição anterior deste livro fala em "oito faixas e um orquestrador M15". O
 texto do repositório (`PLAN.md`) chama o orquestrador de o orquestrador e a implementação
-(`OrquestradorM`) também; a sigla "M15" sobrevive no `AGENTS.md` e em trechos antigos. São o
-mesmo objeto, e este livro usa o orquestrador por ser o nome do código. O laboratório desta edição mede as
+(`OrquestradorM`) também; o rótulo M15, como os rótulos MB da banca, é histórico e está declarado no
+`AGENTS.md` §VIII, junto com a numeração ME do roteiro. São o mesmo objeto, e este livro usa o orquestrador
+por ser o nome do código. O laboratório desta edição mede as
 severidades a partir dos **oitos cuidados da ficha** (bandeiras verdadeiro/falso) e não dos ataques em si:
 rodar o ataque é a maquinaria do repositório, e o número que a banca publica é o da severidade. Por isso os
 valores 8, 9 e 10 aqui reproduzem o pior = 8 do portão, e não um relatório de ataque executado.
