@@ -247,6 +247,10 @@ Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e pub
 
 -- o runner local dos pesos congelados --
   RECUSADO: hash nao declarado em fundo/p20-jev/pesos/SHA256 | o operador declara o sha256 antes de rodar
+
+-- a calibracao: o Brier do modelo congelado --
+  sem conjunto rotulado: hash nao declarado em fundo/p20-jev/calibracao/SHA256 | o Brier exige pares com procedencia declarada antes de rodar
+  regra declarada: 0.0 e 1.0 recusam, id fora de ordem recusa, desfecho fora de 0 e 1 recusa, abaixo de 30 pares o escore nao e publicado, abstencao sai do denominador
   ensaio do runner (nao sao os pesos reais): 0ea082454dea3bc3 | 4 respostas | G1 identicas: true | abstencoes 0.0% | 87.0 tokens por chamada | 0.0 ms por chamada
   leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo
 
@@ -1328,7 +1332,15 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 44 tests
+running 52 tests
+test calibracao::testes::a_abstencao_sai_do_denominador_e_entra_na_taxa ... ok
+test calibracao::testes::amostra_abaixo_do_minimo_nao_publica_escore ... ok
+test calibracao::testes::desfecho_que_nao_e_0_nem_1_e_artefato_ilegivel ... ok
+test calibracao::testes::id_fora_de_ordem_recusa ... ok
+test calibracao::testes::o_conjunto_rotulado_le_e_o_brier_confere ... ok
+test calibracao::testes::o_portao_do_hash_vale_para_o_conjunto_rotulado ... ok
+test calibracao::testes::probabilidade_no_extremo_recusa ... ok
+test calibracao::testes::sem_dado_nao_ha_brier ... ok
 test crenca::testes::a_evidencia_de_ficha_move_a_crenca_para_a_camada_da_ficha ... ok
 test crenca::testes::evidencia_invalida_nao_zera_o_estado ... ok
 test crenca::testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
@@ -1374,7 +1386,7 @@ test runner::testes::pedido_sem_resposta_congelada_vira_abstencao ... ok
 test runner::testes::sem_hash_declarado_a_ponte_nao_roda ... ok
 test runner::testes::um_byte_trocado_no_artefato_recusa_a_ponte ... ok
 
-test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok

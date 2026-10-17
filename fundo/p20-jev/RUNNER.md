@@ -14,6 +14,8 @@ não pede escuta: pede três arquivos, uma ordem de operações e um registro.
 | a prova de determinismo | `ponte.rs`, `provar_determinismo` | fecha no runner: duas execuções, o mesmo `sha256` |
 | a adequação do espaço | `ponte.rs`, `adequacao_do_espaco` | fecha: pedido sem resposta congelada abstém e entra na conta |
 | a regra de pontuação | `runner.rs`, `brier` | implementada; o número sai quando houver conjunto rotulado |
+| o leitor do conjunto rotulado | `calibracao.rs`, `ler_desfechos` e `carregar` | fecha: formato estrito, id sequencial, amostra mínima de 30, abstencao fora do denominador |
+| **o conjunto rotulado** | `fundo/p20-jev/calibracao/desfechos.tsv` | **ausente**: é o desfecho observado que só o operador traz |
 | **os pesos** | `fundo/p20-jev/pesos/modelo.congelado` | **ausente**: é o que falta, e é o que só o operador resolve |
 
 O instrumento prova o caminho inteiro com um artefato de ensaio que ele escreve em diretório temporário e apaga:
@@ -73,16 +75,49 @@ O que invalida o artefato, e o runner recusa em vez de tolerar:
 | um byte trocado no artefato | `PesosComHashDiferente` — a ponte não roda |
 | cabeçalho errado, bloco sem `@end`, chave que não é `sha256`, bloco vazio | `ArtefatoIlegivel` — a ponte não roda |
 
-## 4. O que fica declarado, e não é pendência de código
+## 4. O conjunto rotulado que alimenta o Brier
+
+O Brier não é medido contra o ensaio: ele precisa de desfecho observado. O arquivo canônico é
+`fundo/p20-jev/calibracao/desfechos.tsv`, TSV em UTF-8, com este cabeçalho exato:
+
+```text
+id	caso_id	probabilidade_declarada	desfecho_observado	fonte_desfecho
+1	C-001	0.7500	1	registro-hospitalar-2026
+2	C-002	0.2000	0	registro-hospitalar-2026
+```
+
+| campo | o que o leitor cobra |
+| --- | --- |
+| `id` | inteiro, sequencial de 1 a N; fora de ordem é `ArtefatoIlegivel` |
+| `caso_id` | não vazio; é a chave de junção com o pedido do artefato |
+| `probabilidade_declarada` | `f64` no intervalo **aberto** (0, 1); 0.0 e 1.0 estritos são `ExtremoDogmatico` |
+| `desfecho_observado` | estritamente `0` ou `1`; outro valor é `ArtefatoIlegivel` |
+| `fonte_desfecho` | não vazia; nomeia o registro exógeno de onde o desfecho veio |
+
+O hash do arquivo é declarado em `calibracao/SHA256`, na mesma forma e com a mesma regra de tempo do artefato
+dos pesos: **antes** da primeira execução. Trocar uma linha depois invalida o conjunto, e o instrumento recusa em
+vez de recalcular.
+
+As três regras do escore, declaradas antes de olhar o número:
+
+1. **Sem par, sem escore.** N = 0 devolve `f64::NAN` e a leitura diz "Brier nao publicado".
+2. **Amostra mínima de 30 pares.** Abaixo disso o instrumento devolve `AmostraInsuficiente` e não publica escore.
+3. **Abstenção não vira 0.5.** O caso em que o modelo absteve sai do denominador do Brier condicional e entra na
+   taxa de abstenção, reportada ao lado do escore.
+
+Escrever o arquivo com o código, em vez de à mão: `calibracao::escrever_desfechos(dir, &[(caso_id, p, desfecho, fonte), …])`
+grava o TSV e o `SHA256` no mesmo passo. Ler e conferir: `calibracao::carregar(dir, abstencoes, AMOSTRA_MINIMA)`.
+
+## 5. O que fica declarado, e não é pendência de código
 
 - **Tensor não é lido.** O artefato é a tabela; o carregador de peso bruto fica como passo seguinte, com o formato
   declarado antes de existir.
 - **O custo é contado em palavras do documento devolvido**, não no tokenizador do modelo. O número está declarado,
   e a comparação com o custo real entra quando o artefato real trouxer a contagem do próprio modelo.
-- **O Brier exige conjunto rotulado.** Sem ele não há pontuação, e a ponte diz isso em vez de publicar número de
-  ensaio como se fosse calibração.
+- **O Brier exige conjunto rotulado.** O leitor existe (§4) com as três regras; o que falta é o arquivo com
+  desfecho observado. Sem ele a ponte diz isso em vez de publicar número de ensaio como se fosse calibração.
 
-## 5. Verificação do que aqui se afirma
+## 6. Verificação do que aqui se afirma
 
 ```bash
 cargo test -p stochology-s2      # os testes do runner: carga, hash, adulteração, formato, G1, abstenção, Brier

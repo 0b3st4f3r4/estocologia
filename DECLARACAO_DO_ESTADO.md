@@ -43,7 +43,7 @@ quando `book/` não existe naquele commit —, e o registro de cada uma está em
 | Elicitação SHELF (3) | as outras duas pessoas por domínio e o especialista de fora do programa | gente | sem data; a trilha do primeiro especialista está fechada em cinco domínios |
 | Voz de quem paga (5) | a escuta dos sete grupos afetados, com registro assinado | gente | **2026-12-15** |
 | Tese da ponte em escala (9) | escolhedor de casos de fora, analistas humanos e juiz humano | gente | **2027-01-14**; sem eles, a tese fica não sustentada em definitivo |
-| Ponte Jev-LLM (13) | **os pesos**, com o `sha256` declarado antes de rodar. O runner local existe desde 2026-10-17 (`crates/stochology-s2/src/runner.rs`, sete testes, manual em `fundo/p20-jev/RUNNER.md`) | o operador, com um artefato | sem data |
+| Ponte Jev-LLM (13) | **os pesos**, com o `sha256` declarado antes de rodar, e **o conjunto rotulado** de `fundo/p20-jev/calibracao/desfechos.tsv`. O runner existe desde 2026-10-17 (`crates/stochology-s2/src/runner.rs`) e o leitor do Brier também (`calibracao.rs`, amostra mínima de 30, abstenção fora do denominador); o manual do operador é `fundo/p20-jev/RUNNER.md` | o operador, com dois arquivos | sem data |
 
 **O que os quatro não têm em comum.** Três dependem de **gente de fora do programa** e não se resolvem com código:
 o que falta é consentimento, escuta e julgamento cego, e é por isso que os instrumentos travam a caixa em vez de

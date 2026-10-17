@@ -292,7 +292,7 @@ pub fn rodar() {
             let (tk, msq) = c2.por_chamada();
             println!("  adequacao: {} pedidos | {} abstencoes ({:.1}%) | {}", ad.pedidos, ad.abstencoes, ad.fracao * 100.0, ad.veredito);
             println!("  custo medido: {tk:.1} tokens por chamada | {msq:.1} ms por chamada");
-            println!("  Brier: a regra esta em runner::brier e o numero sai quando houver conjunto rotulado; sem pares, nao ha pontuacao");
+            println!("  Brier: a regra esta em runner::brier e o conjunto rotulado em calibracao::carregar, com amostra minima e abstencao contada");
         }
         Err(recusa) => match &recusa {
             Recusa::HashNaoDeclarado(c) => println!("  RECUSADO: hash nao declarado em {c} | o operador declara o sha256 antes de rodar"),
@@ -302,6 +302,21 @@ pub fn rodar() {
             outra => println!("  RECUSADO: {outra:?}"),
         },
     }
+    println!("\n-- a calibracao: o Brier do modelo congelado --");
+    match crate::calibracao::carregar(
+        crate::calibracao::DIR_PADRAO,
+        0,
+        crate::calibracao::AMOSTRA_MINIMA,
+    ) {
+        Ok(cal) => println!("  {}", cal.leitura()),
+        Err(recusa) => match &recusa {
+            Recusa::HashNaoDeclarado(c) => println!("  sem conjunto rotulado: hash nao declarado em {c} | o Brier exige pares com procedencia declarada antes de rodar"),
+            Recusa::PesosAusentes(c) => println!("  sem conjunto rotulado: {c} ausente | sem par (probabilidade, desfecho) nao ha calibracao, e o instrumento nao inventa uma"),
+            outra => println!("  conjunto rotulado recusado: {outra:?}"),
+        },
+    }
+    println!("  regra declarada: 0.0 e 1.0 recusam, id fora de ordem recusa, desfecho fora de 0 e 1 recusa, abaixo de {} pares o escore nao e publicado, abstencao sai do denominador", crate::calibracao::AMOSTRA_MINIMA);
+
     let dir = std::env::temp_dir().join(format!("p20-jev-ensaio-{}", std::process::id()));
     match crate::runner::escrever_artefato_de_ensaio(&dir, &["caso 1", "caso 2", "caso 3", "caso 4"]) {
         Ok(hash) => match crate::runner::RunnerLocal::carregar(&dir.to_string_lossy()) {
