@@ -75,7 +75,8 @@ def manifesto() -> str:
             if arq.name != "DECLARACAO.md":
                 reemitidas += 1
     fonte = (RAIZ / "crates" / "stochology-book" / "src" / "main.rs").read_text(encoding="utf-8")
-    instrumentos = sorted(set(re.findall(r'"(--[a-z0-9]+)"', fonte)))
+    # A flag pode ter mais de um hifen (--ensaio-shelf); a contagem tem de ver a flag inteira.
+    instrumentos = sorted(set(re.findall(r'"(--[a-z0-9-]+)"', fonte)))
     capitulos = len(list((RAIZ / "book").glob("cap*.md")))
     pontos = len(list((RAIZ / "fundo").glob("p*")))
     crates = len(list((RAIZ / "crates").glob("stochology-*")))
@@ -132,6 +133,9 @@ def main() -> int:
         "| BTonda --checkBT | os seis portoes do motor ondulatorio: L^(q) hermitiano, unidade de Cayley, cadeia de selos, determinismo e seta causal |\n"
         "| BTonda --defeito mutacaoBT | prova negativa da cadeia de selos: sai com 1 |\n"
         "| BTonda --defeito inversaoBT | prova negativa da seta causal: sai com 1 |\n"
+        "| BTlabs --ensaio-shelfBT | o piso sintetico do painel SHELF: quatro respondentes declarados nos itens reais |\n"
+        "| BTlabs --ensaio-escutaBT | a aritmetica da cobertura e o limite do portao da escuta |\n"
+        "| BTlabs --ensaio-ponteBT | papeis, casos e status no portao da ponte em escala |\n"
         "| BTcargo test --workspaceBT | os testes dos dezesseis crates |\n"
     )
     partes.append("## 1. O H0 real, em Rust\n")
@@ -264,6 +268,28 @@ def main() -> int:
         "Prova negativa do motor: a seta causal",
         [str(ONDA), "--defeito", "inversao"],
         "Com um elo da matriz sinaptica invertido, o G6 reprova e o binario sai com codigo 1.",
+    ))
+    partes.append(bloco(
+        "Ensaio sintetico: o painel SHELF",
+        [str(BIN), "--ensaio-shelf"],
+        "Quatro respondentes declarados, pontuados nos cinco pools reais do pre-teste pelo mesmo avaliador que o\n"
+        "painel usa. Rotulo SINTETICO em toda linha: nada aqui conta cobertura. O que se mede e o piso que um\n"
+        "painel real precisa bater, e o respondente fluente (p = 0,75 sem informacao) fica com habilidade\n"
+        "negativa. Divergencia declarada: o oraculo perfeito reprova por 0/0 na guarda de habilidade.",
+    ))
+    partes.append(bloco(
+        "Ensaio sintetico: a escuta de quem paga o erro",
+        [str(BIN), "--ensaio-escuta"],
+        "A aritmetica da cobertura com registro sintetico (0, 1, 2 e 3 grupos), o roteiro congelado contra o\n"
+        "vocabulario proibido e o limite do portao: ele confere campo, nao proveniencia, e sete registros\n"
+        "fabricados abrem a caixa. Fica declarado que a cobertura real precisa de hash da transcricao assinada.",
+    ))
+    partes.append(bloco(
+        "Ensaio sintetico: a ponte em escala",
+        [str(BIN), "--ensaio-ponte"],
+        "Quatro registros sinteticos mostram o que o portao separa: papel preenchido, caso escolhido e status\n"
+        "declarado. Status sustentada com zero caso e reprovado, e o teste justo so abre a caixa com os quatro\n"
+        "papeis designados e os doze casos.",
     ))
     partes.append("## 4. Os testes\n")
     partes.append(bloco("Os dezesseis crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))

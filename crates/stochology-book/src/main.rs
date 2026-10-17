@@ -3,7 +3,7 @@
 //! Uso: ~cargo run --release --bin labs -- --cap 4~
 //!      ~cargo run --release --bin labs -- --todos~
 
-use stochology_book::{banco, cadeia, escuta, fila, genetica, jev, ponte, segunda};
+use stochology_book::{banco, cadeia, ensaio, escuta, fila, genetica, jev, ponte, segunda};
 use stochology_core::s1::{Categoria, S1};
 use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
@@ -34,6 +34,9 @@ fn main() {
     let mut segunda_flag = false;
     let mut jev_flag = false;
     let mut medida_flag = false;
+    let mut ensaio_shelf = false;
+    let mut ensaio_escuta = false;
+    let mut ensaio_ponte = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -88,6 +91,9 @@ fn main() {
             "--segunda" => segunda_flag = true,
             "--jev" => jev_flag = true,
             "--medida" => medida_flag = true,
+            "--ensaio-shelf" => ensaio_shelf = true,
+            "--ensaio-escuta" => ensaio_escuta = true,
+            "--ensaio-ponte" => ensaio_ponte = true,
             _ => {}
         }
         i += 1;
@@ -150,6 +156,27 @@ fn main() {
         return;
     } else if jev_flag {
         jev::rodar();
+        return;
+    }
+    if ensaio_shelf {
+        match ensaio::shelf() {
+            Ok(texto) => print!("{texto}"),
+            Err(e) => println!("ensaio do painel nao rodou: {e}"),
+        }
+        return;
+    }
+    if ensaio_escuta {
+        match ensaio::escuta() {
+            Ok(texto) => print!("{texto}"),
+            Err(e) => println!("ensaio da escuta nao rodou: {e}"),
+        }
+        return;
+    }
+    if ensaio_ponte {
+        match ensaio::ponte() {
+            Ok(texto) => print!("{texto}"),
+            Err(e) => println!("ensaio da ponte nao rodou: {e}"),
+        }
         return;
     }
     if todos {

@@ -5,7 +5,7 @@ Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob inc
 Este repositório guarda a pesquisa conduzida segundo a arquitetura do projeto (hipergrafo tipado, camadas
 Mundo/Modelo/Agente, banca adversarial A1–A8, orquestrador M, fichas estruturadas, invariantes Φ1–Φ5), do H0 ao
 H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenharia é **Rust** (Edition 2024):
-**dezesseis crates**, **344 testes**, **vinte e um instrumentos** no binário `labs` e **sete portões** no binário `portoes`
+**dezesseis crates**, **350 testes**, **vinte e quatro instrumentos** no binário `labs` e **sete portões** no binário `portoes`
 que sabem reprovar.
 
 ## O que está aqui
@@ -37,7 +37,7 @@ Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz
 
 | Medida | Valor | Comando |
 |---|---|---|
-| Testes | **344 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
+| Testes | **350 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
 | Instrumentos | **20** no `labs`, todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
 | Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
 | Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |

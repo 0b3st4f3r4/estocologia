@@ -24,6 +24,9 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `onda --check` | os seis portoes do motor ondulatorio: L^(q) hermitiano, unidade de Cayley, cadeia de selos, determinismo e seta causal |
 | `onda --defeito mutacao` | prova negativa da cadeia de selos: sai com 1 |
 | `onda --defeito inversao` | prova negativa da seta causal: sai com 1 |
+| `labs --ensaio-shelf` | o piso sintetico do painel SHELF: quatro respondentes declarados nos itens reais |
+| `labs --ensaio-escuta` | a aritmetica da cobertura e o limite do portao da escuta |
+| `labs --ensaio-ponte` | papeis, casos e status no portao da ponte em escala |
 | `cargo test --workspace` | os testes dos dezesseis crates |
 
 ## 1. O H0 real, em Rust
@@ -1125,6 +1128,125 @@ Com um elo da matriz sinaptica invertido, o G6 reprova e o binario sai com codig
   causalidade insuficiente em Fluxonomia -> Crononomia: assimetria -0.7500
 ~~~
 
+### Ensaio sintetico: o painel SHELF
+
+Quatro respondentes declarados, pontuados nos cinco pools reais do pre-teste pelo mesmo avaliador que o
+painel usa. Rotulo SINTETICO em toda linha: nada aqui conta cobertura. O que se mede e o piso que um
+painel real precisa bater, e o respondente fluente (p = 0,75 sem informacao) fica com habilidade
+negativa. Divergencia declarada: o oraculo perfeito reprova por 0/0 na guarda de habilidade.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-shelf
+~~~
+
+~~~text
+== ensaio sintetico :: o painel SHELF, com respondente declarado ==
+rotulo: SINTETICO. Nenhuma linha abaixo conta cobertura de painel; o que se mede e o piso de um
+respondente fluente e sem calibracao, para o painel real ter contra o que ser comparado.
+
+respondente            pool de itens                n    brier habilid.      ece  aprovado
+moeda p=0.50           desenvolvimento_preston     22   0.2500  -0.0083   0.2727       nao
+fluente p=0.75         desenvolvimento_preston     22   0.2443  -0.0558   0.2500       nao
+vies-de-sim p=0.90     desenvolvimento_preston     22   0.4100  -0.6400   0.4000       nao
+especialista p=0.85/0.50 desenvolvimento_preston     22   0.1156   0.3419   0.1750       nao
+oraculo p=0.99         desenvolvimento_preston     22   0.0001   0.0000   0.0100       nao
+moeda p=0.50           direito_prisoes             38   0.2500  -0.0256   0.2895       nao
+fluente p=0.75         direito_prisoes             38   0.2072  -0.0076   0.0921       nao
+vies-de-sim p=0.90     direito_prisoes             38   0.3679  -0.4881   0.4263       nao
+especialista p=0.85/0.50 direito_prisoes             38   0.0644  -0.2917   0.1618       nao
+oraculo p=0.99         direito_prisoes             38   0.0001   0.0000   0.0100       nao
+moeda p=0.50           direito_teto_beneficio      30   0.2500  -0.0181   0.2667       nao
+fluente p=0.75         direito_teto_beneficio      30   0.3458  -0.4084   0.3667       nao
+vies-de-sim p=0.90     direito_teto_beneficio      30   0.3567  -0.4525   0.3333       nao
+especialista p=0.85/0.50 direito_teto_beneficio      30   0.1135   0.1828   0.1567       nao
+oraculo p=0.99         direito_teto_beneficio      30   0.0001   0.0000   0.0100       nao
+moeda p=0.50           educacao_star               30   0.2500  -0.0766   0.2667       nao
+fluente p=0.75         educacao_star               30   0.3125  -0.2500   0.3000       nao
+vies-de-sim p=0.90     educacao_star               30   0.4100  -0.6400   0.4000       nao
+especialista p=0.85/0.50 educacao_star               30   0.0832   0.4802   0.1767       nao
+oraculo p=0.99         educacao_star               30   0.0001   0.0000   0.0100       nao
+moeda p=0.50           h1_real_c                   30   0.2500  -0.2784   0.3000       nao
+fluente p=0.75         h1_real_c                   30   0.3292  -0.3225   0.2833       nao
+vies-de-sim p=0.90     h1_real_c                   30   0.4100  -0.6400   0.4000       nao
+especialista p=0.85/0.50 h1_real_c                   30   0.0528   0.1509   0.1433       nao
+oraculo p=0.99         h1_real_c                   30   0.0001   0.0000   0.0100       nao
+
+respondente            todos os pools               n    brier habilid.      ece  aprovado
+moeda p=0.50           todos os pools             150   0.2500  -0.0310   0.1200       nao
+fluente p=0.75         todos os pools             150   0.2858  -0.1565   0.2067       nao
+vies-de-sim p=0.90     todos os pools             150   0.3887  -0.5591   0.3733       nao
+especialista p=0.85/0.50 todos os pools             150   0.0832   0.2803   0.1200       nao
+oraculo p=0.99         todos os pools             150   0.0001   0.0000   0.0100       nao
+
+Leitura: o respondente fluente declara 0,75 sem saber nada. Se ele passa no mesmo limiar que o
+painel usa, o limiar mede confianca declarada e nao conhecimento. O especialista mostra o piso que um
+painel real precisa bater: habilidade positiva com 80% dos itens sabidos e o resto chutado.
+Divergencia declarada: o oraculo perfeito aparece com habilidade 0 e reprovado, porque com acerto 1 a
+variancia do clima e zero e a razao 0/0 e lida como 0 pela guarda do avaliador.
+~~~
+
+### Ensaio sintetico: a escuta de quem paga o erro
+
+A aritmetica da cobertura com registro sintetico (0, 1, 2 e 3 grupos), o roteiro congelado contra o
+vocabulario proibido e o limite do portao: ele confere campo, nao proveniencia, e sete registros
+fabricados abrem a caixa. Fica declarado que a cobertura real precisa de hash da transcricao assinada.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-escuta
+~~~
+
+~~~text
+== ensaio sintetico :: a escuta de quem paga o erro ==
+rotulo: SINTETICO. Os registros abaixo sao construidos no codigo; nenhum conta cobertura.
+
+registro real: 7 decisoes | cobertura 0 de 7 | minimo 2 | CAIXA LACRADA
+
+aritmetica da cobertura, com registro sintetico:
+  0 grupo(s) ouvido(s) | cobertura 0 de 7 | minimo 2 | CAIXA LACRADA
+  1 grupo(s) ouvido(s) | cobertura 1 de 7 | minimo 2 | CAIXA LACRADA
+  2 grupo(s) ouvido(s) | cobertura 2 de 7 | minimo 2 | CAIXA ABERTA
+  3 grupo(s) ouvido(s) | cobertura 3 de 7 | minimo 2 | CAIXA ABERTA
+
+-- o limite do portao: ele confere campo, nao proveniencia --
+  sete registros fabricados, com nome plausivel e arquivo de transcricao: cobertura 7 de 7 | CAIXA ABERTA
+  leitura: o portao nao distingue transcricao assinada de transcricao inventada, porque so olha os
+campos. A cobertura real precisa de proveniencia -- hash da transcricao assinada, encadeado no
+registro de governanca -- e isso nao existe hoje. Fica declarado como o proximo campo do registro:
+hash_da_transcricao, conferido como os lacres, e nao um novo carimbo de confianca.
+
+-- o roteiro congelado contra o vocabulario proibido --
+  Qual e o seu pior cenario que ainda e plausivel?                       sem vazamento
+  O que faria voce recusar essa intervencao?                             sem vazamento
+  Quando essa politica falha, quem de fato arca com o custo?             sem vazamento
+  perguntas com vazamento de vocabulario: 0 de 3
+~~~
+
+### Ensaio sintetico: a ponte em escala
+
+Quatro registros sinteticos mostram o que o portao separa: papel preenchido, caso escolhido e status
+declarado. Status sustentada com zero caso e reprovado, e o teste justo so abre a caixa com os quatro
+papeis designados e os doze casos.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --ensaio-ponte
+~~~
+
+~~~text
+== ensaio sintetico :: a tese da ponte em escala ==
+rotulo: SINTETICO. Nenhum registro abaixo conta caso escolhido nem papel designado.
+
+registro real: 6 papeis | pendentes ["escolhedor_dos_casos", "analistas_braco_A", "analistas_braco_B", "juiz", "casos (0 de 12)"] | casos faltando 12 | status "nao sustentada" | TESE NAO SUSTENTADA
+
+registros sinteticos:
+  nenhum papel, nenhum caso              papeis 0 de 4 | casos  0 de 12 | status "nao sustentada": caixa fechada
+  papeis completos, casos faltando       papeis 4 de 4 | casos  0 de 12 | status "em teste": caixa fechada | DIVERGENCIA: status em teste sem os papeis designados e os casos no minimo
+  teste justo montado                    papeis 4 de 4 | casos 12 de 12 | status "em teste": caixa aberta
+  status forjado sem o teste justo       papeis 0 de 4 | casos  0 de 12 | status "sustentada": caixa fechada | DIVERGENCIA: status declarado "sustentada" com o teste justo por fazer: a tese so muda de estado depois do resultado do juiz
+
+Leitura: o portao separa tres coisas que um parecer confunde -- papel preenchido, caso escolhido
+e status declarado. Status "sustentada" com zero caso e reprovado, como o registro real ja reprova.
+~~~
+
 ## 4. Os testes
 
 ### Os dezesseis crates
@@ -1149,7 +1271,7 @@ test testes::sha256_bate_com_os_vetores_conhecidos ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 43 tests
+running 49 tests
 test banco::testes::agente_a_mais_melhora_o_nivel ... ok
 test banco::testes::erlang_c_cresce_com_a_carga ... ok
 test banco::testes::escalar_pela_meta_devolve_meta ... ok
@@ -1165,6 +1287,12 @@ test cap03::testes::mamografia_da_uma_em_dez ... ok
 test cap04::testes::intervalo_fixo_encolhe_e_o_descontado_fica_largo ... ok
 test cap04::testes::modelo_fixo_erra_quase_sempre_e_o_modelo_com_esquecimento_cobre ... ok
 test cap04::testes::o_vies_muda_de_dois_decimos_a_seis_decimos ... ok
+test ensaio::testes::a_ponte_sintetica_so_abre_com_tudo_e_reprova_status_forjado ... ok
+test ensaio::testes::fluente_e_vies_de_sim_ficam_abaixo_do_oraculo ... ok
+test ensaio::testes::moeda_nao_tem_habilidade ... ok
+test ensaio::testes::o_registro_real_esta_lacrado_e_o_sintetico_de_sete_abre ... ok
+test ensaio::testes::os_cinco_pools_reais_tem_itens ... ok
+test ensaio::testes::os_tres_ensaios_rodam_e_se_rotulam_sinteticos ... ok
 test escuta::testes::a_cobertura_minima_abre_a_caixa ... ok
 test escuta::testes::a_conducao_declarada_e_protocolo_cego ... ok
 test escuta::testes::a_decisao_emitida_sem_ninguem_ouvido_reprova ... ok
@@ -1194,7 +1322,7 @@ test segunda::testes::o_registro_declara_as_classes ... ok
 test segunda::testes::o_vies_do_laco_concorda_em_duas_fontes ... ok
 test segunda::testes::os_limiares_da_multiplicidade_batem_com_alfa_sobre_m ... ok
 
-test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 49 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1652,6 +1780,6 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
 | p20-jev | DECLARACAO.md | 6dd50c8070a6d9b49860021483f3052d6356a5d890437578743cf2ea2abf0578 |
 
-Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 21 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 16
+Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 24 (--banco,--cap,--elicitacao,--ensaio-escuta,--ensaio-ponte,--ensaio-shelf,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 16
 
 Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75209 palavras**, sha256 `91166f4b9123ab8bb70a148e83eccb55d2de14151422f1c87eb95b5d0879fdbc`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

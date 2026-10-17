@@ -77,6 +77,9 @@ cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23  # prova
 cargo run --release --bin onda -- --check            # os seis portões do motor ondulatório
 cargo run --release --bin onda -- --defeito mutacao  # prova negativa da cadeia de selos: sai com 1
 cargo run --release --bin onda -- --defeito inversao # prova negativa da seta causal: sai com 1
+cargo run --release --bin labs -- --ensaio-shelf      # o piso sintetico do painel SHELF
+cargo run --release --bin labs -- --ensaio-escuta     # a aritmetica da cobertura e o limite do portao da escuta
+cargo run --release --bin labs -- --ensaio-ponte      # papeis, casos e status no portao da ponte
 python3 book/gerar.py --check                       # a rampa E o disco: o arquivo tem de ser o livro montado
 python3 book/conferir_labs.py                       # cada bloco citado contra o instrumento
 python3 book/conferir_livro.py                      # partes, capítulos, cercas e ordem
@@ -104,6 +107,15 @@ produz número publicado e não substitui nenhum laboratório. As duas divergên
 originou estão declaradas em `crates/stochology-wave/src/lib.rs` — a frustração `<Psi, L Psi>` não serve de
 gatilho de conflito, porque na antifase simétrica ela vale zero exatamente quando o conflito existe, e o portão
 da plasticidade cobra ganho de ressonância no alvo em vez de queda monotônica de frustração.
+
+Os três ensaios são ensaio, não cobertura: rodam os instrumentos dos pontos 12, 13 e 16 sobre registros
+sintéticos para medir o piso de um respondente fluente e sem calibração, e para descobrir o que o portão não
+distingue. Nenhuma linha deles conta grupo ouvido, caso escolhido ou papel designado, e a saída carrega o
+rótulo SINTÉTICO. O ensaio do painel já mediu duas coisas que ficam declaradas: o respondente fluente (p = 0,75
+sem informação) tem habilidade negativa, e o oráculo perfeito é reprovado pela guarda de habilidade, porque com
+acerto 1 a variância do clima é zero e a razão 0/0 é lida como 0. O ensaio da escuta mediu o limite do portão:
+ele confere campo, não proveniência, e sete registros fabricados abrem a caixa — a cobertura real precisa de
+hash da transcrição assinada, que hoje não existe.
 
 Nenhum número entra no livro sem sair de um destes comandos. Quando um valor divergir do registro antigo, o
 capítulo traz uma **declaração de divergência** com os dois valores e o motivo — é o que os Capítulos 4, 5, 8,

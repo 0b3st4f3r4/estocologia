@@ -632,8 +632,8 @@ cd h1 && python3 -m pytest -q
 cd h1 && python3 portoes.py --reproducao
 ```
 
-Estado medido nesta sessão (2026-10-17): `cargo test --workspace` passa com **344 testes nos dezesseis crates**,
-nenhum reprovado; os **vinte e um instrumentos** do `labs` rodam com código 0; `--horizonte todos --reproducao`
+Estado medido nesta sessão (2026-10-17): `cargo test --workspace` passa com **350 testes nos dezesseis crates**,
+nenhum reprovado; os **vinte e quatro instrumentos** do `labs` rodam com código 0; `--horizonte todos --reproducao`
 devolve "7 portoes ok" com segunda execução idêntica e raiz de Merkle
 `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`; e a prova negativa
 `--horizonte h3 --defeito h3.voos23` sai com 1, reprovando no G6.

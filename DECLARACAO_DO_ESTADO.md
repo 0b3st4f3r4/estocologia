@@ -80,7 +80,7 @@ o runner já está escrito; falta o arquivo. O critério de cada um está declar
 ## 5. A reprodução
 
 ~~~bash
-cargo test --workspace                                  # 344 testes aprovados, nenhum reprovado
+cargo test --workspace                                  # 350 testes aprovados, nenhum reprovado
 cargo run --release --bin labs -- --todos               # os 21 laboratórios
 cargo run --release --bin portoes -- --horizonte todos --reproducao
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23   # sai com 1, como declarado
@@ -88,7 +88,7 @@ python3 book/gerar.py --check                           # a rampa dos 21 capítu
 python3 book/conferir_labs.py                           # 48 blocos citados, 0 divergentes
 python3 book/conferir_livro.py
 python3 book/gerar_resultados.py --check                # o registro e o manifesto do estado
-python3 conferir_lacres.py                              # os 26 lacres: 69 alvos, 8 fora da árvore, 0 problemas
+python3 conferir_lacres.py                              # os 26 lacres: 70 alvos, 8 fora da árvore, 0 problemas
 python3 estilo/conferir-passada.py                      # a passada de prosa contra HEAD:book/
 ~~~
 
@@ -115,7 +115,7 @@ Python).
 ## 6. O manifesto
 
 Em `RESULTADOS_RUST.md` §5, gerado: **20 declarações de ponto**, das quais 4 são declarações 2 ou mais (correção
-com os dois valores lado a lado), **16 pontos de fundo**, **21 instrumentos** no `labs`, **21 capítulos** e
+com os dois valores lado a lado), **16 pontos de fundo**, **24 instrumentos** no `labs`, **21 capítulos** e
 **16 crates**. Cada linha do manifesto traz o `sha256` do arquivo da declaração.
 
 O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 209 palavras** e
