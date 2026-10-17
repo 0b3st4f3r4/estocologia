@@ -45,20 +45,7 @@ pub fn fator_de_ruina(alavancagem: f64, pior_dia: f64) -> f64 {
 
 /// Estimador de Hill do indice de cauda, com os `k` maiores: `alfa = k / soma(ln(x_i/x_k+1))`.
 pub fn hill(serie: &[f64], k: usize) -> f64 {
-    let mut positivos: Vec<f64> = serie.iter().copied().filter(|x| *x > 0.0).collect();
-    if positivos.len() <= k || k == 0 {
-        return f64::NAN;
-    }
-    positivos.sort_by(|a, b| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
-    let corte = positivos[k];
-    if corte <= 0.0 {
-        return f64::NAN;
-    }
-    let soma: f64 = positivos[..k].iter().map(|x| (x / corte).ln()).sum();
-    if soma <= 0.0 {
-        return f64::NAN;
-    }
-    k as f64 / soma
+    stochology_core::hill_no_corte(serie, k, k)
 }
 
 /// Comparacao crua, ganho do experimento e vies de selecao entre o grupo observado e o sorteado.

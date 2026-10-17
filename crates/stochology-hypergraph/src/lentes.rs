@@ -82,14 +82,7 @@ pub fn simular_multiplicativo(
 
 /// Escalonomia: estimador de Hill sobre a cauda superior.
 pub fn indice_hill(valores: &[f64], k: usize) -> f64 {
-    let mut v: Vec<f64> = valores.iter().copied().filter(|x| *x > 0.0).collect();
-    v.sort_by(|a, b| b.partial_cmp(a).unwrap());
-    if v.len() <= k || k == 0 {
-        return f64::NAN;
-    }
-    let corte = v[k];
-    let soma: f64 = v[..k].iter().map(|x| (x / corte).ln()).sum();
-    (soma / k as f64).recip()
+    stochology_core::hill_no_corte(valores, k, k)
 }
 
 /// Escalonomia: cauda selvagem quando o expoente fica abaixo de 2.
@@ -137,25 +130,7 @@ pub fn escore_de_brier(previsoes: &[f64], resultados: &[f64]) -> f64 {
 /// Agrupa por previsão exata: para resultados binários a identidade
 /// Brier = REL - RES + UNC fecha byte a byte.
 pub fn decomposicao_murphy(prev: &[f64], res: &[f64]) -> (f64, f64, f64) {
-    let n = prev.len() as f64;
-    let base = res.iter().sum::<f64>() / n;
-    let mut distintos: Vec<f64> = prev.to_vec();
-    distintos.sort_by(|a, b| a.partial_cmp(b).unwrap());
-    distintos.dedup();
-
-    let mut rel = 0.0;
-    let mut resol = 0.0;
-    for valor in distintos {
-        let idx: Vec<usize> = (0..prev.len()).filter(|i| prev[*i] == valor).collect();
-        if idx.is_empty() {
-            continue;
-        }
-        let nb = idx.len() as f64;
-        let ob = idx.iter().map(|i| res[*i]).sum::<f64>() / nb;
-        rel += (nb / n) * (valor - ob) * (valor - ob);
-        resol += (nb / n) * (ob - base) * (ob - base);
-    }
-    (rel, resol, base * (1.0 - base))
+    stochology_core::decomposicao_murphy(prev, res)
 }
 
 /// Crisonomia: valor esperado da informação perfeita.

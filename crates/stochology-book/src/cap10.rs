@@ -289,11 +289,7 @@ pub fn pareto_amostras(semente: u64, n: usize, alfa: f64, repeticoes: usize) -> 
 
 /// Estimador de Hill com os `k` maiores valores: alpha_hat = k / soma dos logaritmos.
 pub fn hill(xs: &[f64], k: usize) -> f64 {
-    let mut ordenado = xs.to_vec();
-    ordenado.sort_by(|a, b| b.partial_cmp(a).unwrap());
-    let limiar = ordenado[k - 1];
-    let soma: f64 = ordenado[..k].iter().map(|x| (x / limiar).ln()).sum();
-    k as f64 / soma
+    stochology_core::hill_no_corte(xs, k, k.saturating_sub(1))
 }
 
 /// Gera uma amostra de Pareto e devolve o Hill para vários k, com o intervalo

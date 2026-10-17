@@ -60,11 +60,65 @@ fn ficha(
     pergunta: &str,
     acao: &str,
 ) -> Ficha {
-    let mut f = Ficha::nova(id, camada, incerteza).com_cuidados().completa();
+    let mut f = Ficha::nova(id, camada, incerteza);
     f.definicao = definicao.to_string();
+    f.artefato_simulavel = Some(format!("crates/stochology-core#{id}"));
+    f.semente = Some(2026);
+    f.unidade_independente = Some("dia".to_string());
+    f.margem = Some(0.51);
+    f.modelo_nulo = Some("media-historica".to_string());
+    f.escopo_ecologico = true;
+    f.quem_paga_pelo_erro = Some("decisor-declarado".to_string());
+    f.clausula_de_saida = Some("parar-se-ECE>0.10".to_string());
     f.pergunta_do_decisor = pergunta.to_string();
     f.acao_do_pacote = acao.to_string();
+    f.teste_de_propriedade = AgenteA::A1Codigo.ancora_estrutural(&f);
+    f.trata_ausentes = AgenteA::A2Dados.ancora_estrutural(&f);
+    f.deriva_declarada = AgenteA::A3CicloVida.ancora_estrutural(&f);
+    f.patologias_cobertas = AgenteA::A4Inferencia.ancora_estrutural(&f);
+    f.trilha_integra = AgenteA::A5Governanca.ancora_estrutural(&f);
+    f.subgrupos_auditados = AgenteA::A6Justica.ancora_estrutural(&f);
+    f.priori_elicitada = AgenteA::A7Dominio.ancora_estrutural(&f);
     f
+}
+
+/// As três fichas intermediárias que a banca reprovou ao longo dos horizontes H1, H2 e H3,
+/// cada uma com cuidados e âncoras estruturais efetivamente ausentes.
+fn fichas_reprovadas_no_historico() -> Vec<Ficha> {
+    let mut h1_incendios_alavancar = ficha(
+        "h1.c-incendios.alavancar",
+        Camada::Agente,
+        TipoIncerteza::Knightiana,
+        "resseguradora triplica aposta apos 36 meses limpos com Brier skill -0,015",
+        "devemos triplicar a aposta da seguradora?",
+        "triplicar a aposta",
+    );
+    h1_incendios_alavancar.patologias_cobertas = false;
+    h1_incendios_alavancar.clausula_de_saida = None;
+
+    let mut h2_levedura_1linha = ficha(
+        "h2.icp-levedura.1linha",
+        Camada::Modelo,
+        TipoIncerteza::Epistemica,
+        "validacao por intervencao com uma unica linha por mutante (4 de 40 aprovados)",
+        "devemos aceitar a genetica com uma linha?",
+        "aceitar com uma linha",
+    );
+    h2_levedura_1linha.priori_elicitada = false;
+    h2_levedura_1linha.modelo_nulo = None;
+
+    let mut h3_prisoes_toronto = ficha(
+        "h3.prisoes.toronto",
+        Camada::Agente,
+        TipoIncerteza::Knightiana,
+        "recalibracao apenas de intercepto em Toronto 2020-2021 com ECE 0,067",
+        "devemos operar o modelo em Toronto?",
+        "operar em Toronto",
+    );
+    h3_prisoes_toronto.deriva_declarada = false;
+    h3_prisoes_toronto.subgrupos_auditados = false;
+
+    vec![h1_incendios_alavancar, h2_levedura_1linha, h3_prisoes_toronto]
 }
 
 fn fichas(horizonte: &str) -> Vec<Ficha> {
@@ -291,16 +345,21 @@ fn executar(cfg: &Config) -> Execucao {
     }
     let trilha_ok = livro.verificar() && !adulterado.verificar();
 
-    // G6 banca adversarial A1-A8, com vigilancia de deriva (A3), paridade de subgrupos (A6) e Hill de H1 (A4).
+    // G6 banca adversarial A1-A8, com vigilancia de deriva (A3), paridade de subgrupos (A6), Hill de H1 (A4)
+    // e reprovação obrigatória das três fichas intermediárias com cuidados e âncoras ausentes.
     let alfa_h1 = hill(&serie, 500);
     let vigilancia_nula = cusum(&nulo_estacionario(2026, 500, 0.0, 1.0), &OpcoesDeriva::default());
     let paridade_nula = paridade_demografica(&[
         GrupoJustica::novo("coorte-a", 100, 30, 24, 6),
         GrupoJustica::novo("coorte-b", 100, 30, 24, 6),
     ]);
+    let historico_reprovado_ok = fichas_reprovadas_no_historico()
+        .iter()
+        .all(|f| !orq.banca(f).aprovado);
     let modulos_banca_ok = (alfa - alfa_h1).abs() < 1e-12
         && vigilancia_nula.alarme.is_none()
-        && paridade_nula.abs() < 1e-12;
+        && paridade_nula.abs() < 1e-12
+        && historico_reprovado_ok;
     let banca_portao_ok = banca_ok && pior >= SEVERIDADE_MINIMA.0 && modulos_banca_ok;
 
     // G7 cláusula de saída declarada e A8 acima do piso.
@@ -458,6 +517,13 @@ mod testes {
             };
             let exec = executar(&cfg);
             assert_eq!(exec.falhas, 0, "horizonte {h} falhou");
+        }
+        let orq = OrquestradorM::novo("sessao-todos", "");
+        let reprovadas = fichas_reprovadas_no_historico();
+        assert_eq!(reprovadas.len(), 3);
+        for f in &reprovadas {
+            let v = orq.banca(f);
+            assert!(!v.aprovado, "ficha historica {} deveria reprovar na banca", f.id);
         }
     }
 }

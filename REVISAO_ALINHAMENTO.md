@@ -68,21 +68,18 @@ reprovados` e **sai com 1**; `onda --defeito mutacao` e `--defeito inversao` tam
 
 ## 5. Aparato inerte — diagnosticado e corrigido em 2026-10-17
 
-Os dez pontos abaixo foram medidos na revisão e atacados na mesma data, mantendo a raiz de Merkle (`9716e28a…`) e os 48 blocos do livro:
+Os dez pontos abaixo foram medidos na revisão e atacados na mesma data, mantendo a raiz de Merkle (`9716e28a…`) e os 48 blocos do livro. **Saldo auditado depois da terceira passada: nove fecharam por inteiro (1 a 9), e o décimo é limite estrutural do instrumento, não defeito a corrigir.**
 
-1. **A banca adversarial A1–A8 ganhou âncora estrutural e fronteira 5–6.** Antes `agentes.rs` fazia só
-   `8 + rng(3)` contra `2 + rng(3)`. Agora `AgenteA::ancora_estrutural` confere o campo estrutural de cada agente
-   na `Ficha` e separa quatro regimes: cuidado + âncora (`8..=10`), cuidado sem âncora (`5..=6`, testando a
-   fronteira exata de `SEVERIDADE_MINIMA = 6` e reprovando carimbo booleano vazio), âncora sem cuidado (`3..=5`) e
-   nenhum dos dois (`1..=3`), com teste unitário dedicado.
+1. **A banca adversarial A1–A8 ganhou âncora estrutural, fronteira 5–6 e fichas históricas reprovadas no portão.** Antes `agentes.rs` fazia só
+   `8 + rng(3)` contra `2 + rng(3)` e `gates/main.rs` carimbava `com_cuidados().completa()`. Agora `AgenteA::ancora_estrutural` confere o campo estrutural de cada agente
+   na `Ficha` e separa quatro regimes (`8..=10`, `5..=6`, `3..=5`, `1..=3`); `gates/main.rs` não tem nenhuma chamada a `com_cuidados` (deriva os cuidados de `AgenteA::ancora_estrutural(&f)`) e avalia em todo G6 as três fichas reprovadas no histórico (`fichas_reprovadas_no_historico`: `h1.c-incendios.alavancar`, `h2.icp-levedura.1linha` e `h3.prisoes.toronto`), exigindo que a banca reprove todas.
 2. **Os instrumentos `labs` e `portoes` passaram a reprovar flag inválida.** Ambos saem com `std::process::exit(1)`
    em flag desconhecida, `--cap` fora de 1..=21 ou erro de ensaio.
 3. **Os crates `drift`, `fairness` e `h1` entraram no portão G6 e nos capítulos.** `portoes` exercita
    `stochology_drift::cusum`, `stochology_fairness::paridade_demografica` e `stochology_h1::hill` dentro do G6, e
    `stochology-book` consome `stochology-h1`, `stochology-audit` e `stochology-hypergraph`.
-4. **Fórmulas desduplicadas.** `stochology_core::rng::passo_splitmix64` centraliza o passo do gerador em todos os
-   módulos; `banco.rs` usa `stochology_core::Rng` e `stochology_h0::erlang_c`; `cap18.rs` delega `hill` a
-   `stochology_h1::hill`; `cap12.rs` delega as lentes a `stochology_hypergraph::lentes`; `cap15.rs` delega
+4. **Fórmulas desduplicadas em uma única implementação no núcleo.** `stochology_core::rng::passo_splitmix64` centraliza o passo do gerador em todos os
+   módulos; `stochology_core::hill_no_corte` centraliza o estimador de Hill (consumido por `stochology_h1::hill`, `stochology_hypergraph::lentes::indice_hill`, `cap10.rs`, `cap12.rs` e `cap18.rs`); `stochology_core::decomposicao_murphy` centraliza a decomposição de Murphy (consumida por `stochology_hypergraph::lentes::decomposicao_murphy` e `stochology_h3::preteste::decomposicao_de_murphy`); `banco.rs` usa `stochology_core::Rng` e `stochology_h0::erlang_c`; `cap15.rs` delega
    SHA-256, Merkle e `LivroRazao` a `stochology_audit`.
 5. **Campos mortos eliminados.** `teste_severo_fracao_simulada` foi removido de `MedidaBanco` (`banco.rs`);
    `OrquestradorM::conduzir_ataque` passou a validar `hash_trilha` (exigindo 64 hexadecimais quando preenchido, com
@@ -96,9 +93,8 @@ Os dez pontos abaixo foram medidos na revisão e atacados na mesma data, mantend
    `crsp_day_1989_1998.csv` declarado como ausente da árvore (`#`, espelhado em `FONTES.md`); `governanca/DECLARACAO.sha256`
    lacra os 7 arquivos de `governanca/`; e `conferir_lacres.py` confere **28 lacres, 82 alvos e 9 declarados fora
    da árvore, 0 problemas**.
-9. **Automação de CI e conferência do artigo.** `.github/workflows/ci.yml` executa a verificação obrigatória de
-   `AGENTS.md` §V em cada push/PR, e `book/conferir_livro.py` passou a conferir os números canônicos de
-   `artigo/README.md`.
+9. **Automação de CI e conferência viva do artigo contra o instrumento.** `.github/workflows/ci.yml` executa a verificação obrigatória de
+   `AGENTS.md` §V em cada push/PR, e `book/conferir_livro.py` executa `target/release/labs` (`--cap 5`, `--cap 16`, `--cap 17`, `--cap 18`, `--h3`, `--ponte`), extrai os números ao vivo da saída padrão, formata para a notação do artigo e confere `artigo/README.md`.
 10. **Limite estrutural do portão de estilo.** Quando a árvore de trabalho coincide com `HEAD`, `conferir-passada.py`
     compara `X->X`; ele atua como guarda de regressão entre o índice/trabalho e `HEAD`.
 

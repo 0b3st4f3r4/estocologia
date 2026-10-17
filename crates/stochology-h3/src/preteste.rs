@@ -225,28 +225,9 @@ pub fn curva_observada_e_fracamente_monotona(caixas: &[Caixa]) -> bool {
 
 /// Decomposicao de Murphy com um balde por valor distinto de `p` (faz a identidade fechar exata).
 pub fn decomposicao_de_murphy(confianca: &[f64], acerto: &[bool]) -> Murphy {
-    if confianca.is_empty() || confianca.len() != acerto.len() {
-        return Murphy { rel: 0.0, res: 0.0, unc: 0.0 };
-    }
-    let n = confianca.len() as f64;
-    let media: f64 = acerto.iter().filter(|y| **y).count() as f64 / n;
-    let unc = media * (1.0 - media);
-    let mut valores: Vec<f64> = confianca.to_vec();
-    valores.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
-    valores.dedup();
-    let mut rel = 0.0;
-    let mut res = 0.0;
-    for valor in valores {
-        let itens: Vec<usize> = (0..confianca.len()).filter(|i| confianca[*i] == valor).collect();
-        if itens.is_empty() {
-            continue;
-        }
-        let peso = itens.len() as f64 / n;
-        let taxa = itens.iter().filter(|i| acerto[**i]).count() as f64 / itens.len() as f64;
-        rel += peso * (valor - taxa).powi(2);
-        res += peso * (taxa - media).powi(2);
-    }
-    Murphy { rel, res, unc }
+    let res: Vec<f64> = acerto.iter().map(|y| if *y { 1.0 } else { 0.0 }).collect();
+    let (rel, res_m, unc) = stochology_core::decomposicao_murphy(confianca, &res);
+    Murphy { rel, res: res_m, unc }
 }
 
 fn brier(confianca: &[f64], acerto: &[bool]) -> f64 {
