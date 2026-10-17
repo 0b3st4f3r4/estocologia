@@ -73,6 +73,14 @@ Rodada em 2026-10-16, depois do congelamento. Código de saída entre parêntese
 | `python3 book/gerar.py --check` | a rampa de três degraus dos 21 capítulos confere, com 5 903 linhas e 74 847 palavras (0) |
 | `python3 book/conferir_livro.py` | partes, capítulos, cercas e ordem conferem (0) |
 
+**Declaração de divergência (2026-10-17T08:40Z).** O registro acima também deixou de reproduzir nesta data, e
+pelo mesmo motivo declarado: a terceira retificação da edição mexeu em `book/apendices.md` e o livro montado
+cresceu. O `python3 book/gerar.py --check` imprime agora **5 927 linhas e 75 209 palavras**, com código 0. A
+diferença são as tabelas das passadas e das rotas do Apêndice D e os parágrafos que corrigiram a alegação de posse
+física dos arquivos; nenhum número deste ponto muda, e o eixo R continua com as 21 linhas medidas pelo mesmo
+instrumento. O arquivo foi re-selado nesta data, e o hash anterior da declaração (`a768543c…`) fica registrado
+aqui em vez de sumir com a linha do lacre.
+
 **Declaração de divergência (2026-10-17T08:10Z).** A linha do `gerar.py --check` acima é registro datado de
 2026-10-16 e fica como está: naquele dia o livro montado tinha mesmo **5 903 linhas e 74 847 palavras**. O
 registro deixou de reproduzir em 2026-10-17, quando `book/cap13.md` ganhou duas linhas na retificação do trecho

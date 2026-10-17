@@ -1,9 +1,14 @@
 # Comparação: priori elicitada × priori de literatura × priori do pacote
 
-**Esqueleto. Nenhuma elicitação aconteceu: as colunas "elicitada" estão em branco de propósito.** Este arquivo é o
-instrumento da comparação que só pode ser preenchido depois que o painel do
-`fundo/p12-shelf/protocolo.md` terminar, cada formulário de `formularios/` estiver com os quartis
-confirmados e o consenso estiver em `prioris_elicitadas.yaml`.
+**Estado em 2026-10-17: cinco elicitações de E1 feitas, painel não fechado.** As seções 6 a 10 registram os
+cinco domínios elicitados de ponta a ponta pelo primeiro especialista (E1, o autor do programa) — pré-teste,
+quartis confirmados, controles lidos e a terceira coluna do funil com a marca **P**. Isso é **rodada preliminar de
+sensibilidade com $n = 1$**, e não painel: o protocolo de `fundo/p12-shelf/protocolo.md` pede três especialistas
+por domínio, com um de fora do programa, e um especialista aprovado não fecha painel nenhum. Por isso as tabelas
+consolidadas deste arquivo (§"Prioris lado a lado", §"Decisão antes e depois" e o veredito) continuam em branco: elas
+esperam o painel, o `consenso` de cada formulário e `prioris_elicitadas.yaml`.
+**Correção de 2026-10-17:** este cabeçalho dizia "nenhuma elicitação aconteceu", o que contradizia as cinco linhas
+preenchidas de §6 a §10 e as 21 linhas da releitura em `governanca/RELEITURA.md`.
 
 ## Critério declarado — K = 2 desta frente
 
@@ -64,7 +69,8 @@ aprovado) e dois mudaram de ação (`h2/desenvolvimento_preston` adotar → mant
 Ajuste feito com as funções do próprio repositório: `ajustar_normal` (`h2f/estocologia/dominio.py`) para os
 domínios gaussianos, com os quartis de `h2/direito_prisoes` em **log da razão de chances**
 (`priori_da_chave`, mesmo arquivo), e `ajustar_beta_quartis` (`h2f/estocologia/estat.py`) para o H1
-real. As colunas "pacote" e "literatura" são cópia conferida; a linha "elicitada" está **em branco**.
+real. As colunas "pacote" e "literatura" são cópia conferida; a linha "elicitada" fica **em branco nesta tabela
+consolidada**, e o valor de E1 para cada domínio está em §6 a §10, na mesma escala e com os mesmos quartis.
 
 | domínio | prioridade | q05 | q25 | q50 | q75 | q95 | ajuste | erro máx. nos quartis | razão largura 90 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -136,7 +142,8 @@ Regra fixa (declarada antes): sejam N_p e N_l os números de domínios que mudam
 - Em qualquer caso: dizer se o G3 do H2g (Ŝ ≠ ∅ em pelo menos 3 áreas) muda — o ICP não usa a priori, então só muda se
   um domínio for podado antes do F4.
 
-**Campos que faltam preencher (todos em branco agora):** os três blocos de quartis elicitados (tabela de prioris), o
+**Campos que faltam preencher:** o valor consolidado de cada domínio nas três tabelas acima — o de E1 existe por
+domínio em §6 a §10 —, o
 `consenso` de cada `formularios/<horizonte>__<dominio>.yaml`, as colunas "depois" das duas tabelas de
 decisão, o deslocamento em dp, o N_p, o N_l e o veredito.
 

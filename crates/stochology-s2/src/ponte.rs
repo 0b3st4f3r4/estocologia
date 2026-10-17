@@ -2,9 +2,9 @@
 //!
 //! O item 13 pede o runner local de pesos congelados com o \`sha256\` dos pesos, a decodificação restrita ao esquema
 //! da ficha, a prova de determinismo na forma do G1, a calibração contra o Brier do Jev determinístico, o custo por
-//! chamada e a pergunta paralela de adequação do espaço de hipóteses. **Os pesos não estão nesta árvore e não há
-//! runner aqui**, então o que este módulo entrega é o arcabouço inteiro com os portões que dependem do modelo, mais
-//! os que já fecham:
+//! chamada e a pergunta paralela de adequação do espaço de hipóteses. **O runner local existe, em `runner.rs`**; o
+//! que não existe nesta árvore são os pesos do modelo, e é por isso que o portão dos pesos segue recusando. Este
+//! módulo entrega o arcabouço com os portões que dependem do modelo, mais os que já fecham:
 //!
 //! - **o portão dos pesos** — sem o arquivo e sem o \`sha256\` batendo, a ponte **não roda**, e nenhum número sai;
 //! - **a decodificação restrita** — a saída tem de ser o documento canônico da ficha, e a margem não pode encostar em
@@ -40,6 +40,10 @@ pub enum Recusa {
     PesosAusentes(String),
     /// Com o hash diferente do declarado, a ponte não roda.
     PesosComHashDiferente { esperado: String, medido: String },
+    /// O operador não declarou o hash antes de rodar.
+    HashNaoDeclarado(String),
+    /// O artefato existe e o hash bate, e o formato não é o declarado.
+    ArtefatoIlegivel(String),
     /// A saída não é o documento canônico da ficha.
     ForaDoEsquema(String),
     /// A saída fere a proibição dos extremos dogmáticos.
@@ -275,9 +279,52 @@ pub fn rodar() {
     let ad2 = adequacao_do_espaco(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade4);
     println!("  modelo de ensaio: {} pedidos | {} abstencoes ({:.1}%) | {}", ad2.pedidos, ad2.abstencoes, ad2.fracao * 100.0, ad2.veredito);
 
+    println!("\n-- o runner local dos pesos congelados --");
+    match crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO) {
+        Ok(mut runner) => {
+            println!("  pesos verificados: {} | {} respostas congeladas no artefato", runner.sha256(), runner.respostas());
+            let ps: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
+            let mut c = Contabilidade::default();
+            let (a, b, iguais) = provar_determinismo(&mut runner, &ps, &mut c);
+            println!("  determinismo na forma do G1: {a:.16} contra {b:.16} | identicas: {iguais}");
+            let mut c2 = Contabilidade::default();
+            let ad = adequacao_do_espaco(&mut runner, &ps, &mut c2);
+            let (tk, msq) = c2.por_chamada();
+            println!("  adequacao: {} pedidos | {} abstencoes ({:.1}%) | {}", ad.pedidos, ad.abstencoes, ad.fracao * 100.0, ad.veredito);
+            println!("  custo medido: {tk:.1} tokens por chamada | {msq:.1} ms por chamada");
+            println!("  Brier: a regra esta em runner::brier e o numero sai quando houver conjunto rotulado; sem pares, nao ha pontuacao");
+        }
+        Err(recusa) => match &recusa {
+            Recusa::HashNaoDeclarado(c) => println!("  RECUSADO: hash nao declarado em {c} | o operador declara o sha256 antes de rodar"),
+            Recusa::PesosAusentes(c) => println!("  RECUSADO: pesos ausentes em {c} | sem os pesos, a ponte nao roda"),
+            Recusa::PesosComHashDiferente { esperado, medido } => println!("  RECUSADO: hash declarado {esperado}, medido {medido}"),
+            Recusa::ArtefatoIlegivel(m) => println!("  RECUSADO: artefato ilegivel: {m}"),
+            outra => println!("  RECUSADO: {outra:?}"),
+        },
+    }
+    let dir = std::env::temp_dir().join(format!("p20-jev-ensaio-{}", std::process::id()));
+    match crate::runner::escrever_artefato_de_ensaio(&dir, &["caso 1", "caso 2", "caso 3", "caso 4"]) {
+        Ok(hash) => match crate::runner::RunnerLocal::carregar(&dir.to_string_lossy()) {
+            Ok(mut r) => {
+                let ps: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
+                let mut c = Contabilidade::default();
+                let (_, _, iguais) = provar_determinismo(&mut r, &ps, &mut c);
+                let mut c2 = Contabilidade::default();
+                let ad = adequacao_do_espaco(&mut r, &ps, &mut c2);
+                let (tk, msq) = c2.por_chamada();
+                println!("  ensaio do runner (nao sao os pesos reais): {hash:.16} | {} respostas | G1 identicas: {iguais} | abstencoes {:.1}% | {tk:.1} tokens por chamada | {msq:.1} ms por chamada", r.respostas(), ad.fracao * 100.0);
+                println!("  leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo");
+            }
+            Err(e) => println!("  ensaio do runner: o artefato de ensaio nao carregou: {e:?}"),
+        },
+        Err(e) => println!("  ensaio do runner: nao foi possivel escrever o artefato de ensaio: {e}"),
+    }
+    std::fs::remove_dir_all(&dir).ok();
+
     println!("\n-- o estado declarado --");
-    println!("  pesos congelados: ausentes da arvore | runner local: nao existe aqui | por isso a ponte fica declarada, e nenhum numero de calibracao ou de custo real e publicado");
-    println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada e a regra de adequacao do espaco");
+    println!("  runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta");
+    println!("  pesos congelados: ausentes da arvore | o operador declara o sha256 em fundo/p20-jev/pesos/SHA256 e deixa o modelo em fundo/p20-jev/pesos/modelo.congelado; ate la, o portao recusa e nenhum numero de calibracao real e publicado");
+    println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco e o runner que liga todos eles");
 }
 
 #[cfg(test)]

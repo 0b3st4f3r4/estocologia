@@ -212,22 +212,35 @@ antes de rodar.
 
 Esta bibliografia segue três regras, e as três são declarações.
 
-**1. Todo arquivo foi baixado para consulta.** O autor baixou os arquivos dos links desta lista em
-2026-10-16, para conferência direta. Os cinco documentos do projeto foram **integrados** ao repositório
-(arquitetura, plano escalável, fundamentação e o artigo) e as cópias soltas foram apagadas, como manda a regra
-dos arquivos novos. O material integrado está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Os arquivos de
-terceiros não são versionados, por direito autoral. Deles ficam a citação, o DOI e o número que o livro usa.
+**1. A conferência foi remota, e não por arquivo baixado.** Em 2026-10-16 o autor conferiu os metadados
+dos links desta lista contra a API do Crossref, as páginas das editoras, o PubMed, os anais do PMLR e catálogos de
+biblioteca. Nenhum PDF de terceiro existe na árvore, e nenhum é alegado como `[arquivo]`: o que a árvore guarda é
+a conferência do metadado, registrada linha a linha. Os cinco documentos do projeto foram **integrados** ao
+repositório (arquitetura, plano escalável, fundamentação e o artigo) e as cópias soltas foram apagadas, como manda
+a regra dos arquivos novos. O material integrado está em `PLAN.md` §9.13, em `artigo/` e neste apêndice. Deles
+fica a citação, o DOI e o número que o livro usa.
 
 **2. Cada item tem um estado de conferência.**
 
 | Marca | Significa |
 | --- | --- |
 | **[conferido]** | o número citado no livro foi conferido contra o próprio artigo, contra o DOI ou contra a página da editora |
-| **[arquivo]** | há arquivo baixado para consulta, ainda sem conferência item a item contra o texto do livro |
+| **[arquivo]** | há arquivo baixado para consulta, ainda sem conferência item a item contra o texto do livro. Nenhuma linha desta lista usa esta marca: nenhum PDF de terceiro está em disco, e a conferência é do metadado |
 | **[histórico]** | material aposentado, que fica só como registro de onde um número veio |
 
 **O estado de cada linha está na linha.** Depois da conferência de 2026-10-16, todas as linhas de D.2 a D.4 levam
-a marca **[conferido]**, e a fonte de cada conferência está em `referencias/CONFERENCIA.md`.
+a marca **[conferido]**, e a fonte de cada conferência está em `referencias/CONFERENCIA.md`. A rota e a data de
+cada passada estão na tabela abaixo, porque a marca sozinha não diz quando foi aplicada.
+
+| passada | data | linhas | rota | o que ficou na linha |
+| --- | --- | --- | --- | --- |
+| primeira | 2026-10-15 | as 23 de D.3 | Crossref, IDEAS/RePEc, RAND, anais do NeurIPS e página do autor | conferidas, **sem** marca aplicada |
+| segunda | 2026-10-16 | as 27 de D.2 e D.4 | Crossref, páginas das editoras, PubMed e PMLR | conferidas e marcadas |
+| terceira | 2026-10-17 | as 23 de D.3, de novo | as mesmas fontes da primeira, linha a linha | marca aplicada: **50 de 50** |
+
+A terceira passada existe porque a primeira deixou a conferência registrada fora da linha, e a leitura da tabela
+dava menos do que o total. Ela reexecutou os metadados daquela seção contra as mesmas fontes, um por um, e o resultado é o
+que a tabela acima declara. Divergência de conteúdo nessa reexecução: nenhuma.
 
 **3. Todo experimento deste livro é Rust.** O Python aparece apenas como registro histórico aposentado
 (veja o Apêndice C). Nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
@@ -274,29 +287,29 @@ repositório guarda. É o registro empírico conferido, as declarações e os la
 
 | Referência | Onde entra |
 | --- | --- |
-| Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | A central de chamadas do banco, em 2003 (Capítulos 16 e 20) |
-| LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | O experimento de treino profissional do NSW e a diferença crua que engana (Capítulo 17) |
-| Dehejia, R. H.; Wahba, S. *JASA* 94(448):1053–1062, 1999. DOI: 10.1080/01621459.1999.10473858 | A resposta ao LaLonde: o pareamento acerta o número, e por quê isso ainda não basta |
-| McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | Os incêndios dinamarqueses e a cauda selvagem (Capítulo 18) |
-| Embrechts, P.; Klüppelberg, C.; Mikosch, T. *Modelling Extremal Events for Insurance and Finance*, Springer, 1997. DOI: 10.1007/978-3-642-33483-2 | A teoria da cauda que o estimador de Hill usa |
-| Peters, J.; Bühlmann, P.; Meinshausen, N. *JRSS B* 78(5):947–1012, 2016. DOI: 10.1111/rssb.12167 | O ICP, o método das sete rodadas (Capítulo 19). Leia a discussão: as objeções estão lá |
-| Heinze-Deml, C.; Peters, J.; Meinshausen, N. *Journal of Causal Inference* 6(2):20170016, 2018. DOI: 10.1515/jci-2017-0016 | O ICP não linear, que inspirou a segunda régua do H2c |
-| Gamella, J. L.; Peters, J.; Bühlmann, P. *Nature Machine Intelligence* 7:107–118, 2025. DOI: 10.1038/s42256-024-00964-x | As câmaras físicas, o túnel de luz e o túnel de vento |
-| Kemmeren, P. et al. *Cell* 157(3):740–752, 2014. DOI: 10.1016/j.cell.2014.02.054 | As deleções de genes em levedura e a réplica de 40 genes |
-| Meinshausen, N.; Hauser, A.; Mooij, J. M.; Peters, J.; Versteeg, P.; Bühlmann, P. *PNAS* 113(27):7361–7368, 2016. DOI: 10.1073/pnas.1510493113 | A validação por intervenção que decide a réplica da genética |
-| Johannesen, L.; Vicente, J.; Mason, J. W. et al. *Clinical Pharmacology & Therapeutics* 96(5):549–558, 2014. DOI: 10.1038/clpt.2014.155 | O ensaio do FDA com dofetilida, quinidina, ranolazina e verapamil |
-| Vicente, J. et al. *Journal of the American Heart Association* 4(4):e001615, 2015. DOI: 10.1161/JAHA.114.001615 | A morfologia da onda T no mesmo ensaio |
-| Sachs, K.; Perez, O.; Pe'er, D.; Lauffenburger, D. A.; Nolan, G. P. *Science* 308(5721):523–529, 2005. DOI: 10.1126/science.1105809 | A rede de sinalização que o H2 podou no primeiro filtro |
-| Krueger, A. B. *Quarterly Journal of Economics* 114(2):497–532, 1999. DOI: 10.1162/003355399556052 | O STAR: turmas pequenas sorteadas no Tennessee |
-| Finn, J. D.; Achilles, C. M. *American Educational Research Journal* 27(3):557–577, 1990. DOI: 10.3102/00028312027003557 | O desenho do STAR, contado por quem o aplicou |
-| Card, D.; Krueger, A. B. *American Economic Review* 84(4):772–793, 1994 (JSTOR 2118030) | Salário mínimo e emprego, o modelo de diferenças em diferenças |
-| Meyer, B. D.; Viscusi, W. K.; Durbin, D. L. *American Economic Review* 85(3):322–340, 1995 (JSTOR 2118177) | O teto do benefício por acidente de trabalho, no Kentucky e em Michigan |
-| Thornton, R. L. *American Economic Review* 98(5):1829–1863, 2008. DOI: 10.1257/aer.98.5.1829 | O sorteio do resultado do teste de HIV, um ambiente que é intervenção |
-| Newhouse, J. P.; Insurance Experiment Group. *Free for All?*, Harvard University Press, 1993 | O experimento de seguro da RAND, cuja coparticipação satura o teste |
-| Baltagi, B. H.; Levin, D. *Structural Change and Economic Dynamics* 3(2):321–335, 1992. DOI: 10.1016/0954-349X(92)90010-4 | O imposto sobre a cerveja, podado no terceiro filtro |
-| Stock, J. H.; Watson, M. W. *Introduction to Econometrics*, 4. ed., Pearson, 2019, cap. 12 | Variáveis instrumentais, o exemplo dos cigarros |
-| Gibbs, I.; Candès, E. *NeurIPS 34*:1660–1672, 2021 (arXiv:2106.00170) | A inferência conforme adaptativa, que dá os quantis do H3 |
-| O'Hagan, A. et al. *Uncertain Judgements: Eliciting Experts' Probabilities*, Wiley, 2006. DOI: 10.1002/0470033312 | A elicitação que ficou em aberto no Capítulo 21. Nota: SHELF é um protocolo, não este livro |
+| **[conferido]** Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | A central de chamadas do banco, em 2003 (Capítulos 16 e 20) |
+| **[conferido]** LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | O experimento de treino profissional do NSW e a diferença crua que engana (Capítulo 17) |
+| **[conferido]** Dehejia, R. H.; Wahba, S. *JASA* 94(448):1053–1062, 1999. DOI: 10.1080/01621459.1999.10473858 | A resposta ao LaLonde: o pareamento acerta o número, e por quê isso ainda não basta |
+| **[conferido]** McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | Os incêndios dinamarqueses e a cauda selvagem (Capítulo 18) |
+| **[conferido]** Embrechts, P.; Klüppelberg, C.; Mikosch, T. *Modelling Extremal Events for Insurance and Finance*, Springer, 1997. DOI: 10.1007/978-3-642-33483-2 | A teoria da cauda que o estimador de Hill usa |
+| **[conferido]** Peters, J.; Bühlmann, P.; Meinshausen, N. *JRSS B* 78(5):947–1012, 2016. DOI: 10.1111/rssb.12167 | O ICP, o método das sete rodadas (Capítulo 19). Leia a discussão: as objeções estão lá |
+| **[conferido]** Heinze-Deml, C.; Peters, J.; Meinshausen, N. *Journal of Causal Inference* 6(2):20170016, 2018. DOI: 10.1515/jci-2017-0016 | O ICP não linear, que inspirou a segunda régua do H2c |
+| **[conferido]** Gamella, J. L.; Peters, J.; Bühlmann, P. *Nature Machine Intelligence* 7:107–118, 2025. DOI: 10.1038/s42256-024-00964-x | As câmaras físicas, o túnel de luz e o túnel de vento |
+| **[conferido]** Kemmeren, P. et al. *Cell* 157(3):740–752, 2014. DOI: 10.1016/j.cell.2014.02.054 | As deleções de genes em levedura e a réplica de 40 genes |
+| **[conferido]** Meinshausen, N.; Hauser, A.; Mooij, J. M.; Peters, J.; Versteeg, P.; Bühlmann, P. *PNAS* 113(27):7361–7368, 2016. DOI: 10.1073/pnas.1510493113 | A validação por intervenção que decide a réplica da genética |
+| **[conferido]** Johannesen, L.; Vicente, J.; Mason, J. W. et al. *Clinical Pharmacology & Therapeutics* 96(5):549–558, 2014. DOI: 10.1038/clpt.2014.155 | O ensaio do FDA com dofetilida, quinidina, ranolazina e verapamil |
+| **[conferido]** Vicente, J. et al. *Journal of the American Heart Association* 4(4):e001615, 2015. DOI: 10.1161/JAHA.114.001615 | A morfologia da onda T no mesmo ensaio |
+| **[conferido]** Sachs, K.; Perez, O.; Pe'er, D.; Lauffenburger, D. A.; Nolan, G. P. *Science* 308(5721):523–529, 2005. DOI: 10.1126/science.1105809 | A rede de sinalização que o H2 podou no primeiro filtro |
+| **[conferido]** Krueger, A. B. *Quarterly Journal of Economics* 114(2):497–532, 1999. DOI: 10.1162/003355399556052 | O STAR: turmas pequenas sorteadas no Tennessee |
+| **[conferido]** Finn, J. D.; Achilles, C. M. *American Educational Research Journal* 27(3):557–577, 1990. DOI: 10.3102/00028312027003557 | O desenho do STAR, contado por quem o aplicou |
+| **[conferido]** Card, D.; Krueger, A. B. *American Economic Review* 84(4):772–793, 1994 (JSTOR 2118030) | Salário mínimo e emprego, o modelo de diferenças em diferenças |
+| **[conferido]** Meyer, B. D.; Viscusi, W. K.; Durbin, D. L. *American Economic Review* 85(3):322–340, 1995 (JSTOR 2118177) | O teto do benefício por acidente de trabalho, no Kentucky e em Michigan |
+| **[conferido]** Thornton, R. L. *American Economic Review* 98(5):1829–1863, 2008. DOI: 10.1257/aer.98.5.1829 | O sorteio do resultado do teste de HIV, um ambiente que é intervenção |
+| **[conferido]** Newhouse, J. P.; Insurance Experiment Group. *Free for All?*, Harvard University Press, 1993 | O experimento de seguro da RAND, cuja coparticipação satura o teste |
+| **[conferido]** Baltagi, B. H.; Levin, D. *Structural Change and Economic Dynamics* 3(2):321–335, 1992. DOI: 10.1016/0954-349X(92)90010-4 | O imposto sobre a cerveja, podado no terceiro filtro |
+| **[conferido]** Stock, J. H.; Watson, M. W. *Introduction to Econometrics*, 4. ed., Pearson, 2019, cap. 12 | Variáveis instrumentais, o exemplo dos cigarros |
+| **[conferido]** Gibbs, I.; Candès, E. *NeurIPS 34*:1660–1672, 2021 (arXiv:2106.00170) | A inferência conforme adaptativa, que dá os quantis do H3 |
+| **[conferido]** O'Hagan, A. et al. *Uncertain Judgements: Eliciting Experts' Probabilities*, Wiley, 2006. DOI: 10.1002/0470033312 | A elicitação que ficou em aberto no Capítulo 21. Nota: SHELF é um protocolo, não este livro |
 
 ### D.4 Tipologias de erro, incerteza e calibração
 
@@ -339,12 +352,22 @@ Crossref, as páginas das editoras, o PubMed, os anais do PMLR e catálogos de b
 passada (2026-10-15) e as 27 de D.2 e D.4 na segunda. Cada linha deste apêndice traz a marca **[conferido]** e cada
 conferência está na sua linha de `referencias/CONFERENCIA.md`, com a fonte ao lado.
 
+A rota de cada linha da seção de métodos e dados, e o que ela prova:
+
+| rota | linhas de D.3 | o que ela prova |
+| --- | --- | --- |
+| API do Crossref, com o DOI depositado | 17 | autor, ano, periódico, volume, número e páginas |
+| IDEAS/RePEc, metadado de citação | 3 | os três artigos da AER anteriores a 1999, que não têm DOI |
+| RAND, DOI de catálogo | 1 | o livro do experimento de seguro, com editora e ano |
+| anais do NeurIPS | 1 | o paper de inferência conformal adaptativa, com as páginas |
+| página do autor, em Princeton | 1 | o livro-texto e o capítulo de variáveis instrumentais |
+
 O que apareceu: **nenhuma divergência de conteúdo** nas 27 linhas novas — autores, anos, títulos, periódicos e
 páginas conferem —, **onze complementos** (os DOIs que faltavam em dez linhas e o número do *working paper* do
 Sweeney) e **duas ressalvas de fonte declaradas**: a página final do Chernoff de 1954 e a do van Dantzig de 1956
 não saíram nas fontes consultadas, e o ano do Sweeney (2000) vem do registro do CMU.
 
-A regra 1 deste apêndice continua valendo: todo arquivo foi baixado para consulta, e o que o livro guarda de cada
-um é a citação, o DOI e o número que ele usa. O que não entra no repositório são os arquivos de terceiros, por
-direito autoral.
+A regra 1 deste apêndice continua valendo, e agora com o sentido exato: a conferência é do metadado, e o que o
+livro guarda de cada um é a citação, o DOI e o número que ele usa. O que não entra no repositório são os arquivos
+de terceiros, por direito autoral, e nenhum deles é alegado como presente em disco.
 

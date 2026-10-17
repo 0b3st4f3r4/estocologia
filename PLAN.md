@@ -503,7 +503,7 @@ A edição é escrita em `book/`, um arquivo por capítulo, e só substitui
 | Parte | Capítulos | Estado |
 | --- | --- | --- |
 | I. A arte de mirar no escuro | 1 a 4 | escritos, com laboratórios medidos |
-| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 904 linhas, 74 861 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
+| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 927 linhas, 75 209 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
 | II. As armadilhas do mundo e dos dados | 5 a 8 | escritos, com laboratórios medidos |
 | III. Causa, tempo e sobrevivência | 9 a 11 | escritos, com laboratórios medidos |
 | IV. Construindo a máquina auditável | 12 a 15 | escritos, com laboratórios medidos |

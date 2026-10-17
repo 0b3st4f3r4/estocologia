@@ -245,9 +245,15 @@ Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e pub
   modelo instavel: 4 pedidos | 4 abstencoes (100.0%) | o esquema da ficha NAO serve a este modelo: 100.0% de abstencoes, acima do limite declarado de 30%
   modelo de ensaio: 4 pedidos | 0 abstencoes (0.0%) | o esquema da ficha serve a este modelo: 0.0% de abstencoes, dentro do limite declarado de 30%
 
+-- o runner local dos pesos congelados --
+  RECUSADO: hash nao declarado em fundo/p20-jev/pesos/SHA256 | o operador declara o sha256 antes de rodar
+  ensaio do runner (nao sao os pesos reais): 0ea082454dea3bc3 | 4 respostas | G1 identicas: true | abstencoes 0.0% | 87.0 tokens por chamada | 0.0 ms por chamada
+  leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo
+
 -- o estado declarado --
-  pesos congelados: ausentes da arvore | runner local: nao existe aqui | por isso a ponte fica declarada, e nenhum numero de calibracao ou de custo real e publicado
-  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada e a regra de adequacao do espaco
+  runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta
+  pesos congelados: ausentes da arvore | o operador declara o sha256 em fundo/p20-jev/pesos/SHA256 e deixa o modelo em fundo/p20-jev/pesos/modelo.congelado; ate la, o portao recusa e nenhum numero de calibracao real e publicado
+  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco e o runner que liga todos eles
 ~~~
 
 ### A segunda opiniao dos resultados marcados P
@@ -1322,7 +1328,7 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 36 tests
+running 44 tests
 test crenca::testes::a_evidencia_de_ficha_move_a_crenca_para_a_camada_da_ficha ... ok
 test crenca::testes::evidencia_invalida_nao_zera_o_estado ... ok
 test crenca::testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
@@ -1359,8 +1365,16 @@ test ponte::testes::a_saida_fora_do_esquema_vira_abstencao ... ok
 test ponte::testes::o_custo_por_chamada_e_a_adequacao_saem_do_ensaio ... ok
 test ponte::testes::pesos_com_hash_diferente_recusam ... ok
 test ponte::testes::sem_pesos_verificados_a_ponte_nao_roda ... ok
+test runner::testes::cabecalho_errado_e_artefato_ilegivel ... ok
+test runner::testes::o_artefato_de_ensaio_carrega_e_o_hash_confere ... ok
+test runner::testes::o_brier_e_a_regra_propria_fora_do_ajuste ... ok
+test runner::testes::o_operador_escreve_o_artefato_e_o_runner_o_le ... ok
+test runner::testes::o_runner_fecha_o_determinismo_na_forma_do_g1 ... ok
+test runner::testes::pedido_sem_resposta_congelada_vira_abstencao ... ok
+test runner::testes::sem_hash_declarado_a_ponte_nao_roda ... ok
+test runner::testes::um_byte_trocado_no_artefato_recusa_a_ponte ... ok
 
-test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok
@@ -1466,10 +1480,10 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p16-ponte | DECLARACAO.md | 109910beac758a052676c928da9ef7e890d4bf60fa165b22262441795b5fa96a |
 | p16-ponte | DECLARACAO_2.md | 94045a420ab204bc21e2cc95e32faf01a64d192b626e17c850a9cd6723a2bfc7 |
 | p17-schema | DECLARACAO.md | 02b743a308b951b78b63554f860702ff7d50df0e1842504ea4388c3bb875884e |
-| p18-eixo-r | DECLARACAO.md | a768543c6ee8f855ca47406567cc2010ef6278a4ed74b27e4c201c77a3f77ffa |
+| p18-eixo-r | DECLARACAO.md | 8202a54e3b6b826af4387a049c389e78956678f086d9cb34f8e9c9200499a3f7 |
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
-| p20-jev | DECLARACAO.md | 0ee9163a58b8b3f8ab25a9b1bbdf853387cff332afb95b4219d3c742f125013e |
+| p20-jev | DECLARACAO.md | 6dd50c8070a6d9b49860021483f3052d6356a5d890437578743cf2ea2abf0578 |
 
 Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 20 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
 
-Edicao montada: `estocologia-livro-didatico.md` com **5904 linhas** e **74861 palavras**, sha256 `98c69359c92cba3ec0bfeb4d41f87085ccb770f0bcbb0b8556f14f284c0a617f`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.
+Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75209 palavras**, sha256 `91166f4b9123ab8bb70a148e83eccb55d2de14151422f1c87eb95b5d0879fdbc`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

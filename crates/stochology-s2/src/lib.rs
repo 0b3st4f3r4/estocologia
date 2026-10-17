@@ -32,6 +32,7 @@ pub mod inferencia;
 pub mod lats;
 pub mod planejamento;
 pub mod ponte;
+pub mod runner;
 
 pub use crenca::{EstadoCrenca, PISO, TETO};
 pub use estresse::{
@@ -41,3 +42,4 @@ pub use hipergrafo::{MundoHipergrafo, Trilha, destino_da_acao, grafo_de_amostra}
 pub use inferencia::{Cadeia, Metropolis, log_beta, log_normal};
 pub use lats::{Decisao, Lats, Mundo, ganancioso};
 pub use planejamento::{Avaliacao, DecisaoDeResolucao, avaliar as avaliar_resolucoes, decidir};
+pub use runner::{RunnerLocal, brier, hash_declarado};

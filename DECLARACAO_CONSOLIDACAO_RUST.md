@@ -15,7 +15,7 @@ os instrumentos leem, a governança e a auditoria de fundo.
 | ` h2/` a ` h2g/` | as sete rodadas do ICP, com as reexecuções e as declarações |
 | ` h3/` | a malha contínua, critérios e revisões H3b a H3d |
 | `dados-reais/h2*/`, `h3b/`, `h3c/`, `crsp_day_1989_1998.csv` | os dados que só essas frentes usavam |
-| `book/revisao.md`, `book/resposta-a-revisao.md`, `book/resultados-que-dependem-de-python.md` | relatórios gerados, já lidos |
+| `book/revisao.md`, `book/resposta-a-revisao.md`, `book/resultados-que-dependem-de-python.md` | relatórios gerados, já lidos. **Correção de 2026-10-17:** eles não têm blob em `registro-python-removido.txt`, não existem em `1bfec905` e não existem em nenhum dos 94 commits da árvore. O registro do desaparecimento está em `DECLARACAO_PERDA_RELATORIOS.md` |
 | `FORA_DO_GIT.md` e as somas gêmeas | descreviam arquivos grandes que saíram com as frentes |
 
 ## O que fica, e por quê
@@ -32,10 +32,15 @@ os instrumentos leem, a governança e a auditoria de fundo.
 ## Como recuperar
 
 ~~~bash
-git checkout 1bfec905 -- h0-real/ h1-real/ h2/ h2g/ h3/ fundo/ book/revisao.md
+git checkout 1bfec905 -- h0-real/ h1-real/ h2/ h2g/ h3/ fundo/
 ~~~
 
 O manifesto `registro-python-removido.txt` traz o hash de blob de cada arquivo versionado removido.
+
+**Limite declarado em 2026-10-17.** A linha de recuperação acima pedia também `book/revisao.md`, e isso nunca
+funcionou: o diretório `book/` não existe em `1bfec905` (o commit tem 1 314 arquivos, e as seis pastas acima
+estão entre eles), e nenhum dos 94 commits da árvore contém os três relatórios. O comando perdeu o caminho
+fantasma, e o registro do que não se recupera está em `DECLARACAO_PERDA_RELATORIOS.md`.
 
 ## Consequência declarada
 

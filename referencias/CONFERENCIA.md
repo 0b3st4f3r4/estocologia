@@ -128,5 +128,54 @@ fonte não aparece.
 - **Duas ressalvas de fonte, declaradas em vez de escondidas.** A página final do Chernoff de 1954 e a do van
   Dantzig de 1956 não saíram nas fontes consultadas: as duas linhas ficam com a página inicial confirmada e o
   intervalo declarado como vindo do apêndice. E o ano do Sweeney (2000) vem do registro do CMU.
-- **O estado de cada linha de D.2 a D.4 é [conferido]**, e o Apêndice D.6 registra isso. As 23 linhas de D.3 já
-  estavam marcadas pela conferência de 2026-10-15.
+- **O estado de cada linha de D.2 a D.4 é [conferido]**, e o Apêndice D.6 registra isso. **Correção de 2026-10-17:**
+  esta linha afirmava que as 23 linhas de D.3 "já estavam marcadas pela conferência de 2026-10-15". Era falso: a
+  conferência de 2026-10-15 foi feita, e a marca não foi aplicada em nenhuma das 23. A contagem real da tabela era
+  27 de 50. A seção seguinte reexecuta as 23 e aplica a marca.
+
+## As 23 linhas de D.3 (reexecução de 2026-10-17)
+
+A conferência de 2026-10-15 conferiu estas linhas e não aplicou a marca. O Apêndice D.6 dizia "cada linha deste
+apêndice traz a marca", e a tabela dava 27 de 50. Esta seção reexecuta os 23 metadados, um por um, contra a mesma
+fonte declarada, e registra o que cada fonte devolveu. Roda com `curl` contra a API pública, sem chave, e cada
+linha abaixo é uma resposta lida, não uma citação de memória.
+
+| linha | referência no apêndice | veredito | o que a fonte devolveu | fonte |
+| --- | --- | --- | --- | --- |
+| 1 | Shen e Huang, *Annals of Applied Statistics* 2(2):601–623, 2008 | CONFERE | Shen, H.; Huang, J. Z. Forecasting time series of inhomogeneous Poisson processes… v. 2, n. 2, p. 601–623, 2008 | Crossref 10.1214/08-AOAS164 |
+| 2 | LaLonde, *AER* 76(4):604–620, 1986 | CONFERE | LaLonde, R. J. Evaluating the econometric evaluations of training programs with experimental data. v. 76, n. 4, p. 604–620, 1986 | IDEAS/RePEc (a AER anterior a 1999 não tem DOI depositado; o JSTOR 1806062 fica como está) |
+| 3 | Dehejia e Wahba, *JASA* 94(448):1053–1062, 1999 | CONFERE | v. 94, n. 448, p. 1053–1062, 1999 | Crossref 10.1080/01621459.1999.10473858 |
+| 4 | McNeil, *ASTIN Bulletin* 27(1):117–137, 1997 | CONFERE | v. 27, n. 1, p. 117–137, 1997 | Crossref 10.2143/AST.27.1.563210 |
+| 5 | Embrechts, Klüppelberg e Mikosch, Springer, 1997 | CONFERE | monografia, Springer, 1997 | Crossref 10.1007/978-3-642-33483-2 |
+| 6 | Peters, Bühlmann e Meinshausen, *JRSS B* 78(5):947–1012, 2016 | CONFERE | v. 78, n. 5, p. 947–1012, 2016 | Crossref 10.1111/rssb.12167 |
+| 7 | Heinze-Deml, Peters e Meinshausen, *Journal of Causal Inference* 6(2):20170016, 2018 | CONFERE | v. 6, n. 2, **20170016 como número de artigo**, 2018 | Crossref 10.1515/jci-2017-0016 |
+| 8 | Gamella, Peters e Bühlmann, *Nature Machine Intelligence* 7:107–118, 2025 | CONFERE (com complemento) | v. 7, **n. 1**, p. 107–118, 2025: o apêndice omite o número | Crossref 10.1038/s42256-024-00964-x |
+| 9 | Kemmeren et al., *Cell* 157(3):740–752, 2014 | CONFERE | v. 157, n. 3, p. 740–752, 2014 | Crossref 10.1016/j.cell.2014.02.054 |
+| 10 | Meinshausen et al., *PNAS* 113(27):7361–7368, 2016 | CONFERE | v. 113, n. 27, p. 7361–7368, 2016 | Crossref 10.1073/pnas.1510493113 |
+| 11 | Johannesen et al., *Clinical Pharmacology & Therapeutics* 96(5):549–558, 2014 | CONFERE | v. 96, n. 5, p. 549–558, 2014 | Crossref 10.1038/clpt.2014.155 |
+| 12 | Vicente et al., *JAHA* 4(4):e001615, 2015 | CONFERE | v. 4, n. 4, **e001615 como número de artigo**, 2015 | Crossref 10.1161/JAHA.114.001615 |
+| 13 | Sachs et al., *Science* 308(5721):523–529, 2005 | CONFERE | v. 308, n. 5721, p. 523–529, 2005 | Crossref 10.1126/science.1105809 |
+| 14 | Krueger, *QJE* 114(2):497–532, 1999 | CONFERE | v. 114, n. 2, p. 497–532, 1999 | Crossref 10.1162/003355399556052 |
+| 15 | Finn e Achilles, *AERJ* 27(3):557–577, 1990 | CONFERE | v. 27, n. 3, p. 557–577, 1990 | Crossref 10.3102/00028312027003557 |
+| 16 | Card e Krueger, *AER* 84(4):772–793, 1994 | CONFERE | v. 84, n. 4, p. 772–793, 1994 | IDEAS/RePEc (sem DOI depositado; JSTOR 2118030 fica como está) |
+| 17 | Meyer, Viscusi e Durbin, *AER* 85(3):322–340, 1995 | CONFERE | v. 85, n. 3, p. 322–340, 1995; **Meyer** é o primeiro autor, como a correção de 2026-10-15 já tinha aplicado | IDEAS/RePEc (sem DOI depositado; JSTOR 2118177 fica como está) |
+| 18 | Thornton, *AER* 98(5):1829–1863, 2008 | CONFERE | v. 98, n. 5, p. 1829–1863, 2008 | Crossref 10.1257/aer.98.5.1829 |
+| 19 | Newhouse e Insurance Experiment Group, *Free for All?*, Harvard University Press, 1993 | CONFERE | Free for All? Lessons from the RAND Health Insurance Experiment, Harvard University Press, 1993 | Crossref 10.7249/cb199 (DOI de catálogo da RAND) |
+| 20 | Baltagi e Levin, *Structural Change and Economic Dynamics* 3(2):321–335, 1992 | CONFERE | v. 3, n. 2, p. 321–335, 1992 | Crossref 10.1016/0954-349X(92)90010-4 |
+| 21 | Stock e Watson, *Introduction to Econometrics*, 4. ed., Pearson, 2019, cap. 12 | CONFERE | 4. ed., capítulo 12, "Instrumental Variables Regression" | página do autor em Princeton (swh.princeton.edu, material da 4. edição): livro-texto não tem DOI |
+| 22 | Gibbs e Candès, *NeurIPS* 34:1660–1672, 2021 (arXiv:2106.00170) | CONFERE | v. 34, p. 1660–1672, publicado em 2021-12-06; o arXiv 2106.00170 é o mesmo título | anais do NeurIPS, página do paper (o Crossref não indexa os anais) |
+| 23 | O'Hagan et al., *Uncertain Judgements*, Wiley, 2006 | CONFERE | monografia, Wiley, 2006 | Crossref 10.1002/0470033312 |
+
+### O que a reexecução mudou
+
+- **Nenhuma divergência de conteúdo nas 23.** Autor, ano, título, periódico, volume, número e páginas conferem em
+  todas. É o mesmo resultado da segunda passada, e agora com a marca aplicada.
+- **Um complemento de completude:** o número 1 da *Nature Machine Intelligence* na linha do Gamella.
+- **Duas linhas com número de artigo em vez de página** (Heinze-Deml e Vicente): o Crossref devolve
+  `article-number` 20170016 e e001615, que é exatamente o que o apêndice cita. Não é ressalva: é a forma da
+  revista, e fica registrada para quem for conferir de novo.
+- **Cinco linhas sem DOI, e cada uma com a sua rota:** três artigos da AER anteriores a 1999 (IDEAS/RePEc), o livro
+  do experimento de seguro (DOI de catálogo da RAND) e o livro-texto de econometria (página do autor). Nenhuma
+  delas alega arquivo em disco.
+- **A marca foi aplicada em 2026-10-17**, e o Apêndice D.0 ganhou a tabela das três passadas, com a data de cada
+  uma. A contagem deixa de ser 27 de 50 e passa a ser **50 de 50**.

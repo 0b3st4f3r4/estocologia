@@ -47,6 +47,14 @@ de 30% é escolha de especificação declarada uma vez.
 nada do que já está publicado: a ponte é um arcabouço novo, e nenhum número do livro, do registro empírico ou dos
 horizontes passa por ela.
 
+**Nota de 2026-10-17: o runner existe.** O §1 desta declaração e o `registro.tsv` diziam que o runner local não
+existia na árvore. Passou a existir em `crates/stochology-s2/src/runner.rs`: carrega o artefato, lê o hash
+declarado em `pesos/SHA256` **antes** de rodar, confere, e responde pelo `ModeloCongelado`; pedido sem resposta
+congelada abstém e entra na conta da adequação. São sete testes próprios, e o manual do operador é `RUNNER.md`.
+O que continua ausente é o **artefato**: `pesos/modelo.congelado` e o `sha256` declarado. O portão segue
+recusando, e é o comportamento correto. O lacre desta pasta foi refeito: `registro.tsv` e `RUNNER.md` entram
+nele, e o hash anterior do registro (`27596bdf…`) fica registrado aqui em vez de sumir com a linha do lacre.
+
 ## Verificação
 
 Rodada em 2026-10-16, depois do congelamento. Código de saída entre parênteses.

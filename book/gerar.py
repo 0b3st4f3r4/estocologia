@@ -35,7 +35,7 @@ DESTINO = RAIZ / "estocologia-livro-didatico.md"
 EXIGIDOS = ["## Capítulo ", "### Degrau 1", "### Degrau 2", "### Degrau 3", "**Exercícios.**", "**Resumo.**"]
 
 # Onde o numero da edicao e afirmacao sobre esta arvore, e nao registro de uma rodada datada.
-CANONICOS = ["README.md", "PLAN.md", "DECLARACAO_DA_EDICAO.md", "RESULTADOS_RUST.md"]
+CANONICOS = ["README.md", "PLAN.md", "DECLARACAO_DO_ESTADO.md", "RESULTADOS_RUST.md"]
 
 # O par "N linhas ... N palavras" e a forma em que a contagem e declarada: a linha sozinha
 # aparece em outros contextos ("353 linhas atras"), e o par nao.

@@ -28,7 +28,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent
 LINHA = re.compile(r"^([0-9a-f]{64})  (\S.*)$")
-EXTRAS = ["DECLARACAO_DA_EDICAO.sha256"]
+EXTRAS = ["DECLARACAO_DO_ESTADO.sha256"]
 
 
 def lacres() -> list[Path]:

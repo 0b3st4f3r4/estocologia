@@ -12,7 +12,7 @@ que sabem reprovar.
 
 | Caminho | Conteúdo |
 |---|---|
-| `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 904 linhas e 74 861 palavras montadas de `book/` |
+| `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 927 linhas e 75 209 palavras montadas de `book/` |
 | `book/` | A edição em fonte, um arquivo por capítulo, com `gerar.py` (monta e confere), os dois conferidores e o gerador do registro |
 | `crates/` | O workspace Rust: núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`) e o playground WebAssembly (`-wasm`) |
 | `REGISTRO_EMPIRICO.md` | Os números da pesquisa, com o instrumento Rust que reproduz cada um e a marca de divergência declarada |
@@ -23,7 +23,7 @@ que sabem reprovar.
 | `AGENTS.md` | O contrato de governança, engenharia e orquestração: as quatro proibições, os invariantes, a banca, o ciclo e a **verificação obrigatória de §V** |
 | `PLAN.md` | Plano diretor: epistemologia, pedagogia, arquitetura, banca adversarial A1–A8 e governança |
 | `PROPOSTAS_DECLARADAS.md` | O inventário do que está declarado e ainda não exigido nem medido: **quatro itens vivos** — SHELF (3), a voz de quem paga o erro (5), a tese da ponte em escala (9) e a ponte Jev-LLM (13). Os nove que fecharam estão em §2, com a prova ao lado |
-| `DECLARACAO_DA_EDICAO.md` | O congelamento: o que a edição fez, o que não pôde fazer, o que ela reprovou contra si mesma, o que mudaria cada veredito e como tudo se reproduz. O selo do arquivo é `DECLARACAO_DA_EDICAO.sha256`, e a retificação de 2026-10-17 está em `DECLARACAO_DA_EDICAO_2.md`, com os dois hashes lado a lado |
+| `DECLARACAO_DO_ESTADO.md` | **O estado da árvore, não uma edição.** Antes de publicar não há edições numeradas: há um estado vivo, com o que ele mediu, o que reprovou contra si mesmo, o que não pôde fazer e como se reproduz. O selo é `DECLARACAO_DO_ESTADO.sha256`. As correções de 2026-10-17 estão em `historico/`, como registros datados com os hashes de antes e depois |
 | `referencias/` | A conferência das referências bibliográficas |
 | `artigo/` | O artigo "Estocologia: Velhas Fronteiras, Novos Horizontes", com as figuras |
 | `estilo/` | O instrumental da passada de prosa: `conferir-passada.py` compara cada arquivo com a versão dele no `HEAD` |
@@ -41,9 +41,9 @@ Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz
 | Instrumentos | **20** no `labs`, todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
 | Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
 | Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |
-| Edição | **5 904 linhas**, **74 861 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
+| Livro montado | **5 927 linhas**, **75 209 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
 | Blocos citados | **48**, nenhum divergente | `book/conferir_labs.py` |
-| Lacres | **26 arquivos**, **63 alvos conferidos**, 8 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
+| Lacres | **26 arquivos**, **64 alvos conferidos**, 8 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
 
 ## Como verificar
 
@@ -85,15 +85,17 @@ e do registro, compara com o que o mesmo `montar()` mede e sai com 1 quando dive
 
 ## O que segue aberto
 
-Nada disso se fecha com mais código — os três primeiros dependem de gente de fora do programa, e o quarto, de um
-artefato externo.
+Os quatro não são da mesma natureza. Os três primeiros dependem de **gente de fora do programa**, e não fecham com
+mais código: o que falta é consentimento, escuta e julgamento cego. O quarto depende de **artefato e código**: os
+pesos congelados com `sha256` e o runner que os carregue, e ele fecha com um download, uma declaração de hash e uma
+implementação.
 
-| Item | O que falta | Prazo |
-|---|---|---|
-| 3. Elicitação SHELF | as outras duas pessoas por domínio e o controle de fora do programa; a trilha do primeiro especialista está fechada em cinco domínios | sem data |
-| 5. A voz de quem paga o erro | a escuta dos grupos afetados: **0 de 7** ouvidos, cobertura mínima de 2 | **2026-12-15** |
-| 9. A tese da ponte em escala | escolhedor de casos de fora, dois analistas humanos e um juiz humano cego: **0 de 12** casos | **2027-01-14** |
-| 13. A ponte Jev-LLM | os pesos congelados com o `sha256` declarado e o runner local; o arcabouço fecha e os pesos faltam | sem data |
+| Item | Dependência | O que falta | Prazo |
+|---|---|---|---|
+| 3. Elicitação SHELF | **gente de fora do programa** | as outras duas pessoas por domínio e o controle de fora do programa; a trilha do primeiro especialista está fechada em cinco domínios | sem data |
+| 5. A voz de quem paga o erro | **gente de fora do programa** | a escuta dos grupos afetados: **0 de 7** ouvidos, cobertura mínima de 2 | **2026-12-15** |
+| 9. A tese da ponte em escala | **gente de fora do programa** | escolhedor de casos de fora, dois analistas humanos e um juiz humano cego: **0 de 12** casos | **2027-01-14** |
+| 13. A ponte Jev-LLM | **artefato e código** | os pesos com o `sha256` declarado; o runner local existe desde 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | sem data |
 
 Vencida a janela da escuta sem a cobertura mínima, as sete decisões ficam arquivadas como exercício de
 sensibilidade e não viram diretriz de política pública. Vencida a janela da ponte, a tese fica **não sustentada

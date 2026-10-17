@@ -1,22 +1,26 @@
-# Declaração da edição: o congelamento
+# Declaração do estado da árvore
 
-**Congelada em 2026-10-17T06:47:33Z; retificada às 07:27Z e às 08:10Z.** Esta é a declaração que fecha a edição: o que ela fez, o que não pôde fazer, o que
-reprovou contra si mesma, o que mudaria cada veredito e como tudo se reproduz. O manifesto com o hash de cada
-declaração de ponto está em `RESULTADOS_RUST.md` §5, **gerado** por `python3 book/gerar_resultados.py` e conferido
-por `--check`.
+**Isto é um estado, e não uma edição.** A pesquisa e o livro não foram publicados. Antes de publicar não há edição
+numerada, não há "congelamento" com número de ordem e não há segunda nem terceira edição: há um **estado da árvore**,
+que este arquivo declara, e há o **registro datado** das correções que trouxeram a árvore até aqui, em `historico/`
+— `estado-2026-10-17T0810Z.md` e `estado-2026-10-17T0840Z.md`, cada um com os hashes de antes e depois e com os
+nomes que os arquivos tinham naquele momento. Numerar edições antes de publicar carimba de definitivo o que ainda se
+corrige; quando houver publicação, aí a numeração passa a ter sentido.
 
-A retificação de 07:27Z corrigiu o que o congelamento anterior não viu, e cada conserto está declarado no lugar
-próprio: a edição montada ficou 353 linhas atrás de `book/` (§6), o lacre do `CEGAMENTO.md` estava vencido desde
-2026-10-15 e a convenção de caminho dos lacres tinha duas regras (§3), e a receita de reprodução não rodava os
-instrumentos que provam os itens fechados (§5).
+O que este arquivo declara: o que a árvore tem, o que ela reprovou contra si mesma, o que ela não pôde fazer, o que
+mudaria cada veredito e como tudo se reproduz. O manifesto com o hash de cada declaração de ponto está em
+`RESULTADOS_RUST.md` §5, **gerado** por `python3 book/gerar_resultados.py` e conferido por `--check`. O selo
+deste arquivo é `DECLARACAO_DO_ESTADO.sha256`.
 
-A retificação de 08:10Z corrigiu a divergência que a de 07:27Z criou: o livro ganhou duas linhas em `cap13.md`
-e só o manifesto foi regerado, de modo que esta declaração, o `README.md` e o `PLAN.md` passaram a afirmar uma
-contagem que o `montar()` já não produzia. Consertado em §6, com o número corrigido nos quatro lugares; e o
-`gerar.py --check` ganhou a terceira cobrança que faltava, para que a contagem escrita à mão não volte a
-sobreviver ao crescimento do livro. O §7 trocou uma afirmação falsa sobre o transcript Jev pela verdadeira, o §5
-passou a contar o alvo novo do lacre, e a contagem de comandos desta seção foi corrigida. Os dois hashes desta
-declaração, antes e depois, estão lado a lado em `DECLARACAO_DA_EDICAO_2.md`.
+O caminho até aqui, em três correções datadas, e cada conserto declarado no lugar próprio: (1) o livro montado ficou
+353 linhas atrás de `book/` e o `gerar.py --check` passou a comparar o disco com o que o `montar()` produz (§6); o
+lacre do `CEGAMENTO.md` estava vencido desde 2026-10-15 e a convenção de caminho dos lacres tinha duas regras (§3);
+a receita de reprodução não rodava os instrumentos que provam os itens fechados (§5). (2) Uma contagem escrita à mão
+sobreviveu ao crescimento do livro, e o `--check` ganhou a terceira cobrança, que lê o par "N linhas e N palavras"
+nos quatro documentos canônicos. (3) Duas afirmações documentais caíram por medição — a de que as 50 linhas de D.2 a
+D.4 levavam a marca, quando 27 a levavam, e a de que os três relatórios sairiam de `1bfec905` por `git checkout`,
+quando `book/` não existe naquele commit —, e o registro de cada uma está em `referencias/CONFERENCIA.md` e
+`DECLARACAO_PERDA_RELATORIOS.md`.
 
 ## 1. Os nove itens que fecharam, com a prova e o comando
 
@@ -25,7 +29,7 @@ declaração, antes e depois, estão lado a lado em `DECLARACAO_DA_EDICAO_2.md`.
 | Sistema 2 deliberativo | `crates/stochology-s2`, sete módulos testados | `cargo test --workspace` e `labs --s2` |
 | Crates do roteiro | os dez nomes vivos, cada um com teste próprio | `cargo test --workspace` |
 | Resolução fina da genética | `stochology-h2/src/genetica.rs`: 4 de 40 passam com uma linha, 1 de 40 com duas, piso de 0,001 para 0,000001 | `labs --genetica` |
-| Conferência da bibliografia | as 50 linhas de D.2 a D.4 com **[conferido]**, 27 conferidas contra DOI e editora, 0 divergência de conteúdo | `referencias/CONFERENCIA.md` e `book/apendices.md` |
+| Conferência da bibliografia | as 50 linhas de D.2 a D.4 com **[conferido]**, 50 conferidas contra DOI, editora, catálogo ou anais, 0 divergência de conteúdo. **Correção de 2026-10-17:** esta linha dizia "50 linhas com a marca" e "27 conferidas", e as duas coisas juntas não podiam ser verdade — a marca valia em 27, e as 23 de D.3 foram conferidas em 2026-10-15 sem marca. A reexecução de 2026-10-17 mediu as 23 de novo e aplicou a marca | `referencias/CONFERENCIA.md` (seções "As 27 linhas de D.2 e D.4" e "As 23 linhas de D.3") e `book/apendices.md` |
 | Cadeia do H3 | `stochology-h3/src/cadeia.rs`: uma linha derivada, três declaradas com o motivo | `labs --h3` |
 | Previsões 3 e 5 do eixo R | o limiar na amplitude 2,5 com o plano calibrado (perda de +2,87 min, negativa abaixo dele); a transferência com 0 violações e 3 contraexemplos | `labs --resolucao` |
 | Migrações de contrato | a cadeia em `migracoes.tsv`, embutida na compilação, 1.0 → 1.1 → 1.2 | `cargo test -p stochology-schema` e `labs --schema` |
@@ -39,13 +43,14 @@ declaração, antes e depois, estão lado a lado em `DECLARACAO_DA_EDICAO_2.md`.
 | Elicitação SHELF (3) | as outras duas pessoas por domínio e o especialista de fora do programa | gente | sem data; a trilha do primeiro especialista está fechada em cinco domínios |
 | Voz de quem paga (5) | a escuta dos sete grupos afetados, com registro assinado | gente | **2026-12-15** |
 | Tese da ponte em escala (9) | escolhedor de casos de fora, analistas humanos e juiz humano | gente | **2027-01-14**; sem eles, a tese fica não sustentada em definitivo |
-| Ponte Jev-LLM (13) | os pesos congelados com o `sha256` e o runner local | um artefato externo | sem data |
+| Ponte Jev-LLM (13) | **os pesos**, com o `sha256` declarado antes de rodar. O runner local existe desde 2026-10-17 (`crates/stochology-s2/src/runner.rs`, sete testes, manual em `fundo/p20-jev/RUNNER.md`) | o operador, com um artefato | sem data |
 
-**O que os quatro têm em comum:** nenhum deles se resolve com mais código. Três dependem de pessoas de fora do
-programa e um depende de um modelo de verdade para rodar. O arcabouço de cada um está armado, com o critério
-congelado antes de olhar o número.
+**O que os quatro não têm em comum.** Três dependem de **gente de fora do programa** e não se resolvem com código:
+o que falta é consentimento, escuta e julgamento cego, e é por isso que os instrumentos travam a caixa em vez de
+preencher a lacuna. O quarto depende de **artefato e código**: os pesos com `sha256` e o runner que os carregue, e
+o runner já está escrito; falta o arquivo. O critério de cada um está declarado antes de olhar o número.
 
-## 3. O que esta edição reprovou contra si mesma
+## 3. O que este estado reprovou contra si mesmo
 
 | o que caiu | o que ficou no lugar | instrumento |
 | --- | --- | --- |
@@ -82,7 +87,7 @@ cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23   # sai 
 python3 book/gerar.py --check                           # a rampa dos 21 capítulos E o arquivo em disco
 python3 book/conferir_labs.py                           # 48 blocos citados, 0 divergentes
 python3 book/conferir_livro.py
-python3 book/gerar_resultados.py --check                # o registro e o manifesto da edição
+python3 book/gerar_resultados.py --check                # o registro e o manifesto do estado
 python3 conferir_lacres.py                              # os 26 lacres: 63 alvos, 8 fora da árvore, 0 problemas
 python3 estilo/conferir-passada.py                      # a passada de prosa contra HEAD:book/
 ~~~
@@ -102,36 +107,36 @@ cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
 ~~~
 
 Cada pasta de ponto tem o seu `DECLARACAO.sha256`, e os 26 lacres da árvore se conferem de um só comando,
-rodado da raiz: `python3 conferir_lacres.py` devolve **63 alvos conferidos**, **8 linhas declaradas fora da
+rodado da raiz: `python3 conferir_lacres.py` devolve **65 alvos conferidos**, **8 linhas declaradas fora da
 árvore** e **0 problemas**. Dois lacres ficam sem alvo vivo, e aparecem como declarados em vez de aprovados:
 `p01-tese/CASOS.sha256` (o banco de 12 casos saiu da árvore) e `p01-tese/GERADORES.sha256` (o gerador era
 Python).
 
 ## 6. O manifesto
 
-Em `RESULTADOS_RUST.md` §5, gerado: **20 declarações de ponto**, das quais 4 são declarações 2 ou mais (retificação
+Em `RESULTADOS_RUST.md` §5, gerado: **20 declarações de ponto**, das quais 4 são declarações 2 ou mais (correção
 com os dois valores lado a lado), **16 pontos de fundo**, **20 instrumentos** no `labs`, **21 capítulos** e
 **15 crates**. Cada linha do manifesto traz o `sha256` do arquivo da declaração.
 
-A edição montada entra no mesmo manifesto com o que a identifica: **5 904 linhas**, **74 861 palavras** e
-`sha256` do arquivo. O congelamento de 2026-10-17 tinha um defeito que este parágrafo fecha: o
+O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 209 palavras** e
+`sha256` do arquivo. O estado de 2026-10-17 tinha um defeito que este parágrafo fecha: o
 `book/gerar.py --check` da época montava o livro na memória e comparava só a rampa, sem olhar o arquivo em
 disco — e o arquivo em disco estava **353 linhas atrás** de `book/`, sem os 21 blocos do eixo R e sem as
 reescritas dos itens 3 a 13. O portão cobria o motor e não a entrega. Agora o `--check` compara
 `montar()` com `estocologia-livro-didatico.md` **caractere por caractere**, imprime a diferença e sai com 1
 quando o disco não é o livro montado — e cobra uma terceira coisa: que a contagem declarada em `README.md`,
 `PLAN.md`, nesta declaração e no registro seja a contagem que o mesmo `montar()` mede. O número escrito à mão
-passou a ter instrumento, porque a retificação de 08:10Z nasceu de quatro documentos afirmando 5 903 linhas
+passou a ter instrumento, porque a correção de 2026-10-17T08:10Z nasceu de quatro documentos afirmando 5 903 linhas
 enquanto o arquivo em disco tinha 5 904.
 
 ## 7. O que fica escrito
 
-Esta edição não deixa promessa. O que ela mediu está no registro, com o instrumento ao lado; o que ela reprovou
+Este estado não deixa promessa. O que ela mediu está no registro, com o instrumento ao lado; o que ela reprovou
 está reprovado, com o número e o critério que o reprovou; o que ela não pôde fazer está declarado, com quem
 resolve e até quando. A árvore fica limpa, e o transcript que originou a auditoria da ponte Jev
 (`Integração de Modelos Jev à Estocologia.md`) está **versionado** desde o commit `5393515` — a versão anterior
 desta frase o dava como o único arquivo não versionado, e era falsa nos dois lados: o arquivo está no Git e a
-árvore tinha seis arquivos modificados quando a retificação de 08:10Z começou.
+árvore tinha seis arquivos modificados quando a correção de 2026-10-17T08:10Z começou.
 
 Quem quiser conferir não precisa acreditar em nada: rode os dezoito comandos da seção 5 — dez na reprodução e oito
 nos instrumentos dos itens fechados —, e o `sha256sum -c` de cada
