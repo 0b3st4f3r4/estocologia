@@ -47,7 +47,7 @@ if ./target/release/labs --flag-desconhecida; then
 fi
 
 if [ "$rapido" -eq 0 ]; then
-  passo "os dezenove instrumentos de labs"
+  passo "os dezesseis instrumentos de labs que §V cobra"
   for frente in todos banco resolucao s1 s2 fila genetica h3 segunda ponte escuta schema jev \
                 ensaio-shelf ensaio-escuta ensaio-ponte; do
     printf -- "-- labs --%s\n" "$frente"
