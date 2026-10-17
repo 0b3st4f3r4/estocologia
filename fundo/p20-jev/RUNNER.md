@@ -10,7 +10,8 @@ não pede escuta: pede três arquivos, uma ordem de operações e um registro.
 | --- | --- | --- |
 | o portão dos pesos | `crates/stochology-s2/src/ponte.rs`, `verificar_pesos` | fecha: sem arquivo ou com hash diferente, a ponte não roda |
 | o runner | `crates/stochology-s2/src/runner.rs`, `RunnerLocal` | fecha: carrega o artefato, confere o hash declarado, lê os blocos e responde |
-| o ingestor | `crates/stochology-s2/src/bin/ingestar_jev.rs`, binário `ingestar-jev` | fecha: lê as duas fontes do operador, valida campo por campo, ensaia em diretório temporário, lê de volta pelos portões e só então persiste; três testes de integração |
+| o ingestor | `crates/stochology-s2/src/bin/ingestar_jev.rs`, binário `ingestar-jev` | fecha: lê as duas fontes do operador, valida campo por campo, cobra o esquema da ficha pelo parser de verdade, ensaia em diretório temporário, lê de volta pelos portões e só então persiste; cinco testes de integração |
+| o gerador de fontes | `tools/gerar_fontes_incendios.py` | fecha: valida o catálogo sem chamar modelo, roda o runner por `llama-cli`, `vllm`, `api`, `arquivo` ou `demo`, mede determinismo com `--repetir` e grava as duas fontes com a quebra escapada |
 | a leitura do hash declarado | `runner.rs`, `hash_declarado` | fecha: sem `SHA256` no diretório, o runner recusa em vez de adivinhar |
 | a prova de determinismo | `ponte.rs`, `provar_determinismo` | fecha no runner: duas execuções, o mesmo `sha256` |
 | a adequação do espaço | `ponte.rs`, `adequacao_do_espaco` | fecha: pedido sem resposta congelada abstém e entra na conta |

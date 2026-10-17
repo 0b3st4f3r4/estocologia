@@ -18,6 +18,7 @@ use std::env;
 use std::path::{Path, PathBuf};
 use std::process;
 
+use stochology_s2::ponte::validar_saida;
 use stochology_s2::{calibracao, runner};
 
 fn uso_e_abortar(programa: &str) -> ! {
@@ -145,6 +146,26 @@ fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
     std::fs::remove_dir_all(&ensaio_pesos).ok();
     std::fs::remove_dir_all(&ensaio_cal).ok();
     println!("  artefato de ensaio: {} respostas, hash {}", artefato.respostas(), artefato.sha256());
+    // O esquema e cobrado aqui, pelo parser de verdade: o que nao passa vira abstencao na ponte, e e melhor
+    // descobrir na fase 1 do que na leitura do instrumento.
+    let mut fora = 0usize;
+    let mut primeiro_erro = String::new();
+    for (i, (_, resposta)) in inferencias.iter().enumerate() {
+        if let Err(recusa) = validar_saida(resposta) {
+            fora += 1;
+            if primeiro_erro.is_empty() {
+                primeiro_erro = format!("caso {}: {recusa:?}", i + 1);
+            }
+        }
+    }
+    println!(
+        "  esquema da ficha: {} de {} respostas validas",
+        inferencias.len() - fora,
+        inferencias.len()
+    );
+    if fora > 0 {
+        eprintln!("  {fora} resposta(s) fora do esquema; a primeira: {primeiro_erro}");
+    }
     println!("  conjunto de ensaio: {}", cal.leitura());
     let volume = desfechos.len() >= calibracao::AMOSTRA_MINIMA;
     println!(
@@ -153,7 +174,7 @@ fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
         if volume { "cumprido" } else { "NAO cumprido, o escore nao sera publicado" }
     );
     println!("  nenhum destino foi tocado.");
-    if !volume {
+    if !volume || fora > 0 {
         process::exit(1);
     }
 }

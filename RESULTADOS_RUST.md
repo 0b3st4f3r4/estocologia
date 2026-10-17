@@ -1393,14 +1393,15 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 5 tests
+running 6 tests
 test o_ingestor_grava_o_artefato_e_o_conjunto_com_os_lacres ... ok
 test o_modo_conferir_passa_com_trinta_pares ... ok
+test o_modo_conferir_recusa_resposta_fora_do_esquema ... ok
 test o_modo_conferir_valida_sem_tocar_em_destino ... ok
 test probabilidade_no_extremo_aborta_e_nao_escreve_nada ... ok
 test sem_argumentos_o_ingestor_imprime_o_uso_e_sai_com_1 ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok

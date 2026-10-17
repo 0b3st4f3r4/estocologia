@@ -13,6 +13,20 @@ deixar a lista mudar por entusiasmo.
 | `inferencias_reais.tsv` | `pedido<TAB>resposta`, com a quebra interna da ficha escapada como `\n` | resposta no esquema formal da ficha, sem texto livre e sem tag solta |
 | `desfechos_auditados.tsv` | `caso_id<TAB>prob<TAB>desfecho<TAB>fonte` | N ≥ 30, p em (0, 1) estrito, desfecho 0 ou 1, procedência exógena na coluna `fonte` |
 
+O catálogo de casos pode ser montado à mão ou com `tools/gerar_fontes_incendios.py`, que tem duas etapas
+desacopladas: `conferir-casos` valida o catálogo sem chamar modelo nenhum, e `inferir` submete cada prompt ao runner
+— `llama-cli` por subprocesso, `vllm` por `/v1/completions`, `api` por `/v1/chat/completions` com a chave lida de
+`JEV_API_KEY`, `arquivo` para respostas já colhidas e `demo` para atestar o encanamento com ficha determinística —,
+valida o esquema e grava as duas fontes com a quebra escapada.
+
+**A rota por API não entrega peso congelado.** Provedor remoto não publica `sha256` dos pesos e pode trocar o modelo
+sem avisar, então dois critérios da fase 3 mudam de natureza: o portão dos pesos passa a ser a **revisão declarada do
+modelo** (identificador de versão, data e, quando houver, o `sha256` que o provedor publicar), e o G1 deixa de ser
+garantia e passa a ser **medido** — `--repetir 3` faz a mesma pergunta três vezes e conta quantas respostas são
+idênticas à primeira. Repetição que não fecha é resultado, não ruído: significa que aquele provedor não serve como
+peso congelado, e a ponte reporta isso em vez de fingir determinismo. O `demo` e o `exemplo` existem para provar o caminho: o que sai deles carrega a etiqueta
+`SINTETICO-...` e `sintetico-demo` na coluna de procedência, e não serve para calibrar.
+
 A conferência da fase 1 é mecânica e não escreve nada:
 
 ~~~bash

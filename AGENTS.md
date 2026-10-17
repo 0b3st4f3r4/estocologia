@@ -128,5 +128,10 @@ livro, o gerador do registro, o conferidor de lacres, o instrumental de estilo, 
   que não entra em §V não fica na árvore.
 - **O curso e a sua numeração:** o curso *Pensamento Crítico e Modelos Estocásticos* foi obsoletado; os rótulos
   M0–M15, ME1–ME24 e MB1–MB8 são históricos e não são nomenclatura vigente.
+- **Ferramenta de operador em Python:** `tools/gerar_fontes_incendios.py` é autorizada aqui porque prepara os
+  insumos brutos do item 13 fora da árvore — catálogo de casos, inferência congelada e serialização com a quebra
+  escapada —, e o insumo que ela produz entra pela rampa do `ingestar-jev`, que é Rust e cobra o esquema. Ela não
+  calcula número publicado: o que ela escreve é fonte bruta, e a fonte só vira número depois dos lacres e do
+  instrumento. Fonte sintética que ela gera sai etiquetada como sintética.
 - **Artefato sem significância para a teoria:** o critério está em `book/resultados-significantes.md`, e a
   última aplicação está em `DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md`.

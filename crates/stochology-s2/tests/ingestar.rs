@@ -9,6 +9,36 @@ fn temp(nome: &str) -> PathBuf {
     d
 }
 
+
+/// A ficha canonica completa, com id e margem parametrizados: e o que o parser de verdade aceita.
+fn ficha(id: &str, margem: f64) -> String {
+    format!(
+        "versao = 1.2\n\
+         acao_do_pacote = abster quando a saida sai do esquema\n\
+         artefato_simulavel = crates/stochology-core#jev.teste.{id}\n\
+         camada = L2\n\
+         clausula_de_saida = parar-se-ECE>0.10\n\
+         definicao = caso de teste\n\
+         deriva_declarada = true\n\
+         escopo_ecologico = true\n\
+         id = {id}\n\
+         incerteza = epistemica\n\
+         margem = {margem:.4}\n\
+         modelo_nulo = media-historica\n\
+         patologias_cobertas = true\n\
+         pergunta_do_decisor = o caso aparece?\n\
+         priori_elicitada = true\n\
+         quem_paga_pelo_erro = decisor-declarado\n\
+         resolucao = R1-dia\n\
+         semente = 2026\n\
+         subgrupos_auditados = true\n\
+         teste_de_propriedade = true\n\
+         trata_ausentes = true\n\
+         trilha_integra = true\n\
+         unidade_independente = dia\n"
+    )
+}
+
 fn bin() -> &'static str {
     env!("CARGO_BIN_EXE_ingestar-jev")
 }
@@ -110,7 +140,9 @@ fn o_modo_conferir_passa_com_trinta_pares() {
     let inf = d.join("inferencias.tsv");
     let mut linhas = String::new();
     for n in 1..=30 {
-        linhas.push_str(&format!("pergunta {n}\tresposta {n}\n"));
+        let p = 0.05 + 0.9 * (n as f64 / 31.0);
+        let texto = ficha(&format!("caso-{n}"), p).replace('\n', "\\n");
+        linhas.push_str(&format!("pergunta {n}\t{texto}\n"));
     }
     std::fs::write(&inf, linhas.as_bytes()).expect("escreve");
     let desf = d.join("desfechos.tsv");
@@ -129,5 +161,36 @@ fn o_modo_conferir_passa_com_trinta_pares() {
     let texto = String::from_utf8_lossy(&saida.stdout);
     assert!(saida.status.success(), "{texto}{}", String::from_utf8_lossy(&saida.stderr));
     assert!(texto.contains("criterio de volume (N >= 30): cumprido"), "{texto}");
+    std::fs::remove_dir_all(&d).ok();
+}
+
+#[test]
+fn o_modo_conferir_recusa_resposta_fora_do_esquema() {
+    let d = temp("conferir-esquema");
+    let inf = d.join("inferencias.tsv");
+    let mut linhas = String::new();
+    for n in 1..=30 {
+        // texto livre em tudo: nenhuma resposta e ficha canonica
+        linhas.push_str(&format!("pergunta {n}\tisto e texto livre {n}\n"));
+    }
+    std::fs::write(&inf, linhas.as_bytes()).expect("escreve");
+    let desf = d.join("desfechos.tsv");
+    let mut dlinhas = String::new();
+    for n in 1..=30 {
+        let p = 0.05 + 0.9 * (n as f64 / 31.0);
+        dlinhas.push_str(&format!("C-{n:03}\t{p:.4}\t{}\tregistro\n", n % 2));
+    }
+    std::fs::write(&desf, dlinhas.as_bytes()).expect("escreve");
+    let saida = Command::new(bin())
+        .arg("--conferir")
+        .arg(&inf)
+        .arg(&desf)
+        .output()
+        .expect("roda o ingestor");
+    let texto = String::from_utf8_lossy(&saida.stdout);
+    let erro = String::from_utf8_lossy(&saida.stderr);
+    assert!(texto.contains("0 de 30 respostas validas"), "{texto}");
+    assert_eq!(saida.status.code(), Some(1), "resposta fora do esquema sai com 1");
+    assert!(erro.contains("fora do esquema"), "{erro}");
     std::fs::remove_dir_all(&d).ok();
 }

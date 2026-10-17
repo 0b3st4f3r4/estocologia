@@ -35,6 +35,9 @@ fundo/p08-calibracao/saida/replays/voos23e1/diario.parquet
 # Workspace Rust do PLAN.md (Edition 2024)
 target/
 
+# Insumos brutos do operador (item 13): fora da arvore, entram so pelos lacres do ingestor
+dados_brutos/
+
 # Gerados por script dentro das frentes: fora do Git, recriados pelo comando de cada README
 saida/armazem/
 fundo/p03-multiplicidade/copias/
