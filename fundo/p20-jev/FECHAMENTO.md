@@ -19,6 +19,18 @@ desacopladas: `conferir-casos` valida o catálogo sem chamar modelo nenhum, e `i
 `JEV_API_KEY`, `arquivo` para respostas já colhidas e `demo` para atestar o encanamento com ficha determinística —,
 valida o esquema e grava as duas fontes com a quebra escapada.
 
+**Decodificação estrita, e o que ela custa.** `grammar/ficha_jev.gbnf` restringe a saída ao documento canônico: 23
+campos na ordem certa e `margem` no formato `0.<dígitos com ao menos um não nulo>`, o que exclui 0.0 e 1.0 **por
+sintaxe** em vez de por validação. O gerador usa `--gramatica <arquivo>`: com `llama-cli` vira `--grammar-file`,
+com `llama-server` vai no corpo da requisição. Atenção ao preço: com gramática ligada, a forma deixa de ser medida e
+passa a ser garantida, então o critério 3 (taxa de abstenção) vira 1 por construção. A adequação do esquema só é
+medida de verdade **sem** gramática; a rodada com gramática mede outra coisa — a distribuição da margem e a
+calibração. As duas rodadas têm de ser declaradas como o que são.
+
+A gramática do rascunho que originou esta frente usava `--- INICIO FICHA ---`, `CATEGORIA` e `PROBABILIDADE`. Esse
+esquema não é o do repositório: o parser canônico é `campo = valor` com `margem`. Gramática que produz o esquema
+errado garante a coisa errada — por isso a que está aqui segue a ficha do `stochology-schema`.
+
 **Duas etapas, e por quê.** Com modelo pequeno, um exemplo completo no prompt faz o modelo copiar a margem do
 exemplo e todas as previsões saem iguais — calibração constante não mede nada. O protocolo então elicita em duas
 etapas: `--duas-etapas` pergunta primeiro só o número ("responda apenas com um número entre 0.0100 e 0.9900") e

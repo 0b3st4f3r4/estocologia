@@ -1,0 +1,10 @@
+# Gramatica da ficha canonica do item 13 (llama.cpp / GBNF).
+# Uma regra por linha: llama.cpp nao aceita continuacao com barra no fim da linha.
+# A ordem dos campos e a canonica, e a margem e obrigatoriamente 0.<digitos com ao menos um nao nulo>,
+# o que exclui 0.0 e 1.0 por construcao: a regra do extremo dogmatico vira sintaxe.
+
+root ::= "versao = " "1.2" "\n" "acao_do_pacote = " linha "\n" "artefato_simulavel = " "crates/stochology-core#jev.incendio." digitos "\n" "camada = " "L2" "\n" "clausula_de_saida = " "parar-se-ECE>0.10" "\n" "definicao = " linha "\n" "deriva_declarada = " "true" "\n" "escopo_ecologico = " "true" "\n" "id = " "jev.incendio." digitos "\n" "incerteza = " "epistemica" "\n" "margem = " prob "\n" "modelo_nulo = " "media-historica" "\n" "patologias_cobertas = " "true" "\n" "pergunta_do_decisor = " "o foco aparece nas proximas 24 horas?" "\n" "priori_elicitada = " "true" "\n" "quem_paga_pelo_erro = " "brigada-local" "\n" "resolucao = " "R1-dia" "\n" "semente = " "2026" "\n" "subgrupos_auditados = " "true" "\n" "teste_de_propriedade = " "true" "\n" "trata_ausentes = " "true" "\n" "trilha_integra = " "true" "\n" "unidade_independente = " "dia" "\n"
+
+linha ::= [^\n]+
+digitos ::= [0-9]+
+prob ::= "0." [0-9]* [1-9] [0-9]*

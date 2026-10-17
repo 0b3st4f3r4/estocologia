@@ -221,7 +221,9 @@ def ler_casos(caminho: Path) -> list[dict[str, str]]:
     return casos
 
 
-def runner_llama_cli(prompt: str, modelo: str, binario: str, seed: int, max_tokens: int) -> str:
+def runner_llama_cli(
+    prompt: str, modelo: str, binario: str, seed: int, max_tokens: int, gramatica: str = ""
+) -> str:
     """Subprocesso do llama.cpp: temperatura 0, semente fixa, sem eco do prompt."""
     comando = [
         binario,
@@ -233,13 +235,17 @@ def runner_llama_cli(prompt: str, modelo: str, binario: str, seed: int, max_toke
         "--no-display-prompt",
         "--simple-io",
     ]
+    if gramatica:
+        comando += ["--grammar-file", gramatica]
     saida = subprocess.run(comando, capture_output=True, text=True, timeout=600)
     if saida.returncode != 0:
         raise RuntimeError(f"{binario} saiu com {saida.returncode}: {saida.stderr.strip()[:400]}")
     return saida.stdout.strip()
 
 
-def runner_vllm(prompt: str, url: str, modelo: str, seed: int, max_tokens: int) -> str:
+def runner_vllm(
+    prompt: str, url: str, modelo: str, seed: int, max_tokens: int, gramatica: str = ""
+) -> str:
     """Endpoint compativel com OpenAI (vllm serve): temperatura 0 e semente fixa."""
     corpo = {
         "model": modelo,
@@ -248,6 +254,8 @@ def runner_vllm(prompt: str, url: str, modelo: str, seed: int, max_tokens: int) 
         "seed": seed,
         "max_tokens": max_tokens,
     }
+    if gramatica:
+        corpo["grammar"] = gramatica
     dados = json.dumps(corpo).encode("utf-8")
     pedido = urllib.request.Request(url, data=dados, headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(pedido, timeout=600) as resposta:
@@ -263,6 +271,7 @@ def runner_api(
     seed: int,
     max_tokens: int,
     temperatura: float = 0.0,
+    gramatica: str = "",
 ) -> str:
     """Endpoint de chat compativel com OpenAI, com chave no cabecalho.
 
@@ -284,6 +293,8 @@ def runner_api(
         "seed": seed,
         "max_tokens": max_tokens,
     }
+    if gramatica:
+        corpo["grammar"] = gramatica
     dados = json.dumps(corpo).encode("utf-8")
     cabecalhos = {"Content-Type": "application/json"}
     if chave:
@@ -361,6 +372,7 @@ def main() -> int:
     p_in.add_argument("--chave-env", default="JEV_API_KEY")
     p_in.add_argument("--repetir", type=int, default=1, help="repeticoes por caso, para medir determinismo")
     p_in.add_argument("--duas-etapas", action="store_true", help="elicita o numero antes do documento")
+    p_in.add_argument("--gramatica", default="", help="arquivo GBNF que restringe a saida")
     p_in.add_argument("--respostas", default="", help="arquivo caso_id<TAB>resposta, para o runner arquivo")
     p_in.add_argument("--seed", type=int, default=2026)
     p_in.add_argument("--max-tokens", type=int, default=400)
@@ -388,6 +400,11 @@ def main() -> int:
         print("runner arquivo exige --respostas com ao menos uma linha", file=sys.stderr)
         return 1
 
+    gramatica = ""
+    if args.gramatica:
+        gramatica = Path(args.gramatica).read_text(encoding="utf-8")
+        print(f"  gramatica: {args.gramatica} ({len(gramatica)} bytes) — a forma deixa de ser medida, passa a ser garantida")
+
     linhas_inf: list[str] = []
     linhas_desf: list[str] = [
         "\t".join(["caso_id", "probabilidade_declarada", "desfecho_observado", "fonte_desfecho"])
@@ -412,9 +429,9 @@ def main() -> int:
                 int(caso["dias_sem_chuva"]),
             )
             if args.runner in ("llama-cli",):
-                bruto = runner_llama_cli(prompt_numero, args.modelo, args.binario, args.seed, 32)
+                bruto = runner_llama_cli(prompt_numero, args.modelo, args.binario, args.seed, 32, "")
             elif args.runner == "vllm":
-                bruto = runner_vllm(prompt_numero, args.url, args.modelo, args.seed, 32)
+                bruto = runner_vllm(prompt_numero, args.url, args.modelo, args.seed, 32, "")
             elif args.runner == "api":
                 chave = os.environ.get(args.chave_env, "")
                 if not chave:
@@ -438,9 +455,9 @@ def main() -> int:
                 indice,
             )
             if args.runner == "llama-cli":
-                resposta = runner_llama_cli(prompt, args.modelo, args.binario, args.seed, args.max_tokens)
+                resposta = runner_llama_cli(prompt, args.modelo, args.binario, args.seed, args.max_tokens, gramatica)
             elif args.runner == "vllm":
-                resposta = runner_vllm(prompt, args.url, args.modelo, args.seed, args.max_tokens)
+                resposta = runner_vllm(prompt, args.url, args.modelo, args.seed, args.max_tokens, gramatica)
             else:
                 resposta = runner_api(
                     prompt,
@@ -449,6 +466,7 @@ def main() -> int:
                     os.environ.get(args.chave_env, ""),
                     args.seed,
                     args.max_tokens,
+                    gramatica=gramatica,
                 )
         elif args.runner == "demo":
             resposta = runner_demo(caso, indice)
