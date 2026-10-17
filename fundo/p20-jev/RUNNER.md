@@ -10,6 +10,7 @@ não pede escuta: pede três arquivos, uma ordem de operações e um registro.
 | --- | --- | --- |
 | o portão dos pesos | `crates/stochology-s2/src/ponte.rs`, `verificar_pesos` | fecha: sem arquivo ou com hash diferente, a ponte não roda |
 | o runner | `crates/stochology-s2/src/runner.rs`, `RunnerLocal` | fecha: carrega o artefato, confere o hash declarado, lê os blocos e responde |
+| o ingestor | `crates/stochology-s2/src/bin/ingestar_jev.rs`, binário `ingestar-jev` | fecha: lê as duas fontes do operador, valida campo por campo, ensaia em diretório temporário, lê de volta pelos portões e só então persiste; três testes de integração |
 | a leitura do hash declarado | `runner.rs`, `hash_declarado` | fecha: sem `SHA256` no diretório, o runner recusa em vez de adivinhar |
 | a prova de determinismo | `ponte.rs`, `provar_determinismo` | fecha no runner: duas execuções, o mesmo `sha256` |
 | a adequação do espaço | `ponte.rs`, `adequacao_do_espaco` | fecha: pedido sem resposta congelada abstém e entra na conta |
@@ -29,11 +30,24 @@ especificação olhando o número, e isso conta no K.
 
 1. **Escolher a revisão do modelo.** Uma só, nomeada e datada: repositório, identificador da revisão e data do
    congelamento. Trocar de revisão depois é declaração nova.
-2. **Produzir o artefato.** O formato está em §3. O artefato é a tabela de respostas congeladas, com o documento
-   canônico da ficha em cada bloco. O operador colhe as respostas do modelo que congelou e escreve o arquivo com
-   `stochology_s2::runner::escrever_artefato(dir, &[(pedido, resposta), …])`, que grava o artefato **e** o
-   `SHA256`; o caminho manual é o mesmo formato escrito à mão. Não há tensor neste formato, e isso está declarado:
-   um carregador de tensor é passo seguinte, não meio-caminho.
+2. **Produzir o artefato e o conjunto rotulado, de uma vez.** O formato está em §3 e §4. O operador colhe as
+   respostas do modelo que congelou e o desfecho observado, e roda o ingestor:
+
+   ```bash
+   cargo run --release --bin ingestar-jev -- \
+     fundo/p20-jev/pesos \
+     dados_brutos/inferencias_congeladas.tsv \
+     fundo/p20-jev/calibracao \
+     dados_brutos/desfechos_auditados.tsv
+   ```
+
+   As duas fontes são TSV simples: `pedido<TAB>resposta` e `caso_id<TAB>prob<TAB>desfecho<TAB>fonte`. O ingestor
+   **valida antes de persistir**: checa cada campo, escreve num diretório temporário, lê de volta pelos mesmos
+   portões da ponte (hash, formato, `id` sequencial, intervalo aberto da probabilidade) e só então grava nos
+   destinos, com os dois `SHA256`. Recusou, o destino não é tocado. Os escritores da biblioteca
+   (`runner::escrever_artefato` e `calibracao::escrever_desfechos`) fazem o mesmo por dentro; o ingestor é o
+   caminho de linha de comando. Não há tensor neste formato, e isso está declarado: um carregador de tensor é passo
+   seguinte, não meio-caminho.
 3. **Declarar o hash antes de rodar:**
    ```bash
    cd fundo/p20-jev/pesos
@@ -120,6 +134,7 @@ grava o TSV e o `SHA256` no mesmo passo. Ler e conferir: `calibracao::carregar(d
 ## 6. Verificação do que aqui se afirma
 
 ```bash
-cargo test -p stochology-s2      # os testes do runner: carga, hash, adulteração, formato, G1, abstenção, Brier
+cargo test -p stochology-s2      # os testes do runner e da calibração: carga, hash, adulteração, formato, G1, abstenção, Brier, amostra mínima
+cargo test -p stochology-s2 --test ingestar   # o ingestor: grava, recusa e não toca no destino quando recusa
 cargo run --release --bin labs -- --jev
 ```

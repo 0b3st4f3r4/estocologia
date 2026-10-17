@@ -1388,6 +1388,17 @@ test runner::testes::um_byte_trocado_no_artefato_recusa_a_ponte ... ok
 
 test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 3 tests
+test o_ingestor_grava_o_artefato_e_o_conjunto_com_os_lacres ... ok
+test probabilidade_no_extremo_aborta_e_nao_escreve_nada ... ok
+test sem_argumentos_o_ingestor_imprime_o_uso_e_sai_com_1 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok
 test testes::a_cadeia_nao_mexe_num_documento_ja_na_versao_da_ficha ... ok

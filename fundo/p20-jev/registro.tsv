@@ -1,7 +1,7 @@
 # registros	2026-10-16
 # nota	o estado da ponte item por item: o que fecha sem os pesos e o que so fecha com eles
 item	estado	o-que-falta
-pesos_congelados	ausentes	os pesos e o sha256 declarado; sem eles a ponte nao roda
+pesos_congelados	ausentes	os pesos e o sha256 declarado; sem eles a ponte nao roda | o ingestor (crates/stochology-s2/src/bin/ingestar_jev.rs, binario ingestar-jev) grava os dois artefatos e os dois SHA256 com ensaio antes da persistencia
 runner_local	existe	o crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao, abstencao por pedido sem resposta e 7 testes; o manual do operador e fundo/p20-jev/RUNNER.md
 decodificacao_restrita	fecha	o esquema da ficha e as duas recusas (fora do esquema e extremo dogmatico), com abstencao Outros
 determinismo_g1	fecha no ensaio e no runner	o a mesma prova com os pesos reais: duas execucoes, o mesmo sha256
