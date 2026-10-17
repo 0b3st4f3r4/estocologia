@@ -1471,3 +1471,5 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p20-jev | DECLARACAO.md | 0ee9163a58b8b3f8ab25a9b1bbdf853387cff332afb95b4219d3c742f125013e |
 
 Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 20 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
+
+Edicao montada: `estocologia-livro-didatico.md` com **5903 linhas** e **74847 palavras**, sha256 `03654a63abbbb94f3aa62f7a08ad97049fe646217f90328792d221386b698bac`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

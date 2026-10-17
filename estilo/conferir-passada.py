@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Confere uma passada de revisao contra a edicao montada de antes.
+"""Confere uma passada de revisao contra a versao de antes do mesmo arquivo.
 
 Uso:
     python3 estilo/conferir-passada.py                  # todos os arquivos do livro
     python3 estilo/conferir-passada.py book/cap07.md
 
-O baseline e a edicao montada tal como esta no Git (`estocologia-livro-didatico.md`
-no commit HEAD), que guarda o texto de antes. Para cada arquivo o script compara:
+O baseline e o **mesmo arquivo** no commit HEAD (`git show HEAD:book/cap07.md`), comparado
+com a copia de trabalho. Ate 2026-10-17 o baseline era a edicao montada, e isso tinha dois
+defeitos: a montagem ficou 353 linhas atras de `book/` sem ninguem notar, e a passada passou
+a acusar 22 de 26 arquivos por causa do atraso da montagem, e nao da prosa. Com o baseline
+por arquivo, o portao mede a passada e nao o atraso do gerador — e o `book/gerar.py --check`
+cobra a montagem, cada portao no seu alvo.
+
+Para cada arquivo o script compara:
 
   1. o multissed de numeros: nenhum numero entra, sai ou muda de valor;
   2. as cercas de codigo: cada bloco do texto de antes continua no texto de depois;
@@ -49,36 +55,27 @@ CABECALHO = re.compile(r"(?m)^## Capítulo (\d+)\.")
 MARCADORES = ["### Degrau 1", "### Degrau 2", "### Degrau 3", "**Exercícios.**", "**Resumo.**"]
 
 
-def baseline() -> str:
-    import os
-    if os.environ.get("ESTILO_BASELINE"):
-        return Path(os.environ["ESTILO_BASELINE"]).read_text(encoding="utf-8")
-    return subprocess.run(
-        ["git", "show", "HEAD:estocologia-livro-didatico.md"],
-        cwd=RAIZ, capture_output=True, text=True, check=True,
-    ).stdout
+def baseline_do_arquivo(nome: str) -> str | None:
+    """O mesmo arquivo no commit HEAD, ou None quando ele ainda nao existia la."""
+    proc = subprocess.run(
+        ["git", "show", f"HEAD:book/{nome}"],
+        cwd=RAIZ, capture_output=True, text=True,
+    )
+    if proc.returncode != 0:
+        return None
+    return proc.stdout
 
 
-def secoes(texto: str) -> dict[str, str]:
-    """Divide a edicao montada em abertura, capNN e apendices."""
-    partes = CABECALHO.split(texto)
-    numeros = [int(x) for x in partes[1::2]]
-    corpo: dict[str, str] = {"abertura": partes[0]}
-    for i, num in enumerate(numeros):
-        corpo[f"cap{num:02d}"] = partes[2 * i + 2]
-    if numeros and "# Apêndices" in partes[-1]:
-        corpo[f"cap{numeros[-1]:02d}"], resto = partes[-1].split("# Apêndices", 1)
-        corpo["apendices"] = resto
-    return corpo
-
-
-def secao_do_arquivo(caminho: Path) -> str:
+def secao_do_texto(nome: str, texto: str) -> str:
     """Devolve o trecho comparavel: o arquivo, ou a partir do cabecalho do capitulo."""
-    texto = caminho.read_text(encoding="utf-8")
-    if caminho.name == "apendices.md":
+    if nome == "apendices.md":
         return texto.split("# Apêndices", 1)[1]
     m = CABECALHO.search(texto)
     return texto[m.end():] if m else texto
+
+
+def secao_do_arquivo(caminho: Path) -> str:
+    return secao_do_texto(caminho.name, caminho.read_text(encoding="utf-8"))
 
 
 def blocos(texto: str) -> list[tuple[str, str]]:
@@ -87,7 +84,6 @@ def blocos(texto: str) -> list[tuple[str, str]]:
 
 def main() -> int:
     arquivos = [Path(a) for a in sys.argv[1:]] or sorted((RAIZ / "book").glob("*.md"))
-    base_secoes = secoes(baseline())
 
     falhas = 0
     for caminho in arquivos:
@@ -101,10 +97,11 @@ def main() -> int:
         else:
             print(f"{nome}: fora da edicao montada — pulado")
             continue
-        antes_txt = base_secoes.get(chave)
-        if antes_txt is None:
-            print(f"{nome}: sem baseline em {chave!r} — pulado")
+        antes_bruto = baseline_do_arquivo(nome)
+        if antes_bruto is None:
+            print(f"{nome}: sem baseline em HEAD:book/{nome} — pulado")
             continue
+        antes_txt = secao_do_texto(nome, antes_bruto)
         depois_txt = secao_do_arquivo(caminho)
         linhas_antes = [l for l in antes_txt.splitlines() if not l.startswith("|")]
         linhas_depois = [l for l in depois_txt.splitlines() if not l.startswith("|")]

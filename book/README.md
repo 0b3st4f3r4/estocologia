@@ -15,7 +15,7 @@ desdobramento é o §9 do `PLAN.md`.
 ## Comandos
 
 ```bash
-python3 book/gerar.py --check      # confere capítulos presentes, três degraus, exercícios e resumo
+python3 book/gerar.py --check      # confere capítulos, três degraus, exercícios, resumo E o arquivo em disco
 python3 book/conferir_labs.py     # confere o bloco de saída de cada capítulo contra o instrumento
 python3 book/gerar_resultados.py  # escreve RESULTADOS_RUST.md com a saída literal dos instrumentos
 python3 book/gerar_resultados.py --check   # confere se o registro está atualizado
@@ -64,6 +64,8 @@ provável. Nenhum valor antigo é apagado.
 | V. A máquina no mundo real | 16 a 21 | escritos; laboratórios no crate e blocos de saída conferidos |
 | Apêndices A a D | — | escritos; conferidos contra a edição anterior (o antigo Apêndice C, respostas selecionadas, virou material embutido nos Degraus 3) |
 
-A edição de 14 capítulos continua em `estocologia-livro-didatico.md` até a montagem da nova,
-que só sobrescreve aquele arquivo quando os 21 capítulos estiverem prontos (`gerar.py` se recusa a
-escrever antes disso).
+A edição em `estocologia-livro-didatico.md` já é a de 21 capítulos, montada daqui, e `gerar.py --check`
+cobra duas coisas: que os 21 capítulos estejam na rampa e que o arquivo em disco seja, caractere por
+caractere, o texto que `montar()` produz. A montagem do disco ficou 353 linhas atrás de `book/` entre os
+commits `a59803c` e `5393515` sem que nenhum portão notasse — `gerar.py --check` comparava só a rampa. A
+edição de 14 capítulos vive no histórico, no commit `1bfec905`.

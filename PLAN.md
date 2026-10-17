@@ -503,7 +503,7 @@ A edição é escrita em `book/`, um arquivo por capítulo, e só substitui
 | Parte | Capítulos | Estado |
 | --- | --- | --- |
 | I. A arte de mirar no escuro | 1 a 4 | escritos, com laboratórios medidos |
-| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5.392 linhas, 68.249 palavras) |
+| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 903 linhas, 74 847 palavras, conferida caractere por caractere contra `book/` por `gerar.py --check`) |
 | II. As armadilhas do mundo e dos dados | 5 a 8 | escritos, com laboratórios medidos |
 | III. Causa, tempo e sobrevivência | 9 a 11 | escritos, com laboratórios medidos |
 | IV. Construindo a máquina auditável | 12 a 15 | escritos, com laboratórios medidos |
@@ -532,7 +532,9 @@ de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **zero** onde não oscila. O tipo
 `medir_perda_de_resolucao` vivem em `crates/stochology-core/src/resolucao.rs`; a especificação completa, as
 cinco previsões falsificáveis e o estado da regra estão em `book/horizontes-de-resolucao-da-pergunta.md`. O
 campo entrou na ficha como `Ficha.resolucao` e a regra virou $\Phi_5$, contado pelo binário de portões; as
-previsões 3 e 5 seguem sem frente que as meça. O inventário completo do que
+previsões 3 e 5 foram medidas em 2026-10-16 (item 8 de `PROPOSTAS_DECLARADAS.md` §2): o limiar só se sustenta
+na amplitude de 2,5 com o plano calibrado, e a transferência teve 0 violações e 3 contraexemplos. O inventário
+completo do que
 segue como proposta declarada — teoria, método, pesquisa em aberto e limites — está em
 `PROPOSTAS_DECLARADAS.md`.
 
@@ -595,7 +597,7 @@ regra dos arquivos novos. O que cada um virou:
 | Dados e somas | `dados-reais/` com `FONTES.md` e `SHA256SUMS` |
 | Pareceres de risco $F_5$ | `governanca/` |
 | Auditoria de fundo (10 pontos) | `fundo/p01-tese/`, `p02-independencia/`, `p03-multiplicidade/`, `p05-prioris/`, `p06-laco/`, `p07-icp/`, `p08-calibracao/`, `p12-shelf/`; os pontos 9 e 10 (escala e dados), com as extensões de evento raro e de saúde, saíram da árvore em 2026-10-16 por não sustentarem resultado central, e voltam pelo commit `1bfec905` |
-| Livro didático (14 capítulos, sendo 9.7 a auditoria) | `estocologia-livro-didatico.md` |
+| Livro didático (21 capítulos em 5 partes, com os apêndices A a D) | `estocologia-livro-didatico.md`, escrito em `book/` |
 | Artigo | `artigo/` |
 
 Comandos de reprodução do registro empírico (Python 3.13, semente fixa). **O código Python foi aposentado em
@@ -608,9 +610,9 @@ cd h3 && python3 rodar.py && python3 grafo.py && python3 figura.py && python3 po
 ```
 
 Medição feita antes da aposentadoria: `cd h1 && python3 -m pytest -q` devolveu `24 passed in 17.51s`. O livro em
-`estocologia-livro-didatico.md` ainda está na edição de 14 capítulos: a seção 9 deste plano é a
-especificação da edição de 21 capítulos, a ser executada capítulo a capítulo preservando todos os
-números citados.
+`estocologia-livro-didatico.md` já é a edição de 21 capítulos: a seção 9 deste plano deixou de ser
+especificação e passou a descrever o que está no disco. A edição de 14 capítulos vive no histórico, no commit
+`1bfec905`.
 
 ---
 
@@ -630,7 +632,8 @@ cd h1 && python3 -m pytest -q
 cd h1 && python3 portoes.py --reproducao
 ```
 
-Estado medido nesta sessão: `cargo test --workspace` passa com 25 testes
-(3 de audit + 10 de core + 12 de hypergraph); `--horizonte todos --reproducao` devolve "7 portoes ok"
-com segunda execução idêntica e raiz de Merkle
-`9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`.
+Estado medido nesta sessão (2026-10-17): `cargo test --workspace` passa com **260 testes nos quinze crates**,
+nenhum reprovado; os **vinte instrumentos** do `labs` rodam com código 0; `--horizonte todos --reproducao`
+devolve "7 portoes ok" com segunda execução idêntica e raiz de Merkle
+`9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`; e a prova negativa
+`--horizonte h3 --defeito h3.voos23` sai com 1, reprovando no G6.

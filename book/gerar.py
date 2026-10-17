@@ -2,14 +2,19 @@
 """Monta a edicao em 21 capitulos a partir de book/.
 
 Uso:
-    python3 book/gerar.py --check      # confere a rampa de 3 degraus e a presenca dos capitulos
+    python3 book/gerar.py --check      # confere a rampa e, principalmente, o arquivo em disco
     python3 book/gerar.py              # escreve estocologia-livro-didatico.md (so se os 21 existirem)
     python3 book/gerar.py --saida x.md # escreve em outro caminho
+
+O --check tem duas cobrancas: os 21 capitulos na rampa de 3 degraus, e o texto montado
+igual, caractere por caractere, ao arquivo em disco. A segunda e a que impede a edicao
+de envelhecer atras de book/: um livro que monta na memoria e nao esta no disco reprova.
 """
 
 from __future__ import annotations
 
 import argparse
+import difflib
 import re
 import sys
 from pathlib import Path
@@ -59,10 +64,45 @@ def montar() -> str:
     return "\n\n".join(partes) + "\n"
 
 
+def conferir_destino(texto: str, destino: Path) -> list[str]:
+    """O portao que olha o alvo: o arquivo em disco tem de ser o texto montado."""
+    if not destino.exists():
+        return [f"{rotulo(destino)} nao existe no disco"]
+    em_disco = destino.read_text(encoding="utf-8")
+    if em_disco == texto:
+        return []
+    diferenca = list(
+        difflib.unified_diff(
+            texto.splitlines(keepends=True),
+            em_disco.splitlines(keepends=True),
+            fromfile=f"montado ({len(texto.splitlines())} linhas)",
+            tofile=f"{rotulo(destino)} ({len(em_disco.splitlines())} linhas)",
+            n=1,
+        )
+    )
+    problemas = [
+        f"{rotulo(destino)} diverge do texto montado: "
+        f"{sum(1 for l in diferenca if l.startswith('+') and not l.startswith('+++'))} linhas no disco a mais, "
+        f"{sum(1 for l in diferenca if l.startswith('-') and not l.startswith('---'))} linhas montadas ausentes"
+    ]
+    problemas.extend(l.rstrip("\n") for l in diferenca[:40])
+    if len(diferenca) > 40:
+        problemas.append(f"... e mais {len(diferenca) - 40} linhas de diferenca")
+    return problemas
+
+
+def rotulo(caminho: Path) -> str:
+    try:
+        return str(caminho.resolve().relative_to(RAIZ))
+    except ValueError:
+        return str(caminho)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--saida", type=Path, default=DESTINO)
+    ap.add_argument("--forcar", action="store_true", help="escreve mesmo com divergencia declarada")
     args = ap.parse_args()
 
     problemas = conferir()
@@ -74,6 +114,14 @@ def main() -> int:
             return 1
         texto = montar()
         print(f"livro pronto: {len(texto.splitlines())} linhas, {len(re.findall(r'\w+', texto))} palavras")
+        divergencias = conferir_destino(texto, DESTINO)
+        if divergencias:
+            print(f"o disco nao e o livro montado ({rotulo(DESTINO)}):")
+            for d in divergencias:
+                print(d)
+            print("remonte com: python3 book/gerar.py")
+            return 1
+        print(f"{rotulo(DESTINO)} confere caractere por caractere com o texto montado")
         return 0
 
     if problemas:
@@ -82,8 +130,9 @@ def main() -> int:
             print(f"  - {p}")
         return 1
     texto = montar()
+    args.saida.parent.mkdir(parents=True, exist_ok=True)
     args.saida.write_text(texto, encoding="utf-8")
-    print(f"escrito {args.saida.relative_to(RAIZ)}: {len(texto.splitlines())} linhas")
+    print(f"escrito {rotulo(args.saida)}: {len(texto.splitlines())} linhas")
     return 0
 
 

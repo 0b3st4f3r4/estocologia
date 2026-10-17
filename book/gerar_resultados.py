@@ -78,11 +78,20 @@ def manifesto() -> str:
     capitulos = len(list((RAIZ / "book").glob("cap*.md")))
     pontos = len(list((RAIZ / "fundo").glob("p*")))
     crates = len(list((RAIZ / "crates").glob("stochology-*")))
+    livro = RAIZ / "estocologia-livro-didatico.md"
+    texto_livro = livro.read_text(encoding="utf-8")
     linhas.append("")
     linhas.append(
         f"Declaracoes de ponto: {total}, das quais {reemitidas} sao declaracoes 2 ou mais (retificacao declarada, "
         f"com os dois valores) | pontos de fundo: {pontos} | instrumentos do `labs`: {len(instrumentos)} "
         f"({chr(44).join(instrumentos)}) | capitulos: {capitulos} | crates: {crates}"
+    )
+    linhas.append("")
+    linhas.append(
+        f"Edicao montada: `estocologia-livro-didatico.md` com **{len(texto_livro.splitlines())} linhas** e "
+        f"**{len(re.findall(r'\w+', texto_livro))} palavras**, "
+        f"sha256 `{hashlib.sha256(livro.read_bytes()).hexdigest()}`. O arquivo tem de ser o texto que "
+        f"`book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere."
     )
     return "\n".join(linhas) + "\n"
 

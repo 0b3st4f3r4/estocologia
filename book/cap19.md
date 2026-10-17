@@ -11,7 +11,7 @@ passar, e como se lê um resultado aprovado com ressalva. E também um resultado
 **A pergunta que continua valendo em toda parte.** Uma equipe quer saber quais causas continuam valendo quando o mundo muda.
 Não "a causa nesta escola", nem "a causa neste ano". A causa aparece na escola A, na escola B e na escola C, no
 ano bom e no ano ruim, no hospital de Toronto e no de Rhode Island. Esse é o horizonte H2 da pesquisa, e o seu portão é
-único e exigente. Ele pede um conjunto de causas invariantes, não vazio, em pelo menos três áreas
+único e exigente. Ele pede um conjunto não vazio de causas invariantes, em pelo menos três áreas
 diferentes da ciência.
 
 **Primeira tentativa: usar o ano como "ambiente".** Doze áreas entraram de uma vez: educação, clima, crédito,

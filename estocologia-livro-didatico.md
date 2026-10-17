@@ -251,6 +251,13 @@ não foi escolhida para forçar um resultado; ela é só o ponto de partida. **0
 Três sementes diferentes, três moedas honestas, frequências de caras a menos de 0,0013 de um meio em
 100 mil jogadas. O acaso, quando se acumula, se comporta.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  1 | sem perda medida neste capitulo | o capítulo apresenta o alvo e a tese; não há decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Explique, com suas palavras, por que a definição diz "ciência (ou arte)". Dê um
@@ -420,6 +427,13 @@ de inocência vai de **0,0001** (0,01%) a **0,5** (50%). A terceira coluna mostr
 99 vezes no primeiro mundo, 499.999,7 vezes no último. O erro não está na conta; está em responder
 sobre o Mundo com um número do Modelo.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  2 | sem perda medida neste capitulo | as três camadas; o grão da pergunta não entra na conta aqui
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Classifique cada item como Mundo, Modelo ou Agente: a taxa real de chegada de
@@ -584,6 +598,13 @@ independente e para 29,79% no caso correlacionado. A independência não era um 
 metade da conclusão. O número do repositório para o caso correlacionado é 30%, o valor arredondado que
 aparece no roteiro do curso.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  3 | sem perda medida neste capitulo | probabilidade sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conta)* Refaça a árvore da mamografia para 1.000 mulheres (em vez de 10.000) e confira que a
@@ -715,6 +736,13 @@ com esquecimento é menor porque a largura do intervalo usado aqui é a do erro-
 intervalo mais largo (ou um desconto menor) eleva a cobertura acima de 97% — a grade de parâmetros em
 `crates/stochology-book/examples/grade_cap04.rs` mostra o efeito. Os dois valores ficam
 registrados; nenhum foi apagado.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  4 | sem perda medida neste capitulo | os três tipos de incerteza; o eixo R é ortogonal a eles
+```
 
 **Exercícios.**
 
@@ -896,6 +924,13 @@ todos numa vizinhança próxima. A diferença tem duas causas prováveis: o gera
 do NumPy com `SeedSequence(1909)`; aqui, o SplitMix64 com a semente 1909) e o começo de cada dia, que
 aqui é sempre uma fila vazia. A identidade de Jensen, o sinal do pedágio e a conclusão sobre a unidade
 da margem não dependem de nenhuma delas. Nenhum valor antigo foi apagado.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  5 | perda de resolucao 46.24 min (demanda de 5 a 11) | a média mente: o capítulo é o posto que oscila entre 5 e 11
+```
 
 **Exercícios.**
 
@@ -1115,6 +1150,13 @@ do corte de seleção, que o texto antigo não declara. Os números de 1936 conv
 milhões de cédulas, 57,4% para Landon contra os 57% publicados, e a equivalência de 7 pessoas. Nenhum
 valor antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  6 | sem perda medida neste capitulo | a unidade independente é o Φ2; o eixo R é o primo dele no grão da pergunta
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Uma empresa diz: "temos milhões de usuários, então nossa pesquisa de satisfação é
@@ -1331,6 +1373,13 @@ falha diante de dados novos (erro 1,191 contra 1,000). O que não muda é a dire
 pré-registrado acusa 5,2%, perto dos 5% nominais, e o jardim multiplica isso por quatro ou por nove. Os
 dois valores ficam registrados; nenhum foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  7 | sem perda medida neste capitulo | testes severos e multiplicidade; sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Explique, sem conta, por que a média das proporções por sequência ($5/12$) é menor que
@@ -1536,6 +1585,13 @@ honesto e deixa o ruidoso atrás. A tolerância do ECE também diverge em nível
 concentradas ($n = 1\,488$, espalhamento 0,4) o q50 nulo deste instrumento é 0,0320, o número do
 relatório. O que interessa não muda: o ruído do ECE anda com $1/\sqrt n$, e por isso uma tolerância fixa
 é apertada num cofre pequeno e frouxa num cofre grande. Nenhum valor antigo foi apagado.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  8 | perda de resolucao 5.97 min (demanda de 7 a 9) | a tolerância de calibração depende do n do cofre: a oscilação de 7 a 9 é o caso leve
+```
 
 **Exercícios.**
 
@@ -1820,6 +1876,13 @@ efeito verdadeiro com a variação entre sítios; $Z$ vai de 0,6015 para 1,2029,
 ser uma relação estável. Quando os sítios intervêm no mecanismo, nenhum conjunto é a resposta
 certa, e o teste rejeita, como deve.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo  9 | sem perda medida neste capitulo | a escada de causa; o grão entra como a unidade dos ambientes
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Classifique no degrau de Pearl: "bairros com mais polícia têm mais crimes"; "se
@@ -2099,6 +2162,13 @@ os parâmetros calibrados por aqueles dois números, o modelo dá $3\times$ maio
 menor. O motivo provável é a cauda real. O Dow de 1885 a 2023 tem 19/10/1987 e a corrida de 1929-32,
 que o modelo gaussiano não tem. A linha do crash, medida, é a evidência de que o efeito existe; o
 valor exato do crescimento com $3\times$ depende de qual cauda entra na conta.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 10 | perda de resolucao 0.00 min (demanda plana) | o arrasto e a ruína se medem por dia; sem oscilação, refinar não rende nada
+```
 
 **Exercícios.**
 
@@ -2410,6 +2480,13 @@ de controle do H1; este laboratório mede $+628$ (com $+274$ na direção invers
 parte das taxas por grupo em vez das unidades. As divergências estão declaradas e nenhum valor antigo
 foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 11 | sem perda medida neste capitulo | o trilema é a subpergunta do R3: cada hora, e para quem
+```
+
 **Exercícios.**
 
 1. *(Conta)* No navio de Bernoulli, o seguro custa 1 800 e cobre uma perda de 34 000 com chance de
@@ -2692,6 +2769,13 @@ G2 semente fixa, G3 escopo declarado, G4 invariantes e tipo III, G5 integridade 
 $A_1$–$A_8$, G7 cláusula de saída), com saída de código 0 ou 1. O Capítulo 14 detalha os sete; nenhum valor
 antigo foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 12 | sem perda medida neste capitulo | o mapa do conhecimento; sem decisão de escala
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Escreva um nó $L_1$ e um nó $L_2$ para a alegação "com essa média de demanda, a espera
@@ -2961,6 +3045,13 @@ mesmo objeto, e este livro usa o orquestrador por ser o nome do código. O labor
 severidades a partir dos **oitos cuidados da ficha** (bandeiras verdadeiro/falso) e não dos ataques em si:
 rodar o ataque é a maquinaria do repositório, e o número que a banca publica é o da severidade. Por isso os
 valores 8, 9 e 10 aqui reproduzem o pior = 8 do portão, e não um relatório de ataque executado.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 13 | sem perda medida neste capitulo | a banca adversarial julga a ficha, e não o grão dela
+```
 
 **Exercícios.**
 
@@ -3243,6 +3334,13 @@ repositório dizem que "no $H_0$ a esteira aplica $\Phi_1$–$\Phi_4$", e este l
 isso: uma ficha completa gera zero falhas de invariante, e cada defeito gera uma. O número "falhas = 0" do
 portão G4, no horizonte `todos`, reproduz aqui.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 14 | sem perda medida neste capitulo | o contrato carrega o campo resolucao (R0 a R3) e o Φ5; a trava só morde com unidade igual ou mais grossa que o dia
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Preencha as cinco perguntas do cabeçalho para a alegação "alunos que estudam com música
@@ -3475,6 +3573,13 @@ exatamente assim que a reprodução limpa do G1 funciona. (2) O livro anterior d
 central travou porque o Erlang C escrito com fatoriais estourava em cargas grandes; a troca pela recursão
 estável de Erlang B só afeta a decisão, não as previsões, mas muda o hash do módulo e **conta no $K$ (3)**.
 Nenhum valor antigo foi apagado.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 15 | sem perda medida neste capitulo | cada cofre é um grão novo: a régua do eixo R quando a correção muda de pergunta
+```
 
 **Exercícios.**
 
@@ -3774,6 +3879,13 @@ porque a espera média por paciente no mundo oscilante é razão de somas de cau
 com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença
 está dentro da variação do instrumento, e os dois conjuntos de números ficam registrados.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 16 | perda de resolucao 46.24 min (demanda de 5 a 11) | o capítulo traz a tabela R0 a R3 do posto e do banco
+```
+
 **Exercícios.**
 
 1. *(Conta)* Use $W(\lambda)=\lambda/(\mu(\mu-\lambda))$ com $\mu = 12$ para achar a espera de longo prazo com
@@ -4038,6 +4150,13 @@ diferente merece registro: a edição anterior cita "de 1929 a 1932, o capital c
 **0,00025** — exatamente os números do material. A divergência não era de método: era de janela, e as duas
 aparecem agora, com a data de cada uma.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 17 | sem perda medida neste capitulo | a unidade independente é a pessoa; o eixo R aparece como o grão da comparação
+```
+
 **Exercícios.**
 
 1. *(Conta)* Use o arrasto de segunda ordem, $\tfrac{1}{2}L^2\sigma^2$, com $\sigma = 0{,}1749$ ao ano para
@@ -4269,6 +4388,13 @@ frequência mensal simples do treino, $p = 5/108 = 0{,}04630$. A diferença não
 "perigoso" se coloca do outro lado. A cauda ajustada é mais pessimista que a contagem crua de meses, e por isso
 exige mais meses limpos. Os dois valores ficam registrados; nenhum foi apagado.
 
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 18 | perda de resolucao 0.00 min (demanda plana) | os incêndios: o número muda de janela, e a janela é o grão
+```
+
 **Exercícios.**
 
 1. *(Conta)* Com a regra de Laplace, calcule a chance mensal depois de 12, 36 e 69 meses limpos. Quantos meses
@@ -4310,7 +4436,7 @@ passar, e como se lê um resultado aprovado com ressalva. E também um resultado
 **A pergunta que continua valendo em toda parte.** Uma equipe quer saber quais causas continuam valendo quando o mundo muda.
 Não "a causa nesta escola", nem "a causa neste ano". A causa aparece na escola A, na escola B e na escola C, no
 ano bom e no ano ruim, no hospital de Toronto e no de Rhode Island. Esse é o horizonte H2 da pesquisa, e o seu portão é
-único e exigente. Ele pede um conjunto de causas invariantes, não vazio, em pelo menos três áreas
+único e exigente. Ele pede um conjunto não vazio de causas invariantes, em pelo menos três áreas
 diferentes da ciência.
 
 **Primeira tentativa: usar o ano como "ambiente".** Doze áreas entraram de uma vez: educação, clima, crédito,
@@ -4379,6 +4505,15 @@ depois sorteou 40 genes novos de um conjunto de 4.681, com nível de $0{,}05/40 
 gene que passa na validação estrita, com taxa nula de $p = 0{,}001$. É o piso de 999 sorteios. A réplica mostra
 *um gene num mutante*, e não um efeito medido com resolução. Cada mutante é um ambiente de uma linha só, e o menor
 p-valor possível ali é $1/1\,000$.
+
+O laboratório deste capítulo mede o que a **segunda linha** muda, no mesmo desenho (40 mutantes, $lpha/40 =
+0{,}00125$ por gene) e com dois casos plantados: um mutante cujo efeito aparece nas **duas** linhas e um artefato
+cujo efeito aparece em **uma** linha só. Com uma linha por mutante, a validação aprova **4 dos 40** — o mover
+verdadeiro, o artefato de linha e dois que são só ruído, todos encostados no piso de $0{,}001$. O p não separa o
+que se procura do que não se procura, porque todos batem no chão ao mesmo tempo. Com a segunda linha, exigindo o
+efeito nas duas, passa **1 dos 40**: o mover, com $p = 10^{-6}$, que é o piso novo; o artefato cai fora porque o
+efeito dele na segunda linha é $+0{,}028$, contra $+1{,}016$ do mover. Faltava linha, não p-valor menor
+(`labs --genetica`).
 
 **A queda da educação.** A educação era a área mais confortável. Eram turmas pequenas sorteadas no experimento STAR do
 Tennessee, 11.598 alunos. Quando os alunos deixaram de ser contados como 11.598 observações independentes e
@@ -4611,6 +4746,47 @@ método devolve $\hat{S} = \emptyset$, o oposto da verdade, com cara de rigor. C
 conjuntos aceitos e o $\hat{S}$ é $\{x_1, x_2\}$. Foi isso que aconteceu no experimento de seguro da RAND no
 H2d, onde a saúde saiu do placar por saturação.
 
+**A segunda linha, medida.** O mesmo laboratório traz o desenho da validação por intervenção da levedura: os dois
+casos plantados — o mutante que se move nas duas linhas e o artefato que se move numa só — e os dois arranjos
+rodados sobre o mesmo mundo. O instrumento está em `crates/stochology-h2/src/genetica.rs`, a leitura em
+`crates/stochology-book/src/genetica.rs`:
+
+```bash
+cargo run --release --bin labs -- --genetica
+```
+
+```text
+== Capítulo 19 :: a resolução fina da validação por intervenção ==
+desenho: 40 mutantes | 60 individuos por linha | 999 sorteios por teste | alfa = 0.05 | Bonferroni alfa/40 = 0.001250
+plantados pelo instrumento: mover verdadeiro = mutante 7 | artefato de linha = mutante 23
+
+-- a validacao de hoje: cada mutante e um ambiente de uma linha so --
+  40 mutantes x 60 individuos | piso do desenho = 0.001000 | limiar = 0.001250
+  mutante  7 | efeito  +0.940 | p  0.001000 | passa no piso <- mover verdadeiro (efeito nas duas linhas)
+  mutante 14 | efeito  -0.450 | p  0.001000 | passa no piso
+  mutante 23 | efeito  +0.813 | p  0.001000 | passa no piso <- artefato de linha (efeito numa linha so)
+  mutante 29 | efeito  +0.496 | p  0.001000 | passa no piso
+  passam: 4 de 40
+
+-- o mesmo mundo, com a segunda linha: o efeito tem de estar nas duas --
+  40 mutantes x 2 linhas x 60 individuos | piso do desenho = 0.000001 | limiar = 0.001250
+  mutante  7 | efeito l1  +0.456 | efeito l2  +1.016 | faixa  0.560 | p  0.000001 | passa <- mover verdadeiro (efeito nas duas linhas)
+  mutante 23 | efeito l1  +0.607 | efeito l2  +0.028 | faixa  0.579 | p  0.000831 | rejeitado <- artefato de linha (efeito numa linha so)
+  passam: 1 de 40
+  efeito na segunda linha: artefato  +0.028 (nao se reproduz) | mover  +1.016 (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero
+
+leitura: com uma linha o piso de 0.001000 e o limiar de 0.001250 deixam passar 4 dos 40 mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para 0.000001000: passa 1 dos 40 mutantes. O p nunca foi o problema: o problema era a linha ser uma so.
+```
+
+Leia os dois blocos juntos. No arranjo de **uma linha**, a lista dos que passam tem quatro nomes, e só dois deles
+são o que se procura: o mover verdadeiro e o artefato de linha chegam ao piso de $0{,}001$ pela mesma porta, e dois
+mutantes sem efeito nenhum entram com eles, porque no piso o teste não tem resolução para separar. É a medida exata
+do que a réplica já dizia em prosa: *um gene num mutante*. No arranjo de **duas linhas**, o efeito tem de aparecer
+nas duas, e a lista encolhe para um nome. O artefato não cai por p-valor grande — o efeito dele na primeira linha é
+$+0{,}607$, maior que o do mover na mesma linha —, cai porque na segunda linha o efeito é $+0{,}028$, que é nada.
+O piso do desenho, que era o chão de $1/1\,000$, passa a ser o produto dos dois, $10^{-6}$, e a estimativa de
+cada efeito deixa de ser um ponto. **O p nunca foi o problema; a linha é que era uma só.**
+
 **Declaração de divergência.** Os números acima são de dados **simulados** por este laboratório, e não do
 repositório da pesquisa; as três simulações mostram um mecanismo único, em escala de brinquedo. Os valores do
 repositório citados neste capítulo (128 de 1.024 conjuntos aceitos no túnel de luz com $p = 0{,}29$ para
@@ -4618,7 +4794,17 @@ $\{$vermelho, verde, azul$\}$; 35 de 512 no ensaio do FDA; 57 conjuntos aceitos 
 levedura com melhor $p = 0{,}0072$) não são reproduzidos aqui, e não podem ser: eles exigem os dados reais e o
 arcabouço em Python dos horizontes, cujos comandos estão no Apêndice C. O laboratório mede o que pode com
 dados próprios: que o método acha as duas causas no mundo A, que devolve vazio no mundo B e que a regra de
-saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
+saturação é a diferença entre $\emptyset$ e a verdade no mundo C. O desenho da validação por intervenção da
+levedura é a exceção: a resolução da réplica é medida de novo, em Rust, por `labs --genetica`, com o mover
+verdadeiro e o artefato de linha plantados pelo instrumento — o que o instrumento mede ali é o **desenho**, e não
+os 40 genes reais, que continuam sem instrumento.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 19 | sem perda medida neste capitulo | agrupar por escola derruba a área; por aluno, não: a unidade independente no vocabulário do eixo
+```
 
 **Exercícios.**
 
@@ -4628,7 +4814,8 @@ saturação é a diferença entre $\emptyset$ e a verdade no mundo C.
    que aceitar um conjunto saturado não é evidência de invariância.
 3. *(Conta)* No laboratório, o piso da permutação com 999 sorteios é $1/1\,000 = 0{,}001$. Qual é o menor p-valor
    possível com 9.999 sorteios, e por que isso importa para a validação da levedura, onde cada mutante é um
-   ambiente de uma linha?
+   ambiente de uma linha? Confira a conta no arranjo de duas linhas: se cada linha tem o piso $1/1\,000$ e o p
+   combinado é o produto, onde fica o piso do desenho com duas linhas?
 4. *(Laboratório)* Troque, no laboratório, o deslocamento de $Y$ do mundo B de $[0; 6; -4]$ para $[0; 1; -0{,}5]$
    e rode de novo. O portão continua falhando? O que isso diz sobre o poder do teste?
 5. *(Conceito)* A correção de multiplicidade encolhe os conjuntos e ainda deixa quatro áreas. Por que ela também
@@ -4936,6 +5123,50 @@ a resolução não. **O canário** fecha o laboratório. Com o relógio honesto,
 **0** das 24.466 emissões, o coeficiente dela fica em zero e o ganho de habilidade é 0,0000; com o relógio
 desligado, ela está disponível nas 24.466 emissões e o ganho é $+0{,}6521$.
 
+**A cadeia do H3, re-executada até onde a árvore deixa.** O que acontece com as quatro linhas deste horizonte
+quando o andaime Python sai da árvore? Cada uma recebe uma classe, e o instrumento **sabe reprovar** uma linha que
+se declare de uma classe que o dado não sustenta: **medida**, quando o dado bruto está na árvore e a coisa é medida
+de novo; **derivada**, quando o número está num arquivo versionado e o instrumento refaz a conta e o veredito; e
+**registro**, quando o dado bruto não está aqui e só resta declarar o que se mediu. O código está em
+`crates/stochology-h3/src/cadeia.rs` e o registro em `fundo/p14-h3/registro.tsv`:
+
+```bash
+cargo run --release --bin labs -- --h3
+```
+
+```text
+== Ponto 14 :: a cadeia do H3, re-executada ate onde a arvore deixa ==
+carimbo do registro: 2026-10-16
+linha            classe    marca registro versionado                o que o instrumento faz
+h3.fluxos        registro  P    -                                  declara: o dado bruto nao esta na arvore
+h3.ri            registro  D    -                                  declara: o dado bruto nao esta na arvore
+h3.laco          derivada  V    fundo/p06-laco/resultados.json     re-deriva a conta e o veredito
+h3.hipergrafo    registro  P    -                                  declara: o dado bruto nao esta na arvore
+
+-- o laco performativo, re-derivado do registro em arvore --
+estimativa 2SLS: r = 0.1446378859 | IC90 de 0.1319811884 a 0.1568385251 | F do primeiro estagio = 5523.46
+razao r declarado / r medido: 4.1482907207 (o registro traz 4.1482907207) | banda declarada: 0.3333 a 3.0000
+sinal confere: true | ordem de grandeza confere: false | compativel no sentido estrito: false (o registro diz false)
+vies do previsor ingenuo contra a demanda exogena: 0.2912
+divergencias entre a conta e o registro: nenhuma
+veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (razao 4.1483, banda de 0.3333 a 3.0000)
+
+-- prova negativa: um registro em que a razao cai dentro da banda declarada --
+  com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
+-- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
+  divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+```
+
+Leia o cabeçalho da tabela de cada linha. **Os seis fluxos** e **o hipergrafo** ficam na classe registro: os
+diários e o grafo saíram da árvore com o andaime, e o que existe em Rust para eles é o **mecanismo** — o canário
+deste capítulo, que mede o relógio, e não os seis fluxos. **O cofre de Rhode Island** também é registro, e por isso
+segue com a marca **D**: o laboratório mede o mecanismo, e a divergência contra o cofre real está declarada três
+parágrafos acima. **O laço performativo** é a única linha derivável, porque o registro da medida dele está
+versionado: o instrumento lê o `resultados.json`, refaz a conta do critério que foi declarado antes de rodar e
+chega ao mesmo veredito — o laço declarado em 0,6 é **4,1483 vezes** o medido, fora da banda de 1/3 a 3, com zero
+divergência entre a conta e o registro. É a diferença entre "confie no número que está no capítulo" e "rode o
+comando e veja a conta refeita".
+
 **Declaração de divergência.** O experimento acima é simulado e foi calibrado para ter a estrutura do cofre de
 Rhode Island — taxa de 2,26%, 24.466 paradas, correção ajustada no período anterior —, não para reproduzir os
 números dele. Os valores medidos aqui e os do repositório, lado a lado: erro na média do modelo cru, $+0{,}0132$
@@ -4945,6 +5176,13 @@ modelo cru, 60% aqui contra 58% lá. A ordem de grandeza e o sinal de todas elas
 diferenças é o dado: o de cá é gerado por um modelo aditivo simples, com três covariáveis e sem o ruído de um
 registro policial real. O ganho do canário com o relógio desligado, $+0{,}6521$, cai dentro da faixa medida nos
 cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode Island).
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 20 | perda de resolucao 46.24 min (demanda de 5 a 11) | o cofre ao vivo: laboratório 0,0022 e cofre real 0,0048 são dois grãos de teste
+```
 
 **Exercícios.**
 
@@ -4966,7 +5204,9 @@ cofres reais, que vai de $+0{,}55$ (prisões de 2020–2021) a $+0{,}97$ (Rhode 
 **Resumo.**
 
 - Zero vazamento só vale com um canário que prove que o teste acharia o vazamento: 0,000 com o relógio honesto,
-  de $+0{,}55$ a $+0{,}97$ com o relógio desligado.
+  de $+0{,}55$ a $+0{,}97$ com o relógio desligado. E das quatro linhas deste horizonte, só o laço performativo
+  pode ter a conta refeita hoje: as outras três perderam o dado bruto com o andaime, e o que sobra delas é o
+  mecanismo medido aqui.
 - Um previsor pode acertar o que observa (1% de erro) e errar o mundo (29% de excesso); o instrumento sorteado
   dentro do laço desfaz a espiral, e o laço declarado em 0,6 é quatro vezes o medido, 0,145.
 - Cada correção de calibração só foi aceita num cofre novo: voos de 2023 com ECE 0,008, prisões de 2020–2021
@@ -5042,9 +5282,13 @@ de especialistas. O protocolo de painel e seis formulários estão escritos, com
 domínios mudam de status ou de ação dependendo da priori escolhida. A segunda é a voz de quem paga o erro. O
 registro dos grupos afetados existe e diz que nenhum foi ouvido.
 
-**E uma ponta que é só de resolução.** Na genética de levedura, a validação que sustenta a réplica decide com
-**um mutante por ambiente**. O menor p-valor possível ali é $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que é
-o piso. Ali falta resolução, e o p não é o problema. Um efeito medido em uma linha é um efeito medido em uma linha.
+**E uma ponta que era só de resolução.** Na genética de levedura, a validação que sustentava a réplica decidia com
+**um mutante por ambiente**: o menor p-valor possível ali era $1/1\,000$, e o resultado saiu em $p = 0{,}001$, que
+é o piso. O p não era o problema — faltava linha. O desenho dessa falta hoje tem instrumento: com uma linha por
+mutante o teste aprova **4 de 40** (o que se procura, um artefato de linha e dois que são só ruído, todos no piso
+de $0{,}001$, sem que o p separe uns dos outros), e com a segunda linha aprova **1 de 40**, com o piso caindo para
+$10^{-6}$ e a estimativa deixando de ser um ponto (`labs --genetica`, Capítulo 19). O que continua aberto é
+rodar os 40 genes **reais** com a segunda linha: o instrumento mede o desenho, não os dados da levedura.
 
 ---
 
@@ -5135,13 +5379,22 @@ naturais, com cláusula de saída, defendido em banca.
 
 - **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
   foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
-- **A resolução da validação por intervenção da genética.** Um mutante por ambiente, $p = 0{,}001$, o piso de 999
-  sorteios: falta a segunda linha, e o p-valor não é o problema.
+- **A resolução da validação por intervenção da genética.** O desenho está medido: uma linha por mutante aprova
+  4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
+  Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
+- **A tese da ponte em escala.** O piloto cego empatou no teto e a tese segue **não sustentada**, agora com portão:
+  um registro que a declare sustentada sem o teste justo é reprovado, e o piloto é re-derivado das notas do juiz
+  (`labs --ponte`). O teste justo precisa de um escolhedor de casos de fora do programa, de analistas humanos e de um
+  juiz humano, e o prazo é 2027-01-14 — vencido sem eles, a tese fica não sustentada em definitivo, e o dono já
+  aceitou essa consequência por escrito.
 - **A voz de quem paga o erro.** Nas sete decisões que afetam pessoas reais, nenhum grupo afetado foi ouvido. A
-  releitura dos 21 pareceres assinados está preparada, com as 21 linhas e os 21 resumos criptográficos conferidos,
-  e nenhuma decisão foi assinada.
+  releitura dos 21 pareceres foi feita (17 confirmados, 4 retirados e reemitidos), e ela não substitui a escuta:
+  a assinatura do responsável é de quem decide usar o artefato, não de quem paga o erro. A frente tem agora
+  protocolo congelado com hash (`fundo/p13-escuta/`) e a caixa lacrada por instrumento: as sete decisões ficam
+  como análise de sensibilidade ($n = 1$) e não viram diretriz de política pública nem decisão de portão F8 até a
+  cobertura mínima de 2 dos 7 grupos ser atingida, ou até 2026-12-15 (`labs --escuta`).
 
-**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo. R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o recurso total idêntico e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. **Do argumento ao artefato:** a unidade de conhecimento deste programa é o artefato executável, e não o parágrafo. Alegação, processo gerador, modelo nulo e teste ficam lado a lado. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a proibição de texto livre entre agentes que já vale na ficha. **Prazo de validade para a meta do livro:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
+**Quatro horizontes ficam nomeados.** **Resolução da pergunta:** a pergunta do decisor tem grão, e o grão é variável do modelo. R0 pergunta pelo dia médio, R1 pelo dia que existe, R2 pela hora e R3 pelo subgrupo. Com o recurso total idêntico e braços pareados, perguntar grosso custa **46,24 min** de espera média onde a demanda oscila de 5 a 11, **5,97 min** onde oscila de 7 a 9 e **nada** onde não oscila (`cargo run --release --bin labs -- --resolucao`, em `crates/stochology-core/src/resolucao.rs`). É o eixo novo, ortogonal ao H0–H3. As previsões falsificáveis dele estão medidas: o limiar de oscilação aparece na amplitude 2,5 com o plano calibrado — perda de $+2{,}87$ min no cruzamento e negativa abaixo dele — e **não** aparece com o plano de Erlang; a transferência não tem violação em 6 perfis, com 3 contraexemplos que passam em R0 e falham em algum dia (`labs --resolucao`). **Do argumento ao artefato:** a unidade de conhecimento deste programa é o artefato executável, e não o parágrafo. Alegação, processo gerador, modelo nulo e teste ficam lado a lado. **Agentes artificiais com disciplina epistêmica:** modelos de linguagem entram com rubrica de avaliação ($\kappa = (p_o - p_e)/(1 - p_e)$), registro da versão e da data do fornecedor, e a proibição de texto livre entre agentes que já vale na ficha. **Prazo de validade para a meta do livro:** toda métrica deste livro é declarada com a data em que passa a valer, e o Goodhart medido (Capítulo 20) é a razão de declarar o prazo antes.
 
 ---
 
@@ -5224,6 +5477,49 @@ nenhum número publicado mude; o do laboratório roda sobre 12 fichas de teste e
 que os dois têm em comum é o essencial: a pergunta do decisor só vale se nomeia quem decide, copia a ação
 literalmente e termina em pergunta.
 
+**O lacre da escuta.** O segundo instrumento do capítulo é o portão de quem paga o erro. Ele lê o registro em
+máquina das sete decisões que mexem com pessoas reais, conta a cobertura de escuta, confere se alguma decisão se diz
+emitida sem ninguém ouvido e dá o veredito do lacre. O protocolo está em `fundo/p13-escuta/protocolo.md`, congelado
+com hash antes da primeira tentativa de contato:
+
+```bash
+cargo run --release --bin labs -- --escuta
+```
+
+```text
+== Ponto 13 :: a escuta de quem paga o erro ==
+decisoes: 7 | carimbo do registro: 2026-10-16 | conducao: protocolo cego | prazo da janela: 2026-12-15 | cobertura minima: 2 de 7
+decisao                              titulares ouvidos      registro   pode emitir
+h2g/saida/direito_teto_beneficio             - nenhum       -          nao
+h2g/saida/educacao_star_turmas           11598 nenhum       -          nao
+h2g/saida/saude_rand                         - nenhum       -          nao
+h1-real/saida/b                          16177 nenhum       -          nao
+h3/prisoes                                5226 nenhum       -          nao
+h3/prisoes20                             65276 nenhum       -          nao
+h3/prisoes_ri                            86113 nenhum       -          nao
+
+cobertura de escuta: 0 de 7 grupos ouvidos
+divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido
+veredito: CAIXA LACRADA — a cobertura de 0 fica abaixo do minimo de 2; as decisoes ficam como analise de sensibilidade (n = 1) e nao viram diretriz de politica publica nem decisao de portao F8 ate 2026-12-15 ou ate a cobertura minima
+```
+
+**Nenhuma das sete coortes históricas está ao alcance** — são crianças do STAR dos anos 1980, famílias do RAND HIE,
+detidos de Toronto de 1997, motoristas de Rhode Island de 2005 —, e o programa declara isso em vez de inventar
+consulta que não houve. O que a escuta procura é equivalente estrutural: quem hoje ocupa a mesma posição de quem
+pagou o erro então. O roteiro tem três perguntas em linguagem comum (pior cenário plausível, o que faria recusar,
+quem de fato arca com o custo), quem conduz é de fora do programa ou com protocolo cego, e o operador **não conta**
+como grupo ouvido. O prazo é 2026-12-15, a cobertura mínima é de 2 dos 7 grupos com registro assinado, e o que não
+for coberto fica arquivado como exercício de sensibilidade. A prova negativa está no próprio instrumento: uma
+decisão que se diz emitida com a coluna "ouvidos" em nenhum é reprovada, e a caixa só abre quando a cobertura chega
+ao mínimo.
+
+**O grão desta pergunta.** Todo capítulo tem uma decisão com grão, e o eixo R mede o que custa perguntar
+grosso. A linha deste capítulo, pelo instrumento do eixo (`labs --resolucao`):
+
+```text
+capítulo 21 | limiar de oscilacao na amplitude 2.5 (plano calibrado) | o capítulo nomeia o eixo e as previsões 3 e 5
+```
+
 **Exercícios.**
 
 1. *(Conceito)* Escolha um problema da sua escola e escreva a pergunta do decisor nas três partes exigidas. Depois
@@ -5249,8 +5545,9 @@ literalmente e termina em pergunta.
   de conta; a auditoria estreitou a autorização desses números. A tese central empatou, a tolerância de calibração
   era frouxa, o laço declarado era quatro vezes o medido.
 - Ficam em aberto, com nome: a elicitação com especialistas humanos (5 de 33 domínios dependem da priori), a
-  resolução da validação da genética (um mutante por ambiente) e a voz de quem paga o erro (nenhum grupo afetado
-  ouvido nas sete decisões que envolvem pessoas).
+  segunda linha nos 40 genes reais da genética (o desenho já tem instrumento: 4 de 40 passam com uma linha, 1 de
+  40 com duas) e a voz de quem paga o erro (nenhum grupo afetado ouvido nas sete decisões que envolvem pessoas, com
+  a caixa lacrada por instrumento e prazo em 2026-12-15).
 - O projeto final fecha o curso: escolher um problema da escola ou da cidade, escrever a pergunta do decisor,
   preencher a ficha, fixar a semente, construir o nulo, pré-registrar, rodar e defender um memorando em frequências
   naturais com cláusula de saída.
@@ -5483,6 +5780,9 @@ terceiros não são versionados, por direito autoral. Deles ficam a citação, o
 | **[arquivo]** | há arquivo baixado para consulta, ainda sem conferência item a item contra o texto do livro |
 | **[histórico]** | material aposentado, que fica só como registro de onde um número veio |
 
+**O estado de cada linha está na linha.** Depois da conferência de 2026-10-16, todas as linhas de D.2 a D.4 levam
+a marca **[conferido]**, e a fonte de cada conferência está em `referencias/CONFERENCIA.md`.
+
 **3. Todo experimento deste livro é Rust.** O Python aparece apenas como registro histórico aposentado
 (veja o Apêndice C). Nenhum número do Degrau 3 depende de Python, e nenhum depende do curso.
 
@@ -5512,17 +5812,17 @@ repositório guarda. É o registro empírico conferido, as declarações e os la
 
 | Referência | Por que ler agora |
 | --- | --- |
-| Bernoulli, *Ars Conjectandi* (1713) | O livro que transformou "provavelmente" em conta. A regra de Laplace deste livro é filha dele |
-| Hume, *Enquiry* (1748; o título *Enquiry* é da edição de 1758) | A pergunta que nenhuma estatística resolve: por que o futuro se parece com o passado? |
-| Knight, *Risk, Uncertainty and Profit* (1921) | A distinção entre risco mensurável e incerteza que não se mede, no Capítulo 4 |
-| Savage, *The Foundations of Statistics* (1954) e Savage, *JASA* 46:55–67 (1951) | De onde vem a ideia de regra própria: apostar contra a própria crença é perder dinheiro |
-| Wald, *Statistical Decision Functions* (1950) e Chernoff, *Econometrica* 22(4) (1954) | Decidir com perda, e não só com probabilidade: a base do Capítulo 11 |
-| Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | A verossimilhança como medida de evidência, e não como resposta final |
-| Tversky e Kahneman, "Judgment under Uncertainty" (1974) | O catálogo dos atalhos mentais que o Capítulo 2 organiza por modelo de acaso ignorado |
-| Mayo, *Error and the Growth of Experimental Knowledge* (1996) | A severidade: um teste só vale o que vale o seu poder de errar |
-| Pearl, *Causality* (2000) | A escada de ver, agir e imaginar, e a porta dos fundos |
-| Gigerenzer, *Calculated Risks* (2002) | Como escrever risco para quem precisa decidir: frequências naturais, sem jargão |
-| Mandelbrot, *Fractals and Scaling in Finance* (1997) | Caudas selvagens contadas por quem as viu primeiro nos preços |
+| **[conferido]** Bernoulli, *Ars Conjectandi* (1713) | O livro que transformou "provavelmente" em conta. A regra de Laplace deste livro é filha dele |
+| **[conferido]** Hume, *Enquiry* (1748; o título *Enquiry* é da edição de 1758) | A pergunta que nenhuma estatística resolve: por que o futuro se parece com o passado? |
+| **[conferido]** Knight, *Risk, Uncertainty and Profit* (1921) | A distinção entre risco mensurável e incerteza que não se mede, no Capítulo 4 |
+| **[conferido]** Savage, *The Foundations of Statistics* (1954) e Savage, *JASA* 46:55–67 (1951) | De onde vem a ideia de regra própria: apostar contra a própria crença é perder dinheiro |
+| **[conferido]** Wald, *Statistical Decision Functions* (1950) e Chernoff, *Econometrica* 22(4) (1954) | Decidir com perda, e não só com probabilidade: a base do Capítulo 11 |
+| **[conferido]** Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | A verossimilhança como medida de evidência, e não como resposta final |
+| **[conferido]** Tversky e Kahneman, "Judgment under Uncertainty" (1974) | O catálogo dos atalhos mentais que o Capítulo 2 organiza por modelo de acaso ignorado |
+| **[conferido]** Mayo, *Error and the Growth of Experimental Knowledge* (1996) | A severidade: um teste só vale o que vale o seu poder de errar |
+| **[conferido]** Pearl, *Causality* (2000) | A escada de ver, agir e imaginar, e a porta dos fundos |
+| **[conferido]** Gigerenzer, *Calculated Risks* (2002) | Como escrever risco para quem precisa decidir: frequências naturais, sem jargão |
+| **[conferido]** Mandelbrot, *Fractals and Scaling in Finance* (1997) | Caudas selvagens contadas por quem as viu primeiro nos preços |
 
 ### D.3 Métodos e dados usados na pesquisa
 
@@ -5556,22 +5856,22 @@ repositório guarda. É o registro empírico conferido, as declarações e os la
 
 | Referência | Onde entra |
 | --- | --- |
-| Rubin, D. B. *Biometrika* 63(3):581–592, 1976. DOI: 10.1093/biomet/63.3.581 | MCAR, MAR e MNAR: por que o dado falta (Capítulo 6) |
-| Kimball, A. W. *JASA* 52(278):133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | O erro de tipo III: responder à pergunta errada |
-| Gelman, A.; Tuerlinckx, F. *Computational Statistics* 15(3):373–390, 2000. DOI: 10.1007/s001800000040 | Os erros de tipo S (sinal) e tipo M (magnitude) |
-| Gelman, A.; Carlin, J. *Perspectives on Psychological Science* 9(6):641–651, 2014. DOI: 10.1177/1745691614551642 | Como o poder pequeno produz exageros de tamanho |
-| Walker, W. E. et al. *Integrated Assessment* 4(1):5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | A tipologia da incerteza, em linguagem de decisão pública |
-| Stirling, A. *Nature* 468(7327):1029–1031, 2010. DOI: 10.1038/4681029a | Incerteza, ambiguidade e ignorância, e por que simplificar custa |
-| Moreno-Torres, J. G. et al. *Pattern Recognition* 45(1):521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | A visão unificada das mudanças de distribuição, no Capítulo 4 |
-| Ellsberg, D. *Quarterly Journal of Economics* 75(4):643–669, 1961. DOI: 10.2307/1884324 | A aversão à ambiguidade, na matriz de Stirling |
-| Sweeney, L. *Simple Demographics Often Identify People Uniquely*, Carnegie Mellon, 2000 | Quase-identificadores e o k-anonimato do H3 |
-| Baig, S. S. et al. *European Journal of Human Genetics* 24(10):1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | O teste preditivo da doença de Huntington, e o que "17,4%" quer dizer |
-| Makin, T. R.; Orban de Xivry, J.-J. *eLife* 8:e48175, 2019. DOI: 10.7554/eLife.48175 | Os dez erros estatísticos mais comuns, usados no piloto cego |
-| van Dantzig, D. *Econometrica* 24(3):276–287, 1956 | O problema do dique: quanto gastar contra uma enchente improvável (Capítulo 11) |
-| Saerens, M.; Latinne, P.; Decaestecker, C. *Neural Computation* 14:21–41, 2002 | Ajustar as saídas de um classificador a novas taxas-base |
-| Lipton, Z.; Wang, Y.-X.; Smola, A. *ICML* 80:3122–3130, 2018 | O teste de deriva de rótulo que não avisou o desvio de 2013 (Capítulo 20) |
-| Janssen, K. J. M. et al. *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | Ajustar um modelo de risco às circunstâncias locais |
-| Van Calster, B. et al. *Journal of Clinical Epidemiology* 74:167–176, 2016 | A hierarquia da calibração, de utopia a dado empírico |
+| **[conferido]** Rubin, D. B. *Biometrika* 63(3):581–592, 1976. DOI: 10.1093/biomet/63.3.581 | MCAR, MAR e MNAR: por que o dado falta (Capítulo 6) |
+| **[conferido]** Kimball, A. W. *JASA* 52(278):133–142, 1957. DOI: 10.1080/01621459.1957.10501374 | O erro de tipo III: responder à pergunta errada |
+| **[conferido]** Gelman, A.; Tuerlinckx, F. *Computational Statistics* 15(3):373–390, 2000. DOI: 10.1007/s001800000040 | Os erros de tipo S (sinal) e tipo M (magnitude) |
+| **[conferido]** Gelman, A.; Carlin, J. *Perspectives on Psychological Science* 9(6):641–651, 2014. DOI: 10.1177/1745691614551642 | Como o poder pequeno produz exageros de tamanho |
+| **[conferido]** Walker, W. E. et al. *Integrated Assessment* 4(1):5–17, 2003. DOI: 10.1076/iaij.4.1.5.16466 | A tipologia da incerteza, em linguagem de decisão pública |
+| **[conferido]** Stirling, A. *Nature* 468(7327):1029–1031, 2010. DOI: 10.1038/4681029a | Incerteza, ambiguidade e ignorância, e por que simplificar custa |
+| **[conferido]** Moreno-Torres, J. G. et al. *Pattern Recognition* 45(1):521–530, 2012. DOI: 10.1016/j.patcog.2011.06.019 | A visão unificada das mudanças de distribuição, no Capítulo 4 |
+| **[conferido]** Ellsberg, D. *Quarterly Journal of Economics* 75(4):643–669, 1961. DOI: 10.2307/1884324 | A aversão à ambiguidade, na matriz de Stirling |
+| **[conferido]** Sweeney, L. *Simple Demographics Often Identify People Uniquely*, Carnegie Mellon, 2000 | Quase-identificadores e o k-anonimato do H3 |
+| **[conferido]** Baig, S. S. et al. *European Journal of Human Genetics* 24(10):1396–1402, 2016. DOI: 10.1038/ejhg.2016.36 | O teste preditivo da doença de Huntington, e o que "17,4%" quer dizer |
+| **[conferido]** Makin, T. R.; Orban de Xivry, J.-J. *eLife* 8:e48175, 2019. DOI: 10.7554/eLife.48175 | Os dez erros estatísticos mais comuns, usados no piloto cego |
+| **[conferido]** van Dantzig, D. *Econometrica* 24(3):276–287, 1956 | O problema do dique: quanto gastar contra uma enchente improvável (Capítulo 11) |
+| **[conferido]** Saerens, M.; Latinne, P.; Decaestecker, C. *Neural Computation* 14:21–41, 2002 | Ajustar as saídas de um classificador a novas taxas-base |
+| **[conferido]** Lipton, Z.; Wang, Y.-X.; Smola, A. *ICML* 80:3122–3130, 2018 | O teste de deriva de rótulo que não avisou o desvio de 2013 (Capítulo 20) |
+| **[conferido]** Janssen, K. J. M. et al. *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | Ajustar um modelo de risco às circunstâncias locais |
+| **[conferido]** Van Calster, B. et al. *Journal of Clinical Epidemiology* 74:167–176, 2016 | A hierarquia da calibração, de utopia a dado empírico |
 
 ### D.5 Como usar esta lista
 
@@ -5588,6 +5888,16 @@ uma a uma contra a API do Crossref, as páginas das editoras, o PubMed e o RePEc
 artigo do teto do benefício é de **Meyer**, Viscusi e Durbin, e não de Viscusi e Durbin) e uma revista
 trocada (Baltagi e Levin saiu em *Structural Change and Economic Dynamics*).
 
-Falta o seguinte, e está declarado em `PROPOSTAS_DECLARADAS.md`: **conferir item a item contra os arquivos
-baixados**, marcando cada linha de D.2 a D.4 como [conferido], e registrando no livro qualquer divergência que
-apareça, como os capítulos já fazem com as divergências de número.
+**A conferência terminou em 2026-10-16.** As 50 linhas de D.2 a D.4 foram conferidas item a item contra a API do
+Crossref, as páginas das editoras, o PubMed, os anais do PMLR e catálogos de biblioteca: as 23 de D.3 na primeira
+passada (2026-10-15) e as 27 de D.2 e D.4 na segunda. Cada linha deste apêndice traz a marca **[conferido]** e cada
+conferência está na sua linha de `referencias/CONFERENCIA.md`, com a fonte ao lado.
+
+O que apareceu: **nenhuma divergência de conteúdo** nas 27 linhas novas — autores, anos, títulos, periódicos e
+páginas conferem —, **onze complementos** (os DOIs que faltavam em dez linhas e o número do *working paper* do
+Sweeney) e **duas ressalvas de fonte declaradas**: a página final do Chernoff de 1954 e a do van Dantzig de 1956
+não saíram nas fontes consultadas, e o ano do Sweeney (2000) vem do registro do CMU.
+
+A regra 1 deste apêndice continua valendo: todo arquivo foi baixado para consulta, e o que o livro guarda de cada
+um é a citação, o DOI e o número que ele usa. O que não entra no repositório são os arquivos de terceiros, por
+direito autoral.

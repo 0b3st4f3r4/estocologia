@@ -74,10 +74,26 @@ cargo run --release --bin labs -- --s2              # o Sistema 2: hipergrafo, c
 cargo run --release --bin labs -- --fila            # a fila com desistência e a tabela R0 a R3
 cargo run --release --bin portoes -- --horizonte todos --reproducao   # os sete portões
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23  # prova negativa: sai com 1
-python3 book/gerar.py --check                       # a rampa de três degraus dos 21 capítulos
+python3 book/gerar.py --check                       # a rampa E o disco: o arquivo tem de ser o livro montado
 python3 book/conferir_labs.py                       # cada bloco citado contra o instrumento
 python3 book/conferir_livro.py                      # partes, capítulos, cercas e ordem
 python3 book/gerar_resultados.py --check            # o registro RESULTADOS_RUST.md
+python3 conferir_lacres.py                          # os 26 lacres SHA-256, caminho relativo à raiz
+python3 estilo/conferir-passada.py                  # a passada de prosa contra HEAD:book/, arquivo por arquivo
+~~~
+
+Os instrumentos que provam o que os itens de `PROPOSTAS_DECLARADAS.md` §2 fecharam também entram na
+verificação, porque cada linha daquela tabela cita um deles:
+
+~~~bash
+cargo run --release --bin labs -- --genetica    # a resolução fina da genética
+cargo run --release --bin labs -- --h3          # a cadeia do H3
+cargo run --release --bin labs -- --segunda     # a segunda opinião do registro
+cargo run --release --bin labs -- --ponte       # a tese da ponte em escala
+cargo run --release --bin labs -- --escuta      # a voz de quem paga o erro
+cargo run --release --bin labs -- --schema      # a cadeia de migrações do contrato
+cargo run --release --bin labs -- --jev         # a ponte Jev-LLM
+cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
 ~~~
 
 Nenhum número entra no livro sem sair de um destes comandos. Quando um valor divergir do registro antigo, o
@@ -87,8 +103,9 @@ capítulo traz uma **declaração de divergência** com os dois valores e o moti
 ## VI. Regra dos arquivos novos
 
 Arquivo novo de trabalho — cópia intermediária, script de uma vez, rascunho — é **apagado depois da
-integração**. Fica no repositório só artefato com função contínua (`book/gerar.py`, os dois conferidores, o
-gerador do registro, os crates) ou registro (capítulos, declarações, manifestos, relatórios).
+integração**. Fica no repositório só artefato com função contínua (`book/gerar.py`, os dois conferidores do
+livro, o gerador do registro, o conferidor de lacres, o instrumental de estilo, os crates) ou registro
+(capítulos, declarações, manifestos, relatórios).
 
 ## VII. Estado do projeto
 
@@ -99,12 +116,16 @@ gerador do registro, os crates) ou registro (capítulos, declarações, manifest
 | Resultados | `RESULTADOS_RUST.md` | registro gerado dos próprios instrumentos |
 | Registro empírico | `REGISTRO_EMPIRICO.md`, `fundo/`, `governanca/`, `dados-reais/` | cada número com a marca do instrumento que o reproduz; o andaime Python saiu em 2026-10-16 |
 | Aposentado | commit `1bfec905` | o código Python de simulação e os artefatos não significativos para a teoria |
-| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | os dez itens vivos de §1: SHELF, genética fina, a voz de quem paga, a conferência da bibliografia, a reexecução do H3, as previsões 3 e 5 do eixo R, a tese da ponte em escala, as migrações de contrato, o eixo R nos capítulos e o registro sem segunda opinião. O Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila, os dez crates do roteiro e o Sistema 2 saíram da lista em 2026-10-16, ao serem implementados |
+| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | **quatro itens vivos**, e nenhum se fecha com mais código: **3** elicitação humana SHELF (o painel completo), **5** a voz de quem paga o erro (0 de 7 grupos ouvidos, prazo 2026-12-15), **9** a tese da ponte em escala (0 de 12 casos, janela 2027-01-14) e **13** a ponte Jev-LLM (faltam os pesos com `sha256` e o runner local). Os itens 1, 2, 4, 6, 7, 8, 10, 11 e 12 saíram da lista em 2026-10-16, com a prova em §2 do mesmo arquivo; o Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila e o Sistema 2 saíram antes, ao serem implementados |
 
 ## VIII. O que não entra neste repositório
 
 - **Python de simulação:** aposentado em 2026-10-16 (`DECLARACAO_REMOVIDO_PYTHON.md`). O que resta em Python
-  são as ferramentas do livro, e nada mais.
+  são as ferramentas de conferência do livro e do registro, e nada mais: `book/gerar.py`, os dois conferidores
+  do livro, `book/gerar_resultados.py`, `conferir_lacres.py` e o instrumental de estilo em `estilo/`. O
+  instrumental de estilo é autorizado aqui porque a passada de prosa é parte do ciclo de verificação contínua,
+  está declarada em `estilo/decisoes.md` e entra na verificação obrigatória de §V. Ferramenta de conferência
+  que não entra em §V não fica na árvore.
 - **O curso e a sua numeração:** o curso *Pensamento Crítico e Modelos Estocásticos* foi obsoletado; os rótulos
   M0–M15, ME1–ME24 e MB1–MB8 são históricos e não são nomenclatura vigente.
 - **Artefato sem significância para a teoria:** o critério está em `book/resultados-significantes.md`, e a
