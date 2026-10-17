@@ -5,7 +5,7 @@ Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob inc
 Este repositório guarda a pesquisa conduzida segundo a arquitetura do projeto (hipergrafo tipado, camadas
 Mundo/Modelo/Agente, banca adversarial A1–A8, orquestrador M, fichas estruturadas, invariantes Φ1–Φ5), do H0 ao
 H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenharia é **Rust** (Edition 2024):
-**quinze crates**, **260 testes**, **vinte instrumentos** no binário `labs` e **sete portões** no binário `portoes`
+**dezesseis crates**, **344 testes**, **vinte e um instrumentos** no binário `labs` e **sete portões** no binário `portoes`
 que sabem reprovar.
 
 ## O que está aqui
@@ -14,7 +14,7 @@ que sabem reprovar.
 |---|---|
 | `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 927 linhas e 75 209 palavras montadas de `book/` |
 | `book/` | A edição em fonte, um arquivo por capítulo, com `gerar.py` (monta e confere), os dois conferidores e o gerador do registro |
-| `crates/` | O workspace Rust: núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`) e o playground WebAssembly (`-wasm`) |
+| `crates/` | O workspace Rust: núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`), o playground WebAssembly (`-wasm`) e o motor ondulatório (`-wave`: superposição fasorial, Laplaciano magnético, plasticidade Kuramoto-Oja e espículas com STDP) |
 | `REGISTRO_EMPIRICO.md` | Os números da pesquisa, com o instrumento Rust que reproduz cada um e a marca de divergência declarada |
 | `RESULTADOS_RUST.md` | O registro gerado a partir dos próprios instrumentos: cada bloco é a saída literal do comando acima dele. §5 é o manifesto da edição, com o `sha256` de cada declaração de ponto |
 | `dados-reais/` | Os cinco dados que os instrumentos leem (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), com origens em `FONTES.md` e somas em `SHA256SUMS` |
@@ -37,7 +37,7 @@ Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz
 
 | Medida | Valor | Comando |
 |---|---|---|
-| Testes | **260 aprovados**, 0 reprovados, nos quinze crates | `cargo test --workspace` |
+| Testes | **344 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
 | Instrumentos | **20** no `labs`, todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
 | Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
 | Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |

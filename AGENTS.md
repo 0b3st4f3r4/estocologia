@@ -65,7 +65,7 @@ estresse deliberativo da banca, com a síntese de código (F1) declarada e não 
 ## V. Verificação obrigatória antes de consolidar
 
 ~~~bash
-cargo test --workspace                              # os quinze crates
+cargo test --workspace                              # os dezesseis crates
 cargo run --release --bin labs -- --todos           # os 21 laboratórios do livro
 cargo run --release --bin labs -- --banco           # o H0 real, lendo dados-reais/bank_calls.csv
 cargo run --release --bin labs -- --resolucao       # o horizonte R
@@ -74,6 +74,9 @@ cargo run --release --bin labs -- --s2              # o Sistema 2: hipergrafo, c
 cargo run --release --bin labs -- --fila            # a fila com desistência e a tabela R0 a R3
 cargo run --release --bin portoes -- --horizonte todos --reproducao   # os sete portões
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23  # prova negativa: sai com 1
+cargo run --release --bin onda -- --check            # os seis portões do motor ondulatório
+cargo run --release --bin onda -- --defeito mutacao  # prova negativa da cadeia de selos: sai com 1
+cargo run --release --bin onda -- --defeito inversao # prova negativa da seta causal: sai com 1
 python3 book/gerar.py --check                       # a rampa E o disco: o arquivo tem de ser o livro montado
 python3 book/conferir_labs.py                       # cada bloco citado contra o instrumento
 python3 book/conferir_livro.py                      # partes, capítulos, cercas e ordem
@@ -96,6 +99,12 @@ cargo run --release --bin labs -- --jev         # a ponte Jev-LLM
 cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
 ~~~
 
+O motor ondulatório entra no primeiro bloco porque é instrumento, não capítulo: ele não
+produz número publicado e não substitui nenhum laboratório. As duas divergências dele contra o rascunho que o
+originou estão declaradas em `crates/stochology-wave/src/lib.rs` — a frustração `<Psi, L Psi>` não serve de
+gatilho de conflito, porque na antifase simétrica ela vale zero exatamente quando o conflito existe, e o portão
+da plasticidade cobra ganho de ressonância no alvo em vez de queda monotônica de frustração.
+
 Nenhum número entra no livro sem sair de um destes comandos. Quando um valor divergir do registro antigo, o
 capítulo traz uma **declaração de divergência** com os dois valores e o motivo — é o que os Capítulos 4, 5, 8,
 16, 17, 18, 20 e 21 fazem.
@@ -112,7 +121,7 @@ livro, o gerador do registro, o conferidor de lacres, o instrumental de estilo, 
 | Camada | Onde | Estado |
 | --- | --- | --- |
 | Livro | `estocologia-livro-didatico.md`, escrito em `book/` | 21 capítulos, 5 partes, montado e conferido |
-| Aparato | `crates/stochology-*` | quinze crates vivos; nenhum nome do roteiro ficou para trás (2026-10-16) |
+| Aparato | `crates/stochology-*` | dezesseis crates vivos; nenhum nome do roteiro ficou para trás. O décimo sexto é `-wave` (2026-10-17): superposição fasorial local, Laplaciano magnético com propagador de Cayley, plasticidade Kuramoto-Oja e barramento de espículas com STDP, com as divergências declaradas na documentação do crate |
 | Resultados | `RESULTADOS_RUST.md` | registro gerado dos próprios instrumentos |
 | Registro empírico | `REGISTRO_EMPIRICO.md`, `fundo/`, `governanca/`, `dados-reais/` | cada número com a marca do instrumento que o reproduz; o andaime Python saiu em 2026-10-16 |
 | Aposentado | commit `1bfec905` | o código Python de simulação e os artefatos não significativos para a teoria |

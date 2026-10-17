@@ -19,6 +19,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 DESTINO = RAIZ / "RESULTADOS_RUST.md"
 BIN = RAIZ / "target" / "release" / "labs"
 PORTAS = RAIZ / "target" / "release" / "portoes"
+ONDA = RAIZ / "target" / "release" / "onda"
 
 
 def normalizar(texto: str) -> str:
@@ -101,13 +102,13 @@ def main() -> int:
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
 
-    if not BIN.exists() or not PORTAS.exists():
+    if not BIN.exists() or not PORTAS.exists() or not ONDA.exists():
         print("instrumentos ausentes: rode cargo build --release primeiro")
         return 1
 
     partes = [
         "# Resultados em Rust\n",
-        "Registro colhido direto dos instrumentos, em 2026-10-16. Nada aqui e transcricao: cada bloco e a\n"
+        "Registro colhido direto dos instrumentos, em 2026-10-17. Nada aqui e transcricao: cada bloco e a\n"
         "saida literal do comando acima dele. Quem duvidar de um numero roda o comando e compara.\n",
     ]
     partes.append(
@@ -128,7 +129,10 @@ def main() -> int:
         "| BTlabs --jevBT | a ponte Jev-LLM: os portoes da ponte e o que so fecha com os pesos |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
-        "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
+        "| BTonda --checkBT | os seis portoes do motor ondulatorio: L^(q) hermitiano, unidade de Cayley, cadeia de selos, determinismo e seta causal |\n"
+        "| BTonda --defeito mutacaoBT | prova negativa da cadeia de selos: sai com 1 |\n"
+        "| BTonda --defeito inversaoBT | prova negativa da seta causal: sai com 1 |\n"
+        "| BTcargo test --workspaceBT | os testes dos dezesseis crates |\n"
     )
     partes.append("## 1. O H0 real, em Rust\n")
     partes.append(bloco(
@@ -243,8 +247,26 @@ def main() -> int:
         [str(PORTAS), "--horizonte", "h3", "--defeito", "h3.voos23"],
         "Com um defeito plantado, o G6 reprova e o binario sai com codigo 1.",
     ))
+    partes.append(bloco(
+        "O motor ondulatorio: os seis portoes",
+        [str(ONDA), "--check"],
+        "Seis cobrancas sobre o hipergrafo magnetico: estrutura, L^(q) hermitiano, norma l2 preservada pelo\n"
+        "propagador de Cayley, cadeia de selos com prova negativa interna, determinismo e assimetria causal\n"
+        "aprendida pelo STDP entre as cinco lentes. E instrumento de construcao, nao laboratorio do livro: os\n"
+        "numeros dele nao entram em capitulo nenhum.",
+    ))
+    partes.append(bloco(
+        "Prova negativa do motor: a cadeia de selos",
+        [str(ONDA), "--defeito", "mutacao"],
+        "Com 0,001 plantado no ultimo estado, a cadeia recusa o salto e o binario sai com codigo 1.",
+    ))
+    partes.append(bloco(
+        "Prova negativa do motor: a seta causal",
+        [str(ONDA), "--defeito", "inversao"],
+        "Com um elo da matriz sinaptica invertido, o G6 reprova e o binario sai com codigo 1.",
+    ))
     partes.append("## 4. Os testes\n")
-    partes.append(bloco("Os quinze crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))
+    partes.append(bloco("Os dezesseis crates", ["cargo", "test", "--workspace"], "Cada crate com o seu bloco de testes."))
     partes.append("## 5. O manifesto da edicao\n")
     partes.append(manifesto())
 

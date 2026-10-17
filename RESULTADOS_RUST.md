@@ -1,6 +1,6 @@
 # Resultados em Rust
 
-Registro colhido direto dos instrumentos, em 2026-10-16. Nada aqui e transcricao: cada bloco e a
+Registro colhido direto dos instrumentos, em 2026-10-17. Nada aqui e transcricao: cada bloco e a
 saida literal do comando acima dele. Quem duvidar de um numero roda o comando e compara.
 
 | Instrumento | O que ele mede |
@@ -21,7 +21,10 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --jev` | a ponte Jev-LLM: os portoes da ponte e o que so fecha com os pesos |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
-| `cargo test --workspace` | os testes dos quinze crates |
+| `onda --check` | os seis portoes do motor ondulatorio: L^(q) hermitiano, unidade de Cayley, cadeia de selos, determinismo e seta causal |
+| `onda --defeito mutacao` | prova negativa da cadeia de selos: sai com 1 |
+| `onda --defeito inversao` | prova negativa da seta causal: sai com 1 |
+| `cargo test --workspace` | os testes dos dezesseis crates |
 
 ## 1. O H0 real, em Rust
 
@@ -1062,9 +1065,69 @@ hash_do_relatorio=bb012a0c50679cdd1d58b9717c5e94e40a005a6727d0bd0713a9b2f7497182
 veredito: 1 portoes reprovados
 ~~~
 
+### O motor ondulatorio: os seis portoes
+
+Seis cobrancas sobre o hipergrafo magnetico: estrutura, L^(q) hermitiano, norma l2 preservada pelo
+propagador de Cayley, cadeia de selos com prova negativa interna, determinismo e assimetria causal
+aprendida pelo STDP entre as cinco lentes. E instrumento de construcao, nao laboratorio do livro: os
+numeros dele nao entram em capitulo nenhum.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/onda --check
+~~~
+
+~~~text
+[OK] G1 estrutura | 4 vertices, 3 hiperarestas, q = 0.5
+  [OK] G2 hermitiano | maior desvio de L^(q) em relacao a L^(q)^dagger: 0.000e0
+  [OK] G3 unitario | norma l2 preservada em 3 saltos de dt = 0.65
+  [OK] G4 cadeia | selo de estado encadeado em 3 saltos; adulteracao de 0.001 rejeitada
+  [OK] G5 determinismo | duas execucoes independentes selam o mesmo estado
+  [OK] G6 causalidade | assimetria minima exigida de 0.05 em 4 elos; selo sinaptico 0x06d33ef213a8f4a8
+~~~
+
+### Prova negativa do motor: a cadeia de selos
+
+Com 0,001 plantado no ultimo estado, a cadeia recusa o salto e o binario sai com codigo 1.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/onda --defeito mutacao
+~~~
+
+~~~text
+[OK] G1 estrutura | 4 vertices, 3 hiperarestas, q = 0.5
+  [OK] G2 hermitiano | maior desvio de L^(q) em relacao a L^(q)^dagger: 0.000e0
+  [OK] G3 unitario | norma l2 preservada em 3 saltos de dt = 0.65
+  [OK] G4 cadeia | selo de estado encadeado em 3 saltos; adulteracao de 0.001 rejeitada
+  [OK] G5 determinismo | duas execucoes independentes selam o mesmo estado
+  [OK] G6 causalidade | assimetria minima exigida de 0.05 em 4 elos; selo sinaptico 0x06d33ef213a8f4a8
+
+[PROVA NEGATIVA] adulterando 0.001 no ultimo estado da cadeia
+  cadeia recusou: salto 3: selo de estado diverge (declarado 0x27a9cf307a6a5414, medido 0x9d10bccc515646cd)
+~~~
+
+### Prova negativa do motor: a seta causal
+
+Com um elo da matriz sinaptica invertido, o G6 reprova e o binario sai com codigo 1.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/onda --defeito inversao
+~~~
+
+~~~text
+[OK] G1 estrutura | 4 vertices, 3 hiperarestas, q = 0.5
+  [OK] G2 hermitiano | maior desvio de L^(q) em relacao a L^(q)^dagger: 0.000e0
+  [OK] G3 unitario | norma l2 preservada em 3 saltos de dt = 0.65
+  [OK] G4 cadeia | selo de estado encadeado em 3 saltos; adulteracao de 0.001 rejeitada
+  [OK] G5 determinismo | duas execucoes independentes selam o mesmo estado
+  [OK] G6 causalidade | assimetria minima exigida de 0.05 em 4 elos; selo sinaptico 0x06d33ef213a8f4a8
+
+[PROVA NEGATIVA] invertendo um elo causal da matriz sinaptica
+  causalidade insuficiente em Fluxonomia -> Crononomia: assimetria -0.7500
+~~~
+
 ## 4. Os testes
 
-### Os quinze crates
+### Os dezesseis crates
 
 Cada crate com o seu bloco de testes.
 
@@ -1422,7 +1485,8 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 6 tests
+running 7 tests
+test a_escape_do_pedido_nao_quebra_a_chave_do_artefato ... ok
 test o_ingestor_grava_o_artefato_e_o_conjunto_com_os_lacres ... ok
 test o_modo_conferir_passa_com_trinta_pares ... ok
 test o_modo_conferir_recusa_resposta_fora_do_esquema ... ok
@@ -1430,7 +1494,7 @@ test o_modo_conferir_valida_sem_tocar_em_destino ... ok
 test probabilidade_no_extremo_aborta_e_nao_escreve_nada ... ok
 test sem_argumentos_o_ingestor_imprime_o_uso_e_sai_com_1 ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok
@@ -1455,6 +1519,54 @@ test testes::a_ponte_entrega_os_mesmos_numeros_da_funcao_pura ... ok
 test testes::a_probabilidade_nunca_bate_nos_extremos ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 28 tests
+test complexo::testes::antiffase_soma_zero ... ok
+test complexo::testes::divisao_desfaz ... ok
+test complexo::testes::polar_e_fase_concordam ... ok
+test complexo::testes::produto_por_conjugado_da_quadrado_do_modulo ... ok
+test espicula::testes::indice_e_lente_ida_e_volta ... ok
+test espicula::testes::intervalos_errados_nao_casam ... ok
+test espicula::testes::reconhece_cascata_em_qualquer_instante ... ok
+test espicula::testes::selo_do_barramento_e_estavel ... ok
+test espicula::testes::stdp_cria_assimetria_causal ... ok
+test fasor::testes::atraso_de_propagacao_entra_na_fase ... ok
+test fasor::testes::em_antifase_a_energia_colapsa_e_abre_o_sistema_2 ... ok
+test fasor::testes::em_fase_ha_ganho_superaditivo ... ok
+test fasor::testes::sinal_fraco_fica_quiescente ... ok
+test magnetico::testes::antiffase_no_alvo_cancela_a_chegada ... ok
+test magnetico::testes::cadeia_detecta_adulteracao ... ok
+test magnetico::testes::cayley_preserva_a_norma ... ok
+test magnetico::testes::estado_com_tamanho_errado_e_recusado ... ok
+test magnetico::testes::laplaciano_e_hermitiano ... ok
+test magnetico::testes::mesma_entrada_mesmo_selo ... ok
+test magnetico::testes::validacao_pega_vertice_inexistente ... ok
+test plasticidade::testes::alvo_fora_do_grafo_e_erro ... ok
+test plasticidade::testes::veredito_bom_consolida_e_sela ... ok
+test plasticidade::testes::veredito_ruim_e_revertido ... ok
+test selo::testes::envolve_alfa_fica_no_intervalo ... ok
+test selo::testes::envolve_pi_em_antiffase_fica_em_pi_ou_menos_pi ... ok
+test selo::testes::mudanca_de_milesimo_muda_o_selo ... ok
+test selo::testes::poeira_abaixo_da_grade_nao_muda_o_selo ... ok
+test selo::testes::zero_e_negativo_zero_selam_igual ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 4 tests
+test ciclo_completo_s1_s2_s1_sela_o_motor ... ok
+test espicula_tem_tamanho_logico_estavel ... ok
+test palvra_reconhecida_no_fluxo_real_e_nao_no_embaralhado ... ok
+test portao_reprova_matriz_invertida ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1540,6 +1652,6 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
 | p20-jev | DECLARACAO.md | 6dd50c8070a6d9b49860021483f3052d6356a5d890437578743cf2ea2abf0578 |
 
-Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 21 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
+Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 21 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 16
 
 Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75209 palavras**, sha256 `91166f4b9123ab8bb70a148e83eccb55d2de14151422f1c87eb95b5d0879fdbc`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

@@ -16,6 +16,7 @@ members = [
     "crates/stochology-drift",
     "crates/stochology-fairness",
     "crates/stochology-wasm",
+    "crates/stochology-wave",
 ]
 
 [workspace.package]

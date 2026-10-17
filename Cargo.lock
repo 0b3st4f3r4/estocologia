@@ -115,3 +115,10 @@ dependencies = [
  "stochology-core",
  "stochology-h0",
 ]
+
+[[package]]
+name = "stochology-wave"
+version = "0.1.0"
+dependencies = [
+ "stochology-hypergraph",
+]
