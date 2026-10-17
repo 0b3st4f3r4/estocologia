@@ -45,8 +45,8 @@ Legenda, a mesma de `REGISTRO_EMPIRICO.md`:
 | "0% de falha de esquema sintático" | **D** | vale para o Jev determinístico, que não gera texto; para LLM livre não há medida nesta árvore; ver a declaração 7 |
 | Os trechos de Rust do transcript (`OrquestradorM`, `AgenteA`, `AgenteAtaqueAs`) | **D** | os dois primeiros nomes existem, com assinatura diferente, e o terceiro não existe; ver a declaração 8 |
 | As faixas $F_2$, $F_5$, $F_6$ e $F_7$ ganham classificação em lote por rubrica | **P** | declarado no texto; não há classificador de rubrica em código. O que existe é a validação da ficha e o funil |
-| A pergunta paralela de adequação do espaço de hipóteses acompanha toda chamada de Sistema 1 | **P** | a abstenção existe; a pergunta paralela de adequação não existe em código. Entra no item 13 |
-| Truncar a probabilidade do LLM em $[1\%, 99\%]$ alimenta o diário de Brier e Kelly | **P** | a faixa existe na escala do Jev; a ponte com um LLM fica declarada |
+| A pergunta paralela de adequação do espaço de hipóteses acompanha toda chamada de Sistema 1 | **P** / **R** | a abstenção existe (`s1.rs`) e a pergunta paralela entrou em código no ponto 20: `adequacao_do_espaco` mede a fração de abstenções por chamada e o veredito sai do critério declarado de 30%; o número do modelo real só sai com os pesos verificados |
+| Truncar a probabilidade do LLM em $[1\%, 99\%]$ alimenta o diário de Brier e Kelly | **P** / **R** | a faixa existe na escala do Jev, e o ponto 20 implementou a decodificação restrita que recusa a margem em 0% ou 100% (`ExtremoDogmatico`); a ponte com um LLM de verdade fica declarada, com os pesos |
 
 ## 3. Declarações de divergência
 

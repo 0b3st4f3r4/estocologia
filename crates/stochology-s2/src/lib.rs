@@ -31,6 +31,7 @@ pub mod hipergrafo;
 pub mod inferencia;
 pub mod lats;
 pub mod planejamento;
+pub mod ponte;
 
 pub use crenca::{EstadoCrenca, PISO, TETO};
 pub use estresse::{

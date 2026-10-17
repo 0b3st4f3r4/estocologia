@@ -94,8 +94,10 @@ dependencies = [
 name = "stochology-s2"
 version = "0.1.0"
 dependencies = [
+ "stochology-audit",
  "stochology-core",
  "stochology-hypergraph",
+ "stochology-schema",
 ]
 
 [[package]]

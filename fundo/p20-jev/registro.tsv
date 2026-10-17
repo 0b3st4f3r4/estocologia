@@ -1,0 +1,10 @@
+# registros	2026-10-16
+# nota	o estado da ponte item por item: o que fecha sem os pesos e o que so fecha com eles
+item	estado	o-que-falta
+pesos_congelados	ausentes	os pesos e o sha256 declarado; sem eles a ponte nao roda
+runner_local	nao existe na arvore	o runner que carregue os pesos e responda pelo trait ModeloCongelado
+decodificacao_restrita	fecha	o esquema da ficha e as duas recusas (fora do esquema e extremo dogmatico), com abstencao Outros
+determinismo_g1	fecha no ensaio	o a mesma prova com os pesos reais: duas execucoes, o mesmo sha256
+calibracao_contra_o_jev	sem numero	o o Brier da ponte contra o Brier do Jev deterministico, que so se mede com os pesos
+custo_por_chamada	medido no ensaio	o o custo real, em tokens e tempo, com os pesos
+adequacao_do_espaco	regra declarada (30%)	a fracao de abstencoes do modelo real, e o veredito pelo criterio declarado

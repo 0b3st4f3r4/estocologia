@@ -18,6 +18,7 @@ saida literal do comando acima dele. Quem duvidar de um numero roda o comando e 
 | `labs --ponte` | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |
 | `labs --schema` | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |
 | `labs --segunda` | a segunda opiniao dos resultados marcados P |
+| `labs --jev` | a ponte Jev-LLM: os portoes da ponte e o que so fecha com os pesos |
 | `labs --fila` | a fila com desistencia e as quatro regras de escala (R0 a R3) |
 | `portoes` | os sete portoes deterministicos e a banca adversarial A1-A8 |
 | `cargo test --workspace` | os testes dos quinze crates |
@@ -210,6 +211,43 @@ veredito: o laco do H3 superestima o medido: o sinal confere e a ordem nao (raza
   com r medido 0,4: ordem confere = true | veredito: o laco do H3 tem o sinal e a ordem do medido (razao 1.5000 dentro da banda)
 -- prova negativa 2: um registro em que o campo da razao nao bate com a conta --
   divergencias: ["a razao do registro (2.000000) nao bate com a conta (4.148291)", "a contencao do registro (true) nao bate com a conta (false)"]
+~~~
+
+### A ponte Jev-LLM
+
+O portao dos pesos (sem o arquivo ou com o sha256 diferente, a ponte nao roda), a decodificacao
+restrita ao esquema da ficha com a abstencao declarada, a prova de determinismo na forma do G1 nos
+dois modelos de ensaio, o custo por chamada e a adequacao do espaco de hipoteses com o criterio de 30%.
+Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e publicado.
+
+~~~bash
+/home/silvano-neto/Documents/estocologia/target/release/labs --jev
+~~~
+
+~~~text
+== Ponto 20 :: a ponte Jev-LLM ==
+
+-- o portao dos pesos --
+  RECUSADO: pesos ausentes em fundo/p20-jev/pesos/modelo.congelado | abstencao Outros | sem os pesos, a ponte nao roda e nenhum numero sai
+
+-- a decodificacao restrita --
+  o modelo de ensaio responde no esquema: ficha jev.ponte.1 | camada L2 | palavras do documento: 92
+  texto livre recusado: ForaDoEsquema("LinhaSemSeparador(\"isto e texto livre, nao uma ficha\")") | abstencao Outros
+  margem em 100% recusada: ExtremoDogmatico("margem 1") | abstencao Outros
+
+-- a prova de determinismo, na forma do G1 --
+  modelo de ensaio: execucao 1 8813a29826c09a52 | execucao 2 8813a29826c09a52 | identicas: true
+  modelo instavel: execucao 1 832a7ff86889326c | execucao 2 3495fa30b037ce75 | identicas: false
+  leitura: o portao G1 fecha com um modelo congelado e NAO fecha com um modelo que muda de resposta — e o que o INTEGRACAO_JEV.md declara sobre o LLM livre
+
+-- o custo por chamada e a adequacao do espaco --
+  modelo de ensaio: 8 chamadas | 42.0 tokens por chamada | 0.0 ms por chamada
+  modelo instavel: 4 pedidos | 4 abstencoes (100.0%) | o esquema da ficha NAO serve a este modelo: 100.0% de abstencoes, acima do limite declarado de 30%
+  modelo de ensaio: 4 pedidos | 0 abstencoes (0.0%) | o esquema da ficha serve a este modelo: 0.0% de abstencoes, dentro do limite declarado de 30%
+
+-- o estado declarado --
+  pesos congelados: ausentes da arvore | runner local: nao existe aqui | por isso a ponte fica declarada, e nenhum numero de calibracao ou de custo real e publicado
+  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada e a regra de adequacao do espaco
 ~~~
 
 ### A segunda opiniao dos resultados marcados P
@@ -1284,7 +1322,7 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 29 tests
+running 36 tests
 test crenca::testes::a_evidencia_de_ficha_move_a_crenca_para_a_camada_da_ficha ... ok
 test crenca::testes::evidencia_invalida_nao_zera_o_estado ... ok
 test crenca::testes::o_estado_de_crenca_nunca_bate_no_zero_nem_no_um ... ok
@@ -1314,8 +1352,15 @@ test planejamento::testes::a_escada_de_resolucao_vem_do_core ... ok
 test planejamento::testes::com_oscilacao_a_perda_paga_a_margem ... ok
 test planejamento::testes::margem_cara_volta_para_o_agregado ... ok
 test planejamento::testes::sem_oscilacao_a_perda_e_zero_e_o_agregado_basta ... ok
+test ponte::testes::a_margem_no_extremo_e_recusada ... ok
+test ponte::testes::a_prova_de_determinismo_passa_no_modelo_de_ensaio ... ok
+test ponte::testes::a_prova_de_determinismo_reprova_o_modelo_instavel ... ok
+test ponte::testes::a_saida_fora_do_esquema_vira_abstencao ... ok
+test ponte::testes::o_custo_por_chamada_e_a_adequacao_saem_do_ensaio ... ok
+test ponte::testes::pesos_com_hash_diferente_recusam ... ok
+test ponte::testes::sem_pesos_verificados_a_ponte_nao_roda ... ok
 
-test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 13 tests
 test testes::a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha ... ok

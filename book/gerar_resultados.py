@@ -84,6 +84,7 @@ def main() -> int:
         "| BTlabs --ponteBT | a tese da ponte em escala: o piloto re-derivado e o portao do teste justo |\n"
         "| BTlabs --schemaBT | o contrato da ficha: a versao e a cadeia de migracoes em arquivo |\n"
         "| BTlabs --segundaBT | a segunda opiniao dos resultados marcados P |\n"
+        "| BTlabs --jevBT | a ponte Jev-LLM: os portoes da ponte e o que so fecha com os pesos |\n"
         "| BTlabs --filaBT | a fila com desistencia e as quatro regras de escala (R0 a R3) |\n"
         "| BTportoesBT | os sete portoes deterministicos e a banca adversarial A1-A8 |\n"
         "| BTcargo test --workspaceBT | os testes dos quinze crates |\n"
@@ -143,6 +144,14 @@ def main() -> int:
         "veredito sao refeitos) e registro (o dado bruto saiu da arvore). Re-deriva o laco performativo do\n"
         "BTresultados.jsonBT do ponto 6 e mostra as provas negativas: um registro em que a razao cai dentro da banda\n"
         "declarada muda o veredito, e um registro em que o campo da razao nao bate com a conta e reprovado.",
+    ))
+    partes.append(bloco(
+        "A ponte Jev-LLM",
+        [str(BIN), "--jev"],
+        "O portao dos pesos (sem o arquivo ou com o sha256 diferente, a ponte nao roda), a decodificacao\n"
+        "restrita ao esquema da ficha com a abstencao declarada, a prova de determinismo na forma do G1 nos\n"
+        "dois modelos de ensaio, o custo por chamada e a adequacao do espaco de hipoteses com o criterio de 30%.\n"
+        "Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e publicado.",
     ))
     partes.append(bloco(
         "A segunda opiniao dos resultados marcados P",

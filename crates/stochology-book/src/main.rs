@@ -3,7 +3,7 @@
 //! Uso: ~cargo run --release --bin labs -- --cap 4~
 //!      ~cargo run --release --bin labs -- --todos~
 
-use stochology_book::{banco, cadeia, escuta, fila, genetica, ponte, segunda};
+use stochology_book::{banco, cadeia, escuta, fila, genetica, jev, ponte, segunda};
 use stochology_core::s1::{Categoria, S1};
 use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
@@ -32,6 +32,7 @@ fn main() {
     let mut ponte_flag = false;
     let mut schema_flag = false;
     let mut segunda_flag = false;
+    let mut jev_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -84,6 +85,7 @@ fn main() {
             "--ponte" => ponte_flag = true,
             "--schema" => schema_flag = true,
             "--segunda" => segunda_flag = true,
+            "--jev" => jev_flag = true,
             _ => {}
         }
         i += 1;
@@ -138,6 +140,10 @@ fn main() {
     }
     if segunda_flag {
         segunda::rodar();
+        return;
+    }
+    if jev_flag {
+        jev::rodar();
         return;
     }
     if todos {
