@@ -5,8 +5,10 @@ Uso:
     python3 estilo/conferir-passada.py                  # todos os arquivos do livro
     python3 estilo/conferir-passada.py book/cap07.md
 
-O baseline e o **mesmo arquivo** no commit HEAD (`git show HEAD:book/cap07.md`), comparado
-com a copia de trabalho. Ate 2026-10-17 o baseline era a edicao montada, e isso tinha dois
+O baseline e o **mesmo arquivo** no commit de referencia (`git show HEAD:book/cap07.md`),
+comparado com a copia de trabalho. O commit de referencia vem de `ESTOCOLOGIA_BASE`: no
+CI a variavel aponta para `origin/main`, porque num pull request o `HEAD` e o commit de
+mescla e o arquivo seria comparado consigo mesmo — portao que aprova por construcao. Ate 2026-10-17 o baseline era a edicao montada, e isso tinha dois
 defeitos: a montagem ficou 353 linhas atras de `book/` sem ninguem notar, e a passada passou
 a acusar 22 de 26 arquivos por causa do atraso da montagem, e nao da prosa. Com o baseline
 por arquivo, o portao mede a passada e nao o atraso do gerador — e o `book/gerar.py --check`
@@ -26,6 +28,7 @@ resto.
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 from collections import Counter
@@ -55,10 +58,14 @@ CABECALHO = re.compile(r"(?m)^## Capítulo (\d+)\.")
 MARCADORES = ["### Degrau 1", "### Degrau 2", "### Degrau 3", "**Exercícios.**", "**Resumo.**"]
 
 
+BASE = os.environ.get("ESTOCOLOGIA_BASE", "HEAD")
+"""O commit de referencia da passada: `origin/main` no CI, `HEAD` na maquina do revisor."""
+
+
 def baseline_do_arquivo(nome: str) -> str | None:
-    """O mesmo arquivo no commit HEAD, ou None quando ele ainda nao existia la."""
+    """O mesmo arquivo no commit de referencia, ou None quando ele ainda nao existia la."""
     proc = subprocess.run(
-        ["git", "show", f"HEAD:book/{nome}"],
+        ["git", "show", f"{BASE}:book/{nome}"],
         cwd=RAIZ, capture_output=True, text=True,
     )
     if proc.returncode != 0:

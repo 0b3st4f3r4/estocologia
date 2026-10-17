@@ -64,7 +64,20 @@ estresse deliberativo da banca, com a síntese de código (F1) declarada e não 
 
 ## V. Verificação obrigatória antes de consolidar
 
+Um comando, e ele é a lista:
+
 ~~~bash
+scripts/verificar.sh            # §V inteiro: formato, lints, testes, instrumentos e conferidores
+scripts/verificar.sh --rapido   # o mesmo sem os laboratórios pesados, para o laço de edição
+~~~
+
+A lista mora em `scripts/verificar.sh` e o CI chama **esse arquivo**, não uma cópia. Enquanto ela morava em dois
+lugares, o contrato cobrava 29 comandos e o CI rodava 11 — a divergência que este parágrafo fecha. O que segue é a
+leitura da lista, com o que cada linha cobra:
+
+~~~bash
+cargo fmt --all --check                             # o formato é do rustfmt, não do gosto
+cargo clippy --workspace --all-targets -- -D warnings   # nenhum aviso tolerado nos dezesseis crates
 cargo test --workspace                              # os dezesseis crates
 cargo run --release --bin labs -- --todos           # os 21 laboratórios do livro
 cargo run --release --bin labs -- --banco           # o H0 real, lendo dados-reais/bank_calls.csv
@@ -146,7 +159,9 @@ livro, o gerador do registro, o conferidor de lacres, o instrumental de estilo, 
   do livro, `book/gerar_resultados.py`, `conferir_lacres.py` e o instrumental de estilo em `estilo/`. O
   instrumental de estilo é autorizado aqui porque a passada de prosa é parte do ciclo de verificação contínua,
   está declarada em `estilo/decisoes.md` e entra na verificação obrigatória de §V. Ferramenta de conferência
-  que não entra em §V não fica na árvore.
+  que não entra em §V não fica na árvore: os quatro instrumentais que sobraram fora da lista passam por dentro dela
+  (`estilo/varredura.py` é importado por `conferir-passada.py`) ou servem à releitura declarada em
+  `estilo/decisoes.md`, e o que não servia — os três manifestos e as duas transcrições — saiu para `historico/`.
 - **O curso e a sua numeração:** o curso *Pensamento Crítico e Modelos Estocásticos* foi obsoletado; os rótulos
   M0–M15, ME1–ME24 e MB1–MB8 são históricos e não são nomenclatura vigente.
 - **Ferramenta de operador em Python:** `tools/gerar_fontes_incendios.py` é autorizada aqui porque prepara os
