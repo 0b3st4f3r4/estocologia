@@ -225,13 +225,20 @@ pub fn rodar() {
     println!("== Ponto 20 :: a ponte Jev-LLM ==");
 
     println!("\n-- o portao dos pesos --");
-    let caminho = "fundo/p20-jev/pesos/modelo.congelado";
-    match verificar_pesos(caminho, "0000000000000000000000000000000000000000000000000000000000000000") {
-        Ok(sha) => println!("  pesos verificados: {sha}"),
-        Err(recusa) => match &recusa {
-            Recusa::PesosAusentes(c) => println!("  RECUSADO: pesos ausentes em {c} | abstencao {:?} | sem os pesos, a ponte nao roda e nenhum numero sai", recusa.abstracao()),
-            Recusa::PesosComHashDiferente { esperado, medido } => println!("  RECUSADO: hash declarado {esperado}, medido {medido}"),
-            outra => println!("  RECUSADO: {outra:?}"),
+    let dir_pesos = crate::runner::DIR_PADRAO;
+    let caminho = format!("{dir_pesos}/{}", crate::runner::ARQUIVO);
+    match crate::runner::hash_declarado(dir_pesos) {
+        Err(recusa) => println!(
+            "  RECUSADO: {recusa:?} | o operador declara o sha256 em {dir_pesos}/SHA256 antes de rodar, e nenhum numero sai"
+        ),
+        Ok(declarado) => match verificar_pesos(&caminho, &declarado) {
+            Ok(sha) => println!("  pesos verificados: {sha}"),
+            Err(recusa) => match &recusa {
+                Recusa::PesosComHashDiferente { esperado, medido } => {
+                    println!("  RECUSADO: hash declarado {esperado}, medido {medido}")
+                }
+                outra => println!("  RECUSADO: {outra:?}"),
+            },
         },
     }
 
@@ -338,8 +345,20 @@ pub fn rodar() {
 
     println!("\n-- o estado declarado --");
     println!("  runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta");
-    println!("  pesos congelados: ausentes da arvore | o operador declara o sha256 em fundo/p20-jev/pesos/SHA256 e deixa o modelo em fundo/p20-jev/pesos/modelo.congelado; ate la, o portao recusa e nenhum numero de calibracao real e publicado");
-    println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco e o runner que liga todos eles");
+    let tem_pesos = crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO).is_ok();
+    let cal = crate::calibracao::carregar(crate::calibracao::DIR_PADRAO, 0, crate::calibracao::AMOSTRA_MINIMA);
+    let tem_escore = matches!(cal, Ok(crate::calibracao::Calibracao::Escore { .. }));
+    if tem_pesos {
+        println!("  pesos congelados: artefato verificado em {dir_pesos} | a ponte roda com ele, e o hash fica declarado antes de cada execucao");
+    } else {
+        println!("  pesos congelados: ausentes da arvore | o operador declara o sha256 em {dir_pesos}/SHA256 e deixa o modelo em {dir_pesos}/{}; ate la, o portao recusa e nenhum numero de calibracao real e publicado", crate::runner::ARQUIVO);
+    }
+    if tem_escore {
+        println!("  conjunto rotulado: com escore publicado | o Brier acima e o do conjunto verificado, nao do ensaio");
+    } else {
+        println!("  conjunto rotulado: sem escore publicado | o leitor existe e o conjunto e o que falta");
+    }
+    println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco, o runner e o leitor do conjunto rotulado");
 }
 
 #[cfg(test)]

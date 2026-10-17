@@ -55,7 +55,10 @@ fn ler_inferencias(caminho: &Path) -> Vec<(String, String)> {
         if campos[0].trim().is_empty() || campos[1].trim().is_empty() {
             morrer(format!("Erro na linha {} de {}: campo vazio", i + 1, caminho.display()));
         }
-        pares.push((campos[0].to_string(), campos[1].to_string()));
+        // A resposta pode ter mais de uma linha (o documento canonico da ficha tem). Na fonte, que e
+        // linha a linha, a quebra vem escapada como a sequencia de dois caracteres barra-n, e o ingestor
+        // desfaz o escape aqui. Sem escape nao ha duas linhas ambiguas.
+        pares.push((campos[0].to_string(), campos[1].replace("\\n", "\n")));
     }
     if pares.is_empty() {
         morrer(format!("{} nao tem nenhuma inferencia", caminho.display()));

@@ -228,7 +228,7 @@ Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e pub
 == Ponto 20 :: a ponte Jev-LLM ==
 
 -- o portao dos pesos --
-  RECUSADO: pesos ausentes em fundo/p20-jev/pesos/modelo.congelado | abstencao Outros | sem os pesos, a ponte nao roda e nenhum numero sai
+  RECUSADO: HashNaoDeclarado("fundo/p20-jev/pesos/SHA256") | o operador declara o sha256 em fundo/p20-jev/pesos/SHA256 antes de rodar, e nenhum numero sai
 
 -- a decodificacao restrita --
   o modelo de ensaio responde no esquema: ficha jev.ponte.1 | camada L2 | palavras do documento: 92
@@ -257,7 +257,8 @@ Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e pub
 -- o estado declarado --
   runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta
   pesos congelados: ausentes da arvore | o operador declara o sha256 em fundo/p20-jev/pesos/SHA256 e deixa o modelo em fundo/p20-jev/pesos/modelo.congelado; ate la, o portao recusa e nenhum numero de calibracao real e publicado
-  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco e o runner que liga todos eles
+  conjunto rotulado: sem escore publicado | o leitor existe e o conjunto e o que falta
+  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco, o runner e o leitor do conjunto rotulado
 ~~~
 
 ### A segunda opiniao dos resultados marcados P

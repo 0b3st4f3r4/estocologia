@@ -41,8 +41,10 @@ especificação olhando o número, e isso conta no K.
      dados_brutos/desfechos_auditados.tsv
    ```
 
-   As duas fontes são TSV simples: `pedido<TAB>resposta` e `caso_id<TAB>prob<TAB>desfecho<TAB>fonte`. O ingestor
-   **valida antes de persistir**: checa cada campo, escreve num diretório temporário, lê de volta pelos mesmos
+   As duas fontes são TSV simples: `pedido<TAB>resposta` e `caso_id<TAB>prob<TAB>desfecho<TAB>fonte`. Como o
+   documento canônico da ficha tem mais de uma linha e a fonte é linha a linha, a quebra vem **escapada** como a
+   sequência de dois caracteres `\n`, e o ingestor desfaz o escape; sem o escape não há duas linhas ambíguas. O
+   ingestor **valida antes de persistir**: checa cada campo, escreve num diretório temporário, lê de volta pelos mesmos
    portões da ponte (hash, formato, `id` sequencial, intervalo aberto da probabilidade) e só então grava nos
    destinos, com os dois `SHA256`. Recusou, o destino não é tocado. Os escritores da biblioteca
    (`runner::escrever_artefato` e `calibracao::escrever_desfechos`) fazem o mesmo por dentro; o ingestor é o
@@ -131,7 +133,23 @@ grava o TSV e o `SHA256` no mesmo passo. Ler e conferir: `calibracao::carregar(d
 - **O Brier exige conjunto rotulado.** O leitor existe (§4) com as três regras; o que falta é o arquivo com
   desfecho observado. Sem ele a ponte diz isso em vez de publicar número de ensaio como se fosse calibração.
 
-## 6. Verificação do que aqui se afirma
+## 6. Ensaio sintético, para atestar o caminho
+
+Antes de existir peso de verdade, o caminho inteiro é atestado com 30 pares sintéticos, gerados por
+`crates/stochology-s2/examples/rodada_sintetica.rs` com regra determinística e etiqueta `rodada-sintetica`:
+
+```bash
+cargo run --release --example rodada_sintetica -- /tmp/sint
+cargo run --release --bin ingestar-jev -- fundo/p20-jev/pesos /tmp/sint/inferencias_congeladas.tsv \
+  fundo/p20-jev/calibracao /tmp/sint/desfechos_auditados.tsv
+cargo run --release --bin labs -- --jev
+```
+
+A saída literal dessa rodada, com os hashes e a leitura do instrumento, está em `ENSAIO_SINTETICO.md`. Os dois
+arquivos sintéticos foram apagados depois do ensaio, e o instrumento voltou a recusar — número de ensaio não fica
+onde o número real deveria estar.
+
+## 7. Verificação do que aqui se afirma
 
 ```bash
 cargo test -p stochology-s2      # os testes do runner e da calibração: carga, hash, adulteração, formato, G1, abstenção, Brier, amostra mínima
