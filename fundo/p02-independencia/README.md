@@ -82,7 +82,7 @@ Nada foi feito aqui sobre isso.
 
 ```
 cd fundo/p02-independencia
-./rodar.sh                                          # ~4 min; grava saida/*.json e imprime os hashes
+./historico/rodar-p02-independencia-2026-10-17.sh   # ~4 min a partir da raiz; o script saiu da pasta em 2026-10-17
 python3 -I diagnostico/diag_r1_spec_original.py     # pós-congelamento: escore com as covariáveis do original
 python3 -I diagnostico/diag_r4_filtro_original.py   # pós-congelamento: filtro de linhas do original
 sha256sum -c <(head -6 CONGELAMENTO.sha256)         # confere que o código é o congelado

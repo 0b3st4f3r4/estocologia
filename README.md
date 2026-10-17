@@ -12,7 +12,7 @@ que sabem reprovar.
 
 | Caminho | Conteúdo |
 |---|---|
-| `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 927 linhas e 75 289 palavras montadas de `book/` |
+| `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 927 linhas e 75 290 palavras montadas de `book/` |
 | `book/` | A edição em fonte, um arquivo por capítulo, com `gerar.py` (monta e confere), os dois conferidores e o gerador do registro |
 | `crates/` | O workspace Rust: núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`), o playground WebAssembly (`-wasm`) e o motor ondulatório (`-wave`: superposição fasorial, Laplaciano magnético, plasticidade Kuramoto-Oja e espículas com STDP) |
 | `REGISTRO_EMPIRICO.md` | Os números da pesquisa, com o instrumento Rust que reproduz cada um e a marca de divergência declarada |
@@ -28,6 +28,7 @@ que sabem reprovar.
 | `artigo/` | O artigo "Estocologia: Velhas Fronteiras, Novos Horizontes", com as figuras |
 | `estilo/` | O instrumental da passada de prosa: `conferir-passada.py` compara cada arquivo com a versão dele no `HEAD` |
 | `conferir_lacres.py` | O conferidor dos 28 lacres SHA-256 da árvore, de um comando e de um diretório |
+| `scripts/verificar.sh` | **A verificação obrigatória de §V em um só comando**: formato, lints, testes, oito portões, dezenove instrumentos e os conferidores. O CI chama este arquivo, não uma cópia da lista |
 | `INTEGRACAO_JEV.md` | A auditoria da transcrição *Integração de Modelos Jev à Estocologia*: cada alegação conferida contra o código, com as divergências declaradas — a numeração do roteiro antigo contra a vigente ($M_{15}$ e $MB_1$–$MB_8$ de um lado, $\mathcal{M}$ e $A_1$–$A_8$ do outro), quatro filtros contra cinco, $\Phi_1$–$\Phi_4$ contra $\Phi_1$–$\Phi_5$, e o *LLM-as-Jev* — e a ponte Jev-LLM como proposta declarada |
 | `DECLARACAO_REMOVIDO_PYTHON.md`, `DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md` | O que saiu da árvore em 2026-10-16, com o commit de recuperação e os manifestos de hash de blob |
 
@@ -41,7 +42,7 @@ Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz
 | Instrumentos | **19** no `labs` (mais 5 flags modificadoras), todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
 | Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
 | Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |
-| Livro montado | **5 927 linhas**, **75 289 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
+| Livro montado | **5 927 linhas**, **75 290 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
 | Blocos citados | **48**, nenhum divergente | `book/conferir_labs.py` |
 | Lacres | **28 arquivos**, **82 alvos conferidos**, 9 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
 
@@ -105,6 +106,6 @@ em definitivo**, como o dono aceitou por escrito.
 
 Em 2026-10-16 o andaime de medição em Python saiu da árvore — o código, as frentes `h0` a `h3` com os seus
 READMEs e os dados que só elas usavam. O número ficou: em `REGISTRO_EMPIRICO.md` e no livro, com o commit
-`1bfec905` como âncora de recuperação e os manifestos `python-removido.txt`, `registro-python-removido.txt` e
-`nao-significante-removido.txt` com o hash de blob de cada arquivo. O que resta em Python são as ferramentas de
+`1bfec905` como âncora de recuperação e os manifestos `historico/python-removido.txt`, `historico/registro-python-removido.txt` e
+`historico/nao-significante-removido.txt` com o hash de blob de cada arquivo. O que resta em Python são as ferramentas de
 conferência do livro, do registro e dos lacres — e nada mais.

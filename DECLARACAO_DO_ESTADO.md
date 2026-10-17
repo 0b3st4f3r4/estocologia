@@ -63,6 +63,7 @@ o runner já está escrito; falta o arquivo. O critério de cada um está declar
 | a escuta de quem paga | **0 de 7** grupos ouvidos, e a caixa lacrada por instrumento | `labs --escuta` |
 | o lacre do `p01-tese/CEGAMENTO.md` | **re-selado**: o hash gravado às 12:42 de 2026-10-15 (`fcf8da5a…`) parou de valer quando o adendo do commit `935807e`, às 15:36, mudou o arquivo, e o lacre seguiu apontando para o texto de antes; agora vale `d92afa7c…` | `python3 conferir_lacres.py` |
 | a convenção dos lacres | **uma só**: os 28 arquivos passaram a usar caminho relativo à raiz (incluindo `dados-reais/SHA256SUMS` e `governanca/DECLARACAO.sha256`), as 9 linhas que apontavam para o Python removido, para a pasta de casos que saiu da árvore ou para `crsp_day_1989_1998.csv` viraram comentário declarado, e `sha256sum -c` deixou de depender da pasta de onde se roda | `python3 conferir_lacres.py` |
+| a higiene da árvore | **medida e corrigida**: `cargo fmt --check` e `clippy -D warnings` passam nos dezesseis crates (eram 615 diffs de formato e 35 avisos), a toolchain está fixada em `rust-toolchain.toml`, `scripts/verificar.sh` passa a ser a lista única de §V — o CI chamava 11 dos 29 comandos —, e o arquivo morto saiu da raiz para `historico/`. Nenhum número publicado mudou: **373 testes** e `RESULTADOS_RUST.md` idêntico byte a byte | `scripts/verificar.sh` |
 
 ## 4. O que mudaria cada veredito
 
@@ -118,7 +119,7 @@ Em `RESULTADOS_RUST.md` §5, gerado: **20 declarações de ponto**, das quais 4 
 com os dois valores lado a lado), **16 pontos de fundo**, **19 instrumentos** (e 5 flags modificadoras) no `labs`, **21 capítulos** e
 **16 crates**. Cada linha do manifesto traz o `sha256` do arquivo da declaração.
 
-O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 289 palavras** e
+O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 290 palavras** e
 `sha256` do arquivo. O estado de 2026-10-17 tinha um defeito que este parágrafo fecha: o
 `book/gerar.py --check` da época montava o livro na memória e comparava só a rampa, sem olhar o arquivo em
 disco — e o arquivo em disco estava **353 linhas atrás** de `book/`, sem os 21 blocos do eixo R e sem as
@@ -134,7 +135,7 @@ enquanto o arquivo em disco tinha 5 904.
 Este estado não deixa promessa. O que ela mediu está no registro, com o instrumento ao lado; o que ela reprovou
 está reprovado, com o número e o critério que o reprovou; o que ela não pôde fazer está declarado, com quem
 resolve e até quando. A árvore fica limpa, e o transcript que originou a auditoria da ponte Jev
-(`Integração de Modelos Jev à Estocologia.md`) está **versionado** desde o commit `5393515` — a versão anterior
+(`historico/transcricao-jev-2026-10-16.md`) está **versionado** desde o commit `5393515` — a versão anterior
 desta frase o dava como o único arquivo não versionado, e era falsa nos dois lados: o arquivo está no Git e a
 árvore tinha seis arquivos modificados quando a correção de 2026-10-17T08:10Z começou.
 

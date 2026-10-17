@@ -50,9 +50,9 @@ ancestral
 Os três manifestos de remoção foram procurados por qualquer caminho sob `book/`:
 
 ~~~text
-$ grep -c 'book/' registro-python-removido.txt
+$ grep -c 'book/' historico/registro-python-removido.txt
 0
-$ grep -n 'revisao\|resposta-a\|dependem' registro-python-removido.txt python-removido.txt nao-significante-removido.txt
+$ grep -n 'revisao\|resposta-a\|dependem' historico/registro-python-removido.txt historico/python-removido.txt historico/nao-significante-removido.txt
 (nenhuma linha)
 ~~~
 

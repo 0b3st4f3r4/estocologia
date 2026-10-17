@@ -22,9 +22,9 @@ Legenda, a mesma de `REGISTRO_EMPIRICO.md`:
 | --- | --- |
 | Título | *Integração de Modelos Jev à Estocologia* |
 | Origem | conversa do Gemini, com a URL no cabeçalho do próprio arquivo |
-| Arquivo local | `Integração de Modelos Jev à Estocologia.md`, 470 linhas, 6 263 palavras, 12 turnos |
+| Arquivo local | `historico/transcricao-jev-2026-10-16.md`, 470 linhas, 6 263 palavras, 12 turnos |
 | `sha256` do bruto | `cf223807b4ac578b4fc68bf5180703dff4246a6f09ee1d209b34dd894da2276b` |
-| Estado no Git | fora do índice. O bruto é a fonte; a forma integrada é este registro (`PLAN.md` §9.12) |
+| Estado no Git | versionado desde `5393515`; desde 2026-10-17 em `historico/transcricao-jev-2026-10-16.md`, fora da raiz. O bruto é a fonte; a forma integrada é este registro (`PLAN.md` §9.12) |
 
 ## 2. Veredito de cada alegação
 

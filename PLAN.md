@@ -521,7 +521,7 @@ A edição é escrita em `book/`, um arquivo por capítulo, e só substitui
 | Parte | Capítulos | Estado |
 | --- | --- | --- |
 | I. A arte de mirar no escuro | 1 a 4 | escritos, com laboratórios medidos |
-| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 927 linhas, 75 289 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
+| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 927 linhas, 75 290 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
 | II. As armadilhas do mundo e dos dados | 5 a 8 | escritos, com laboratórios medidos |
 | III. Causa, tempo e sobrevivência | 9 a 11 | escritos, com laboratórios medidos |
 | IV. Construindo a máquina auditável | 12 a 15 | escritos, com laboratórios medidos |
@@ -562,8 +562,8 @@ segue como proposta declarada — teoria, método, pesquisa em aberto e limites 
 
 Arquivo novo de trabalho — cópia intermediária de laboratório, script de uma vez, rascunho — é **apagado depois
 da integração**. Fica no repositório só artefato com função contínua (`book/gerar.py`, `book/conferir_labs.py`,
-`book/conferir_livro.py`, os crates) ou registro (capítulos, declarações, manifestos `python-removido.txt` e
-`nao-significante-removido.txt`, relatórios). A última aplicação da regra apagou `book/labs/` (17 cópias
+`book/conferir_livro.py`, os crates) ou registro (capítulos, declarações, manifestos `historico/python-removido.txt` e
+`historico/nao-significante-removido.txt`, relatórios). A última aplicação da regra apagou `book/labs/` (17 cópias
 intermediárias, já integradas em `crates/stochology-book/src/capNN.rs`) e os scripts de uma vez usados na
 migração de nomes, na remoção do Python e na atualização do Apêndice D.
 

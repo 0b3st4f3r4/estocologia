@@ -3,7 +3,7 @@
 Os números da pesquisa, com o instrumento Rust que os reproduz hoje. As frentes que os mediram em Python
 (` h0-lab0/`, ` h0-real/`, ` h1/`, ` h1-real/`, ` h2/` a ` h2g/`, ` h3/`) saíram da árvore em 2026-10-16: o
 andaime de medição foi apagado e o número ficou aqui e no livro. O original volta com
-`git checkout 1bfec905 -- <pasta>`, e o manifesto `registro-python-removido.txt` traz o hash de blob de cada
+`git checkout 1bfec905 -- <pasta>`, e o manifesto `historico/registro-python-removido.txt` traz o hash de blob de cada
 arquivo removido.
 
 Legenda: **R** o instrumento Rust mede de novo; **D** divergência declarada no capítulo, com os dois valores;
@@ -82,4 +82,4 @@ Rust a partir do registro versionado (a medida continua sem instrumento — decl
 | Números publicados, com o instrumento que os mede | este arquivo e `RESULTADOS_RUST.md` |
 | Auditoria de fundo, governança e ética | `fundo/` e `governanca/` (mantidos) |
 | Bibliografia conferida | `referencias/CONFERENCIA.md` e o Apêndice D do livro |
-| Ancoragem do que saiu | `registro-python-removido.txt`, `python-removido.txt`, `nao-significante-removido.txt`, no commit `1bfec905` |
+| Ancoragem do que saiu | `historico/registro-python-removido.txt`, `historico/python-removido.txt`, `historico/nao-significante-removido.txt`, no commit `1bfec905` |

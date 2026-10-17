@@ -33,7 +33,7 @@ texto (Capítulos 15 e 21), com a nota de aposentadoria ao lado da tabela.
 | `governanca/` | quem assina e quem paga pelo erro |
 | `dados-reais/` (menos `p10`) | procedência de cada número que o livro cita |
 | `referencias/`, `artigo/` | a bibliografia conferida e o artigo que apresenta a teoria |
-| `DECLARACAO_REMOVIDO_*.md`, `python-removido.txt`, `nao-significante-removido.txt` | o rastro das duas remoções |
+| `DECLARACAO_REMOVIDO_*.md`, `historico/python-removido.txt`, `historico/nao-significante-removido.txt` | o rastro das duas remoções |
 
 ## Como recuperar
 
@@ -42,7 +42,7 @@ git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-evento
 git show 1bfec905:estocologia-livro-didatico.md | head -50   # a edição de 14 capítulos
 ```
 
-O manifesto `nao-significante-removido.txt` traz o hash de blob de cada arquivo versionado removido.
+O manifesto `historico/nao-significante-removido.txt` traz o hash de blob de cada arquivo versionado removido.
 
 ## Consequência declarada
 

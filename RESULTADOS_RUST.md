@@ -1805,4 +1805,4 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 
 Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 19 (--banco,--cap,--elicitacao,--ensaio-escuta,--ensaio-ponte,--ensaio-shelf,--escuta,--fila,--genetica,--h3,--jev,--ponte,--preteste,--resolucao,--s1,--s2,--schema,--segunda,--todos; mais 5 flags modificadoras: --escala,--gabarito,--limiar,--medida,--respostas) | capitulos: 21 | crates: 16
 
-Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75289 palavras**, sha256 `38c3564de07817c332fe1771c1af896be9744f4cc59996170b0dba729c4fdd54`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.
+Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75290 palavras**, sha256 `c10358d2692a6feb6b66a04ecf6ede50e484a12c08d6897929f648bd67663f6b`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

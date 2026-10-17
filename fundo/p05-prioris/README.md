@@ -171,7 +171,9 @@ sobrevive é o mesmo das três rodadas: `{c_dof, c_qui, c_ran}` na farmacologia,
    conferida aqui: nos 22 domínios em que a entrada de literatura é a fraca (14 do H2g, 5 do H2 e os 3 do H1 real) os
    quartis das duas tabelas são iguais e, nos resultados, a priori e a posterior de (b) e (c) são idênticas.
    O H2g **não** foi rodado pela varredura completa de 18 domínios dentro do `rodar.sh` (seriam três varreduras
-   sequenciais de ~13 min); a via do `rodar_h2g.sh` é a que mantém a mesma semente e paraleliza.
+   sequenciais de ~13 min); a via do `rodar_h2g.sh` é a que mantém a mesma semente e paraleliza. Os dois scripts
+   saíram da árvore executável em 2026-10-17, porque chamam o `p05_um.py` aposentado; a cópia de referência está em
+   `historico/rodar-p05-prioris-2026-10-17.sh` e `historico/rodar-p05-prioris-h2g-2026-10-17.sh`.
 4. **Saídas fora do repositório**, em `/home/silvano-neto/p05-saida/` (o repositório só recebeu este README, o
    `resultados.json` e a `tabela.md` gerados pelo `comparar.py`).
 5. **A checagem de (a) contra os originais** foi feita com o `comparar.py` (tolerância de 1e-9) e campo a campo

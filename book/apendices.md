@@ -175,7 +175,7 @@ cd fundo/p07-icp/codigo && python3 nulo_validacao.py          # a taxa nula da g
 **O código Python de simulação foi aposentado em 2026-10-16** (576 arquivos, cerca de 2,9 MB), porque o aparato
 de engenharia do projeto passou a ser o workspace Rust. Na árvore fica o registro. São os dados e as somas, os
 `README.md` de cada frente com os números publicados, as declarações, os pareceres e as saídas conferidas. O
-manifesto `python-removido.txt` traz o hash de blob de cada arquivo removido, e a declaração completa está em
+manifesto `historico/python-removido.txt` traz o hash de blob de cada arquivo removido, e a declaração completa está em
 `DECLARACAO_REMOVIDO_PYTHON.md`.
 
 Naquele dia saíram os artefatos que não sustentam resultado central. São as extensões de escala, saúde e evento raro (pontos 9 e 10 da auditoria de fundo) e a edição anterior do livro. Os números dessas extensões continuam nos Capítulos 15 e 21, com a nota de aposentadoria na tabela. Depois saiu o andaime de medição em Python inteiro. Também saíram as frentes `h0` a `h3`, com os seus READMEs, e os dados que só elas usavam. Os números ficaram em `REGISTRO_EMPIRICO.md`, com o commit `1bfec905` como âncora (`DECLARACAO_CONSOLIDACAO_RUST.md`).

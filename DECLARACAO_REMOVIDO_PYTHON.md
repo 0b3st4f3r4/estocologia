@@ -30,7 +30,7 @@ workspace Rust (`crates/stochology-*`), de modo que as simulações em Python cu
 ## Como recuperar
 
 O código não foi perdido: vive no histórico do git, no commit **`1bfec9050bf046820787bdec8cb9765529658bdf`**.
-O manifesto `python-removido.txt` guarda o hash de blob de cada arquivo, para conferência:
+O manifesto `historico/python-removido.txt` guarda o hash de blob de cada arquivo, para conferência:
 
 ```bash
 git show 1bfec905:h1/rodar.py           # ver um arquivo
