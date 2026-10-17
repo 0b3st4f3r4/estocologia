@@ -1,43 +1,19 @@
+# Rust: o alvo de build nao entra.
+/target/
+
+# Python: bytecode fora, sempre (as ferramentas sao stdlib puro, ver pyproject.toml).
 __pycache__/
 *.pyc
-.hypothesis/
 .pytest_cache/
-notas/
-dados-reais/h2/nycflights13_flights.csv
-dados-reais/h2e/causal_chamber_lt_interventions_standard_v1.csv
-dados-reais/h2e/causal_chamber_wt_walks_v1_regime_jumps_single.csv
-dados-reais/h2f/Kemmeren.RData
-dados-reais/h2f/kemmeren2014_obs_int.parquet
-dados-reais/h2g/ecgcipa/adeg.csv
-dados-reais/h3b/nycflights23_flights.csv
-h1/saida/diario.json
-h2/saida/diario.json
-h2b/saida/diario.json
-h2c/saida/diario.json
-h2d/saida/diario.json
-h2d/saida/hipergrafo.json
-h2e/saida/diario.json
-h2f/saida/diario.json
-h2g/saida/diario.json
-h3/saida/bolsa/diario.parquet
-h3/saida/energia/diario.parquet
-h3/saida/hipergrafo_arestas_tree.parquet
-h3/saida/hipergrafo_nos.parquet
-h3/saida/prisoes20/diario.parquet
-h3/saida/prisoes_ri/diario.parquet
-h3/saida/voos/diario.parquet
-h3/saida/voos23/diario.parquet
-fundo/p08-calibracao/saida/replays/voos23e2/diario.parquet
-fundo/p08-calibracao/saida/replays/voos17/diario.parquet
-fundo/p08-calibracao/saida/replays/voospnw14/diario.parquet
-fundo/p08-calibracao/saida/replays/voos23e1/diario.parquet
+.hypothesis/
 
-# Workspace Rust do PLAN.md (Edition 2024)
-target/
+# Notas locais de trabalho, nunca versionadas.
+/notas/
 
-# Insumos brutos do operador (item 13): fora da arvore, entram so pelos lacres do ingestor
+# Insumos brutos do operador (item 13): fora da arvore, entram so pelos lacres do ingestor.
 dados_brutos/
 
-# Gerados por script dentro das frentes: fora do Git, recriados pelo comando de cada README
+# Saidas recriadas pelo comando do README de cada frente. O que o livro cita fica
+# versionado, por arquivo: regra por diretorio inteiro esconderia o que precisa ser lido.
 saida/armazem/
 fundo/p03-multiplicidade/copias/

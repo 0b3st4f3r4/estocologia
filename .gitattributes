@@ -1,0 +1,18 @@
+# Um so fim de linha na arvore. Sem isto o `core.autocrlf` local decide o diff.
+* text=auto eol=lf
+
+*.rs      text diff=rust
+*.toml    text
+*.md      text
+*.py      text diff=python
+*.sh      text eol=lf
+*.yml     text eol=lf
+
+# Dado, figura e artefato binario: nao se normaliza linha.
+*.csv     -text
+*.parquet -text
+*.png     -text
+*.jpg     -text
+*.pdf     -text
+*.so      -text
+*.gz      -text
