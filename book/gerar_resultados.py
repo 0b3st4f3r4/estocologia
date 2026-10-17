@@ -9,6 +9,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import re
 import subprocess
@@ -303,6 +304,11 @@ def main() -> int:
         atual = DESTINO.read_text(encoding="utf-8") if DESTINO.exists() else ""
         if atual.strip() != texto.strip():
             print("RESULTADOS_RUST.md desatualizado: rode python3 book/gerar_resultados.py")
+            # Portao que reprova tem de dizer onde: a primeira divergencia, com contexto.
+            diferenca = difflib.unified_diff(
+                atual.splitlines(), texto.splitlines(), "no disco", "gerado", lineterm="", n=1
+            )
+            print("\n".join(list(diferenca)[:80]))
             return 1
         print("RESULTADOS_RUST.md atualizado")
         return 0
