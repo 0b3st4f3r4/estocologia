@@ -1345,7 +1345,7 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 60 tests
+running 62 tests
 test agentes::testes::cuidado_sem_ancora_estrutural_testa_a_fronteira_5_e_6_e_reprova_carimbo_vazio ... ok
 test agentes::testes::falta_de_cuidado_reprova_o_agente_da_faixa ... ok
 test agentes::testes::oito_agentes_aprovam_ficha_com_cuidados ... ok
@@ -1358,6 +1358,8 @@ test funil::testes::a_cota_superior_limita_o_evsi_de_qualquer_exame ... ok
 test funil::testes::a_poda_declara_sem_incerteza_no_extremo ... ok
 test funil::testes::a_poda_dispara_quando_o_evsi_nao_cobre_o_limiar ... ok
 test funil::testes::a_poda_nao_dispara_quando_o_evsi_cobre ... ok
+test funil::testes::canal_sem_informacao_zera_evsi_e_impoe_parada_imediata ... ok
+test funil::testes::dominancia_estrita_invariante_a_probabilidade_oculta ... ok
 test funil::testes::evsi_medido_bate_com_o_exato ... ok
 test funil::testes::exame_mais_acurado_nao_vale_menos ... ok
 test funil::testes::f1_recusa_ficha_sem_pergunta_do_decisor ... ok
@@ -1407,7 +1409,7 @@ test s1::tests::reprojecao_do_teto_preserva_a_soma ... ok
 test s1::tests::soma_um_depois_do_ajuste ... ok
 test s1::tests::sufixo_longo_vence_tema_curto ... ok
 
-test result: ok. 60 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 62 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 5 tests
 test testes::a_kl_e_zero_contra_si_mesma_e_cresce_com_a_distancia ... ok

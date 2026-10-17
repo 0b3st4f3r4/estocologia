@@ -80,7 +80,7 @@ o runner já está escrito; falta o arquivo. O critério de cada um está declar
 ## 5. A reprodução
 
 ~~~bash
-cargo test --workspace                                  # 371 testes aprovados, nenhum reprovado
+cargo test --workspace                                  # 373 testes aprovados, nenhum reprovado
 cargo run --release --bin labs -- --todos               # os 21 laboratórios
 cargo run --release --bin portoes -- --horizonte todos --reproducao
 cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23   # sai com 1, como declarado

@@ -47,7 +47,7 @@ Ficam como registro, e não como proposta.
 | **Crates do roteiro (item 1)** | os dez nomes que faltavam vivem, cada um com lib, teste próprio e dependência declarada: `stochology-schema` (contrato em arquivo, versão e cadeia de migrações), `-s2` (LATS e estado de crença), `-h0` (Erlang e escala mínima, que passaram ao núcleo em 2026-10-16 e são re-exportadas por ele, nulo de Poisson, resumo obrigatório), `-h1` (arrasto, viés de seleção, Hill), `-h2` (rodadas, contador $K$, Bonferroni, nulo por embaralhamento), `-h3` (relógio estrito com canário, ECE, Brier, laço performativo), `-icp`, `-drift` (CUSUM e KL), `-fairness` (paridade, oportunidades, ECE por subgrupo) e `-wasm` (ponte C), mais o décimo sexto crate `stochology-wave` (motor ondulatório, binário `onda`). Sem dependência externa | `cargo test --workspace` e `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm` |
 | **$\Phi_5$ e o campo de resolução na ficha** | `invariantes.rs:12,110` com 10 testes no arquivo, entre eles `acao_agregada_contra_unidade_dia_reprova_phi5`; campo `resolucao` em `camada.rs:52`, troca em `camada.rs:98`; `portoes` conta $\Phi_1$–$\Phi_5$ em `crates/stochology-gates/src/main.rs:316`. Limite declarado: a trava só morde com unidade igual ou mais grossa que o dia | `cargo test --workspace` |
 | **Sistema 1 determinístico** | `crates/stochology-core/src/s1.rs` (877 linhas, 12 testes), vocabulário fechado, árvore de sufixos e probabilidade presa em $[0{,}01; 0{,}99]$ | `labs --s1` |
-| **Funil de quatro filtros e contador $K$** | `crates/stochology-core/src/funil.rs` (878 linhas, 17 testes), com a poda por valor da informação e `o_funil_conta_as_tentativas_ate_a_versao_final` | `cargo test --workspace` |
+| **Funil de quatro filtros e contador $K$** | `crates/stochology-core/src/funil.rs` (1 099 linhas, 19 testes), com a poda por valor da informação, parada imediata ($\tau^* = 0$ sob $\Delta \mathcal{I}_t = 0$), dominância invariante a $p$ e `o_funil_conta_as_tentativas_ate_a_versao_final` | `cargo test --workspace` |
 | **Cofre fora do tempo** | `crates/stochology-audit/src/cofre.rs` (705 linhas, 6 testes): abertura única, adulteração invalida a verificação e errar depois da abertura exige cofre novo | `cargo test --workspace` |
 | **Fila com desistência e a tabela $H_0$ de R0 a R3** | `crates/stochology-book/src/fila.rs` (1 113 linhas, 8 testes); `REGISTRO_EMPIRICO.md` §H0 marca **R** nos agente-horas e **D** nas falhas por dia, com a divergência declarada no Capítulo 16 | `labs --fila` |
 | **Resolução fina da genética (item 4)** | `crates/stochology-h2/src/genetica.rs` (290 linhas, 6 testes próprios: o piso cai com a potência das linhas, o intervalo é um ponto sem a segunda linha, todo efeito ganha faixa com ela, o artefato de linha passa na validação de uma linha, a segunda linha separa o artefato do mover e o desenho é determinístico) e a leitura em `crates/stochology-book/src/genetica.rs`. O desenho planta dois casos — o mover verdadeiro, com efeito nas duas linhas, e o artefato de linha, com efeito numa só — e roda os dois arranjos sobre o mesmo mundo: com uma linha por mutante passam **4 de 40** no piso de $0{,}001$ (o mover, o artefato e dois de ruído, que o p não separa), e com duas passa **1 de 40**, com o piso caindo para $10^{-6}$ e a estimativa deixando de ser um ponto. O livro mudou junto: `book/cap19.md` (Degrau 1, o bloco do instrumento no Degrau 3 e o exercício 3) e `book/cap21.md` (as três passagens) | `cargo test -p stochology-h2` e `labs --genetica` |
@@ -120,7 +120,7 @@ apontam agora para o que ficou.
 ### Estado corrente da verificação (2026-10-17)
 
 Na árvore atual (16 crates, após a entrada de `stochology-wave`, `banca`, `runner`, `calibracao`, `ingestar-jev` e dos 21 blocos do eixo R):
-- `cargo test --workspace`: **371 testes aprovados**, 0 reprovados (`s2` 81 unitários + 7 de integração, `book` 66, `core` 60, `h3` 40, `wave` 28 unitários + 4 de integração, `h2` 13, `schema` 13, `hypergraph` 12, `audit` 9, `h0` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `gates` 3, `wasm` 3).
+- `cargo test --workspace`: **373 testes aprovados**, 0 reprovados (`s2` 81 unitários + 7 de integração, `book` 66, `core` 62, `h3` 40, `wave` 28 unitários + 4 de integração, `h2` 13, `schema` 13, `hypergraph` 12, `audit` 9, `h0` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `gates` 3, `wasm` 3).
 - `python3 book/conferir_labs.py`: **48 blocos citados**, 0 divergentes.
 - `python3 book/gerar.py --check`: **5 927 linhas** e **75 289 palavras**, disco idêntico ao texto montado.
 - `python3 conferir_lacres.py`: **28 lacres**, **82 alvos conferidos**, 9 declarados fora da árvore, 0 problemas.
@@ -134,7 +134,7 @@ entre parênteses.
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test --workspace` | 214 testes aprovados naquela passada (hoje 371), nenhum reprovado: `core` 51, `h3` 33, `s2` 29, `book` 23, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` e `labs` 0 (0) |
+| `cargo test --workspace` | 214 testes aprovados naquela passada (hoje 373), nenhum reprovado: `core` 51, `h3` 33, `s2` 29, `book` 23, `h2` 13, `hypergraph` 12, `audit` 9, `h0` 9, `schema` 9, `icp` 8, `h1` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` e `labs` 0 (0) |
 | `labs --genetica` | 40 mutantes com dois casos plantados: uma linha por mutante aprova 4 de 40 no piso de $0{,}001$; duas linhas aprovam 1 de 40, o piso cai para $10^{-6}$ e o artefato de linha sai da lista porque o efeito não se reproduz na segunda (0) |
 | `python3 book/gerar.py --check` | a rampa de três degraus dos 21 capítulos confere (0) |
 | `python3 book/conferir_labs.py` | 25 blocos citados naquela passada (hoje 48), 0 divergentes — o bloco 2 do Capítulo 19 confere em `labs --genetica` (0) |
@@ -149,7 +149,7 @@ passada do dia fechou os itens 1 e 2: os números de `cargo test`, a linha do al
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test --workspace` | 181 testes aprovados naquela passada (hoje 371), nenhum reprovado: `core` 51, `s2` 29, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
+| `cargo test --workspace` | 181 testes aprovados naquela passada (hoje 373), nenhum reprovado: `core` 51, `s2` 29, `book` 23, `hypergraph` 12, `audit` 9, `schema` 9, `h0` 9, `icp` 8, `h2` 7, `h1` 6, `h3` 6, `drift` 5, `fairness` 4, `wasm` 3, `gates` 0 (0) |
 | `labs --s2` | o Sistema 2 roda: o grafo declarado valida com 8 nós e 5 hiperarestas, o LATS chega em `f1.sintese-de-codigo` (o nó que nenhuma lente cobre) onde o ganancioso para em `h0.fila`, a crença da banca acerta A5 de primeira contra 5 ataques da ordem declarada, a posterior da Beta(4, 8) dá 0,3346 contra a forma fechada 1/3 e o eixo R escolhe R1-dia com a perda de 46,24 min (0) |
 | `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm` | o playground compila: `stochology_wasm.wasm`, 30 606 bytes (0) |
 | `labs --todos` | os 21 laboratórios rodam (0) |

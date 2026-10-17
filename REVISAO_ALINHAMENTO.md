@@ -51,7 +51,7 @@ duas coisas no texto.
 ## 4. Aparato sólido, e quanto custa
 
 16 crates, ~27 000 linhas de Rust em 84 arquivos, **zero dependência externa** (`Cargo.lock` com 16 pacotes
-locais, build offline), um só gerador SplitMix64 no núcleo (`passo_splitmix64` compartilhado), **371 testes e 0
+locais, build offline), um só gerador SplitMix64 no núcleo (`passo_splitmix64` compartilhado), **373 testes e 0
 falhas**, quatro binários (`labs`, `portoes`, `onda`, `ingestar-jev`).
 
 Custo medido de verificação fria: `cargo build --release` 7,96 s e 16 MB; `cargo test --workspace` 64,63 s;
@@ -84,8 +84,8 @@ Os dez pontos abaixo foram medidos na revisão e atacados na mesma data, mantend
 5. **Campos mortos eliminados.** `teste_severo_fracao_simulada` foi removido de `MedidaBanco` (`banco.rs`);
    `OrquestradorM::conduzir_ataque` passou a validar `hash_trilha` (exigindo 64 hexadecimais quando preenchido, com
    teste de corrupção).
-6. **Testes adicionados onde faltavam.** `stochology-gates` ganhou 3 testes unitários e os 17 módulos de capítulo
-   (`cap05.rs` a `cap21.rs`) ganharam `#[cfg(test)] mod testes`, elevando a suíte de 350 para **371 testes**.
+6. **Testes adicionados onde faltavam.** `stochology-gates` ganhou 3 testes unitários, os 17 módulos de capítulo
+   (`cap05.rs` a `cap21.rs`) ganharam `#[cfg(test)] mod testes` e `stochology-core::funil` ganhou a prova de parada imediata ($\tau^* = 0$ sob $\Delta \mathcal{I}_t = 0$) e dominância invariante a $p$, elevando a suíte de 350 para **373 testes**.
 7. **Relógio físico removido do aparato.** `std::time::Instant` saiu de `crates/stochology-s2/src/ponte.rs` (zero
    ocorrências de `std::time` em `crates/`); o custo em milissegundos passou a ser reportado deterministicamente
    por `ModeloCongelado::ms()`.
@@ -123,7 +123,7 @@ e o gatilho real é a coerência das chegadas.
 ## 7. Contradições reais — corrigidas em 2026-10-17
 
 As vinte linhas abaixo foram corrigidas na árvore nesta data, com 38 arquivos modificados na primeira passada e os 10 pontos de §5 fechados na segunda, livro regerado
-(5 927 linhas, 75 289 palavras), lacres re-selados e a verificação de §V verde: 371 testes, 48 blocos, 28
+(5 927 linhas, 75 289 palavras), lacres re-selados e a verificação de §V verde: 373 testes, 48 blocos, 28
 lacres e 82 alvos com 0 problemas, 7 portões ok, provas negativas saindo com 1. Ficam registradas porque a
 declaração de divergência é o método do repositório: o valor antigo não se apaga.
 
@@ -138,7 +138,7 @@ declaração de divergência é o método do repositório: o valor antigo não s
 | 7 | `cap21.md:162` | "nenhuma entrevista foi feita" | 5 yaml com habilidade medida; falta só o de fora |
 | 8 | `cap21.md:164`, `PLAN.md:463` | genética "em aberto" | item 4 fechado em 2026-10-16 |
 | 9 | `PROPOSTAS:113` tabela de contagem | lista 3, 5, 12 e ignora 9 e 13 | lista viva é 3, 5, 9, 13 |
-| 10 | `PROPOSTAS:126,141` | 214 e 181 testes; 25 e 24 blocos | 371 testes; 48 blocos |
+| 10 | `PROPOSTAS:126,141` | 214 e 181 testes; 25 e 24 blocos | 373 testes; 48 blocos |
 | 11 | `conferir_lacres.py:8` | "os 25 lacres" | 28 |
 | 12 | `README.md:8` / `:41` / `RESULTADOS` | 24 instrumentos / 20 / 24 flags | a regex conta modificadores (`--escala`, `--limiar`, `--respostas`, `--gabarito`, `--medida`); são 19 instrumentos + 5 modificadores |
 | 13 | `README.md:46` / `DECLARACAO:91` / `:110` | 64 / 70 / 65 alvos | 82 alvos em 28 lacres |
@@ -167,7 +167,7 @@ Decisor: ninguém de fora assinou; sem sumário de uma página. Pesquisador: art
 
 ## 9. Custódia: onde a máquina alcança e onde é pessoa
 
-Verificável por máquina do **número ao lacre**: 48 blocos conferidos, 371 testes, 7 portões com raiz de Merkle,
+Verificável por máquina do **número ao lacre**: 48 blocos conferidos, 373 testes, 7 portões com raiz de Merkle,
 6 portões ondulatórios, 28 lacres e 82 alvos de lacre (incluindo `dados-reais/SHA256SUMS` e `governanca/DECLARACAO.sha256`), 0 problemas.
 
 **Humana** em tudo o que decide o significado:
@@ -209,7 +209,7 @@ real do cap19 saiu com o Python.
 Reexecutado nesta máquina após o fechamento de §5 e §7:
 
 ```text
-cargo test --workspace                                  371 aprovados, 0 reprovados
+cargo test --workspace                                  373 aprovados, 0 reprovados
 portoes --horizonte todos --reproducao                  7 portoes ok, raiz 9716e28a..., hash 08e7c8f0...
 portoes --horizonte h3 --defeito h3.voos23              1 portao reprovado, exit 1
 onda --check                                            6 portoes ok

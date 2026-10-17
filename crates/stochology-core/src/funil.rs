@@ -398,6 +398,186 @@ impl Poda {
     }
 }
 
+// ------------------------- parada otima (tau* = 0) e dominancia invariante a p
+
+/// Politica de acao local diante de parametro latente nao-identificavel p in [0, 1].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum PoliticaLocal {
+    /// Engajamento realista (a_R): coleta valor local V_L e preserva acoplamento a V_I.
+    Realista,
+    /// Ruminacao / busca sem informacao (a_U): paga custo c_R e reduz acoplamento por alfa in [0, 1).
+    Ruminacao,
+    /// Paralisia / esquiva (a_D): paga custo fixo de esquiva c_E.
+    Paralisia,
+}
+
+impl PoliticaLocal {
+    pub fn codigo(self) -> &'static str {
+        match self {
+            PoliticaLocal::Realista => "realista",
+            PoliticaLocal::Ruminacao => "ruminacao",
+            PoliticaLocal::Paralisia => "paralisia",
+        }
+    }
+}
+
+/// Matriz de payoff com utilidade separavel U(a, p) sobre variavel oculta p in [0, 1].
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct MatrizDominancia {
+    pub valor_intrinsico: f64,
+    pub valor_local: f64,
+    pub custo_ruminacao: f64,
+    pub custo_esquiva: f64,
+    pub acoplamento_ruminacao: f64,
+}
+
+impl MatrizDominancia {
+    /// Exige V_I > 0, V_L > 0, c_R > 0, c_E > 0 e 0 <= alfa < 1.
+    pub fn nova(
+        valor_intrinsico: f64,
+        valor_local: f64,
+        custo_ruminacao: f64,
+        custo_esquiva: f64,
+        acoplamento_ruminacao: f64,
+    ) -> Self {
+        assert!(
+            valor_intrinsico.is_finite() && valor_intrinsico > 0.0,
+            "valor_intrinsico precisa ser positivo e finito, veio {valor_intrinsico}"
+        );
+        assert!(
+            valor_local.is_finite() && valor_local > 0.0,
+            "valor_local precisa ser positivo e finito, veio {valor_local}"
+        );
+        assert!(
+            custo_ruminacao.is_finite() && custo_ruminacao > 0.0,
+            "custo_ruminacao precisa ser positivo e finito, veio {custo_ruminacao}"
+        );
+        assert!(
+            custo_esquiva.is_finite() && custo_esquiva > 0.0,
+            "custo_esquiva precisa ser positivo e finito, veio {custo_esquiva}"
+        );
+        assert!(
+            acoplamento_ruminacao.is_finite() && (0.0..1.0).contains(&acoplamento_ruminacao),
+            "acoplamento_ruminacao precisa estar em [0, 1), veio {acoplamento_ruminacao}"
+        );
+        MatrizDominancia {
+            valor_intrinsico,
+            valor_local,
+            custo_ruminacao,
+            custo_esquiva,
+            acoplamento_ruminacao,
+        }
+    }
+
+    /// Utilidade esperada E[U(a)] para p in [0, 1].
+    pub fn utilidade_esperada(&self, politica: PoliticaLocal, p: f64) -> f64 {
+        let p = p.clamp(0.0, 1.0);
+        match politica {
+            PoliticaLocal::Realista => p * self.valor_intrinsico + self.valor_local,
+            PoliticaLocal::Ruminacao => {
+                p * self.acoplamento_ruminacao * self.valor_intrinsico - self.custo_ruminacao
+            }
+            PoliticaLocal::Paralisia => -self.custo_esquiva,
+        }
+    }
+
+    /// Margem liquida E[U(a_R)] - E[U(a_U)] = p(1 - alfa)V_I + V_L + c_R.
+    pub fn margem_sobre_ruminacao(&self, p: f64) -> f64 {
+        let p = p.clamp(0.0, 1.0);
+        p * (1.0 - self.acoplamento_ruminacao) * self.valor_intrinsico
+            + self.valor_local
+            + self.custo_ruminacao
+    }
+
+    /// Margem liquida E[U(a_R)] - E[U(a_D)] = p V_I + V_L + c_E.
+    pub fn margem_sobre_paralisia(&self, p: f64) -> f64 {
+        let p = p.clamp(0.0, 1.0);
+        p * self.valor_intrinsico + self.valor_local + self.custo_esquiva
+    }
+
+    /// Politica que maximiza a utilidade esperada em p.
+    pub fn melhor_politica(&self, p: f64) -> PoliticaLocal {
+        let u_r = self.utilidade_esperada(PoliticaLocal::Realista, p);
+        let u_u = self.utilidade_esperada(PoliticaLocal::Ruminacao, p);
+        let u_d = self.utilidade_esperada(PoliticaLocal::Paralisia, p);
+        if u_r >= u_u && u_r >= u_d {
+            PoliticaLocal::Realista
+        } else if u_u >= u_d {
+            PoliticaLocal::Ruminacao
+        } else {
+            PoliticaLocal::Paralisia
+        }
+    }
+
+    /// Confere se a politica otima e invariante em todo o intervalo p in [0, 1] (da*/dp = 0).
+    pub fn invariante_a_p(&self) -> bool {
+        self.margem_sobre_ruminacao(0.0) > 0.0
+            && self.margem_sobre_ruminacao(1.0) > 0.0
+            && self.margem_sobre_paralisia(0.0) > 0.0
+            && self.margem_sobre_paralisia(1.0) > 0.0
+            && self.melhor_politica(0.0) == PoliticaLocal::Realista
+            && self.melhor_politica(1.0) == PoliticaLocal::Realista
+    }
+
+    /// Regra de parada de Bellman (VOC = EVSI - c_R): quando o canal nao traz informacao
+    /// (se + esp == 1 => Delta I_t = 0 => EVSI = 0) ou nao paga o passo, tau* = 0.
+    pub fn parada_otima(
+        &self,
+        cp: &CustoPerda,
+        p: f64,
+        sensibilidade: f64,
+        especificidade: f64,
+    ) -> ParadaOtima {
+        let p = p.clamp(0.0, 1.0);
+        let se = sensibilidade.clamp(0.0, 1.0);
+        let esp = especificidade.clamp(0.0, 1.0);
+        let canal_sem_informacao = (se + esp - 1.0).abs() <= 1e-12;
+        let evsi = if canal_sem_informacao {
+            0.0
+        } else {
+            cp.evsi(p, se, esp)
+        };
+        let voc = evsi - self.custo_ruminacao;
+        let tau_estrela = if voc <= 0.0 { 0 } else { 1 };
+        ParadaOtima {
+            probabilidade: p,
+            evsi,
+            custo_passo: self.custo_ruminacao,
+            voc,
+            canal_sem_informacao,
+            tau_estrela,
+            politica_dominante: self.melhor_politica(p),
+        }
+    }
+}
+
+/// Resultado do corte de Bellman sobre um passo de deliberacao interna.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ParadaOtima {
+    pub probabilidade: f64,
+    pub evsi: f64,
+    pub custo_passo: f64,
+    pub voc: f64,
+    pub canal_sem_informacao: bool,
+    pub tau_estrela: usize,
+    pub politica_dominante: PoliticaLocal,
+}
+
+impl ParadaOtima {
+    pub fn linha(&self) -> String {
+        format!(
+            "p = {:.4} | EVSI = {:.4} | c_R = {:.4} | VOC = {:.4} | sem informacao = {} | tau* = {} | politica = {}",
+            self.probabilidade,
+            self.evsi,
+            self.custo_passo,
+            self.voc,
+            self.canal_sem_informacao,
+            self.tau_estrela,
+            self.politica_dominante.codigo()
+        )
+    }
+}
+
 // ---------------------------------------------------- contador de tentativas K
 
 /// Uma especificacao tentada, com o portao onde ela parou (ou nenhum, se passou).
@@ -874,5 +1054,45 @@ mod testes {
             r.linha(),
             "K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3"
         );
+    }
+
+    #[test]
+    fn canal_sem_informacao_zera_evsi_e_impoe_parada_imediata() {
+        let cp = CustoPerda::nova(1.0, 10.0);
+        let m = MatrizDominancia::nova(5.0, 2.0, 0.25, 1.50, 0.30);
+        for p in [0.0, 0.01, 0.10, 0.30, 0.50, 0.90, 0.99, 1.0] {
+            for (se, esp) in [(0.50, 0.50), (0.80, 0.20), (0.10, 0.90)] {
+                let evsi = cp.evsi(p, se, esp);
+                assert!(
+                    evsi.abs() < 1e-12,
+                    "canal com se+esp=1 devia ter EVSI=0, veio {evsi:.6} em p={p}"
+                );
+                let corte = m.parada_otima(&cp, p, se, esp);
+                assert!(corte.canal_sem_informacao, "{}", corte.linha());
+                assert!(corte.evsi.abs() < 1e-12);
+                assert!((corte.voc - (-0.25)).abs() < 1e-12);
+                assert_eq!(corte.tau_estrela, 0);
+                assert_eq!(corte.politica_dominante, PoliticaLocal::Realista);
+            }
+        }
+    }
+
+    #[test]
+    fn dominancia_estrita_invariante_a_probabilidade_oculta() {
+        let m = MatrizDominancia::nova(4.0, 1.5, 0.40, 1.20, 0.25);
+        assert!(m.invariante_a_p());
+        // no pior caso (p = 0), agir ainda supera ruminar por V_L + c_R e paralisia por V_L + c_E
+        assert!((m.margem_sobre_ruminacao(0.0) - 1.90).abs() < 1e-12);
+        assert!((m.margem_sobre_paralisia(0.0) - 2.70).abs() < 1e-12);
+        for k in 0..=100 {
+            let p = k as f64 / 100.0;
+            assert_eq!(m.melhor_politica(p), PoliticaLocal::Realista);
+            let u_r = m.utilidade_esperada(PoliticaLocal::Realista, p);
+            let u_u = m.utilidade_esperada(PoliticaLocal::Ruminacao, p);
+            let u_d = m.utilidade_esperada(PoliticaLocal::Paralisia, p);
+            assert!((u_r - u_u - m.margem_sobre_ruminacao(p)).abs() < 1e-12);
+            assert!((u_r - u_d - m.margem_sobre_paralisia(p)).abs() < 1e-12);
+            assert!(u_r > u_u && u_r > u_d);
+        }
     }
 }
