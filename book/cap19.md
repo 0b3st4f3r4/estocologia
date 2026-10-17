@@ -244,8 +244,8 @@ O laboratório deste capítulo é um ICP mínimo, com as duas réguas do livro e
 por equações normais, resíduo padronizado pela escala estimada sem olhar o ambiente, Kruskal–Wallis da locação e
 Brown–Forsythe da escala, p-valor por 999 permutações dos rótulos de ambiente, Bonferroni sobre os dois testes, e a
 regra de saturação medida pelo 1-NN deixando a linha de fora. O código está em `crates/stochology-book/src/cap19.rs` —
-autocontido, com função principal própria, sem dependências, com o acaso embutido em dez linhas de SplitMix64. No
-rascunho de escrita ele rodou num crate com a tabela de espaço de trabalho vazia no arquivo de manifesto:
+autocontido, com função principal própria, sem dependências, com o acaso embutido em dez linhas de SplitMix64 (rodado pelo
+binário `labs` com `--cap` dezenove, ou direto no módulo):
 
 ```bash
 cargo run --release

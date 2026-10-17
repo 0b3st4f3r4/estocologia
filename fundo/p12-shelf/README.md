@@ -2,16 +2,13 @@
 
 ## Resultado
 
-**Nada rodou e nada foi elicitado: este ponto só tem formulário.** O que existe são os dois instrumentos que dependem
-de pessoas — o protocolo do painel com os formulários por domínio, e a releitura dos 21 pareceres — prontos para
-receber resposta. Nenhum especialista foi consultado, nenhuma previsão de calibração foi corrigida, nenhum parecer foi
-relido, nenhuma linha de decisão foi escrita e nenhum arquivo foi assinado.
+**Cinco domínios elicitados pelo primeiro especialista ($n = 1$, análise preliminar de sensibilidade) e 21 linhas de releitura preenchidas e assinadas; faltam os outros dois especialistas por domínio e o de fora do programa.** O protocolo do painel está congelado com hash (`DECLARACAO.sha256`), o primeiro especialista (E1, autor do programa) concluiu os cinco pré-testes de 20 previsões resolvidas (habilidades de Brier de 0,6500, 0,9730, 0,7425, 0,8585 e 0,4240) e as cinco elicitações de quantis (`h2/desenvolvimento_preston`, `h2/direito_prisoes`, `h2/educacao_star`, `h2g/direito_teto_beneficio` e `h1-real/c`, com `h2g/educacao_star_turmas` reservado por mesma base), e a releitura dos 21 pareceres foi concluída em `governanca/RELEITURA.md` (17 confirmados, 4 retirados e reemitidos com nota assinada). Como nenhum especialista de fora do programa foi entrevistado ainda ($n = 1$), nenhuma priori elicitada substitui a priori do pacote na rodada oficial.
 
 | artefato | conteúdo | estado |
 |---|---|---|
-| `protocolo.md` | protocolo completo: pré-teste de calibração de 20 previsões resolvidas (Brier em 10 caixas de massa igual), regra de quem não passa não entra como fonte, elicitação por mediana/quartis/extremos com devolução, controles de âncora, ordem e excesso de confiança, três especialistas por domínio com um de fora da área do programa, e a lista dos 6 domínios com os quartis de partida do p05 | escrito; hash **não** preenchido |
-| `formularios/` | 6 formulários em branco (um por domínio, 3 blocos de especialista cada = 18 blocos), `prioris_elicitadas.yaml` de exemplo e `comparacao.md` esqueleto | em branco / exemplo |
-| `../../governanca/RELEITURA.md` | 21 linhas dos pareceres com arquivo e SHA-256, data e decisão (confirmo / retiro / retiro e reemito) e nota em branco, mais o bloco da seção "Releitura" que `ASSINATURAS.md` deve ganhar | em branco; 21 de 21 hashes conferidos |
+| `protocolo.md` | protocolo completo: pré-teste de calibração de 20 previsões resolvidas (Brier em 10 caixas de massa igual), regra de quem não passa não entra como fonte, elicitação por mediana/quartis/extremos com devolução, controles de âncora, ordem e excesso de confiança, três especialistas por domínio com um de fora da área do programa, e a lista dos 6 domínios com os quartis de partida do p05 | congelado em `DECLARACAO.sha256` |
+| `formularios/` e `preteste/` | 6 formulários (5 preenchidos no bloco E1 e 1 reservado; blocos E2 e E3 em branco), 5 arquivos `preteste/*.yaml` com habilidade medida, `prioris_elicitadas.yaml` e `comparacao.md` (§6–§10 preenchidos para $n = 1$) | E1 concluído ($n = 1$); faltam E2, E3 e especialista externo |
+| `../../governanca/RELEITURA.md` | 21 linhas dos pareceres com arquivo e SHA-256, data, decisão (17 confirmados, 4 retirados e reemitidos) e nota assinada, mais a seção "Releitura" aplicada em `ASSINATURAS.md` | 21 linhas preenchidas; 21 de 21 hashes conferidos |
 
 Os dois números que este ponto usa como ponto de partida são cópia conferida de `fundo/p05-prioris/prioris/`: os
 quartis de literatura dos 6 domínios batem com o arquivo do p05 na 15ª casa, e os 21 SHA-256 de `RELEITURA.md`
@@ -59,13 +56,9 @@ batem com os arquivos citados por `sha256sum`.
 
 ## Limites
 
-- **Nada aqui é elicitação nem releitura.** Todos os campos de gente estão em branco de propósito. O protocolo diz o
-  que fazer; não houve painel, não houve pré-teste, não houve devolução e ninguém assinou nada.
-- **O protocolo não está congelado.** O `protocolo_sha256` e a `DECLARACAO.md` da frente não existem ainda:
-  quem congela é quem assina, e o hash não foi preenchido aqui (regra de casa: declaração antes, com hash).
-- **Os números de "Ajuste das prioris" são aritmética descritiva**, calculados com `ajustar_normal` e
-  `ajustar_beta_quartis` do repositório sobre quartis já publicados; não são resultado de elicitação e não
-  decidem nada.
+- **A elicitação de E1 é análise de sensibilidade ($n = 1$), não painel completo.** Os blocos E2 e E3 dos formulários continuam em branco até que os dois especialistas adicionais por domínio (incluindo o de fora do programa e da área) passem pelo pré-teste e pela devolução.
+- **O protocolo está congelado em `DECLARACAO.sha256`.** Os cinco pré-testes de 20 itens resolvidos e as declarações de itens estão lacrados em `DECLARACAO.sha256`.
+- **Os números de "Ajuste das prioris" acima são a linha de base descritiva**, calculados sobre os quartis de partida do p05; a comparação com as cinco prioris elicitadas por E1 está em `formularios/comparacao.md` (§6–§10).
 - **O rótulo do K é do programa.** O `K = 2` de `comparacao.md` é o número desta frente (protocolo = 1,
   comparação = 2) e soma-se ao K de cada domínio (1 → 2 e 3 → 4); se a contagem do programa usar outro número, o
   rótulo se corrige por declaração nova, sem reescrever arquivo nem hash.
@@ -73,12 +66,8 @@ batem com os arquivos citados por `sha256sum`.
   do programa fica sem par.
 - **Três domínios são "mesma base"** (`h2/educacao_star`, `h2g/educacao_star_turmas`,
   `h2g/direito_teto_beneficio`): a priori de literatura deles não é evidência independente, e o painel não pode
-  ter a mesma pessoa dos dois lados de um par.
-- **A pré-seleção dos 20 itens não foi feita.** O protocolo exige 20 previsões já resolvidas por especialista, fora do
-  cofre do domínio; a lista, a semente e o gabarito são trabalho de quem for rodar o pré-teste, e não foram montados
-  aqui.
-- **`ASSINATURAS.md` não foi tocado** (fora do escopo de escrita desta tarefa): a seção "Releitura" está no fim
-  de `RELEITURA.md` como bloco de texto, **não aplicado**.
+  ter a mesma pessoa dos dois lados de um par (por isso `h2g/educacao_star_turmas` ficou reservado para E1).
+- **A releitura dos 21 pareceres está aplicada em `governanca/RELEITURA.md` e `governanca/ASSINATURAS.md`**, com 17 pareceres confirmados e 4 retirados e reemitidos; continua valendo o limite de que quem assina é parte interessada.
 
 ## Como reproduzir / como conferir
 

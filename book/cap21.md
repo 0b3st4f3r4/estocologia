@@ -127,8 +127,9 @@ que lhe fazem.
 auditável faz cinco perguntas de cabeçalho. Qual é o **processo gerador** dos dados, com semente; onde mora a
 **não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído**, se o ruído entra somado
 (Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive.
-Quatro proibições fecham a lista: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina,
-nenhuma autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
+Quatro proibições fecham a lista: nenhuma linguagem natural livre entre agentes, nenhuma média solitária onde há
+curvatura ou cauda pesada, nenhuma confusão entre aprendizado e performatividade sem contrafactual, e nenhum extremo
+dogmático fora do intervalo de 1% a 99% nem omissão de tentativas. Cinco invariantes e sete portões
 automáticos verificam a ficha, e o binário de portões sai com código 0 ou 1.
 
 **O roteiro do projeto final.** O projeto vale como o curso inteiro. São quatro semanas de trabalho para um
@@ -157,13 +158,13 @@ naturais, com cláusula de saída, defendido em banca.
    bastante quando ele declara os modos de falha, quando alguém de fora consegue reproduzir cada número, e quando a
    decisão que ele autoriza não depende de nenhuma suposição que não tenha sido escrita.
 
-**Três coisas ficam abertas, com nome.** Nenhuma delas se resolve com mais código.
+**Três frentes de gente ficam abertas, e a genética fechou em código.** As três que pedem pessoas de fora não se resolvem com mais código.
 
-- **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
-  foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
-- **A resolução da validação por intervenção da genética.** O desenho está medido: uma linha por mutante aprova
+- **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos, com cinco domínios
+  elicitados pelo primeiro especialista com habilidade medida no pré-teste; faltam os outros dois por domínio e o de fora. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda resta fechar no painel.
+- **A resolução da validação por intervenção da genética (fechada em código no item quatro).** O desenho está medido: uma linha por mutante aprova
   4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
-  Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
+  O instrumento separou o artefato de linha do mover verdadeiro; só a bancada úmida dos 40 genes reais com segunda linhagem ficaria fora do programa, e o p-valor nunca foi o problema.
 - **A tese da ponte em escala.** O piloto cego empatou no teto e a tese segue **não sustentada**, agora com portão:
   um registro que a declare sustentada sem o teste justo é reprovado, e o piloto é re-derivado das notas do juiz
   (`labs --ponte`). O teste justo precisa de um escolhedor de casos de fora do programa, de analistas humanos e de um

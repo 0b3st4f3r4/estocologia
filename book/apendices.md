@@ -49,7 +49,8 @@ do dia a dia. A ordem é alfabética.
 | **Incerteza aleatória** | A variabilidade do mundo, que mais dados não reduzem | O resultado do dado honesto: rolar dez mil vezes não deixa o dado previsível |
 | **Incerteza epistêmica** | A ignorância do modelo sobre o mundo, que encolhe com dados | Não saber a altura média da turma; medir todos resolve |
 | **Incerteza knightiana** | Um processo real fora do espaço de hipóteses, em que mais dados dão falsa confiança | O peru que engorda por mil dias até o dia do Natal |
-| **Invariantes $\Phi_1$ a $\Phi_4$** | As quatro condições que toda alegação precisa cumprir: pertinência, contraste, justiça e cláusula de saída | As quatro perguntas da banca que reprovam um trabalho, faça ele o que fizer |
+| **Invariantes $\Phi_1$ a $\Phi_5$** | As cinco condições de contorno que toda alegação precisa cumprir: simulabilidade ($\Phi_1$), unidade independente ($\Phi_2$), teste severo ($\Phi_3$), escopo e cláusula de saída ($\Phi_4$) e resolução da pergunta ($\Phi_5$) | As cinco travas da ficha que reprovam um trabalho antes do argumento |
+| **$\Phi_5$ (resolução da pergunta)** | O invariante que reprova decisão agregada ($R_0$) quando a unidade independente é o dia ou mais grossa | Escalar pelo dia médio quando o posto alterna entre calmaria e surto |
 | **Jensen (desigualdade de)** | A média de uma função curvada não é a função da média | A média dos tempos de espera cresce quando a chegada oscila, mesmo com a mesma média de chegada |
 | **Kelly (critério de)** | A fração do patrimônio que maximiza o crescimento no longo prazo | Apostar 20% quando a chance é 60% a 1 para 1; apostar tudo leva à ruína |
 | **Kupiec (teste de)** | O teste que confere se o número de violações do valor em risco é o esperado | Conferir se o seguro de enchente acionou na frequência prometida |
@@ -137,7 +138,7 @@ depois de ver o resultado conta como declaração nova e entra no contador de te
 
 | Comando | O que prova |
 | --- | --- |
-| `cargo test --workspace` | Que os tipos e os portões da arquitetura funcionam: medido nesta sessão, 25 testes passam (3 de auditoria, 10 do núcleo e 12 do hipergrafo) |
+| `cargo test --workspace` | Que os tipos e os portões da arquitetura funcionam: medido nesta árvore, 350 testes passam nos dezesseis crates |
 | `cargo run --release --bin portoes -- --horizonte todos --reproducao` | Que o portão roda duas vezes e dá o mesmo resultado: medido, "7 portões ok", com a raiz de Merkle `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23` | Que um portão **sabe reprovar**: com o defeito plantado, o comando sai com código 1 e diz qual portão caiu |
 | `cargo run --release --bin labs -- --cap 19` | Que os números citados no Degrau 3 do capítulo 19 saem de código, com semente fixa. Vale trocar 19 por qualquer capítulo; `--todos` roda todos |

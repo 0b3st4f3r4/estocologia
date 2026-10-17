@@ -2,8 +2,8 @@
 //!
 //! Autocontido, sem dependências externas: lê a base pública, estima Hill na cauda real e numa cauda
 //! simulada, aplica a regra de Laplace à janela de 36 meses limpos e mede a evidência em bits.
-//! Crate de rascunho: ~/tmp/labs-cap18 (com [workspace] vazio no Cargo.toml). Rodar:
-//!     cargo run --release -- caminho/danish_fire.csv
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 18
 
 const RETENCAO: f64 = 50.0; // camada "100 xs 50", em M DKK de 1985
 const U_POT: f64 = 10.0; // limiar do ajuste POT do repositório

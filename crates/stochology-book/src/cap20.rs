@@ -3,8 +3,8 @@
 //! Laboratório autocontido, sem dependências externas: SplitMix64 embutido, logística por mínimos
 //! quadrados reponderados (IRLS), escalonamento de Platt, ECE de 10 caixas de massa igual e o
 //! canário plantado de propósito (uma coluna igual ao rótulo, publicada no instante do rótulo).
-//! Crate de rascunho: ~/tmp/labs-cap20 (com [workspace] vazio no Cargo.toml).
-//! Rodar: cargo run --release
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 20
 
 const SEMENTE: u64 = 2021;
 const N_TREINO: usize = 120_000;

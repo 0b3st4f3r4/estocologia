@@ -1766,7 +1766,7 @@ correlacionados, porque eram filhos dos LEDs.
 
 Três tarefas: refazer a conta de Charig com as contagens, classificar perguntas nos três degraus e
 construir um ICP mínimo que escolhe a causa e rejeita o alarme falso. Código verificado em
-`crates/stochology-book/src/cap09.rs`; saída medida com o crate de rascunho `labs_cap09`:
+`crates/stochology-book/src/cap09.rs`; saída medida com `cargo run --release --bin labs -- --cap 09`:
 
 ```text
 == Capítulo 9 :: o paradoxo de Simpson nas cirurgias de pedra nos rins ==
@@ -2040,8 +2040,8 @@ $\alpha$ estimado em 1,81 (intervalo de 1,41 a 2,56), estão nesse território (
 
 Quatro tarefas compõem o laboratório. Medir a moeda de Peters com a fração ótima e com a aposta total;
 medir 10 000 vendedores de seguro com e sem Laplace; estimar a cauda com Hill; e medir o arrasto da
-volatilidade em $1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com o
-crate de rascunho `labs_cap10`:
+volatilidade em $1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com
+`cargo run --release --bin labs -- --cap 10`:
 
 ```text
 == Capítulo 10 :: a moeda de Peters (cara +50%, coroa -40%) ==
@@ -2352,7 +2352,7 @@ e uma cláusula objetiva de quando deixa de valer.
 Quatro tarefas: a calculadora de custo/perda no navio de Bernoulli com o crescimento no tempo, o EVPI
 e o EVSI em um caso de dois atos, os quatro modelos de cauda do dique com cinco regras de decisão, e a
 tabela do trilema com a identidade de Chouldechova. Código verificado em `crates/stochology-book/src/cap11.rs`; saída
-medida com o crate de rascunho `labs_cap11`:
+medida com `cargo run --release --bin labs -- --cap 11`:
 
 ```text
 == Capítulo 11 :: o navio de Bernoulli (C = 1.800, L = 34.000, p = 0,05) ==
@@ -2696,7 +2696,7 @@ Três tarefas: montar um mini-hipergrafo com três nós e três lentes, provar q
 casos, e rodar as lentes com número medido. A **Escalonomia** entra pelo estimador de Hill, a
 **Crisonomia** pelo valor esperado da informação perfeita (EVPI), e a **Morfonomia** pelo teste de
 invariância entre regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com
-`cargo run --release` no crate de rascunho `/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências
+`cargo run --release --bin labs -- --cap 12` (módulo autocontido, sem dependências
 externas):
 
 ```text
@@ -2970,8 +2970,7 @@ rival **não ganhou o direito de decidir**.
 
 Duas medidas: rodar a banca completa sobre uma ficha com os oito cuidados e sobre uma ficha com cuidados
 removidos, imprimindo as oito severidades; e conferir que a triagem do Sistema 1 nunca sai do intervalo
-entre 1% e 99%. Código em `crates/stochology-book/src/cap13.rs`; saída medida com `cargo run --release`
-no crate de rascunho `/tmp/labs-cap13`:
+entre 1% e 99%. Código em `crates/stochology-book/src/cap13.rs`; saída medida com `cargo run --release --bin labs -- --cap 13`:
 
 ```text
 == Capitulo 13 :: a banca adversarial A1-A8 ==
@@ -3276,7 +3275,7 @@ compara duas execuções do horizonte declarado. Um portão que nunca falha não
 
 O laboratório valida uma ficha completa e uma ficha com um defeito plantado por vez, imprimindo as falhas por
 portão, no espírito de `portoes --defeito`. Código em `crates/stochology-book/src/cap14.rs`; saída medida com
-`cargo run --release` no crate de rascunho `/tmp/labs-cap14`:
+`cargo run --release --bin labs -- --cap 14`:
 
 ```text
 == Capitulo 14 :: o contrato de ferro ==
@@ -3524,7 +3523,7 @@ declaração de quem conduz o programa de que leu um resumo.
 Duas tarefas: construir um livro-razão encadeado por SHA-256 e provar que trocar **um caractere** no passado
 derruba a corrente; e calcular a raiz de Merkle de um lote de fichas. O código traz o SHA-256 escrito à mão,
 sem dependências, e confere a implementação contra os vetores conhecidos. Código em `crates/stochology-book/src/cap15.rs`;
-saída medida com `cargo run --release` no crate de rascunho `/tmp/labs-cap15`:
+saída medida com `cargo run --release --bin labs -- --cap 15`:
 
 ```text
 == Capitulo 15 :: o cofre, a senha e a auditoria ==
@@ -3776,7 +3775,7 @@ mesmo hash nas duas execuções, e isso faz de cada número acima uma medida con
 O laboratório reconstrói o Lab 0 em Rust, com semente fixa e sem dependências: SplitMix64 embutido, um dia de
 posto com chegadas de Poisson espalhadas no dia, atendimento exponencial e a recursão de Lindley para a espera,
 que é a regra "espero o que sobrou da fila, ou nada, o que for maior". O código está em `crates/stochology-book/src/cap16.rs`;
-a saída abaixo foi medida com `cargo run --release` no crate de rascunho `~/tmp/labs-cap16`.
+a saída abaixo foi medida com `cargo run --release --bin labs -- --cap 16`.
 
 ```text
 == Capítulo 16 :: a mesma média, duas esperas ==
@@ -3873,8 +3872,8 @@ meta (0,6543); o desvio entre dias de
 No cofre ela é 246,7 e na série toda 261,1, e o motivo é o recorte da janela. O nulo de metades por dia sai em
 0,0441 contra os 0,0474 publicados (esquema de repartição diferente), e o nulo por chamada desta conta é 0,0006
 pela binomial, contra os 0,0033 do roteiro, que usavam outro desenho de correlação intradiária. As duas
-divergências ficam declaradas, e o que segue vindo do registro antigo é a tabela de decisão com os esquemas R0 a
-R3, que é simulação de fila com desistência e não tem instrumento em Rust ainda.
+divergências ficam declaradas, junto com a reconstrução em Rust da tabela de decisão dos esquemas R0 a
+R3 pela simulação de fila com desistência (`fila.rs`, medida logo acima com `labs --fila`).
 Os outros valores diferem porque o gerador de números é outro (SplitMix64 aqui, PCG64 no material original) e
 porque a espera média por paciente no mundo oscilante é razão de somas de cauda pesada. Rodando o instrumento
 com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença
@@ -4092,7 +4091,7 @@ produzidos. O terceiro projeto do horizonte, os incêndios dinamarqueses, é o C
 O laboratório lê as três bases públicas e mede todas as quantidades citadas acima: o crescimento temporal e o arrasto,
 as coortes de 20 anos de início mensal, o choque de 1987, a Depressão, o mundo da alegação por reamostragem de
 anos e a decomposição crua do NSW contra o CPS. O código está em `crates/stochology-book/src/cap17.rs`; a saída abaixo foi
-medida com `cargo run --release` no crate de rascunho `~/tmp/labs-cap17`.
+medida com `cargo run --release --bin labs -- --cap 17`.
 
 ```text
 == Capítulo 17 :: arrasto da volatilidade e o viés de seleção ==
@@ -4337,8 +4336,7 @@ duas aprovações.
 
 O laboratório lê a série real, mede Hill na cauda do treino e numa cauda simulada, conta os meses em que a camada
 foi atingida e calcula Laplace, a razão de verossimilhança e os bits da janela limpa. O código está em
-`crates/stochology-book/src/cap18.rs`; a saída abaixo foi medida com `cargo run --release` no crate de rascunho
-`~/tmp/labs-cap18`.
+`crates/stochology-book/src/cap18.rs`; a saída abaixo foi medida com `cargo run --release --bin labs -- --cap 18`.
 
 ```text
 == Capítulo 18 :: a cauda, a janela limpa e a informação ==
@@ -4670,8 +4668,8 @@ O laboratório deste capítulo é um ICP mínimo, com as duas réguas do livro e
 por equações normais, resíduo padronizado pela escala estimada sem olhar o ambiente, Kruskal–Wallis da locação e
 Brown–Forsythe da escala, p-valor por 999 permutações dos rótulos de ambiente, Bonferroni sobre os dois testes, e a
 regra de saturação medida pelo 1-NN deixando a linha de fora. O código está em `crates/stochology-book/src/cap19.rs` —
-autocontido, com função principal própria, sem dependências, com o acaso embutido em dez linhas de SplitMix64. No
-rascunho de escrita ele rodou num crate com a tabela de espaço de trabalho vazia no arquivo de manifesto:
+autocontido, com função principal própria, sem dependências, com o acaso embutido em dez linhas de SplitMix64 (rodado pelo
+binário `labs` com `--cap` dezenove, ou direto no módulo):
 
 ```bash
 cargo run --release
@@ -5086,7 +5084,7 @@ não é um serviço rodando: é um replay sob relógio.
 O laboratório deste capítulo monta as três peças de que o H3 depende, o escalonamento de Platt, o erro esperado de
 calibração e o canário, sobre previsões simuladas, com o acaso embutido em dez linhas de SplitMix64. A logística é
 ajustada por mínimos quadrados reponderados, que é determinístico e não precisa de biblioteca. O código está em
-`crates/stochology-book/src/cap20.rs`, e no rascunho de escrita rodou assim:
+`crates/stochology-book/src/cap20.rs` (rodado pelo binário `labs` com `--cap` vinte, ou direto no módulo):
 
 ```bash
 cargo run --release
@@ -5346,8 +5344,9 @@ que lhe fazem.
 auditável faz cinco perguntas de cabeçalho. Qual é o **processo gerador** dos dados, com semente; onde mora a
 **não-linearidade**; qual é a **unidade independente**; qual é a **física do ruído**, se o ruído entra somado
 (Itô) ou se a variável é que é arrastada (Stratonovich); e em que degrau da **escada causal** a alegação vive.
-Quatro proibições fecham a lista: nenhum texto livre entre agentes, nenhuma conta de cabeça feita por máquina,
-nenhuma autoaprovação, e nenhuma probabilidade fora do intervalo de 1% a 99%. Quatro invariantes e sete portões
+Quatro proibições fecham a lista: nenhuma linguagem natural livre entre agentes, nenhuma média solitária onde há
+curvatura ou cauda pesada, nenhuma confusão entre aprendizado e performatividade sem contrafactual, e nenhum extremo
+dogmático fora do intervalo de 1% a 99% nem omissão de tentativas. Cinco invariantes e sete portões
 automáticos verificam a ficha, e o binário de portões sai com código 0 ou 1.
 
 **O roteiro do projeto final.** O projeto vale como o curso inteiro. São quatro semanas de trabalho para um
@@ -5376,13 +5375,13 @@ naturais, com cláusula de saída, defendido em banca.
    bastante quando ele declara os modos de falha, quando alguém de fora consegue reproduzir cada número, e quando a
    decisão que ele autoriza não depende de nenhuma suposição que não tenha sido escrita.
 
-**Três coisas ficam abertas, com nome.** Nenhuma delas se resolve com mais código.
+**Três frentes de gente ficam abertas, e a genética fechou em código.** As três que pedem pessoas de fora não se resolvem com mais código.
 
-- **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos; nenhuma entrevista
-  foi feita. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda não foi medido.
-- **A resolução da validação por intervenção da genética.** O desenho está medido: uma linha por mutante aprova
+- **A elicitação com especialistas humanos.** O protocolo e os seis formulários estão prontos, com cinco domínios
+  elicitados pelo primeiro especialista com habilidade medida no pré-teste; faltam os outros dois por domínio e o de fora. Cinco dos 33 domínios dependem da priori escolhida, e é esse o tamanho do que ainda resta fechar no painel.
+- **A resolução da validação por intervenção da genética (fechada em código no item quatro).** O desenho está medido: uma linha por mutante aprova
   4 de 40 no piso de $0{,}001$ e a segunda linha aprova 1 de 40, com o piso em $10^{-6}$ (`labs --genetica`).
-  Falta rodar os 40 genes reais com a segunda linha, e o p-valor nunca foi o problema.
+  O instrumento separou o artefato de linha do mover verdadeiro; só a bancada úmida dos 40 genes reais com segunda linhagem ficaria fora do programa, e o p-valor nunca foi o problema.
 - **A tese da ponte em escala.** O piloto cego empatou no teto e a tese segue **não sustentada**, agora com portão:
   um registro que a declare sustentada sem o teste justo é reprovado, e o piloto é re-derivado das notas do juiz
   (`labs --ponte`). O teste justo precisa de um escolhedor de casos de fora do programa, de analistas humanos e de um
@@ -5604,7 +5603,8 @@ do dia a dia. A ordem é alfabética.
 | **Incerteza aleatória** | A variabilidade do mundo, que mais dados não reduzem | O resultado do dado honesto: rolar dez mil vezes não deixa o dado previsível |
 | **Incerteza epistêmica** | A ignorância do modelo sobre o mundo, que encolhe com dados | Não saber a altura média da turma; medir todos resolve |
 | **Incerteza knightiana** | Um processo real fora do espaço de hipóteses, em que mais dados dão falsa confiança | O peru que engorda por mil dias até o dia do Natal |
-| **Invariantes $\Phi_1$ a $\Phi_4$** | As quatro condições que toda alegação precisa cumprir: pertinência, contraste, justiça e cláusula de saída | As quatro perguntas da banca que reprovam um trabalho, faça ele o que fizer |
+| **Invariantes $\Phi_1$ a $\Phi_5$** | As cinco condições de contorno que toda alegação precisa cumprir: simulabilidade ($\Phi_1$), unidade independente ($\Phi_2$), teste severo ($\Phi_3$), escopo e cláusula de saída ($\Phi_4$) e resolução da pergunta ($\Phi_5$) | As cinco travas da ficha que reprovam um trabalho antes do argumento |
+| **$\Phi_5$ (resolução da pergunta)** | O invariante que reprova decisão agregada ($R_0$) quando a unidade independente é o dia ou mais grossa | Escalar pelo dia médio quando o posto alterna entre calmaria e surto |
 | **Jensen (desigualdade de)** | A média de uma função curvada não é a função da média | A média dos tempos de espera cresce quando a chegada oscila, mesmo com a mesma média de chegada |
 | **Kelly (critério de)** | A fração do patrimônio que maximiza o crescimento no longo prazo | Apostar 20% quando a chance é 60% a 1 para 1; apostar tudo leva à ruína |
 | **Kupiec (teste de)** | O teste que confere se o número de violações do valor em risco é o esperado | Conferir se o seguro de enchente acionou na frequência prometida |
@@ -5692,7 +5692,7 @@ depois de ver o resultado conta como declaração nova e entra no contador de te
 
 | Comando | O que prova |
 | --- | --- |
-| `cargo test --workspace` | Que os tipos e os portões da arquitetura funcionam: medido nesta sessão, 25 testes passam (3 de auditoria, 10 do núcleo e 12 do hipergrafo) |
+| `cargo test --workspace` | Que os tipos e os portões da arquitetura funcionam: medido nesta árvore, 350 testes passam nos dezesseis crates |
 | `cargo run --release --bin portoes -- --horizonte todos --reproducao` | Que o portão roda duas vezes e dá o mesmo resultado: medido, "7 portões ok", com a raiz de Merkle `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23` | Que um portão **sabe reprovar**: com o defeito plantado, o comando sai com código 1 e diz qual portão caiu |
 | `cargo run --release --bin labs -- --cap 19` | Que os números citados no Degrau 3 do capítulo 19 saem de código, com semente fixa. Vale trocar 19 por qualquer capítulo; `--todos` roda todos |

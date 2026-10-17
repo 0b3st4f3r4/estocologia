@@ -1778,8 +1778,8 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p17-schema | DECLARACAO.md | 02b743a308b951b78b63554f860702ff7d50df0e1842504ea4388c3bb875884e |
 | p18-eixo-r | DECLARACAO.md | 8202a54e3b6b826af4387a049c389e78956678f086d9cb34f8e9c9200499a3f7 |
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
-| p20-jev | DECLARACAO.md | 6dd50c8070a6d9b49860021483f3052d6356a5d890437578743cf2ea2abf0578 |
+| p20-jev | DECLARACAO.md | 3b17589cee9368a6980a8f509c961e63e1e5ac380617cfd57161f10b5ffc3e18 |
 
-Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 24 (--banco,--cap,--elicitacao,--ensaio-escuta,--ensaio-ponte,--ensaio-shelf,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 16
+Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 19 (--banco,--cap,--elicitacao,--ensaio-escuta,--ensaio-ponte,--ensaio-shelf,--escuta,--fila,--genetica,--h3,--jev,--ponte,--preteste,--resolucao,--s1,--s2,--schema,--segunda,--todos; mais 5 flags modificadoras: --escala,--gabarito,--limiar,--medida,--respostas) | capitulos: 21 | crates: 16
 
-Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75209 palavras**, sha256 `91166f4b9123ab8bb70a148e83eccb55d2de14151422f1c87eb95b5d0879fdbc`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.
+Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75289 palavras**, sha256 `38c3564de07817c332fe1771c1af896be9744f4cc59996170b0dba729c4fdd54`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

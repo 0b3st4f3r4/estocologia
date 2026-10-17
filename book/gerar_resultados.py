@@ -75,8 +75,10 @@ def manifesto() -> str:
             if arq.name != "DECLARACAO.md":
                 reemitidas += 1
     fonte = (RAIZ / "crates" / "stochology-book" / "src" / "main.rs").read_text(encoding="utf-8")
-    # A flag pode ter mais de um hifen (--ensaio-shelf); a contagem tem de ver a flag inteira.
-    instrumentos = sorted(set(re.findall(r'"(--[a-z0-9-]+)"', fonte)))
+    # A flag pode ter mais de um hifen (--ensaio-shelf); separamos os 19 instrumentos dos 5 modificadores.
+    modificadores = {"--escala", "--gabarito", "--limiar", "--medida", "--respostas"}
+    todas_flags = sorted(set(re.findall(r'"(--[a-z0-9-]+)"', fonte)))
+    instrumentos = [f for f in todas_flags if f not in modificadores]
     capitulos = len(list((RAIZ / "book").glob("cap*.md")))
     pontos = len(list((RAIZ / "fundo").glob("p*")))
     crates = len(list((RAIZ / "crates").glob("stochology-*")))
@@ -86,7 +88,7 @@ def manifesto() -> str:
     linhas.append(
         f"Declaracoes de ponto: {total}, das quais {reemitidas} sao declaracoes 2 ou mais (retificacao declarada, "
         f"com os dois valores) | pontos de fundo: {pontos} | instrumentos do `labs`: {len(instrumentos)} "
-        f"({chr(44).join(instrumentos)}) | capitulos: {capitulos} | crates: {crates}"
+        f"({chr(44).join(instrumentos)}; mais {len(modificadores)} flags modificadoras: {chr(44).join(sorted(modificadores))}) | capitulos: {capitulos} | crates: {crates}"
     )
     linhas.append("")
     linhas.append(

@@ -167,7 +167,7 @@ Três tarefas: montar um mini-hipergrafo com três nós e três lentes, provar q
 casos, e rodar as lentes com número medido. A **Escalonomia** entra pelo estimador de Hill, a
 **Crisonomia** pelo valor esperado da informação perfeita (EVPI), e a **Morfonomia** pelo teste de
 invariância entre regimes. Código em `crates/stochology-book/src/cap12.rs`; saída medida com
-`cargo run --release` no crate de rascunho `/tmp/labs-cap12` (tabela `[workspace]` vazia, sem dependências
+`cargo run --release --bin labs -- --cap 12` (módulo autocontido, sem dependências
 externas):
 
 ```text

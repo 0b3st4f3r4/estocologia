@@ -247,7 +247,7 @@ não é um serviço rodando: é um replay sob relógio.
 O laboratório deste capítulo monta as três peças de que o H3 depende, o escalonamento de Platt, o erro esperado de
 calibração e o canário, sobre previsões simuladas, com o acaso embutido em dez linhas de SplitMix64. A logística é
 ajustada por mínimos quadrados reponderados, que é determinístico e não precisa de biblioteca. O código está em
-`crates/stochology-book/src/cap20.rs`, e no rascunho de escrita rodou assim:
+`crates/stochology-book/src/cap20.rs` (rodado pelo binário `labs` com `--cap` vinte, ou direto no módulo):
 
 ```bash
 cargo run --release

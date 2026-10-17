@@ -154,7 +154,7 @@ declaração de quem conduz o programa de que leu um resumo.
 Duas tarefas: construir um livro-razão encadeado por SHA-256 e provar que trocar **um caractere** no passado
 derruba a corrente; e calcular a raiz de Merkle de um lote de fichas. O código traz o SHA-256 escrito à mão,
 sem dependências, e confere a implementação contra os vetores conhecidos. Código em `crates/stochology-book/src/cap15.rs`;
-saída medida com `cargo run --release` no crate de rascunho `/tmp/labs-cap15`:
+saída medida com `cargo run --release --bin labs -- --cap 15`:
 
 ```text
 == Capitulo 15 :: o cofre, a senha e a auditoria ==

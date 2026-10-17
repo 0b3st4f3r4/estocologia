@@ -175,7 +175,7 @@ produzidos. O terceiro projeto do horizonte, os incêndios dinamarqueses, é o C
 O laboratório lê as três bases públicas e mede todas as quantidades citadas acima: o crescimento temporal e o arrasto,
 as coortes de 20 anos de início mensal, o choque de 1987, a Depressão, o mundo da alegação por reamostragem de
 anos e a decomposição crua do NSW contra o CPS. O código está em `crates/stochology-book/src/cap17.rs`; a saída abaixo foi
-medida com `cargo run --release` no crate de rascunho `~/tmp/labs-cap17`.
+medida com `cargo run --release --bin labs -- --cap 17`.
 
 ```text
 == Capítulo 17 :: arrasto da volatilidade e o viés de seleção ==

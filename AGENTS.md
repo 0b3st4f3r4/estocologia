@@ -38,7 +38,7 @@ tudo o que segue declarado e ainda não exigido está em `PROPOSTAS_DECLARADAS.m
 | Phi4 — escopo e saída | quem paga pelo erro e cláusula objetiva de saída | validado na ficha; banca A8 |
 | Phi5 — resolução da pergunta | exigido quando a unidade é o dia ou mais grossa: aí resolução agregada (R0) reprova; unidade mais fina fica fora, declarado | `crates/stochology-core/src/invariantes.rs` e `src/resolucao.rs` |
 
-O binário `portoes` cobra os invariantes e a banca em sete portões (G1 a G7) e sai com código 0 ou 1.
+O binário `portoes` cobra os invariantes e a banca em sete portões (G1 a G7, distintos dos seis portões G1 a G6 do motor ondulatório `onda`) e sai com código 0 ou 1.
 
 ## III. Ontologia e as cinco lentes
 

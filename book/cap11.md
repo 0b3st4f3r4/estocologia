@@ -149,7 +149,7 @@ e uma cláusula objetiva de quando deixa de valer.
 Quatro tarefas: a calculadora de custo/perda no navio de Bernoulli com o crescimento no tempo, o EVPI
 e o EVSI em um caso de dois atos, os quatro modelos de cauda do dique com cinco regras de decisão, e a
 tabela do trilema com a identidade de Chouldechova. Código verificado em `crates/stochology-book/src/cap11.rs`; saída
-medida com o crate de rascunho `labs_cap11`:
+medida com `cargo run --release --bin labs -- --cap 11`:
 
 ```text
 == Capítulo 11 :: o navio de Bernoulli (C = 1.800, L = 34.000, p = 0,05) ==

@@ -3,8 +3,8 @@
 //! Laboratório autocontido, sem dependências externas: um verificador que recusa uma ficha sem
 //! pergunta do decisor, sem semente e sem cláusula de saída, e que mostra cada regra reprovando
 //! ao menos uma ficha (um portão precisa saber reprovar).
-//! Crate de rascunho: ~/tmp/labs-cap21 (com [workspace] vazio no Cargo.toml).
-//! Rodar: cargo run --release
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 21
 
 /// As sete regras, na ordem em que são aplicadas.
 const REGRAS: [&str; 7] = [

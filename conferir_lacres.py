@@ -5,7 +5,7 @@ Uso:
     python3 conferir_lacres.py          # todos os lacres, relatorio por arquivo
     python3 conferir_lacres.py --quieto # so o resumo
 
-Regra do formato, a mesma para os 25 lacres: cada linha util e
+Regra do formato, a mesma para os 26 lacres: cada linha util e
 
     <64 hex>  <caminho relativo a raiz do repositorio>
 

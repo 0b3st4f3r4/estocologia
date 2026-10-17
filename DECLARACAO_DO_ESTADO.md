@@ -26,7 +26,7 @@ quando `book/` não existe naquele commit —, e o registro de cada uma está em
 
 | item | prova | comando |
 | --- | --- | --- |
-| Sistema 2 deliberativo | `crates/stochology-s2`, sete módulos testados | `cargo test --workspace` e `labs --s2` |
+| Sistema 2 deliberativo | `crates/stochology-s2`, dez módulos testados (81 testes unitários e 7 de integração) | `cargo test --workspace` e `labs --s2` |
 | Crates do roteiro | os dez nomes vivos, cada um com teste próprio | `cargo test --workspace` |
 | Resolução fina da genética | `stochology-h2/src/genetica.rs`: 4 de 40 passam com uma linha, 1 de 40 com duas, piso de 0,001 para 0,000001 | `labs --genetica` |
 | Conferência da bibliografia | as 50 linhas de D.2 a D.4 com **[conferido]**, 50 conferidas contra DOI, editora, catálogo ou anais, 0 divergência de conteúdo. **Correção de 2026-10-17:** esta linha dizia "50 linhas com a marca" e "27 conferidas", e as duas coisas juntas não podiam ser verdade — a marca valia em 27, e as 23 de D.3 foram conferidas em 2026-10-15 sem marca. A reexecução de 2026-10-17 mediu as 23 de novo e aplicou a marca | `referencias/CONFERENCIA.md` (seções "As 27 linhas de D.2 e D.4" e "As 23 linhas de D.3") e `book/apendices.md` |
@@ -107,7 +107,7 @@ cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
 ~~~
 
 Cada pasta de ponto tem o seu `DECLARACAO.sha256`, e os 26 lacres da árvore se conferem de um só comando,
-rodado da raiz: `python3 conferir_lacres.py` devolve **65 alvos conferidos**, **8 linhas declaradas fora da
+rodado da raiz: `python3 conferir_lacres.py` devolve **70 alvos conferidos**, **8 linhas declaradas fora da
 árvore** e **0 problemas**. Dois lacres ficam sem alvo vivo, e aparecem como declarados em vez de aprovados:
 `p01-tese/CASOS.sha256` (o banco de 12 casos saiu da árvore) e `p01-tese/GERADORES.sha256` (o gerador era
 Python).
@@ -115,10 +115,10 @@ Python).
 ## 6. O manifesto
 
 Em `RESULTADOS_RUST.md` §5, gerado: **20 declarações de ponto**, das quais 4 são declarações 2 ou mais (correção
-com os dois valores lado a lado), **16 pontos de fundo**, **24 instrumentos** no `labs`, **21 capítulos** e
+com os dois valores lado a lado), **16 pontos de fundo**, **19 instrumentos** (e 5 flags modificadoras) no `labs`, **21 capítulos** e
 **16 crates**. Cada linha do manifesto traz o `sha256` do arquivo da declaração.
 
-O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 209 palavras** e
+O livro montado entra no mesmo manifesto com o que o identifica: **5 927 linhas**, **75 289 palavras** e
 `sha256` do arquivo. O estado de 2026-10-17 tinha um defeito que este parágrafo fecha: o
 `book/gerar.py --check` da época montava o livro na memória e comparava só a rampa, sem olhar o arquivo em
 disco — e o arquivo em disco estava **353 linhas atrás** de `book/`, sem os 21 blocos do eixo R e sem as

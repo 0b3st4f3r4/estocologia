@@ -143,7 +143,7 @@ correlacionados, porque eram filhos dos LEDs.
 
 Três tarefas: refazer a conta de Charig com as contagens, classificar perguntas nos três degraus e
 construir um ICP mínimo que escolhe a causa e rejeita o alarme falso. Código verificado em
-`crates/stochology-book/src/cap09.rs`; saída medida com o crate de rascunho `labs_cap09`:
+`crates/stochology-book/src/cap09.rs`; saída medida com `cargo run --release --bin labs -- --cap 09`:
 
 ```text
 == Capítulo 9 :: o paradoxo de Simpson nas cirurgias de pedra nos rins ==

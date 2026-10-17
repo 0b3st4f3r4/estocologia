@@ -145,9 +145,9 @@ tenta quebrar o artefato antes da aprovação (seção 8).
 
 ## 7. Workspace Técnico em Rust (Edition 2024)
 
-O ecossistema é modularizado em crates dedicados e determinísticos. **Quinze existem e passam em teste hoje**
-(2026-10-16), e nenhum nome do roteiro ficou para trás: os dez que faltavam nasceram com teste próprio, e a
-triagem do Sistema 1 continua como módulo de `core`.
+O ecossistema é modularizado em crates dedicados e determinísticos. **Dezesseis existem e passam em teste hoje**
+(2026-10-17, 350 testes), e nenhum nome do roteiro ficou para trás: os dez que faltavam nasceram com teste próprio, o
+décimo sexto é o motor ondulatório (`stochology-wave`, binário `onda`), e a triagem do Sistema 1 continua como módulo de `core`.
 
 | Crate | Estado | Conteúdo |
 |---|---|---|
@@ -155,23 +155,36 @@ triagem do Sistema 1 continua como módulo de `core`.
 | `crates/stochology-book` | vivo | laboratórios do livro capítulo por capítulo, com o binário `labs --cap N` e `--todos` |
 | `crates/stochology-hypergraph` | vivo | hipergrafo $\mathcal{G}$, validador de estrutura, ordem topológica e as cinco lentes |
 | `crates/stochology-audit` | vivo | SHA-256 sem dependências, livro-razão encadeado e raiz de Merkle |
-| `crates/stochology-gates` | vivo | binário `portoes`: 7 portões determinísticos por horizonte |
+| `crates/stochology-gates` | vivo | binário `portoes`: 7 portões determinísticos de governança por horizonte (G1 a G7) |
 | `crates/stochology-schema` | vivo | o contrato em arquivo: texto canônico da ficha, versão 1.2 e a **cadeia de migrações em `migracoes.tsv`**, embutida na compilação |
-| `crates/stochology-s2` | vivo | deliberativo: LATS e o motor de estado de crença (o Sistema 1 entrou como módulo `stochology-core/src/s1.rs`; decisão de 2026-10-16: `stochology-s1` não volta como crate) |
+| `crates/stochology-s2` | vivo | deliberativo (10 módulos, 81 testes unitários e 7 de integração): LATS (`lats`), estado de crença (`crenca`), hipergrafo (`hipergrafo`), Metropolis (`inferencia`), estresse da banca (`estresse`), eixo R (`planejamento`), bancada FSM sem orquestrador G8.1–G8.4 (`banca`), ponte Jev-LLM (`ponte`), runner local (`runner`) e calibração de Brier (`calibracao`), mais o binário `ingestar-jev` |
 | `crates/stochology-h0` | vivo | Erlang B e C, escala mínima, nulo de Poisson e o resumo obrigatório (media, mediana, quantis) |
 | `crates/stochology-h1` | vivo | arrasto da alavancagem, viés de seleção e o estimador de Hill da cauda |
-| `crates/stochology-h2` | vivo | as rodadas de invariância causal, o contador $K$ e Bonferroni, com nulo por embaralhamento |
+| `crates/stochology-h2` | vivo | as rodadas de invariância causal, o contador $K$ e Bonferroni, com nulo por embaralhamento e resolução fina da genética |
 | `crates/stochology-h3` | vivo | relógio estrito com canário, ECE, habilidade de Brier e o laço performativo |
 | `crates/stochology-icp` | vivo | predição causal invariante: ambientes, mínimos quadrados, Kolmogorov-Smirnov e a área que sobrevive |
 | `crates/stochology-drift` | vivo | CUSUM bilateral com o nulo estacionário medido e a divergência de Kullback-Leibler |
 | `crates/stochology-fairness` | vivo | paridade demográfica, igualdade de oportunidades e calibração por subgrupo |
-| `crates/stochology-wasm` | vivo | playground WebAssembly: ponte C mínima e a página de `www/` |
+| `crates/stochology-wasm` | vivo | playground WebAssembly: ponte C mínima |
+| `crates/stochology-wave` | vivo | motor ondulatório (binário `onda`): superposição fasorial local, Laplaciano magnético com propagador de Cayley, plasticidade Kuramoto-Oja e barramento de espículas com STDP, com seis portões próprios |
+
+**Desambiguação dos portões `G1`–`G7` (`portoes`) e `G1`–`G6` (`onda`).** Os dois binários usam a sigla `G` em
+escopos distintos:
+- Em `portoes` (`stochology-gates`), **G1 a G7** cobram a governança das fichas por horizonte: G1 determinismo
+  (raiz de Merkle idêntica em duas passadas), G2 semente fixa, G3 escopo declarado, G4 invariantes $\Phi_1$–$\Phi_5$
+  e prevenção ao erro tipo III, G5 integridade da trilha SHA-256, G6 banca adversarial $A_1$–$A_8$ (piso 6) e G7
+  cláusula de saída.
+- Em `onda` (`stochology-wave`), **G1 a G6** cobram a física do motor ondulatório: G1 hermiticidade do Laplaciano
+  magnético $L^{(q)}$, G2 unitariedade do propagador de Cayley, G3 cadeia de selos sobre o estado fasorial, G4
+  determinismo da evolução de fase, G5 ganho de ressonância no alvo sob plasticidade Kuramoto-Oja e G6 seta causal
+  do barramento de espículas sob STDP.
 
 Verificação dos portões determinísticos em máquina limpa:
 
 ```bash
 cargo test --workspace
 cargo run --release --bin portoes -- --horizonte todos --reproducao
+cargo run --release --bin onda -- --check
 ```
 
 Saída real medida neste repositório (12 fichas, 4 horizontes):
@@ -458,11 +471,16 @@ esconde o que importa; a unidade independente decide a margem; acertar o número
 não podia errar; reprovar o próprio modelo é vitória científica; a previsão viaja melhor que a lista
 de causas, mas só a causa protege contra o inédito; calibração se conserta, resolução não; declarar
 antes de rodar é o que separa ciência de trapaça. O balanço dos 10 pontos da auditoria de fundo. O
-que continua em aberto, com honestidade: (1) os formulários SHELF (`fundo/p12-shelf/`) estão prontos
-mas **nenhum especialista humano foi entrevistado ainda** (e 5 de 33 domínios mudam de decisão
-dependendo da priori); (2) a resolução fina da genética (1 mutante por ambiente); (3) **a voz de quem
-paga pelo erro** (`governanca/GRUPOS.md`): nas 7 decisões que afetam pessoas reais, nenhum membro dos
-grupos afetados foi ouvido — assinar dá nome ao responsável, escutar é outra coisa. *Projeto final:*
+que continua em aberto, com honestidade: (1) no protocolo SHELF (`fundo/p12-shelf/`), o primeiro
+especialista (E1) elicitou cinco domínios com habilidade medida no pré-teste (0,4240 a 0,9730) e releu os
+21 pareceres, mas **faltam os outros dois especialistas por domínio e o de fora do programa** (e 5 de 33
+domínios mudam de decisão dependendo da priori); (2) a resolução fina da genética fechou em código em
+2026-10-16 (`labs --genetica`: 4 de 40 com uma linha, 1 de 40 com duas linhas), restando fora do programa
+apenas eventual bancada úmida com segunda linhagem real; (3) **a voz de quem paga pelo erro**
+(`governanca/GRUPOS.md`): nas 7 decisões que afetam pessoas reais, nenhum membro dos grupos afetados foi
+ouvido (prazo 2026-12-15, `labs --escuta`) — assinar dá nome ao responsável, escutar é outra coisa; (4) **a
+tese da ponte em escala** (`labs --ponte`, 0 de 12 casos com escolhedor e juiz de fora, prazo 2027-01-14); e
+(5) os pesos congelados e os desfechos rotulados da ponte Jev-LLM (`labs --jev`). *Projeto final:*
 roteiro guiado para o aluno escolher um problema da escola ou da cidade, preencher a `ficha.yaml`,
 simular o mundo e defender a conclusão.
 
@@ -503,12 +521,12 @@ A edição é escrita em `book/`, um arquivo por capítulo, e só substitui
 | Parte | Capítulos | Estado |
 | --- | --- | --- |
 | I. A arte de mirar no escuro | 1 a 4 | escritos, com laboratórios medidos |
-| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 927 linhas, 75 209 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
+| — | 21 capítulos | edição montada em `estocologia-livro-didatico.md` (5 927 linhas, 75 289 palavras, conferida caractere por caractere contra `book/` e contra a contagem declarada por `gerar.py --check`) |
 | II. As armadilhas do mundo e dos dados | 5 a 8 | escritos, com laboratórios medidos |
 | III. Causa, tempo e sobrevivência | 9 a 11 | escritos, com laboratórios medidos |
 | IV. Construindo a máquina auditável | 12 a 15 | escritos, com laboratórios medidos |
 | V. A máquina no mundo real | 16 a 21 | escritos, com laboratórios medidos (17 e 18 leem as bases de `dados-reais/`) |
-| Apêndices A a D | — | escritos (A com 72 verbetes) |
+| Apêndices A a D | — | escritos (A com 73 verbetes) |
 
 ```bash
 python3 book/gerar.py --check    # exige, por capítulo: título, três degraus, exercícios e resumo

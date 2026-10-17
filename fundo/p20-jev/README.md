@@ -4,8 +4,11 @@
 
 O item 13 pede o runner local de pesos congelados, o `sha256` dos pesos, a decodificação restrita ao esquema da
 ficha, a prova de determinismo na forma do G1, a calibração contra o Brier do Jev determinístico, o custo por
-chamada e a pergunta paralela de adequação do espaço de hipóteses. **Os pesos não estão nesta árvore e não há runner
-local aqui** — então o que existe é o arcabouço inteiro, com os portões armados.
+chamada e a pergunta paralela de adequação do espaço de hipóteses. **O runner local (`crates/stochology-s2/src/runner.rs`,
+397 linhas, 9 testes), o leitor de calibração (`calibracao.rs`, 9 testes), a ponte (`ponte.rs`, 12 testes) e o binário
+`ingestar-jev` (7 testes de integração) já existem nesta árvore** — o que falta são os dois artefatos de operador
+(`fundo/p20-jev/pesos/modelo.congelado` com `pesos/SHA256` e `fundo/p20-jev/calibracao/desfechos.tsv` com
+`calibracao/SHA256`), com os portões armados.
 
 **O que já fecha, com prova negativa.** O portão dos pesos: sem o arquivo, ou com o hash diferente do declarado, a
 ponte **não roda**. A decodificação restrita: texto livre e margem em 100% são recusados, e a recusa é a abstenção
@@ -22,5 +25,5 @@ ficha não serve àquele modelo — e a ponte reporta isso em vez de forçar res
 cargo run --release --bin labs -- --jev
 ~~~
 
-**O limite.** Sem os pesos verificados, nada de número: nem Brier calibrado, nem custo real, nem abstenção do
-modelo de verdade. O K da frente é 1.
+**O limite.** Sem os pesos verificados e o conjunto rotulado, nada de número publicado: nem Brier calibrado, nem custo
+real, nem abstenção do modelo de verdade. O K da frente é 1.

@@ -163,7 +163,7 @@ mesmo hash nas duas execuções, e isso faz de cada número acima uma medida con
 O laboratório reconstrói o Lab 0 em Rust, com semente fixa e sem dependências: SplitMix64 embutido, um dia de
 posto com chegadas de Poisson espalhadas no dia, atendimento exponencial e a recursão de Lindley para a espera,
 que é a regra "espero o que sobrou da fila, ou nada, o que for maior". O código está em `crates/stochology-book/src/cap16.rs`;
-a saída abaixo foi medida com `cargo run --release` no crate de rascunho `~/tmp/labs-cap16`.
+a saída abaixo foi medida com `cargo run --release --bin labs -- --cap 16`.
 
 ```text
 == Capítulo 16 :: a mesma média, duas esperas ==
@@ -260,8 +260,8 @@ meta (0,6543); o desvio entre dias de
 No cofre ela é 246,7 e na série toda 261,1, e o motivo é o recorte da janela. O nulo de metades por dia sai em
 0,0441 contra os 0,0474 publicados (esquema de repartição diferente), e o nulo por chamada desta conta é 0,0006
 pela binomial, contra os 0,0033 do roteiro, que usavam outro desenho de correlação intradiária. As duas
-divergências ficam declaradas, e o que segue vindo do registro antigo é a tabela de decisão com os esquemas R0 a
-R3, que é simulação de fila com desistência e não tem instrumento em Rust ainda.
+divergências ficam declaradas, junto com a reconstrução em Rust da tabela de decisão dos esquemas R0 a
+R3 pela simulação de fila com desistência (`fila.rs`, medida logo acima com `labs --fila`).
 Os outros valores diferem porque o gerador de números é outro (SplitMix64 aqui, PCG64 no material original) e
 porque a espera média por paciente no mundo oscilante é razão de somas de cauda pesada. Rodando o instrumento
 com seis sementes diferentes, a espera do mundo 5 ou 11 vai de **19,3 a 20,6 minutos**. A diferença

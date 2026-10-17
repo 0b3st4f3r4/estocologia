@@ -2,8 +2,8 @@
 //!
 //! Laboratório autocontido, sem dependências externas: SplitMix64 embutido, fila M/M/1 com um
 //! atendente, recursão de Lindley, modelo nulo de metades e teste severo.
-//! Crate de rascunho: ~/tmp/labs-cap16 (com [workspace] vazio no Cargo.toml).
-//! Rodar: cargo run --release
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 16
 
 const SEMENTE: u64 = 1909; // a mesma semente do Lab 0 do curso (Erlang, 1909)
 const HORAS: f64 = 10.0; // o posto abre 10 h por dia

@@ -148,8 +148,7 @@ duas aprovações.
 
 O laboratório lê a série real, mede Hill na cauda do treino e numa cauda simulada, conta os meses em que a camada
 foi atingida e calcula Laplace, a razão de verossimilhança e os bits da janela limpa. O código está em
-`crates/stochology-book/src/cap18.rs`; a saída abaixo foi medida com `cargo run --release` no crate de rascunho
-`~/tmp/labs-cap18`.
+`crates/stochology-book/src/cap18.rs`; a saída abaixo foi medida com `cargo run --release --bin labs -- --cap 18`.
 
 ```text
 == Capítulo 18 :: a cauda, a janela limpa e a informação ==

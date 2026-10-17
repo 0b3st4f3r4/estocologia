@@ -126,8 +126,8 @@ $\alpha$ estimado em 1,81 (intervalo de 1,41 a 2,56), estão nesse território (
 
 Quatro tarefas compõem o laboratório. Medir a moeda de Peters com a fração ótima e com a aposta total;
 medir 10 000 vendedores de seguro com e sem Laplace; estimar a cauda com Hill; e medir o arrasto da
-volatilidade em $1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com o
-crate de rascunho `labs_cap10`:
+volatilidade em $1\times$, $2\times$ e $3\times$. Código verificado em `crates/stochology-book/src/cap10.rs`; saída medida com
+`cargo run --release --bin labs -- --cap 10`:
 
 ```text
 == Capítulo 10 :: a moeda de Peters (cara +50%, coroa -40%) ==

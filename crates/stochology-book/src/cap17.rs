@@ -3,9 +3,9 @@
 //! Autocontido, sem dependências externas: lê as bases públicas do repositório e reproduz os números
 //! publicados do H1 real — crescimento temporal, arrasto, coortes de 20 anos de início mensal, o choque
 //! de 1987, o nulo de anos reamostrados e a decomposição crua contra o experimento sorteado do NSW.
-//! Crate de rascunho: ~/tmp/labs-cap17 (com [workspace] vazio no Cargo.toml). Rodar da raiz do repositório:
-//!     cargo run --release
-//! (aceita três caminhos opcionais: o CSV do Dow e os CSVs do NSW e do CPS)
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 17
+//! (aceita três caminhos opcionais na execução isolada: o CSV do Dow e os CSVs do NSW e do CPS)
 
 const ANO_FIM_TREINO: i32 = 1999; // o treino é 1885-1999; o cofre é 2000-2023
 const HORIZONTE: i32 = 20; // anos por coorte ("quem segura por décadas")

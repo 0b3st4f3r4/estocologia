@@ -6,16 +6,16 @@ Uma linha por decisão que envolve pessoas: as quatro dos 21 pareceres e os trê
 
 | decisão | grupos afetados | ouvidos | por quem | quando | onde está o registro |
 |---|---|---|---|---|---|
-| `h2g/saida/direito_teto_beneficio` — cortar o benefício semanal em 10% para encurtar os afastamentos | trabalhadores acidentados no trabalho cobertos pelo teto, Kentucky (1980) e Michigan (1982); o corte atinge o grupo `alta_renda` (acima do teto) | **nenhum** | — | — | `h2f/dominios/direito_teto_beneficio/pacote.yaml` (`shelf.painel: "literatura publicada; nenhum especialista humano consultado"`); `h2g/saida/direito_teto_beneficio/resultados.json` (`governanca.responsavel_humano`) |
-| `h2g/saida/educacao_star_turmas` — reduzir as turmas das séries iniciais para ~15 alunos | crianças do jardim à 3ª série das escolas públicas do Tennessee no STAR (11 598 alunos, 80 escolas), por etnia declarada: `afam` 4 524, `cauc` 8 632, `outra` 80 | **nenhum** | — | — | `h2f/dominios/educacao_star_turmas/pacote.yaml` (mesmo `shelf.painel`, `grupo_justica: etnia`); `resultados.json` → `governanca.justica.taxa_base_por_grupo` |
-| `h2g/saida/saude_rand` — trocar o cuidado gratuito por coparticipação de 25% | famílias não idosas dos EUA no RAND HIE (anos 1970), nos planos com teto de desembolso | **nenhum** | — | — | `h2f/dominios/saude_rand/pacote.yaml` (mesmo `shelf.painel`); `resultados.json` → `decisao.termo_escopo` |
-| `h1-real/saida/b` (NSW/LaLonde) — comparar o treino profissional do NSW com controles do CPS | 185 participantes do treino do NSW e 15 992 controles do CPS, por raça declarada (`negro`, `hispanico`, `outro`) | **nenhum** | — | — | `h1-real/saida/b/resultados.json` → `f6` (grupos e taxas-base) e `f5` (`aplicavel_a_titulares: true`) |
-| `h3` fluxo `prisoes` — marcar o detido para revisão da liberação (Toronto 1997–2002) | 5 226 detidos, por cor percebida (`colour`, atributo protegido do contrato do fluxo) | **nenhum** | — | — | `h3/fluxos/prisoes.py` (`contrato: tem_titulares, atributo_protegido`); `h3/saida/prisoes/justica_invertida.json` |
-| `h3` fluxo `prisoes20` — marcar a pessoa presa para revisão do registro na delegacia (Toronto 2020–2021) | 65 276 prisões, por cor percebida; 37 mil pessoas distintas | **nenhum** | — | — | `h3/fluxos/prisoes20.py`; `h3/saida/prisoes20/justica_invertida.json` |
-| `h3` fluxo `prisoes_ri` — marcar o motorista para revisão da prisão na parada (Rhode Island 2005–2015, cofre 2013–2015) | 86 113 paradas, por cor percebida; sem identificador de motorista nem de policial | **nenhum** | — | — | `h3/fluxos/prisoes_ri.py`; `h3/saida/prisoes_ri/justica_invertida.json` |
+| `h2g/saida/direito_teto_beneficio` — cortar o benefício semanal em 10% para encurtar os afastamentos | trabalhadores acidentados no trabalho cobertos pelo teto, Kentucky (1980) e Michigan (1982); o corte atinge o grupo `alta_renda` (acima do teto) | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h2g/direito_teto_beneficio`), `governanca/pareceres/h2g-direito_teto_beneficio.md`, `governanca/RELEITURA.md` e `fundo/p12-shelf/elicitacoes/direito_teto_beneficio.yaml` (origem histórica em `h2f/` e `h2g/`, aposentados no commit `1bfec905`, `DECLARACAO_REMOVIDO_PYTHON.md`) |
+| `h2g/saida/educacao_star_turmas` — reduzir as turmas das séries iniciais para ~15 alunos | crianças do jardim à 3ª série das escolas públicas do Tennessee no STAR (11 598 alunos, 80 escolas), por etnia declarada: `afam` 4 524, `cauc` 8 632, `outra` 80 | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h2g/educacao_star_turmas`), `governanca/pareceres/h2g-educacao_star_turmas.md` e `governanca/RELEITURA.md` (origem histórica em `h2f/` e `h2g/`, aposentados em `1bfec905`) |
+| `h2g/saida/saude_rand` — trocar o cuidado gratuito por coparticipação de 25% | famílias não idosas dos EUA no RAND HIE (anos 1970), nos planos com teto de desembolso | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h2g/saude_rand`), `governanca/pareceres/h2g-saude_rand.md`, `governanca/RELEITURA.md` e `fundo/p12-shelf/elicitacoes/saude_rand.yaml` (origem histórica em `h2f/` e `h2g/`, aposentados em `1bfec905`) |
+| `h1-real/saida/b` (NSW/LaLonde) — comparar o treino profissional do NSW com controles do CPS | 185 participantes do treino do NSW e 15 992 controles do CPS, por raça declarada (`negro`, `hispanico`, `outro`) | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h1-real/b`), `governanca/pareceres/h1-real-b.md`, `governanca/RELEITURA.md` e `crates/stochology-book/src/cap17.rs` (origem histórica em `h1-real/`, aposentado em `1bfec905`) |
+| `h3` fluxo `prisoes` — marcar o detido para revisão da liberação (Toronto 1997–2002) | 5 226 detidos, por cor percebida (`colour`, atributo protegido do contrato do fluxo) | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h3/prisoes`), `governanca/pareceres/h3-prisoes.md`, `governanca/RELEITURA.md` e `fundo/p14-h3/registro.tsv` (origem histórica em `h3/`, aposentado em `1bfec905`) |
+| `h3` fluxo `prisoes20` — marcar a pessoa presa para revisão do registro na delegacia (Toronto 2020–2021) | 65 276 prisões, por cor percebida; 37 mil pessoas distintas | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h3/prisoes20`), `governanca/pareceres/h3d-prisoes20.md`, `governanca/RELEITURA.md` e `fundo/p14-h3/registro.tsv` (origem histórica em `h3/`, aposentado em `1bfec905`) |
+| `h3` fluxo `prisoes_ri` — marcar o motorista para revisão da prisão na parada (Rhode Island 2005–2015, cofre 2013–2015) | 86 113 paradas, por cor percebida; sem identificador de motorista nem de policial | **nenhum** | — | — | `fundo/p13-escuta/registro.tsv` (`h3/prisoes_ri`), `governanca/pareceres/h3d-prisoes_ri.md`, `governanca/RELEITURA.md` e `fundo/p14-h3/registro.tsv` (origem histórica em `h3/`, aposentado em `1bfec905`) |
 
 **Nenhum dos sete grupos afetados foi ouvido, em nenhuma das sete decisões.** Não há no repositório registro de
-consulta, entrevista, painel ou consentimento.
+consulta, entrevista, painel dos grupos afetados ou consentimento.
 
 ## O lacre (2026-10-16)
 
@@ -32,12 +32,15 @@ decisão pode se dizer emitida sem alguém ouvido — o caso sintético que ment
 ## O que a auditoria não pôde olhar
 
 - **Quem autoriza.** Os 21 pareceres foram assinados por sil em 2026-10-15T03:53:28Z
-  (`governanca/ASSINATURAS.md`), e sil confirmou a troca de pergunta do H3d em 2026-10-15T04:08Z
-  (`h3/README.md`). Assinatura do responsável não é escuta do grupo afetado: o responsável está do lado de quem
-  decide usar o artefato, não de quem paga o erro.
-- **O painel humano nunca foi feito.** Os três domínios do h2g declaram `shelf.painel: "literatura publicada;
-  nenhum especialista humano consultado"`, e a auditoria de fundo confirma que nenhuma elicitação humana foi feita
-  (`fundo/p05-prioris/README.md`; livro, seção 9.7). Falta o passo mais barato e mais óbvio da lista.
+  (`governanca/ASSINATURAS.md`) e relidos um a um em 2026-10-16 (`governanca/RELEITURA.md`), e sil confirmou a troca
+  de pergunta do H3d em 2026-10-15T04:08Z (registrado em `REGISTRO_EMPIRICO.md` §4 e `fundo/p14-h3/README.md`).
+  Assinatura do responsável não é escuta do grupo afetado: o responsável está do lado de quem decide usar o artefato,
+  não de quem paga o erro.
+- **O painel humano de especialistas de fora nunca foi concluído.** Os três domínios do `h2g` nasceram declarando
+  `shelf.painel: "literatura publicada; nenhum especialista humano consultado"` (`fundo/p05-prioris/README.md`;
+  livro, seção 9.7); em 2026-10-16 o primeiro especialista interno (`E1`) fechou cinco domínios em
+  `fundo/p12-shelf/elicitacoes/` ($n = 1$), mas faltam as outras duas pessoas por domínio e o especialista de fora do
+  programa, e nenhum membro dos grupos afetados foi ouvido.
 - **As decisões não chegaram a ninguém.** Nos três fluxos de prisões o artefato emite uma marca para revisão; quem
   seria marcado — o detido, a pessoa presa, o motorista abordado — nunca viu o artefato nem a sua taxa de erro.
 - **Sem consentimento nem comitê.** Os dados são públicos e antigos (Toronto 1997–2002 e 2020–2021, Rhode Island
@@ -48,20 +51,21 @@ decisão pode se dizer emitida sem alguém ouvido — o caso sintético que ment
 
 ## Como isto foi apurado
 
-Não há protocolo de consulta no programa, então o registro saiu de uma busca de qualquer rastro de escuta no
-repositório inteiro. Os únicos achados ligados a pessoas são os campos `shelf.painel`, os `tem_titulares` e os
+Não há protocolo de consulta concluído no programa, então o registro saiu de uma busca de qualquer rastro de escuta
+no repositório inteiro. Os únicos achados ligados a pessoas são os campos `shelf.painel`, os `tem_titulares` e os
 quase-identificadores — declarações sobre dados, não sobre grupos ouvidos.
 
 ```
 grep -rni "grupos afetados|grupo afetado|ouvidos|partes afetadas" --include=*.md .
 grep -rni "painel de especialistas|entrevista|consulta pública|stakeholder|grupo de interesse" --include=*.md .
-grep -rn "titular|tem_titulares" --include=*.md --include=*.py --include=*.yaml .
+grep -rn "titular|tem_titulares" --include=*.md --include=*.tsv --include=*.yaml .
 ```
 
 ## Bloco G: a inversão da métrica
 
 A pergunta do Φ4 — inverter a métrica escolhida e mostrar quem passaria a pagar — foi rodada nos três fluxos de
-prisões. Nos arquivos `h3/saida/<fluxo>/justica_invertida.json`, a métrica **escolhida** é a taxa de falso
+prisões. No registro histórico de `h3/saida/<fluxo>/justica_invertida.json` (preservado no manifesto do commit
+`1bfec905` e consolidado nesta tabela e em `REGISTRO_EMPIRICO.md`), a métrica **escolhida** é a taxa de falso
 positivo do flag, P(marcado | não sofre o desfecho de interesse), e a **invertida** é a taxa de falso negativo,
 P(não marcado | sofre o desfecho). O grupo menos favorecido sai da maior taxa-base do desfecho, e o pagador é o
 de maior taxa sob a métrica; empate é o que tem intervalos de Wilson de 95% sobrepostos. A varredura de limiares é
@@ -85,8 +89,7 @@ pagador. O padrão de fundo é o mesmo nos três fluxos: o `Black` tem o FPR mai
 
 **K = 2 neste bloco.** A declaração 1 nomeava "empate" quando os intervalos das taxas-base se cruzavam, e isso
 deixava Toronto 2001 e 2002 sem o número pedido (as taxas-base são 21% e 19%). A declaração 2 nomeia o grupo pela
-taxa-base pontual e carrega o empate ao lado. As duas estão gravadas, lado a lado, em cada
-`justica_invertida.json`; a 1 não foi reescrita.
+taxa-base pontual e carrega o empate ao lado. As duas ficaram gravadas, lado a lado, com os hashes abaixo.
 
 | fluxo | declaração 1 | declaração 2 | `governanca.py` na declaração | na rodada |
 |---|---|---|---|---|
@@ -94,8 +97,7 @@ taxa-base pontual e carrega o empate ao lado. As duas estão gravadas, lado a la
 | `prisoes20` | `449bfa97459eb1971eb196030c7e121c2bd5367c4f902562736310f1ef29f9e8` | `2be0152924dc2ee4d61cc2eb33e2050dd9a95cfc212b3e65964048f67d7122c6` | idem | idem |
 | `prisoes_ri` | `a48c8899cee9d1a962102cd31aa7974af1c6306c88d318e816e900fa1a289251` | `7fb1cfbfd57edd956a9de8f4f4debbdd40ebb20b0f6f8732113cb35b23436b17` | idem | idem |
 
-Reproduzir: `cd h3 && python3 -m estocologia.governanca --declarar` grava só as declarações; sem a opção, roda
-e completa os mesmos arquivos. Lê `saida/<fluxo>/diario.parquet` (`prisoes20` e `prisoes_ri` estão fora do Git:
-regenerar com `python3 rodar.py prisoes20 prisoes_ri`). **Nenhum número publicado do H3 muda**: `f6_trilema`
-só devolve a chave nova quando recebe `por_limiar`, e o caminho oficial (`portoes.py`, `avaliar_h3c.py`,
-`avaliar_h3d.py`) chama sem ela.
+Verificação vigente na árvore: `cargo run --release --bin labs -- --escuta` confere `fundo/p13-escuta/registro.tsv`
+contra a cobertura mínima, e `crates/stochology-fairness` implementa o trilema de Chouldechova e a inversão de
+métrica em Rust. O andaime Python original (`h3/estocologia/governanca.py`) saiu da árvore em 2026-10-16 e permanece
+recuperável pelo commit `1bfec905` (`DECLARACAO_REMOVIDO_PYTHON.md`).

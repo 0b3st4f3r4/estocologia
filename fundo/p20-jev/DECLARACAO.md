@@ -4,10 +4,10 @@
 
 | arquivo | SHA-256 | o que é |
 | --- | --- | --- |
-| `fundo/p20-jev/registro.tsv` | `27596bdfd62b5bfb18bab099a9c4bfcfc6d1ad06d2550bc064ec53ebe4339199` | o estado da ponte, item por item, em máquina |
+| `fundo/p20-jev/registro.tsv` | `909c1ad75ffe17791427c8a982ecd1a23c4ca0de1762c7360b973a20bc7b5ed9` (histórico: `27596bdf…`, `b777a213…`) | o estado da ponte, item por item, em máquina |
 | `DECLARACAO.md` (esta) | — | as cinco declarações; o hash próprio sai em `DECLARACAO.sha256` |
-| `README.md` | `e4c3fe9fa4266c8d0328fc8d861ccbed474f9d58333894e24f5f2ec23a163481` | o resultado em uma página |
-| `DECLARACAO.sha256` | — | os três hashes, em forma de `sha256sum` |
+| `README.md` | `c18ddc5e1f7689bacb5a45de8caf1bfd6005a8bf64749ac05c576acbb47dfcd4` (histórico: `e4c3fe9f…`) | o resultado em uma página |
+| `DECLARACAO.sha256` | — | os sete hashes da pasta e da gramática, em forma de `sha256sum` |
 
 ## Declaração 1 — o que o item pede e o que a árvore tem
 
@@ -48,19 +48,21 @@ nada do que já está publicado: a ponte é um arcabouço novo, e nenhum número
 horizontes passa por ela.
 
 **Nota de 2026-10-17: o runner existe.** O §1 desta declaração e o `registro.tsv` diziam que o runner local não
-existia na árvore. Passou a existir em `crates/stochology-s2/src/runner.rs`: carrega o artefato, lê o hash
+existia na árvore. Passou a existir em `crates/stochology-s2/src/runner.rs` (397 linhas): carrega o artefato, lê o hash
 declarado em `pesos/SHA256` **antes** de rodar, confere, e responde pelo `ModeloCongelado`; pedido sem resposta
-congelada abstém e entra na conta da adequação. São sete testes próprios, e o manual do operador é `RUNNER.md`.
+congelada abstém e entra na conta da adequação. São **9 testes** em `runner.rs`, **12** em `ponte.rs`, **9** em
+`calibracao.rs` e **7** de integração no binário `ingestar-jev`, e o manual do operador é `RUNNER.md`.
 O que continua ausente é o **artefato**: `pesos/modelo.congelado` e o `sha256` declarado. O portão segue
 recusando, e é o comportamento correto. O lacre desta pasta foi refeito: `registro.tsv` e `RUNNER.md` entram
-nele, e o hash anterior do registro (`27596bdf…`) fica registrado aqui em vez de sumir com a linha do lacre.
+nele, e os hashes anteriores do registro (`27596bdf…`, `b777a213…`) e do `README.md` (`e4c3fe9f…`) ficam registrados
+aqui em vez de sumir com a linha do lacre.
 
 ## Verificação
 
-Rodada em 2026-10-16, depois do congelamento. Código de saída entre parênteses.
+Rodada em 2026-10-16, depois do congelamento, e atualizada em 2026-10-17. Código de saída entre parênteses.
 
 | Comando | Resultado |
 | --- | --- |
-| `cargo test -p stochology-s2` | 36 testes aprovados, entre eles os sete do `ponte`: sem pesos não roda, hash diferente recusa, texto livre abstém, margem em 100% recusa, o G1 fecha no modelo de ensaio e **não** fecha no instável, e o custo e a adequação saem do ensaio (0) |
+| `cargo test -p stochology-s2` | 81 testes unitários e 7 de integração aprovados (36 no congelamento de 2026-10-16), entre eles os 12 do `ponte`, os 9 do `runner`, os 9 do `calibracao` e os 7 do `ingestar-jev`: sem pesos não roda, hash diferente recusa, texto livre abstém, margem em 100% recusa, o G1 fecha no modelo de ensaio e **não** fecha no instável, e o custo e a adequação saem do ensaio (0) |
 | `labs --jev` | o portão dos pesos recusando com os pesos ausentes, a decodificação restrita com as duas recusas, a prova de determinismo nos dois modelos, o custo por chamada e a adequação nos dois modelos (0) |
 | `python3 book/gerar_resultados.py --check` | `RESULTADOS_RUST.md` atualizado, com o bloco da ponte (0) |

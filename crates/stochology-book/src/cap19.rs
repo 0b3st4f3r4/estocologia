@@ -3,8 +3,8 @@
 //! Laboratório autocontido, sem dependências externas: SplitMix64 embutido, mínimos quadrados por
 //! equações normais, teste de invariância por permutação (Kruskal-Wallis da locação + Brown-Forsythe
 //! da escala, Bonferroni sobre 2) e a regra de saturação do K = 3 (1-NN deixando a linha de fora).
-//! Crate de rascunho: ~/tmp/labs-cap19 (com [workspace] vazio no Cargo.toml).
-//! Rodar: cargo run --release
+//! Rodar da raiz do repositório:
+//!     cargo run --release --bin labs -- --cap 19
 
 const SEMENTE: u64 = 2019;
 const N_POR_AMBIENTE: usize = 600;

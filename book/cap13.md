@@ -164,8 +164,7 @@ rival **não ganhou o direito de decidir**.
 
 Duas medidas: rodar a banca completa sobre uma ficha com os oito cuidados e sobre uma ficha com cuidados
 removidos, imprimindo as oito severidades; e conferir que a triagem do Sistema 1 nunca sai do intervalo
-entre 1% e 99%. Código em `crates/stochology-book/src/cap13.rs`; saída medida com `cargo run --release`
-no crate de rascunho `/tmp/labs-cap13`:
+entre 1% e 99%. Código em `crates/stochology-book/src/cap13.rs`; saída medida com `cargo run --release --bin labs -- --cap 13`:
 
 ```text
 == Capitulo 13 :: a banca adversarial A1-A8 ==

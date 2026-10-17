@@ -191,7 +191,7 @@ compara duas execuções do horizonte declarado. Um portão que nunca falha não
 
 O laboratório valida uma ficha completa e uma ficha com um defeito plantado por vez, imprimindo as falhas por
 portão, no espírito de `portoes --defeito`. Código em `crates/stochology-book/src/cap14.rs`; saída medida com
-`cargo run --release` no crate de rascunho `/tmp/labs-cap14`:
+`cargo run --release --bin labs -- --cap 14`:
 
 ```text
 == Capitulo 14 :: o contrato de ferro ==
