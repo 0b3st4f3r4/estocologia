@@ -172,10 +172,7 @@ impl Grafo {
     }
 
     fn ciclo_em_tree(&self) -> Option<Vec<String>> {
-        match self.ordem_topologica() {
-            Ok(_) => None,
-            Err(ciclo) => Some(ciclo),
-        }
+        self.ordem_topologica().err()
     }
 
     fn nos_sem_lente(&self) -> Vec<String> {
@@ -194,14 +191,9 @@ impl Grafo {
                 .map(|id| {
                     let mut d = 1usize;
                     let mut atual = id.clone();
-                    loop {
-                        match self.tree.iter().find(|a| a.de == atual) {
-                            Some(a) => {
-                                d += 1;
-                                atual = a.para.clone();
-                            }
-                            None => break,
-                        }
+                    while let Some(a) = self.tree.iter().find(|a| a.de == atual) {
+                        d += 1;
+                        atual = a.para.clone();
                     }
                     (id.clone(), d)
                 })
@@ -266,8 +258,18 @@ fn grafo_valido() -> Grafo {
             ),
         ],
         tree: vec![
-            aresta("L2_erlang_c", "L3_gestor", TipoAresta::Dedutiva, "ficha que a decisao usa"),
-            aresta("L1_demanda", "L2_erlang_c", TipoAresta::Dedutiva, "entrada do modelo"),
+            aresta(
+                "L2_erlang_c",
+                "L3_gestor",
+                TipoAresta::Dedutiva,
+                "ficha que a decisao usa",
+            ),
+            aresta(
+                "L1_demanda",
+                "L2_erlang_c",
+                TipoAresta::Dedutiva,
+                "entrada do modelo",
+            ),
         ],
         graph: vec![
             aresta(
@@ -282,7 +284,12 @@ fn grafo_valido() -> Grafo {
                 TipoAresta::Patologia,
                 "decisao pelo dia medio, sem a cauda dos dias",
             ),
-            aresta("L1_demanda", "L2_erlang_c", TipoAresta::Causal, "do(escala) sobre a demanda real"),
+            aresta(
+                "L1_demanda",
+                "L2_erlang_c",
+                TipoAresta::Causal,
+                "do(escala) sobre a demanda real",
+            ),
             aresta(
                 "L2_erlang_c",
                 "L3_gestor",
@@ -341,7 +348,11 @@ fn medir(semente: u64, regimes: &[Regime]) -> Medida {
         let mut rx: Vec<f64> = Vec::new();
         let mut ry: Vec<f64> = Vec::new();
         for _ in 0..n {
-            let t = if uniforme(&mut rng, 100) < r.p_tratado { 1.0 } else { 0.0 };
+            let t = if uniforme(&mut rng, 100) < r.p_tratado {
+                1.0
+            } else {
+                0.0
+            };
             let residuo = (uniforme(&mut rng, 4_001) as f64 - 2_000.0) / 1_000.0;
             let out = r.base + r.efeito * t + residuo;
             rx.push(t);
@@ -379,15 +390,28 @@ pub fn rodar() {
     );
     println!(
         "ordem topologica = {:?} | folhas={} raizes={} | nos sem lente = {:?}",
-        ordem, folhas, raizes, g.nos_sem_lente()
+        ordem,
+        folhas,
+        raizes,
+        g.nos_sem_lente()
     );
 
     let mut g1 = g.clone();
-    g1.tree.push(aresta("L2_erlang_c", "L2_no_fantasma", TipoAresta::Dedutiva, "ponte quebrada"));
+    g1.tree.push(aresta(
+        "L2_erlang_c",
+        "L2_no_fantasma",
+        TipoAresta::Dedutiva,
+        "ponte quebrada",
+    ));
     println!("prova 1 (aresta para no ausente): {:?}", g1.validar());
 
     let mut g2 = g.clone();
-    g2.tree.push(aresta("L3_gestor", "L2_erlang_c", TipoAresta::Dedutiva, "volta"));
+    g2.tree.push(aresta(
+        "L3_gestor",
+        "L2_erlang_c",
+        TipoAresta::Dedutiva,
+        "volta",
+    ));
     println!("prova 2 (ciclo dedutivo): {:?}", g2.validar());
 
     let mut g3 = g.clone();
@@ -399,7 +423,8 @@ pub fn rodar() {
     println!("prova 3 (hiperaresta com um membro): {:?}", g3.validar());
 
     let mut g4 = g.clone();
-    g4.nos.push(no("L2_orfao", Camada::L2, "no que ninguem olha"));
+    g4.nos
+        .push(no("L2_orfao", Camada::L2, "no que ninguem olha"));
     println!(
         "prova 4 (no fora de toda lente): {:?} validacao={:?}",
         g4.nos_sem_lente(),
@@ -468,12 +493,31 @@ pub fn rodar() {
     // Lente 3 — Morfonomia.
     // Regimes 1, 2 e 3 com bases 100, 140 e 120 e efeito verdadeiro 10 nos tres.
     let regimes = [
-        Regime { p_tratado: 25, base: 100.0, efeito: 10.0, n: 240 },
-        Regime { p_tratado: 75, base: 140.0, efeito: 10.0, n: 240 },
-        Regime { p_tratado: 50, base: 120.0, efeito: 10.0, n: 240 },
+        Regime {
+            p_tratado: 25,
+            base: 100.0,
+            efeito: 10.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 75,
+            base: 140.0,
+            efeito: 10.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 50,
+            base: 120.0,
+            efeito: 10.0,
+            n: 240,
+        },
     ];
     let m = medir(2026, &regimes);
-    let dois = |v: &[f64]| v.iter().map(|x| (x * 100.0).round() / 100.0).collect::<Vec<f64>>();
+    let dois = |v: &[f64]| {
+        v.iter()
+            .map(|x| (x * 100.0).round() / 100.0)
+            .collect::<Vec<f64>>()
+    };
     println!(
         "Morfonomia: regra 1 -> inclinacao marginal = {:.2} (fracao tratada = {:.3}) | por regime = {:?} | invariante(0,5) = {}",
         m.marginal,
@@ -483,9 +527,24 @@ pub fn rodar() {
     );
     // Mesmo efeito verdadeiro, alocacao trocada: o marginal muda de sinal.
     let regimes_trocados = [
-        Regime { p_tratado: 75, base: 100.0, efeito: 10.0, n: 240 },
-        Regime { p_tratado: 25, base: 140.0, efeito: 10.0, n: 240 },
-        Regime { p_tratado: 50, base: 120.0, efeito: 10.0, n: 240 },
+        Regime {
+            p_tratado: 75,
+            base: 100.0,
+            efeito: 10.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 25,
+            base: 140.0,
+            efeito: 10.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 50,
+            base: 120.0,
+            efeito: 10.0,
+            n: 240,
+        },
     ];
     let t = medir(2026, &regimes_trocados);
     println!(
@@ -496,9 +555,24 @@ pub fn rodar() {
     );
     // Efeito que quebra a invariancia: o regime do meio responde 40, nao 10.
     let regimes_quebrados = [
-        Regime { p_tratado: 25, base: 100.0, efeito: 10.0, n: 240 },
-        Regime { p_tratado: 75, base: 140.0, efeito: 40.0, n: 240 },
-        Regime { p_tratado: 50, base: 120.0, efeito: 10.0, n: 240 },
+        Regime {
+            p_tratado: 25,
+            base: 100.0,
+            efeito: 10.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 75,
+            base: 140.0,
+            efeito: 40.0,
+            n: 240,
+        },
+        Regime {
+            p_tratado: 50,
+            base: 120.0,
+            efeito: 10.0,
+            n: 240,
+        },
     ];
     let q = medir(2026, &regimes_quebrados);
     println!(
@@ -520,8 +594,13 @@ mod testes {
         assert!(g.validar().is_empty());
         assert!(g.ordem_topologica().is_ok());
         let xs = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
-        assert_eq!(indice_hill(&xs, 3), stochology_hypergraph::lentes::indice_hill(&xs, 3));
-        assert_eq!(cauda_selvagem(1.8), stochology_hypergraph::lentes::cauda_selvagem(1.8));
+        assert_eq!(
+            indice_hill(&xs, 3),
+            stochology_hypergraph::lentes::indice_hill(&xs, 3)
+        );
+        assert_eq!(
+            cauda_selvagem(1.8),
+            stochology_hypergraph::lentes::cauda_selvagem(1.8)
+        );
     }
 }
-

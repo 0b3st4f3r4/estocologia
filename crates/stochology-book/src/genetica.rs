@@ -35,7 +35,11 @@ fn uma_linha(c: &stochology_h2::genetica::Comparacao, desenho: &Desenho) -> Vec<
                 m,
                 v.efeito_por_linha[0],
                 v.p,
-                if v.p <= (1.0 / (desenho.permutacoes as f64 + 1.0)) + 1e-12 { "passa no piso" } else { "passa" },
+                if v.p <= (1.0 / (desenho.permutacoes as f64 + 1.0)) + 1e-12 {
+                    "passa no piso"
+                } else {
+                    "passa"
+                },
                 marca(c, m)
             )
         })
@@ -63,21 +67,27 @@ fn duas_linhas(c: &stochology_h2::genetica::Comparacao, quem: &[usize], alfa: f6
 pub fn rodar() {
     println!("== Capítulo 19 :: a resolução fina da validação por intervenção ==");
     let uma = Desenho::default();
-    let duas = Desenho { linhas_por_mutante: 2, ..Desenho::default() };
+    let duas = Desenho {
+        linhas_por_mutante: 2,
+        ..Desenho::default()
+    };
     let c_uma = comparar(uma, SEMENTE);
     let c_duas = comparar(duas, SEMENTE);
     println!(
         "desenho: {} mutantes | {} individuos por linha | {} sorteios por teste | alfa = {:.2} | Bonferroni alfa/{} = {:.6}",
-        uma.mutantes, uma.individuos_por_linha, uma.permutacoes, uma.alfa, uma.mutantes, c_uma.alfa_corrigido
+        uma.mutantes,
+        uma.individuos_por_linha,
+        uma.permutacoes,
+        uma.alfa,
+        uma.mutantes,
+        c_uma.alfa_corrigido
     );
     println!(
         "plantados pelo instrumento: mover verdadeiro = mutante {} | artefato de linha = mutante {}",
         c_uma.mover_verdadeiro, c_uma.artefato_de_linha
     );
 
-    println!(
-        "\n-- a validacao de hoje: cada mutante e um ambiente de uma linha so --"
-    );
+    println!("\n-- a validacao de hoje: cada mutante e um ambiente de uma linha so --");
     println!(
         "  {} mutantes x {} individuos | piso do desenho = {:.6} | limiar = {:.6}",
         uma.mutantes, uma.individuos_por_linha, c_uma.piso_sem, c_uma.alfa_corrigido
@@ -85,7 +95,11 @@ pub fn rodar() {
     for linha in uma_linha(&c_uma, &uma) {
         println!("{linha}");
     }
-    println!("  passam: {} de {}", c_uma.quantos_passam_sem(), uma.mutantes);
+    println!(
+        "  passam: {} de {}",
+        c_uma.quantos_passam_sem(),
+        uma.mutantes
+    );
 
     println!("\n-- o mesmo mundo, com a segunda linha: o efeito tem de estar nas duas --");
     println!(
@@ -102,7 +116,11 @@ pub fn rodar() {
     for linha in duas_linhas(&c_duas, &olhar, c_duas.alfa_corrigido) {
         println!("{linha}");
     }
-    println!("  passam: {} de {}", c_duas.quantos_passam_com(), duas.mutantes);
+    println!(
+        "  passam: {} de {}",
+        c_duas.quantos_passam_com(),
+        duas.mutantes
+    );
     println!(
         "  efeito na segunda linha: artefato {:>+7.3} (nao se reproduz) | mover {:>+7.3} (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero",
         c_duas.com_segunda_linha[c_duas.artefato_de_linha].efeito_por_linha[1],

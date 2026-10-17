@@ -11,3 +11,6 @@ path = "src/bin/onda.rs"
 
 [dependencies]
 stochology-hypergraph = { path = "../stochology-hypergraph" }
+
+[lints]
+workspace = true

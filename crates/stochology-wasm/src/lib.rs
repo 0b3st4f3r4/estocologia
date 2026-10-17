@@ -10,6 +10,11 @@
 //! Declarado e nao implementado: a interface de memoria (hoje tudo passa por inteiros) e o
 //! carregamento do hipergrafo no navegador.
 
+// A ponte C exporta com `#[unsafe(no_mangle)]`, que o lint de unsafe_code conta como
+// declaracao insegura. Nao ha bloco unsafe neste crate: o allow e pelo atributo de export,
+// e o resto da arvore continua com unsafe_code = "deny".
+#![allow(unsafe_code)]
+
 use stochology_core::Rng;
 
 /// As funcoes puras que a ponte C e o navegador usam.
@@ -70,7 +75,11 @@ pub extern "C" fn estocologia_erlang_c(agentes: u32, carga_centesimos: u64) -> u
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_dispersao_do_nulo(semente: u64, passos: u32, media_centesimos: u64) -> u64 {
+pub extern "C" fn estocologia_dispersao_do_nulo(
+    semente: u64,
+    passos: u32,
+    media_centesimos: u64,
+) -> u64 {
     api::dispersao_do_nulo(semente, passos, media_centesimos)
 }
 
@@ -100,7 +109,10 @@ mod testes {
         assert_eq!(api::erlang_c_decimilessimos(10, 500), 361);
         assert_eq!(api::erlang_c_decimilessimos(3, 200), 4444);
         let dispersao = api::dispersao_do_nulo(7, 20_000, 400);
-        assert!((990..=1010).contains(&dispersao), "Poisson fica em 1000: {dispersao}");
+        assert!(
+            (990..=1010).contains(&dispersao),
+            "Poisson fica em 1000: {dispersao}"
+        );
     }
 
     #[test]

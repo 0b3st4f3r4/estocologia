@@ -34,7 +34,10 @@ fn main() {
         let pergunta = format!("caso {n}");
         let texto_do_pedido = pedido(&pergunta);
         let resposta = ensaio.decodificar(&texto_do_pedido);
-        inferencias.push_str(&format!("{texto_do_pedido}\t{}\n", resposta.replace('\n', "\\n")));
+        inferencias.push_str(&format!(
+            "{texto_do_pedido}\t{}\n",
+            resposta.replace('\n', "\\n")
+        ));
 
         let p = 0.05 + 0.90 * (((n * 7) % 19) as f64 / 18.0);
         let desfecho = usize::from((n * 13) % 5 < 3);
@@ -49,6 +52,11 @@ fn main() {
 
     println!("rodada sintetica escrita em {}", dir.display());
     println!("  30 inferencias: {arq_inf:?}");
-    println!("  30 desfechos: {arq_desf:?} ({positivos} com desfecho 1, {} com 0)", 30 - positivos);
-    println!("  regras: p = 0.05 + 0.90 * (((n * 7) % 19) / 18); desfecho = 1 quando (n * 13) % 5 < 3");
+    println!(
+        "  30 desfechos: {arq_desf:?} ({positivos} com desfecho 1, {} com 0)",
+        30 - positivos
+    );
+    println!(
+        "  regras: p = 0.05 + 0.90 * (((n * 7) % 19) / 18); desfecho = 1 quando (n * 13) % 5 < 3"
+    );
 }

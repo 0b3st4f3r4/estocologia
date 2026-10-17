@@ -1,6 +1,6 @@
 //! Orquestrador mestre M: conduz o ciclo e submete a ficha à banca A1-A8.
 
-use crate::agentes::{Aprovacao, AgenteA, Severidade, aprovado, estressar};
+use crate::agentes::{AgenteA, Aprovacao, Severidade, aprovado, estressar};
 use crate::camada::Ficha;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -23,7 +23,8 @@ impl OrquestradorM {
             return Err("ficha sem identificador".to_string());
         }
         if !self.hash_trilha.is_empty()
-            && (self.hash_trilha.len() != 64 || !self.hash_trilha.chars().all(|c| c.is_ascii_hexdigit()))
+            && (self.hash_trilha.len() != 64
+                || !self.hash_trilha.chars().all(|c| c.is_ascii_hexdigit()))
         {
             return Err("hash_trilha fora do formato SHA-256 (64 hex)".to_string());
         }
@@ -57,7 +58,10 @@ mod testes {
         assert!(m.conduzir_ataque(AgenteA::A3CicloVida, &f).is_ok());
 
         let corrompido = OrquestradorM::novo("sessao-h1", "nao-e-sha256");
-        assert!(corrompido.conduzir_ataque(AgenteA::A5Governanca, &f).is_err());
+        assert!(
+            corrompido
+                .conduzir_ataque(AgenteA::A5Governanca, &f)
+                .is_err()
+        );
     }
 }
-

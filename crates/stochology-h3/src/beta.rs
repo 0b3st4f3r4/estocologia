@@ -11,7 +11,7 @@
 /// Logaritmo do gama, por Lanczos (z > 0) com reflexão para z < 0,5.
 pub fn ln_gama(z: f64) -> f64 {
     const G: [f64; 9] = [
-        0.999_999_999_999_809_93,
+        0.999_999_999_999_809_9,
         676.520_368_121_885_1,
         -1_259.139_216_722_402_8,
         771.323_428_777_653_1,
@@ -156,7 +156,11 @@ pub fn ajustar_beta(q25: f64, q50: f64, q75: f64) -> PrioriBeta {
             }
         }
     }
-    PrioriBeta { a: melhor_a, b: melhor_b, erro_max_quartis: melhor_erro }
+    PrioriBeta {
+        a: melhor_a,
+        b: melhor_b,
+        erro_max_quartis: melhor_erro,
+    }
 }
 
 #[cfg(test)]
@@ -168,7 +172,10 @@ mod testes {
         for n in 1..=10u32 {
             let obtido = ln_gama(n as f64 + 1.0);
             let esperado = (1..=n).map(|k| (k as f64).ln()).sum::<f64>();
-            assert!((obtido - esperado).abs() < 1e-9, "ln Gama({n}+1): {obtido} contra {esperado}");
+            assert!(
+                (obtido - esperado).abs() < 1e-9,
+                "ln Gama({n}+1): {obtido} contra {esperado}"
+            );
         }
     }
 

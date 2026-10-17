@@ -66,7 +66,7 @@ fn resultado(portao: &'static str, veredito: Result<(), String>, detalhe: String
 }
 
 /// Roda os seis portoes.
-pub fn verifica(cenario: &Cenario) -> Relatorio {
+pub fn verifica(cenario: &Cenario<'_>) -> Relatorio {
     let mut resultados = Vec::new();
 
     // G1: estrutura.
@@ -145,10 +145,10 @@ pub fn verifica(cenario: &Cenario) -> Relatorio {
         Ok(saltos) => match verifica_cadeia(&saltos) {
             Ok(()) => {
                 let mut corrompido = saltos.clone();
-                if let Some(s) = corrompido.last_mut() {
-                    if let Some(c) = s.estado.first_mut() {
-                        c.re += 0.001;
-                    }
+                if let Some(s) = corrompido.last_mut()
+                    && let Some(c) = s.estado.first_mut()
+                {
+                    c.re += 0.001;
                 }
                 if verifica_cadeia(&corrompido).is_err() {
                     Ok(())

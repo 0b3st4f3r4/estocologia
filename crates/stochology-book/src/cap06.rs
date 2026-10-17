@@ -30,9 +30,14 @@ impl SplitMix64 {
     }
 }
 
-
 /// A pesquisa viciada de 1936: votantes com propensão a responder que depende do voto.
-fn literary_digest(semente: u64, n_eleitores: u64, p_roosevelt: f64, q_roosevelt: f64, q_landon: f64) -> (u64, f64) {
+fn literary_digest(
+    semente: u64,
+    n_eleitores: u64,
+    p_roosevelt: f64,
+    q_roosevelt: f64,
+    q_landon: f64,
+) -> (u64, f64) {
     let mut rng = SplitMix64::novo(semente);
     let mut respondentes = 0u64;
     let mut roosevelt_entre_respondentes = 0u64;
@@ -100,7 +105,6 @@ fn berkson(semente: u64, n: usize, corte: f64) -> (f64, f64, f64) {
     )
 }
 
-
 /// Tamanho efetivo de uma amostra de n letras numa cadeia de dois estados com
 /// persistência p: mede a variância da média amostral em muitas réplicas.
 fn tamanho_efetivo(semente: u64, p_persistencia: f64, n: usize, replicas: usize) -> (f64, f64) {
@@ -137,7 +141,11 @@ pub fn rodar() {
     let erro = r_entre - p_roosevelt;
     println!(
         "Literary Digest: {} de {} eleitores responderam (f = {:.3}); Roosevelt entre eles = {:.4}, Landon = {:.4}",
-        respondentes, n_eleitores, f, r_entre, 1.0 - r_entre
+        respondentes,
+        n_eleitores,
+        f,
+        r_entre,
+        1.0 - r_entre
     );
     println!(
         "erro medido = {:+.4} ({:.1} pontos); identidade de Meng com rho = -0.21: {:+.4}",
@@ -174,7 +182,6 @@ pub fn rodar() {
         100.0 * sigma_y / 50_000f64.sqrt()
     );
 
-
     // (2) O filtro fabrica relações (Berkson).
     for corte in [1.0_f64, 1.5, 2.0] {
         let (pop, sel, frac) = berkson(2026, 400_000, corte);
@@ -193,7 +200,12 @@ pub fn rodar() {
     let bruto_outras = (234.0 + 55.0) / (270.0 + 80.0);
     println!(
         "Simpson: pequenos {:.3} x {:.3}; grandes {:.3} x {:.3}; bruto {:.3} x {:.3} (inverte)",
-        abertas_pequenas, outras_pequenas, abertas_grandes, outras_grandes, bruto_abertas, bruto_outras
+        abertas_pequenas,
+        outras_pequenas,
+        abertas_grandes,
+        outras_grandes,
+        bruto_abertas,
+        bruto_outras
     );
     let ponderado_abertas = 0.5 * abertas_pequenas + 0.5 * abertas_grandes;
     let ponderado_outras = 0.5 * outras_pequenas + 0.5 * outras_grandes;
@@ -229,4 +241,3 @@ mod testes {
         assert!(n_pers < n_indep * 0.4);
     }
 }
-

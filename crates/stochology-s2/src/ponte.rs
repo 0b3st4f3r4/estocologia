@@ -74,11 +74,12 @@ pub fn verificar_pesos(caminho: &str, esperado: &str) -> Result<String, Recusa> 
 /// A decodificação restrita: a saída tem de ser o documento canônico da ficha, e a margem não pode encostar nos
 /// extremos. Fora disso, a ponte abstém em vez de aceitar texto livre.
 pub fn validar_saida(saida: &str) -> Result<stochology_core::Ficha, Recusa> {
-    let ficha = stochology_schema::de_texto(saida).map_err(|e| Recusa::ForaDoEsquema(format!("{e:?}")))?;
-    if let Some(m) = ficha.margem {
-        if !(0.0 < m && m < 1.0) {
-            return Err(Recusa::ExtremoDogmatico(format!("margem {m}")));
-        }
+    let ficha =
+        stochology_schema::de_texto(saida).map_err(|e| Recusa::ForaDoEsquema(format!("{e:?}")))?;
+    if let Some(m) = ficha.margem
+        && !(0.0 < m && m < 1.0)
+    {
+        return Err(Recusa::ExtremoDogmatico(format!("margem {m}")));
     }
     Ok(ficha)
 }
@@ -164,7 +165,12 @@ pub fn adequacao_do_espaco(
             ABSTENCOES_MAXIMAS * 100.0
         )
     };
-    Adequacao { pedidos: pedidos.len(), abstencoes, fracao, veredito }
+    Adequacao {
+        pedidos: pedidos.len(),
+        abstencoes,
+        fracao,
+        veredito,
+    }
 }
 
 /// Um modelo de ensaio: determinístico, responde no esquema da ficha.
@@ -174,7 +180,9 @@ pub struct ModeloDeEnsaio {
 
 impl ModeloDeEnsaio {
     pub fn novo() -> Self {
-        ModeloDeEnsaio { tokens_por_chamada: 42 }
+        ModeloDeEnsaio {
+            tokens_por_chamada: 42,
+        }
     }
 }
 
@@ -183,9 +191,13 @@ impl ModeloCongelado for ModeloDeEnsaio {
         "modelo de ensaio (deterministico)"
     }
     fn decodificar(&mut self, pedido: &str) -> String {
-        let ficha = stochology_core::Ficha::nova("jev.ponte.1", stochology_core::Camada::Modelo, stochology_core::TipoIncerteza::Epistemica)
-            .completa()
-            .com_cuidados();
+        let ficha = stochology_core::Ficha::nova(
+            "jev.ponte.1",
+            stochology_core::Camada::Modelo,
+            stochology_core::TipoIncerteza::Epistemica,
+        )
+        .completa()
+        .com_cuidados();
         let mut ficha = ficha;
         ficha.definicao = pedido.to_string();
         ficha.pergunta_do_decisor = "a ponte responde?".into();
@@ -248,13 +260,21 @@ pub fn rodar() {
     let p = pedido("o posto de saude aguenta a demanda?");
     let saida = ensaio.decodificar(&p);
     match validar_saida(&saida) {
-        Ok(ficha) => println!("  o modelo de ensaio responde no esquema: ficha {} | camada {} | palavras do documento: {}", ficha.id, ficha.camada.codigo(), saida.split_whitespace().count()),
+        Ok(ficha) => println!(
+            "  o modelo de ensaio responde no esquema: ficha {} | camada {} | palavras do documento: {}",
+            ficha.id,
+            ficha.camada.codigo(),
+            saida.split_whitespace().count()
+        ),
         Err(r) => println!("  a saida do ensaio nao passou: {r:?}"),
     }
     let fora = "isto e texto livre, nao uma ficha";
     match validar_saida(fora) {
         Ok(_) => println!("  PROBLEMA: texto livre aceito"),
-        Err(r) => println!("  texto livre recusado: {r:?} | abstencao {:?}", r.abstracao()),
+        Err(r) => println!(
+            "  texto livre recusado: {r:?} | abstencao {:?}",
+            r.abstracao()
+        ),
     }
     let extremo: Vec<String> = saida
         .lines()
@@ -264,39 +284,74 @@ pub fn rodar() {
         .collect();
     match validar_saida(&extremo.join("\n")) {
         Ok(_) => println!("  PROBLEMA: margem em 100% aceita"),
-        Err(r) => println!("  margem em 100% recusada: {r:?} | abstencao {:?}", r.abstracao()),
+        Err(r) => println!(
+            "  margem em 100% recusada: {r:?} | abstencao {:?}",
+            r.abstracao()
+        ),
     }
 
     println!("\n-- a prova de determinismo, na forma do G1 --");
     let pedidos: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
     let mut contabilidade = Contabilidade::default();
-    let (a, b, iguais) = provar_determinismo(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade);
+    let (a, b, iguais) =
+        provar_determinismo(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade);
     println!("  modelo de ensaio: execucao 1 {a:.16} | execucao 2 {b:.16} | identicas: {iguais}");
     let mut contabilidade2 = Contabilidade::default();
-    let (c, d, iguais2) = provar_determinismo(&mut ModeloDeEnsaioInstavel::novo(), &pedidos, &mut contabilidade2);
+    let (c, d, iguais2) = provar_determinismo(
+        &mut ModeloDeEnsaioInstavel::novo(),
+        &pedidos,
+        &mut contabilidade2,
+    );
     println!("  modelo instavel: execucao 1 {c:.16} | execucao 2 {d:.16} | identicas: {iguais2}");
-    println!("  leitura: o portao G1 fecha com um modelo congelado e NAO fecha com um modelo que muda de resposta — e o que o INTEGRACAO_JEV.md declara sobre o LLM livre");
+    println!(
+        "  leitura: o portao G1 fecha com um modelo congelado e NAO fecha com um modelo que muda de resposta — e o que o INTEGRACAO_JEV.md declara sobre o LLM livre"
+    );
 
     println!("\n-- o custo por chamada e a adequacao do espaco --");
     let (tokens, ms) = contabilidade.por_chamada();
-    println!("  modelo de ensaio: {} chamadas | {tokens:.1} tokens por chamada | {ms:.1} ms por chamada", contabilidade.chamadas);
+    println!(
+        "  modelo de ensaio: {} chamadas | {tokens:.1} tokens por chamada | {ms:.1} ms por chamada",
+        contabilidade.chamadas
+    );
     let mut contabilidade3 = Contabilidade::default();
-    let ad = adequacao_do_espaco(&mut ModeloDeEnsaioInstavel::novo(), &pedidos, &mut contabilidade3);
-    println!("  modelo instavel: {} pedidos | {} abstencoes ({:.1}%) | {}", ad.pedidos, ad.abstencoes, ad.fracao * 100.0, ad.veredito);
+    let ad = adequacao_do_espaco(
+        &mut ModeloDeEnsaioInstavel::novo(),
+        &pedidos,
+        &mut contabilidade3,
+    );
+    println!(
+        "  modelo instavel: {} pedidos | {} abstencoes ({:.1}%) | {}",
+        ad.pedidos,
+        ad.abstencoes,
+        ad.fracao * 100.0,
+        ad.veredito
+    );
     let mut contabilidade4 = Contabilidade::default();
     let ad2 = adequacao_do_espaco(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade4);
-    println!("  modelo de ensaio: {} pedidos | {} abstencoes ({:.1}%) | {}", ad2.pedidos, ad2.abstencoes, ad2.fracao * 100.0, ad2.veredito);
+    println!(
+        "  modelo de ensaio: {} pedidos | {} abstencoes ({:.1}%) | {}",
+        ad2.pedidos,
+        ad2.abstencoes,
+        ad2.fracao * 100.0,
+        ad2.veredito
+    );
 
     println!("\n-- o runner local dos pesos congelados --");
     match crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO) {
         Ok(mut runner) => {
-            println!("  pesos verificados: {} | {} respostas congeladas no artefato", runner.sha256(), runner.respostas());
+            println!(
+                "  pesos verificados: {} | {} respostas congeladas no artefato",
+                runner.sha256(),
+                runner.respostas()
+            );
             // A adequacao e o G1 sao medidos sobre os casos do proprio artefato quando ele os guarda (v2). Com
             // artefato v1, que so tem o hash, cai na sonda propria — e o instrumento diz qual dos dois usou.
             let do_artefato = runner.pedidos();
             let (ps, sonda) = if do_artefato.is_empty() {
                 (
-                    (1..=4).map(|i| pedido(&format!("caso {i}"))).collect::<Vec<String>>(),
+                    (1..=4)
+                        .map(|i| pedido(&format!("caso {i}")))
+                        .collect::<Vec<String>>(),
                     "sonda propria do instrumento (artefato v1, sem o texto do pedido)",
                 )
             } else {
@@ -309,14 +364,28 @@ pub fn rodar() {
             let mut c2 = Contabilidade::default();
             let ad = adequacao_do_espaco(&mut runner, &ps, &mut c2);
             let (tk, msq) = c2.por_chamada();
-            println!("  adequacao: {} pedidos | {} abstencoes ({:.1}%) | {}", ad.pedidos, ad.abstencoes, ad.fracao * 100.0, ad.veredito);
+            println!(
+                "  adequacao: {} pedidos | {} abstencoes ({:.1}%) | {}",
+                ad.pedidos,
+                ad.abstencoes,
+                ad.fracao * 100.0,
+                ad.veredito
+            );
             println!("  custo medido: {tk:.1} tokens por chamada | {msq:.1} ms por chamada");
-            println!("  Brier: a regra esta em runner::brier e o conjunto rotulado em calibracao::carregar, com amostra minima e abstencao contada");
+            println!(
+                "  Brier: a regra esta em runner::brier e o conjunto rotulado em calibracao::carregar, com amostra minima e abstencao contada"
+            );
         }
         Err(recusa) => match &recusa {
-            Recusa::HashNaoDeclarado(c) => println!("  RECUSADO: hash nao declarado em {c} | o operador declara o sha256 antes de rodar"),
-            Recusa::PesosAusentes(c) => println!("  RECUSADO: pesos ausentes em {c} | sem os pesos, a ponte nao roda"),
-            Recusa::PesosComHashDiferente { esperado, medido } => println!("  RECUSADO: hash declarado {esperado}, medido {medido}"),
+            Recusa::HashNaoDeclarado(c) => println!(
+                "  RECUSADO: hash nao declarado em {c} | o operador declara o sha256 antes de rodar"
+            ),
+            Recusa::PesosAusentes(c) => {
+                println!("  RECUSADO: pesos ausentes em {c} | sem os pesos, a ponte nao roda")
+            }
+            Recusa::PesosComHashDiferente { esperado, medido } => {
+                println!("  RECUSADO: hash declarado {esperado}, medido {medido}")
+            }
             Recusa::ArtefatoIlegivel(m) => println!("  RECUSADO: artefato ilegivel: {m}"),
             outra => println!("  RECUSADO: {outra:?}"),
         },
@@ -329,15 +398,25 @@ pub fn rodar() {
     ) {
         Ok(cal) => println!("  {}", cal.leitura()),
         Err(recusa) => match &recusa {
-            Recusa::HashNaoDeclarado(c) => println!("  sem conjunto rotulado: hash nao declarado em {c} | o Brier exige pares com procedencia declarada antes de rodar"),
-            Recusa::PesosAusentes(c) => println!("  sem conjunto rotulado: {c} ausente | sem par (probabilidade, desfecho) nao ha calibracao, e o instrumento nao inventa uma"),
+            Recusa::HashNaoDeclarado(c) => println!(
+                "  sem conjunto rotulado: hash nao declarado em {c} | o Brier exige pares com procedencia declarada antes de rodar"
+            ),
+            Recusa::PesosAusentes(c) => println!(
+                "  sem conjunto rotulado: {c} ausente | sem par (probabilidade, desfecho) nao ha calibracao, e o instrumento nao inventa uma"
+            ),
             outra => println!("  conjunto rotulado recusado: {outra:?}"),
         },
     }
-    println!("  regra declarada: 0.0 e 1.0 recusam, id fora de ordem recusa, desfecho fora de 0 e 1 recusa, abaixo de {} pares o escore nao e publicado, abstencao sai do denominador", crate::calibracao::AMOSTRA_MINIMA);
+    println!(
+        "  regra declarada: 0.0 e 1.0 recusam, id fora de ordem recusa, desfecho fora de 0 e 1 recusa, abaixo de {} pares o escore nao e publicado, abstencao sai do denominador",
+        crate::calibracao::AMOSTRA_MINIMA
+    );
 
     let dir = std::env::temp_dir().join(format!("p20-jev-ensaio-{}", std::process::id()));
-    match crate::runner::escrever_artefato_de_ensaio(&dir, &["caso 1", "caso 2", "caso 3", "caso 4"]) {
+    match crate::runner::escrever_artefato_de_ensaio(
+        &dir,
+        &["caso 1", "caso 2", "caso 3", "caso 4"],
+    ) {
         Ok(hash) => match crate::runner::RunnerLocal::carregar(&dir.to_string_lossy()) {
             Ok(mut r) => {
                 let ps: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
@@ -346,33 +425,57 @@ pub fn rodar() {
                 let mut c2 = Contabilidade::default();
                 let ad = adequacao_do_espaco(&mut r, &ps, &mut c2);
                 let (tk, msq) = c2.por_chamada();
-                println!("  ensaio do runner (nao sao os pesos reais): {hash:.16} | {} respostas | G1 identicas: {iguais} | abstencoes {:.1}% | {tk:.1} tokens por chamada | {msq:.1} ms por chamada", r.respostas(), ad.fracao * 100.0);
-                println!("  leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo");
+                println!(
+                    "  ensaio do runner (nao sao os pesos reais): {hash:.16} | {} respostas | G1 identicas: {iguais} | abstencoes {:.1}% | {tk:.1} tokens por chamada | {msq:.1} ms por chamada",
+                    r.respostas(),
+                    ad.fracao * 100.0
+                );
+                println!(
+                    "  leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo"
+                );
             }
             Err(e) => println!("  ensaio do runner: o artefato de ensaio nao carregou: {e:?}"),
         },
-        Err(e) => println!("  ensaio do runner: nao foi possivel escrever o artefato de ensaio: {e}"),
+        Err(e) => {
+            println!("  ensaio do runner: nao foi possivel escrever o artefato de ensaio: {e}")
+        }
     }
     std::fs::remove_dir_all(&dir).ok();
 
     println!("\n-- o estado declarado --");
-    println!("  runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta");
+    println!(
+        "  runner local: existe em crates/stochology-s2/src/runner.rs, com artefato, hash declarado antes da execucao e abstencao por pedido sem resposta"
+    );
     let tem_pesos = crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO).is_ok();
-    let cal = crate::calibracao::carregar(crate::calibracao::DIR_PADRAO, 0, crate::calibracao::AMOSTRA_MINIMA);
+    let cal = crate::calibracao::carregar(
+        crate::calibracao::DIR_PADRAO,
+        0,
+        crate::calibracao::AMOSTRA_MINIMA,
+    );
     let tem_escore = matches!(cal, Ok(crate::calibracao::Calibracao::Escore { .. }));
     if tem_pesos {
-        println!("  pesos congelados: artefato verificado em {dir_pesos} | a ponte roda com ele, e o hash fica declarado antes de cada execucao");
+        println!(
+            "  pesos congelados: artefato verificado em {dir_pesos} | a ponte roda com ele, e o hash fica declarado antes de cada execucao"
+        );
     } else {
-        println!("  pesos congelados: ausentes da arvore | o operador declara o sha256 em {dir_pesos}/SHA256 e deixa o modelo em {dir_pesos}/{}; ate la, o portao recusa e nenhum numero de calibracao real e publicado", crate::runner::ARQUIVO);
+        println!(
+            "  pesos congelados: ausentes da arvore | o operador declara o sha256 em {dir_pesos}/SHA256 e deixa o modelo em {dir_pesos}/{}; ate la, o portao recusa e nenhum numero de calibracao real e publicado",
+            crate::runner::ARQUIVO
+        );
     }
     if tem_escore {
-        println!("  conjunto rotulado: com escore publicado | o Brier acima e o do conjunto verificado, nao do ensaio");
+        println!(
+            "  conjunto rotulado: com escore publicado | o Brier acima e o do conjunto verificado, nao do ensaio"
+        );
     } else {
-        println!("  conjunto rotulado: sem escore publicado | o leitor existe e o conjunto e o que falta");
+        println!(
+            "  conjunto rotulado: sem escore publicado | o leitor existe e o conjunto e o que falta"
+        );
     }
-    println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco, o runner e o leitor do conjunto rotulado");
+    println!(
+        "  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco, o runner e o leitor do conjunto rotulado"
+    );
 }
-
 
 /// A medida do instrumento, em forma legivel por maquina.
 ///
@@ -409,7 +512,9 @@ pub fn medir() -> Medida {
         let do_artefato = runner.pedidos();
         let (ps, sonda) = if do_artefato.is_empty() {
             (
-                (1..=4).map(|i| pedido(&format!("caso {i}"))).collect::<Vec<String>>(),
+                (1..=4)
+                    .map(|i| pedido(&format!("caso {i}")))
+                    .collect::<Vec<String>>(),
                 String::from("sonda propria (artefato v1)"),
             )
         } else {
@@ -429,16 +534,16 @@ pub fn medir() -> Medida {
         m.tokens_por_chamada = tk;
         m.ms_por_chamada = msq;
     }
-    if let Ok(cal) = crate::calibracao::carregar(
-        crate::calibracao::DIR_PADRAO,
-        0,
-        crate::calibracao::AMOSTRA_MINIMA,
-    ) {
-        if let crate::calibracao::Calibracao::Escore { n, brier, ece, .. } = cal {
-            m.n_pares = n;
-            m.brier = Some(brier);
-            m.ece = Some(ece);
-        }
+    if let Ok(crate::calibracao::Calibracao::Escore { n, brier, ece, .. }) =
+        crate::calibracao::carregar(
+            crate::calibracao::DIR_PADRAO,
+            0,
+            crate::calibracao::AMOSTRA_MINIMA,
+        )
+    {
+        m.n_pares = n;
+        m.brier = Some(brier);
+        m.ece = Some(ece);
     }
     m
 }
@@ -485,16 +590,28 @@ pub fn ficha_da_medida(m: &Medida) -> String {
     let m = m.clone().quantizada();
     let vazio = String::from("(ausente)");
     let mut s = String::new();
-    s.push_str(&format!("pesos = {}\n", m.pesos.clone().unwrap_or(vazio.clone())));
+    s.push_str(&format!(
+        "pesos = {}\n",
+        m.pesos.clone().unwrap_or(vazio.clone())
+    ));
     s.push_str(&format!("respostas = {}\n", m.respostas));
     s.push_str(&format!("pedidos = {}\n", m.pedidos));
     s.push_str(&format!("sonda = {}\n", m.sonda));
     s.push_str(&format!("abstencoes = {}\n", m.abstencoes));
-    s.push_str(&format!("fracao_de_abstencao = {:.*}\n", CASAS_FRACAO, m.fracao_de_abstencao));
+    s.push_str(&format!(
+        "fracao_de_abstencao = {:.*}\n",
+        CASAS_FRACAO, m.fracao_de_abstencao
+    ));
     s.push_str(&format!("g1_identicas = {}\n", m.g1_identicas));
     s.push_str(&format!("g1_hash = {}\n", m.g1_hash));
-    s.push_str(&format!("tokens_por_chamada = {:.*}\n", CASAS_CUSTO, m.tokens_por_chamada));
-    s.push_str(&format!("ms_por_chamada = {:.*}\n", CASAS_CUSTO, m.ms_por_chamada));
+    s.push_str(&format!(
+        "tokens_por_chamada = {:.*}\n",
+        CASAS_CUSTO, m.tokens_por_chamada
+    ));
+    s.push_str(&format!(
+        "ms_por_chamada = {:.*}\n",
+        CASAS_CUSTO, m.ms_por_chamada
+    ));
     s.push_str(&format!("n_pares = {}\n", m.n_pares));
     s.push_str(&format!("brier = {}\n", escore(m.brier, CASAS_ESCORE)));
     s.push_str(&format!("ece = {}\n", escore(m.ece, CASAS_ESCORE)));
@@ -511,9 +628,13 @@ pub fn de_ficha(texto: &str) -> Result<Medida, String> {
             None => continue,
         };
         let numero = |v: &str| -> Result<f64, String> {
-            let x = v.parse::<f64>().map_err(|_| format!("{chave}: {v:?} nao e numero"))?;
+            let x = v
+                .parse::<f64>()
+                .map_err(|_| format!("{chave}: {v:?} nao e numero"))?;
             if !x.is_finite() {
-                return Err(format!("{chave}: {v:?} nao e numero finito; ausencia se escreve (ausente)"));
+                return Err(format!(
+                    "{chave}: {v:?} nao e numero finito; ausencia se escreve (ausente)"
+                ));
             }
             Ok(x)
         };
@@ -523,9 +644,18 @@ pub fn de_ficha(texto: &str) -> Result<Medida, String> {
             }
             numero(v).map(Some)
         };
-        let inteiro = |v: &str| v.parse::<usize>().map_err(|_| format!("{chave}: {v:?} nao e inteiro"));
+        let inteiro = |v: &str| {
+            v.parse::<usize>()
+                .map_err(|_| format!("{chave}: {v:?} nao e inteiro"))
+        };
         match chave {
-            "pesos" => m.pesos = if valor == "(ausente)" || valor.is_empty() { None } else { Some(valor.to_string()) },
+            "pesos" => {
+                m.pesos = if valor == "(ausente)" || valor.is_empty() {
+                    None
+                } else {
+                    Some(valor.to_string())
+                }
+            }
             "respostas" => m.respostas = inteiro(valor)?,
             "pedidos" => m.pedidos = inteiro(valor)?,
             "sonda" => m.sonda = valor.to_string(),
@@ -554,9 +684,14 @@ pub fn linha_de_registro(m: &Medida, data: &str) -> Result<String, String> {
     if data.len() != 10 || data.chars().filter(|c| *c == '-').count() != 2 {
         return Err(String::from("data tem de vir no formato AAAA-MM-DD"));
     }
-    let pesos = m.pesos.clone().ok_or("sem peso verificado: o registro exige o sha256 do artefato")?;
+    let pesos = m
+        .pesos
+        .clone()
+        .ok_or("sem peso verificado: o registro exige o sha256 do artefato")?;
     if !m.g1_identicas {
-        return Err(String::from("G1 nao fechou: duas execucoes com respostas diferentes nao viram registro"));
+        return Err(String::from(
+            "G1 nao fechou: duas execucoes com respostas diferentes nao viram registro",
+        ));
     }
     if m.n_pares < m.amostra_minima {
         return Err(format!(
@@ -567,7 +702,9 @@ pub fn linha_de_registro(m: &Medida, data: &str) -> Result<String, String> {
     let brier = m.brier.ok_or("sem Brier medido")?;
     let ece = m.ece.ok_or("sem ECE medido")?;
     if !brier.is_finite() || !ece.is_finite() {
-        return Err(String::from("Brier ou ECE nao finito nao vira registro: escore tem de ser numero"));
+        return Err(String::from(
+            "Brier ou ECE nao finito nao vira registro: escore tem de ser numero",
+        ));
     }
     Ok(format!(
         "{data}\t{pesos}\t{}\t{}\t{}\t{:.1}\t{:.1}\t{brier:.6}\t{ece:.6}",
@@ -586,7 +723,12 @@ mod testes {
             Err(Recusa::PesosAusentes(c)) => assert!(c.contains("nao-existe")),
             outro => panic!("esperava pesos ausentes: {outro:?}"),
         }
-        assert_eq!(verificar_pesos("fundo/p20-jev/pesos/nao-existe.bin", "abc").unwrap_err().abstracao(), Categoria::Outros);
+        assert_eq!(
+            verificar_pesos("fundo/p20-jev/pesos/nao-existe.bin", "abc")
+                .unwrap_err()
+                .abstracao(),
+            Categoria::Outros
+        );
     }
 
     #[test]
@@ -595,9 +737,15 @@ mod testes {
         std::fs::write(&caminho, b"pesos de ensaio").expect("escreve");
         let esperado = stochology_audit::sha256_hex(b"outra coisa qualquer");
         let r = verificar_pesos(&caminho.to_string_lossy(), &esperado);
-        assert!(matches!(r, Err(Recusa::PesosComHashDiferente { .. })), "{r:?}");
+        assert!(
+            matches!(r, Err(Recusa::PesosComHashDiferente { .. })),
+            "{r:?}"
+        );
         let certo = stochology_audit::sha256_hex(b"pesos de ensaio");
-        assert!(verificar_pesos(&caminho.to_string_lossy(), &certo).is_ok(), "com o hash certo, passa");
+        assert!(
+            verificar_pesos(&caminho.to_string_lossy(), &certo).is_ok(),
+            "com o hash certo, passa"
+        );
         std::fs::remove_file(&caminho).ok();
     }
 
@@ -605,21 +753,29 @@ mod testes {
     fn a_saida_fora_do_esquema_vira_abstencao() {
         let r = validar_saida("isto e texto livre, nao uma ficha");
         assert!(matches!(r, Err(Recusa::ForaDoEsquema(_))), "{r:?}");
-        assert_eq!(r.unwrap_err().abstracao(), Categoria::Outros, "a abstencao e o \"nao sei\" auditavel");
+        assert_eq!(
+            r.unwrap_err().abstracao(),
+            Categoria::Outros,
+            "a abstencao e o \"nao sei\" auditavel"
+        );
     }
 
     #[test]
     fn a_margem_no_extremo_e_recusada() {
         let mut ensaio = ModeloDeEnsaio::novo();
         let limpa = ensaio.decodificar(&pedido("caso"));
-        assert!(limpa.contains("margem = "), "a ficha de ensaio declara margem");
+        assert!(
+            limpa.contains("margem = "),
+            "a ficha de ensaio declara margem"
+        );
         let com_extremo: Vec<String> = limpa
             .lines()
             .filter(|l| !l.starts_with("margem"))
             .map(|l| l.to_string())
             .chain(std::iter::once("margem = 1.0".to_string()))
             .collect();
-        let recusa = validar_saida(&com_extremo.join("\n")).expect_err("a margem no extremo tinha de ser recusada");
+        let recusa = validar_saida(&com_extremo.join("\n"))
+            .expect_err("a margem no extremo tinha de ser recusada");
         assert!(matches!(recusa, Recusa::ExtremoDogmatico(_)), "{recusa:?}");
         assert_eq!(recusa.abstracao(), Categoria::Outros);
     }
@@ -628,7 +784,8 @@ mod testes {
     fn a_prova_de_determinismo_passa_no_modelo_de_ensaio() {
         let mut contabilidade = Contabilidade::default();
         let pedidos: Vec<String> = (1..=3).map(|i| pedido(&format!("caso {i}"))).collect();
-        let (a, b, iguais) = provar_determinismo(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade);
+        let (a, b, iguais) =
+            provar_determinismo(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade);
         assert!(iguais, "o modelo congelado fecha o G1: {a} contra {b}");
         assert_eq!(contabilidade.chamadas, 6, "duas execucoes de tres pedidos");
     }
@@ -637,10 +794,16 @@ mod testes {
     fn a_prova_de_determinismo_reprova_o_modelo_instavel() {
         let mut contabilidade = Contabilidade::default();
         let pedidos: Vec<String> = (1..=3).map(|i| pedido(&format!("caso {i}"))).collect();
-        let (a, b, iguais) = provar_determinismo(&mut ModeloDeEnsaioInstavel::novo(), &pedidos, &mut contabilidade);
-        assert!(!iguais, "o modelo que muda de resposta NAO fecha o G1: {a} contra {b}");
+        let (a, b, iguais) = provar_determinismo(
+            &mut ModeloDeEnsaioInstavel::novo(),
+            &pedidos,
+            &mut contabilidade,
+        );
+        assert!(
+            !iguais,
+            "o modelo que muda de resposta NAO fecha o G1: {a} contra {b}"
+        );
     }
-
 
     #[test]
     fn a_medida_vai_e_volta_pela_ficha() {
@@ -668,7 +831,11 @@ mod testes {
         assert!(volta.g1_identicas);
         assert!((volta.brier.unwrap() - 0.25).abs() < 1e-12);
         assert!((volta.ece.unwrap() - 0.125).abs() < 1e-12);
-        assert_eq!(volta, m.quantizada(), "a ficha volta identica apos a quantizacao declarada");
+        assert_eq!(
+            volta,
+            m.quantizada(),
+            "a ficha volta identica apos a quantizacao declarada"
+        );
     }
 
     #[test]
@@ -680,24 +847,47 @@ mod testes {
             ..Medida::default()
         };
         let volta = de_ficha(&ficha_da_medida(&m)).expect("le de volta");
-        assert_eq!(volta.fracao_de_abstencao, 0.030303, "seis casas, sem epsilon");
+        assert_eq!(
+            volta.fracao_de_abstencao, 0.030303,
+            "seis casas, sem epsilon"
+        );
         assert_eq!(volta.tokens_por_chamada, 95.3, "uma casa: 95.25 sobe");
         assert_eq!(volta.ms_por_chamada, 1.0, "uma casa: 1.04 desce");
-        assert_eq!(volta, m.quantizada(), "quantizar na borda faz a volta ser igualdade");
-        assert_ne!(volta.fracao_de_abstencao, 1.0 / 33.0, "a ficha e lossy por declaracao, nao por acidente");
+        assert_eq!(
+            volta,
+            m.quantizada(),
+            "quantizar na borda faz a volta ser igualdade"
+        );
+        assert_ne!(
+            volta.fracao_de_abstencao,
+            1.0 / 33.0,
+            "a ficha e lossy por declaracao, nao por acidente"
+        );
     }
 
     #[test]
     fn ausencia_volta_ausente_e_nan_e_recusado() {
-        let m = Medida { pesos: Some(String::from("abc")), ..Medida::default() };
+        let m = Medida {
+            pesos: Some(String::from("abc")),
+            ..Medida::default()
+        };
         let ficha = ficha_da_medida(&m);
         assert!(ficha.contains("brier = (ausente)"), "{ficha}");
         let volta = de_ficha(&ficha).expect("le de volta");
         assert_eq!(volta.brier, None, "ausencia nao ressuscita como NaN");
         assert_eq!(volta.ece, None, "ausencia nao ressuscita como NaN");
-        assert!(de_ficha("brier = NaN\n").is_err(), "NaN nao entra pela leitura");
-        assert!(de_ficha("ece = inf\n").is_err(), "infinito nao entra pela leitura");
-        assert!(de_ficha("fracao_de_abstencao = (ausente)\n").is_err(), "campo obrigatorio nao fica ausente");
+        assert!(
+            de_ficha("brier = NaN\n").is_err(),
+            "NaN nao entra pela leitura"
+        );
+        assert!(
+            de_ficha("ece = inf\n").is_err(),
+            "infinito nao entra pela leitura"
+        );
+        assert!(
+            de_ficha("fracao_de_abstencao = (ausente)\n").is_err(),
+            "campo obrigatorio nao fica ausente"
+        );
     }
 
     #[test]
@@ -726,21 +916,56 @@ mod testes {
             ece: Some(0.1),
             ..Medida::default()
         };
-        assert!(linha_de_registro(&completo, "2026-10-17").is_ok(), "medida completa registra");
+        assert!(
+            linha_de_registro(&completo, "2026-10-17").is_ok(),
+            "medida completa registra"
+        );
 
-        let sem_peso = Medida { pesos: None, ..completo.clone() };
-        assert!(linha_de_registro(&sem_peso, "2026-10-17").unwrap_err().contains("sha256"));
+        let sem_peso = Medida {
+            pesos: None,
+            ..completo.clone()
+        };
+        assert!(
+            linha_de_registro(&sem_peso, "2026-10-17")
+                .unwrap_err()
+                .contains("sha256")
+        );
 
-        let sem_g1 = Medida { g1_identicas: false, ..completo.clone() };
-        assert!(linha_de_registro(&sem_g1, "2026-10-17").unwrap_err().contains("G1"));
+        let sem_g1 = Medida {
+            g1_identicas: false,
+            ..completo.clone()
+        };
+        assert!(
+            linha_de_registro(&sem_g1, "2026-10-17")
+                .unwrap_err()
+                .contains("G1")
+        );
 
-        let amostra_curta = Medida { n_pares: 3, ..completo.clone() };
-        assert!(linha_de_registro(&amostra_curta, "2026-10-17").unwrap_err().contains("amostra"));
+        let amostra_curta = Medida {
+            n_pares: 3,
+            ..completo.clone()
+        };
+        assert!(
+            linha_de_registro(&amostra_curta, "2026-10-17")
+                .unwrap_err()
+                .contains("amostra")
+        );
 
-        let sem_escore = Medida { brier: None, ..completo.clone() };
-        assert!(linha_de_registro(&sem_escore, "2026-10-17").unwrap_err().contains("Brier"));
+        let sem_escore = Medida {
+            brier: None,
+            ..completo.clone()
+        };
+        assert!(
+            linha_de_registro(&sem_escore, "2026-10-17")
+                .unwrap_err()
+                .contains("Brier")
+        );
 
-        assert!(linha_de_registro(&completo, "17/10/2026").unwrap_err().contains("AAAA-MM-DD"));
+        assert!(
+            linha_de_registro(&completo, "17/10/2026")
+                .unwrap_err()
+                .contains("AAAA-MM-DD")
+        );
     }
 
     #[test]
@@ -749,11 +974,19 @@ mod testes {
         let pedidos: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
         let ad = adequacao_do_espaco(&mut ModeloDeEnsaio::novo(), &pedidos, &mut contabilidade);
         assert_eq!(ad.abstencoes, 0, "o modelo de ensaio responde no esquema");
-        assert!(ad.veredito.contains("serve a este modelo"), "{}", ad.veredito);
+        assert!(
+            ad.veredito.contains("serve a este modelo"),
+            "{}",
+            ad.veredito
+        );
         let (tokens, _) = contabilidade.por_chamada();
         assert!((tokens - 42.0).abs() < 1e-9, "tokens por chamada: {tokens}");
         let mut contabilidade2 = Contabilidade::default();
-        let ad2 = adequacao_do_espaco(&mut ModeloDeEnsaioInstavel::novo(), &pedidos, &mut contabilidade2);
+        let ad2 = adequacao_do_espaco(
+            &mut ModeloDeEnsaioInstavel::novo(),
+            &pedidos,
+            &mut contabilidade2,
+        );
         assert_eq!(ad2.abstencoes, 4, "o modelo instavel abstem em todos");
         assert!(ad2.veredito.contains("NAO serve"), "{}", ad2.veredito);
     }

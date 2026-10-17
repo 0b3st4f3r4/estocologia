@@ -16,7 +16,8 @@ const K: [u32; 64] = [
 /// SHA-256 puro, sem dependências.
 pub fn sha256(dados: &[u8]) -> [u8; 32] {
     let mut h: [u32; 8] = [
-        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+        0x5be0cd19,
     ];
     let bitlen = (dados.len() as u64).wrapping_mul(8);
     let mut msg = dados.to_vec();
@@ -136,7 +137,11 @@ impl LivroRazao {
         anterior: &str,
     ) -> String {
         sha256_hex(
-            format!("{}|{}|{}|{}|{}", id_sessao, indice, ficha_id, conteudo, anterior).as_bytes(),
+            format!(
+                "{}|{}|{}|{}|{}",
+                id_sessao, indice, ficha_id, conteudo, anterior
+            )
+            .as_bytes(),
         )
     }
 
@@ -146,7 +151,8 @@ impl LivroRazao {
             Some(e) => e.hash_atual.clone(),
             None => "0".repeat(64),
         };
-        let hash_atual = Self::hash_do_evento(&self.id_sessao, indice, ficha_id, conteudo, &anterior);
+        let hash_atual =
+            Self::hash_do_evento(&self.id_sessao, indice, ficha_id, conteudo, &anterior);
         self.eventos.push(Evento {
             indice,
             ficha_id: ficha_id.to_string(),
@@ -180,7 +186,13 @@ impl LivroRazao {
     }
 
     pub fn raiz_merkle(&self) -> String {
-        raiz_merkle(&self.eventos.iter().map(|e| e.hash_atual.clone()).collect::<Vec<_>>())
+        raiz_merkle(
+            &self
+                .eventos
+                .iter()
+                .map(|e| e.hash_atual.clone())
+                .collect::<Vec<_>>(),
+        )
     }
 }
 
@@ -243,7 +255,9 @@ mod testes {
 
     #[test]
     fn merkle_e_reproduzivel() {
-        let hashes: Vec<String> = (0..5).map(|i| sha256_hex(format!("no{}", i).as_bytes())).collect();
+        let hashes: Vec<String> = (0..5)
+            .map(|i| sha256_hex(format!("no{}", i).as_bytes()))
+            .collect();
         assert_eq!(raiz_merkle(&hashes), raiz_merkle(&hashes));
         let mut outros = hashes.clone();
         outros[4] = sha256_hex(b"trocado");

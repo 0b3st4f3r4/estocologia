@@ -60,7 +60,7 @@ fn verificar(f: &Ficha) -> Vec<String> {
         p.push("R2 campo unidade vazio".to_string());
     }
     // R3
-    if f.nulo.trim().len() < 5 || !f.nulo.contains(&f.semente) && f.semente.len() > 0 {
+    if f.nulo.trim().len() < 5 || !f.nulo.contains(f.semente) && !f.semente.is_empty() {
         p.push("R3 modelo nulo ausente ou sem a mesma semente".to_string());
     }
     // R4 — a pergunta do decisor, em três partes
@@ -133,7 +133,11 @@ pub fn rodar() {
     };
     let casos: [Ficha; 12] = [
         Ficha { ..base },
-        Ficha { nome: "02 sem pergunta do decisor", pergunta: "", ..base },
+        Ficha {
+            nome: "02 sem pergunta do decisor",
+            pergunta: "",
+            ..base
+        },
         Ficha {
             nome: "03 quem decide generico",
             pergunta: "Quem decide: o decisor. Ação que a decisão muda: reduzir as turmas das series iniciais para 15 alunos. A pergunta do decisor e: reduzi-las melhora a leitura?",
@@ -149,17 +153,41 @@ pub fn rodar() {
             pergunta: "Quem decide: a secretaria municipal de educacao. Ação que a decisão muda: reduzir as turmas das series iniciais para 15 alunos. A pergunta do decisor e: isto melhora a leitura um ano depois.",
             ..base
         },
-        Ficha { nome: "06 sem semente", semente: "", ..base },
-        Ficha { nome: "07 sem clausula de saida", saida: "", ..base },
+        Ficha {
+            nome: "06 sem semente",
+            semente: "",
+            ..base
+        },
+        Ficha {
+            nome: "07 sem clausula de saida",
+            saida: "",
+            ..base
+        },
         Ficha {
             nome: "08 clausula sem gatilho",
             saida: "vale enquanto o modelo continuar bom e ninguem reclamar",
             ..base
         },
-        Ficha { nome: "09 sem pre-registro", hash: "", ..base },
-        Ficha { nome: "10 sem modelo nulo", nulo: "", ..base },
-        Ficha { nome: "11 sem gerador", gerador: "sei la", ..base },
-        Ficha { nome: "12 sem unidade", unidade: "?", ..base },
+        Ficha {
+            nome: "09 sem pre-registro",
+            hash: "",
+            ..base
+        },
+        Ficha {
+            nome: "10 sem modelo nulo",
+            nulo: "",
+            ..base
+        },
+        Ficha {
+            nome: "11 sem gerador",
+            gerador: "sei la",
+            ..base
+        },
+        Ficha {
+            nome: "12 sem unidade",
+            unidade: "?",
+            ..base
+        },
     ];
 
     let mut aceitas = 0usize;
@@ -217,4 +245,3 @@ mod testes {
         assert!(!verificar(&f).is_empty());
     }
 }
-

@@ -82,7 +82,11 @@ fn mundo<F: FnMut(&mut Sm64) -> f64, G: Fn(f64) -> f64>(
         n_dia.push(e.len() as f64);
         esperas.extend(e);
     }
-    Mundo { esperas, soma_dia, n_dia }
+    Mundo {
+        esperas,
+        soma_dia,
+        n_dia,
+    }
 }
 
 fn media(x: &[f64]) -> f64 {
@@ -122,7 +126,8 @@ fn margem_por_paciente(e: &[f64]) -> f64 {
 
 fn linha_mundo(nome: &str, m: &Mundo) {
     let media_e = media(&m.esperas);
-    let acima: f64 = m.esperas.iter().filter(|e| **e > 30.0).count() as f64 / m.esperas.len() as f64;
+    let acima: f64 =
+        m.esperas.iter().filter(|e| **e > 30.0).count() as f64 / m.esperas.len() as f64;
     println!(
         "{:<28} {:>8} {:>7.1} {:>7.1} {:>7.1} {:>7} {:>12.2} {:>15.2}",
         nome,
@@ -167,7 +172,14 @@ pub fn rodar() {
 
     println!(
         "{:<28} {:>8} {:>7} {:>7} {:>7} {:>7} {:>12} {:>15}",
-        "mundo (pacientes por hora)", "pacientes", "espera", "mediana", "p90", ">30min", "margem/dia", "margem/pac."
+        "mundo (pacientes por hora)",
+        "pacientes",
+        "espera",
+        "mediana",
+        "p90",
+        ">30min",
+        "margem/dia",
+        "margem/pac."
     );
     linha_mundo("8 todo dia (a alegacao)", &alegacao);
     linha_mundo("7 ou 9", &quase);
@@ -215,7 +227,10 @@ pub fn rodar() {
     );
     println!("desvio medido das diferencas = {:.4} min", sd_difs);
     println!("previsto pela unidade dia     = {:.4} min", previsto_dia);
-    println!("previsto pela unidade paciente= {:.4} min  ({} pacientes)", previsto_pac, n_pac as usize);
+    println!(
+        "previsto pela unidade paciente= {:.4} min  ({} pacientes)",
+        previsto_pac, n_pac as usize
+    );
     println!(
         "nulo: max |diferenca| em {} reparticoes = {:.3} min",
         REPS, max_abs
@@ -233,7 +248,8 @@ pub fn rodar() {
     );
     println!(
         "cauda: 8 em 100 pacientes esperam mais de 30 min no mundo 8; {:.0} em 100 no mundo 5 ou 11",
-        100.0 * variavel.esperas.iter().filter(|e| **e > 30.0).count() as f64 / variavel.esperas.len() as f64
+        100.0 * variavel.esperas.iter().filter(|e| **e > 30.0).count() as f64
+            / variavel.esperas.len() as f64
     );
 }
 
@@ -249,4 +265,3 @@ mod testes {
         assert!(m_dia > m_pac * 1.5);
     }
 }
-

@@ -71,7 +71,11 @@ pub fn vies_de_selecao(
     let cru = media(tratados) - media(controle_observado);
     let experimental = media(tratados) - media(controle_experimental);
     // o vies e o deslocamento da estimativa crua: quanto o grupo observado mente contra o sorteado
-    ViesDeSelecao { cru, experimental, vies: cru - experimental }
+    ViesDeSelecao {
+        cru,
+        experimental,
+        vies: cru - experimental,
+    }
 }
 
 /// Serie multiplicativa com cauda a direita: o mundo em que a mediana e a media contam historias
@@ -105,16 +109,28 @@ mod testes {
         let serie = [-0.1, 0.1];
         let esperado = 1.0 - (0.99_f64).sqrt();
         let obtido = arrasto(1.0, &serie);
-        assert!((obtido - esperado).abs() < 1e-12, "arrasto {obtido}, esperado {esperado}");
+        assert!(
+            (obtido - esperado).abs() < 1e-12,
+            "arrasto {obtido}, esperado {esperado}"
+        );
         assert!((arrasto(2.0, &serie) - (1.0 - 0.96_f64.sqrt())).abs() < 1e-12);
     }
 
     #[test]
     fn arrasto_cresce_com_a_alavancagem() {
         let mut rng = Rng::novo(2026);
-        let serie: Vec<f64> = (0..2_000).map(|_| 0.0004 + 0.011 * h0_normal(&mut rng)).collect();
-        let (um, dois, tres) = (arrasto(1.0, &serie), arrasto(2.0, &serie), arrasto(3.0, &serie));
-        assert!(um < dois && dois < tres, "arrasto monotonico: {um} {dois} {tres}");
+        let serie: Vec<f64> = (0..2_000)
+            .map(|_| 0.0004 + 0.011 * h0_normal(&mut rng))
+            .collect();
+        let (um, dois, tres) = (
+            arrasto(1.0, &serie),
+            arrasto(2.0, &serie),
+            arrasto(3.0, &serie),
+        );
+        assert!(
+            um < dois && dois < tres,
+            "arrasto monotonico: {um} {dois} {tres}"
+        );
         assert!(um > 0.0, "arrasto positivo com volatilidade: {um}");
         assert!(
             (taxa_composta(1.0, &serie) - (media(&serie) - um)).abs() < 1e-12,
@@ -144,7 +160,10 @@ mod testes {
         let obtido = hill(&serie, 400);
         assert!((obtido - alfa).abs() < 0.35, "Hill {obtido} contra {alfa}");
         assert!(hill(&serie, 1).is_finite());
-        assert!(hill(&serie, 100_000).is_nan(), "sem k suficiente nao ha estimativa");
+        assert!(
+            hill(&serie, 100_000).is_nan(),
+            "sem k suficiente nao ha estimativa"
+        );
     }
 
     #[test]
@@ -163,7 +182,12 @@ mod testes {
     fn a_mediana_e_a_media_contam_historias_diferentes() {
         let serie = serie_multiplicativa(2026, 20_000, 2_660, 0.00016);
         let r = resumo(&serie);
-        assert!(r.mediana < r.media / 3.0, "mediana {} media {}", r.mediana, r.media);
+        assert!(
+            r.mediana < r.media / 3.0,
+            "mediana {} media {}",
+            r.mediana,
+            r.media
+        );
         assert!(r.p95 > 4.0 * r.mediana);
         assert!(r.p05 < r.mediana);
     }

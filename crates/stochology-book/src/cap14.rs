@@ -150,10 +150,16 @@ fn avaliar(f: &Ficha) -> Vec<Falha> {
         add(Portao::Phi2, "margem sem unidade independente declarada");
     }
     if f.modelo_nulo.is_none() || f.definicao.trim().is_empty() {
-        add(Portao::Phi3, "sem modelo nulo ou sem definicao em uma linha");
+        add(
+            Portao::Phi3,
+            "sem modelo nulo ou sem definicao em uma linha",
+        );
     }
     if !f.escopo_ecologico || f.quem_paga_pelo_erro.is_none() || f.clausula_de_saida.is_none() {
-        add(Portao::Phi4, "escopo ecologico, quem paga pelo erro ou clausula de saida ausente");
+        add(
+            Portao::Phi4,
+            "escopo ecologico, quem paga pelo erro ou clausula de saida ausente",
+        );
     }
     let pergunta = f.pergunta_do_decisor.trim();
     let acao = f.acao_do_pacote.trim().to_lowercase();
@@ -168,7 +174,13 @@ fn avaliar(f: &Ficha) -> Vec<Falha> {
         add(Portao::Phi3, "cabecalho de cinco perguntas incompleto");
     }
     for (i, c) in f.cabecalho.iter().enumerate() {
-        let esperado = ["processo_gerador", "nao_linearidade", "unidade_e_margem", "fisica_do_ruido", "escada_causal"][i];
+        let esperado = [
+            "processo_gerador",
+            "nao_linearidade",
+            "unidade_e_margem",
+            "fisica_do_ruido",
+            "escada_causal",
+        ][i];
         if !c.starts_with(esperado) {
             add(Portao::Phi3, "campo do cabecalho fora de ordem");
         }
@@ -227,12 +239,7 @@ impl Grafo {
         p
     }
 
-    fn visitar(
-        &self,
-        id: &str,
-        cor: &mut Vec<(String, u8)>,
-        ciclo: &mut Option<String>,
-    ) -> bool {
+    fn visitar(&self, id: &str, cor: &mut Vec<(String, u8)>, ciclo: &mut Option<String>) -> bool {
         match cor.iter().find(|(x, _)| x == id).map(|(_, c)| *c) {
             Some(1) => {
                 *ciclo = Some(id.to_string());
@@ -258,9 +265,18 @@ impl Grafo {
 fn grafo_bom() -> Grafo {
     Grafo {
         nos: vec![
-            No { id: "L1_fila".to_string(), definicao: "espera medida em 81 dias".to_string() },
-            No { id: "L2_erlang".to_string(), definicao: "nivel de servico estacionario".to_string() },
-            No { id: "L3_gestor".to_string(), definicao: "escala decidida pela media".to_string() },
+            No {
+                id: "L1_fila".to_string(),
+                definicao: "espera medida em 81 dias".to_string(),
+            },
+            No {
+                id: "L2_erlang".to_string(),
+                definicao: "nivel de servico estacionario".to_string(),
+            },
+            No {
+                id: "L3_gestor".to_string(),
+                definicao: "escala decidida pela media".to_string(),
+            },
         ],
         tree: vec![
             ("L1_fila".to_string(), "L2_erlang".to_string()),
@@ -299,7 +315,10 @@ fn com_defeito(d: Defeito) -> Ficha {
 }
 
 fn nomes(v: &[Portao]) -> String {
-    v.iter().map(|p| p.codigo()).collect::<Vec<&str>>().join(",")
+    v.iter()
+        .map(|p| p.codigo())
+        .collect::<Vec<&str>>()
+        .join(",")
 }
 
 pub fn rodar() {
@@ -313,7 +332,10 @@ pub fn rodar() {
         f.camada.codigo(),
         f.incerteza.codigo(),
         f.cabecalho.len(),
-        falhas.iter().map(|x| x.portao.codigo()).collect::<Vec<&str>>(),
+        falhas
+            .iter()
+            .map(|x| x.portao.codigo())
+            .collect::<Vec<&str>>(),
         falhas.len()
     );
 
@@ -354,7 +376,10 @@ pub fn rodar() {
             d,
             falhas.len(),
             nomes(&portoes),
-            falhas.first().map(|x| x.detalhe.clone()).unwrap_or_default()
+            falhas
+                .first()
+                .map(|x| x.detalhe.clone())
+                .unwrap_or_default()
         );
     }
 
@@ -362,17 +387,22 @@ pub fn rodar() {
     let g = grafo_bom();
     println!("grafo integro: validacao={:?}", g.validar());
     let mut g1 = g.clone();
-    g1.tree.push(("L2_erlang".to_string(), "L2_fantasma".to_string()));
+    g1.tree
+        .push(("L2_erlang".to_string(), "L2_fantasma".to_string()));
     println!("grafo com aresta fantasma: validacao={:?}", g1.validar());
     let mut g2 = g.clone();
-    g2.tree.push(("L3_gestor".to_string(), "L1_fila".to_string()));
+    g2.tree
+        .push(("L3_gestor".to_string(), "L1_fila".to_string()));
     println!("grafo com ciclo dedutivo: validacao={:?}", g2.validar());
     let mut g3 = g.clone();
     g3.hiperarestas.push(Hiperaresta {
         id: "H2".to_string(),
         membros: vec!["L3_gestor".to_string()],
     });
-    println!("grafo com hiperaresta de um membro: validacao={:?}", g3.validar());
+    println!(
+        "grafo com hiperaresta de um membro: validacao={:?}",
+        g3.validar()
+    );
 
     // Teste de propriedades sobre a funcao do portao Phi2: a margem simulada
     // nunca pode ser negativa e nunca pode encolher quando a amostra cresce.
@@ -423,4 +453,3 @@ mod testes {
         assert!(grafo_bom().validar().is_empty());
     }
 }
-

@@ -1,6 +1,6 @@
 //! O motor de estado de crenca: o que o Sistema 2 acredita, com piso e teto do contrato.
 
-use stochology_core::{Aprovacao, SEVERIDADE_MINIMA, AgenteA, Ficha};
+use stochology_core::{AgenteA, Aprovacao, Ficha, SEVERIDADE_MINIMA};
 
 /// Piso epistemologico: nenhuma probabilidade desce a 0%.
 pub const PISO: f64 = 0.01;
@@ -21,7 +21,9 @@ impl EstadoCrenca {
 
     pub fn de_nomes(hipoteses: Vec<String>) -> Self {
         let peso = 1.0 / hipoteses.len().max(1) as f64;
-        EstadoCrenca { pesos: hipoteses.into_iter().map(|h| (h, peso)).collect() }
+        EstadoCrenca {
+            pesos: hipoteses.into_iter().map(|h| (h, peso)).collect(),
+        }
     }
 
     pub fn hipoteses(&self) -> Vec<&str> {
@@ -37,7 +39,13 @@ impl EstadoCrenca {
         self.pesos
             .iter()
             .find(|(h, _)| h == hipotese)
-            .map(|(_, p)| if soma > 0.0 { (p / soma).clamp(PISO, TETO) } else { 0.0 })
+            .map(|(_, p)| {
+                if soma > 0.0 {
+                    (p / soma).clamp(PISO, TETO)
+                } else {
+                    0.0
+                }
+            })
     }
 
     /// Atualizacao bayesiana: multiplica pelo peso da evidencia e reapresa no intervalo do contrato.
@@ -128,14 +136,24 @@ impl EstadoCrenca {
         });
         itens
             .into_iter()
-            .map(|i| (self.pesos[i].0.clone(), self.probabilidade(&self.pesos[i].0).unwrap_or(0.0)))
+            .map(|i| {
+                (
+                    self.pesos[i].0.clone(),
+                    self.probabilidade(&self.pesos[i].0).unwrap_or(0.0),
+                )
+            })
             .collect()
     }
 }
 
 /// A crenca do estresse adversarial: o espaco de hipoteses sao as oito faixas A1 a A8.
 pub fn crenca_da_banca() -> EstadoCrenca {
-    EstadoCrenca::de_nomes(AgenteA::TODOS.iter().map(|a| a.nome().to_string()).collect())
+    EstadoCrenca::de_nomes(
+        AgenteA::TODOS
+            .iter()
+            .map(|a| a.nome().to_string())
+            .collect(),
+    )
 }
 
 #[cfg(test)]
@@ -151,8 +169,8 @@ mod testes {
         }
         let pa = crenca.probabilidade("a").expect("existe");
         let pb = crenca.probabilidade("b").expect("existe");
-        assert!(pa <= TETO + 1e-12 && pa >= PISO - 1e-12, "a em {pa}");
-        assert!(pb <= TETO + 1e-12 && pb >= PISO - 1e-12, "b em {pb}");
+        assert!((PISO - 1e-12..=TETO + 1e-12).contains(&pa), "a em {pa}");
+        assert!((PISO - 1e-12..=TETO + 1e-12).contains(&pb), "b em {pb}");
         assert_eq!(crenca.mais_provavel(), Some("a"));
         assert!(crenca.entropia() > 0.0);
     }
@@ -162,7 +180,10 @@ mod testes {
         let mut crenca = EstadoCrenca::novo(&["a", "b"]);
         crenca.observar(&[("a", 0.0), ("b", 0.0)]);
         let pa = crenca.probabilidade("a").expect("existe");
-        assert!((pa - 0.5).abs() < 1e-12, "sem evidencia util volta ao uniforme: {pa}");
+        assert!(
+            (pa - 0.5).abs() < 1e-12,
+            "sem evidencia util volta ao uniforme: {pa}"
+        );
     }
 
     #[test]
@@ -175,7 +196,10 @@ mod testes {
         // as duas hipoteses que casam com a ficha (L3 e epistemica) sobem juntas, e empatam
         let topo = crenca.mais_provavel().expect("tem topo");
         assert!(topo == "L3" || topo == "epistemica", "topo veio {topo}");
-        assert!(crenca.probabilidade("L3").expect("existe") > crenca.probabilidade("L1").expect("existe"));
+        assert!(
+            crenca.probabilidade("L3").expect("existe")
+                > crenca.probabilidade("L1").expect("existe")
+        );
         assert!(
             crenca.probabilidade("epistemica").expect("existe")
                 > crenca.probabilidade("aleatoria").expect("existe")

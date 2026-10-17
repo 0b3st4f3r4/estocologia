@@ -94,14 +94,17 @@ fn decompor(previsoes: &[f64], desfechos: &[f64]) -> Decomposicao {
     }
 }
 
-
 /// Ajuste de Platt: regressão logística de y sobre o logit da previsão.
 fn platt(previsoes: &[f64], desfechos: &[f64]) -> (f64, f64) {
     // O logit entra padronizado: sem isso o Newton estoura quando as previsões
     // encostam em 0 e 1.
     let xs: Vec<f64> = previsoes.iter().map(|p| logit(*p)).collect();
     let media_x = xs.iter().sum::<f64>() / xs.len() as f64;
-    let var_x = xs.iter().map(|x| (x - media_x) * (x - media_x)).sum::<f64>() / xs.len() as f64;
+    let var_x = xs
+        .iter()
+        .map(|x| (x - media_x) * (x - media_x))
+        .sum::<f64>()
+        / xs.len() as f64;
     let desvio_x = var_x.sqrt();
     // Previsor constante (o climatologista): só resta o intercepto, e a
     // recalibração devolve exatamente a taxa-base.
@@ -171,7 +174,6 @@ fn tolerancia_ece(semente: u64, previsoes: &[f64], simulacoes: usize) -> (f64, f
     )
 }
 
-
 pub fn rodar() {
     println!("== Capítulo 8 :: o termômetro do adivinho ==");
 
@@ -232,7 +234,6 @@ pub fn rodar() {
         d.brier_caixa - d.brier
     );
 
-
     // A tolerância do ECE depende de n: três cofres do H3.
     let mut rng = SplitMix64::novo(20261015);
     let casos: [(usize, f64, f64, &str); 3] = [
@@ -275,4 +276,3 @@ mod testes {
         assert!((d.rel - d.res + d.unc - d.brier_caixa).abs() < 1e-12);
     }
 }
-

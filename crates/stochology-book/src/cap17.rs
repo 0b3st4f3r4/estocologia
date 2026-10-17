@@ -146,13 +146,20 @@ fn fracao_acima(coortes: &[f64]) -> f64 {
 
 /// Mundo da alegação: os anos do treino são reamostrados e a riqueza cresce 3 vezes a soma aritmética
 /// anual, sem arrasto. Devolve (fração média, quantil 1%, p-valor contra o observado).
-fn mundo_da_alegacao(anual_aritmetica: &[f64], observado: f64, reps: usize, semente: u64) -> (f64, f64, f64) {
+fn mundo_da_alegacao(
+    anual_aritmetica: &[f64],
+    observado: f64,
+    reps: usize,
+    semente: u64,
+) -> (f64, f64, f64) {
     let mut rng = Sm64::novo(semente);
     let n = anual_aritmetica.len();
     let mut fracs = Vec::with_capacity(reps);
     for _ in 0..reps {
         let serie: Vec<f64> = (0..n)
-            .map(|_| ALAVANCAGEM_ALEGADA * anual_aritmetica[(rng.uniforme() * n as f64) as usize % n])
+            .map(|_| {
+                ALAVANCAGEM_ALEGADA * anual_aritmetica[(rng.uniforme() * n as f64) as usize % n]
+            })
             .collect();
         fracs.push(fracao_acima(&coortes_anuais(&serie)));
     }
@@ -194,7 +201,13 @@ fn renda(v: &[&Pessoa]) -> f64 {
 fn emprego(v: &[&Pessoa], ano: u8) -> f64 {
     let n = v
         .iter()
-        .filter(|p| if ano == 75 { p.re75 > 0.0 } else { p.re78 > 0.0 })
+        .filter(|p| {
+            if ano == 75 {
+                p.re75 > 0.0
+            } else {
+                p.re78 > 0.0
+            }
+        })
         .count();
     n as f64 / v.len() as f64
 }
@@ -224,9 +237,17 @@ pub fn rodar() {
             )
         })
         .collect();
-    let r: Vec<f64> = (1..precos.len()).map(|i| precos[i] / precos[i - 1] - 1.0).collect();
-    let anos: Vec<i32> = rotulos[1..].iter().map(|s| s[..4].parse().unwrap()).collect();
-    let fim = anos.iter().position(|a| *a > ANO_FIM_TREINO).unwrap_or(anos.len());
+    let r: Vec<f64> = (1..precos.len())
+        .map(|i| precos[i] / precos[i - 1] - 1.0)
+        .collect();
+    let anos: Vec<i32> = rotulos[1..]
+        .iter()
+        .map(|s| s[..4].parse().unwrap())
+        .collect();
+    let fim = anos
+        .iter()
+        .position(|a| *a > ANO_FIM_TREINO)
+        .unwrap_or(anos.len());
     let mut anos_u: Vec<i32> = anos[..fim].to_vec();
     anos_u.dedup();
     let n_anos = anos_u.len() as f64;
@@ -281,7 +302,11 @@ pub fn rodar() {
 
     for (nome, de, ate) in [
         ("ano civil 1929-1932", "1929-01-01", "1932-12-31"),
-        ("pico a fundo, 1929-09-03 a 1932-07-08", "1929-09-03", "1932-07-08"),
+        (
+            "pico a fundo, 1929-09-03 a 1932-07-08",
+            "1929-09-03",
+            "1932-07-08",
+        ),
     ] {
         let i0 = rotulos.iter().position(|s| s.as_str() >= de).unwrap();
         let i1 = rotulos.iter().rposition(|s| s.as_str() <= ate).unwrap();
@@ -299,7 +324,10 @@ pub fn rodar() {
 
     println!();
     println!("coortes de 20 anos com inicio no primeiro pregao de cada mes (treino):");
-    println!("{:<6} {:>12} {:>14} {:>14} {:>16}", "L", "coortes", "mediana (x)", "media (x)", "acima do inicio");
+    println!(
+        "{:<6} {:>12} {:>14} {:>14} {:>16}",
+        "L", "coortes", "mediana (x)", "media (x)", "acima do inicio"
+    );
     for l in [1.0f64, 2.0, ALAVANCAGEM_ALEGADA] {
         let co = coortes_mensais(&datas, &rotulos, &r, fim, l);
         let riquezas: Vec<f64> = co.iter().map(|x| x.exp()).collect();
@@ -362,7 +390,10 @@ pub fn rodar() {
         controle.len(),
         cps.len()
     );
-    println!("{:<40} {:>10} {:>14}", "comparacao (desfecho de 1978)", "emprego", "renda (US$)");
+    println!(
+        "{:<40} {:>10} {:>14}",
+        "comparacao (desfecho de 1978)", "emprego", "renda (US$)"
+    );
     println!(
         "{:<40} {:>10.3} {:>14.0}",
         "experimento sorteado (NSW trat. - NSW ctrl)",
@@ -378,7 +409,8 @@ pub fn rodar() {
     println!(
         "{:<40} {:>10.3} {:>14.0}",
         "vies de selecao implicado (cru - experimento)",
-        (emprego(&tratados, 78) - emprego(&todos_cps, 78)) - (emprego(&tratados, 78) - emprego(&controle, 78)),
+        (emprego(&tratados, 78) - emprego(&todos_cps, 78))
+            - (emprego(&tratados, 78) - emprego(&controle, 78)),
         (renda(&tratados) - renda(&todos_cps)) - (renda(&tratados) - renda(&controle))
     );
     println!(

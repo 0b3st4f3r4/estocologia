@@ -77,6 +77,10 @@ mod testes {
         let independentes = posterior_por_chances(0.01, &[10.0, 10.0]);
         let correlacionados = posterior_por_chances(0.01, &[10.0, 4.2]);
         assert!((independentes - 0.5025).abs() < 0.002, "{}", independentes);
-        assert!((correlacionados - 0.2977).abs() < 0.002, "{}", correlacionados);
+        assert!(
+            (correlacionados - 0.2977).abs() < 0.002,
+            "{}",
+            correlacionados
+        );
     }
 }

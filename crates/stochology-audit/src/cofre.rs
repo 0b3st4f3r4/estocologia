@@ -21,7 +21,7 @@
 //! Determinismo: sem relogio, sem rede, sem semente aleatoria; o corte temporal e um carimbo inteiro
 //! fornecido por quem chama.
 
-use crate::{sha256_hex, LivroRazao};
+use crate::{LivroRazao, sha256_hex};
 
 /// Ficha do evento de abertura aceita.
 pub const FICHA_ABERTURA: &str = "cofre.abertura";
@@ -29,8 +29,7 @@ pub const FICHA_ABERTURA: &str = "cofre.abertura";
 pub const FICHA_RECUSA: &str = "cofre.recusa";
 
 /// A regra do projeto, em uma linha, para quem le o codigo antes do teste.
-pub const REGRA_DO_COFRE: &str =
-    "cofre aberto uma unica vez; depois da abertura, o conserto e um cofre novo, nunca reajuste no mesmo dado";
+pub const REGRA_DO_COFRE: &str = "cofre aberto uma unica vez; depois da abertura, o conserto e um cofre novo, nunca reajuste no mesmo dado";
 
 /// Onde cai o corte entre treino e cofre, declarado antes de abrir.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -88,9 +87,18 @@ impl std::fmt::Display for ErroCofre {
         match self {
             ErroCofre::SerieVazia => write!(f, "serie vazia: nao ha o que separar"),
             ErroCofre::CorteDegenerado { corte, n } => {
-                write!(f, "corte degenerado {} sobre serie de {}", corte.rotulo(), n)
+                write!(
+                    f,
+                    "corte degenerado {} sobre serie de {}",
+                    corte.rotulo(),
+                    n
+                )
             }
-            ErroCofre::SerieDesordenada { posicao, anterior, atual } => write!(
+            ErroCofre::SerieDesordenada {
+                posicao,
+                anterior,
+                atual,
+            } => write!(
                 f,
                 "serie desordenada na posicao {}: {} depois de {}",
                 posicao, atual, anterior
@@ -103,7 +111,11 @@ impl std::fmt::Display for ErroCofre {
                 "segunda abertura recusada: a primeira foi o evento {} (hash {})",
                 abertura, hash
             ),
-            ErroCofre::CofreNovoNecessario { cofre, abertura, hash } => write!(
+            ErroCofre::CofreNovoNecessario {
+                cofre,
+                abertura,
+                hash,
+            } => write!(
                 f,
                 "correcao depois da abertura {} do cofre {} (hash {}): exige cofre novo",
                 abertura, cofre, hash
@@ -192,14 +204,14 @@ pub fn separar_por_tempo<T: Clone, F: Fn(&T) -> i64>(
     let mut anterior: Option<i64> = None;
     for (posicao, item) in serie.iter().enumerate() {
         let atual = carimbo(item);
-        if let Some(a) = anterior {
-            if atual < a {
-                return Err(ErroCofre::SerieDesordenada {
-                    posicao,
-                    anterior: a,
-                    atual,
-                });
-            }
+        if let Some(a) = anterior
+            && atual < a
+        {
+            return Err(ErroCofre::SerieDesordenada {
+                posicao,
+                anterior: a,
+                atual,
+            });
         }
         anterior = Some(atual);
     }
@@ -229,7 +241,12 @@ pub fn declarar_cofre<T: Clone>(
     corte: usize,
 ) -> Result<(Particao<T>, Cofre<T>), ErroCofre> {
     let particao = separar_por_indice(serie, corte)?;
-    let cofre = Cofre::novo(id, Corte::Indice(corte), especificacao, particao.cofre.clone())?;
+    let cofre = Cofre::novo(
+        id,
+        Corte::Indice(corte),
+        especificacao,
+        particao.cofre.clone(),
+    )?;
     Ok((particao, cofre))
 }
 
@@ -327,7 +344,11 @@ impl<T> Cofre<T> {
         if !self.livro.verificar() {
             return false;
         }
-        let mut aceitas = self.livro.eventos.iter().filter(|e| e.ficha_id == FICHA_ABERTURA);
+        let mut aceitas = self
+            .livro
+            .eventos
+            .iter()
+            .filter(|e| e.ficha_id == FICHA_ABERTURA);
         let primeira = aceitas.next();
         if aceitas.next().is_some() {
             return false;
@@ -477,7 +498,11 @@ mod testes {
         assert_eq!(p.cofre[3], "d009");
 
         // corte temporal: o cofre comeca em t >= corte, como o t_disp do H3
-        let itens: Vec<(i64, String)> = s.iter().enumerate().map(|(i, x)| (i as i64 * 10, x.clone())).collect();
+        let itens: Vec<(i64, String)> = s
+            .iter()
+            .enumerate()
+            .map(|(i, x)| (i as i64 * 10, x.clone()))
+            .collect();
         let q = separar_por_tempo(&itens, 30, |x| x.0).expect("corte valido");
         assert_eq!(q.n_treino(), 3);
         assert_eq!(q.n_cofre(), 7);
@@ -626,7 +651,12 @@ mod testes {
         // mesma declaracao, mesmo conteudo: raiz reproduzivel
         assert_eq!(a.raiz_merkle(), b.raiz_merkle());
         assert_eq!(a.raiz_merkle(), a.livro().raiz_merkle());
-        let hashes: Vec<String> = a.livro().eventos.iter().map(|e| e.hash_atual.clone()).collect();
+        let hashes: Vec<String> = a
+            .livro()
+            .eventos
+            .iter()
+            .map(|e| e.hash_atual.clone())
+            .collect();
         assert_eq!(crate::raiz_merkle(&hashes), a.raiz_merkle());
 
         // conteudo a mais no registro (a recusa): raiz muda
@@ -657,7 +687,11 @@ mod testes {
         let raiz = c.raiz_merkle();
         // reajustar no mesmo dado: recusado, e a tentacao fica no registro
         match c.corrigir("F3", "delta=-0.027") {
-            Err(ErroCofre::CofreNovoNecessario { cofre, abertura, hash }) => {
+            Err(ErroCofre::CofreNovoNecessario {
+                cofre,
+                abertura,
+                hash,
+            }) => {
                 assert_eq!(cofre, "h3.voos13");
                 assert_eq!(abertura, 0);
                 assert_eq!(hash, c.livro().eventos[0].hash_atual);

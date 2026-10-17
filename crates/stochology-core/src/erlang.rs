@@ -49,7 +49,11 @@ mod testes {
 
     #[test]
     fn a_escala_minima_entrega_a_meta_e_uma_a_menos_nao() {
-        for (lambda, mu, meta) in [(8.0_f64, 1.0_f64, 0.8_f64), (234.0, 1.0, 0.8), (5.0, 2.0, 0.9)] {
+        for (lambda, mu, meta) in [
+            (8.0_f64, 1.0_f64, 0.8_f64),
+            (234.0, 1.0, 0.8),
+            (5.0, 2.0, 0.9),
+        ] {
             let agentes = escala_minima(lambda, mu, meta);
             let carga = lambda / mu;
             assert!(erlang_c(agentes, carga) <= 1.0 - meta + 1e-12);
@@ -70,6 +74,9 @@ mod testes {
             }
         }
         assert!(erlang_c(0, 1.0) == 1.0);
-        assert!(erlang_c(3, 4.0) == 1.0, "carga acima da capacidade espera sempre");
+        assert!(
+            erlang_c(3, 4.0) == 1.0,
+            "carga acima da capacidade espera sempre"
+        );
     }
 }

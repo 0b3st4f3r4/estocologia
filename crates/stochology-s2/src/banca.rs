@@ -68,7 +68,10 @@ impl Lente {
     }
 
     pub fn agente(self) -> Option<AgenteA> {
-        AgenteA::TODOS.iter().copied().find(|a| Lente::de_agente(*a) == self)
+        AgenteA::TODOS
+            .iter()
+            .copied()
+            .find(|a| Lente::de_agente(*a) == self)
     }
 }
 
@@ -163,7 +166,11 @@ pub struct Leitura {
 
 impl Leitura {
     pub fn nova(avaliador: Avaliador, lente: Lente, artefato: &str) -> Leitura {
-        Leitura { avaliador, lente, artefato: artefato.to_string() }
+        Leitura {
+            avaliador,
+            lente,
+            artefato: artefato.to_string(),
+        }
     }
 }
 
@@ -179,8 +186,18 @@ pub struct Veto {
 }
 
 impl Veto {
-    pub fn novo(avaliador: Avaliador, lente: Lente, artefato_falseador: &str, p_falha: f64) -> Veto {
-        Veto { avaliador, lente, artefato_falseador: artefato_falseador.to_string(), p_falha }
+    pub fn novo(
+        avaliador: Avaliador,
+        lente: Lente,
+        artefato_falseador: &str,
+        p_falha: f64,
+    ) -> Veto {
+        Veto {
+            avaliador,
+            lente,
+            artefato_falseador: artefato_falseador.to_string(),
+            p_falha,
+        }
     }
 }
 
@@ -194,7 +211,11 @@ pub struct Autoridade {
 
 impl Autoridade {
     pub fn nova(avaliador: Avaliador, janela: u32) -> Autoridade {
-        Autoridade { avaliador, janela, vetos_restantes: VETOS_POR_JANELA }
+        Autoridade {
+            avaliador,
+            janela,
+            vetos_restantes: VETOS_POR_JANELA,
+        }
     }
 }
 
@@ -242,13 +263,19 @@ impl Recusa {
                 format!("lente {} citou artefato que a peca nao declara", lente.0)
             }
             Recusa::CotaEsgotada { avaliador } => {
-                format!("avaliador {} estourou a cota de veto da janela", avaliador.0)
+                format!(
+                    "avaliador {} estourou a cota de veto da janela",
+                    avaliador.0
+                )
             }
             Recusa::VetoDuplicado { avaliador } => {
                 format!("avaliador {} vetou duas vezes a mesma lente", avaliador.0)
             }
             Recusa::ApostaDogmatica { avaliador } => {
-                format!("avaliador {} apostou 0 ou 1: extremo dogmatico", avaliador.0)
+                format!(
+                    "avaliador {} apostou 0 ou 1: extremo dogmatico",
+                    avaliador.0
+                )
             }
             Recusa::LenteForaDaAtribuicao { lente, avaliador } => format!(
                 "lente {} nao pertence ao avaliador {} na atribuicao publicada",
@@ -256,7 +283,10 @@ impl Recusa {
             ),
             Recusa::UnidadeAusente => "peca sem unidade que absorve o erro (Phi4)".to_string(),
             Recusa::SemAutoridade { avaliador } => {
-                format!("avaliador {} nao tem posto nem cota nesta bancada", avaliador.0)
+                format!(
+                    "avaliador {} nao tem posto nem cota nesta bancada",
+                    avaliador.0
+                )
             }
         }
     }
@@ -306,7 +336,11 @@ impl Recibo {
             fecho.codigo(),
             self.leituras_validas,
             self.vetos_validos.len(),
-            self.consumos.iter().map(|(a, c)| format!("{}:-{}", a.0, c)).collect::<Vec<_>>().join(" "),
+            self.consumos
+                .iter()
+                .map(|(a, c)| format!("{}:-{}", a.0, c))
+                .collect::<Vec<_>>()
+                .join(" "),
             &self.lacre_transcricao[..12]
         )
     }
@@ -340,7 +374,10 @@ impl EstadoBancada {
     }
 
     pub fn posto(&self, lente: Lente) -> Option<Avaliador> {
-        self.designacoes.iter().find(|d| d.lente == lente).map(|d| d.avaliador)
+        self.designacoes
+            .iter()
+            .find(|d| d.lente == lente)
+            .map(|d| d.avaliador)
     }
 
     pub fn cota(&self, avaliador: Avaliador) -> u8 {
@@ -380,7 +417,9 @@ pub fn atribuir(
     pool.sort();
     pool.dedup();
     if pool.len() < Lente::TODAS.len() {
-        return Err(Recusa::BancadaInsuficiente { presentes: pool.len() });
+        return Err(Recusa::BancadaInsuficiente {
+            presentes: pool.len(),
+        });
     }
 
     let mut rng = Rng::novo(misturar(semente, &peca.hash_conteudo));
@@ -389,9 +428,15 @@ pub fn atribuir(
         pool.swap(i, j);
     }
 
-    let mut designacoes = [Designacao { lente: Lente(1), avaliador: Avaliador(0) }; 8];
+    let mut designacoes = [Designacao {
+        lente: Lente(1),
+        avaliador: Avaliador(0),
+    }; 8];
     for (indice, posto) in designacoes.iter_mut().enumerate() {
-        *posto = Designacao { lente: Lente(indice as u8 + 1), avaliador: pool[indice] };
+        *posto = Designacao {
+            lente: Lente(indice as u8 + 1),
+            avaliador: pool[indice],
+        };
     }
     Ok(designacoes)
 }
@@ -416,7 +461,9 @@ pub fn fechar(peca: &Peca, estado: &EstadoBancada) -> Result<(Fecho, Recibo), Re
     for leitura in &estado.leituras {
         exigir_posto(estado, leitura.lente, leitura.avaliador)?;
         if !peca.conhece(&leitura.artefato) {
-            return Err(Recusa::ArtefatoDesconhecido { lente: leitura.lente });
+            return Err(Recusa::ArtefatoDesconhecido {
+                lente: leitura.lente,
+            });
         }
         if !lentes_lidas.contains(&leitura.lente) {
             lentes_lidas.push(leitura.lente);
@@ -424,8 +471,11 @@ pub fn fechar(peca: &Peca, estado: &EstadoBancada) -> Result<(Fecho, Recibo), Re
         }
     }
 
-    let mut cotas: Vec<(Avaliador, u8)> =
-        estado.orcamentos.iter().map(|a| (a.avaliador, a.vetos_restantes)).collect();
+    let mut cotas: Vec<(Avaliador, u8)> = estado
+        .orcamentos
+        .iter()
+        .map(|a| (a.avaliador, a.vetos_restantes))
+        .collect();
     let mut vetos_validos: Vec<Avaliador> = Vec::new();
     let mut lentes_vetadas: Vec<Lente> = Vec::new();
 
@@ -435,16 +485,24 @@ pub fn fechar(peca: &Peca, estado: &EstadoBancada) -> Result<(Fecho, Recibo), Re
             return Err(Recusa::ArtefatoDesconhecido { lente: veto.lente });
         }
         if !(veto.p_falha > 0.0 && veto.p_falha < 1.0) {
-            return Err(Recusa::ApostaDogmatica { avaliador: veto.avaliador });
+            return Err(Recusa::ApostaDogmatica {
+                avaliador: veto.avaliador,
+            });
         }
         if lentes_vetadas.contains(&veto.lente) {
-            return Err(Recusa::VetoDuplicado { avaliador: veto.avaliador });
+            return Err(Recusa::VetoDuplicado {
+                avaliador: veto.avaliador,
+            });
         }
         let Some(cota) = cotas.iter_mut().find(|(a, _)| *a == veto.avaliador) else {
-            return Err(Recusa::SemAutoridade { avaliador: veto.avaliador });
+            return Err(Recusa::SemAutoridade {
+                avaliador: veto.avaliador,
+            });
         };
         if cota.1 == 0 {
-            return Err(Recusa::CotaEsgotada { avaliador: veto.avaliador });
+            return Err(Recusa::CotaEsgotada {
+                avaliador: veto.avaliador,
+            });
         }
         cota.1 -= 1;
         lentes_vetadas.push(veto.lente);
@@ -492,7 +550,13 @@ pub fn fechar(peca: &Peca, estado: &EstadoBancada) -> Result<(Fecho, Recibo), Re
         ));
     }
 
-    Ok((Fecho::Sustentada { lacre, leituras: leituras_validas }, recibo))
+    Ok((
+        Fecho::Sustentada {
+            lacre,
+            leituras: leituras_validas,
+        },
+        recibo,
+    ))
 }
 
 fn exigir_posto(estado: &EstadoBancada, lente: Lente, avaliador: Avaliador) -> Result<(), Recusa> {
@@ -528,7 +592,11 @@ fn lacrar(peca: &Peca, estado: &EstadoBancada, leituras: usize, vetos: &[Avaliad
         peca.artefatos.join(","),
         postos.join(","),
         leituras,
-        vetantes.iter().map(|a| a.to_string()).collect::<Vec<_>>().join(","),
+        vetantes
+            .iter()
+            .map(|a| a.to_string())
+            .collect::<Vec<_>>()
+            .join(","),
         apostas.join(","),
         estado.prazo_vencido
     );
@@ -540,8 +608,16 @@ pub fn aplicar(recibo: &Recibo, orcamentos: &mut [Autoridade]) -> Result<(), Rec
     for (avaliador, consumo) in &recibo.consumos {
         match orcamentos.iter_mut().find(|a| a.avaliador == *avaliador) {
             Some(a) if a.vetos_restantes >= *consumo => a.vetos_restantes -= *consumo,
-            Some(_) => return Err(Recusa::CotaEsgotada { avaliador: *avaliador }),
-            None => return Err(Recusa::SemAutoridade { avaliador: *avaliador }),
+            Some(_) => {
+                return Err(Recusa::CotaEsgotada {
+                    avaliador: *avaliador,
+                });
+            }
+            None => {
+                return Err(Recusa::SemAutoridade {
+                    avaliador: *avaliador,
+                });
+            }
         }
     }
     Ok(())
@@ -564,7 +640,11 @@ impl Bancada {
     ) -> Result<Bancada, Recusa> {
         let designacoes = atribuir(&peca, semente, avaliadores)?;
         let estado = EstadoBancada::nova(designacoes, janela);
-        Ok(Bancada { peca, semente, estado })
+        Ok(Bancada {
+            peca,
+            semente,
+            estado,
+        })
     }
 
     pub fn fechar(&self) -> Result<(Fecho, Recibo), Recusa> {
@@ -639,7 +719,10 @@ mod testes {
         let diverge = (2..40u64)
             .map(|s| atribuir(&p, s, &avaliadores()).expect("atribui"))
             .any(|m| m != base);
-        assert!(diverge, "sementes diferentes sempre deveriam sortear outra matriz");
+        assert!(
+            diverge,
+            "sementes diferentes sempre deveriam sortear outra matriz"
+        );
     }
 
     #[test]
@@ -654,7 +737,10 @@ mod testes {
     fn g8_2_veto_com_artefato_desconhecido_recusa() {
         let (p, _) = peca();
         let b = bancada(p, 3);
-        let estado = b.estado.clone().vetar(veto_de(&b, 0, "hash-que-nao-existe", 0.7));
+        let estado = b
+            .estado
+            .clone()
+            .vetar(veto_de(&b, 0, "hash-que-nao-existe", 0.7));
         let erro = fechar(&b.peca, &estado).expect_err("veto sem prova material");
         assert_eq!(erro.codigo(), "G8.2");
     }
@@ -664,7 +750,10 @@ mod testes {
         let (p, _) = peca();
         let b = bancada(p, 3);
         let d = b.estado.designacoes[2];
-        let estado = b.estado.clone().ler(Leitura::nova(d.avaliador, d.lente, "inventado"));
+        let estado = b
+            .estado
+            .clone()
+            .ler(Leitura::nova(d.avaliador, d.lente, "inventado"));
         let erro = fechar(&b.peca, &estado).expect_err("leitura de artefato inexistente");
         assert_eq!(erro.codigo(), "G8.2");
     }
@@ -697,7 +786,11 @@ mod testes {
         let b = bancada(p, 5);
         let mut estado = b.estado.clone();
         let alvo = estado.designacoes[3].avaliador;
-        let cota = estado.orcamentos.iter_mut().find(|a| a.avaliador == alvo).expect("posto");
+        let cota = estado
+            .orcamentos
+            .iter_mut()
+            .find(|a| a.avaliador == alvo)
+            .expect("posto");
         cota.vetos_restantes = 0;
         estado = estado.vetar(veto_de(&b, 3, &artefato, 0.8));
 

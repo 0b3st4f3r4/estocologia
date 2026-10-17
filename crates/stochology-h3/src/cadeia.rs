@@ -126,7 +126,8 @@ pub fn ler_cadeia(texto: &str) -> Result<Cadeia, String> {
         if campos.len() < 7 || campos[0] == "linha" {
             continue;
         }
-        let classe = Classe::da_linha(campos[2]).ok_or_else(|| format!("classe desconhecida: {}", campos[2]))?;
+        let classe = Classe::da_linha(campos[2])
+            .ok_or_else(|| format!("classe desconhecida: {}", campos[2]))?;
         linhas.push(Linha {
             linha: campos[0].to_string(),
             afirmacao: campos[1].to_string(),
@@ -151,12 +152,18 @@ pub fn ler_criterio(texto: &str) -> Result<CriterioDoLaco, String> {
     let mut f_minimo = None;
     for linha in texto.lines() {
         let l = linha.trim_end();
-        let Some(resto) = l.strip_prefix('#') else { continue };
+        let Some(resto) = l.strip_prefix('#') else {
+            continue;
+        };
         let campos: Vec<&str> = resto.trim().split('\t').collect();
         if campos.len() < 2 {
             continue;
         }
-        let numero = |v: &str| v.trim().parse::<f64>().map_err(|_| format!("{v} nao e numero"));
+        let numero = |v: &str| {
+            v.trim()
+                .parse::<f64>()
+                .map_err(|_| format!("{v} nao e numero"))
+        };
         match campos[0] {
             "r_declarado" => r_declarado = Some(numero(campos[1])?),
             "razao_minima" => razao_minima = Some(numero(campos[1])?),
@@ -166,7 +173,12 @@ pub fn ler_criterio(texto: &str) -> Result<CriterioDoLaco, String> {
         }
     }
     match (r_declarado, razao_minima, razao_maxima, f_minimo) {
-        (Some(r), Some(lo), Some(hi), Some(f)) => Ok(CriterioDoLaco { r_declarado: r, razao_minima: lo, razao_maxima: hi, f_minimo: f }),
+        (Some(r), Some(lo), Some(hi), Some(f)) => Ok(CriterioDoLaco {
+            r_declarado: r,
+            razao_minima: lo,
+            razao_maxima: hi,
+            f_minimo: f,
+        }),
         _ => Err("criterio do laco incompleto no registro".to_string()),
     }
 }
@@ -184,7 +196,11 @@ fn apos_chave<'a>(js: &'a str, chave: &str) -> Option<&'a str> {
 /// O primeiro número depois da chave.
 pub fn numero(js: &str, chave: &str) -> Option<f64> {
     let resto = apos_chave(js, chave)?;
-    let fim = resto.find(|c: char| !(c.is_ascii_digit() || c == '-' || c == '+' || c == '.' || c == 'e' || c == 'E')).unwrap_or(resto.len());
+    let fim = resto
+        .find(|c: char| {
+            !(c.is_ascii_digit() || c == '-' || c == '+' || c == '.' || c == 'e' || c == 'E')
+        })
+        .unwrap_or(resto.len());
     resto[..fim].parse::<f64>().ok()
 }
 
@@ -212,16 +228,23 @@ pub fn booleano(js: &str, chave: &str) -> Option<bool> {
 }
 
 /// Refaz a conta do critério declarado no pré-registro do ponto 6, contra o registro versionado.
-pub fn rederivar_o_laco(resultados: &str, posthoc: &str, criterio: CriterioDoLaco) -> Result<VereditoDoLaco, String> {
+pub fn rederivar_o_laco(
+    resultados: &str,
+    posthoc: &str,
+    criterio: CriterioDoLaco,
+) -> Result<VereditoDoLaco, String> {
     let r_iv = numero(resultados, "r_IV").ok_or("registro sem r_IV")?;
     let ic = lista(resultados, "ic90").ok_or("registro sem ic90")?;
     if ic.len() != 2 {
         return Err("ic90 sem dois extremos".to_string());
     }
     let f = numero(resultados, "F_primeiro_estagio").ok_or("registro sem F do primeiro estagio")?;
-    let razao_no_registro = numero(resultados, "razao_0,6_sobre_r_IV").ok_or("registro sem a razao")?;
-    let contencao_no_registro = booleano(resultados, "0,6_no_ic90").ok_or("registro sem o campo de contenção")?;
-    let vies = numero(resultados, "vies_ingenuo_vs_exogena").ok_or("registro sem o vies do ingenuo")?;
+    let razao_no_registro =
+        numero(resultados, "razao_0,6_sobre_r_IV").ok_or("registro sem a razao")?;
+    let contencao_no_registro =
+        booleano(resultados, "0,6_no_ic90").ok_or("registro sem o campo de contenção")?;
+    let vies =
+        numero(resultados, "vies_ingenuo_vs_exogena").ok_or("registro sem o vies do ingenuo")?;
 
     let razao = criterio.r_declarado / r_iv;
     let sinal_confere = ic[0] > 0.0;
@@ -230,10 +253,14 @@ pub fn rederivar_o_laco(resultados: &str, posthoc: &str, criterio: CriterioDoLac
 
     let mut divergencias = Vec::new();
     if (razao - razao_no_registro).abs() > 1e-9 {
-        divergencias.push(format!("a razao do registro ({razao_no_registro:.6}) nao bate com a conta ({razao:.6})"));
+        divergencias.push(format!(
+            "a razao do registro ({razao_no_registro:.6}) nao bate com a conta ({razao:.6})"
+        ));
     }
     if contencao_no_registro != estrito {
-        divergencias.push(format!("a contencao do registro ({contencao_no_registro}) nao bate com a conta ({estrito})"));
+        divergencias.push(format!(
+            "a contencao do registro ({contencao_no_registro}) nao bate com a conta ({estrito})"
+        ));
     }
     let veredito = if f < criterio.f_minimo {
         "indecidido: o instrumento e fraco (F abaixo do minimo declarado)".to_string()
@@ -248,7 +275,10 @@ pub fn rederivar_o_laco(resultados: &str, posthoc: &str, criterio: CriterioDoLac
         )
     };
     // o post-hoc só entra no relatório se existir, e não decide nada
-    let _ = numero(posthoc, "r_IV / P(fila depois da desistência) (correção grosseira, supõe novas chamadas como pedidos comuns)");
+    let _ = numero(
+        posthoc,
+        "r_IV / P(fila depois da desistência) (correção grosseira, supõe novas chamadas como pedidos comuns)",
+    );
     Ok(VereditoDoLaco {
         r_iv,
         ic90: (ic[0], ic[1]),
@@ -269,7 +299,10 @@ pub fn rederivar_o_laco(resultados: &str, posthoc: &str, criterio: CriterioDoLac
 pub fn relatar(cadeia: &Cadeia, veredito: Option<&VereditoDoLaco>) -> String {
     let mut s = String::new();
     s.push_str(&format!("carimbo do registro: {}\n", cadeia.carimbo));
-    s.push_str(&format!("{:<16} {:<9} {:<4} {:<34} {}\n", "linha", "classe", "marca", "registro versionado", "o que o instrumento faz"));
+    s.push_str(&format!(
+        "{:<16} {:<9} {:<4} {:<34} {}\n",
+        "linha", "classe", "marca", "registro versionado", "o que o instrumento faz"
+    ));
     for l in &cadeia.linhas {
         let o_que = match l.classe {
             Classe::Derivada if veredito.is_some() => "re-deriva a conta e o veredito",
@@ -277,7 +310,14 @@ pub fn relatar(cadeia: &Cadeia, veredito: Option<&VereditoDoLaco>) -> String {
             Classe::Medida => "mede de novo a partir do dado na arvore",
             Classe::Registro => "declara: o dado bruto nao esta na arvore",
         };
-        s.push_str(&format!("{:<16} {:<9} {:<4} {:<34} {}\n", l.linha, l.classe.nome(), l.marca, l.registro, o_que));
+        s.push_str(&format!(
+            "{:<16} {:<9} {:<4} {:<34} {}\n",
+            l.linha,
+            l.classe.nome(),
+            l.marca,
+            l.registro,
+            o_que
+        ));
     }
     match veredito {
         Some(v) => {
@@ -294,11 +334,17 @@ pub fn relatar(cadeia: &Cadeia, veredito: Option<&VereditoDoLaco>) -> String {
                 "sinal confere: {} | ordem de grandeza confere: {} | compativel no sentido estrito: {} (o registro diz {})\n",
                 v.sinal_confere, v.ordem_confere, v.estrito, v.contencao_no_registro
             ));
-            s.push_str(&format!("vies do previsor ingenuo contra a demanda exogena: {:.4}\n", v.vies_ingenuo));
+            s.push_str(&format!(
+                "vies do previsor ingenuo contra a demanda exogena: {:.4}\n",
+                v.vies_ingenuo
+            ));
             if v.divergencias.is_empty() {
                 s.push_str("divergencias entre a conta e o registro: nenhuma\n");
             } else {
-                s.push_str(&format!("divergencias entre a conta e o registro: REPROVADO em {:?}\n", v.divergencias));
+                s.push_str(&format!(
+                    "divergencias entre a conta e o registro: REPROVADO em {:?}\n",
+                    v.divergencias
+                ));
             }
             s.push_str(&format!("veredito: {}\n", v.veredito));
         }
@@ -325,7 +371,11 @@ pub fn rodar(caminho: &str, caminho_resultados: &str, caminho_posthoc: &str) {
         }
     };
     let criterio = ler_criterio(&texto);
-    let veredito = match (criterio, std::fs::read_to_string(caminho_resultados), std::fs::read_to_string(caminho_posthoc)) {
+    let veredito = match (
+        criterio,
+        std::fs::read_to_string(caminho_resultados),
+        std::fs::read_to_string(caminho_posthoc),
+    ) {
         (Ok(c), Ok(r), Ok(p)) => rederivar_o_laco(&r, &p, c).ok(),
         _ => None,
     };
@@ -334,11 +384,17 @@ pub fn rodar(caminho: &str, caminho_resultados: &str, caminho_posthoc: &str) {
     println!("\n-- prova negativa: um registro em que a razao cai dentro da banda declarada --");
     let dentro = format!(
         "{{\"principal_15min\": {{\"r_IV\": {}, \"ic90\": [{}, {}], \"F_primeiro_estagio\": 5523.46, \"razao_0,6_sobre_r_IV\": {}, \"0,6_no_ic90\": false, \"vies_ingenuo_vs_exogena\": 0.29}}}}",
-        0.4, 0.35, 0.45, 0.6 / 0.4
+        0.4,
+        0.35,
+        0.45,
+        0.6 / 0.4
     );
     if let Ok(c) = ler_criterio(&texto) {
         match rederivar_o_laco(&dentro, "{}", c) {
-            Ok(v) => println!("  com r medido 0,4: ordem confere = {} | veredito: {}", v.ordem_confere, v.veredito),
+            Ok(v) => println!(
+                "  com r medido 0,4: ordem confere = {} | veredito: {}",
+                v.ordem_confere, v.veredito
+            ),
             Err(e) => println!("  caso sintetico nao lido: {e}"),
         }
     }
@@ -359,7 +415,11 @@ mod testes {
     use std::path::Path;
 
     fn raiz() -> std::path::PathBuf {
-        Path::new(env!("CARGO_MANIFEST_DIR")).parent().and_then(Path::parent).expect("raiz").to_path_buf()
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(Path::parent)
+            .expect("raiz")
+            .to_path_buf()
     }
     fn ler_arquivo(rel: &str) -> String {
         std::fs::read_to_string(raiz().join(rel)).expect("arquivo do registro")
@@ -372,23 +432,47 @@ mod testes {
         let marcas: Vec<&str> = cadeia.linhas.iter().map(|l| l.marca.as_str()).collect();
         assert_eq!(marcas, vec!["P", "D", "V", "P"]);
         let classes: Vec<&str> = cadeia.linhas.iter().map(|l| l.classe.nome()).collect();
-        assert_eq!(classes, vec!["registro", "registro", "derivada", "registro"]);
+        assert_eq!(
+            classes,
+            vec!["registro", "registro", "derivada", "registro"]
+        );
     }
 
     #[test]
     fn o_laco_e_re_derivado_do_registro_versionado() {
         let criterio = ler_criterio(&ler_arquivo(REGISTRO)).expect("criterio");
         assert_eq!(criterio.r_declarado, 0.6);
-        let v = rederivar_o_laco(&ler_arquivo(RESULTADOS_DO_LACO), &ler_arquivo(POSTHOC_DO_LACO), criterio).expect("re-derivacao");
-        assert!((v.r_iv - 0.1446378859145094).abs() < 1e-12, "r medido: {}", v.r_iv);
+        let v = rederivar_o_laco(
+            &ler_arquivo(RESULTADOS_DO_LACO),
+            &ler_arquivo(POSTHOC_DO_LACO),
+            criterio,
+        )
+        .expect("re-derivacao");
+        assert!(
+            (v.r_iv - 0.1446378859145094).abs() < 1e-12,
+            "r medido: {}",
+            v.r_iv
+        );
         assert!((v.ic90.0 - 0.131981188365084).abs() < 1e-12);
-        assert!((v.razao - 4.148290720694298).abs() < 1e-9, "razao: {}", v.razao);
+        assert!(
+            (v.razao - 4.148290720694298).abs() < 1e-9,
+            "razao: {}",
+            v.razao
+        );
         assert!((v.razao - v.razao_no_registro).abs() < 1e-9);
         assert!(v.sinal_confere);
         assert!(!v.ordem_confere, "a razao 4,148 fica fora da banda");
         assert!(!v.estrito, "0,6 nao esta no IC90");
-        assert!(v.divergencias.is_empty(), "a conta bate com o registro: {:?}", v.divergencias);
-        assert!(v.veredito.starts_with("o laco do H3 superestima"), "veredito: {}", v.veredito);
+        assert!(
+            v.divergencias.is_empty(),
+            "a conta bate com o registro: {:?}",
+            v.divergencias
+        );
+        assert!(
+            v.veredito.starts_with("o laco do H3 superestima"),
+            "veredito: {}",
+            v.veredito
+        );
     }
 
     #[test]
@@ -397,7 +481,11 @@ mod testes {
         let dentro = "{\"principal_15min\": {\"r_IV\": 0.4, \"ic90\": [0.35, 0.45], \"F_primeiro_estagio\": 5523.46, \"razao_0,6_sobre_r_IV\": 1.5, \"0,6_no_ic90\": false, \"vies_ingenuo_vs_exogena\": 0.29}}";
         let v = rederivar_o_laco(dentro, "{}", criterio).expect("re-derivacao");
         assert!(v.ordem_confere);
-        assert!(v.veredito.starts_with("o laco do H3 tem o sinal e a ordem"), "veredito: {}", v.veredito);
+        assert!(
+            v.veredito.starts_with("o laco do H3 tem o sinal e a ordem"),
+            "veredito: {}",
+            v.veredito
+        );
     }
 
     #[test]
@@ -405,7 +493,12 @@ mod testes {
         let criterio = ler_criterio(&ler_arquivo(REGISTRO)).expect("criterio");
         let mentiroso = "{\"principal_15min\": {\"r_IV\": 0.1446378859, \"ic90\": [0.1319811884, 0.1568385251], \"F_primeiro_estagio\": 5523.46, \"razao_0,6_sobre_r_IV\": 2.0, \"0,6_no_ic90\": true, \"vies_ingenuo_vs_exogena\": 0.29}}";
         let v = rederivar_o_laco(mentiroso, "{}", criterio).expect("re-derivacao");
-        assert_eq!(v.divergencias.len(), 2, "a razao e a contencao divergem: {:?}", v.divergencias);
+        assert_eq!(
+            v.divergencias.len(),
+            2,
+            "a razao e a contencao divergem: {:?}",
+            v.divergencias
+        );
     }
 
     #[test]
@@ -413,14 +506,21 @@ mod testes {
         let criterio = ler_criterio(&ler_arquivo(REGISTRO)).expect("criterio");
         let fraco = "{\"principal_15min\": {\"r_IV\": 0.4, \"ic90\": [0.35, 0.45], \"F_primeiro_estagio\": 4.0, \"razao_0,6_sobre_r_IV\": 1.5, \"0,6_no_ic90\": false, \"vies_ingenuo_vs_exogena\": 0.29}}";
         let v = rederivar_o_laco(fraco, "{}", criterio).expect("re-derivacao");
-        assert!(v.veredito.starts_with("indecidido"), "veredito: {}", v.veredito);
+        assert!(
+            v.veredito.starts_with("indecidido"),
+            "veredito: {}",
+            v.veredito
+        );
     }
 
     #[test]
     fn uma_linha_derivada_sem_registro_versionado_reprova() {
         let criterio = ler_criterio(&ler_arquivo(REGISTRO)).expect("criterio");
         let sem = "{\"principal_15min\": {\"ic90\": [0.1, 0.2]}}";
-        assert!(rederivar_o_laco(sem, "{}", criterio).is_err(), "sem r_IV nao ha re-derivacao");
+        assert!(
+            rederivar_o_laco(sem, "{}", criterio).is_err(),
+            "sem r_IV nao ha re-derivacao"
+        );
     }
 
     #[test]

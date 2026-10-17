@@ -147,7 +147,12 @@ pub struct Parametros {
 
 impl Default for Parametros {
     fn default() -> Self {
-        Parametros { aht_s: AHT_FILA_S, paciencia_s: PACIENCIA_S, alvo_s: ALVO_FILA_S, meta: META }
+        Parametros {
+            aht_s: AHT_FILA_S,
+            paciencia_s: PACIENCIA_S,
+            alvo_s: ALVO_FILA_S,
+            meta: META,
+        }
     }
 }
 
@@ -193,7 +198,8 @@ pub struct DiaBins {
 /// Le a base (rownames,DateTime,Calls) na grade de 5 min de 07:00 a 21:00.
 pub fn carregar_bins(caminho: &str) -> Vec<DiaBins> {
     let texto = std::fs::read_to_string(caminho).expect("nao li o CSV do banco");
-    let mut por_dia: std::collections::BTreeMap<String, [f64; BINS]> = std::collections::BTreeMap::new();
+    let mut por_dia: std::collections::BTreeMap<String, [f64; BINS]> =
+        std::collections::BTreeMap::new();
     for linha in texto.lines().skip(1) {
         let campos: Vec<&str> = linha.split(',').collect();
         if campos.len() < 3 {
@@ -218,15 +224,27 @@ pub fn carregar_bins(caminho: &str) -> Vec<DiaBins> {
     }
     por_dia
         .into_iter()
-        .map(|(data, bins)| DiaBins { data, bins, total: bins.iter().sum() })
+        .map(|(data, bins)| DiaBins {
+            data,
+            bins,
+            total: bins.iter().sum(),
+        })
         .filter(|d| d.total > 0.0)
         .collect()
 }
 
 /// Treino (marco a junho) e cofre (julho a outubro), como o registro.
 pub fn separar_treino_cofre(dias: &[DiaBins]) -> (Vec<DiaBins>, Vec<DiaBins>) {
-    let treino = dias.iter().filter(|d| (3..=6).contains(&mes_da(&d.data))).cloned().collect();
-    let cofre = dias.iter().filter(|d| (7..=10).contains(&mes_da(&d.data))).cloned().collect();
+    let treino = dias
+        .iter()
+        .filter(|d| (3..=6).contains(&mes_da(&d.data)))
+        .cloned()
+        .collect();
+    let cofre = dias
+        .iter()
+        .filter(|d| (7..=10).contains(&mes_da(&d.data)))
+        .cloned()
+        .collect();
     (treino, cofre)
 }
 
@@ -248,7 +266,7 @@ fn semente_do_dia(base: u64, dia: usize, replica: usize) -> u64 {
     let mut z = (base
         ^ (dia as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
         ^ (replica as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F))
-        .wrapping_sub(0x9E37_79B9_7F4A_7C15);
+    .wrapping_sub(0x9E37_79B9_7F4A_7C15);
     stochology_core::rng::passo_splitmix64(&mut z)
 }
 
@@ -308,8 +326,11 @@ pub fn perfis_por_dia_da_semana(treino: &[DiaBins]) -> ([[f64; BINS]; 7], [usize
     let mut perfis = [[0.0_f64; BINS]; 7];
     for w in 0..7 {
         for i in 0..BINS {
-            perfis[w][i] =
-                if contagem[w] == 0 { media[i] } else { soma[w][i] / contagem[w] as f64 };
+            perfis[w][i] = if contagem[w] == 0 {
+                media[i]
+            } else {
+                soma[w][i] / contagem[w] as f64
+            };
         }
     }
     (perfis, contagem)
@@ -405,12 +426,20 @@ pub struct MedidaDia {
 impl MedidaDia {
     /// Nivel de servico: fracao das chamadas oferecidas atendidas em ate o alvo.
     pub fn nivel_de_servico(&self) -> f64 {
-        if self.chegadas == 0 { 1.0 } else { self.dentro_do_alvo as f64 / self.chegadas as f64 }
+        if self.chegadas == 0 {
+            1.0
+        } else {
+            self.dentro_do_alvo as f64 / self.chegadas as f64
+        }
     }
 
     /// Desistencias em cada 100 chamadas oferecidas.
     pub fn desistencias_por_100(&self) -> f64 {
-        if self.chegadas == 0 { 0.0 } else { 100.0 * self.desistencias as f64 / self.chegadas as f64 }
+        if self.chegadas == 0 {
+            0.0
+        } else {
+            100.0 * self.desistencias as f64 / self.chegadas as f64
+        }
     }
 }
 
@@ -425,10 +454,19 @@ fn quantil(ordenada: &[f64], q: f64) -> f64 {
 
 /// Fecha as estatisticas de um dia a partir das esperas de todas as chamadas oferecidas e da
 /// marca de quem desistiu.
-fn resumir(esperas: &mut Vec<f64>, desistentes: &[f64], em_espera_no_fim: u64, p: &Parametros) -> MedidaDia {
+fn resumir(
+    esperas: &mut [f64],
+    desistentes: &[f64],
+    em_espera_no_fim: u64,
+    p: &Parametros,
+) -> MedidaDia {
     let chegadas = esperas.len() as u64;
     let dentro = esperas.iter().filter(|e| **e <= p.alvo_s).count() as u64;
-    let media = if esperas.is_empty() { 0.0 } else { esperas.iter().sum::<f64>() / esperas.len() as f64 };
+    let media = if esperas.is_empty() {
+        0.0
+    } else {
+        esperas.iter().sum::<f64>() / esperas.len() as f64
+    };
     esperas.sort_by(f64::total_cmp);
     MedidaDia {
         chegadas,
@@ -463,7 +501,13 @@ pub fn fila_exata(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64
     }
     let servico: Vec<f64> = (0..n).map(|_| exponencial(&mut rng, p.aht_s)).collect();
     let paciencia: Vec<f64> = (0..n)
-        .map(|_| if p.paciencia_s.is_finite() { exponencial(&mut rng, p.paciencia_s) } else { f64::INFINITY })
+        .map(|_| {
+            if p.paciencia_s.is_finite() {
+                exponencial(&mut rng, p.paciencia_s)
+            } else {
+                f64::INFINITY
+            }
+        })
         .collect();
 
     // em que grupo de escala o atendente k esta de turno, a partir de cada grupo
@@ -490,12 +534,20 @@ pub fn fila_exata(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64
             let t0 = if livre[k] > a { livre[k] } else { a };
             let j = (t0 / GRUPO_S) as usize;
             let v = if j >= GRUPOS {
-                if (k as u32) < c[GRUPOS - 1] { t0 } else { f64::INFINITY }
+                if (k as u32) < c[GRUPOS - 1] {
+                    t0
+                } else {
+                    f64::INFINITY
+                }
             } else if (k as u32) < c[j] {
                 t0
             } else {
                 let x = nxt[k * GRUPOS + j];
-                if x >= 0 { x as f64 * GRUPO_S } else { f64::INFINITY }
+                if x >= 0 {
+                    x as f64 * GRUPO_S
+                } else {
+                    f64::INFINITY
+                }
             };
             if v < melhor {
                 melhor = v;
@@ -509,7 +561,11 @@ pub fn fila_exata(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64
         if !melhor.is_finite() || melhor - a > paciencia[i] {
             // quem desiste espera a propria paciencia; sem atendente disponivel no dia, a
             // espera fica infinita (o instrumento aposentado gravava o mesmo, via -1 do numpy)
-            let e = if melhor.is_finite() { paciencia[i] } else { f64::INFINITY };
+            let e = if melhor.is_finite() {
+                paciencia[i]
+            } else {
+                f64::INFINITY
+            };
             esperas.push(e);
             desistentes.push(e);
         } else {
@@ -550,7 +606,8 @@ pub fn fila_eventos(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u
     for i in 0..BINS {
         let capacidade = c[i / POR_GRUPO] as usize;
         let lam = dia.bins[i] / BIN_S;
-        proxima_chegada = t + exponencial(&mut rng, if lam > 0.0 { 1.0 / lam } else { f64::INFINITY });
+        proxima_chegada =
+            t + exponencial(&mut rng, if lam > 0.0 { 1.0 / lam } else { f64::INFINITY });
         let fim = (i + 1) as f64 * BIN_S;
         loop {
             while servicos.len() < capacidade {
@@ -601,9 +658,14 @@ pub fn fila_eventos(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u
                     estado.push(0);
                     chegada.push(t);
                     fila.push_back(id);
-                    prazos.push(Prazo { t: t + exponencial(&mut rng, p.paciencia_s), id });
-                    proxima_chegada =
-                        t + exponencial(&mut rng, if lam > 0.0 { 1.0 / lam } else { f64::INFINITY });
+                    prazos.push(Prazo {
+                        t: t + exponencial(&mut rng, p.paciencia_s),
+                        id,
+                    });
+                    proxima_chegada = t + exponencial(
+                        &mut rng,
+                        if lam > 0.0 { 1.0 / lam } else { f64::INFINITY },
+                    );
                 }
                 _ => break,
             }
@@ -659,7 +721,11 @@ pub fn montar_escalas(treino: &[DiaBins], cofre: &[DiaBins], p: &Parametros) -> 
     let custo_r2 = if cofre.is_empty() {
         0.0
     } else {
-        cofre.iter().map(|d| agente_horas(&r2[dia_da_semana(&d.data)])).sum::<f64>() / cofre.len() as f64
+        cofre
+            .iter()
+            .map(|d| agente_horas(&r2[dia_da_semana(&d.data)]))
+            .sum::<f64>()
+            / cofre.len() as f64
     };
     let mut extra = 0_u32;
     while extra < 1_000 && agente_horas(&r0.map(|x| x + extra)) < custo_r2 {
@@ -779,10 +845,19 @@ pub struct Relatorio {
 }
 
 /// Carrega a base, separa treino e cofre e mede as quatro regras num motor de fila.
-pub fn medir_regras(caminho: &str, semente: u64, replicas: usize, motor: Motor, p: &Parametros) -> Relatorio {
+pub fn medir_regras(
+    caminho: &str,
+    semente: u64,
+    replicas: usize,
+    motor: Motor,
+    p: &Parametros,
+) -> Relatorio {
     let dias = carregar_bins(caminho);
     let (treino, cofre) = separar_treino_cofre(&dias);
-    assert!(!treino.is_empty() && !cofre.is_empty(), "treino ou cofre vazio na base");
+    assert!(
+        !treino.is_empty() && !cofre.is_empty(),
+        "treino ou cofre vazio na base"
+    );
     let escalas = montar_escalas(&treino, &cofre, p);
     let medidas = Regra::TODAS
         .iter()
@@ -823,7 +898,10 @@ fn imprimir_cabeca(rel: &Relatorio, p: &Parametros) {
         "CV residual do dia {:.4} | margem de R2 = 1 + {:.4} x CV = {:.4} | R3 = R0 + {} atendentes por igual",
         rel.cv_residual, Z_MARGEM, rel.fator_r2, rel.extra_r3
     );
-    println!("dias no treino por dia da semana {:?}", rel.dias_por_dia_da_semana);
+    println!(
+        "dias no treino por dia da semana {:?}",
+        rel.dias_por_dia_da_semana
+    );
 }
 
 /// Imprime a tabela de um motor.
@@ -866,11 +944,12 @@ pub fn rodar() {
     println!("motor Exato (chegadas observadas, FCFS com desistencia) — a reconstrucao");
     imprimir_tabela(&exato.medidas);
     println!();
-    println!("motor Eventos (M/M/c+M evento a evento, chegadas de Poisson) — verificacao independente");
+    println!(
+        "motor Eventos (M/M/c+M evento a evento, chegadas de Poisson) — verificacao independente"
+    );
     let eventos = medir_regras(&caminho, SEMENTE, 3, Motor::Eventos, &p);
     imprimir_tabela(&eventos.medidas);
 }
-
 
 #[cfg(test)]
 mod testes {
@@ -880,7 +959,11 @@ mod testes {
     /// A base do repositorio; sem ela os testes de medida ficam sem dado e se declaram pulados.
     fn caminho() -> Option<String> {
         let c = caminho_de_dados("dados-reais/bank_calls.csv");
-        if std::path::Path::new(&c).exists() { Some(c) } else { None }
+        if std::path::Path::new(&c).exists() {
+            Some(c)
+        } else {
+            None
+        }
     }
 
     /// Uma medida so, reaproveitada pelos testes: semente fixa, uma replica por dia, como o
@@ -889,7 +972,13 @@ mod testes {
         static REL: OnceLock<Option<Relatorio>> = OnceLock::new();
         REL.get_or_init(|| {
             let c = caminho()?;
-            Some(medir_regras(&c, SEMENTE, 1, Motor::Exato, &Parametros::default()))
+            Some(medir_regras(
+                &c,
+                SEMENTE,
+                1,
+                Motor::Exato,
+                &Parametros::default(),
+            ))
         })
         .as_ref()
     }
@@ -897,14 +986,22 @@ mod testes {
     /// Dia sintetico com a mesma contagem em todos os intervalos, para forcar sobrecarga.
     fn dia_sobrecarregado(por_intervalo: f64) -> DiaBins {
         let bins = [por_intervalo; BINS];
-        DiaBins { data: "2003-07-01".to_string(), bins, total: bins.iter().sum() }
+        DiaBins {
+            data: "2003-07-01".to_string(),
+            bins,
+            total: bins.iter().sum(),
+        }
     }
 
     #[test]
     fn dia_da_semana_de_datas_conhecidas() {
         assert_eq!(dia_da_semana("2000-01-01"), 5, "sabado");
         assert_eq!(dia_da_semana("2024-01-01"), 0, "segunda");
-        assert_eq!(dia_da_semana("2003-03-03"), 0, "a primeira segunda do treino");
+        assert_eq!(
+            dia_da_semana("2003-03-03"),
+            0,
+            "a primeira segunda do treino"
+        );
         assert_eq!(dia_da_semana("2003-08-31"), 6, "domingo");
     }
 
@@ -919,7 +1016,11 @@ mod testes {
         // agente-horas de uma escala constante: 14,0833 h de turno por atendente
         let uniforme = [10_u32; GRUPOS];
         let esperado = 10.0 * BINS as f64 * BIN_S / 3600.0;
-        assert!((agente_horas(&uniforme) - esperado).abs() < 1e-9, "{}", agente_horas(&uniforme));
+        assert!(
+            (agente_horas(&uniforme) - esperado).abs() < 1e-9,
+            "{}",
+            agente_horas(&uniforme)
+        );
     }
 
     #[test]
@@ -932,14 +1033,21 @@ mod testes {
 
         // 1. o motor exato: com paciencia, a espera para no teto da paciencia
         let com = fila_exata(&dia, &escala, &p, 7);
-        assert!(com.desistencias_por_100() > 50.0, "desistencia {}", com.desistencias_por_100());
+        assert!(
+            com.desistencias_por_100() > 50.0,
+            "desistencia {}",
+            com.desistencias_por_100()
+        );
         assert!(
             com.espera_p90_s <= 3.0 * p.paciencia_s,
             "p90 da espera {} contra paciencia {}",
             com.espera_p90_s,
             p.paciencia_s
         );
-        let sem = Parametros { paciencia_s: f64::INFINITY, ..p };
+        let sem = Parametros {
+            paciencia_s: f64::INFINITY,
+            ..p
+        };
         let sem_desistir = fila_exata(&dia, &escala, &sem, 7);
         assert_eq!(sem_desistir.desistencias, 0);
         assert!(
@@ -967,17 +1075,31 @@ mod testes {
         );
         // a fila assentada e proporcional a paciencia: com 90 s de paciencia a espera de
         // equilibrio cai para cerca da metade, que e a assinatura de uma fila com saida
-        let curta = Parametros { paciencia_s: 90.0, ..p };
+        let curta = Parametros {
+            paciencia_s: 90.0,
+            ..p
+        };
         let ev_curta = fila_eventos(&dia, &escala, &curta, 7);
         let razao = ev_curta.em_espera_no_fim as f64 / ev_com.em_espera_no_fim as f64;
-        assert!((0.3..=0.7).contains(&razao), "razao das filas assentadas {razao}");
+        assert!(
+            (0.3..=0.7).contains(&razao),
+            "razao das filas assentadas {razao}"
+        );
         assert!(ev_sem.em_espera_no_fim > 5 * ev_com.em_espera_no_fim);
     }
 
     #[test]
     fn monotonicidade_r2_melhor_que_r0() {
-        let Some(rel) = relatorio() else { eprintln!("sem a base"); return; };
-        let (r0, r1, r2, r3) = (&rel.medidas[0], &rel.medidas[1], &rel.medidas[2], &rel.medidas[3]);
+        let Some(rel) = relatorio() else {
+            eprintln!("sem a base");
+            return;
+        };
+        let (r0, r1, r2, r3) = (
+            &rel.medidas[0],
+            &rel.medidas[1],
+            &rel.medidas[2],
+            &rel.medidas[3],
+        );
         assert!(
             r2.dias_abaixo_da_meta < r0.dias_abaixo_da_meta,
             "R2 {:.3} dias falhos contra R0 {:.3}",
@@ -986,9 +1108,18 @@ mod testes {
         );
         assert!(r2.nivel_de_servico > r0.nivel_de_servico);
         assert!(r2.agente_horas_dia > r0.agente_horas_dia);
-        assert!(r1.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta, "R1 pior que a alegacao");
-        assert!(r3.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta, "R3 pior que a alegacao");
-        assert!(r2.dias_abaixo_da_meta <= r3.dias_abaixo_da_meta, "R2 nao venceu R3");
+        assert!(
+            r1.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta,
+            "R1 pior que a alegacao"
+        );
+        assert!(
+            r3.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta,
+            "R3 pior que a alegacao"
+        );
+        assert!(
+            r2.dias_abaixo_da_meta <= r3.dias_abaixo_da_meta,
+            "R2 nao venceu R3"
+        );
         // R2 e R3 custam quase o mesmo, e por isso a comparacao e de alocacao, nao de gasto
         let razao = r3.agente_horas_dia / r2.agente_horas_dia;
         assert!((0.98..=1.02).contains(&razao), "R3/R2 = {razao}");
@@ -996,39 +1127,61 @@ mod testes {
 
     #[test]
     fn a_margem_de_r2_e_o_p90_do_cv_residual() {
-        let Some(c) = caminho() else { return; };
+        let Some(c) = caminho() else {
+            return;
+        };
         let p = Parametros::default();
         let dias = carregar_bins(&c);
         let (treino, cofre) = separar_treino_cofre(&dias);
         let esc = montar_escalas(&treino, &cofre, &p);
         // o CV residual do capitulo 16 e de 6%; o instrumento mede perto disso
-        assert!(esc.cv_residual > 0.04 && esc.cv_residual < 0.08, "cv {}", esc.cv_residual);
+        assert!(
+            esc.cv_residual > 0.04 && esc.cv_residual < 0.08,
+            "cv {}",
+            esc.cv_residual
+        );
         let esperado = 1.0 + Z_MARGEM * esc.cv_residual;
         assert!((esc.fator_r2 - esperado).abs() < 1e-12);
-        assert!((1.05..=1.10).contains(&esc.fator_r2), "fator {}", esc.fator_r2);
+        assert!(
+            (1.05..=1.10).contains(&esc.fator_r2),
+            "fator {}",
+            esc.fator_r2
+        );
         // R3 e "R0 mais atendentes por igual": a diferenca e constante, e e o extra medido
-        assert!(esc.extra_r3 >= 8 && esc.extra_r3 <= 16, "extra {}", esc.extra_r3);
+        assert!(
+            esc.extra_r3 >= 8 && esc.extra_r3 <= 16,
+            "extra {}",
+            esc.extra_r3
+        );
         for j in 0..GRUPOS {
             assert_eq!(esc.r3[j] - esc.r0[j], esc.extra_r3);
         }
         // a margem e alocada onde esta o risco: o pico de R2 passa o de R1, que passa o de R0
         let pico = |c: &[u32; GRUPOS]| c.iter().copied().max().unwrap_or(0);
         for w in 0..5 {
-            assert!(pico(&esc.r2[w]) > pico(&esc.r1[w]), "R2 sem folga no pico do dia {w}");
+            assert!(
+                pico(&esc.r2[w]) > pico(&esc.r1[w]),
+                "R2 sem folga no pico do dia {w}"
+            );
         }
         assert!(pico(&esc.r1[0]) > pico(&esc.r0));
         // R1 e "custo zero": a media dos cinco dias uteis fica dentro de 1% do custo de R0
-        let media_r1: f64 =
-            (0..5).map(|w| agente_horas(&esc.r1[w])).sum::<f64>() / 5.0;
+        let media_r1: f64 = (0..5).map(|w| agente_horas(&esc.r1[w])).sum::<f64>() / 5.0;
         let zero = (media_r1 - agente_horas(&esc.r0)).abs() / agente_horas(&esc.r0);
-        assert!(zero < 0.01, "R1 custa {media_r1:.0} contra {:.0}", agente_horas(&esc.r0));
+        assert!(
+            zero < 0.01,
+            "R1 custa {media_r1:.0} contra {:.0}",
+            agente_horas(&esc.r0)
+        );
         // e o perfil por dia da semana nao e o perfil medio repetido
         assert_ne!(esc.r1[0], esc.r1[3]);
     }
 
     #[test]
     fn instrumento_roda_com_semente_fixa() {
-        let Some(c) = caminho() else { return; };
+        let Some(c) = caminho() else {
+            return;
+        };
         let p = Parametros::default();
         let dias = carregar_bins(&c);
         let (treino, cofre) = separar_treino_cofre(&dias);
@@ -1054,12 +1207,18 @@ mod testes {
         // duas rodadas do relatorio inteiro com a mesma semente dao o mesmo numero
         let r1 = medir_regras(&c, SEMENTE, 1, Motor::Exato, &p);
         let r2 = medir_regras(&c, SEMENTE, 1, Motor::Exato, &p);
-        assert_eq!(r1.medidas[0].nivel_de_servico.to_bits(), r2.medidas[0].nivel_de_servico.to_bits());
+        assert_eq!(
+            r1.medidas[0].nivel_de_servico.to_bits(),
+            r2.medidas[0].nivel_de_servico.to_bits()
+        );
     }
 
     #[test]
     fn faixas_do_registro_e_divergencia_declarada() {
-        let Some(rel) = relatorio() else { eprintln!("sem a base"); return; };
+        let Some(rel) = relatorio() else {
+            eprintln!("sem a base");
+            return;
+        };
         // o cofre: 81 dias uteis de julho a outubro, 2,65 milhoes de chamadas oferecidas
         assert_eq!(rel.treino, 83);
         assert_eq!(rel.cofre, 81);
@@ -1082,31 +1241,63 @@ mod testes {
         // 2 433), dentro de 1%.
         for (m, publicado) in [(r0, 2264.0), (r1, 2261.0), (r2, 2428.0), (r3, 2433.0)] {
             let erro = (m.agente_horas_dia - publicado).abs() / publicado;
-            assert!(erro < 0.01, "{} custa {:.0} contra {:.0}", m.regra.nome(), m.agente_horas_dia, publicado);
+            assert!(
+                erro < 0.01,
+                "{} custa {:.0} contra {:.0}",
+                m.regra.nome(),
+                m.agente_horas_dia,
+                publicado
+            );
         }
-        assert_eq!(rel.extra_r3, 12, "R3 e R0 + 12 atendentes por igual no registro");
+        assert_eq!(
+            rel.extra_r3, 12,
+            "R3 e R0 + 12 atendentes por igual no registro"
+        );
 
         // Nivel de servico e dias falhos: aqui a divergencia esta declarada. O registo publica
         // 86/26 (R0), 90/12 (R1), 96/3,7 (R2) e 94/7,4 (R3); a faixa abaixo e generosa de
         // proposito, porque o gerador de numeros e outro e os sorteios caem em outro lugar.
         let ns = |m: &MedidaRegra| m.nivel_de_servico * 100.0;
         assert!((80.0..=90.0).contains(&ns(&r0)), "NS de R0 {:.1}", ns(&r0));
-        assert!(ns(&r1) >= ns(&r0) - 1.0, "R1 {:.1} contra R0 {:.1}", ns(&r1), ns(&r0));
+        assert!(
+            ns(&r1) >= ns(&r0) - 1.0,
+            "R1 {:.1} contra R0 {:.1}",
+            ns(&r1),
+            ns(&r0)
+        );
         assert!(ns(&r2) >= 89.0, "NS de R2 {:.1}", ns(&r2));
         assert!(ns(&r3) >= 88.0, "NS de R3 {:.1}", ns(&r3));
-        assert!((0.20..=0.42).contains(&r0.dias_abaixo_da_meta), "R0 falha {:.3}", r0.dias_abaixo_da_meta);
-        assert!((0.08..=0.28).contains(&r1.dias_abaixo_da_meta), "R1 falha {:.3}", r1.dias_abaixo_da_meta);
-        assert!((0.00..=0.10).contains(&r2.dias_abaixo_da_meta), "R2 falha {:.3}", r2.dias_abaixo_da_meta);
-        assert!((0.03..=0.18).contains(&r3.dias_abaixo_da_meta), "R3 falha {:.3}", r3.dias_abaixo_da_meta);
+        assert!(
+            (0.20..=0.42).contains(&r0.dias_abaixo_da_meta),
+            "R0 falha {:.3}",
+            r0.dias_abaixo_da_meta
+        );
+        assert!(
+            (0.08..=0.28).contains(&r1.dias_abaixo_da_meta),
+            "R1 falha {:.3}",
+            r1.dias_abaixo_da_meta
+        );
+        assert!(
+            (0.00..=0.10).contains(&r2.dias_abaixo_da_meta),
+            "R2 falha {:.3}",
+            r2.dias_abaixo_da_meta
+        );
+        assert!(
+            (0.03..=0.18).contains(&r3.dias_abaixo_da_meta),
+            "R3 falha {:.3}",
+            r3.dias_abaixo_da_meta
+        );
     }
 
     #[test]
     fn impressao_de_trabalho() {
-        let Some(rel) = relatorio() else { eprintln!("sem a base"); return; };
+        let Some(rel) = relatorio() else {
+            eprintln!("sem a base");
+            return;
+        };
         let p = Parametros::default();
         imprimir_cabeca(rel, &p);
         println!("motor Exato (chegadas observadas, FCFS com desistencia)");
         imprimir_tabela(&rel.medidas);
     }
 }
-

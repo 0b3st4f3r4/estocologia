@@ -44,7 +44,9 @@ impl Default for CrencaDaBanca {
 
 impl CrencaDaBanca {
     pub fn nova() -> Self {
-        CrencaDaBanca { crenca: crenca_da_banca() }
+        CrencaDaBanca {
+            crenca: crenca_da_banca(),
+        }
     }
 
     /// Aprende com uma ficha que ja passou pela banca inteira.
@@ -100,7 +102,13 @@ pub fn estressar_em_ordem(ficha: &Ficha, semente: u64, ordem: &[AgenteA]) -> Atu
         .find(|(a, _)| *a == ultimo)
         .map(|(_, s)| *s)
         .unwrap_or(Severidade(0));
-    Atuacao { agente: ultimo, severidade, ataques: trilha.len(), reprovou: false, trilha }
+    Atuacao {
+        agente: ultimo,
+        severidade,
+        ataques: trilha.len(),
+        reprovou: false,
+        trilha,
+    }
 }
 
 /// O ataque deliberativo: a ordem vem da crenca, e o resultado e o mesmo de `estressar_em_ordem`.
@@ -153,8 +161,14 @@ mod testes {
         let declarado = estressar_em_ordem(&candidata, 2026, &ORDEM_DECLARADA);
         assert!(deliberado.reprovou && declarado.reprovou);
         assert_eq!(deliberado.agente, AgenteA::A5Governanca);
-        assert_eq!(deliberado.ataques, 1, "a crenca acertou de primeira: {deliberado:?}");
-        assert_eq!(declarado.ataques, 5, "na ordem declarada, A5 e o quinto: {declarado:?}");
+        assert_eq!(
+            deliberado.ataques, 1,
+            "a crenca acertou de primeira: {deliberado:?}"
+        );
+        assert_eq!(
+            declarado.ataques, 5,
+            "na ordem declarada, A5 e o quinto: {declarado:?}"
+        );
     }
 
     #[test]
@@ -169,9 +183,17 @@ mod testes {
         aprender(&mut banca, &fichas_sem_trilha(), 2026, 3.0);
         let boa = ficha_completa("boa.1");
         let deliberado = estressar_deliberativo(&boa, 2026, &banca);
-        assert!(!deliberado.reprovou, "o estresse nao e cacada as bruxas: {deliberado:?}");
+        assert!(
+            !deliberado.reprovou,
+            "o estresse nao e cacada as bruxas: {deliberado:?}"
+        );
         assert_eq!(deliberado.ataques, 8, "sem reprovado, a banca inteira roda");
-        assert!(deliberado.trilha.iter().all(|(_, s)| *s >= SEVERIDADE_MINIMA));
+        assert!(
+            deliberado
+                .trilha
+                .iter()
+                .all(|(_, s)| *s >= SEVERIDADE_MINIMA)
+        );
     }
 
     #[test]
@@ -181,7 +203,11 @@ mod testes {
         let mut soma = 0.0;
         for agente in AgenteA::TODOS {
             let p = banca.probabilidade(agente);
-            assert!((PISO - 1e-12..=TETO + 1e-12).contains(&p), "{} em {p}", agente.nome());
+            assert!(
+                (PISO - 1e-12..=TETO + 1e-12).contains(&p),
+                "{} em {p}",
+                agente.nome()
+            );
             soma += p;
         }
         assert!((soma - 1.0).abs() < 0.02, "soma das probabilidades: {soma}");

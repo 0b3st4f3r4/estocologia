@@ -10,3 +10,6 @@ stochology-h3 = { path = "../stochology-h3" }
 
 [dev-dependencies]
 stochology-core = { path = "../stochology-core" }
+
+[lints]
+workspace = true

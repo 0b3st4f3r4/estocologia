@@ -32,7 +32,9 @@ impl NuloPoisson {
         }
         if self.media > 700.0 {
             // fora da faixa do metodo: Gaussiana com media e variancia iguais
-            return (self.media + self.media.sqrt() * crate_normal(rng)).max(0.0).round() as u32;
+            return (self.media + self.media.sqrt() * crate_normal(rng))
+                .max(0.0)
+                .round() as u32;
         }
         let limite = (-self.media).exp();
         let mut produto = 1.0_f64;
@@ -112,7 +114,11 @@ pub fn resumo(serie: &[f64]) -> Resumo {
     let mut ordenada = serie.to_vec();
     ordenada.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
     let n = ordenada.len();
-    let media = if n == 0 { 0.0 } else { ordenada.iter().sum::<f64>() / n as f64 };
+    let media = if n == 0 {
+        0.0
+    } else {
+        ordenada.iter().sum::<f64>() / n as f64
+    };
     let desvio = if n < 2 {
         0.0
     } else {
@@ -160,7 +166,8 @@ mod testes {
             .iter()
             .map(|t| (t - maior).exp())
             .sum::<f64>();
-        let fila = (termos[agentes as usize] - maior).exp() * (agentes as f64) / (agentes as f64 - carga);
+        let fila =
+            (termos[agentes as usize] - maior).exp() * (agentes as f64) / (agentes as f64 - carga);
         fila / (ultimos + fila)
     }
 
@@ -200,17 +207,28 @@ mod testes {
         let mut anterior = 1.0;
         for agentes in 9..40 {
             let c = erlang_c(agentes, carga);
-            assert!(c <= anterior + 1e-12, "nao caiu em {agentes}: {c} > {anterior}");
+            assert!(
+                c <= anterior + 1e-12,
+                "nao caiu em {agentes}: {c} > {anterior}"
+            );
             assert!(c >= erlang_b(agentes, carga) - 1e-12);
             assert!((0.0..=1.0).contains(&c));
             anterior = c;
         }
-        assert_eq!(erlang_c(8, 8.0), 1.0, "carga igual a capacidade nao segura a fila");
+        assert_eq!(
+            erlang_c(8, 8.0),
+            1.0,
+            "carga igual a capacidade nao segura a fila"
+        );
     }
 
     #[test]
     fn escala_minima_entrega_a_meta_e_uma_a_menos_nao() {
-        for (lambda, mu, meta) in [(8.0_f64, 1.0_f64, 0.8_f64), (234.0, 1.0, 0.8), (5.0, 2.0, 0.9)] {
+        for (lambda, mu, meta) in [
+            (8.0_f64, 1.0_f64, 0.8_f64),
+            (234.0, 1.0, 0.8),
+            (5.0, 2.0, 0.9),
+        ] {
             let agentes = escala_minima(lambda, mu, meta);
             let carga = lambda / mu;
             assert!(erlang_c(agentes, carga) <= 1.0 - meta + 1e-12);
@@ -227,7 +245,10 @@ mod testes {
         let media = serie.iter().map(|c| *c as f64).sum::<f64>() / serie.len() as f64;
         assert!((media - 8.0).abs() < 0.08, "media do nulo: {media}");
         let dispersao = indice_de_dispersao(&serie);
-        assert!((dispersao - 1.0).abs() < 0.05, "Poisson fica em 1: {dispersao}");
+        assert!(
+            (dispersao - 1.0).abs() < 0.05,
+            "Poisson fica em 1: {dispersao}"
+        );
     }
 
     #[test]
@@ -266,8 +287,17 @@ mod testes {
         let r = resumo(&serie);
         assert_eq!(r.n, 20_000);
         assert!(r.p05 < r.mediana && r.mediana < r.p95 && r.p95 <= r.maximo);
-        assert!(r.media > r.mediana, "cauda a direita: media {} mediana {}", r.media, r.mediana);
-        assert!(pedagio_da_media(&serie) > 0.5, "pedagio da media solitaria: {}", pedagio_da_media(&serie));
+        assert!(
+            r.media > r.mediana,
+            "cauda a direita: media {} mediana {}",
+            r.media,
+            r.mediana
+        );
+        assert!(
+            pedagio_da_media(&serie) > 0.5,
+            "pedagio da media solitaria: {}",
+            pedagio_da_media(&serie)
+        );
     }
 
     #[test]

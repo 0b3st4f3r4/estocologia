@@ -37,7 +37,7 @@ impl SplitMix64 {
 fn ln_gama(x: f64) -> f64 {
     // Lanczos, g = 7, n = 9.
     const C: [f64; 9] = [
-        0.999_999_999_999_809_93,
+        0.999_999_999_999_809_9,
         676.520_368_121_885_1,
         -1_259.139_216_722_402_8,
         771.323_428_777_653_1,
@@ -138,9 +138,24 @@ pub struct Ambiente {
 }
 
 pub const TRES_SITIOS: [Ambiente; 3] = [
-    Ambiente { nome: "sitio_A", n: 4000, deslocamento: -1.0, ruido_z: 0.5 },
-    Ambiente { nome: "sitio_B", n: 4000, deslocamento: 0.0, ruido_z: 2.0 },
-    Ambiente { nome: "sitio_C", n: 4000, deslocamento: 1.0, ruido_z: 3.0 },
+    Ambiente {
+        nome: "sitio_A",
+        n: 4000,
+        deslocamento: -1.0,
+        ruido_z: 0.5,
+    },
+    Ambiente {
+        nome: "sitio_B",
+        n: 4000,
+        deslocamento: 0.0,
+        ruido_z: 2.0,
+    },
+    Ambiente {
+        nome: "sitio_C",
+        n: 4000,
+        deslocamento: 1.0,
+        ruido_z: 3.0,
+    },
 ];
 
 /// Uma linha: a causa X, o sintoma Z (filho de X), o ruído W, o desfecho Y e o ambiente.
@@ -167,7 +182,13 @@ pub fn gerar(semente: u64, ambientes: &[Ambiente], instabilidade: f64) -> Vec<Li
             // instabilidade = 0: o mecanismo X -> Y é o mesmo em todo sítio.
             // instabilidade > 0: o sítio também entra por X e o coeficiente cambia.
             let y = 2.0 * x + rng.normal() + instabilidade * 2.0 * x;
-            linhas.push(Linha { ambiente: e, x, z, w, y });
+            linhas.push(Linha {
+                ambiente: e,
+                x,
+                z,
+                w,
+                y,
+            });
         }
     }
     linhas
@@ -281,7 +302,6 @@ fn resolver(a: &mut [Vec<f64>], b: &mut [f64]) -> Vec<f64> {
     x
 }
 
-
 /// O teste de invariância (ICP linear) para um conjunto candidato de variáveis.
 /// Hipótese nula: P(Y | X_S, E = e) é a mesma em todo ambiente.
 pub fn icp(linhas: &[Linha], ambientes: &[Ambiente], nomes: &[&str]) -> Teste {
@@ -294,7 +314,13 @@ pub fn icp(linhas: &[Linha], ambientes: &[Ambiente], nomes: &[&str]) -> Teste {
     if p == 0 {
         // o conjunto vazio só tem interceptos: nunca rejeita por inclinação.
         let incl = vec![0.0; ambientes.len()];
-        return Teste { nome: "(vazio)".into(), f: 0.0, p: 1.0, inclinacao_comum: 0.0, inclinacoes_por_ambiente: incl };
+        return Teste {
+            nome: "(vazio)".into(),
+            f: 0.0,
+            p: 1.0,
+            inclinacao_comum: 0.0,
+            inclinacoes_por_ambiente: incl,
+        };
     }
 
     // Restrito: intercepto livre por ambiente + inclinação comum a todos.
@@ -364,9 +390,17 @@ pub fn icp(linhas: &[Linha], ambientes: &[Ambiente], nomes: &[&str]) -> Teste {
             let sk: f64 = cols[k].iter().sum();
             m[0][k + 1] = sk;
             m[k + 1][0] = sk;
-            v[k + 1] = cols[k].iter().zip(ys.iter()).map(|(x, y)| x * y).sum::<f64>();
+            v[k + 1] = cols[k]
+                .iter()
+                .zip(ys.iter())
+                .map(|(x, y)| x * y)
+                .sum::<f64>();
             for l in 0..p {
-                m[k + 1][l + 1] = cols[k].iter().zip(cols[l].iter()).map(|(x, z)| x * z).sum::<f64>();
+                m[k + 1][l + 1] = cols[k]
+                    .iter()
+                    .zip(cols[l].iter())
+                    .map(|(x, z)| x * z)
+                    .sum::<f64>();
             }
         }
         let sol = resolver(&mut m, &mut v);
@@ -460,9 +494,6 @@ pub fn degrau_de_pearl(pergunta: &str) -> &'static str {
     "1. associação"
 }
 
-
-
-
 const PERGUNTAS: [&str; 3] = [
     "bairros com mais policia tem mais crimes",
     "se dobrarmos o policiamento, o crime cai?",
@@ -484,13 +515,31 @@ fn pedra_nos_rins() {
     let grd = n_grd_ab + n_grd_nova;
     println!(
         "pequenas: aberta {}/{} = {:.4}  nova {}/{} = {:.4}",
-        peq_ab as u32, n_peq_ab as u32, peq_ab / n_peq_ab, peq_nova as u32, n_peq_nova as u32, peq_nova / n_peq_nova
+        peq_ab as u32,
+        n_peq_ab as u32,
+        peq_ab / n_peq_ab,
+        peq_nova as u32,
+        n_peq_nova as u32,
+        peq_nova / n_peq_nova
     );
     println!(
         "grandes:  aberta {}/{} = {:.4}  nova {}/{} = {:.4}",
-        grd_ab as u32, n_grd_ab as u32, grd_ab / n_grd_ab, grd_nova as u32, n_grd_nova as u32, grd_nova / n_grd_nova
+        grd_ab as u32,
+        n_grd_ab as u32,
+        grd_ab / n_grd_ab,
+        grd_nova as u32,
+        n_grd_nova as u32,
+        grd_nova / n_grd_nova
     );
-    println!("cru:      aberta {}/{} = {:.4}  nova {}/{} = {:.4}", ab as u32, nab as u32, ab / nab, nova as u32, nnova as u32, nova / nnova);
+    println!(
+        "cru:      aberta {}/{} = {:.4}  nova {}/{} = {:.4}",
+        ab as u32,
+        nab as u32,
+        ab / nab,
+        nova as u32,
+        nnova as u32,
+        nova / nnova
+    );
     let w_peq = peq / (peq + grd);
     let w_grd = grd / (peq + grd);
     let ponderada_ab = w_peq * (peq_ab / n_peq_ab) + w_grd * (grd_ab / n_grd_ab);
@@ -505,7 +554,8 @@ fn pedra_nos_rins() {
     );
     println!(
         "fracao de casos dificeis na aberta = {:.4}, na nova = {:.4}",
-        n_grd_ab / nab, n_grd_nova / nnova
+        n_grd_ab / nab,
+        n_grd_nova / nnova
     );
     println!();
 }
@@ -568,7 +618,10 @@ fn uma_rodada() {
         }
     }
     let t = icp(&linhas, &TRES_SITIOS, &[]);
-    println!("  candidato {{vazio}}  F = {:.3}  p = {:.1}  (so interceptos)", t.f, t.p);
+    println!(
+        "  candidato {{vazio}}  F = {:.3}  p = {:.1}  (so interceptos)",
+        t.f, t.p
+    );
     println!(
         "conjuntos aceitos: {} -> intersecao S_hat = {{{}}}",
         aceitos.len(),
@@ -654,11 +707,24 @@ fn muitas_rodadas(repeticoes: usize, instabilidade: f64, rotulo: &str) {
         );
     }
     println!("  {{x}} aceito em {:.3} das rodadas", aceito_x as f64 / n);
-    println!("  interseção = {{x}} em {:.3} das rodadas", inter_x as f64 / n);
-    println!("  interseção = {{z}} em {:.3} das rodadas", inter_z as f64 / n);
-    println!("  interseção = {{w}} em {:.3} das rodadas", inter_w as f64 / n);
-    println!("  interseção contém x e não contém w em {:.3} das rodadas", inter_com_xsem_w as f64 / n);
-    let vazia_por_w = (inter_vazia as f64 / n) - (todos_aceitos as f64 / n) - (inter_vazia_por_poder as f64 / n);
+    println!(
+        "  interseção = {{x}} em {:.3} das rodadas",
+        inter_x as f64 / n
+    );
+    println!(
+        "  interseção = {{z}} em {:.3} das rodadas",
+        inter_z as f64 / n
+    );
+    println!(
+        "  interseção = {{w}} em {:.3} das rodadas",
+        inter_w as f64 / n
+    );
+    println!(
+        "  interseção contém x e não contém w em {:.3} das rodadas",
+        inter_com_xsem_w as f64 / n
+    );
+    let vazia_por_w =
+        (inter_vazia as f64 / n) - (todos_aceitos as f64 / n) - (inter_vazia_por_poder as f64 / n);
     println!(
         "  interseção vazia em {:.3} (dos quais {:.3} porque só o ruído W sobrou, {:.3} porque a própria causa não sobrou, e {:.3} porque W entrou em alguns conjuntos e não em outros)",
         inter_vazia as f64 / n,
@@ -674,7 +740,11 @@ pub fn rodar() {
     escalada_de_pearl();
     uma_rodada();
     muitas_rodadas(200, 0.0, "mecanismo estavel: Y = 2X + ruido em todo sitio");
-    muitas_rodadas(200, 1.0, "mecanismo instavel: o coeficiente de X em Y muda de sitio para sitio");
+    muitas_rodadas(
+        200,
+        1.0,
+        "mecanismo instavel: o coeficiente de X em Y muda de sitio para sitio",
+    );
 }
 
 #[cfg(test)]
@@ -686,7 +756,9 @@ mod testes {
         assert!(degrau_de_pearl("P(Y | X)").contains("associação"));
         assert!(degrau_de_pearl("P(Y | do(X))").contains("intervenção"));
         assert!(degrau_de_pearl("esse assalto teria acontecido?").contains("contrafactual"));
-        assert_eq!(intersecao(&[vec!["x", "z"], vec!["x"]]), vec!["x".to_string()]);
+        assert_eq!(
+            intersecao(&[vec!["x", "z"], vec!["x"]]),
+            vec!["x".to_string()]
+        );
     }
 }
-

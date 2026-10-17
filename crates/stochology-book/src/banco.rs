@@ -142,8 +142,16 @@ fn nivel_do_dia(escala: &[u32; FATIAS], dia: &Dia) -> f64 {
 /// Mede tudo o que o capitulo cita da base real.
 pub fn medir(caminho: &str, semente: u64, replicas: usize) -> MedidaBanco {
     let dias = carregar(caminho);
-    let treino: Vec<Dia> = dias.iter().filter(|d| (3..=6).contains(&mes(&d.data))).cloned().collect();
-    let cofre: Vec<Dia> = dias.iter().filter(|d| (7..=10).contains(&mes(&d.data))).cloned().collect();
+    let treino: Vec<Dia> = dias
+        .iter()
+        .filter(|d| (3..=6).contains(&mes(&d.data)))
+        .cloned()
+        .collect();
+    let cofre: Vec<Dia> = dias
+        .iter()
+        .filter(|d| (7..=10).contains(&mes(&d.data)))
+        .cloned()
+        .collect();
     let escala = escala_do_perfil_medio(&treino);
 
     let media = {
@@ -158,7 +166,12 @@ pub fn medir(caminho: &str, semente: u64, replicas: usize) -> MedidaBanco {
     let mut nivel_perfil = 0.0;
     let mut peso = 0.0;
     for i in 0..FATIAS {
-        nivel_perfil += nivel_de_servico(escala[i] as f64, media[i] * 2.0 * AHT_S / 3600.0, AHT_S, ALVO_S) * media[i];
+        nivel_perfil += nivel_de_servico(
+            escala[i] as f64,
+            media[i] * 2.0 * AHT_S / 3600.0,
+            AHT_S,
+            ALVO_S,
+        ) * media[i];
         peso += media[i];
     }
     let nivel_perfil = nivel_perfil / peso;
@@ -169,7 +182,11 @@ pub fn medir(caminho: &str, semente: u64, replicas: usize) -> MedidaBanco {
 
     let totais: Vec<f64> = cofre.iter().map(|d| d.total).collect();
     let media_dia = totais.iter().sum::<f64>() / totais.len() as f64;
-    let var = totais.iter().map(|t| (t - media_dia) * (t - media_dia)).sum::<f64>() / (totais.len() as f64 - 1.0);
+    let var = totais
+        .iter()
+        .map(|t| (t - media_dia) * (t - media_dia))
+        .sum::<f64>()
+        / (totais.len() as f64 - 1.0);
 
     // nulo de metades: 400 reparticões aleatórias dos dias do cofre
     let mut rng = crate::banco::Rng::novo(semente);
@@ -182,11 +199,15 @@ pub fn medir(caminho: &str, semente: u64, replicas: usize) -> MedidaBanco {
         }
         let meio = niveis_embaralhados.len() / 2;
         let a: f64 = niveis_embaralhados[..meio].iter().sum::<f64>() / meio as f64;
-        let b: f64 = niveis_embaralhados[meio..].iter().sum::<f64>() / (niveis_embaralhados.len() - meio) as f64;
+        let b: f64 = niveis_embaralhados[meio..].iter().sum::<f64>()
+            / (niveis_embaralhados.len() - meio) as f64;
         meias.push((a - b).abs());
     }
     let media_meias = meias.iter().sum::<f64>() / meias.len() as f64;
-    let nulo_dia = (meias.iter().map(|x| (x - media_meias) * (x - media_meias)).sum::<f64>()
+    let nulo_dia = (meias
+        .iter()
+        .map(|x| (x - media_meias) * (x - media_meias))
+        .sum::<f64>()
         / (meias.len() as f64 - 1.0))
         .sqrt();
     let n_chamadas: f64 = totais.iter().sum();

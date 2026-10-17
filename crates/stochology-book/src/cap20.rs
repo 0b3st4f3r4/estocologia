@@ -42,11 +42,7 @@ impl Sm64 {
         ((self.proximo() >> 11) as f64) / ((1u64 << 53) as f64)
     }
     fn bernoulli(&mut self, p: f64) -> f64 {
-        if self.uniforme() < p {
-            1.0
-        } else {
-            0.0
-        }
+        if self.uniforme() < p { 1.0 } else { 0.0 }
     }
 }
 
@@ -63,7 +59,14 @@ struct Periodo {
     x: Vec<Vec<f64>>,
 }
 
-fn gerar(n: usize, b0: f64, p_noite: f64, p_velocidade: f64, p_placa: f64, rng: &mut Sm64) -> Periodo {
+fn gerar(
+    n: usize,
+    b0: f64,
+    p_noite: f64,
+    p_velocidade: f64,
+    p_placa: f64,
+    rng: &mut Sm64,
+) -> Periodo {
     let mut y = Vec::with_capacity(n);
     let noite = vec![0.0; n];
     let velocidade = vec![0.0; n];
@@ -188,7 +191,14 @@ fn habilidade(p: &[f64], y: &[f64], referencia: f64) -> f64 {
 pub fn rodar() {
     println!("== Capítulo 20 :: o relogio, o canario e o cofre ==");
     let mut rng = Sm64::novo(SEMENTE);
-    let treino = gerar(N_TREINO, B0_TREINO, P_NOITE, P_VELOCIDADE, P_PLACA, &mut rng);
+    let treino = gerar(
+        N_TREINO,
+        B0_TREINO,
+        P_NOITE,
+        P_VELOCIDADE,
+        P_PLACA,
+        &mut rng,
+    );
     let desenvolvimento = gerar(
         N_DESENVOLVIMENTO,
         B0_NOVO,
@@ -242,7 +252,9 @@ pub fn rodar() {
     );
     println!(
         "modelo oficial com Platt (a = {:.2}, b = {:.2}): media prevista {:.4}",
-        b_platt[1], b_platt[0], media(&p_platt)
+        b_platt[1],
+        b_platt[0],
+        media(&p_platt)
     );
     println!(
         "  CITL = {:+.4} | ECE = {:.4} | Brier = {:.5} | habilidade = {:+.4}",
@@ -253,12 +265,7 @@ pub fn rodar() {
     );
     println!(
         "climatologia fixa na taxa do passado: Brier = {:.5} (p(1-p) = {:.5})",
-        cofre
-            .y
-            .iter()
-            .map(|v| (taxa_dev - v).powi(2))
-            .sum::<f64>()
-            / N_COFRE as f64,
+        cofre.y.iter().map(|v| (taxa_dev - v).powi(2)).sum::<f64>() / N_COFRE as f64,
         taxa_dev * (1.0 - taxa_dev)
     );
 
@@ -288,7 +295,11 @@ pub fn rodar() {
         let disponivel = if relogio_honesto { 0 } else { N_COFRE };
         println!(
             "  relogio {}: canario disponivel em {} de {} emissoes | beta_canario = {:+.2} | ganho de habilidade = {:+.4}",
-            if relogio_honesto { "honesto" } else { "desligado" },
+            if relogio_honesto {
+                "honesto"
+            } else {
+                "desligado"
+            },
             disponivel,
             N_COFRE,
             b[4],
@@ -309,4 +320,3 @@ mod testes {
         assert!((brier(&[0.5, 0.5], &[0.0, 1.0]) - 0.25).abs() < 1e-12);
     }
 }
-

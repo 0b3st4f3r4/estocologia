@@ -93,7 +93,12 @@ fn gerar(mundo: u8, semente: u64) -> Dados {
         cand.push(c5);
         nomes.push("x5 turma");
     }
-    Dados { y, amb, cand, nomes }
+    Dados {
+        y,
+        amb,
+        cand,
+        nomes,
+    }
 }
 
 // ---------------------------------------------------------------- mínimos quadrados
@@ -294,7 +299,10 @@ fn acerto_1nn(dados: &Dados, s: &[usize]) -> f64 {
             }
         }
         if !celula.is_empty() {
-            let iguais = celula.iter().filter(|&&j| dados.amb[j] == dados.amb[i]).count();
+            let iguais = celula
+                .iter()
+                .filter(|&&j| dados.amb[j] == dados.amb[i])
+                .count();
             acertos += iguais as f64 / celula.len() as f64;
         } else {
             let (mut melhor, mut viz) = (f64::INFINITY, 0usize);
@@ -376,7 +384,10 @@ fn icp(dados: &Dados, regra_saturacao: bool) -> Relatorio {
     let na_familia: Vec<&Linha> = linhas.iter().filter(|l| !l.saturado).collect();
     let aceitos_familia = na_familia.iter().filter(|l| l.aceito).count();
     let aceitos_todos = linhas.iter().filter(|l| l.aceito).count();
-    let saturados_aceitos = linhas.iter().filter(|l| l.aceito && l.acerto >= LIMIAR_SATURACAO).count();
+    let saturados_aceitos = linhas
+        .iter()
+        .filter(|l| l.aceito && l.acerto >= LIMIAR_SATURACAO)
+        .count();
     let intersecao = |fonte: &[&Linha]| -> Vec<usize> {
         let aceitos: Vec<&&Linha> = fonte.iter().filter(|l| l.aceito).collect();
         if aceitos.is_empty() {
@@ -389,7 +400,10 @@ fn icp(dados: &Dados, regra_saturacao: bool) -> Relatorio {
     let com_regra = intersecao(&na_familia);
     let todos: Vec<&Linha> = linhas.iter().collect();
     let sem_regra = intersecao(&todos);
-    let saturados_testados = linhas.iter().filter(|l| l.acerto >= LIMIAR_SATURACAO).count();
+    let saturados_testados = linhas
+        .iter()
+        .filter(|l| l.acerto >= LIMIAR_SATURACAO)
+        .count();
     Relatorio {
         linhas,
         aceitos_familia,
@@ -511,4 +525,3 @@ mod testes {
         assert!(kruskal(&u, &g, 2).abs() < 1e-9);
     }
 }
-

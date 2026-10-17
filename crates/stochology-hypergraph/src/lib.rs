@@ -99,12 +99,18 @@ impl Grafo {
 
         for a in &self.arestas_tree {
             if !existe(&a.de) || !existe(&a.para) {
-                problemas.push(format!("aresta tree para no ausente: {} -> {}", a.de, a.para));
+                problemas.push(format!(
+                    "aresta tree para no ausente: {} -> {}",
+                    a.de, a.para
+                ));
             }
         }
         for a in &self.arestas_graph {
             if !existe(&a.de) || !existe(&a.para) {
-                problemas.push(format!("aresta graph para no ausente: {} -> {}", a.de, a.para));
+                problemas.push(format!(
+                    "aresta graph para no ausente: {} -> {}",
+                    a.de, a.para
+                ));
             }
         }
         for h in &self.hiperarestas {
@@ -156,10 +162,7 @@ impl Grafo {
     }
 
     fn ciclo_em_tree(&self) -> Option<Vec<String>> {
-        match self.ordem_topologica() {
-            Ok(_) => None,
-            Err(ciclo) => Some(ciclo),
-        }
+        self.ordem_topologica().err()
     }
 
     /// Cobertura: todo nó precisa estar em ao menos uma hiperaresta (lente).

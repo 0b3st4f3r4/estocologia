@@ -118,7 +118,11 @@ fn fichas_reprovadas_no_historico() -> Vec<Ficha> {
     h3_prisoes_toronto.deriva_declarada = false;
     h3_prisoes_toronto.subgrupos_auditados = false;
 
-    vec![h1_incendios_alavancar, h2_levedura_1linha, h3_prisoes_toronto]
+    vec![
+        h1_incendios_alavancar,
+        h2_levedura_1linha,
+        h3_prisoes_toronto,
+    ]
 }
 
 fn fichas(horizonte: &str) -> Vec<Ficha> {
@@ -348,7 +352,10 @@ fn executar(cfg: &Config) -> Execucao {
     // G6 banca adversarial A1-A8, com vigilancia de deriva (A3), paridade de subgrupos (A6), Hill de H1 (A4)
     // e reprovação obrigatória das três fichas intermediárias com cuidados e âncoras ausentes.
     let alfa_h1 = hill(&serie, 500);
-    let vigilancia_nula = cusum(&nulo_estacionario(2026, 500, 0.0, 1.0), &OpcoesDeriva::default());
+    let vigilancia_nula = cusum(
+        &nulo_estacionario(2026, 500, 0.0, 1.0),
+        &OpcoesDeriva::default(),
+    );
     let paridade_nula = paridade_demografica(&[
         GrupoJustica::novo("coorte-a", 100, 30, 24, 6),
         GrupoJustica::novo("coorte-b", 100, 30, 24, 6),
@@ -364,9 +371,11 @@ fn executar(cfg: &Config) -> Execucao {
 
     // G7 cláusula de saída declarada e A8 acima do piso.
     let saida_ok = lista.iter().all(|f| f.clausula_de_saida.is_some())
-        && lista
-            .iter()
-            .all(|f| orq.conduzir_ataque(AgenteA::A8Decisao, f).map(|s| s >= SEVERIDADE_MINIMA).unwrap_or(false));
+        && lista.iter().all(|f| {
+            orq.conduzir_ataque(AgenteA::A8Decisao, f)
+                .map(|s| s >= SEVERIDADE_MINIMA)
+                .unwrap_or(false)
+        });
 
     let raiz = livro.raiz_merkle();
     portoes.push((
@@ -397,7 +406,10 @@ fn executar(cfg: &Config) -> Execucao {
     portoes.push((
         "G6".to_string(),
         banca_portao_ok,
-        format!("banca A1-A8 com piso {} e pior {}", SEVERIDADE_MINIMA.0, pior),
+        format!(
+            "banca A1-A8 com piso {} e pior {}",
+            SEVERIDADE_MINIMA.0, pior
+        ),
     ));
     portoes.push((
         "G7".to_string(),
@@ -504,7 +516,10 @@ mod testes {
         let exec = executar(&cfg);
         assert_eq!(exec.falhas, 1);
         let g6 = exec.portoes.iter().find(|(n, _, _)| n == "G6").expect("G6");
-        assert!(!g6.1, "G6 deve reprovar quando h3.voos23 perde trilha e subgrupos");
+        assert!(
+            !g6.1,
+            "G6 deve reprovar quando h3.voos23 perde trilha e subgrupos"
+        );
     }
 
     #[test]
@@ -523,8 +538,11 @@ mod testes {
         assert_eq!(reprovadas.len(), 3);
         for f in &reprovadas {
             let v = orq.banca(f);
-            assert!(!v.aprovado, "ficha historica {} deveria reprovar na banca", f.id);
+            assert!(
+                !v.aprovado,
+                "ficha historica {} deveria reprovar na banca",
+                f.id
+            );
         }
     }
 }
-

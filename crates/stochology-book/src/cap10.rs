@@ -181,7 +181,8 @@ pub fn seguradoras(
     regra: Regra,
 ) -> Seguradora {
     let mut rng = SplitMix64::new(semente);
-    let (mut sem_perda, mut aposta_total, mut ruinados, mut ruinados_1000) = (0usize, 0usize, 0usize, 0usize);
+    let (mut sem_perda, mut aposta_total, mut ruinados, mut ruinados_1000) =
+        (0usize, 0usize, 0usize, 0usize);
     let mut finais = Vec::with_capacity(investidores);
     for _ in 0..investidores {
         let mut perdas = 0usize;
@@ -252,7 +253,11 @@ pub struct AmostraPareto {
 /// Sorteia `repeticoes` amostras de tamanho `n` de um Pareto com P(X > x) = x^(-alfa).
 pub fn pareto_amostras(semente: u64, n: usize, alfa: f64, repeticoes: usize) -> AmostraPareto {
     let mut rng = SplitMix64::new(semente);
-    let media_verdadeira = if alfa > 1.0 { alfa / (alfa - 1.0) } else { f64::INFINITY };
+    let media_verdadeira = if alfa > 1.0 {
+        alfa / (alfa - 1.0)
+    } else {
+        f64::INFINITY
+    };
     let mut medias = Vec::with_capacity(repeticoes);
     let (mut abaixo, mut cobre) = (0usize, 0usize);
     let mut fracao_dominada_pelo_maior = 0.0;
@@ -355,9 +360,6 @@ pub fn arrasto_teorico(mu: f64, sigma: f64) -> (f64, f64) {
     (mu - 0.5 * sigma * sigma, 0.5 * sigma * sigma)
 }
 
-
-
-
 fn moeda_de_peters() {
     println!("== Capítulo 10 :: a moeda de Peters (cara +50%, coroa -40%) ==");
     let (esperanca, log_tempo) = taxas_da_moeda(0.5, 1.5, 0.6);
@@ -387,7 +389,12 @@ fn moeda_de_peters() {
         g_otimo
     );
     println!();
-    let apostas = [Aposta::Tudo, Aposta::Kelly, Aposta::MeioKelly, Aposta::Decimo];
+    let apostas = [
+        Aposta::Tudo,
+        Aposta::Kelly,
+        Aposta::MeioKelly,
+        Aposta::Decimo,
+    ];
     for a in apostas {
         let c = coorte(2026, 10_000, 1_000, a);
         println!(
@@ -428,7 +435,9 @@ fn fracao_da_media_no_topo(semente: u64, trajetorias: usize, passos: usize) -> f
 }
 
 fn vendedor_de_seguro() {
-    println!("== Capítulo 10 :: o vendedor de seguro (ganha 1% por semana, perde 50% com q = 0,004) ==");
+    println!(
+        "== Capítulo 10 :: o vendedor de seguro (ganha 1% por semana, perde 50% com q = 0,004) =="
+    );
     let q = 0.004;
     println!(
         "crescimento no tempo da aposta total: {:+.5} por semana (negativo: a ruína é certa)",
@@ -438,11 +447,19 @@ fn vendedor_de_seguro() {
         let s = seguradoras(2026, 10_000, 250, 1_000, q, regra);
         println!(
             "{:<32} sem perda = {:.3}  aposta total = {:.3}  ruina em 1000 semanas = {:.4}  mediana final = {:.3e}  média final = {:.3e}",
-            s.nome, s.fracao_sem_perda, s.fracao_aposta_total, s.fracao_ruinada_em_1000, s.mediana_final, s.media_final
+            s.nome,
+            s.fracao_sem_perda,
+            s.fracao_aposta_total,
+            s.fracao_ruinada_em_1000,
+            s.mediana_final,
+            s.media_final
         );
     }
     let sem_perda_teorico = (1.0 - q).powi(250);
-    println!("probabilidade teórica de 250 semanas sem perda = {:.4}", sem_perda_teorico);
+    println!(
+        "probabilidade teórica de 250 semanas sem perda = {:.4}",
+        sem_perda_teorico
+    );
     println!(
         "Laplace com zero perdas em 250 semanas: q_est = 1/252 = {:.6}",
         1.0 / 252.0
@@ -458,7 +475,11 @@ fn cauda_selvagem() {
         let a = pareto_amostras(99, n, 1.1, 200);
         println!(
             "n = {:>9}: média amostral média = {:>8.2}  mediana = {:>7.2}  abaixo de 11 em {:.2}  IC95 cobre em {:.2}",
-            a.n, a.media, a.mediana, a.fracao_media_abaixo_do_verdadeiro, a.cobertura_do_intervalo_de_95
+            a.n,
+            a.media,
+            a.mediana,
+            a.fracao_media_abaixo_do_verdadeiro,
+            a.cobertura_do_intervalo_de_95
         );
     }
     println!(
@@ -472,7 +493,10 @@ fn cauda_selvagem() {
     println!();
     println!("estimador de Hill com alfa = 1,1 e n = 200 000:");
     for (k, h, lo, hi) in hill_por_k(7, 200_000, 1.1, &[100, 500, 1_000, 5_000, 20_000]) {
-        println!("  k = {:>6}  alfa_hat = {:.3}  IC95 aprox [{:.3}; {:.3}]", k, h, lo, hi);
+        println!(
+            "  k = {:>6}  alfa_hat = {:.3}  IC95 aprox [{:.3}; {:.3}]",
+            k, h, lo, hi
+        );
     }
     println!(
         "gregarina: um modelo gaussiano ajustado a essa cauda subestima a perda em todas as repetições"
@@ -488,7 +512,8 @@ fn alavancagem_do_dow() {
     //   1x: m d - 1/2 sigma^2 d = 0,051 -> m d = 0,080 -> m = 0,000317 por sessao.
     let mu = 0.000317;
     let sigma = 0.01518;
-    let sessoes = 100_000;    for c in alavancagem_longa(2026, sessoes, mu, sigma) {
+    let sessoes = 100_000;
+    for c in alavancagem_longa(2026, sessoes, mu, sigma) {
         println!(
             "L = {:.0}x: media aritmetica = {:+.6}/sessao, crescimento medido = {:+.6}/sessao, arrasto = {:+.6}/sessao ({:+.4}/ano), riqueza em {} sessoes = {:.3e}",
             c.alavancagem,
@@ -570,4 +595,3 @@ mod testes {
         assert!(tempo_kelly > 0.0);
     }
 }
-

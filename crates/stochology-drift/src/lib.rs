@@ -22,7 +22,11 @@ pub struct Opcoes {
 
 impl Default for Opcoes {
     fn default() -> Self {
-        Opcoes { base: 50, folga: 0.75, limiar: 10.0 }
+        Opcoes {
+            base: 50,
+            folga: 0.75,
+            limiar: 10.0,
+        }
     }
 }
 
@@ -41,12 +45,20 @@ pub fn cusum(serie: &[f64], opcoes: &Opcoes) -> Vigilancia {
         return Vigilancia {
             alarme: None,
             cusum_maximo: 0.0,
-            media_da_base: if serie.is_empty() { 0.0 } else { serie.iter().sum::<f64>() / serie.len() as f64 },
+            media_da_base: if serie.is_empty() {
+                0.0
+            } else {
+                serie.iter().sum::<f64>() / serie.len() as f64
+            },
             desvio_da_base: 0.0,
         };
     }
     let media = serie[..base].iter().sum::<f64>() / base as f64;
-    let variancia = serie[..base].iter().map(|x| (x - media).powi(2)).sum::<f64>() / (base as f64 - 1.0);
+    let variancia = serie[..base]
+        .iter()
+        .map(|x| (x - media).powi(2))
+        .sum::<f64>()
+        / (base as f64 - 1.0);
     let desvio = variancia.sqrt().max(1e-9);
     let mut alto = 0.0_f64;
     let mut baixo = 0.0_f64;
@@ -67,7 +79,12 @@ pub fn cusum(serie: &[f64], opcoes: &Opcoes) -> Vigilancia {
             };
         }
     }
-    Vigilancia { alarme: None, cusum_maximo: maximo, media_da_base: media, desvio_da_base: desvio }
+    Vigilancia {
+        alarme: None,
+        cusum_maximo: maximo,
+        media_da_base: media,
+        desvio_da_base: desvio,
+    }
 }
 
 /// Divergencia de Kullback-Leibler entre duas distribuicoes declaradas, com piso (nunca 0 nem 1).
@@ -121,7 +138,10 @@ mod testes {
                 alarmes += 1;
             }
         }
-        assert_eq!(alarmes, 0, "o nulo estacionario nao dispara: {alarmes} alarmes");
+        assert_eq!(
+            alarmes, 0,
+            "o nulo estacionario nao dispara: {alarmes} alarmes"
+        );
     }
 
     #[test]
@@ -146,7 +166,10 @@ mod testes {
         let mut serie = nulo_estacionario(31, 1_200, 5.0, 1.0);
         com_salto(&mut serie, 600, -2.0);
         let vigilancia = cusum(&serie, &Opcoes::default());
-        assert!(vigilancia.alarme.map(|i| i >= 600).unwrap_or(false), "{vigilancia:?}");
+        assert!(
+            vigilancia.alarme.map(|i| i >= 600).unwrap_or(false),
+            "{vigilancia:?}"
+        );
     }
 
     #[test]

@@ -106,12 +106,9 @@ pub fn inclinacao(xs: &[f64], ys: &[f64]) -> f64 {
 
 /// Morfonomia: a mesma regra sobrevive quando muda o regime.
 pub fn invariante_entre_regimes(inclinacoes: &[f64], tolerancia: f64) -> bool {
-    match (
-        inclinacoes.iter().cloned().fold(f64::MIN, f64::max),
-        inclinacoes.iter().cloned().fold(f64::MAX, f64::min),
-    ) {
-        (maior, menor) => (maior - menor).abs() <= tolerancia,
-    }
+    let maior = inclinacoes.iter().cloned().fold(f64::MIN, f64::max);
+    let menor = inclinacoes.iter().cloned().fold(f64::MAX, f64::min);
+    (maior - menor).abs() <= tolerancia
 }
 
 /// Crisonomia: escore de Brier.
@@ -162,7 +159,11 @@ mod testes {
     fn moeda_de_peters_nao_e_ergodica() {
         assert!(nao_ergodico(0.50, 0.40));
         let (mediana, arruinadas) = simular_multiplicativo(2026, 400, 2_000, 0.50, 0.40);
-        assert!(mediana < 0.0, "mediana da riqueza deveria encolher: {}", mediana);
+        assert!(
+            mediana < 0.0,
+            "mediana da riqueza deveria encolher: {}",
+            mediana
+        );
         assert!(arruinadas > 0.9, "fração arruinada: {}", arruinadas);
     }
 

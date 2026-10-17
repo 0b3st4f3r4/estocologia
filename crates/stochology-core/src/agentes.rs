@@ -82,7 +82,9 @@ impl AgenteA {
                 f.artefato_simulavel.as_ref().is_some_and(|s| !s.is_empty()) && f.semente.is_some()
             }
             AgenteA::A2Dados => {
-                f.unidade_independente.as_ref().is_some_and(|s| !s.is_empty())
+                f.unidade_independente
+                    .as_ref()
+                    .is_some_and(|s| !s.is_empty())
                     && f.margem.is_some_and(|m| m > 0.0 && m < 1.0)
             }
             AgenteA::A3CicloVida => f.escopo_ecologico && f.semente.is_some(),
@@ -93,10 +95,15 @@ impl AgenteA {
             AgenteA::A5Governanca => {
                 !f.id.is_empty() && f.artefato_simulavel.as_ref().is_some_and(|s| !s.is_empty())
             }
-            AgenteA::A6Justica => f.quem_paga_pelo_erro.as_ref().is_some_and(|s| !s.is_empty()),
+            AgenteA::A6Justica => f
+                .quem_paga_pelo_erro
+                .as_ref()
+                .is_some_and(|s| !s.is_empty()),
             AgenteA::A7Dominio => !f.definicao.is_empty() || f.escopo_ecologico,
             AgenteA::A8Decisao => {
-                f.quem_paga_pelo_erro.as_ref().is_some_and(|s| !s.is_empty())
+                f.quem_paga_pelo_erro
+                    .as_ref()
+                    .is_some_and(|s| !s.is_empty())
                     && f.clausula_de_saida.as_ref().is_some_and(|s| !s.is_empty())
             }
         }
@@ -117,7 +124,10 @@ impl AgenteA {
 /// - sem cuidado e sem âncora: 1..=3 (reprovado).
 pub fn estressar(agente: AgenteA, ficha: &Ficha, semente: u64) -> Severidade {
     let mut rng = Rng::novo(agente.semente(semente));
-    match (agente.cuidado_atendido(ficha), agente.ancora_estrutural(ficha)) {
+    match (
+        agente.cuidado_atendido(ficha),
+        agente.ancora_estrutural(ficha),
+    ) {
         (true, true) => Severidade((8 + rng.uniforme(3)) as u8),
         (true, false) => Severidade((5 + rng.uniforme(2)) as u8),
         (false, true) => Severidade((3 + rng.uniforme(3)) as u8),
@@ -193,16 +203,26 @@ mod testes {
 
     #[test]
     fn cuidado_sem_ancora_estrutural_testa_a_fronteira_5_e_6_e_reprova_carimbo_vazio() {
-        let mut sem_ancora = Ficha::nova("carimbo.vazio", Camada::Modelo, TipoIncerteza::Epistemica).com_cuidados();
+        let mut sem_ancora =
+            Ficha::nova("carimbo.vazio", Camada::Modelo, TipoIncerteza::Epistemica).com_cuidados();
         sem_ancora.clausula_de_saida = Some("parar".into());
         // Sem .completa(), faltam artefato, semente, unidade, modelo nulo e quem paga pelo erro:
         // os agentes caem no regime (true, false) -> 5 ou 6, tocando a fronteira exata do piso 6.
         let mut viu_cinco = false;
         let mut viu_seis = false;
         for semente in 1..=32 {
-            for a in [AgenteA::A1Codigo, AgenteA::A2Dados, AgenteA::A4Inferencia, AgenteA::A6Justica] {
+            for a in [
+                AgenteA::A1Codigo,
+                AgenteA::A2Dados,
+                AgenteA::A4Inferencia,
+                AgenteA::A6Justica,
+            ] {
                 let s = estressar(a, &sem_ancora, semente);
-                assert!(s.0 == 5 || s.0 == 6, "esperava fronteira 5..=6, veio {}", s.0);
+                assert!(
+                    s.0 == 5 || s.0 == 6,
+                    "esperava fronteira 5..=6, veio {}",
+                    s.0
+                );
                 if s.0 == 5 {
                     viu_cinco = true;
                 }
@@ -211,8 +231,14 @@ mod testes {
                 }
             }
         }
-        assert!(viu_cinco && viu_seis, "a fronteira 5 e 6 precisa ser alcancavel");
+        assert!(
+            viu_cinco && viu_seis,
+            "a fronteira 5 e 6 precisa ser alcancavel"
+        );
         let r = aprovado(&sem_ancora, 2026);
-        assert!(!r.aprovado, "ficha com booleano marcado mas sem ancora estrutural nao pode passar");
+        assert!(
+            !r.aprovado,
+            "ficha com booleano marcado mas sem ancora estrutural nao pode passar"
+        );
     }
 }

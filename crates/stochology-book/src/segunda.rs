@@ -92,14 +92,20 @@ pub fn limiares_da_multiplicidade(texto: &str) -> Vec<(usize, f64, bool)> {
 /// Segunda opinião 2: a reprodução do p05, contada de novo do registro em máquina.
 pub fn reproducao_das_prioris(texto: &str) -> (usize, usize) {
     let inicio = texto.find("\"reproducao_rodada_a\"").unwrap_or(0);
-    let fim = texto[inicio..].find("\"mudancas\"").map(|i| inicio + i).unwrap_or(texto.len());
+    let fim = texto[inicio..]
+        .find("\"mudancas\"")
+        .map(|i| inicio + i)
+        .unwrap_or(texto.len());
     let bloco = &texto[inicio..fim];
     // só as chaves dos domínios entram na conta: as linhas que começam com \"h2/\", \"h2g/\" ou \"h3/\"
     let mut iguais = 0usize;
     let mut total = 0usize;
     for linha in bloco.lines() {
         let l = linha.trim_start();
-        let dominio = l.starts_with("\"h2/") || l.starts_with("\"h2g/") || l.starts_with("\"h3/") || l.starts_with("\"h1-");
+        let dominio = l.starts_with("\"h2/")
+            || l.starts_with("\"h2g/")
+            || l.starts_with("\"h3/")
+            || l.starts_with("\"h1-");
         if !dominio {
             continue;
         }
@@ -134,11 +140,17 @@ pub fn contar_o_banco(csv: &str) -> (usize, f64, f64, f64) {
         if carimbo.len() < 16 {
             continue;
         }
-        let Ok(chamadas) = campos[2].trim().parse::<f64>() else { continue };
+        let Ok(chamadas) = campos[2].trim().parse::<f64>() else {
+            continue;
+        };
         *por_dia.entry(carimbo[..10].to_string()).or_insert(0.0) += chamadas;
     }
     let todos: Vec<(String, f64)> = por_dia.into_iter().collect();
-    let cofre: Vec<(String, f64)> = todos.iter().filter(|(d, _)| matches!(&d[5..7], "07" | "08" | "09" | "10")).cloned().collect();
+    let cofre: Vec<(String, f64)> = todos
+        .iter()
+        .filter(|(d, _)| matches!(&d[5..7], "07" | "08" | "09" | "10"))
+        .cloned()
+        .collect();
     let dispersao = |serie: &[(String, f64)]| -> f64 {
         let n = serie.len() as f64;
         if n < 2.0 {
@@ -157,13 +169,28 @@ pub fn contar_o_banco(csv: &str) -> (usize, f64, f64, f64) {
         if media > 0.0 { variancia / media } else { 0.0 }
     };
     let chamadas_cofre: f64 = cofre.iter().map(|(_, v)| *v).sum();
-    (todos.len(), chamadas_cofre, dispersao(&todos), dispersao(&cofre))
+    (
+        todos.len(),
+        chamadas_cofre,
+        dispersao(&todos),
+        dispersao(&cofre),
+    )
 }
 
 /// Segunda opinião 5: os pareceres contados e as linhas da releitura.
 pub fn contar_os_pareceres(releitura: &str, pasta: &str) -> (usize, usize) {
-    let linhas = releitura.lines().filter(|l| l.starts_with("| ") && !l.contains("---") && !l.starts_with("| Decisão") && !l.starts_with("| Parecer")).count();
-    let arquivos = std::fs::read_dir(pasta).map(|d| d.filter_map(|e| e.ok()).count()).unwrap_or(0);
+    let linhas = releitura
+        .lines()
+        .filter(|l| {
+            l.starts_with("| ")
+                && !l.contains("---")
+                && !l.starts_with("| Decisão")
+                && !l.starts_with("| Parecer")
+        })
+        .count();
+    let arquivos = std::fs::read_dir(pasta)
+        .map(|d| d.filter_map(|e| e.ok()).count())
+        .unwrap_or(0);
     (linhas, arquivos)
 }
 
@@ -172,7 +199,11 @@ fn numero(js: &str, chave: &str) -> Option<f64> {
     let alvo = format!("\"{chave}\"");
     let pos = js.find(&alvo)? + alvo.len();
     let resto = js[pos..].trim_start().strip_prefix(':')?.trim_start();
-    let fim = resto.find(|c: char| !(c.is_ascii_digit() || c == '-' || c == '+' || c == '.' || c == 'e' || c == 'E')).unwrap_or(resto.len());
+    let fim = resto
+        .find(|c: char| {
+            !(c.is_ascii_digit() || c == '-' || c == '+' || c == '.' || c == 'e' || c == 'E')
+        })
+        .unwrap_or(resto.len());
     resto[..fim].parse::<f64>().ok()
 }
 
@@ -180,17 +211,31 @@ fn numero(js: &str, chave: &str) -> Option<f64> {
 pub fn relatar(registro: &Registro, linhas: &[String]) -> String {
     let mut s = String::new();
     s.push_str(&format!("carimbo do registro: {}\n", registro.carimbo));
-    s.push_str(&format!("{:<26} {:<11} {}\n", "item", "classe", "segunda opiniao"));
+    s.push_str(&format!(
+        "{:<26} {:<11} {}\n",
+        "item", "classe", "segunda opiniao"
+    ));
     for item in &registro.itens {
-        s.push_str(&format!("{:<26} {:<11} {}\n", item.id, item.classe, item.o_que_faz));
+        s.push_str(&format!(
+            "{:<26} {:<11} {}\n",
+            item.id, item.classe, item.o_que_faz
+        ));
     }
     s.push_str("\n-- o que a segunda opiniao mediu --\n");
     for linha in linhas {
         s.push_str(linha);
         s.push('\n');
     }
-    let conferidas = registro.itens.iter().filter(|i| i.classe == "conferida").count();
-    let registros = registro.itens.iter().filter(|i| i.classe == "registro").count();
+    let conferidas = registro
+        .itens
+        .iter()
+        .filter(|i| i.classe == "conferida")
+        .count();
+    let registros = registro
+        .itens
+        .iter()
+        .filter(|i| i.classe == "registro")
+        .count();
     s.push_str(&format!("\nlinhas conferidas por segunda implementacao: {conferidas} | linhas que so restam como registro: {registros}\n"));
     s
 }
@@ -210,7 +255,9 @@ pub fn rodar() {
     }
 
     let (iguais, total) = reproducao_das_prioris(&ler(PRIORIS));
-    linhas.push(format!("  prioris: reproducao do p05 lida do registro: {iguais} identicos de {total} dominios"));
+    linhas.push(format!(
+        "  prioris: reproducao do p05 lida do registro: {iguais} identicos de {total} dominios"
+    ));
 
     match vies_em_duas_fontes(&ler(LACO_P03), &ler(LACO_P06)) {
         Some((a, b)) => linhas.push(format!(
@@ -233,7 +280,9 @@ pub fn rodar() {
         "  pareceres: {linhas_releitura} linhas na releitura | {arquivos} pareceres reemitidos na pasta"
     ));
 
-    let registro = std::fs::read_to_string(REGISTRO).ok().and_then(|t| ler_registro(&t).ok());
+    let registro = std::fs::read_to_string(REGISTRO)
+        .ok()
+        .and_then(|t| ler_registro(&t).ok());
     match registro {
         Some(r) => print!("{}", relatar(&r, &linhas)),
         None => println!("registro da segunda opiniao nao lido"),
@@ -246,7 +295,11 @@ mod testes {
     use std::path::Path;
 
     fn ler_arquivo(rel: &str) -> String {
-        let raiz = Path::new(env!("CARGO_MANIFEST_DIR")).parent().and_then(Path::parent).expect("raiz").to_path_buf();
+        let raiz = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(Path::parent)
+            .expect("raiz")
+            .to_path_buf();
         std::fs::read_to_string(raiz.join(rel)).expect("arquivo do registro")
     }
 
@@ -259,7 +312,10 @@ mod testes {
             assert!(achado, "o limiar gravado tem de ser 0,05/M na forma exata");
         }
         let vazio = limiares_da_multiplicidade("nada aqui");
-        assert!(vazio.iter().all(|(_, _, achado)| !achado), "sem o registro, nada confere");
+        assert!(
+            vazio.iter().all(|(_, _, achado)| !achado),
+            "sem o registro, nada confere"
+        );
     }
 
     #[test]
@@ -274,33 +330,56 @@ mod testes {
 
     #[test]
     fn o_vies_do_laco_concorda_em_duas_fontes() {
-        let (a, b) = vies_em_duas_fontes(&ler_arquivo(LACO_P03), &ler_arquivo(LACO_P06)).expect("duas fontes");
+        let (a, b) = vies_em_duas_fontes(&ler_arquivo(LACO_P03), &ler_arquivo(LACO_P06))
+            .expect("duas fontes");
         assert!((a - b).abs() < 1e-15, "as duas fontes: {a} contra {b}");
         assert!((a - 0.29124674633711956).abs() < 1e-15);
     }
 
     #[test]
     fn o_banco_e_recontado_em_rust_e_bate_com_o_publicado() {
-        let (dias, chamadas_cofre, var_todos, var_cofre) = contar_o_banco(&ler_arquivo("dados-reais/bank_calls.csv"));
+        let (dias, chamadas_cofre, var_todos, var_cofre) =
+            contar_o_banco(&ler_arquivo("dados-reais/bank_calls.csv"));
         assert_eq!(dias, 164, "164 dias uteis");
         // a diferença contra o publicado é a janela de horas do laboratório: 0,2% das chamadas ficam fora dela
-        assert!((chamadas_cofre - 2_649_354.0).abs() < 20_000.0, "cofre: {chamadas_cofre}");
-        assert!((var_todos - 261.1).abs() < 2.0, "Var/media em todos: {var_todos}");
-        assert!((var_cofre - 246.7).abs() < 2.0, "Var/media no cofre: {var_cofre}");
+        assert!(
+            (chamadas_cofre - 2_649_354.0).abs() < 20_000.0,
+            "cofre: {chamadas_cofre}"
+        );
+        assert!(
+            (var_todos - 261.1).abs() < 2.0,
+            "Var/media em todos: {var_todos}"
+        );
+        assert!(
+            (var_cofre - 246.7).abs() < 2.0,
+            "Var/media no cofre: {var_cofre}"
+        );
     }
 
     #[test]
     fn a_releitura_e_os_pareceres_sao_contados() {
-        let pasta = Path::new(env!("CARGO_MANIFEST_DIR")).parent().and_then(Path::parent).expect("raiz").join(PARECERES);
-        let (linhas, arquivos) = contar_os_pareceres(&ler_arquivo(RELEITURA), &pasta.to_string_lossy());
-        assert!(linhas >= 21, "pelo menos as 21 decisoes da releitura: {linhas}");
+        let pasta = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(Path::parent)
+            .expect("raiz")
+            .join(PARECERES);
+        let (linhas, arquivos) =
+            contar_os_pareceres(&ler_arquivo(RELEITURA), &pasta.to_string_lossy());
+        assert!(
+            linhas >= 21,
+            "pelo menos as 21 decisoes da releitura: {linhas}"
+        );
         assert_eq!(arquivos, 4, "os quatro pareceres reemitidos");
     }
 
     #[test]
     fn o_registro_declara_as_classes() {
         let registro = ler_registro(&ler_arquivo(REGISTRO)).expect("registro da segunda opiniao");
-        assert!(registro.itens.len() >= 12, "as linhas marcadas P: {}", registro.itens.len());
+        assert!(
+            registro.itens.len() >= 12,
+            "as linhas marcadas P: {}",
+            registro.itens.len()
+        );
         assert!(registro.itens.iter().any(|i| i.classe == "conferida"));
         assert!(registro.itens.iter().any(|i| i.classe == "registro"));
         assert!(registro.itens.iter().all(|i| !i.o_que_faz.is_empty()));

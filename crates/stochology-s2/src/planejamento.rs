@@ -30,7 +30,8 @@ pub struct DecisaoDeResolucao {
 }
 
 /// O motivo declarado de R2 e R3 ficarem fora: o instrumento nao mede esses degraus hoje.
-pub const FORA_DO_ALCANCE: &str = "o instrumento mede o par agregado/fino; o degrau nao e extrapolado";
+pub const FORA_DO_ALCANCE: &str =
+    "o instrumento mede o par agregado/fino; o degrau nao e extrapolado";
 
 /// Avalia os quatro degraus: R0 sem perda e sem custo, R1 com a perda medida e o custo declarado,
 /// R2 e R3 declarados fora do alcance medido.
@@ -73,7 +74,11 @@ pub fn decidir(perda: &PerdaDeResolucao, custo_da_margem_min: f64) -> DecisaoDeR
     let custo = custo_da_margem_min.max(0.0);
     let fina = perda.perda > custo;
     DecisaoDeResolucao {
-        escolhida: if fina { Resolucao::R1Dia } else { Resolucao::R0Agregada },
+        escolhida: if fina {
+            Resolucao::R1Dia
+        } else {
+            Resolucao::R0Agregada
+        },
         perda_do_agregado_min: perda.perda,
         custo_da_margem_min: custo,
         motivo: if fina {
@@ -104,13 +109,20 @@ mod testes {
         assert_eq!(perda.perda, 0.0);
         let decisao = decidir(&perda, 12.0);
         assert_eq!(decisao.escolhida, Resolucao::R0Agregada);
-        assert_eq!(decisao.motivo, "a margem do dia nao se paga: o agregado basta");
+        assert_eq!(
+            decisao.motivo,
+            "a margem do dia nao se paga: o agregado basta"
+        );
     }
 
     #[test]
     fn com_oscilacao_a_perda_paga_a_margem() {
         let perda = posto_do_capitulo_16();
-        assert!(perda.perda > 40.0, "a perda medida no posto do capitulo 16: {}", perda.perda);
+        assert!(
+            perda.perda > 40.0,
+            "a perda medida no posto do capitulo 16: {}",
+            perda.perda
+        );
         let decisao = decidir(&perda, 12.0);
         assert_eq!(decisao.escolhida, Resolucao::R1Dia);
         assert_eq!(decisao.perda_do_agregado_min, perda.perda);

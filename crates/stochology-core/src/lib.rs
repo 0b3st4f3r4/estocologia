@@ -14,7 +14,7 @@ pub mod resolucao;
 pub mod rng;
 pub mod s1;
 
-pub use agentes::{Aprovacao, AgenteA, Severidade, SEVERIDADE_MINIMA, aprovado, estressar};
+pub use agentes::{AgenteA, Aprovacao, SEVERIDADE_MINIMA, Severidade, aprovado, estressar};
 pub use camada::{Camada, Ficha, TipoIncerteza};
 pub use funil::{MatrizDominancia, ParadaOtima, PoliticaLocal};
 pub use invariantes::{Falha, Portao, avaliar, relatorio};

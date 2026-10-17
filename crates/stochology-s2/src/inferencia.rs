@@ -83,7 +83,12 @@ impl Cadeia {
 
 impl Metropolis {
     /// Roda a cadeia a partir de `inicio`, com `log_alvo` declarada como densidade nao normalizada.
-    pub fn amostrar<F: Fn(f64) -> f64>(&self, log_alvo: F, inicio: f64, iteracoes: usize) -> Cadeia {
+    pub fn amostrar<F: Fn(f64) -> f64>(
+        &self,
+        log_alvo: F,
+        inicio: f64,
+        iteracoes: usize,
+    ) -> Cadeia {
         let mut rng = Rng::novo(self.semente);
         let mut atual = inicio;
         let mut log_atual = log_alvo(atual);
@@ -134,7 +139,11 @@ mod testes {
 
     #[test]
     fn a_cadeia_recupera_a_media_de_uma_normal() {
-        let cadeia = Metropolis { passo: 1.5, semente: 2026 }.amostrar(log_normal(2.0, 1.0), 0.0, 200_000);
+        let cadeia = Metropolis {
+            passo: 1.5,
+            semente: 2026,
+        }
+        .amostrar(log_normal(2.0, 1.0), 0.0, 200_000);
         let media = cadeia.media(20_000);
         assert!((media - 2.0).abs() < 0.05, "media da cadeia: {media}");
         let desvio = cadeia.desvio(20_000);
@@ -146,36 +155,83 @@ mod testes {
     #[test]
     fn a_cadeia_recupera_a_posterior_conjugada_da_beta() {
         // Beta(4, 8): media exata 4/12 = 1/3, no suporte [0, 1].
-        let cadeia = Metropolis { passo: 0.15, semente: 7 }.amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
+        let cadeia = Metropolis {
+            passo: 0.15,
+            semente: 7,
+        }
+        .amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
         let media = cadeia.media(20_000);
-        assert!((media - 1.0 / 3.0).abs() < 0.02, "media da posterior: {media}");
-        assert!(cadeia.amostras.iter().all(|x| (0.0..=1.0).contains(x)), "a cadeia respeita o suporte");
+        assert!(
+            (media - 1.0 / 3.0).abs() < 0.02,
+            "media da posterior: {media}"
+        );
+        assert!(
+            cadeia.amostras.iter().all(|x| (0.0..=1.0).contains(x)),
+            "a cadeia respeita o suporte"
+        );
         let mediana = cadeia.quantil(20_000, 0.5);
-        assert!(mediana < media, "a Beta(4,8) tem mediana abaixo da media: {mediana} contra {media}");
+        assert!(
+            mediana < media,
+            "a Beta(4,8) tem mediana abaixo da media: {mediana} contra {media}"
+        );
     }
 
     #[test]
     fn a_cadeia_e_deterministica_na_semente() {
-        let passo = Metropolis { passo: 1.0, semente: 99 };
+        let passo = Metropolis {
+            passo: 1.0,
+            semente: 99,
+        };
         let alvo = log_normal(0.0, 1.0);
-        assert_eq!(passo.amostrar(&alvo, 0.0, 5_000), passo.amostrar(&alvo, 0.0, 5_000));
-        let outra = Metropolis { passo: 1.0, semente: 100 };
-        assert_ne!(passo.amostrar(&alvo, 0.0, 5_000), outra.amostrar(&alvo, 0.0, 5_000));
+        assert_eq!(
+            passo.amostrar(&alvo, 0.0, 5_000),
+            passo.amostrar(&alvo, 0.0, 5_000)
+        );
+        let outra = Metropolis {
+            passo: 1.0,
+            semente: 100,
+        };
+        assert_ne!(
+            passo.amostrar(&alvo, 0.0, 5_000),
+            outra.amostrar(&alvo, 0.0, 5_000)
+        );
     }
 
     #[test]
     fn passo_grande_derruba_a_aceitacao() {
         let alvo = log_normal(0.0, 1.0);
-        let pequeno = Metropolis { passo: 0.1, semente: 3 }.amostrar(&alvo, 0.0, 50_000);
-        let grande = Metropolis { passo: 50.0, semente: 3 }.amostrar(&alvo, 0.0, 50_000);
+        let pequeno = Metropolis {
+            passo: 0.1,
+            semente: 3,
+        }
+        .amostrar(&alvo, 0.0, 50_000);
+        let grande = Metropolis {
+            passo: 50.0,
+            semente: 3,
+        }
+        .amostrar(&alvo, 0.0, 50_000);
         assert!(pequeno.aceitacao() > grande.aceitacao());
-        assert!(grande.aceitacao() < 0.05, "proposta absurda quase nao aceita: {}", grande.aceitacao());
+        assert!(
+            grande.aceitacao() < 0.05,
+            "proposta absurda quase nao aceita: {}",
+            grande.aceitacao()
+        );
     }
 
     #[test]
     fn alvo_fora_do_suporte_nao_aceita_nada() {
-        let cadeia = Metropolis { passo: 1.0, semente: 5 }
-            .amostrar(|x: f64| if x < 0.0 { f64::NEG_INFINITY } else { -x }, 1.0, 1_000);
-        assert!(cadeia.amostras.iter().all(|x| *x >= 0.0), "a cadeia fica no suporte");
+        let cadeia = Metropolis {
+            passo: 1.0,
+            semente: 5,
+        }
+        .amostrar(
+            |x: f64| if x < 0.0 { f64::NEG_INFINITY } else { -x },
+            1.0,
+            1_000,
+        );
+        assert!(
+            cadeia.amostras.iter().all(|x| *x >= 0.0),
+            "a cadeia fica no suporte"
+        );
     }
 }

@@ -31,7 +31,10 @@ pub struct Linha {
 impl Linha {
     /// A escuta existe quando há alguém ouvido **e** o registro assinado está apontado.
     pub fn tem_escuta(&self) -> bool {
-        self.ouvidos != "nenhum" && self.ouvidos != "-" && self.registro != "-" && !self.registro.is_empty()
+        self.ouvidos != "nenhum"
+            && self.ouvidos != "-"
+            && self.registro != "-"
+            && !self.registro.is_empty()
     }
 
     /// A divergência que o portão pega: a decisão se diz emitida sem ninguém ouvido.
@@ -80,7 +83,12 @@ pub fn ler(texto: &str) -> Result<Registro, String> {
                     "prazo" => prazo = campos[1].trim().to_string(),
                     "conducao" => conducao = campos[1].trim().to_string(),
                     "grupos_minimos" => {
-                        grupos_minimos = Some(campos[1].trim().parse().map_err(|_| "grupos_minimos nao e numero")?)
+                        grupos_minimos = Some(
+                            campos[1]
+                                .trim()
+                                .parse()
+                                .map_err(|_| "grupos_minimos nao e numero")?,
+                        )
                     }
                     _ => {}
                 }
@@ -103,7 +111,13 @@ pub fn ler(texto: &str) -> Result<Registro, String> {
     if prazo.is_empty() || grupos_minimos.is_none() || conducao.is_empty() {
         return Err("registro sem prazo, sem conducao ou sem grupos_minimos".to_string());
     }
-    Ok(Registro { carimbo, prazo, conducao, grupos_minimos: grupos_minimos.unwrap(), linhas })
+    Ok(Registro {
+        carimbo,
+        prazo,
+        conducao,
+        grupos_minimos: grupos_minimos.unwrap(),
+        linhas,
+    })
 }
 
 /// Lê o registro de um arquivo. Devolve o erro em vez de entrar em pânico, para o portão poder reprovar.
@@ -123,7 +137,12 @@ impl Registro {
             cobertura,
             grupos_minimos: self.grupos_minimos,
             lacrado: cobertura < self.grupos_minimos,
-            divergencias: self.linhas.iter().filter(|l| l.divergente()).map(|l| l.decisao.clone()).collect(),
+            divergencias: self
+                .linhas
+                .iter()
+                .filter(|l| l.divergente())
+                .map(|l| l.decisao.clone())
+                .collect(),
         }
     }
 
@@ -161,9 +180,14 @@ pub fn relatar(registro: &Registro) -> String {
         registro.linhas.len()
     ));
     if veredito.divergencias.is_empty() {
-        saida.push_str("divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido\n");
+        saida.push_str(
+            "divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido\n",
+        );
     } else {
-        saida.push_str(&format!("divergencias: REPROVADO em {:?}\n", veredito.divergencias));
+        saida.push_str(&format!(
+            "divergencias: REPROVADO em {:?}\n",
+            veredito.divergencias
+        ));
     }
     if veredito.lacrado {
         saida.push_str(&format!(
@@ -214,18 +238,30 @@ mod testes {
     use super::*;
 
     fn caminho_do_registro() -> String {
-        let raiz = Path::new(env!("CARGO_MANIFEST_DIR")).parent().and_then(Path::parent).expect("raiz").to_path_buf();
+        let raiz = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(Path::parent)
+            .expect("raiz")
+            .to_path_buf();
         raiz.join(REGISTRO).to_string_lossy().to_string()
     }
 
     #[test]
     fn o_registro_do_programa_tem_sete_decisoes_e_nenhum_ouvido() {
         let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
-        assert_eq!(registro.linhas.len(), 7, "as sete decisoes de governanca/GRUPOS.md");
+        assert_eq!(
+            registro.linhas.len(),
+            7,
+            "as sete decisoes de governanca/GRUPOS.md"
+        );
         assert_eq!(registro.sem_escuta().len(), 7);
         assert_eq!(registro.veredito().cobertura, 0);
         assert_eq!(registro.veredito().grupos_minimos, 2);
-        assert_eq!(registro.veredito().divergencias.len(), 0, "o registro nao mente");
+        assert_eq!(
+            registro.veredito().divergencias.len(),
+            0,
+            "o registro nao mente"
+        );
         assert!(registro.veredito().lacrado);
     }
 
@@ -235,7 +271,10 @@ mod testes {
         let registro = ler(texto).expect("caso sintetico");
         let veredito = registro.veredito();
         assert_eq!(veredito.divergencias, vec!["h3/prisoes".to_string()]);
-        assert!(veredito.lacrado, "com um grupo ouvido a caixa continua lacrada");
+        assert!(
+            veredito.lacrado,
+            "com um grupo ouvido a caixa continua lacrada"
+        );
     }
 
     #[test]
@@ -251,7 +290,11 @@ mod testes {
     fn a_escuta_sem_registro_assinado_nao_conta() {
         let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tconversa informal\t-\tnao\n";
         let registro = ler(texto).expect("caso sintetico");
-        assert_eq!(registro.veredito().cobertura, 0, "conversa sem registro nao e escuta");
+        assert_eq!(
+            registro.veredito().cobertura,
+            0,
+            "conversa sem registro nao e escuta"
+        );
     }
 
     #[test]
@@ -264,6 +307,9 @@ mod testes {
     #[test]
     fn a_conducao_declarada_e_protocolo_cego() {
         let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
-        assert_eq!(registro.conducao, "protocolo cego", "a forma escolhida na declaracao 2");
+        assert_eq!(
+            registro.conducao, "protocolo cego",
+            "a forma escolhida na declaracao 2"
+        );
     }
 }

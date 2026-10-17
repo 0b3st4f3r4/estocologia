@@ -103,7 +103,9 @@ fn ler_dados(caminho: &str) -> Dados {
     let texto = std::fs::read_to_string(caminho).expect("nao li o CSV dos incendios");
     let mut todas = Vec::new();
     let mut meses: Vec<(String, f64)> = Vec::new();
-    let mut por_mes: Vec<Vec<f64>> = (0..(ANOS_TREINO * 12) as usize).map(|_| Vec::new()).collect();
+    let mut por_mes: Vec<Vec<f64>> = (0..(ANOS_TREINO * 12) as usize)
+        .map(|_| Vec::new())
+        .collect();
     for (i, linha) in texto.lines().enumerate() {
         if i == 0 || linha.trim().is_empty() {
             continue;
@@ -127,7 +129,11 @@ fn ler_dados(caminho: &str) -> Dados {
             por_mes[idx].push(perda);
         }
     }
-    Dados { todas, meses, por_mes }
+    Dados {
+        todas,
+        meses,
+        por_mes,
+    }
 }
 
 /// Meses do período, meses em que a camada foi atingida e a maior perda do período.
@@ -165,7 +171,9 @@ fn cauda_simulada(alfa: f64, n: usize, k: usize, reps: usize, semente: u64) -> V
     let mut rng = Sm64::novo(semente);
     let mut out = Vec::with_capacity(reps);
     for _ in 0..reps {
-        let amostra: Vec<f64> = (0..n).map(|_| (1.0 - rng.uniforme()).powf(-1.0 / alfa)).collect();
+        let amostra: Vec<f64> = (0..n)
+            .map(|_| (1.0 - rng.uniforme()).powf(-1.0 / alfa))
+            .collect();
         out.push(hill(&amostra, k));
     }
     out

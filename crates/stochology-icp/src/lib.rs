@@ -52,7 +52,10 @@ impl Ambiente {
         if colunas.iter().any(|c| c.len() != linhas) {
             return Err(Erro::LinhasDesiguais);
         }
-        Ok(Ambiente { nome: nome.to_string(), colunas })
+        Ok(Ambiente {
+            nome: nome.to_string(),
+            colunas,
+        })
     }
 
     pub fn linhas(&self) -> usize {
@@ -328,8 +331,14 @@ mod testes {
         assert!(conjunto_aceito(&ambientes, 0, &[1], 0.05).expect("testa"));
         assert!(!conjunto_aceito(&ambientes, 0, &[2], 0.05).expect("testa"));
         let familia = familia_aceita(&ambientes, 0, &[1, 2], 0.05).expect("familia");
-        assert!(familia.contains(&vec![1]), "o invariante entra: {familia:?}");
-        assert!(!familia.contains(&vec![2]), "o confundido fica fora: {familia:?}");
+        assert!(
+            familia.contains(&vec![1]),
+            "o invariante entra: {familia:?}"
+        );
+        assert!(
+            !familia.contains(&vec![2]),
+            "o confundido fica fora: {familia:?}"
+        );
         assert_eq!(area(&familia), vec![1]);
     }
 
@@ -384,9 +393,19 @@ mod testes {
 
     #[test]
     fn preditores_colineares_reprovam() {
-        let ambientes = vec![Ambiente::novo("A", vec![vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]])
-            .expect("ambiente")];
-        match regressao(&[1.0, 2.0, 3.0], &[vec![1.0, 2.0, 3.0], vec![2.0, 4.0, 6.0]]) {
+        let ambientes = [Ambiente::novo(
+            "A",
+            vec![
+                vec![1.0, 2.0, 3.0],
+                vec![1.0, 2.0, 3.0],
+                vec![1.0, 2.0, 3.0],
+            ],
+        )
+        .expect("ambiente")];
+        match regressao(
+            &[1.0, 2.0, 3.0],
+            &[vec![1.0, 2.0, 3.0], vec![2.0, 4.0, 6.0]],
+        ) {
             Err(Erro::SistemaSingular) => {}
             outro => panic!("esperava sistema singular, veio {outro:?}"),
         }

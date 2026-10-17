@@ -68,7 +68,12 @@ impl std::fmt::Display for Erro {
                 write!(f, "sem migracao de {} para {}", de.texto(), para.texto())
             }
             Erro::CadeiaDescontinua { de, para } => {
-                write!(f, "cadeia descontinua entre {} e {}", de.texto(), para.texto())
+                write!(
+                    f,
+                    "cadeia descontinua entre {} e {}",
+                    de.texto(),
+                    para.texto()
+                )
             }
         }
     }
@@ -113,11 +118,17 @@ pub fn documento(ficha: &Ficha) -> BTreeMap<String, String> {
     doc.insert("incerteza".into(), ficha.incerteza.codigo().into());
     doc.insert("definicao".into(), ficha.definicao.clone());
     doc.insert("resolucao".into(), ficha.resolucao.codigo().into());
-    doc.insert("pergunta_do_decisor".into(), ficha.pergunta_do_decisor.clone());
+    doc.insert(
+        "pergunta_do_decisor".into(),
+        ficha.pergunta_do_decisor.clone(),
+    );
     doc.insert("acao_do_pacote".into(), ficha.acao_do_pacote.clone());
     for (nome, valor) in [
         ("artefato_simulavel", opcional(&ficha.artefato_simulavel)),
-        ("unidade_independente", opcional(&ficha.unidade_independente)),
+        (
+            "unidade_independente",
+            opcional(&ficha.unidade_independente),
+        ),
         ("modelo_nulo", opcional(&ficha.modelo_nulo)),
         ("quem_paga_pelo_erro", opcional(&ficha.quem_paga_pelo_erro)),
         ("clausula_de_saida", opcional(&ficha.clausula_de_saida)),
@@ -148,24 +159,29 @@ pub fn documento(ficha: &Ficha) -> BTreeMap<String, String> {
 }
 
 fn exigir(doc: &BTreeMap<String, String>, campo: &str) -> Result<String, Erro> {
-    doc.get(campo)
-        .cloned()
-        .ok_or_else(|| Erro::ValorInvalido { campo: campo.into(), valor: "(ausente)".into() })
+    doc.get(campo).cloned().ok_or_else(|| Erro::ValorInvalido {
+        campo: campo.into(),
+        valor: "(ausente)".into(),
+    })
 }
 
 pub fn ficha_de_documento(doc: &BTreeMap<String, String>) -> Result<Ficha, Erro> {
     let booleano = |campo: &str| -> Result<bool, Erro> {
         let bruto = doc.get(campo).cloned().unwrap_or_else(|| "false".into());
-        bruto
-            .parse()
-            .map_err(|_| Erro::ValorInvalido { campo: campo.into(), valor: bruto })
+        bruto.parse().map_err(|_| Erro::ValorInvalido {
+            campo: campo.into(),
+            valor: bruto,
+        })
     };
     let camada = match exigir(doc, "camada")?.as_str() {
         "L1" => Camada::Mundo,
         "L2" => Camada::Modelo,
         "L3" => Camada::Agente,
         outro => {
-            return Err(Erro::ValorInvalido { campo: "camada".into(), valor: outro.into() });
+            return Err(Erro::ValorInvalido {
+                campo: "camada".into(),
+                valor: outro.into(),
+            });
         }
     };
     let incerteza = match exigir(doc, "incerteza")?.as_str() {
@@ -173,7 +189,10 @@ pub fn ficha_de_documento(doc: &BTreeMap<String, String>) -> Result<Ficha, Erro>
         "epistemica" => TipoIncerteza::Epistemica,
         "knightiana" => TipoIncerteza::Knightiana,
         outro => {
-            return Err(Erro::ValorInvalido { campo: "incerteza".into(), valor: outro.into() });
+            return Err(Erro::ValorInvalido {
+                campo: "incerteza".into(),
+                valor: outro.into(),
+            });
         }
     };
     let resolucao = match exigir(doc, "resolucao")?.as_str() {
@@ -182,21 +201,24 @@ pub fn ficha_de_documento(doc: &BTreeMap<String, String>) -> Result<Ficha, Erro>
         "R2-hora" => Resolucao::R2Hora,
         "R3-subpergunta" => Resolucao::R3Subpergunta,
         outro => {
-            return Err(Erro::ValorInvalido { campo: "resolucao".into(), valor: outro.into() });
+            return Err(Erro::ValorInvalido {
+                campo: "resolucao".into(),
+                valor: outro.into(),
+            });
         }
     };
     let semente = match doc.get("semente") {
-        Some(t) => Some(
-            t.parse()
-                .map_err(|_| Erro::ValorInvalido { campo: "semente".into(), valor: t.clone() })?,
-        ),
+        Some(t) => Some(t.parse().map_err(|_| Erro::ValorInvalido {
+            campo: "semente".into(),
+            valor: t.clone(),
+        })?),
         None => None,
     };
     let margem = match doc.get("margem") {
-        Some(t) => Some(
-            t.parse()
-                .map_err(|_| Erro::ValorInvalido { campo: "margem".into(), valor: t.clone() })?,
-        ),
+        Some(t) => Some(t.parse().map_err(|_| Erro::ValorInvalido {
+            campo: "margem".into(),
+            valor: t.clone(),
+        })?),
         None => None,
     };
     let mut ficha = Ficha::nova(&exigir(doc, "id")?, camada, incerteza);
@@ -272,7 +294,14 @@ pub struct Migracao {
 
 impl Migracao {
     pub fn simples(de: Versao, para: Versao, nota: &'static str) -> Self {
-        Migracao { de, para, renomeia: Vec::new(), descarta: Vec::new(), acrescenta: Vec::new(), nota }
+        Migracao {
+            de,
+            para,
+            renomeia: Vec::new(),
+            descarta: Vec::new(),
+            acrescenta: Vec::new(),
+            nota,
+        }
     }
 
     pub fn com_renomeacao(mut self, de: &'static str, para: &'static str) -> Self {
@@ -317,16 +346,25 @@ impl Cadeia {
     pub fn nova(mut migracoes: Vec<Migracao>) -> Result<Self, Erro> {
         for (i, m) in migracoes.iter().enumerate() {
             if m.de >= m.para {
-                return Err(Erro::CadeiaDescontinua { de: m.de, para: m.para });
+                return Err(Erro::CadeiaDescontinua {
+                    de: m.de,
+                    para: m.para,
+                });
             }
             if migracoes[..i].iter().any(|outra| outra.de == m.de) {
-                return Err(Erro::CadeiaDescontinua { de: m.de, para: m.para });
+                return Err(Erro::CadeiaDescontinua {
+                    de: m.de,
+                    para: m.para,
+                });
             }
         }
         migracoes.sort_by_key(|m| (m.de, m.para));
         for janela in migracoes.windows(2) {
             if janela[0].para != janela[1].de {
-                return Err(Erro::CadeiaDescontinua { de: janela[0].para, para: janela[1].de });
+                return Err(Erro::CadeiaDescontinua {
+                    de: janela[0].para,
+                    para: janela[1].de,
+                });
             }
         }
         Ok(Cadeia { migracoes })
@@ -359,7 +397,13 @@ impl Cadeia {
                 for (campo, valor) in &m.acrescenta {
                     ops.push(format!("acrescenta {campo} = {valor}"));
                 }
-                format!("de {} para {}: {} | {}", m.de.texto(), m.para.texto(), ops.join("; "), m.nota)
+                format!(
+                    "de {} para {}: {} | {}",
+                    m.de.texto(),
+                    m.para.texto(),
+                    ops.join("; "),
+                    m.nota
+                )
             })
             .collect()
     }
@@ -404,7 +448,10 @@ pub fn cadeia_de_texto(texto: &str) -> Result<Cadeia, Erro> {
         }
         let campos: Vec<&str> = l.split('\t').collect();
         if campos.len() < 6 {
-            return Err(Erro::ValorInvalido { campo: "migracoes.tsv".into(), valor: format!("linha {} com {} campos", i + 1, campos.len()) });
+            return Err(Erro::ValorInvalido {
+                campo: "migracoes.tsv".into(),
+                valor: format!("linha {} com {} campos", i + 1, campos.len()),
+            });
         }
         let de = Versao::de_texto(campos[0].trim())?;
         let para = Versao::de_texto(campos[1].trim())?;
@@ -435,7 +482,10 @@ pub fn cadeia_de_texto(texto: &str) -> Result<Cadeia, Erro> {
                 etapas[posicao].descarta.push(campo);
             }
             outra => {
-                return Err(Erro::ValorInvalido { campo: "operacao".into(), valor: outra.to_string() });
+                return Err(Erro::ValorInvalido {
+                    campo: "operacao".into(),
+                    valor: outra.to_string(),
+                });
             }
         }
     }
@@ -493,7 +543,8 @@ mod testes {
 
     #[test]
     fn valor_invalido_reprova() {
-        let texto = "versao = 1.0\nid = x\ncamada = L9\nincerteza = aleatoria\nresolucao = R1-dia\n";
+        let texto =
+            "versao = 1.0\nid = x\ncamada = L9\nincerteza = aleatoria\nresolucao = R1-dia\n";
         match de_texto(texto) {
             Err(Erro::ValorInvalido { campo, .. }) => assert_eq!(campo, "camada"),
             outro => panic!("esperava valor invalido, veio {outro:?}"),
@@ -509,8 +560,12 @@ mod testes {
     #[test]
     fn cadeia_aplica_renomeacao_descarte_e_acrescimo() {
         let cadeia = Cadeia::nova(vec![
-            Migracao::simples(Versao::nova(1, 0), Versao::nova(1, 1), "margem vira margem_da_unidade")
-                .com_renomeacao("margem", "margem_da_unidade"),
+            Migracao::simples(
+                Versao::nova(1, 0),
+                Versao::nova(1, 1),
+                "margem vira margem_da_unidade",
+            )
+            .com_renomeacao("margem", "margem_da_unidade"),
             Migracao::simples(Versao::nova(1, 1), Versao::nova(2, 0), "escopo vira texto")
                 .com_descarte("escopo_ecologico")
                 .com_acrescimo("escopo", "declarado"),
@@ -570,8 +625,16 @@ mod testes {
     #[test]
     fn a_cadeia_do_arquivo_e_continua_e_termina_na_versao_da_ficha() {
         let versoes: Vec<String> = PADRAO.versoes().iter().map(|v| v.texto()).collect();
-        assert_eq!(versoes, vec!["1.0", "1.1", "1.2"], "a cadeia declarada em arquivo");
-        assert_eq!(PADRAO.versoes().last().copied(), Some(VERSAO_DA_FICHA), "a cadeia termina na versão da ficha");
+        assert_eq!(
+            versoes,
+            vec!["1.0", "1.1", "1.2"],
+            "a cadeia declarada em arquivo"
+        );
+        assert_eq!(
+            PADRAO.versoes().last().copied(),
+            Some(VERSAO_DA_FICHA),
+            "a cadeia termina na versão da ficha"
+        );
     }
 
     #[test]
@@ -579,9 +642,15 @@ mod testes {
         let buraco = "1.0\t1.1\tacrescenta\tresolucao\tR0-agregada\tnota\n1.2\t1.3\tacrescenta\tx\ty\tnota\n";
         assert!(cadeia_de_texto(buraco).is_err(), "buraco na cadeia");
         let desconhecida = "1.0\t1.1\tinventa\tresolucao\tR0-agregada\tnota\n";
-        assert!(cadeia_de_texto(desconhecida).is_err(), "operação desconhecida");
+        assert!(
+            cadeia_de_texto(desconhecida).is_err(),
+            "operação desconhecida"
+        );
         let para_tras = "1.1\t1.0\tacrescenta\tx\ty\tnota\n";
-        assert!(cadeia_de_texto(para_tras).is_err(), "etapa que anda para trás");
+        assert!(
+            cadeia_de_texto(para_tras).is_err(),
+            "etapa que anda para trás"
+        );
         let sem_valor = "1.0\t1.1\tacrescenta\tresolucao\n";
         assert!(cadeia_de_texto(sem_valor).is_err(), "linha curta");
     }
@@ -589,7 +658,11 @@ mod testes {
     #[test]
     fn um_documento_da_versao_1_0_migra_com_os_padroes_declarados() {
         let ficha = ficha_cheia();
-        assert_eq!(ficha.resolucao, Resolucao::R3Subpergunta, "a ficha de teste declara R3");
+        assert_eq!(
+            ficha.resolucao,
+            Resolucao::R3Subpergunta,
+            "a ficha de teste declara R3"
+        );
         let atual = texto(&ficha);
         let mut antigo = String::from("versao = 1.0\n");
         for linha in atual.lines().skip(1) {
@@ -600,7 +673,11 @@ mod testes {
             antigo.push('\n');
         }
         let migrada = de_texto(&antigo).expect("migra da 1.0 para a versão da ficha");
-        assert_eq!(migrada.resolucao, Resolucao::R0Agregada, "o valor de acréscimo declarado");
+        assert_eq!(
+            migrada.resolucao,
+            Resolucao::R0Agregada,
+            "o valor de acréscimo declarado"
+        );
         assert!(!migrada.priori_elicitada, "o valor de acréscimo declarado");
         let mut esperada = ficha.clone();
         esperada.resolucao = Resolucao::R0Agregada;

@@ -9,14 +9,8 @@ pub fn rodar() {
     println!("== Capitulo 15 :: o cofre, a senha e a auditoria ==");
 
     // Vetores conhecidos: se o SHA-256 estivesse errado, o resto nao valeria.
-    println!(
-        "sha256(\"\")={}",
-        sha256_hex(b"")
-    );
-    println!(
-        "sha256(\"abc\")={}",
-        sha256_hex(b"abc")
-    );
+    println!("sha256(\"\")={}", sha256_hex(b""));
+    println!("sha256(\"abc\")={}", sha256_hex(b"abc"));
 
     let mut livro = LivroRazao::novo("sessao-h3");
     livro.registrar("h3.voos", "ECE=0.0048");
@@ -137,4 +131,3 @@ mod testes {
         assert!(!l.verificar());
     }
 }
-

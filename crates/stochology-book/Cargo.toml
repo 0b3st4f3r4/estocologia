@@ -22,3 +22,6 @@ stochology-hypergraph = { path = "../stochology-hypergraph" }
 stochology-audit = { path = "../stochology-audit" }
 stochology-schema = { path = "../stochology-schema" }
 stochology-core = { path = "../stochology-core" }
+
+[lints]
+workspace = true

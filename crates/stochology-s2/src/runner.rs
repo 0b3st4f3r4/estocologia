@@ -31,7 +31,7 @@
 //! que ele congelou. Um formato de tensor fica declarado como passo seguinte, e não como meio-caminho: enquanto
 //! não existir, o que roda é a tabela, e ela é suficiente para o portão, o determinismo, o custo e a abstenção.
 
-use crate::ponte::{pedido, Recusa};
+use crate::ponte::{Recusa, pedido};
 use std::collections::BTreeMap;
 
 /// O diretório onde o operador deixa o artefato.
@@ -44,7 +44,8 @@ pub const CABECALHO: &str = "# p20-jev/runner-v1";
 /// Lê o hash declarado em `SHA256`, no formato que o `sha256sum` escreve.
 pub fn hash_declarado(dir: &str) -> Result<String, Recusa> {
     let caminho = format!("{dir}/SHA256");
-    let texto = std::fs::read_to_string(&caminho).map_err(|_| Recusa::HashNaoDeclarado(caminho.clone()))?;
+    let texto =
+        std::fs::read_to_string(&caminho).map_err(|_| Recusa::HashNaoDeclarado(caminho.clone()))?;
     let linha = texto
         .lines()
         .map(str::trim)
@@ -75,7 +76,13 @@ impl RunnerLocal {
         let texto = std::fs::read_to_string(&caminho)
             .map_err(|_| Recusa::PesosAusentes(caminho.clone()))?;
         let (tabela, pedidos) = ler_blocos(&texto)?;
-        Ok(RunnerLocal { caminho, sha256: medido, tabela, pedidos, ultimos_tokens: 0 })
+        Ok(RunnerLocal {
+            caminho,
+            sha256: medido,
+            tabela,
+            pedidos,
+            ultimos_tokens: 0,
+        })
     }
 
     /// O caminho do artefato que este runner carregou.
@@ -113,7 +120,9 @@ impl crate::ponte::ModeloCongelado for RunnerLocal {
     fn decodificar(&mut self, pedido: &str) -> String {
         let saida = match self.tabela.get(&chave(pedido)) {
             Some(saida) => saida.clone(),
-            None => String::from("fora do esquema: este pedido nao tem resposta congelada no artefato"),
+            None => {
+                String::from("fora do esquema: este pedido nao tem resposta congelada no artefato")
+            }
         };
         // O custo declarado e o do documento devolvido: palavras separadas por espaco. Nao e o tokenizador do
         // modelo, e o numero fica declarado como tal — a comparacao com o custo real entra quando o artefato real
@@ -128,11 +137,16 @@ impl crate::ponte::ModeloCongelado for RunnerLocal {
 }
 
 /// O formato do artefato: cada bloco começa em `@pedido` e termina em `@end`.
-fn ler_blocos(texto: &str) -> Result<(BTreeMap<String, String>, BTreeMap<String, String>), Recusa> {
+/// Os dois blocos do artefato: cabecalho por chave e corpo por chave.
+type Blocos = (BTreeMap<String, String>, BTreeMap<String, String>);
+
+fn ler_blocos(texto: &str) -> Result<Blocos, Recusa> {
     let mut linhas = texto.lines();
     let cabecalho = linhas.next().unwrap_or("").trim();
     if cabecalho != CABECALHO {
-        return Err(Recusa::ArtefatoIlegivel(format!("cabecalho {cabecalho:?}, esperado {CABECALHO:?}")));
+        return Err(Recusa::ArtefatoIlegivel(format!(
+            "cabecalho {cabecalho:?}, esperado {CABECALHO:?}"
+        )));
     }
     let mut tabela = BTreeMap::new();
     let mut pedidos: BTreeMap<String, String> = BTreeMap::new();
@@ -159,7 +173,9 @@ fn ler_blocos(texto: &str) -> Result<(BTreeMap<String, String>, BTreeMap<String,
             chave_atual = Some(chave);
             corpo.clear();
         } else if l == "@end" {
-            let chave = chave_atual.take().ok_or_else(|| Recusa::ArtefatoIlegivel("@end sem @pedido".into()))?;
+            let chave = chave_atual
+                .take()
+                .ok_or_else(|| Recusa::ArtefatoIlegivel("@end sem @pedido".into()))?;
             if corpo.is_empty() {
                 return Err(Recusa::ArtefatoIlegivel(format!("bloco vazio: {chave}")));
             }
@@ -169,14 +185,20 @@ fn ler_blocos(texto: &str) -> Result<(BTreeMap<String, String>, BTreeMap<String,
                 corpo.push(l.to_string());
             }
         } else if !l.trim().is_empty() && !l.trim_start().starts_with('#') {
-            return Err(Recusa::ArtefatoIlegivel(format!("linha fora de bloco: {l}")));
+            return Err(Recusa::ArtefatoIlegivel(format!(
+                "linha fora de bloco: {l}"
+            )));
         }
     }
     if chave_atual.is_some() {
-        return Err(Recusa::ArtefatoIlegivel("bloco sem @end no fim do arquivo".into()));
+        return Err(Recusa::ArtefatoIlegivel(
+            "bloco sem @end no fim do arquivo".into(),
+        ));
     }
     if tabela.is_empty() {
-        return Err(Recusa::ArtefatoIlegivel("artefato sem nenhuma resposta".into()));
+        return Err(Recusa::ArtefatoIlegivel(
+            "artefato sem nenhuma resposta".into(),
+        ));
     }
     Ok((tabela, pedidos))
 }
@@ -188,7 +210,10 @@ pub fn chave(pedido: &str) -> String {
 
 /// Escreve um artefato de ensaio em `dir`: a mesma forma do artefato real, com as respostas do modelo de
 /// ensaio. Serve para provar o runner antes de existir peso de verdade, e não é o modelo.
-pub fn escrever_artefato_de_ensaio(dir: &std::path::Path, casos: &[&str]) -> std::io::Result<String> {
+pub fn escrever_artefato_de_ensaio(
+    dir: &std::path::Path,
+    casos: &[&str],
+) -> std::io::Result<String> {
     use crate::ponte::ModeloCongelado;
     std::fs::create_dir_all(dir)?;
     let mut ensaio = crate::ponte::ModeloDeEnsaio::novo();
@@ -196,8 +221,12 @@ pub fn escrever_artefato_de_ensaio(dir: &std::path::Path, casos: &[&str]) -> std
     texto.push('\n');
     for caso in casos {
         let p = pedido(caso);
-        texto.push_str(&format!("@pedido {} {}\n", chave(&p), p.replace('\n', "\\n")));
-        texto.push_str(&ensaio.decodificar(&p).trim_end());
+        texto.push_str(&format!(
+            "@pedido {} {}\n",
+            chave(&p),
+            p.replace('\n', "\\n")
+        ));
+        texto.push_str(ensaio.decodificar(&p).trim_end());
         texto.push_str("\n@end\n");
     }
     let caminho = dir.join(ARQUIVO);
@@ -210,12 +239,19 @@ pub fn escrever_artefato_de_ensaio(dir: &std::path::Path, casos: &[&str]) -> std
 /// Escreve um artefato a partir de respostas colhidas do modelo que o operador congelou: cada par é o texto do
 /// pedido e o documento canônico que o modelo devolveu. É o que o operador usa no passo 2 de `RUNNER.md`; a ordem
 /// continua sendo declarar o hash **depois** de escrever e **antes** de rodar a ponte.
-pub fn escrever_artefato(dir: &std::path::Path, pares: &[(String, String)]) -> std::io::Result<String> {
+pub fn escrever_artefato(
+    dir: &std::path::Path,
+    pares: &[(String, String)],
+) -> std::io::Result<String> {
     std::fs::create_dir_all(dir)?;
     let mut texto = String::from(CABECALHO);
     texto.push('\n');
     for (p, resposta) in pares {
-        texto.push_str(&format!("@pedido {} {}\n", chave(p), p.replace('\n', "\\n")));
+        texto.push_str(&format!(
+            "@pedido {} {}\n",
+            chave(p),
+            p.replace('\n', "\\n")
+        ));
         texto.push_str(resposta.trim_end());
         texto.push_str("\n@end\n");
     }
@@ -245,7 +281,7 @@ pub fn brier(pares: &[(f64, bool)]) -> f64 {
 mod testes {
     use super::*;
     use crate::ponte::{
-        adequacao_do_espaco, provar_determinismo, validar_saida, Contabilidade, ModeloCongelado,
+        Contabilidade, ModeloCongelado, adequacao_do_espaco, provar_determinismo, validar_saida,
     };
 
     fn temp(nome: &str) -> std::path::PathBuf {
@@ -317,7 +353,10 @@ mod testes {
         let pedidos: Vec<String> = (1..=3).map(|i| pedido(&format!("caso {i}"))).collect();
         let mut contabilidade = Contabilidade::default();
         let (a, b, iguais) = provar_determinismo(&mut runner, &pedidos, &mut contabilidade);
-        assert!(iguais, "o runner devolve o mesmo sha256 nas duas execucoes: {a} contra {b}");
+        assert!(
+            iguais,
+            "o runner devolve o mesmo sha256 nas duas execucoes: {a} contra {b}"
+        );
         assert_eq!(contabilidade.chamadas, 6, "duas execucoes de tres pedidos");
         std::fs::remove_dir_all(&d).ok();
     }
@@ -328,14 +367,24 @@ mod testes {
         escrever_artefato_de_ensaio(&d, &["caso 1"]).expect("escreve");
         let mut runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
         let conhecido = runner.decodificar(&pedido("caso 1"));
-        assert!(validar_saida(&conhecido).is_ok(), "o pedido congelado devolve ficha valida");
+        assert!(
+            validar_saida(&conhecido).is_ok(),
+            "o pedido congelado devolve ficha valida"
+        );
         let desconhecido = runner.decodificar(&pedido("caso 99"));
-        assert!(validar_saida(&desconhecido).is_err(), "pedido sem resposta congela abstencao");
+        assert!(
+            validar_saida(&desconhecido).is_err(),
+            "pedido sem resposta congela abstencao"
+        );
         let mut c = Contabilidade::default();
         let pedidos: Vec<String> = vec![pedido("caso 1"), pedido("caso 99")];
         let ad = adequacao_do_espaco(&mut runner, &pedidos, &mut c);
         assert_eq!(ad.abstencoes, 1, "uma abstencao em dois pedidos");
-        assert!(ad.veredito.contains("NAO serve") || ad.veredito.contains("serve"), "{}", ad.veredito);
+        assert!(
+            ad.veredito.contains("NAO serve") || ad.veredito.contains("serve"),
+            "{}",
+            ad.veredito
+        );
         std::fs::remove_dir_all(&d).ok();
     }
 
@@ -355,10 +404,12 @@ mod testes {
         assert_eq!(runner.sha256(), hash);
         assert_eq!(runner.respostas(), 2);
         let primeira = runner.decodificar(&pares[0].0);
-        assert!(validar_saida(&primeira).is_ok(), "a resposta colhida devolve ficha valida");
+        assert!(
+            validar_saida(&primeira).is_ok(),
+            "a resposta colhida devolve ficha valida"
+        );
         std::fs::remove_dir_all(&d).ok();
     }
-
 
     #[test]
     fn o_artefato_v2_guarda_o_texto_do_pedido_e_o_v1_continua_lendo() {
@@ -390,8 +441,13 @@ mod testes {
     #[test]
     fn o_brier_e_a_regra_propria_fora_do_ajuste() {
         let pares = [(0.9, true), (0.1, false), (0.5, true)];
-        let esperado = ((0.9f64 - 1.0).powi(2) + (0.1f64 - 0.0).powi(2) + (0.5f64 - 1.0).powi(2)) / 3.0;
-        assert!((brier(&pares) - esperado).abs() < 1e-12, "{}", brier(&pares));
+        let esperado =
+            ((0.9f64 - 1.0).powi(2) + (0.1f64 - 0.0).powi(2) + (0.5f64 - 1.0).powi(2)) / 3.0;
+        assert!(
+            (brier(&pares) - esperado).abs() < 1e-12,
+            "{}",
+            brier(&pares)
+        );
         assert!(brier(&[]).is_nan(), "sem par nao ha pontuacao");
     }
 }

@@ -16,3 +16,6 @@ stochology-audit = { path = "../stochology-audit" }
 stochology-drift = { path = "../stochology-drift" }
 stochology-fairness = { path = "../stochology-fairness" }
 stochology-h1 = { path = "../stochology-h1" }
+
+[lints]
+workspace = true

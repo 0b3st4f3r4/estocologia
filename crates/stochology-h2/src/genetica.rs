@@ -45,7 +45,13 @@ pub struct Desenho {
 
 impl Default for Desenho {
     fn default() -> Self {
-        Desenho { mutantes: 40, linhas_por_mutante: 1, individuos_por_linha: 60, permutacoes: 999, alfa: 0.05 }
+        Desenho {
+            mutantes: 40,
+            linhas_por_mutante: 1,
+            individuos_por_linha: 60,
+            permutacoes: 999,
+            alfa: 0.05,
+        }
     }
 }
 
@@ -128,7 +134,11 @@ fn gerar(desenho: Desenho, semente: u64) -> Mundo {
         let efeito_do_mutante = if m == mover_verdadeiro { 0.9 } else { 0.0 };
         let mut linhas = Vec::with_capacity(desenho.linhas_por_mutante);
         for l in 0..desenho.linhas_por_mutante {
-            let efeito_da_linha = if m == artefato_de_linha && l == 0 { 0.9 } else { 0.0 };
+            let efeito_da_linha = if m == artefato_de_linha && l == 0 {
+                0.9
+            } else {
+                0.0
+            };
             let deslocamento = 0.15 * normal(&mut rng);
             let mut individuos = Vec::with_capacity(desenho.individuos_por_linha);
             for _ in 0..desenho.individuos_por_linha {
@@ -140,7 +150,12 @@ fn gerar(desenho: Desenho, semente: u64) -> Mundo {
         }
         fenotipo.push(linhas);
     }
-    Mundo { desenho, fenotipo, mover_verdadeiro, artefato_de_linha }
+    Mundo {
+        desenho,
+        fenotipo,
+        mover_verdadeiro,
+        artefato_de_linha,
+    }
 }
 
 /// O efeito de cada mutante numa linha e o p da linha: a média do mutante contra a distribuição da linha
@@ -222,7 +237,11 @@ pub fn comparar(desenho: Desenho, semente: u64) -> Comparacao {
     Comparacao {
         sem_segunda_linha: sem,
         com_segunda_linha: com,
-        piso_sem: Desenho { linhas_por_mutante: 1, ..desenho }.piso(),
+        piso_sem: Desenho {
+            linhas_por_mutante: 1,
+            ..desenho
+        }
+        .piso(),
         piso_com: desenho.piso_com_a_segunda_linha(),
         alfa_corrigido,
         mover_verdadeiro: mundo.mover_verdadeiro,
@@ -237,8 +256,16 @@ mod testes {
     #[test]
     fn o_piso_cai_com_a_potencia_das_linhas() {
         let d = Desenho::default();
-        let sem = Desenho { linhas_por_mutante: 1, ..d }.piso();
-        let com = Desenho { linhas_por_mutante: 2, ..d }.piso();
+        let sem = Desenho {
+            linhas_por_mutante: 1,
+            ..d
+        }
+        .piso();
+        let com = Desenho {
+            linhas_por_mutante: 2,
+            ..d
+        }
+        .piso();
         assert!((sem - 1.0 / 1000.0).abs() < 1e-12, "piso sem: {sem}");
         assert!((com - 1.0 / 1_000_000.0).abs() < 1e-15, "piso com: {com}");
         assert!(com < sem);
@@ -247,16 +274,41 @@ mod testes {
     #[test]
     fn sem_a_segunda_linha_o_intervalo_e_um_ponto() {
         let c = comparar(Desenho::default(), 2019);
-        assert!(c.sem_segunda_linha.iter().all(|v| v.efeito_por_linha.len() == 1));
-        assert!(c.sem_segunda_linha.iter().all(|v| v.largura_do_intervalo == 0.0));
+        assert!(
+            c.sem_segunda_linha
+                .iter()
+                .all(|v| v.efeito_por_linha.len() == 1)
+        );
+        assert!(
+            c.sem_segunda_linha
+                .iter()
+                .all(|v| v.largura_do_intervalo == 0.0)
+        );
     }
 
     #[test]
     fn com_a_segunda_linha_todo_efeito_tem_intervalo() {
-        let c = comparar(Desenho { linhas_por_mutante: 2, ..Desenho::default() }, 2019);
-        assert!(c.com_segunda_linha.iter().all(|v| v.efeito_por_linha.len() == 2));
-        let com_intervalo = c.com_segunda_linha.iter().filter(|v| v.largura_do_intervalo > 0.0).count();
-        assert!(com_intervalo > c.com_segunda_linha.len() / 2, "quase todos com faixa: {com_intervalo}");
+        let c = comparar(
+            Desenho {
+                linhas_por_mutante: 2,
+                ..Desenho::default()
+            },
+            2019,
+        );
+        assert!(
+            c.com_segunda_linha
+                .iter()
+                .all(|v| v.efeito_por_linha.len() == 2)
+        );
+        let com_intervalo = c
+            .com_segunda_linha
+            .iter()
+            .filter(|v| v.largura_do_intervalo > 0.0)
+            .count();
+        assert!(
+            com_intervalo > c.com_segunda_linha.len() / 2,
+            "quase todos com faixa: {com_intervalo}"
+        );
     }
 
     #[test]
@@ -264,12 +316,21 @@ mod testes {
         let c = comparar(Desenho::default(), 2019);
         let artefato = c.artefato_de_linha;
         let v = &c.sem_segunda_linha[artefato];
-        assert!(v.passa, "o artefato de linha passa na validação de uma linha: {v:?}");
+        assert!(
+            v.passa,
+            "o artefato de linha passa na validação de uma linha: {v:?}"
+        );
     }
 
     #[test]
     fn a_segunda_linha_separa_o_artefato_do_mover() {
-        let c = comparar(Desenho { linhas_por_mutante: 2, ..Desenho::default() }, 2019);
+        let c = comparar(
+            Desenho {
+                linhas_por_mutante: 2,
+                ..Desenho::default()
+            },
+            2019,
+        );
         let artefato = c.artefato_de_linha;
         let mover = c.mover_verdadeiro;
         let a = &c.com_segunda_linha[artefato];

@@ -52,7 +52,11 @@ pub fn ajustar_normal(q25: f64, q50: f64, q75: f64) -> PrioriNormal {
         .zip(qs.iter())
         .map(|(z, q)| (q - (media + dp * z)).abs())
         .fold(0.0_f64, f64::max);
-    PrioriNormal { media, dp, erro_max_quartis }
+    PrioriNormal {
+        media,
+        dp,
+        erro_max_quartis,
+    }
 }
 
 /// Largura 90% elicitada: a distância entre os dois extremos.
@@ -131,11 +135,7 @@ mod testes {
     #[test]
     fn recupera_a_normal_que_gerou_os_quartis() {
         let (media, dp) = (4.5_f64, 1.853_253_2_f64);
-        let p = ajustar_normal(
-            media - Z_QUARTIL * dp,
-            media,
-            media + Z_QUARTIL * dp,
-        );
+        let p = ajustar_normal(media - Z_QUARTIL * dp, media, media + Z_QUARTIL * dp);
         assert!((p.media - media).abs() < 1e-12, "media {}", p.media);
         assert!((p.dp - dp).abs() < 1e-12, "dp {}", p.dp);
         assert!(p.erro_max_quartis < 1e-12, "erro {}", p.erro_max_quartis);
@@ -184,22 +184,43 @@ mod testes {
         let p = ajustar_normal(1.75, 3.25, 4.75);
         // na propria mediana a priori preve 0,50 exatos
         let na_mediana = p_acima_de(p.media, p.media, p.dp);
-        assert!((na_mediana - 0.5).abs() < 1e-7, "P(theta > mediana): {na_mediana}");
+        assert!(
+            (na_mediana - 0.5).abs() < 1e-7,
+            "P(theta > mediana): {na_mediana}"
+        );
         // em 4,5 a priori ajustada preve 0,2870; o especialista declarou 0,29, a 0,003
         let previsto = p_acima_de(4.5, p.media, p.dp);
-        assert!((previsto - 0.2870).abs() < 0.001, "P(theta > 4,5) pela priori: {previsto}");
+        assert!(
+            (previsto - 0.2870).abs() < 0.001,
+            "P(theta > 4,5) pela priori: {previsto}"
+        );
         // a regra dos 0,50 +- 0,10 vale na propria mediana, e la ela fecha exata
-        assert!(ancora_na_mediana_ok(na_mediana), "na propria mediana: {na_mediana}");
+        assert!(
+            ancora_na_mediana_ok(na_mediana),
+            "na propria mediana: {na_mediana}"
+        );
         // em 4,5 nao ha regra de 0,50: o que se le e a coerencia entre o declarado e a propria priori
-        assert!((0.29 - previsto).abs() < 0.01, "o declarado e o previsto batem: {previsto}");
+        assert!(
+            (0.29 - previsto).abs() < 0.01,
+            "o declarado e o previsto batem: {previsto}"
+        );
     }
 
     #[test]
     fn phi_bate_com_a_tabela() {
         // os valores da tabela da normal padrão, item a item
-        for (z, esperado) in [(0.0_f64, 0.5_f64), (0.5, 0.691_462), (1.0, 0.841_345), (1.96, 0.975_002), (-1.0, 0.158_655)] {
+        for (z, esperado) in [
+            (0.0_f64, 0.5_f64),
+            (0.5, 0.691_462),
+            (1.0, 0.841_345),
+            (1.96, 0.975_002),
+            (-1.0, 0.158_655),
+        ] {
             let obtido = phi(z);
-            assert!((obtido - esperado).abs() < 1e-6, "Phi({z}) = {obtido}, tabela {esperado}");
+            assert!(
+                (obtido - esperado).abs() < 1e-6,
+                "Phi({z}) = {obtido}, tabela {esperado}"
+            );
         }
     }
 

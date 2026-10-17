@@ -36,6 +36,11 @@ pub mod planejamento;
 pub mod ponte;
 pub mod runner;
 
+pub use banca::{
+    Autoridade, Avaliador, Bancada, Designacao, EstadoBancada, Fecho, LEITURA_MINIMA, Leitura,
+    Lente, Peca, Recibo, Recusa, Unidade, VETOS_POR_JANELA, Veto, aplicar, atribuir, fechar,
+};
+pub use calibracao::{AMOSTRA_MINIMA, Calibracao, Desfecho, calibrar, ler_desfechos};
 pub use crenca::{EstadoCrenca, PISO, TETO};
 pub use estresse::{
     Atuacao, CrencaDaBanca, ORDEM_DECLARADA, aprender, estressar_deliberativo, estressar_em_ordem,
@@ -44,9 +49,4 @@ pub use hipergrafo::{MundoHipergrafo, Trilha, destino_da_acao, grafo_de_amostra}
 pub use inferencia::{Cadeia, Metropolis, log_beta, log_normal};
 pub use lats::{Decisao, Lats, Mundo, ganancioso};
 pub use planejamento::{Avaliacao, DecisaoDeResolucao, avaliar as avaliar_resolucoes, decidir};
-pub use banca::{
-    Autoridade, Avaliador, Bancada, Designacao, EstadoBancada, Fecho, Leitura, Lente, Peca, Recibo,
-    Recusa, Unidade, Veto, LEITURA_MINIMA, VETOS_POR_JANELA, aplicar, atribuir, fechar,
-};
-pub use calibracao::{Calibracao, Desfecho, AMOSTRA_MINIMA, calibrar, ler_desfechos};
 pub use runner::{RunnerLocal, brier, hash_declarado};

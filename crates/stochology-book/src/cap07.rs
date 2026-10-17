@@ -64,7 +64,6 @@ fn t_test(a: &[f64], b: &[f64]) -> f64 {
     2.0 * (1.0 - cdf_normal(t.abs()))
 }
 
-
 /// Mínimos quadrados com equações normais: devolve beta, (X'X)^-1 e o resíduo médio quadrático.
 fn regressao(colunas: &[Vec<f64>], y: &[f64]) -> Option<(Vec<f64>, Vec<Vec<f64>>, f64)> {
     let k = colunas.len() + 1;
@@ -120,7 +119,9 @@ fn regressao(colunas: &[Vec<f64>], y: &[f64]) -> Option<(Vec<f64>, Vec<Vec<f64>>
             }
         }
     }
-    let inv: Vec<Vec<f64>> = (0..k).map(|i| (0..k).map(|j| aug[i][k + j]).collect()).collect();
+    let inv: Vec<Vec<f64>> = (0..k)
+        .map(|i| (0..k).map(|j| aug[i][k + j]).collect())
+        .collect();
     let beta: Vec<f64> = (0..k)
         .map(|i| (0..k).map(|j| inv[i][j] * b[j]).sum::<f64>())
         .collect();
@@ -149,7 +150,6 @@ fn p_efeito(y: &[f64], x: &[f64], covs: &[&Vec<f64>]) -> Option<f64> {
     Some(2.0 * (1.0 - cdf_normal((beta[1] / se).abs())))
 }
 
-
 /// O jardim dos modelos: 500 candidatos ajustados em ruído puro.
 struct Jardim {
     replicas: usize,
@@ -160,7 +160,12 @@ struct Jardim {
     erro_medio_teste: f64,
 }
 
-fn jardim_de_modelos(semente: u64, replicas: usize, candidatos: usize, preditores: usize) -> Jardim {
+fn jardim_de_modelos(
+    semente: u64,
+    replicas: usize,
+    candidatos: usize,
+    preditores: usize,
+) -> Jardim {
     let mut rng = SplitMix64::novo(semente);
     let (n_treino, n_val, n_teste) = (25usize, 25usize, 25usize);
     let mut val_ganha = 0usize;
@@ -301,7 +306,6 @@ fn fantasma(semente: u64, replicas: usize) -> (f64, f64) {
     )
 }
 
-
 /// O jardim dos caminhos que se bifurcam: liberdades de pesquisador num
 /// experimento sem efeito nenhum. Mede dois jardins: o pequeno (quatro
 /// liberdades, cada uma usada uma vez) e o grande (com parada opcional).
@@ -437,7 +441,6 @@ fn severidade_do_agente(ordinal: u64, cuidado_atendido: bool, semente: u64) -> u
     }
 }
 
-
 pub fn rodar() {
     println!("== Capítulo 7 :: caçando fantasmas no ruído ==");
 
@@ -491,7 +494,10 @@ pub fn rodar() {
     let boa: Vec<u8> = (1..=8)
         .map(|i| severidade_do_agente(i, true, 2026))
         .collect();
-    let pior: u8 = (1..=8).map(|i| severidade_do_agente(i, false, 2026)).min().unwrap();
+    let pior: u8 = (1..=8)
+        .map(|i| severidade_do_agente(i, false, 2026))
+        .min()
+        .unwrap();
     println!(
         "banca A1-A8 com a semente 2026, ficha com os oito cuidados: severidades {:?}, piso 6, aprovada = {}",
         boa,
@@ -517,4 +523,3 @@ mod testes {
         assert!(c.grande > c.pequeno && c.pequeno > c.pre_registrado);
     }
 }
-

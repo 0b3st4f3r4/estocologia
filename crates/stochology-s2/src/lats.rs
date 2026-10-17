@@ -29,7 +29,12 @@ pub struct Lats {
 
 impl Default for Lats {
     fn default() -> Self {
-        Lats { profundidade: 3, orcamento: 40, exploracao: 1.0, semente: 2026 }
+        Lats {
+            profundidade: 3,
+            orcamento: 40,
+            exploracao: 1.0,
+            semente: 2026,
+        }
     }
 }
 
@@ -80,7 +85,11 @@ impl Lats {
             .map(|(i, e)| (i, *e))?;
         Some(Decisao {
             acao: acoes[indice].clone(),
-            valor: if visitas == 0 { 0.0 } else { soma / visitas as f64 },
+            valor: if visitas == 0 {
+                0.0
+            } else {
+                soma / visitas as f64
+            },
             nos_visitados: visitas as usize,
             trilha: vec![acoes[indice].clone()],
         })
@@ -94,7 +103,12 @@ pub fn ganancioso<M: Mundo>(mundo: &M, raiz: &str) -> Option<Decisao> {
     for acao in acoes {
         let estado = mundo.passo(raiz, &acao);
         let valor = mundo.avaliar(&estado);
-        let candidata = Decisao { acao, valor, nos_visitados: 1, trilha: Vec::new() };
+        let candidata = Decisao {
+            acao,
+            valor,
+            nos_visitados: 1,
+            trilha: Vec::new(),
+        };
         if melhor.as_ref().map(|m| valor > m.valor).unwrap_or(true) {
             melhor = Some(candidata);
         }
@@ -144,12 +158,22 @@ mod testes {
     #[test]
     fn a_deliberacao_bate_o_ganancioso() {
         let mundo = DoisCaminhos;
-        let lats = Lats { profundidade: 2, orcamento: 40, exploracao: 1.0, semente: 2026 };
+        let lats = Lats {
+            profundidade: 2,
+            orcamento: 40,
+            exploracao: 1.0,
+            semente: 2026,
+        };
         let decisao = lats.deliberar(&mundo, "raiz").expect("decide");
         let guloso = ganancioso(&mundo, "raiz").expect("decide");
         assert_eq!(guloso.acao, "imediato");
         assert_eq!(decisao.acao, "adiado");
-        assert!(decisao.valor > guloso.valor, "{} contra {}", decisao.valor, guloso.valor);
+        assert!(
+            decisao.valor > guloso.valor,
+            "{} contra {}",
+            decisao.valor,
+            guloso.valor
+        );
     }
 
     #[test]
@@ -159,7 +183,9 @@ mod testes {
         let primeira = lats.deliberar(&mundo, "raiz").expect("decide");
         let segunda = lats.deliberar(&mundo, "raiz").expect("decide");
         assert_eq!(primeira, segunda);
-        let outra = Lats { semente: 7, ..lats }.deliberar(&mundo, "raiz").expect("decide");
+        let outra = Lats { semente: 7, ..lats }
+            .deliberar(&mundo, "raiz")
+            .expect("decide");
         assert_eq!(outra.acao, primeira.acao);
     }
 
@@ -167,10 +193,18 @@ mod testes {
     fn mundo_sem_acao_nao_decide() {
         struct Vazio;
         impl Mundo for Vazio {
-            fn acoes(&self, _: &str) -> Vec<String> { Vec::new() }
-            fn passo(&self, e: &str, _: &str) -> String { e.to_string() }
-            fn avaliar(&self, _: &str) -> f64 { 0.0 }
-            fn terminal(&self, _: &str) -> bool { true }
+            fn acoes(&self, _: &str) -> Vec<String> {
+                Vec::new()
+            }
+            fn passo(&self, e: &str, _: &str) -> String {
+                e.to_string()
+            }
+            fn avaliar(&self, _: &str) -> f64 {
+                0.0
+            }
+            fn terminal(&self, _: &str) -> bool {
+                true
+            }
         }
         assert!(Lats::default().deliberar(&Vazio, "raiz").is_none());
         assert!(ganancioso(&Vazio, "raiz").is_none());

@@ -26,12 +26,16 @@ fn uso_e_abortar(programa: &str) -> ! {
     eprintln!("Uso:");
     eprintln!("  {programa} --conferir <fonte_inferencias.tsv> <fonte_desfechos.tsv>");
     eprintln!("  {programa} --registrar <medida.txt> <rodadas.tsv> --data AAAA-MM-DD");
-    eprintln!("  {programa} <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>");
+    eprintln!(
+        "  {programa} <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>"
+    );
     eprintln!();
     eprintln!("Argumentos:");
     eprintln!("  dir_pesos                destino do artefato (ex.: fundo/p20-jev/pesos)");
     eprintln!("  fonte_inferencias.tsv    linhas pedido-TAB-resposta, uma por caso congelado");
-    eprintln!("  dir_calibracao           destino do conjunto rotulado (ex.: fundo/p20-jev/calibracao)");
+    eprintln!(
+        "  dir_calibracao           destino do conjunto rotulado (ex.: fundo/p20-jev/calibracao)"
+    );
     eprintln!("  fonte_desfechos.tsv      linhas caso_id-TAB-prob-TAB-desfecho-TAB-fonte");
     eprintln!();
     eprintln!("Nada e escrito no destino antes de o ensaio passar nos portoes da ponte.");
@@ -46,7 +50,10 @@ fn morrer(mensagem: String) -> ! {
 /// Le as inferencias congeladas, com dois campos e nenhum vazio.
 fn ler_inferencias(caminho: &Path) -> Vec<(String, String)> {
     let conteudo = std::fs::read_to_string(caminho).unwrap_or_else(|e| {
-        morrer(format!("Erro ao abrir fonte de inferencias {}: {e}", caminho.display()))
+        morrer(format!(
+            "Erro ao abrir fonte de inferencias {}: {e}",
+            caminho.display()
+        ))
     });
     let mut pares = Vec::new();
     for (i, linha) in conteudo.lines().enumerate() {
@@ -64,7 +71,11 @@ fn ler_inferencias(caminho: &Path) -> Vec<(String, String)> {
             ));
         }
         if campos[0].trim().is_empty() || campos[1].trim().is_empty() {
-            morrer(format!("Erro na linha {} de {}: campo vazio", i + 1, caminho.display()));
+            morrer(format!(
+                "Erro na linha {} de {}: campo vazio",
+                i + 1,
+                caminho.display()
+            ));
         }
         // A resposta pode ter mais de uma linha (o documento canonico da ficha tem). Na fonte, que e
         // linha a linha, a quebra vem escapada como a sequencia de dois caracteres barra-n, e o ingestor
@@ -87,7 +98,10 @@ fn ler_inferencias(caminho: &Path) -> Vec<(String, String)> {
 /// Le os desfechos, com as regras da frente aplicadas antes de qualquer escrita.
 fn ler_desfechos(caminho: &Path) -> Vec<(String, f64, bool, String)> {
     let conteudo = std::fs::read_to_string(caminho).unwrap_or_else(|e| {
-        morrer(format!("Erro ao abrir fonte de desfechos {}: {e}", caminho.display()))
+        morrer(format!(
+            "Erro ao abrir fonte de desfechos {}: {e}",
+            caminho.display()
+        ))
     });
     let mut pares = Vec::new();
     for (i, linha) in conteudo.lines().enumerate() {
@@ -105,10 +119,18 @@ fn ler_desfechos(caminho: &Path) -> Vec<(String, f64, bool, String)> {
             ));
         }
         if campos[0].trim().is_empty() || campos[3].trim().is_empty() {
-            morrer(format!("Erro na linha {} de {}: caso_id ou fonte vazio", i + 1, caminho.display()));
+            morrer(format!(
+                "Erro na linha {} de {}: caso_id ou fonte vazio",
+                i + 1,
+                caminho.display()
+            ));
         }
         let prob: f64 = campos[1].trim().parse().unwrap_or_else(|_| {
-            morrer(format!("Linha {}: probabilidade invalida '{}'", i + 1, campos[1]))
+            morrer(format!(
+                "Linha {}: probabilidade invalida '{}'",
+                i + 1,
+                campos[1]
+            ))
         });
         if !(0.0 < prob && prob < 1.0) {
             morrer(format!(
@@ -119,9 +141,18 @@ fn ler_desfechos(caminho: &Path) -> Vec<(String, f64, bool, String)> {
         let desfecho = match campos[2].trim() {
             "0" => false,
             "1" => true,
-            outro => morrer(format!("Linha {}: desfecho '{}' nao e 0 nem 1", i + 1, outro)),
+            outro => morrer(format!(
+                "Linha {}: desfecho '{}' nao e 0 nem 1",
+                i + 1,
+                outro
+            )),
         };
-        pares.push((campos[0].trim().to_string(), prob, desfecho, campos[3].trim().to_string()));
+        pares.push((
+            campos[0].trim().to_string(),
+            prob,
+            desfecho,
+            campos[3].trim().to_string(),
+        ));
     }
     if pares.is_empty() {
         morrer(format!("{} nao tem nenhum desfecho", caminho.display()));
@@ -139,9 +170,15 @@ fn dir_de_ensaio(rotulo: &str) -> PathBuf {
 fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
     println!("== Conferencia das fontes (fase 1), sem escrita em destino ==");
     let inferencias = ler_inferencias(fonte_inferencias);
-    println!("  inferencias: {} pares pedido/resposta, com os dois campos", inferencias.len());
+    println!(
+        "  inferencias: {} pares pedido/resposta, com os dois campos",
+        inferencias.len()
+    );
     let desfechos = ler_desfechos(fonte_desfechos);
-    println!("  desfechos: {} pares, com p em (0, 1), desfecho 0 ou 1 e fonte declarada", desfechos.len());
+    println!(
+        "  desfechos: {} pares, com p em (0, 1), desfecho 0 ou 1 e fonte declarada",
+        desfechos.len()
+    );
     let ensaio_pesos = dir_de_ensaio("conf-pesos");
     let ensaio_cal = dir_de_ensaio("conf-cal");
     runner::escrever_artefato(&ensaio_pesos, &inferencias)
@@ -154,7 +191,11 @@ fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
         .unwrap_or_else(|e| morrer(format!("O conjunto de ensaio nao passa no portao: {e:?}")));
     std::fs::remove_dir_all(&ensaio_pesos).ok();
     std::fs::remove_dir_all(&ensaio_cal).ok();
-    println!("  artefato de ensaio: {} respostas, hash {}", artefato.respostas(), artefato.sha256());
+    println!(
+        "  artefato de ensaio: {} respostas, hash {}",
+        artefato.respostas(),
+        artefato.sha256()
+    );
     // O esquema e cobrado aqui, pelo parser de verdade: o que nao passa vira abstencao na ponte, e e melhor
     // descobrir na fase 1 do que na leitura do instrumento.
     let mut fora = 0usize;
@@ -180,7 +221,11 @@ fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
     println!(
         "  criterio de volume (N >= {}): {}",
         calibracao::AMOSTRA_MINIMA,
-        if volume { "cumprido" } else { "NAO cumprido, o escore nao sera publicado" }
+        if volume {
+            "cumprido"
+        } else {
+            "NAO cumprido, o escore nao sera publicado"
+        }
     );
     println!("  nenhum destino foi tocado.");
     if !volume || fora > 0 {
@@ -205,7 +250,9 @@ fn registrar(ficha: &Path, rodadas: &Path, data: &str) {
         destino.push_str(cabecalho);
     }
     if destino.contains(&linha) {
-        morrer(String::from("esta rodada ja esta no registro: a linha existe"));
+        morrer(String::from(
+            "esta rodada ja esta no registro: a linha existe",
+        ));
     }
     destino.push_str(&linha);
     destino.push('\n');
@@ -235,18 +282,29 @@ fn main() {
 
     println!("== Ingestao de artefatos Jev-LLM (item 13) ==");
 
-    println!("\n[1/3] Lendo inferencias de {}...", fonte_inferencias.display());
+    println!(
+        "\n[1/3] Lendo inferencias de {}...",
+        fonte_inferencias.display()
+    );
     let inferencias = ler_inferencias(fonte_inferencias);
-    println!("  {} pares pedido/resposta, todos com os dois campos", inferencias.len());
+    println!(
+        "  {} pares pedido/resposta, todos com os dois campos",
+        inferencias.len()
+    );
 
-    println!("\n[2/3] Lendo desfechos de {}...", fonte_desfechos.display());
+    println!(
+        "\n[2/3] Lendo desfechos de {}...",
+        fonte_desfechos.display()
+    );
     let desfechos = ler_desfechos(fonte_desfechos);
     println!(
         "  {} pares rotulados, com probabilidade em (0, 1), desfecho 0 ou 1 e fonte declarada",
         desfechos.len()
     );
 
-    println!("\n[3/3] Ensaio antes de persistir: os dois arquivos vao a um diretorio temporario e voltam pelos portoes");
+    println!(
+        "\n[3/3] Ensaio antes de persistir: os dois arquivos vao a um diretorio temporario e voltam pelos portoes"
+    );
     let ensaio_pesos = dir_de_ensaio("pesos");
     let ensaio_cal = dir_de_ensaio("calibracao");
     runner::escrever_artefato(&ensaio_pesos, &inferencias)
@@ -260,8 +318,9 @@ fn main() {
     );
     calibracao::escrever_desfechos(&ensaio_cal, &desfechos)
         .unwrap_or_else(|e| morrer(format!("Falha ao escrever o conjunto de ensaio: {e}")));
-    let conferido = calibracao::carregar(&ensaio_cal.to_string_lossy(), 0, calibracao::AMOSTRA_MINIMA)
-        .unwrap_or_else(|e| morrer(format!("O conjunto de ensaio nao passa no portao: {e:?}")));
+    let conferido =
+        calibracao::carregar(&ensaio_cal.to_string_lossy(), 0, calibracao::AMOSTRA_MINIMA)
+            .unwrap_or_else(|e| morrer(format!("O conjunto de ensaio nao passa no portao: {e:?}")));
     println!("  conjunto rotulado: {}", conferido.leitura());
     std::fs::remove_dir_all(&ensaio_pesos).ok();
     std::fs::remove_dir_all(&ensaio_cal).ok();
@@ -269,10 +328,16 @@ fn main() {
     println!("\nPersistindo nos destinos declarados...");
     let hash_pesos = runner::escrever_artefato(dir_pesos, &inferencias)
         .unwrap_or_else(|e| morrer(format!("Falha em runner::escrever_artefato: {e}")));
-    println!("  {} -> modelo.congelado + SHA256 ({hash_pesos})", dir_pesos.display());
+    println!(
+        "  {} -> modelo.congelado + SHA256 ({hash_pesos})",
+        dir_pesos.display()
+    );
     let hash_cal = calibracao::escrever_desfechos(dir_calibracao, &desfechos)
         .unwrap_or_else(|e| morrer(format!("Falha em calibracao::escrever_desfechos: {e}")));
-    println!("  {} -> desfechos.tsv + SHA256 ({hash_cal})", dir_calibracao.display());
+    println!(
+        "  {} -> desfechos.tsv + SHA256 ({hash_cal})",
+        dir_calibracao.display()
+    );
 
     println!("\nPronto. Conferir os lacres e rodar o instrumento:");
     println!("  (cd {} && sha256sum -c SHA256)", dir_pesos.display());

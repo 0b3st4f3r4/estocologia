@@ -50,7 +50,6 @@ fn quantil(ordenadas: &[f64], q: f64) -> f64 {
     ordenadas[i] * (1.0 - frac) + ordenadas[j] * frac
 }
 
-
 /// Simula o posto: um servidor com taxa mu pacientes/hora, dia de 10 horas
 /// começando vazio, e uma taxa de chegada que pode mudar de dia para dia.
 fn simular<F, G>(semente: u64, n_dias: usize, horas_por_dia: f64, mu_de: G, lambda_de: F) -> Medida
@@ -113,7 +112,6 @@ fn desvio(xs: &[f64]) -> f64 {
     variancia(xs).sqrt()
 }
 
-
 /// O nulo de metades: reparte os dias ao acaso em duas metades e mede o desvio
 /// da diferença entre as médias (Φ2 do livro).
 fn nulo_de_metades(m: &Medida, semente: u64) -> f64 {
@@ -151,10 +149,7 @@ pub fn rodar() {
     let e_f_bimodal = 0.5 * w_formula(5.0, mu) + 0.5 * w_formula(11.0, mu);
     let var_bimodal = 9.0;
     let var_uniforme = 3.0;
-    let e_f_uniforme = (5..=10)
-        .map(|i| w_formula(i as f64 + 0.5, mu))
-        .sum::<f64>()
-        / 6.0;
+    let e_f_uniforme = (5..=10).map(|i| w_formula(i as f64 + 0.5, mu)).sum::<f64>() / 6.0;
     let f2 = 120.0 / (mu - 8.0).powi(3);
     println!(
         "Jensen: f(E[X]) = {:.2} min | E[f(X)] = {:.2} (5 ou 11) e {:.2} (uniforme 5..11)",
@@ -177,7 +172,13 @@ pub fn rodar() {
         |_| mu,
         |d| if d % 2 == 0 { 5.0 } else { 11.0 },
     );
-    let uniforme = simular(semente, dias, horas, |_| mu, |d| 5.0 + ((d * 7919) % 7) as f64);
+    let uniforme = simular(
+        semente,
+        dias,
+        horas,
+        |_| mu,
+        |d| 5.0 + ((d * 7919) % 7) as f64,
+    );
     let reforco = simular(
         semente,
         dias,
@@ -197,7 +198,6 @@ pub fn rodar() {
             nome, m.pacientes, m.espera_media_min, m.mediana_min, m.p90_min, m.acima_30_por_100
         );
     }
-
 
     let surto: Vec<f64> = bimodal
         .dias
@@ -236,7 +236,11 @@ pub fn rodar() {
         };
         println!(
             "nulo de metades no mundo {:>11}: desvio medido {:.3} min | margem por dia {:.3} | por paciente {:.3} | variancia da espera {:.0} min^2",
-            nome, nulo, margem_dia, margem_paciente, variancia(&m.esperas)
+            nome,
+            nulo,
+            margem_dia,
+            margem_paciente,
+            variancia(&m.esperas)
         );
     }
     println!(
@@ -248,7 +252,6 @@ pub fn rodar() {
         "mediana do mundo 5 ou 11 = {:.1} min, contra a espera media de {:.1} min do mundo constante",
         bimodal.mediana_min, constante.espera_media_min
     );
-
 
     let mut rng = SplitMix64::novo(1909);
     let mut soma = 0.0;
@@ -281,9 +284,14 @@ mod testes {
     #[test]
     fn jensen_na_fila_varia_acima_da_constante() {
         let constante = simular(1909, 200, 10.0, |_| 12.0, |_| 8.0);
-        let variavel = simular(1909, 200, 10.0, |_| 12.0, |d| if d % 2 == 0 { 5.0 } else { 11.0 });
+        let variavel = simular(
+            1909,
+            200,
+            10.0,
+            |_| 12.0,
+            |d| if d % 2 == 0 { 5.0 } else { 11.0 },
+        );
         assert!(variavel.espera_media_min > constante.espera_media_min);
         assert!((w_formula(8.0, 12.0) - 10.0).abs() < 1e-9);
     }
 }
-

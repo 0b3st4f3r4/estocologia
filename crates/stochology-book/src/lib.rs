@@ -4,11 +4,11 @@
 //! fixa, e pode ser reproduzido pelo comando ~labs --cap N~.
 
 pub mod banco;
-pub mod ensaio;
 pub mod cap01;
+pub mod ensaio;
+pub mod escuta;
 pub mod fila;
 pub mod genetica;
-pub mod escuta;
 pub mod ponte;
 pub mod segunda;
 

@@ -48,7 +48,13 @@ pub enum Calibracao {
     /// Ha dado, e nao ha amostra para publicar escore.
     AmostraInsuficiente { n: usize, minimo: usize },
     /// O escore condicional, com a abstencao ao lado.
-    Escore { n: usize, brier: f64, ece: f64, abstencoes: usize, taxa_de_abstencao: f64 },
+    Escore {
+        n: usize,
+        brier: f64,
+        ece: f64,
+        abstencoes: usize,
+        taxa_de_abstencao: f64,
+    },
 }
 
 impl Calibracao {
@@ -63,13 +69,19 @@ impl Calibracao {
     /// A leitura em uma linha, para o instrumento imprimir.
     pub fn leitura(&self) -> String {
         match self {
-            Calibracao::Vazia => {
-                String::from("sem conjunto rotulado: nenhum par (probabilidade, desfecho), Brier nao publicado")
-            }
+            Calibracao::Vazia => String::from(
+                "sem conjunto rotulado: nenhum par (probabilidade, desfecho), Brier nao publicado",
+            ),
             Calibracao::AmostraInsuficiente { n, minimo } => format!(
                 "AmostraInsuficiente: {n} pares, minimo declarado de {minimo}; o escore nao e publicado"
             ),
-            Calibracao::Escore { n, brier, ece, abstencoes, taxa_de_abstencao } => format!(
+            Calibracao::Escore {
+                n,
+                brier,
+                ece,
+                abstencoes,
+                taxa_de_abstencao,
+            } => format!(
                 "Brier {brier:.6} e ECE {ece:.6} em {BALDES_ECE} baldes sobre {n} pares | abstencoes {abstencoes} ({:.1}%) fora do denominador",
                 taxa_de_abstencao * 100.0
             ),
@@ -114,12 +126,14 @@ pub fn ler_desfechos(caminho: &str) -> Result<Vec<Desfecho>, Recusa> {
         }
         let caso_id = campos[1].trim().to_string();
         if caso_id.is_empty() {
-            return Err(Recusa::ArtefatoIlegivel(format!("caso_id vazio na linha {}", i + 2)));
+            return Err(Recusa::ArtefatoIlegivel(format!(
+                "caso_id vazio na linha {}",
+                i + 2
+            )));
         }
-        let probabilidade: f64 = campos[2]
-            .trim()
-            .parse()
-            .map_err(|_| Recusa::ArtefatoIlegivel(format!("probabilidade invalida na linha {}", i + 2)))?;
+        let probabilidade: f64 = campos[2].trim().parse().map_err(|_| {
+            Recusa::ArtefatoIlegivel(format!("probabilidade invalida na linha {}", i + 2))
+        })?;
         if !(0.0 < probabilidade && probabilidade < 1.0) {
             return Err(Recusa::ExtremoDogmatico(format!(
                 "probabilidade {probabilidade} na linha {}",
@@ -133,20 +147,32 @@ pub fn ler_desfechos(caminho: &str) -> Result<Vec<Desfecho>, Recusa> {
                 return Err(Recusa::ArtefatoIlegivel(format!(
                     "desfecho {outro:?} na linha {}",
                     i + 2
-                )))
+                )));
             }
         };
         let fonte = campos[4].trim().to_string();
         if fonte.is_empty() {
-            return Err(Recusa::ArtefatoIlegivel(format!("fonte vazia na linha {}", i + 2)));
+            return Err(Recusa::ArtefatoIlegivel(format!(
+                "fonte vazia na linha {}",
+                i + 2
+            )));
         }
-        saida.push(Desfecho { id, caso_id, probabilidade, desfecho, fonte });
+        saida.push(Desfecho {
+            id,
+            caso_id,
+            probabilidade,
+            desfecho,
+            fonte,
+        });
     }
     Ok(saida)
 }
 
 /// Escreve o conjunto rotulado e o seu `SHA256`, no mesmo padrao do artefato dos pesos.
-pub fn escrever_desfechos(dir: &Path, linhas: &[(String, f64, bool, String)]) -> std::io::Result<String> {
+pub fn escrever_desfechos(
+    dir: &Path,
+    linhas: &[(String, f64, bool, String)],
+) -> std::io::Result<String> {
     std::fs::create_dir_all(dir)?;
     let mut texto = String::from(CABECALHO);
     texto.push('\n');
@@ -164,8 +190,13 @@ pub fn escrever_desfechos(dir: &Path, linhas: &[(String, f64, bool, String)]) ->
     let caminho = dir.join(ARQUIVO);
     std::fs::write(&caminho, texto.as_bytes())?;
     let hash = stochology_audit::sha256_hex(texto.as_bytes());
-    std::fs::write(dir.join("SHA256"), format!("{hash}  {ARQUIVO}
-"))?;
+    std::fs::write(
+        dir.join("SHA256"),
+        format!(
+            "{hash}  {ARQUIVO}
+"
+        ),
+    )?;
     Ok(hash)
 }
 
@@ -178,14 +209,23 @@ pub fn calibrar(desfechos: &[Desfecho], abstencoes: usize, minimo: usize) -> Cal
     if n < minimo {
         return Calibracao::AmostraInsuficiente { n, minimo };
     }
-    let pares: Vec<(f64, bool)> = desfechos.iter().map(|d| (d.probabilidade, d.desfecho)).collect();
+    let pares: Vec<(f64, bool)> = desfechos
+        .iter()
+        .map(|d| (d.probabilidade, d.desfecho))
+        .collect();
     let brier = crate::runner::brier(&pares);
     let confianca: Vec<f64> = pares.iter().map(|(p, _)| *p).collect();
     let acerto: Vec<bool> = pares.iter().map(|(_, y)| *y).collect();
     let ece = stochology_h3::ece(&confianca, &acerto, BALDES_ECE);
     let total = n + abstencoes;
     let taxa_de_abstencao = abstencoes as f64 / total.max(1) as f64;
-    Calibracao::Escore { n, brier, ece, abstencoes, taxa_de_abstencao }
+    Calibracao::Escore {
+        n,
+        brier,
+        ece,
+        abstencoes,
+        taxa_de_abstencao,
+    }
 }
 
 /// Carrega o conjunto rotulado com o hash declarado conferido antes, como no artefato dos pesos.
@@ -227,7 +267,10 @@ mod testes {
         match calibrar(&desfechos, 0, 1) {
             Calibracao::Escore { brier, n, .. } => {
                 assert_eq!(n, 3);
-                assert!((brier - esperado).abs() < 1e-12, "{brier} contra {esperado}");
+                assert!(
+                    (brier - esperado).abs() < 1e-12,
+                    "{brier} contra {esperado}"
+                );
             }
             outro => panic!("esperava escore: {outro:?}"),
         }
@@ -277,7 +320,11 @@ mod testes {
         let cal = calibrar(&[], 0, AMOSTRA_MINIMA);
         assert_eq!(cal, Calibracao::Vazia);
         assert!(cal.escore().is_none(), "sem par, nenhum escore");
-        assert!(cal.leitura().contains("Brier nao publicado"), "{}", cal.leitura());
+        assert!(
+            cal.leitura().contains("Brier nao publicado"),
+            "{}",
+            cal.leitura()
+        );
     }
 
     #[test]
@@ -287,10 +334,16 @@ mod testes {
         let desfechos = ler_desfechos(&d.join(ARQUIVO).to_string_lossy()).expect("le");
         let cal = calibrar(&desfechos, 0, AMOSTRA_MINIMA);
         match &cal {
-            Calibracao::AmostraInsuficiente { n, minimo } => assert_eq!((*n, *minimo), (3, AMOSTRA_MINIMA)),
+            Calibracao::AmostraInsuficiente { n, minimo } => {
+                assert_eq!((*n, *minimo), (3, AMOSTRA_MINIMA))
+            }
             outro => panic!("esperava amostra insuficiente: {outro:?}"),
         }
-        assert!(cal.leitura().contains("AmostraInsuficiente"), "{}", cal.leitura());
+        assert!(
+            cal.leitura().contains("AmostraInsuficiente"),
+            "{}",
+            cal.leitura()
+        );
         std::fs::remove_dir_all(&d).ok();
     }
 
@@ -301,17 +354,28 @@ mod testes {
         let desfechos = ler_desfechos(&d.join(ARQUIVO).to_string_lossy()).expect("le");
         let sem = calibrar(&desfechos, 0, 1);
         let com = calibrar(&desfechos, 1, 1);
-        assert_eq!(sem.escore(), com.escore(), "a abstencao nao muda o escore condicional");
+        assert_eq!(
+            sem.escore(),
+            com.escore(),
+            "a abstencao nao muda o escore condicional"
+        );
         match com {
-            Calibracao::Escore { abstencoes, taxa_de_abstencao, n, .. } => {
+            Calibracao::Escore {
+                abstencoes,
+                taxa_de_abstencao,
+                n,
+                ..
+            } => {
                 assert_eq!((n, abstencoes), (3, 1));
-                assert!((taxa_de_abstencao - 0.25).abs() < 1e-12, "{taxa_de_abstencao}");
+                assert!(
+                    (taxa_de_abstencao - 0.25).abs() < 1e-12,
+                    "{taxa_de_abstencao}"
+                );
             }
             outro => panic!("esperava escore: {outro:?}"),
         }
         std::fs::remove_dir_all(&d).ok();
     }
-
 
     #[test]
     fn o_ece_usa_a_regra_do_h3_e_os_baldes_declarados() {
@@ -345,14 +409,21 @@ mod testes {
             outro => panic!("esperava escore: {outro:?}"),
         }
         assert_eq!(BALDES_ECE, 10, "baldes declarados");
-        assert!(calibrar(&[], 0, 1).leitura().contains("Brier nao publicado"));
+        assert!(
+            calibrar(&[], 0, 1)
+                .leitura()
+                .contains("Brier nao publicado")
+        );
     }
 
     #[test]
     fn o_portao_do_hash_vale_para_o_conjunto_rotulado() {
         let d = temp("hash");
         escrever_desfechos(&d, &tres()).expect("escreve");
-        assert!(carregar(&d.to_string_lossy(), 0, 1).is_ok(), "com hash declarado, carrega");
+        assert!(
+            carregar(&d.to_string_lossy(), 0, 1).is_ok(),
+            "com hash declarado, carrega"
+        );
         let caminho = d.join(ARQUIVO);
         let mut texto = std::fs::read_to_string(&caminho).expect("le");
         texto.push_str("4\tC-004\t0.3000\t0\tfonte\n");

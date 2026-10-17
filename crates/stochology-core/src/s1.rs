@@ -59,6 +59,10 @@ pub const TETO: f64 = 0.99;
 /// Abaixo disso o que casou é ruído (`de`, `a`, `em`) e o casamento é descartado.
 pub const TEMA_MINIMO: usize = 4;
 
+// O portao de tema so faz sentido se o minimo for maior que zero: com 1 ou 2, qualquer
+// preposicao sustentaria categoria. A prova e de compilacao, nao de teste.
+const _: () = assert!(TEMA_MINIMO >= 4);
+
 /// Nome do rótulo de ausência de evidência.
 const ROTULO_OUTROS: &str = "outros";
 
@@ -224,46 +228,151 @@ struct Tema {
 /// Só entra aqui o que é verificável à mão: tema curto, em minúsculas, sem acento, sem espaço.
 const VOCABULARIO: [Tema; 35] = [
     // fila — espera e saturação de serviço
-    Tema { texto: "fila", categoria: Categoria::Fila },
-    Tema { texto: "espera", categoria: Categoria::Fila },
-    Tema { texto: "atraso", categoria: Categoria::Fila },
-    Tema { texto: "servico", categoria: Categoria::Fila },
-    Tema { texto: "posto", categoria: Categoria::Fila },
-    Tema { texto: "demanda", categoria: Categoria::Fila },
+    Tema {
+        texto: "fila",
+        categoria: Categoria::Fila,
+    },
+    Tema {
+        texto: "espera",
+        categoria: Categoria::Fila,
+    },
+    Tema {
+        texto: "atraso",
+        categoria: Categoria::Fila,
+    },
+    Tema {
+        texto: "servico",
+        categoria: Categoria::Fila,
+    },
+    Tema {
+        texto: "posto",
+        categoria: Categoria::Fila,
+    },
+    Tema {
+        texto: "demanda",
+        categoria: Categoria::Fila,
+    },
     // causal — intervenção e identificação
-    Tema { texto: "causal", categoria: Categoria::Causal },
-    Tema { texto: "causa", categoria: Categoria::Causal },
-    Tema { texto: "efeito", categoria: Categoria::Causal },
-    Tema { texto: "tratamento", categoria: Categoria::Causal },
-    Tema { texto: "intervencao", categoria: Categoria::Causal },
-    Tema { texto: "contrafactual", categoria: Categoria::Causal },
-    Tema { texto: "identificacao", categoria: Categoria::Causal },
+    Tema {
+        texto: "causal",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "causa",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "efeito",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "tratamento",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "intervencao",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "contrafactual",
+        categoria: Categoria::Causal,
+    },
+    Tema {
+        texto: "identificacao",
+        categoria: Categoria::Causal,
+    },
     // cauda — evento raro, variância, cauda pesada
-    Tema { texto: "cauda", categoria: Categoria::Cauda },
-    Tema { texto: "raro", categoria: Categoria::Cauda },
-    Tema { texto: "extremo", categoria: Categoria::Cauda },
-    Tema { texto: "variancia", categoria: Categoria::Cauda },
-    Tema { texto: "volatilidade", categoria: Categoria::Cauda },
-    Tema { texto: "media", categoria: Categoria::Cauda },
+    Tema {
+        texto: "cauda",
+        categoria: Categoria::Cauda,
+    },
+    Tema {
+        texto: "raro",
+        categoria: Categoria::Cauda,
+    },
+    Tema {
+        texto: "extremo",
+        categoria: Categoria::Cauda,
+    },
+    Tema {
+        texto: "variancia",
+        categoria: Categoria::Cauda,
+    },
+    Tema {
+        texto: "volatilidade",
+        categoria: Categoria::Cauda,
+    },
+    Tema {
+        texto: "media",
+        categoria: Categoria::Cauda,
+    },
     // calibracao — verificação do tamanho da incerteza
-    Tema { texto: "calibracao", categoria: Categoria::Calibracao },
-    Tema { texto: "cobertura", categoria: Categoria::Calibracao },
-    Tema { texto: "posto", categoria: Categoria::Calibracao },
-    Tema { texto: "probabilidade", categoria: Categoria::Calibracao },
-    Tema { texto: "brier", categoria: Categoria::Calibracao },
-    Tema { texto: "platt", categoria: Categoria::Calibracao },
+    Tema {
+        texto: "calibracao",
+        categoria: Categoria::Calibracao,
+    },
+    Tema {
+        texto: "cobertura",
+        categoria: Categoria::Calibracao,
+    },
+    Tema {
+        texto: "posto",
+        categoria: Categoria::Calibracao,
+    },
+    Tema {
+        texto: "probabilidade",
+        categoria: Categoria::Calibracao,
+    },
+    Tema {
+        texto: "brier",
+        categoria: Categoria::Calibracao,
+    },
+    Tema {
+        texto: "platt",
+        categoria: Categoria::Calibracao,
+    },
     // justica — quem paga pelo erro
-    Tema { texto: "justica", categoria: Categoria::Justica },
-    Tema { texto: "equidade", categoria: Categoria::Justica },
-    Tema { texto: "subgrupo", categoria: Categoria::Justica },
-    Tema { texto: "grupo", categoria: Categoria::Justica },
-    Tema { texto: "paga", categoria: Categoria::Justica },
-    Tema { texto: "erro", categoria: Categoria::Justica },
-    Tema { texto: "etica", categoria: Categoria::Justica },
+    Tema {
+        texto: "justica",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "equidade",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "subgrupo",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "grupo",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "paga",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "erro",
+        categoria: Categoria::Justica,
+    },
+    Tema {
+        texto: "etica",
+        categoria: Categoria::Justica,
+    },
     // outros — o próprio vocabulário da ausência declarada
-    Tema { texto: "outros", categoria: Categoria::Outros },
-    Tema { texto: "indefinida", categoria: Categoria::Outros },
-    Tema { texto: "generica", categoria: Categoria::Outros },
+    Tema {
+        texto: "outros",
+        categoria: Categoria::Outros,
+    },
+    Tema {
+        texto: "indefinida",
+        categoria: Categoria::Outros,
+    },
+    Tema {
+        texto: "generica",
+        categoria: Categoria::Outros,
+    },
 ];
 
 /// Palavras vazias: normalizadas, mas sem valor de tema. Nunca entram na árvore.
@@ -648,10 +757,19 @@ mod tests {
         let s1 = S1::novo();
         let casos = [
             ("tempo de espera na fila do posto de saude", Categoria::Fila),
-            ("efeito causal do tratamento sobre a renda", Categoria::Causal),
+            (
+                "efeito causal do tratamento sobre a renda",
+                Categoria::Causal,
+            ),
             ("cauda pesada de evento raro e extremo", Categoria::Cauda),
-            ("calibracao do escore por platt com brier", Categoria::Calibracao),
-            ("justica entre subgrupos e quem paga o erro", Categoria::Justica),
+            (
+                "calibracao do escore por platt com brier",
+                Categoria::Calibracao,
+            ),
+            (
+                "justica entre subgrupos e quem paga o erro",
+                Categoria::Justica,
+            ),
             ("ficha generica indefinida", Categoria::Outros),
         ];
         for (definicao, esperada) in casos {
@@ -748,7 +866,11 @@ mod tests {
         // A massa efetiva e o peso declarado dividido pela massa total da priori: as cinco
         // categorias tematicas ficam em 0,0256 e "outros" leva 0,8718. Valor analitico conferido.
         let esperado = MASSA_SEM_EVIDENCIA / (MASSA_SEM_EVIDENCIA + 5.0 * PESO_SEM_CASAMENTO);
-        assert!(esperado > 0.5 && esperado < TETO, "priori declarada = {}", esperado);
+        assert!(
+            esperado > 0.5 && esperado < TETO,
+            "priori declarada = {}",
+            esperado
+        );
         assert!(
             (t.probabilidade - esperado).abs() < 1e-12,
             "massa de outros {} != {}",
@@ -785,7 +907,6 @@ mod tests {
         // Prova negativa do mesmo portao: sem o comprimento minimo, "os" nao casa; se casasse,
         // a energia lexical de qualquer preposicao viraria categoria.
         assert_ne!(curto.categoria, Categoria::Justica);
-        assert!(TEMA_MINIMO >= 4);
     }
 
     #[test]
@@ -871,7 +992,11 @@ mod tests {
         // O intervalo e ponto fixo: distribuir de novo nao muda nada.
         let q = distribuir(p);
         for i in 0..6 {
-            assert!((p[i] - q[i]).abs() < 1e-12, "ponto fixo quebrado no indice {}", i);
+            assert!(
+                (p[i] - q[i]).abs() < 1e-12,
+                "ponto fixo quebrado no indice {}",
+                i
+            );
         }
     }
 }

@@ -71,7 +71,7 @@ pub fn ler_notas(texto: &str) -> Vec<Nota> {
                     let resto = &t[i + alvo.len()..];
                     resto
                         .trim_start()
-                        .split(|c: char| c == ',' || c == '}')
+                        .split([',', '}'])
                         .next()
                         .unwrap_or("")
                         .trim()
@@ -88,7 +88,7 @@ pub fn ler_notas(texto: &str) -> Vec<Nota> {
                     let resto = &t[i + alvo.len()..];
                     resto
                         .trim_start()
-                        .split(|c: char| c == ',' || c == '}')
+                        .split([',', '}'])
                         .next()
                         .unwrap_or("")
                         .trim()
@@ -99,7 +99,12 @@ pub fn ler_notas(texto: &str) -> Vec<Nota> {
         };
         let tipo = campo("tipo");
         let _ = tipo.clone();
-        notas.push(Nota { caso: caso.clone(), braco, tipo, nota: campo_nota("nota") });
+        notas.push(Nota {
+            caso: caso.clone(),
+            braco,
+            tipo,
+            nota: campo_nota("nota"),
+        });
     }
     notas
 }
@@ -117,13 +122,21 @@ pub fn pontuar(notas: &[Nota]) -> Pontuacao {
                 }
             }
             None => {
-                let (x, y) = if n.braco == 'X' { (n.nota, 0) } else { (0, n.nota) };
+                let (x, y) = if n.braco == 'X' {
+                    (n.nota, 0)
+                } else {
+                    (0, n.nota)
+                };
                 por_caso.push((n.caso.clone(), x, y));
             }
         }
     }
     let tipo_do_caso = |caso: &str| -> String {
-        notas.iter().find(|n| n.caso == caso).map(|n| n.tipo.clone()).unwrap_or_default()
+        notas
+            .iter()
+            .find(|n| n.caso == caso)
+            .map(|n| n.tipo.clone())
+            .unwrap_or_default()
     };
     let mut apontou_x = 0;
     let mut apontou_y = 0;
@@ -154,12 +167,24 @@ pub fn pontuar(notas: &[Nota]) -> Pontuacao {
             discordantes += 1;
         }
     }
-    Pontuacao { casos: por_caso.len(), com_defeito, limpos, apontou_x, apontou_y, alarmes_x, alarmes_y, pares_discordantes: discordantes }
+    Pontuacao {
+        casos: por_caso.len(),
+        com_defeito,
+        limpos,
+        apontou_x,
+        apontou_y,
+        alarmes_x,
+        alarmes_y,
+        pares_discordantes: discordantes,
+    }
 }
 
 /// O veredito do piloto pela regra declarada antes: o empate no teto conta como tese não sustentada.
 pub fn veredito_do_piloto(p: &Pontuacao) -> String {
-    let teto = p.apontou_x == p.com_defeito && p.apontou_y == p.com_defeito && p.alarmes_x == 0 && p.alarmes_y == 0;
+    let teto = p.apontou_x == p.com_defeito
+        && p.apontou_y == p.com_defeito
+        && p.alarmes_x == 0
+        && p.alarmes_y == 0;
     if teto && p.pares_discordantes == 0 {
         format!(
             "empate no teto: os dois bracos apontaram {} de {} defeitos e deram {} alarmes falsos em {} casos limpos; pela regra declarada, a tese NAO e sustentada",
@@ -171,7 +196,8 @@ pub fn veredito_do_piloto(p: &Pontuacao) -> String {
             p.pares_discordantes, p.apontou_x, p.apontou_y, p.com_defeito, p.alarmes_x, p.alarmes_y
         )
     } else {
-        "as duas linhagens empatam fora do teto: falta poder, e o veredito nao se sustenta".to_string()
+        "as duas linhagens empatam fora do teto: falta poder, e o veredito nao se sustenta"
+            .to_string()
     }
 }
 
@@ -225,8 +251,15 @@ pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
                 match campos[0] {
                     "registros" => carimbo = campos[1].trim().to_string(),
                     "prazo" => prazo = campos[1].trim().to_string(),
-                    "casos_minimos" => casos_minimos = campos[1].trim().parse().map_err(|_| "casos_minimos nao e numero")?,
-                    "veredito_se_o_prazo_vencer" => veredito_se_o_prazo_vencer = campos[1].trim().to_string(),
+                    "casos_minimos" => {
+                        casos_minimos = campos[1]
+                            .trim()
+                            .parse()
+                            .map_err(|_| "casos_minimos nao e numero")?
+                    }
+                    "veredito_se_o_prazo_vencer" => {
+                        veredito_se_o_prazo_vencer = campos[1].trim().to_string()
+                    }
                     _ => {}
                 }
             }
@@ -244,9 +277,17 @@ pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
         });
     }
     if prazo.is_empty() || papeis.is_empty() || veredito_se_o_prazo_vencer.is_empty() {
-        return Err("registro da ponte sem prazo, sem papeis ou sem o veredito da janela".to_string());
+        return Err(
+            "registro da ponte sem prazo, sem papeis ou sem o veredito da janela".to_string(),
+        );
     }
-    Ok(Ponte { carimbo, prazo, casos_minimos, veredito_se_o_prazo_vencer, papeis })
+    Ok(Ponte {
+        carimbo,
+        prazo,
+        casos_minimos,
+        veredito_se_o_prazo_vencer,
+        papeis,
+    })
 }
 
 impl Ponte {
@@ -264,7 +305,12 @@ impl Ponte {
                 continue;
             }
             if p.papel == "casos" {
-                let feitos: usize = p.estado.split_whitespace().next().and_then(|v| v.parse().ok()).unwrap_or(0);
+                let feitos: usize = p
+                    .estado
+                    .split_whitespace()
+                    .next()
+                    .and_then(|v| v.parse().ok())
+                    .unwrap_or(0);
                 casos_faltando = self.casos_minimos.saturating_sub(feitos);
                 if casos_faltando > 0 {
                     tudo_designado = false;
@@ -285,7 +331,8 @@ impl Ponte {
             divergencias.push(format!("status declarado \"{status}\" com o teste justo por fazer: a tese so muda de estado depois do resultado do juiz"));
         }
         if !tudo_designado && status == "em teste" {
-            divergencias.push("status em teste sem os papeis designados e os casos no minimo".to_string());
+            divergencias
+                .push("status em teste sem os papeis designados e os casos no minimo".to_string());
         }
         VereditoDaPonte {
             papeis_designados: designados,
@@ -318,7 +365,8 @@ pub fn escolher_casos(
     let mut rng = stochology_core::Rng::novo(semente);
     let mut escolhidos = Vec::new();
     for (grupo, quantos) in [("defeito", com_defeito), ("limpo", limpos)] {
-        let mut candidatos: Vec<&CasoElegivel> = lista.iter().filter(|c| c.grupo == grupo).collect();
+        let mut candidatos: Vec<&CasoElegivel> =
+            lista.iter().filter(|c| c.grupo == grupo).collect();
         if candidatos.len() < quantos {
             return Err(format!(
                 "a lista externa nao sustenta a escolha: {quantos} casos do grupo {grupo} pedidos, {} elegiveis",
@@ -362,10 +410,19 @@ pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
     match ponte {
         Some(p) => {
             let v = p.veredito();
-            s.push_str(&format!("prazo da janela: {} | casos minimos: {}\n", p.prazo, p.casos_minimos));
-            s.push_str(&format!("se a janela vencer sem os papeis: {}\n", p.veredito_se_o_prazo_vencer));
+            s.push_str(&format!(
+                "prazo da janela: {} | casos minimos: {}\n",
+                p.prazo, p.casos_minimos
+            ));
+            s.push_str(&format!(
+                "se a janela vencer sem os papeis: {}\n",
+                p.veredito_se_o_prazo_vencer
+            ));
             for papel in &p.papeis {
-                s.push_str(&format!("  {:<22} {:<10} {}\n", papel.papel, papel.estado, papel.exigencia));
+                s.push_str(&format!(
+                    "  {:<22} {:<10} {}\n",
+                    papel.papel, papel.estado, papel.exigencia
+                ));
             }
             s.push_str(&format!(
                 "designados: {:?} | pendentes: {:?} | casos faltando: {}\n",
@@ -374,7 +431,10 @@ pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
             if v.divergencias.is_empty() {
                 s.push_str("divergencias: nenhuma — nenhuma linha afirma o que o teste justo ainda nao sustenta\n");
             } else {
-                s.push_str(&format!("divergencias: REPROVADO em {:?}\n", v.divergencias));
+                s.push_str(&format!(
+                    "divergencias: REPROVADO em {:?}\n",
+                    v.divergencias
+                ));
             }
             if v.caixa_fechada {
                 s.push_str(&format!(
@@ -394,8 +454,12 @@ pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
 /// O laboratório: o piloto re-derivado, o estado do teste justo e as duas provas.
 pub fn rodar(caminho_registro: &str, caminho_notas: &str) {
     println!("== Ponto 16 :: a tese da ponte em escala ==");
-    let pontuacao = std::fs::read_to_string(caminho_notas).ok().map(|t| pontuar(&ler_notas(&t)));
-    let ponte = std::fs::read_to_string(caminho_registro).ok().and_then(|t| ler_ponte(&t).ok());
+    let pontuacao = std::fs::read_to_string(caminho_notas)
+        .ok()
+        .map(|t| pontuar(&ler_notas(&t)));
+    let ponte = std::fs::read_to_string(caminho_registro)
+        .ok()
+        .and_then(|t| ler_ponte(&t).ok());
     print!("{}", relatar(pontuacao.as_ref(), ponte.as_ref()));
 
     println!("\n-- prova negativa: um registro que diz a tese sustentada sem o teste justo --");
@@ -414,7 +478,10 @@ pub fn rodar(caminho_registro: &str, caminho_notas: &str) {
     match ler_ponte(honesto) {
         Ok(p) => {
             let v = p.veredito();
-            println!("  divergencias: {:?} | caixa fechada: {}", v.divergencias, v.caixa_fechada);
+            println!(
+                "  divergencias: {:?} | caixa fechada: {}",
+                v.divergencias, v.caixa_fechada
+            );
         }
         Err(e) => println!("  caso sintetico nao lido: {e}"),
     }
@@ -426,7 +493,11 @@ mod testes {
     use std::path::Path;
 
     fn ler_arquivo(rel: &str) -> String {
-        let raiz = Path::new(env!("CARGO_MANIFEST_DIR")).parent().and_then(Path::parent).expect("raiz").to_path_buf();
+        let raiz = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(Path::parent)
+            .expect("raiz")
+            .to_path_buf();
         std::fs::read_to_string(raiz.join(rel)).expect("arquivo do registro")
     }
 
@@ -436,9 +507,16 @@ mod testes {
         assert_eq!(p.casos, 12, "os doze casos do piloto");
         assert_eq!(p.com_defeito, 8);
         assert_eq!(p.limpos, 4);
-        assert_eq!((p.apontou_x, p.apontou_y), (8, 8), "os dois bracos apontaram todos os defeitos");
+        assert_eq!(
+            (p.apontou_x, p.apontou_y),
+            (8, 8),
+            "os dois bracos apontaram todos os defeitos"
+        );
         assert_eq!((p.alarmes_x, p.alarmes_y), (0, 0), "nenhum alarme falso");
-        assert_eq!(p.pares_discordantes, 0, "sem par discordante, o McNemar nao tem o que testar");
+        assert_eq!(
+            p.pares_discordantes, 0,
+            "sem par discordante, o McNemar nao tem o que testar"
+        );
         let v = veredito_do_piloto(&p);
         assert!(v.starts_with("empate no teto"), "veredito: {v}");
         assert!(v.contains("NAO e sustentada"));
@@ -448,10 +526,17 @@ mod testes {
     fn o_registro_do_teste_justo_declara_o_que_falta() {
         let ponte = ler_ponte(&ler_arquivo(REGISTRO)).expect("registro da ponte");
         let v = ponte.veredito();
-        assert!(v.caixa_fechada, "sem escolhedor, analistas e juiz, a caixa fica fechada");
+        assert!(
+            v.caixa_fechada,
+            "sem escolhedor, analistas e juiz, a caixa fica fechada"
+        );
         assert_eq!(v.casos_faltando, ponte.casos_minimos);
         assert_eq!(v.status_declarado, "nao sustentada");
-        assert!(v.divergencias.is_empty(), "o registro nao mente: {:?}", v.divergencias);
+        assert!(
+            v.divergencias.is_empty(),
+            "o registro nao mente: {:?}",
+            v.divergencias
+        );
         assert_eq!(v.papeis_pendentes.len(), 5);
     }
 
@@ -484,10 +569,16 @@ mod testes {
     fn lista_de_teste(com_defeito: usize, limpos: usize) -> Vec<CasoElegivel> {
         let mut lista = Vec::new();
         for i in 0..com_defeito {
-            lista.push(CasoElegivel { id: format!("defeito_{i:02}"), grupo: "defeito".to_string() });
+            lista.push(CasoElegivel {
+                id: format!("defeito_{i:02}"),
+                grupo: "defeito".to_string(),
+            });
         }
         for i in 0..limpos {
-            lista.push(CasoElegivel { id: format!("limpo_{i:02}"), grupo: "limpo".to_string() });
+            lista.push(CasoElegivel {
+                id: format!("limpo_{i:02}"),
+                grupo: "limpo".to_string(),
+            });
         }
         lista
     }
@@ -512,7 +603,11 @@ mod testes {
         ordenada.sort();
         let mut escolhidos = a.clone();
         escolhidos.sort();
-        assert_eq!(escolhidos.len(), 12, "a escolha sai da lista, e nao de fora dela");
+        assert_eq!(
+            escolhidos.len(),
+            12,
+            "a escolha sai da lista, e nao de fora dela"
+        );
         assert!(escolhidos.iter().all(|id| ordenada.contains(id)));
     }
 
@@ -531,7 +626,9 @@ mod testes {
     fn o_registro_declara_o_veredito_se_o_prazo_vencer() {
         let ponte = ler_ponte(&ler_arquivo(REGISTRO)).expect("registro da ponte");
         assert!(
-            ponte.veredito_se_o_prazo_vencer.contains("nao sustentada em definitivo"),
+            ponte
+                .veredito_se_o_prazo_vencer
+                .contains("nao sustentada em definitivo"),
             "o registro carrega a decisao do dono: {}",
             ponte.veredito_se_o_prazo_vencer
         );

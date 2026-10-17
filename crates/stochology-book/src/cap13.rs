@@ -314,4 +314,3 @@ mod testes {
         assert!(!banca(&f, 2026).aprovado);
     }
 }
-

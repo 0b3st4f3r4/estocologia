@@ -4,12 +4,12 @@
 //!      ~cargo run --release --bin labs -- --todos~
 
 use stochology_book::{banco, cadeia, ensaio, escuta, fila, genetica, jev, ponte, segunda};
-use stochology_core::s1::{Categoria, S1};
-use stochology_core::resolucao::{Resolucao, medir as medir_perda};
 use stochology_book::{
-    cap01, cap02, cap03, cap04, cap05, cap06, cap07, cap08, cap09, cap10, cap11, cap12, cap13, cap14,
-    cap15, cap16, cap17, cap18, cap19, cap20, cap21,
+    cap01, cap02, cap03, cap04, cap05, cap06, cap07, cap08, cap09, cap10, cap11, cap12, cap13,
+    cap14, cap15, cap16, cap17, cap18, cap19, cap20, cap21,
 };
+use stochology_core::resolucao::{Resolucao, medir as medir_perda};
+use stochology_core::s1::{Categoria, S1};
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -138,7 +138,11 @@ fn main() {
         return;
     }
     if cadeia_flag {
-        cadeia::rodar(cadeia::REGISTRO, cadeia::RESULTADOS_DO_LACO, cadeia::POSTHOC_DO_LACO);
+        cadeia::rodar(
+            cadeia::REGISTRO,
+            cadeia::RESULTADOS_DO_LACO,
+            cadeia::POSTHOC_DO_LACO,
+        );
         return;
     }
     if ponte_flag {
@@ -229,7 +233,6 @@ fn sistema_1() {
     }
 }
 
-
 /// Elicitação SHELF: o ajuste da priori pelos quartis e os controles do protocolo.
 ///
 /// Uso: `labs --elicitacao q05,q25,q50,q75,q95`
@@ -245,7 +248,10 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
         .filter_map(|t| t.trim().replace(',', ".").parse::<f64>().ok())
         .collect();
     if valores.len() != 5 {
-        println!("preciso de cinco quantis na ordem q05,q25,q50,q75,q95; vieram {}", valores.len());
+        println!(
+            "preciso de cinco quantis na ordem q05,q25,q50,q75,q95; vieram {}",
+            valores.len()
+        );
         return;
     }
     let [q05, q25, q50, q75, q95] = [valores[0], valores[1], valores[2], valores[3], valores[4]];
@@ -272,14 +278,22 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
         let elicitada = q95 - q05;
         let implicada =
             beta_quantil(0.95, p_beta.a, p_beta.b) - beta_quantil(0.05, p_beta.a, p_beta.b);
-        let razao = if implicada > 0.0 { elicitada / implicada } else { f64::NAN };
+        let razao = if implicada > 0.0 {
+            elicitada / implicada
+        } else {
+            f64::NAN
+        };
         println!(
             "largura 90%: elicitada {:.4} | implicada pela própria Beta {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
             elicitada,
             implicada,
             razao,
             RAZAO_LARGURA_MINIMA,
-            if excesso_de_confianca_ok(razao) { "ok" } else { "EXCESSO DE CONFIANÇA" }
+            if excesso_de_confianca_ok(razao) {
+                "ok"
+            } else {
+                "EXCESSO DE CONFIANÇA"
+            }
         );
         let na_mediana = 1.0 - stochology_h3::beta::beta_incompleta(p_beta.a, p_beta.b, q50);
         println!(
@@ -318,7 +332,11 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
             implicada,
             razao,
             RAZAO_LARGURA_MINIMA,
-            if excesso_de_confianca_ok(razao) { "ok" } else { "EXCESSO DE CONFIANÇA" }
+            if excesso_de_confianca_ok(razao) {
+                "ok"
+            } else {
+                "EXCESSO DE CONFIANÇA"
+            }
         );
         println!(
             "no log 0 é razão de chances 1 (tratamento igual): P(RC > 1) na própria priori = {:.4}",
@@ -337,9 +355,7 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
         );
         return;
     }
-    println!(
-        "quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
-    );
+    println!("quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}");
     let priori = ajustar_normal(q25, q50, q75);
     println!(
         "Normal ajustada por mínimos quadrados em q25/q50/q75: média {:.6} | dp {:.6} | erro máximo nos quartis {:.3e}",
@@ -354,7 +370,11 @@ fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
         implicada,
         razao,
         RAZAO_LARGURA_MINIMA,
-        if excesso_de_confianca_ok(razao) { "ok" } else { "EXCESSO DE CONFIANÇA" }
+        if excesso_de_confianca_ok(razao) {
+            "ok"
+        } else {
+            "EXCESSO DE CONFIANÇA"
+        }
     );
     println!(
         "âncora com S igual à mediana do próprio especialista: esperado {:.2} +- {:.2} em P(theta > S)",
@@ -386,12 +406,19 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
             .map(|t| t.trim().eq_ignore_ascii_case("sim"))
             .collect();
         if confianca.len() != acerto.len() || confianca.is_empty() {
-            println!("respostas com {} valores e gabarito com {}: não pontuo", confianca.len(), acerto.len());
+            println!(
+                "respostas com {} valores e gabarito com {}: não pontuo",
+                confianca.len(),
+                acerto.len()
+            );
             return;
         }
         let invalidas = probabilidades_invalidas(&confianca);
         if !invalidas.is_empty() {
-            println!("p fora de (0, 1) nos itens {:?}: o protocolo recusa 0 e 1 exatos", invalidas);
+            println!(
+                "p fora de (0, 1) nos itens {:?}: o protocolo recusa 0 e 1 exatos",
+                invalidas
+            );
         }
         println!("== Pré-teste SHELF :: pontuação de um especialista ==");
         println!("itens: {} | p distintos: {}", confianca.len(), {
@@ -414,7 +441,11 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
         for caixa in &ajustado.caixas {
             println!(
                 "  caixa {} | n {} | media prevista {:.4} | taxa observada {:.4} | desvio {:+.4}",
-                caixa.indice, caixa.n, caixa.media_prevista, caixa.taxa_observada, caixa.desvio()
+                caixa.indice,
+                caixa.n,
+                caixa.media_prevista,
+                caixa.taxa_observada,
+                caixa.desvio()
             );
         }
         let caixas_testadas = stochology_h3::preteste::caixas_por_teste_binomial(&ajustado.caixas);
@@ -427,44 +458,82 @@ fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
                 t.media_prevista,
                 t.p_bilateral,
                 t.p_com_bonferroni,
-                if t.sistematica(0.05) { "SISTEMATICA" } else { "ok" }
+                if t.sistematica(0.05) {
+                    "SISTEMATICA"
+                } else {
+                    "ok"
+                }
             );
         }
-        let escrito_limiar = avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
+        let escrito_limiar =
+            avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
         let por_limiar_fixo = escrito_limiar
             .reprovacoes
             .iter()
-            .filter(|x| matches!(x, stochology_h3::preteste::Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }))
+            .filter(|x| {
+                matches!(
+                    x,
+                    stochology_h3::preteste::Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }
+                )
+            })
             .count();
         println!(
             "criterio 3, as duas reguas: pelo teste binomial (em vigor, declaracao 3) {} | pelo limiar fixo de 0,25 (como escrito) {}",
-            if caixas_testadas.iter().any(|t| t.sistematica(0.05)) { "reprovado" } else { "ok" },
-            if por_limiar_fixo > 0 { "reprovado" } else { "ok" }
+            if caixas_testadas.iter().any(|t| t.sistematica(0.05)) {
+                "reprovado"
+            } else {
+                "ok"
+            },
+            if por_limiar_fixo > 0 {
+                "reprovado"
+            } else {
+                "ok"
+            }
         );
         println!(
             "curva observada (diagnostico que morde): {}",
-            if stochology_h3::preteste::curva_observada_e_fracamente_monotona(&ajustado.caixas) { "fracamente monotona" } else { "NAO monotonona" }
+            if stochology_h3::preteste::curva_observada_e_fracamente_monotona(&ajustado.caixas) {
+                "fracamente monotona"
+            } else {
+                "NAO monotonona"
+            }
         );
         for caixa in &ajustado.caixas {
-            println!("  item a item da caixa {}: ver o formulario do especialista", caixa.indice);
+            println!(
+                "  item a item da caixa {}: ver o formulario do especialista",
+                caixa.indice
+            );
         }
         println!(
             "portao ajustado, em vigor ({} caixas, ECE <= {}, criterio 3 pelo teste binomial): ECE {:.4} -> {}",
             BALDES_AJUSTADOS,
             ECE_MAXIMO_AJUSTADO,
             ajustado.ece,
-            if ajustado.aprovado { "APROVADO" } else { "REPROVADO" }
+            if ajustado.aprovado {
+                "APROVADO"
+            } else {
+                "REPROVADO"
+            }
         );
         for r in &ajustado.reprovacoes {
             println!("  reprovacao: {r:?}");
         }
-        let escrito = avaliar_com(&confianca, &acerto, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO);
+        let escrito = avaliar_com(
+            &confianca,
+            &acerto,
+            BALDES_DO_PROTOCOLO,
+            ECE_MAXIMO_DO_PROTOCOLO,
+        );
         println!(
             "portao do protocolo como escrito ({} caixas, ECE <= {}): ECE {:.4} -> {}",
             BALDES_DO_PROTOCOLO,
             ECE_MAXIMO_DO_PROTOCOLO,
             escrito.ece,
-            if escrito.aprovado { "aprovado" } else { "reprovado" }
+            if escrito.aprovado {
+                "aprovado"
+            } else {
+                "reprovado"
+            }
         );
         return;
     }
@@ -523,13 +592,24 @@ fn sistema_2() {
         grafo.arestas_tree.len(),
         grafo.arestas_graph.len(),
         grafo.hiperarestas.len(),
-        if problemas.is_empty() { "ok".to_string() } else { format!("{problemas:?}") }
+        if problemas.is_empty() {
+            "ok".to_string()
+        } else {
+            format!("{problemas:?}")
+        }
     );
     let mundo = MundoHipergrafo::novo(&grafo);
     println!("nos que nenhuma lente cobre: {:?}", mundo.nos_descobertos());
-    let lats = Lats { profundidade: 2, orcamento: 40, exploracao: 1.0, semente: 2026 };
+    let lats = Lats {
+        profundidade: 2,
+        orcamento: 40,
+        exploracao: 1.0,
+        semente: 2026,
+    };
     let guloso = ganancioso(&mundo, "raiz.estocologia").expect("o grafo tem saidas");
-    let busca = mundo.busca("raiz.estocologia", &lats, 3).expect("a busca chega");
+    let busca = mundo
+        .busca("raiz.estocologia", &lats, 3)
+        .expect("a busca chega");
     println!(
         "ganancioso: para em {} (valor {:.3}) | LATS: {} (valor {:.3}, no sem lente {})",
         destino_da_acao(&guloso.acao),
@@ -540,7 +620,9 @@ fn sistema_2() {
     );
 
     let ficha_completa = |id: &str| {
-        Ficha::nova(id, Camada::Agente, TipoIncerteza::Epistemica).com_cuidados().completa()
+        Ficha::nova(id, Camada::Agente, TipoIncerteza::Epistemica)
+            .com_cuidados()
+            .completa()
     };
     let mut banca = CrencaDaBanca::nova();
     let treino: Vec<Ficha> = (0..4)
@@ -571,7 +653,11 @@ fn sistema_2() {
         deliberado.reprovou == declarado.reprovou
     );
 
-    let cadeia = Metropolis { passo: 0.15, semente: 7 }.amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
+    let cadeia = Metropolis {
+        passo: 0.15,
+        semente: 7,
+    }
+    .amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
     println!(
         "inferencia: Beta(4, 8) media da cadeia {:.4} contra a forma fechada {:.4} | aceitacao {:.3}",
         cadeia.media(20_000),
@@ -619,11 +705,18 @@ fn h0_real() {
     );
     println!(
         "nivel de servico no perfil medio = {:.4} | media dos dias do cofre = {:.4} | dias abaixo da meta de {:.0}% = {:.4}",
-        m.nivel_no_perfil_medio, m.nivel_medio_dos_dias, banco::META * 100.0, m.fracao_dias_abaixo_da_meta
+        m.nivel_no_perfil_medio,
+        m.nivel_medio_dos_dias,
+        banco::META * 100.0,
+        m.fracao_dias_abaixo_da_meta
     );
     println!(
         "dispersao entre dias: Var/media = {:.1} no cofre, {:.1} no treino, {:.1} em todos | desvio entre dias = {:.0} | Poisson preveria {:.0}",
-        m.var_sobre_media, m.var_sobre_media_treino, m.var_sobre_media_todos, m.sd_entre_dias, m.poisson_sd
+        m.var_sobre_media,
+        m.var_sobre_media_treino,
+        m.var_sobre_media_todos,
+        m.sd_entre_dias,
+        m.poisson_sd
     );
     println!(
         "nulo de metades: por dia = {:.4} | por chamada = {:.4}",
@@ -634,9 +727,15 @@ fn h0_real() {
 /// Horizonte R: quanto custa perguntar grosso, com o mesmo recurso total.
 fn horizonte_r() {
     println!("== Horizonte R :: resolucao da pergunta ==");
-    println!("bracos pareados: mesmas chegadas e mesmas bases de servico; muda so a taxa de atendimento");
+    println!(
+        "bracos pareados: mesmas chegadas e mesmas bases de servico; muda so a taxa de atendimento"
+    );
     for (rotulo, baixa, alta) in [
-        ("demanda 5 ou 11 (o posto do Capitulo 16)", 5.0_f64, 11.0_f64),
+        (
+            "demanda 5 ou 11 (o posto do Capitulo 16)",
+            5.0_f64,
+            11.0_f64,
+        ),
         ("demanda 7 ou 9 (oscilacao leve)", 7.0, 9.0),
         ("demanda 8 ou 8 (sem oscilacao)", 8.0, 8.0),
     ] {
@@ -654,7 +753,9 @@ fn horizonte_r() {
     println!("escada de resolucao: {}", finuras.join(" -> "));
 
     // ---- previsao 3: o limiar de oscilacao
-    println!("\n-- previsao 3: o limiar de oscilacao (dia falho: mais de 10% acima de 30 min; limiar: mais de 1/4 dos dias) --");
+    println!(
+        "\n-- previsao 3: o limiar de oscilacao (dia falho: mais de 10% acima de 30 min; limiar: mais de 1/4 dos dias) --"
+    );
     let amplitudes = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
     let calibrada = stochology_core::resolucao::escala_calibrada(1909, 200, 10, 8.0, 0.10);
     let erlang = stochology_core::resolucao::limiar_de_oscilacao(1909, 200, 10, 8.0, &amplitudes);
@@ -662,7 +763,10 @@ fn horizonte_r() {
         "  {} dias por amplitude | 10 h por dia | especificacao 1: o plano de Erlang do dia medio, {} agentes",
         erlang.pontos[0].dias, erlang.pontos[0].agentes_r0
     );
-    println!("  {:>10} {:>12} {:>14} {:>12} {:>10}", "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0");
+    println!(
+        "  {:>10} {:>12} {:>14} {:>12} {:>10}",
+        "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0"
+    );
     for p in &erlang.pontos {
         println!(
             "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
@@ -676,13 +780,29 @@ fn horizonte_r() {
             erlang.perda_no_limiar.unwrap_or(f64::NAN),
             erlang.monotona
         ),
-        None => println!("  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}", erlang.monotona),
+        None => println!(
+            "  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}",
+            erlang.monotona
+        ),
     }
 
     println!("\n-- previsao 3, especificacao 2: a escala de R0 calibrada na demanda plana --");
-    let l = stochology_core::resolucao::limiar_de_oscilacao_com_plano(1909, 200, 10, 8.0, &amplitudes, calibrada);
-    println!("  a escala calibrada tem {} agentes (a plana falha no maximo 10% dos dias)", calibrada);
-    println!("  {:>10} {:>12} {:>14} {:>12} {:>10}", "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0");
+    let l = stochology_core::resolucao::limiar_de_oscilacao_com_plano(
+        1909,
+        200,
+        10,
+        8.0,
+        &amplitudes,
+        calibrada,
+    );
+    println!(
+        "  a escala calibrada tem {} agentes (a plana falha no maximo 10% dos dias)",
+        calibrada
+    );
+    println!(
+        "  {:>10} {:>12} {:>14} {:>12} {:>10}",
+        "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0"
+    );
     for p in &l.pontos {
         println!(
             "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
@@ -696,22 +816,39 @@ fn horizonte_r() {
             l.perda_no_limiar.unwrap_or(f64::NAN),
             l.monotona
         ),
-        None => println!("  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}", l.monotona),
+        None => println!(
+            "  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}",
+            l.monotona
+        ),
     }
 
     // ---- previsao 5: a transferencia
-    println!("\n-- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --");
-    let perfis = [(8.0, 0.5), (8.0, 1.0), (8.0, 1.5), (8.0, 2.0), (8.0, 2.5), (8.0, 3.0)];
+    println!(
+        "\n-- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --"
+    );
+    let perfis = [
+        (8.0, 0.5),
+        (8.0, 1.0),
+        (8.0, 1.5),
+        (8.0, 2.0),
+        (8.0, 2.5),
+        (8.0, 3.0),
+    ];
     let t = stochology_core::resolucao::transferencia(1909, 200, 10, &perfis);
     println!(
         "  {} perfis x 200 dias | limiar do dia {:.2} | violacoes da implicacao: {} | contraexemplos: {} | conservacao do agregado conferida: {}",
         t.perfis, t.limiar, t.violacoes, t.contraexemplos, t.conservacao_conferida
     );
-    println!("  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia", t.contraexemplos);
+    println!(
+        "  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia",
+        t.contraexemplos
+    );
     let l_limiar = l.limiar;
 
     // ---- o eixo R, capítulo por capítulo
-    println!("\n-- o eixo R, capitulo por capitulo (a tabela esta em book/eixo-r.tsv; a leitura e calculada aqui) --");
+    println!(
+        "\n-- o eixo R, capitulo por capitulo (a tabela esta em book/eixo-r.tsv; a leitura e calculada aqui) --"
+    );
     let perfis: [(&str, f64, f64, &str); 3] = [
         ("posto", 5.0, 11.0, "demanda de 5 a 11"),
         ("posto-leve", 7.0, 9.0, "demanda de 7 a 9"),
@@ -735,7 +872,9 @@ fn horizonte_r() {
             }
             None => match caso {
                 "previsoes" => match l_limiar {
-                    Some(amplitude) => format!("limiar de oscilacao na amplitude {amplitude:.1} (plano calibrado)"),
+                    Some(amplitude) => {
+                        format!("limiar de oscilacao na amplitude {amplitude:.1} (plano calibrado)")
+                    }
                     None => "limiar de oscilacao nao encontrado".to_string(),
                 },
                 _ => "sem perda medida neste capitulo".to_string(),
@@ -744,7 +883,6 @@ fn horizonte_r() {
         println!("capítulo {cap:>2} | {leitura} | {frase}");
     }
 }
-
 
 fn contrato() {
     println!("== O contrato :: a ficha em arquivo, a versao e a cadeia de migracoes ==");
@@ -766,10 +904,14 @@ fn contrato() {
     );
 
     println!("\n-- demonstracao: um documento da versao 1.0 migra ate a versao da ficha --");
-    let mut ficha = stochology_core::Ficha::nova("lab.schema.1", stochology_core::Camada::Modelo, stochology_core::TipoIncerteza::Epistemica)
-        .com_resolucao(stochology_core::Resolucao::R3Subpergunta)
-        .completa()
-        .com_cuidados();
+    let mut ficha = stochology_core::Ficha::nova(
+        "lab.schema.1",
+        stochology_core::Camada::Modelo,
+        stochology_core::TipoIncerteza::Epistemica,
+    )
+    .com_resolucao(stochology_core::Resolucao::R3Subpergunta)
+    .completa()
+    .com_cuidados();
     ficha.definicao = "ficha de demonstracao do contrato".into();
     ficha.pergunta_do_decisor = "cada dia, o servico da conta?".into();
     ficha.acao_do_pacote = "dimensionar a escala do dia".into();
@@ -801,7 +943,10 @@ fn contrato() {
         }
         Err(erro) => println!("  REPROVADO: {erro:?}"),
     }
-    println!("  a ficha na versao atual nao passa pela cadeia: {}", stochology_schema::de_texto(&atual).is_ok());
+    println!(
+        "  a ficha na versao atual nao passa pela cadeia: {}",
+        stochology_schema::de_texto(&atual).is_ok()
+    );
 }
 
 fn rodar(cap: usize) {

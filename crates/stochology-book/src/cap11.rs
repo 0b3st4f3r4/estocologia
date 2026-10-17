@@ -271,21 +271,32 @@ pub fn trilema(a: Grupo, b: Grupo) -> Trilema {
         fpr_com_fnr(a.fnr_observado, a.fpr_observado, alvo),
         fpr_com_fnr(b.fnr_observado, b.fpr_observado, alvo),
     ];
-    Trilema { grupos: [a, b], fpr_com_fnr_igualado, fnr_alvo_igualado: alvo }
+    Trilema {
+        grupos: [a, b],
+        fpr_com_fnr_igualado,
+        fnr_alvo_igualado: alvo,
+    }
 }
-
-
-
 
 fn navio_de_bernoulli() {
     println!("== Capítulo 11 :: o navio de Bernoulli (C = 1.800, L = 34.000, p = 0,05) ==");
-    let n = Navio { riqueza: 100_000.0, premio: 1_800.0, perda: 34_000.0, p: 0.05, jogadores: 1 };
+    let n = Navio {
+        riqueza: 100_000.0,
+        premio: 1_800.0,
+        perda: 34_000.0,
+        p: 0.05,
+        jogadores: 1,
+    };
     let (perda_esperada, resultado_do_seguro) = n.contas_de_esperanca();
     println!(
         "limiar p > C/L: p* = {:.5} ({:.3}%)  ->  p = 0,050 {} o limiar",
         n.limiar(),
         100.0 * n.limiar(),
-        if n.protege_pela_esperanca() { "passa" } else { "nao passa" }
+        if n.protege_pela_esperanca() {
+            "passa"
+        } else {
+            "nao passa"
+        }
     );
     println!(
         "em esperança: perda esperada sem seguro = {:.0}, resultado do seguro = {:+.0} por mês",
@@ -319,12 +330,22 @@ fn valor_da_informacao() {
     println!(
         "limiar de ação: p > {:.2}  ->  com p = 0,3 o melhor ato sem informação {} ({:+.2})",
         d.limiar_de_acao(),
-        if d.melhor_sem_informacao().0 { "tratar" } else { "nao tratar" },
+        if d.melhor_sem_informacao().0 {
+            "tratar"
+        } else {
+            "nao tratar"
+        },
         d.melhor_sem_informacao().1
     );
-    println!("ganho de quem sabe o estado antes de agir = {:+.2}", d.com_informacao_perfeita());
+    println!(
+        "ganho de quem sabe o estado antes de agir = {:+.2}",
+        d.com_informacao_perfeita()
+    );
     println!("EVPI = {:+.2}", d.evpi());
-    for (nome, sens, espec) in [("sensivel  (0,90; 0,70)", 0.9, 0.7), ("especifico (0,30; 0,95)", 0.3, 0.95)] {
+    for (nome, sens, espec) in [
+        ("sensivel  (0,90; 0,70)", 0.9, 0.7),
+        ("especifico (0,30; 0,95)", 0.3, 0.95),
+    ] {
         println!("  exame {}: EVSI = {:+.4}", nome, evsi(&d, sens, espec));
     }
     for p in [0.05_f64, 0.3, 0.6] {
@@ -333,7 +354,11 @@ fn valor_da_informacao() {
         println!(
             "  com prevalência {:.2}: melhor ato sem informação = {}, EVPI = {:+.3}",
             p,
-            if e.melhor_sem_informacao().0 { "tratar" } else { "nao tratar" },
+            if e.melhor_sem_informacao().0 {
+                "tratar"
+            } else {
+                "nao tratar"
+            },
             e.evpi()
         );
     }
@@ -365,7 +390,9 @@ fn diques() {
         alturas.push(h);
         println!(
             "  altura ótima com xi = {:+.1}: {:.3} m  (custo {:.3})",
-            xi, h, custo_do_dique(xi, mu, sigma, h)
+            xi,
+            h,
+            custo_do_dique(xi, mu, sigma, h)
         );
     }
     let media = alturas.iter().sum::<f64>() / alturas.len() as f64;
@@ -377,11 +404,15 @@ fn diques() {
         }
     }
     // Savage: para cada modelo, o arrependimento é o custo menos o melhor custo do modelo
-    let menores: Vec<f64> = (0..4).map(|i| custos[i].iter().cloned().fold(f64::INFINITY, f64::min)).collect();
+    let menores: Vec<f64> = (0..4)
+        .map(|i| custos[i].iter().cloned().fold(f64::INFINITY, f64::min))
+        .collect();
     let mut savage = alturas[0];
     let mut melhor_arrependimento = f64::INFINITY;
     for j in 0..4 {
-        let pior = (0..4).map(|i| custos[i][j] - menores[i]).fold(f64::MIN, f64::max);
+        let pior = (0..4)
+            .map(|i| custos[i][j] - menores[i])
+            .fold(f64::MIN, f64::max);
         if pior < melhor_arrependimento {
             melhor_arrependimento = pior;
             savage = alturas[j];
@@ -394,9 +425,18 @@ fn diques() {
     println!("  valor esperado com o Gumbel: {:.2} m", alturas[1]);
     println!("  media dos modelos: {:.2} m", media);
     println!("  maximin de Wald: {:.2} m", wald);
-    println!("  arrependimento minimax de Savage: {:.2} m (maior arrependimento {:.2})", savage, melhor_arrependimento);
-    println!("  precaucao: 1 em 10 000 no pior modelo = {:.2} m", precaucao);
-    println!("  EVPI do conjunto de modelos = {:+.3} m", precaucao - alturas[1]);
+    println!(
+        "  arrependimento minimax de Savage: {:.2} m (maior arrependimento {:.2})",
+        savage, melhor_arrependimento
+    );
+    println!(
+        "  precaucao: 1 em 10 000 no pior modelo = {:.2} m",
+        precaucao
+    );
+    println!(
+        "  EVPI do conjunto de modelos = {:+.3} m",
+        precaucao - alturas[1]
+    );
     println!();
 }
 
@@ -404,13 +444,29 @@ fn bloco_do_trilema() {
     println!("== Capítulo 11 :: o trilema de Chouldechova ==");
     // Taxas-base e erros do H1 (h1/README.md): 0,069 contra 0,111 e FNR 0,24 contra 0,36.
     // O FPR por grupo vem do mesmo bloco de justiça: 0,105 contra 0,196.
-    let brancos = Grupo { nome: "White", n: 4_776, taxa_base: 0.069, fnr_observado: 0.24, fpr_observado: 0.105 };
-    let negros = Grupo { nome: "Black", n: 4_776, taxa_base: 0.111, fnr_observado: 0.36, fpr_observado: 0.196 };
+    let brancos = Grupo {
+        nome: "White",
+        n: 4_776,
+        taxa_base: 0.069,
+        fnr_observado: 0.24,
+        fpr_observado: 0.105,
+    };
+    let negros = Grupo {
+        nome: "Black",
+        n: 4_776,
+        taxa_base: 0.111,
+        fnr_observado: 0.36,
+        fpr_observado: 0.196,
+    };
     let t = trilema(brancos, negros);
-    println!("{:<8} {:>10} {:>10} {:>10} {:>16} {:>16} {:>10}", "grupo", "taxa-base", "FNR", "FPR", "falsos positivos", "falsos negativos", "VPP");
+    println!(
+        "{:<8} {:>10} {:>10} {:>10} {:>16} {:>16} {:>10}",
+        "grupo", "taxa-base", "FNR", "FPR", "falsos positivos", "falsos negativos", "VPP"
+    );
     let vpp = |g: &Grupo| {
         (1.0 - g.fpr_observado) * (1.0 - g.taxa_base)
-            / ((1.0 - g.fpr_observado) * (1.0 - g.taxa_base) + (1.0 - g.fnr_observado) * g.taxa_base)
+            / ((1.0 - g.fpr_observado) * (1.0 - g.taxa_base)
+                + (1.0 - g.fnr_observado) * g.taxa_base)
     };
     let mut fp_antes = 0.0;
     let mut fn_antes = 0.0;
@@ -419,12 +475,32 @@ fn bloco_do_trilema() {
         let fneg = g.n as f64 * g.taxa_base * g.fnr_observado;
         fp_antes += fp;
         fn_antes += fneg;
-        println!("{:<8} {:>10.3} {:>10.3} {:>10.3} {:>16.0} {:>16.0} {:>10.4}", g.nome, g.taxa_base, g.fnr_observado, g.fpr_observado, fp, fneg, vpp(g));
+        println!(
+            "{:<8} {:>10.3} {:>10.3} {:>10.3} {:>16.0} {:>16.0} {:>10.4}",
+            g.nome,
+            g.taxa_base,
+            g.fnr_observado,
+            g.fpr_observado,
+            fp,
+            fneg,
+            vpp(g)
+        );
     }
-    println!("casos observados: White {} marcados pelos fatos, Black {}", (t.grupos[0].n as f64 * t.grupos[0].taxa_base) as u32, (t.grupos[1].n as f64 * t.grupos[1].taxa_base) as u32);
+    println!(
+        "casos observados: White {} marcados pelos fatos, Black {}",
+        (t.grupos[0].n as f64 * t.grupos[0].taxa_base) as u32,
+        (t.grupos[1].n as f64 * t.grupos[1].taxa_base) as u32
+    );
     println!();
-    for (rotulo, alvo) in [("para baixo, ao FNR do White", t.grupos[0].fnr_observado), ("para cima, ao FNR do Black", t.grupos[1].fnr_observado)] {
-        let fprs: Vec<f64> = t.grupos.iter().map(|g| fpr_com_fnr(g.fnr_observado, g.fpr_observado, alvo)).collect();
+    for (rotulo, alvo) in [
+        ("para baixo, ao FNR do White", t.grupos[0].fnr_observado),
+        ("para cima, ao FNR do Black", t.grupos[1].fnr_observado),
+    ] {
+        let fprs: Vec<f64> = t
+            .grupos
+            .iter()
+            .map(|g| fpr_com_fnr(g.fnr_observado, g.fpr_observado, alvo))
+            .collect();
         let mut fp = 0.0;
         let mut fneg = 0.0;
         println!("-- FNR igualado {} em {:.3} --", rotulo, alvo);
@@ -433,21 +509,45 @@ fn bloco_do_trilema() {
             let n_ = g.n as f64 * g.taxa_base * alvo;
             fp += f;
             fneg += n_;
-            println!("{:<8} {:>10.3} {:>10.3} {:>10.3} {:>16.0} {:>16.0}", g.nome, g.taxa_base, alvo, fprs[i], f, n_);
+            println!(
+                "{:<8} {:>10.3} {:>10.3} {:>10.3} {:>16.0} {:>16.0}",
+                g.nome, g.taxa_base, alvo, fprs[i], f, n_
+            );
         }
-        println!("falsos positivos totais: {:.0} -> {:.0} ({:+.0})", fp_antes, fp, fp - fp_antes);
-        println!("falsos negativos totais: {:.0} -> {:.0} ({:+.0})", fn_antes, fneg, fneg - fn_antes);
+        println!(
+            "falsos positivos totais: {:.0} -> {:.0} ({:+.0})",
+            fp_antes,
+            fp,
+            fp - fp_antes
+        );
+        println!(
+            "falsos negativos totais: {:.0} -> {:.0} ({:+.0})",
+            fn_antes,
+            fneg,
+            fneg - fn_antes
+        );
         println!();
     }
     println!("identidade de Chouldechova: FPR = p/(1-p) * (1-VPP)/VPP * (1-FNR)");
-    println!("{:<8} {:>16} {:>18} {:>14}", "grupo", "VPP da matriz", "VPP da identidade", "razao");
+    println!(
+        "{:<8} {:>16} {:>18} {:>14}",
+        "grupo", "VPP da matriz", "VPP da identidade", "razao"
+    );
     for g in &t.grupos {
         let da_matriz = vpp_da_matriz(g.taxa_base, g.fnr_observado, g.fpr_observado);
         let da_identidade = vpp_da_identidade(g.taxa_base, g.fnr_observado, g.fpr_observado);
-        println!("{:<8} {:>16.4} {:>18.4} {:>14.1}x", g.nome, da_matriz, da_identidade, da_identidade / da_matriz);
+        println!(
+            "{:<8} {:>16.4} {:>18.4} {:>14.1}x",
+            g.nome,
+            da_matriz,
+            da_identidade,
+            da_identidade / da_matriz
+        );
     }
     println!("leitura: com o FNR e o FPR observados, o escore so seria calibrado por grupo");
-    println!("se o valor preditivo positivo fosse o da coluna do meio. Ele e muito maior: o escore");
+    println!(
+        "se o valor preditivo positivo fosse o da coluna do meio. Ele e muito maior: o escore"
+    );
     println!("separa razoavelmente e nao se le como probabilidade de risco.");
     println!();
 }
@@ -471,4 +571,3 @@ mod testes {
         assert!(v1 > 0.2 && v1 < 0.5);
     }
 }
-

@@ -42,14 +42,17 @@ pub struct MundoHipergrafo<'a> {
 
 impl<'a> MundoHipergrafo<'a> {
     pub fn novo(grafo: &'a Grafo) -> Self {
-        let mut lentes: BTreeMap<String, Vec<Lente>> =
-            grafo.nos.iter().map(|n| (n.id.clone(), Vec::new())).collect();
+        let mut lentes: BTreeMap<String, Vec<Lente>> = grafo
+            .nos
+            .iter()
+            .map(|n| (n.id.clone(), Vec::new()))
+            .collect();
         for hiperaresta in &grafo.hiperarestas {
             for membro in &hiperaresta.membros {
-                if let Some(lista) = lentes.get_mut(membro) {
-                    if !lista.contains(&hiperaresta.lente) {
-                        lista.push(hiperaresta.lente);
-                    }
+                if let Some(lista) = lentes.get_mut(membro)
+                    && !lista.contains(&hiperaresta.lente)
+                {
+                    lista.push(hiperaresta.lente);
                 }
             }
         }
@@ -106,7 +109,11 @@ impl<'a> MundoHipergrafo<'a> {
             valor = self.valor(&atual);
             caminho.push(atual.clone());
         }
-        Some(Trilha { caminho, valor, sem_lente: self.cobertura(&atual) == Some(0) })
+        Some(Trilha {
+            caminho,
+            valor,
+            sem_lente: self.cobertura(&atual) == Some(0),
+        })
     }
 }
 
@@ -165,7 +172,10 @@ pub fn grafo_de_amostra() -> Grafo {
         definicao: definicao.to_string(),
         artefato: Some(format!("crates/stochology-{id}")),
     };
-    let aresta = |de: &str, para: &str| ArestaTree { de: de.to_string(), para: para.to_string() };
+    let aresta = |de: &str, para: &str| ArestaTree {
+        de: de.to_string(),
+        para: para.to_string(),
+    };
     let grafo = |de: &str, para: &str, tipo: TipoAresta| ArestaGraph {
         de: de.to_string(),
         para: para.to_string(),
@@ -178,13 +188,48 @@ pub fn grafo_de_amostra() -> Grafo {
     };
     Grafo {
         nos: vec![
-            no("raiz.estocologia", Camada::Modelo, TipoIncerteza::Epistemica, "o programa"),
-            no("h0.fila", Camada::Mundo, TipoIncerteza::Aleatoria, "a fila e a central de chamadas"),
-            no("h1.bolsa", Camada::Mundo, TipoIncerteza::Aleatoria, "bolsa, emprego e fogo"),
-            no("h2.invariancia", Camada::Modelo, TipoIncerteza::Epistemica, "as rodadas de invariância"),
-            no("h3.malha", Camada::Mundo, TipoIncerteza::Epistemica, "a malha contínua"),
-            no("r.resolucao", Camada::Modelo, TipoIncerteza::Epistemica, "a resolução da pergunta"),
-            no("s1.triagem", Camada::Agente, TipoIncerteza::Aleatoria, "a triagem determinística"),
+            no(
+                "raiz.estocologia",
+                Camada::Modelo,
+                TipoIncerteza::Epistemica,
+                "o programa",
+            ),
+            no(
+                "h0.fila",
+                Camada::Mundo,
+                TipoIncerteza::Aleatoria,
+                "a fila e a central de chamadas",
+            ),
+            no(
+                "h1.bolsa",
+                Camada::Mundo,
+                TipoIncerteza::Aleatoria,
+                "bolsa, emprego e fogo",
+            ),
+            no(
+                "h2.invariancia",
+                Camada::Modelo,
+                TipoIncerteza::Epistemica,
+                "as rodadas de invariância",
+            ),
+            no(
+                "h3.malha",
+                Camada::Mundo,
+                TipoIncerteza::Epistemica,
+                "a malha contínua",
+            ),
+            no(
+                "r.resolucao",
+                Camada::Modelo,
+                TipoIncerteza::Epistemica,
+                "a resolução da pergunta",
+            ),
+            no(
+                "s1.triagem",
+                Camada::Agente,
+                TipoIncerteza::Aleatoria,
+                "a triagem determinística",
+            ),
             no(
                 "f1.sintese-de-codigo",
                 Camada::Agente,
@@ -205,15 +250,31 @@ pub fn grafo_de_amostra() -> Grafo {
             grafo("s1.triagem", "h0.fila", TipoAresta::Patologia),
         ],
         hiperarestas: vec![
-            hiper("lente.fluxonomia", Lente::Fluxonomia, &["h0.fila", "h1.bolsa"]),
-            hiper("lente.escalonomia", Lente::Escalonomia, &["h0.fila", "h1.bolsa", "h2.invariancia"]),
-            hiper("lente.crononomia", Lente::Crononomia, &["h3.malha", "r.resolucao"]),
+            hiper(
+                "lente.fluxonomia",
+                Lente::Fluxonomia,
+                &["h0.fila", "h1.bolsa"],
+            ),
+            hiper(
+                "lente.escalonomia",
+                Lente::Escalonomia,
+                &["h0.fila", "h1.bolsa", "h2.invariancia"],
+            ),
+            hiper(
+                "lente.crononomia",
+                Lente::Crononomia,
+                &["h3.malha", "r.resolucao"],
+            ),
             hiper(
                 "lente.morfonomia",
                 Lente::Morfonomia,
                 &["raiz.estocologia", "h2.invariancia", "r.resolucao"],
             ),
-            hiper("lente.crisonomia", Lente::Crisonomia, &["s1.triagem", "h3.malha"]),
+            hiper(
+                "lente.crisonomia",
+                Lente::Crisonomia,
+                &["s1.triagem", "h3.malha"],
+            ),
         ],
     }
 }
@@ -236,9 +297,18 @@ mod testes {
         Grafo {
             nos: vec![no("raiz"), no("coberto"), no("meio"), no("descoberto")],
             arestas_tree: vec![
-                ArestaTree { de: "raiz".into(), para: "coberto".into() },
-                ArestaTree { de: "raiz".into(), para: "meio".into() },
-                ArestaTree { de: "meio".into(), para: "descoberto".into() },
+                ArestaTree {
+                    de: "raiz".into(),
+                    para: "coberto".into(),
+                },
+                ArestaTree {
+                    de: "raiz".into(),
+                    para: "meio".into(),
+                },
+                ArestaTree {
+                    de: "meio".into(),
+                    para: "descoberto".into(),
+                },
             ],
             arestas_graph: vec![ArestaGraph {
                 de: "meio".into(),
@@ -293,7 +363,12 @@ mod testes {
         assert_eq!(destino_da_acao(&guloso.acao), "coberto");
         assert_eq!(guloso.valor, 0.8);
         // o LATS olha dois passos: de "meio" so ha uma saida, e ela vale 1,0
-        let lats = Lats { profundidade: 2, orcamento: 40, exploracao: 1.0, semente: 2026 };
+        let lats = Lats {
+            profundidade: 2,
+            orcamento: 40,
+            exploracao: 1.0,
+            semente: 2026,
+        };
         let busca = mundo.busca("raiz", &lats, 3).expect("busca");
         assert_eq!(busca.caminho, vec!["raiz", "meio", "descoberto"]);
         assert!(busca.sem_lente);
@@ -326,27 +401,42 @@ mod testes {
     #[test]
     fn o_grafo_da_amostra_e_valido_e_tem_um_no_descoberto() {
         let grafo = grafo_de_amostra();
-        assert!(grafo.validar().is_empty(), "o grafo declarado tem de ser valido: {:?}", grafo.validar());
+        assert!(
+            grafo.validar().is_empty(),
+            "o grafo declarado tem de ser valido: {:?}",
+            grafo.validar()
+        );
         assert!(grafo.ordem_topologica().is_ok());
         assert_eq!(grafo.nos.len(), 8);
         assert_eq!(grafo.hiperarestas.len(), Lente::TODAS.len());
         let mundo = MundoHipergrafo::novo(&grafo);
         assert_eq!(mundo.nos_descobertos(), vec!["f1.sintese-de-codigo"]);
-        assert_eq!(mundo.lentes_do_no("raiz.estocologia"), vec![Lente::Morfonomia]);
+        assert_eq!(
+            mundo.lentes_do_no("raiz.estocologia"),
+            vec![Lente::Morfonomia]
+        );
     }
 
     #[test]
     fn a_busca_no_grafo_da_amostra_chega_na_frente_sem_lente() {
         let grafo = grafo_de_amostra();
         let mundo = MundoHipergrafo::novo(&grafo);
-        let lats = Lats { profundidade: 2, orcamento: 40, exploracao: 1.0, semente: 2026 };
+        let lats = Lats {
+            profundidade: 2,
+            orcamento: 40,
+            exploracao: 1.0,
+            semente: 2026,
+        };
         // o ganancioso empata nas cinco frentes de valor 0,6 e fica na primeira
         let guloso = crate::lats::ganancioso(&mundo, "raiz.estocologia").expect("decide");
         assert_eq!(destino_da_acao(&guloso.acao), "h0.fila");
         assert!((guloso.valor - 0.6).abs() < 1e-12);
         // o LATS ve que de r.resolucao se chega a frente que nenhuma lente cobre
         let busca = mundo.busca("raiz.estocologia", &lats, 3).expect("busca");
-        assert_eq!(busca.caminho, vec!["raiz.estocologia", "r.resolucao", "f1.sintese-de-codigo"]);
+        assert_eq!(
+            busca.caminho,
+            vec!["raiz.estocologia", "r.resolucao", "f1.sintese-de-codigo"]
+        );
         assert!(busca.sem_lente);
         assert_eq!(busca.valor, 1.0);
     }

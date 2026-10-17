@@ -89,7 +89,10 @@ pub fn nulo_por_embaralhamento(
     repeticoes: usize,
 ) -> Result<f64, Erro> {
     let mut rng = stochology_core::Rng::novo(semente);
-    let linhas = ambientes.first().map(Ambiente::linhas).ok_or(Erro::SemLinhas)?;
+    let linhas = ambientes
+        .first()
+        .map(Ambiente::linhas)
+        .ok_or(Erro::SemLinhas)?;
     let colunas: Vec<Vec<f64>> = (0..ambientes[0].colunas.len())
         .map(|j| {
             ambientes
@@ -161,8 +164,15 @@ mod testes {
         let ambientes = mundo_sintetico(2026, 140);
         let r = rodada("tunel-de-luz", &ambientes, 0, &[1, 2], 0.05).expect("rodada");
         assert_eq!(r.conjuntos, 4);
-        assert_eq!(r.area, vec![1], "a area que sobrevive e o invariante: {r:?}");
-        assert!(r.aceitos < r.conjuntos as usize, "nem todo conjunto passa: {r:?}");
+        assert_eq!(
+            r.area,
+            vec![1],
+            "a area que sobrevive e o invariante: {r:?}"
+        );
+        assert!(
+            r.aceitos < r.conjuntos as usize,
+            "nem todo conjunto passa: {r:?}"
+        );
     }
 
     #[test]
@@ -186,19 +196,28 @@ mod testes {
         // conjunto vazio e o confundido passam, e a area se dissolve. Quem conta o n em linha
         // pseudorreplicada fica com um teste que promete mais do que pode entregar (Phi2).
         assert_eq!(grossa[0].linhas(), 12);
-        assert!(stochology_icp::limiar_ks(12, 12, 0.05) > stochology_icp::limiar_ks(240, 240, 0.05));
+        assert!(
+            stochology_icp::limiar_ks(12, 12, 0.05) > stochology_icp::limiar_ks(240, 240, 0.05)
+        );
         assert!(
             r_grossa.aceitos >= r_fina.aceitos,
             "grao grosso aceita mais: {} contra {}",
             r_grossa.aceitos,
             r_fina.aceitos
         );
-        assert_eq!(r_fina.area, vec![1], "no grao fino o invariante sobrevive: {r_fina:?}");
+        assert_eq!(
+            r_fina.area,
+            vec![1],
+            "no grao fino o invariante sobrevive: {r_fina:?}"
+        );
         assert_eq!(
             r_grossa.aceitos, 4,
             "no grao grosso tudo passa, inclusive o conjunto vazio: {r_grossa:?}"
         );
-        assert!(r_grossa.area.is_empty(), "e a area se dissolve: {r_grossa:?}");
+        assert!(
+            r_grossa.area.is_empty(),
+            "e a area se dissolve: {r_grossa:?}"
+        );
     }
 
     #[test]
@@ -224,10 +243,14 @@ mod testes {
     #[test]
     fn o_nulo_embaralhado_mostra_o_poder_do_teste() {
         let ambientes = mundo_sintetico(5, 150);
-        let confundido = nulo_por_embaralhamento(&ambientes, 0, &[2], 0.05, 2026, 20).expect("nulo");
+        let confundido =
+            nulo_por_embaralhamento(&ambientes, 0, &[2], 0.05, 2026, 20).expect("nulo");
         let real = stochology_icp::conjunto_aceito(&ambientes, 0, &[2], 0.05).expect("testa");
         assert!(!real, "o confundido reprova com o rotulo real");
-        assert!(confundido > 0.5, "sem rotulo, o mesmo conjunto passa: {confundido}");
+        assert!(
+            confundido > 0.5,
+            "sem rotulo, o mesmo conjunto passa: {confundido}"
+        );
     }
 
     #[test]

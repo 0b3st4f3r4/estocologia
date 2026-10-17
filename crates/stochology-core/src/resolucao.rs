@@ -92,7 +92,13 @@ impl Medida {
 
 /// Um dia de fila, com os dois bracos pareados: as mesmas chegadas e as mesmas bases de servico,
 /// mudando so a taxa de atendimento. Sem isso a comparacao mediria tambem a diferenca de sorteio.
-fn dia_pareado(rng: &mut Rng, horas: usize, lam: f64, mu_agregada: f64, mu_fina: f64) -> (Medida, Medida) {
+fn dia_pareado(
+    rng: &mut Rng,
+    horas: usize,
+    lam: f64,
+    mu_agregada: f64,
+    mu_fina: f64,
+) -> (Medida, Medida) {
     let mut agregada = Medida::default();
     let mut fina = Medida::default();
     let mut espera_agregada = 0.0_f64;
@@ -158,7 +164,6 @@ pub fn medir(
         acima30_fina: fina.fracao_acima30(),
     }
 }
-
 
 // ---------------------------------------------------------------------------------------------
 // Previsões 3 e 5 do eixo R
@@ -240,7 +245,11 @@ pub fn limiar_de_oscilacao(
         let mut r1 = Medida::default();
         for dia in 0..dias {
             let forte = dia % 2 == 1;
-            let lam = if forte { media + amplitude } else { (media - amplitude).max(0.0) };
+            let lam = if forte {
+                media + amplitude
+            } else {
+                (media - amplitude).max(0.0)
+            };
             let a = dia_com_agentes(&mut rng, horas_por_dia, lam, agentes_r0);
             let agentes_r1 = crate::erlang::escala_minima(lam.max(1e-9), 1.0, META_DA_ESCALA);
             let f = dia_com_agentes(&mut rng, horas_por_dia, lam, agentes_r1);
@@ -261,21 +270,30 @@ pub fn limiar_de_oscilacao(
             acima30_r1: r1.fracao_acima30(),
         });
     }
-    let cruzamento = pontos.iter().find(|p| p.fracao_de_dias_falhos > FRACAO_DE_DIAS_FALHOS_DECLARADA);
+    let cruzamento = pontos
+        .iter()
+        .find(|p| p.fracao_de_dias_falhos > FRACAO_DE_DIAS_FALHOS_DECLARADA);
     LimiarDeOscilacao {
         limiar: cruzamento.map(|p| p.amplitude),
         perda_no_limiar: cruzamento.map(|p| p.perda),
-        monotona: pontos.windows(2).all(|par| par[1].fracao_de_dias_falhos >= par[0].fracao_de_dias_falhos - 1e-12),
+        monotona: pontos
+            .windows(2)
+            .all(|par| par[1].fracao_de_dias_falhos >= par[0].fracao_de_dias_falhos - 1e-12),
         pontos,
     }
 }
-
 
 /// A escala de R0 **calibrada**: o menor número de agentes em que a demanda plana do dia médio faz
 /// falhar no máximo `alvo_de_dias_falhos` dos dias. É a segunda especificação do desenho — a
 /// primeira, o plano de Erlang C da meta de 80%, deixava 1 dia em 5 falho já com a demanda plana.
 /// A calibração entrou como especificação nova, declarada e contada no K, e não como conserto.
-pub fn escala_calibrada(semente: u64, dias: usize, horas_por_dia: usize, media: f64, alvo_de_dias_falhos: f64) -> u32 {
+pub fn escala_calibrada(
+    semente: u64,
+    dias: usize,
+    horas_por_dia: usize,
+    media: f64,
+    alvo_de_dias_falhos: f64,
+) -> u32 {
     let inicial = crate::erlang::escala_minima(media, 1.0, META_DA_ESCALA).max(1);
     for agentes in inicial..(inicial + 40) {
         let mut rng = Rng::novo(semente);
@@ -311,7 +329,11 @@ pub fn limiar_de_oscilacao_com_plano(
         let mut r1 = Medida::default();
         for dia in 0..dias {
             let forte = dia % 2 == 1;
-            let lam = if forte { media + amplitude } else { (media - amplitude).max(0.0) };
+            let lam = if forte {
+                media + amplitude
+            } else {
+                (media - amplitude).max(0.0)
+            };
             let a = dia_com_agentes(&mut rng, horas_por_dia, lam, agentes_r0);
             let agentes_r1 = crate::erlang::escala_minima(lam.max(1e-9), 1.0, META_DA_ESCALA);
             let f = dia_com_agentes(&mut rng, horas_por_dia, lam, agentes_r1);
@@ -332,11 +354,15 @@ pub fn limiar_de_oscilacao_com_plano(
             acima30_r1: r1.fracao_acima30(),
         });
     }
-    let cruzamento = pontos.iter().find(|p| p.fracao_de_dias_falhos > FRACAO_DE_DIAS_FALHOS_DECLARADA);
+    let cruzamento = pontos
+        .iter()
+        .find(|p| p.fracao_de_dias_falhos > FRACAO_DE_DIAS_FALHOS_DECLARADA);
     LimiarDeOscilacao {
         limiar: cruzamento.map(|p| p.amplitude),
         perda_no_limiar: cruzamento.map(|p| p.perda),
-        monotona: pontos.windows(2).all(|par| par[1].fracao_de_dias_falhos >= par[0].fracao_de_dias_falhos - 1e-12),
+        monotona: pontos
+            .windows(2)
+            .all(|par| par[1].fracao_de_dias_falhos >= par[0].fracao_de_dias_falhos - 1e-12),
         pontos,
     }
 }
@@ -366,17 +392,31 @@ pub fn conservacao_do_agregado(por_dia: &[(usize, usize)], agregado: (usize, usi
 pub fn checar_implicacao(dias: &[(usize, usize)], limiar: f64) -> ChecagemDaImplicacao {
     let clientes: usize = dias.iter().map(|(_, n)| *n).sum();
     let acima: usize = dias.iter().map(|(a, _)| *a).sum();
-    let agregado = if clientes == 0 { 0.0 } else { acima as f64 / clientes as f64 };
+    let agregado = if clientes == 0 {
+        0.0
+    } else {
+        acima as f64 / clientes as f64
+    };
     let ponderada = if clientes == 0 {
         0.0
     } else {
         dias.iter()
-            .map(|(a, n)| if *n == 0 { 0.0 } else { *a as f64 / *n as f64 * *n as f64 })
+            .map(|(a, n)| {
+                if *n == 0 {
+                    0.0
+                } else {
+                    *a as f64 / *n as f64 * *n as f64
+                }
+            })
             .sum::<f64>()
             / clientes as f64
     };
-    let todos_ok = dias.iter().all(|(a, n)| *n == 0 || (*a as f64 / *n as f64) <= limiar);
-    let algum_falho = dias.iter().any(|(a, n)| *n > 0 && (*a as f64 / *n as f64) > limiar);
+    let todos_ok = dias
+        .iter()
+        .all(|(a, n)| *n == 0 || (*a as f64 / *n as f64) <= limiar);
+    let algum_falho = dias
+        .iter()
+        .any(|(a, n)| *n > 0 && (*a as f64 / *n as f64) > limiar);
     let mut violacoes = 0usize;
     let mut contraexemplos = 0usize;
     if todos_ok && agregado > limiar {
@@ -409,7 +449,12 @@ pub struct Transferencia {
 }
 
 /// Mede a previsão 5: a mesma decisão tomada em R1 (cada dia) e em R0 (o agregado).
-pub fn transferencia(semente: u64, dias: usize, horas_por_dia: usize, perfis: &[(f64, f64)]) -> Transferencia {
+pub fn transferencia(
+    semente: u64,
+    dias: usize,
+    horas_por_dia: usize,
+    perfis: &[(f64, f64)],
+) -> Transferencia {
     let mut rng = Rng::novo(semente);
     let mut violacoes = 0usize;
     let mut contraexemplos = 0usize;
@@ -420,7 +465,11 @@ pub fn transferencia(semente: u64, dias: usize, horas_por_dia: usize, perfis: &[
         let mut r0 = Medida::default();
         for dia in 0..dias {
             let forte = dia % 2 == 1;
-            let lam = if forte { media + amplitude } else { (media - amplitude).max(0.0) };
+            let lam = if forte {
+                media + amplitude
+            } else {
+                (media - amplitude).max(0.0)
+            };
             let a = dia_com_agentes(&mut rng, horas_por_dia, lam, agentes_r0);
             por_dia.push((a.acima, a.clientes));
             r0.somar(a);
@@ -428,7 +477,9 @@ pub fn transferencia(semente: u64, dias: usize, horas_por_dia: usize, perfis: &[
         let checagem = checar_implicacao(&por_dia, DIA_FALHO_ACIMA30);
         violacoes += checagem.violacoes;
         contraexemplos += checagem.contraexemplos;
-        if !conservacao_do_agregado(&por_dia, (r0.acima, r0.clientes)) || !checagem.identidade_conferida {
+        if !conservacao_do_agregado(&por_dia, (r0.acima, r0.clientes))
+            || !checagem.identidade_conferida
+        {
             conservacao = false;
         }
     }
@@ -483,7 +534,11 @@ mod testes {
         let amplitudes = [0.0, 1.0, 2.0, 3.0];
         let agentes = escala_calibrada(1909, 200, 10, 8.0, 0.10);
         let l = limiar_de_oscilacao_com_plano(1909, 200, 10, 8.0, &amplitudes, agentes);
-        assert!(l.monotona, "a fração tem de crescer com a amplitude: {:?}", l.pontos);
+        assert!(
+            l.monotona,
+            "a fração tem de crescer com a amplitude: {:?}",
+            l.pontos
+        );
         assert!(
             l.pontos[0].fracao_de_dias_falhos <= 0.10,
             "o plano é calibrado na demanda plana: {:.3}",
@@ -496,7 +551,10 @@ mod testes {
             ultimo.amplitude,
             ultimo.fracao_de_dias_falhos
         );
-        assert!(l.limiar.is_some(), "o ponto existe e o instrumento o encontra");
+        assert!(
+            l.limiar.is_some(),
+            "o ponto existe e o instrumento o encontra"
+        );
         assert!(l.limiar.expect("limiar") > 0.0, "o ponto não é o zero");
     }
 
@@ -512,7 +570,10 @@ mod testes {
             "com a demanda plana a escala de Erlang já falha um dia em cinco: {:.3}",
             l.pontos[0].fracao_de_dias_falhos
         );
-        assert!(!l.monotona, "e a fração não cresce de forma monótona neste desenho");
+        assert!(
+            !l.monotona,
+            "e a fração não cresce de forma monótona neste desenho"
+        );
         let perda_no_limiar = l.perda_no_limiar.expect("o cruzamento existe no grid");
         assert!(
             perda_no_limiar < 0.0,
@@ -526,16 +587,25 @@ mod testes {
         let l = limiar_de_oscilacao(1909, 40, 10, 8.0, &amplitudes);
         let perda_abaixo = l.pontos[0].perda;
         let perda_acima = l.pontos[3].perda;
-        assert!(perda_acima > perda_abaixo, "a perda cresce com a oscilação: {perda_acima:.2} contra {perda_abaixo:.2}");
+        assert!(
+            perda_acima > perda_abaixo,
+            "a perda cresce com a oscilação: {perda_acima:.2} contra {perda_abaixo:.2}"
+        );
     }
 
     #[test]
     fn a_transferencia_nao_tem_violacao_e_tem_contraexemplo() {
         let perfis = [(8.0, 0.5), (8.0, 1.0), (8.0, 2.0), (8.0, 3.0)];
         let t = transferencia(1909, 40, 10, &perfis);
-        assert_eq!(t.violacoes, 0, "um resultado que sobrevive a R1 sobrevive a R0");
+        assert_eq!(
+            t.violacoes, 0,
+            "um resultado que sobrevive a R1 sobrevive a R0"
+        );
         assert!(t.contraexemplos > 0, "e o contrário não vale: {:?}", t);
-        assert!(t.conservacao_conferida, "a soma dos dias reconstrói o agregado");
+        assert!(
+            t.conservacao_conferida,
+            "a soma dos dias reconstrói o agregado"
+        );
     }
 
     #[test]
@@ -543,7 +613,10 @@ mod testes {
         let por_dia = vec![(5usize, 100usize), (4, 100), (3, 100)];
         assert!(conservacao_do_agregado(&por_dia, (12, 300)));
         assert!(!conservacao_do_agregado(&por_dia, (12, 299)), "n de menos");
-        assert!(!conservacao_do_agregado(&por_dia, (11, 300)), "acima de menos");
+        assert!(
+            !conservacao_do_agregado(&por_dia, (11, 300)),
+            "acima de menos"
+        );
     }
 
     #[test]
@@ -552,7 +625,11 @@ mod testes {
         let c = checar_implicacao(&dias, DIA_FALHO_ACIMA30);
         assert_eq!(c.violacoes, 0);
         assert_eq!(c.contraexemplos, 1);
-        assert!((c.agregado - 0.095).abs() < 1e-12, "agregado {:.4}", c.agregado);
+        assert!(
+            (c.agregado - 0.095).abs() < 1e-12,
+            "agregado {:.4}",
+            c.agregado
+        );
         assert!(c.identidade_conferida);
         let limpos = vec![(5usize, 100usize), (6, 100)];
         let c2 = checar_implicacao(&limpos, DIA_FALHO_ACIMA30);

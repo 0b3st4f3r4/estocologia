@@ -11,11 +11,7 @@ pub struct Ponte {
 }
 
 /// Calcula as duas quantidades que o promotor confunde.
-pub fn falacia_do_promotor(
-    prevalencia: f64,
-    sensibilidade: f64,
-    falso_positivo: f64,
-) -> Ponte {
+pub fn falacia_do_promotor(prevalencia: f64, sensibilidade: f64, falso_positivo: f64) -> Ponte {
     let p_evidencia = prevalencia * sensibilidade + (1.0 - prevalencia) * falso_positivo;
     let posterior_de_culpa = prevalencia * sensibilidade / p_evidencia;
     Ponte {

@@ -57,18 +57,8 @@ pub fn relatorio(falhas: &[Falha]) -> String {
 /// desta checagem — a ficha só é cobrada quando o dado já está no dia ou acima dele.
 fn no_grao_do_dia_ou_maior(unidade: &str) -> bool {
     const ACIMA: [&str; 12] = [
-        "semana",
-        "mes",
-        "mês",
-        "mensal",
-        "trimestr",
-        "semestr",
-        "ano",
-        "anual",
-        "agregad",
-        "média",
-        "media",
-        "global",
+        "semana", "mes", "mês", "mensal", "trimestr", "semestr", "ano", "anual", "agregad",
+        "média", "media", "global",
     ];
     const DIA: [&str; 4] = ["dia", "diari", "jornada", "24h"];
     let u = unidade.trim().to_lowercase();
@@ -103,24 +93,26 @@ pub fn avaliar(f: &Ficha) -> Vec<Falha> {
     if !f.escopo_ecologico || f.quem_paga_pelo_erro.is_none() || f.clausula_de_saida.is_none() {
         falhas.push(Falha {
             portao: Portao::Phi4,
-            detalhe: "escopo ecológico, quem paga pelo erro ou cláusula de saída ausente".to_string(),
+            detalhe: "escopo ecológico, quem paga pelo erro ou cláusula de saída ausente"
+                .to_string(),
         });
     }
 
     // Phi5: a ação declarada tem de estar no mesmo grão da unidade independente. Se a
     // unidade é o dia (ou maior) e a resolução é R0Agregada, a ação está num grão mais
     // grosso que o dado. R1Dia ou mais fina passa.
-    if let Some(unidade) = f.unidade_independente.as_deref() {
-        if no_grao_do_dia_ou_maior(unidade) && f.resolucao == Resolucao::R0Agregada {
-            falhas.push(Falha {
-                portao: Portao::Phi5,
-                detalhe: format!(
-                    "ação em {} contra unidade independente \"{}\": a ação está num grão mais grosso que o dado",
-                    f.resolucao.codigo(),
-                    unidade.trim()
-                ),
-            });
-        }
+    if let Some(unidade) = f.unidade_independente.as_deref()
+        && no_grao_do_dia_ou_maior(unidade)
+        && f.resolucao == Resolucao::R0Agregada
+    {
+        falhas.push(Falha {
+            portao: Portao::Phi5,
+            detalhe: format!(
+                "ação em {} contra unidade independente \"{}\": a ação está num grão mais grosso que o dado",
+                f.resolucao.codigo(),
+                unidade.trim()
+            ),
+        });
     }
 
     let pergunta = f.pergunta_do_decisor.trim();

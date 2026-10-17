@@ -1,6 +1,6 @@
 //! Os testes do ingestor: o que ele grava, o que ele recusa e o que ele nao toca quando recusa.
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn temp(nome: &str) -> PathBuf {
@@ -8,7 +8,6 @@ fn temp(nome: &str) -> PathBuf {
     std::fs::create_dir_all(&d).expect("cria o diretorio de teste");
     d
 }
-
 
 /// A ficha canonica completa, com id e margem parametrizados: e o que o parser de verdade aceita.
 fn ficha(id: &str, margem: f64) -> String {
@@ -43,11 +42,19 @@ fn bin() -> &'static str {
     env!("CARGO_BIN_EXE_ingestar-jev")
 }
 
-fn conferir_lacre(dir: &PathBuf, arquivo: &str) {
+fn conferir_lacre(dir: &Path, arquivo: &str) {
     let manifesto = std::fs::read_to_string(dir.join("SHA256")).expect("le o manifesto");
-    let declarado = manifesto.split_whitespace().next().expect("hash no manifesto").to_lowercase();
+    let declarado = manifesto
+        .split_whitespace()
+        .next()
+        .expect("hash no manifesto")
+        .to_lowercase();
     let dados = std::fs::read(dir.join(arquivo)).expect("le o arquivo");
-    assert_eq!(declarado, stochology_audit::sha256_hex(&dados), "o manifesto confere com o arquivo");
+    assert_eq!(
+        declarado,
+        stochology_audit::sha256_hex(&dados),
+        "o manifesto confere com o arquivo"
+    );
 }
 
 #[test]
@@ -56,7 +63,11 @@ fn o_ingestor_grava_o_artefato_e_o_conjunto_com_os_lacres() {
     let inf = d.join("inferencias.tsv");
     std::fs::write(&inf, "pergunta A\tresposta A\npergunta B\tresposta B\n").expect("escreve");
     let desf = d.join("desfechos.tsv");
-    std::fs::write(&desf, "C-001\t0.7000\t1\tregistro\nC-002\t0.2000\t0\tregistro\n").expect("escreve");
+    std::fs::write(
+        &desf,
+        "C-001\t0.7000\t1\tregistro\nC-002\t0.2000\t0\tregistro\n",
+    )
+    .expect("escreve");
     let pesos = d.join("pesos");
     let cal = d.join("calibracao");
     let saida = Command::new(bin())
@@ -74,7 +85,10 @@ fn o_ingestor_grava_o_artefato_e_o_conjunto_com_os_lacres() {
     conferir_lacre(&pesos, "modelo.congelado");
     conferir_lacre(&cal, "desfechos.tsv");
     let texto = std::fs::read_to_string(cal.join("desfechos.tsv")).expect("le o tsv");
-    assert!(texto.starts_with("id\tcaso_id\tprobabilidade_declarada\t"), "cabecalho canonico");
+    assert!(
+        texto.starts_with("id\tcaso_id\tprobabilidade_declarada\t"),
+        "cabecalho canonico"
+    );
     assert_eq!(texto.lines().count(), 3, "cabecalho e dois casos");
     std::fs::remove_dir_all(&d).ok();
 }
@@ -95,7 +109,10 @@ fn probabilidade_no_extremo_aborta_e_nao_escreve_nada() {
         .arg(&desf)
         .output()
         .expect("roda o ingestor");
-    assert!(!saida.status.success(), "probabilidade em 1.0 tinha de abortar");
+    assert!(
+        !saida.status.success(),
+        "probabilidade em 1.0 tinha de abortar"
+    );
     let erro = String::from_utf8_lossy(&saida.stderr);
     assert!(erro.contains("extremo dogmatico"), "{erro}");
     assert!(!pesos.exists(), "nada e escrito no destino dos pesos");
@@ -127,10 +144,23 @@ fn o_modo_conferir_valida_sem_tocar_em_destino() {
         .expect("roda o ingestor");
     let texto = String::from_utf8_lossy(&saida.stdout);
     assert!(texto.contains("nenhum destino foi tocado"), "{texto}");
-    assert!(texto.contains("AmostraInsuficiente"), "com um par, o escore nao e publicado: {texto}");
-    assert_eq!(saida.status.code(), Some(1), "volume abaixo do minimo sai com 1");
-    assert!(!d.join("pesos").exists(), "o modo de conferencia nao cria destino");
-    assert!(!d.join("calibracao").exists(), "o modo de conferencia nao cria destino");
+    assert!(
+        texto.contains("AmostraInsuficiente"),
+        "com um par, o escore nao e publicado: {texto}"
+    );
+    assert_eq!(
+        saida.status.code(),
+        Some(1),
+        "volume abaixo do minimo sai com 1"
+    );
+    assert!(
+        !d.join("pesos").exists(),
+        "o modo de conferencia nao cria destino"
+    );
+    assert!(
+        !d.join("calibracao").exists(),
+        "o modo de conferencia nao cria destino"
+    );
     std::fs::remove_dir_all(&d).ok();
 }
 
@@ -159,8 +189,15 @@ fn o_modo_conferir_passa_com_trinta_pares() {
         .output()
         .expect("roda o ingestor");
     let texto = String::from_utf8_lossy(&saida.stdout);
-    assert!(saida.status.success(), "{texto}{}", String::from_utf8_lossy(&saida.stderr));
-    assert!(texto.contains("criterio de volume (N >= 30): cumprido"), "{texto}");
+    assert!(
+        saida.status.success(),
+        "{texto}{}",
+        String::from_utf8_lossy(&saida.stderr)
+    );
+    assert!(
+        texto.contains("criterio de volume (N >= 30): cumprido"),
+        "{texto}"
+    );
     std::fs::remove_dir_all(&d).ok();
 }
 
@@ -190,7 +227,11 @@ fn o_modo_conferir_recusa_resposta_fora_do_esquema() {
     let texto = String::from_utf8_lossy(&saida.stdout);
     let erro = String::from_utf8_lossy(&saida.stderr);
     assert!(texto.contains("0 de 30 respostas validas"), "{texto}");
-    assert_eq!(saida.status.code(), Some(1), "resposta fora do esquema sai com 1");
+    assert_eq!(
+        saida.status.code(),
+        Some(1),
+        "resposta fora do esquema sai com 1"
+    );
     assert!(erro.contains("fora do esquema"), "{erro}");
     std::fs::remove_dir_all(&d).ok();
 }
@@ -204,7 +245,11 @@ fn a_escape_do_pedido_nao_quebra_a_chave_do_artefato() {
     let inf = d.join("inferencias.tsv");
     let pedido = "linha um\nlinha dois";
     let resposta = ficha("caso-escape", 0.4).replace('\n', "\\n");
-    std::fs::write(&inf, format!("{}\t{}\n", pedido.replace('\n', "\\n"), resposta)).expect("escreve");
+    std::fs::write(
+        &inf,
+        format!("{}\t{}\n", pedido.replace('\n', "\\n"), resposta),
+    )
+    .expect("escreve");
     let desf = d.join("desfechos.tsv");
     std::fs::write(&desf, "C-001\t0.4000\t1\tregistro\n").expect("escreve");
     let pesos = d.join("pesos");
@@ -216,10 +261,18 @@ fn a_escape_do_pedido_nao_quebra_a_chave_do_artefato() {
         .arg(&desf)
         .output()
         .expect("roda o ingestor");
-    assert!(saida.status.success(), "{}", String::from_utf8_lossy(&saida.stderr));
-    let runner = stochology_s2::runner::RunnerLocal::carregar(&pesos.to_string_lossy()).expect("carrega");
+    assert!(
+        saida.status.success(),
+        "{}",
+        String::from_utf8_lossy(&saida.stderr)
+    );
+    let runner =
+        stochology_s2::runner::RunnerLocal::carregar(&pesos.to_string_lossy()).expect("carrega");
     let guardados = runner.pedidos();
     assert_eq!(guardados.len(), 1, "um pedido guardado");
-    assert_eq!(guardados[0], pedido, "o pedido guardado e o texto cru, nao o escapado");
+    assert_eq!(
+        guardados[0], pedido,
+        "o pedido guardado e o texto cru, nao o escapado"
+    );
     std::fs::remove_dir_all(&d).ok();
 }

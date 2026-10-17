@@ -7,3 +7,6 @@ license.workspace = true
 
 [dependencies]
 stochology-core = { path = "../stochology-core" }
+
+[lints]
+workspace = true

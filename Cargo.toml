@@ -22,8 +22,24 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+# Versao que a arvore realmente compila e testa, fixada em rust-toolchain.toml. A MSRV antiga
+# (1.85) nunca foi exercitada: era alegacao sem instrumento.
+rust-version = "1.97"
 license = "MIT"
+
+# Um so conjunto de lints para os dezesseis crates. O -D warnings do CI so e honesto se o
+# padrao nao puder divergir de crate para crate.
+[workspace.lints.rust]
+unsafe_code = "deny"
+unused_must_use = "deny"
+rust_2018_idioms = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+# Os kernels numericos indexam arrays paralelos de proposito: o indice e o dado (a coluna, a
+# fatia, o instante), nao o elemento. Trocar por iterador custa legibilidade e arrisca
+# aritmetica de indice num caminho que o livro publica.
+needless_range_loop = "allow"
 
 [profile.release]
 opt-level = 3

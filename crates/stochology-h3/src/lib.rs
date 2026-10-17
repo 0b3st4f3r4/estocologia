@@ -125,20 +125,30 @@ pub fn laco_da_acao(semente: u64, n: usize, ruido_do_indicador: f64) -> LacoDaAc
     let media_alvo = alvo.iter().sum::<f64>() / n as f64;
     let media_indicador = indicador.iter().sum::<f64>() / n as f64;
     let mut ordem: Vec<usize> = (0..n).collect();
-    ordem.sort_by(|a, b| indicador[*b].partial_cmp(&indicador[*a]).unwrap_or(std::cmp::Ordering::Equal));
+    ordem.sort_by(|a, b| {
+        indicador[*b]
+            .partial_cmp(&indicador[*a])
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
     let corte = (n / 10).max(1);
     let escolhidos = &ordem[..corte];
     let ganho_no_indicador =
         escolhidos.iter().map(|i| indicador[*i]).sum::<f64>() / corte as f64 - media_indicador;
-    let ganho_no_alvo = escolhidos.iter().map(|i| alvo[*i]).sum::<f64>() / corte as f64 - media_alvo;
+    let ganho_no_alvo =
+        escolhidos.iter().map(|i| alvo[*i]).sum::<f64>() / corte as f64 - media_alvo;
     let razao = if ganho_no_indicador.abs() < 1e-12 {
         0.0
     } else {
         ganho_no_alvo / ganho_no_indicador
     };
-    let desvio_alvo = (alvo.iter().map(|v| (v - media_alvo).powi(2)).sum::<f64>() / n as f64).sqrt();
-    let desvio_indicador =
-        (indicador.iter().map(|v| (v - media_indicador).powi(2)).sum::<f64>() / n as f64).sqrt();
+    let desvio_alvo =
+        (alvo.iter().map(|v| (v - media_alvo).powi(2)).sum::<f64>() / n as f64).sqrt();
+    let desvio_indicador = (indicador
+        .iter()
+        .map(|v| (v - media_indicador).powi(2))
+        .sum::<f64>()
+        / n as f64)
+        .sqrt();
     let covariancia = alvo
         .iter()
         .zip(indicador.iter())
@@ -150,7 +160,12 @@ pub fn laco_da_acao(semente: u64, n: usize, ruido_do_indicador: f64) -> LacoDaAc
     } else {
         0.0
     };
-    LacoDaAcao { ganho_no_indicador, ganho_no_alvo, razao, passivo }
+    LacoDaAcao {
+        ganho_no_indicador,
+        ganho_no_alvo,
+        razao,
+        passivo,
+    }
 }
 
 #[cfg(test)]
@@ -193,7 +208,10 @@ mod testes {
         }
         let pequenas = pequenas / rodadas as f64;
         let grandes = grandes / rodadas as f64;
-        assert!(pequenas > grandes, "200 pontos medem {pequenas}, 8000 medem {grandes}");
+        assert!(
+            pequenas > grandes,
+            "200 pontos medem {pequenas}, 8000 medem {grandes}"
+        );
     }
 
     #[test]
@@ -234,9 +252,15 @@ mod testes {
             "indicador que e o alvo nao encolhe: {perfeito:?}"
         );
         let viciado = laco_da_acao(2026, 40_000, 1.0);
-        assert!(viciado.razao < 0.8, "com ruido proprio, o ganho evapora: {viciado:?}");
+        assert!(
+            viciado.razao < 0.8,
+            "com ruido proprio, o ganho evapora: {viciado:?}"
+        );
         let pior = laco_da_acao(2026, 40_000, 2.0);
-        assert!(pior.razao < viciado.razao, "o laco cresce com o ruido: {pior:?}");
+        assert!(
+            pior.razao < viciado.razao,
+            "o laco cresce com o ruido: {pior:?}"
+        );
         assert!(viciado.passivo < perfeito.passivo);
     }
 
@@ -247,7 +271,10 @@ mod testes {
         for ruido in [0.0_f64, 0.5, 1.0, 2.0] {
             let medido = laco_da_acao(2026, 40_000, ruido).passivo;
             let exato = 1.0 / (2.0 * (1.0 + ruido * ruido)).sqrt();
-            assert!((medido - exato).abs() < 0.03, "ruido {ruido}: {medido} contra {exato}");
+            assert!(
+                (medido - exato).abs() < 0.03,
+                "ruido {ruido}: {medido} contra {exato}"
+            );
         }
     }
 }

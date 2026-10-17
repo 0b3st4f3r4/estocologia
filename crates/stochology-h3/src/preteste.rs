@@ -69,13 +69,33 @@ pub struct Murphy {
 #[derive(Debug, Clone, PartialEq)]
 pub enum Reprovacao {
     /// Caixa sistemática pela régua do protocolo como escrito (limiar fixo de desvio).
-    CaixaSistemáticaPorLimiarFixo { indice: usize, n: usize, desvio: f64 },
+    CaixaSistemáticaPorLimiarFixo {
+        indice: usize,
+        n: usize,
+        desvio: f64,
+    },
     /// Caixa sistemática pela régua corrigida (declaração 3): teste binomial com Bonferroni.
-    CaixaSistemáticaPorTeste { indice: usize, n: usize, p_com_bonferroni: f64 },
-    HabilidadeNaoPositiva { habilidade: f64 },
-    EceAcimaDoLimite { ece: f64, limite: f64 },
-    CaixaSistematica { indice: usize, n: usize, desvio: f64 },
-    CurvaNaoMonotona { media_da_caixa_baixa: f64, media_da_caixa_alta: f64 },
+    CaixaSistemáticaPorTeste {
+        indice: usize,
+        n: usize,
+        p_com_bonferroni: f64,
+    },
+    HabilidadeNaoPositiva {
+        habilidade: f64,
+    },
+    EceAcimaDoLimite {
+        ece: f64,
+        limite: f64,
+    },
+    CaixaSistematica {
+        indice: usize,
+        n: usize,
+        desvio: f64,
+    },
+    CurvaNaoMonotona {
+        media_da_caixa_baixa: f64,
+        media_da_caixa_alta: f64,
+    },
 }
 
 /// O que o pre-teste devolve: as medidas e o veredito.
@@ -108,7 +128,11 @@ pub fn caixas_de_massa_igual(confianca: &[f64], acerto: &[bool], baldes: usize) 
         return Vec::new();
     }
     let mut ordem: Vec<usize> = (0..confianca.len()).collect();
-    ordem.sort_by(|a, b| confianca[*a].partial_cmp(&confianca[*b]).unwrap_or(std::cmp::Ordering::Equal));
+    ordem.sort_by(|a, b| {
+        confianca[*a]
+            .partial_cmp(&confianca[*b])
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
     let mut caixas = Vec::with_capacity(baldes);
     let n = ordem.len();
     for indice in 0..baldes {
@@ -198,7 +222,10 @@ pub fn ece_de_massa_igual(confianca: &[f64], acerto: &[bool], baldes: usize) -> 
         return f64::NAN;
     }
     let n = confianca.len() as f64;
-    caixas.iter().map(|c| (c.n as f64 / n) * c.desvio().abs()).sum()
+    caixas
+        .iter()
+        .map(|c| (c.n as f64 / n) * c.desvio().abs())
+        .sum()
 }
 
 /// O criterio 4 do protocolo, na letra dele: a media prevista da caixa de cima acima da de baixo.
@@ -227,7 +254,11 @@ pub fn curva_observada_e_fracamente_monotona(caixas: &[Caixa]) -> bool {
 pub fn decomposicao_de_murphy(confianca: &[f64], acerto: &[bool]) -> Murphy {
     let res: Vec<f64> = acerto.iter().map(|y| if *y { 1.0 } else { 0.0 }).collect();
     let (rel, res_m, unc) = stochology_core::decomposicao_murphy(confianca, &res);
-    Murphy { rel, res: res_m, unc }
+    Murphy {
+        rel,
+        res: res_m,
+        unc,
+    }
 }
 
 fn brier(confianca: &[f64], acerto: &[bool]) -> f64 {
@@ -244,7 +275,12 @@ fn brier(confianca: &[f64], acerto: &[bool]) -> f64 {
 /// Declarado: este portao foi medido e substituido pelo ajustado (`BALDES_AJUSTADOS`,
 /// `ECE_MAXIMO_AJUSTADO`), porque o nulo calibrado o reprova em 99,92% dos casos.
 pub fn avaliar(confianca: &[f64], acerto: &[bool]) -> PreTeste {
-    avaliar_com(confianca, acerto, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO)
+    avaliar_com(
+        confianca,
+        acerto,
+        BALDES_DO_PROTOCOLO,
+        ECE_MAXIMO_DO_PROTOCOLO,
+    )
 }
 
 /// Roda os quatro critérios com o desenho de caixas e o limiar declarados pelo chamador, com o critério 3
@@ -266,12 +302,7 @@ pub fn avaliar_ajustado(confianca: &[f64], acerto: &[bool]) -> PreTeste {
 
 /// Roda os quatro critérios com o desenho de caixas e o limiar declarados pelo chamador, com o critério 3
 /// pela régua do protocolo **como escrito** (limiar fixo).
-pub fn avaliar_com(
-    confianca: &[f64],
-    acerto: &[bool],
-    baldes: usize,
-    ece_maximo: f64,
-) -> PreTeste {
+pub fn avaliar_com(confianca: &[f64], acerto: &[bool], baldes: usize, ece_maximo: f64) -> PreTeste {
     avaliar_interno(confianca, acerto, baldes, ece_maximo, false)
 }
 
@@ -286,15 +317,25 @@ fn avaliar_interno(
     let b = brier(confianca, acerto);
     let media: f64 = acerto.iter().filter(|y| **y).count() as f64 / n.max(1) as f64;
     let brier_clima = media * (1.0 - media);
-    let habilidade = if brier_clima == 0.0 { 0.0 } else { 1.0 - b / brier_clima };
+    let habilidade = if brier_clima == 0.0 {
+        0.0
+    } else {
+        1.0 - b / brier_clima
+    };
     let caixas = caixas_de_massa_igual(confianca, acerto, baldes);
     let ece = ece_de_massa_igual(confianca, acerto, baldes);
     let mut reprovacoes = Vec::new();
-    if !(habilidade > 0.0) {
+    // A negacao e proposital: NaN tem de cair na reprovacao, nao passar pela comparacao.
+    let habilidade_positiva = habilidade > 0.0;
+    if !habilidade_positiva {
         reprovacoes.push(Reprovacao::HabilidadeNaoPositiva { habilidade });
     }
-    if !(ece <= ece_maximo) {
-        reprovacoes.push(Reprovacao::EceAcimaDoLimite { ece, limite: ece_maximo });
+    let ece_dentro_do_limite = ece <= ece_maximo;
+    if !ece_dentro_do_limite {
+        reprovacoes.push(Reprovacao::EceAcimaDoLimite {
+            ece,
+            limite: ece_maximo,
+        });
     }
     for caixa in &caixas {
         if caixa.n >= CAIXA_N_MINIMO && caixa.desvio().abs() > CAIXA_DESVIO_MAXIMO {
@@ -431,7 +472,10 @@ pub fn nulo_com_gate(
             reprovados_algum += 1;
         }
         let caixas = caixas_de_massa_igual(&confianca, &acerto, baldes);
-        if caixas_por_teste_binomial(&caixas).iter().any(|c| c.sistematica(0.05)) {
+        if caixas_por_teste_binomial(&caixas)
+            .iter()
+            .any(|c| c.sistematica(0.05))
+        {
             reprovados_3_binomial += 1;
         }
         if habilidade > 0.0 && ece <= ece_maximo && !c3 && !c2 {
@@ -469,7 +513,10 @@ mod testes {
             let acerto: Vec<bool> = confianca.iter().map(|p| uniforme(&mut rng) < *p).collect();
             let m = decomposicao_de_murphy(&confianca, &acerto);
             let b = brier(&confianca, &acerto);
-            assert!((m.rel - m.res + m.unc - b).abs() < 1e-12, "identidade: {m:?} contra {b}");
+            assert!(
+                (m.rel - m.res + m.unc - b).abs() < 1e-12,
+                "identidade: {m:?} contra {b}"
+            );
         }
     }
 
@@ -490,7 +537,11 @@ mod testes {
         // a granularidade de 4 itens por caixa ja custa cerca de 0,06 de ECE a quem esta calibrado:
         // e um piso do desenho, e nao um erro do especialista.
         assert!(r.ece < 0.08, "ece do desenho perfeito: {}", r.ece);
-        assert!(r.habilidade > 0.2, "habilidade do desenho perfeito: {}", r.habilidade);
+        assert!(
+            r.habilidade > 0.2,
+            "habilidade do desenho perfeito: {}",
+            r.habilidade
+        );
         assert!(curva_fracamente_monotona(&r.caixas));
         assert!(curva_observada_e_fracamente_monotona(&r.caixas));
         assert!(r.aprovado, "reprovacoes: {:?}", r.reprovacoes);
@@ -503,7 +554,10 @@ mod testes {
         let confianca: Vec<f64> = (0..20).map(|i| 0.95 - i as f64 * 0.045).collect();
         let invertido: Vec<bool> = (0..20).map(|i| i % 3 != 0).collect();
         let caixas = caixas_de_massa_igual(&confianca, &invertido, BALDES_DO_PROTOCOLO);
-        assert!(curva_fracamente_monotona(&caixas), "o criterio 4 passa mesmo com a previsao invertida");
+        assert!(
+            curva_fracamente_monotona(&caixas),
+            "o criterio 4 passa mesmo com a previsao invertida"
+        );
     }
 
     #[test]
@@ -512,9 +566,21 @@ mod testes {
         let acerto: Vec<bool> = (0..40).map(|i| i % 4 == 0).collect();
         let r = avaliar(&confianca, &acerto);
         assert!(!r.aprovado);
-        assert!(r.reprovacoes.iter().any(|x| matches!(x, Reprovacao::EceAcimaDoLimite { .. })));
-        assert!(r.reprovacoes.iter().any(|x| matches!(x, Reprovacao::CaixaSistemáticaPorLimiarFixo { .. })));
-        assert!(r.habilidade < 0.0, "prever alto e errar derruba a habilidade: {}", r.habilidade);
+        assert!(
+            r.reprovacoes
+                .iter()
+                .any(|x| matches!(x, Reprovacao::EceAcimaDoLimite { .. }))
+        );
+        assert!(
+            r.reprovacoes
+                .iter()
+                .any(|x| matches!(x, Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }))
+        );
+        assert!(
+            r.habilidade < 0.0,
+            "prever alto e errar derruba a habilidade: {}",
+            r.habilidade
+        );
     }
 
     #[test]
@@ -524,35 +590,71 @@ mod testes {
         let acerto: Vec<bool> = confianca.iter().map(|p| *p < 0.5).collect();
         let r = avaliar(&confianca, &acerto);
         // o criterio 4 nao morde (e inerte); quem denuncia a curva trocada e o diagnostico da observada.
-        assert!(r.reprovacoes.iter().all(|x| !matches!(x, Reprovacao::CurvaNaoMonotona { .. })));
+        assert!(
+            r.reprovacoes
+                .iter()
+                .all(|x| !matches!(x, Reprovacao::CurvaNaoMonotona { .. }))
+        );
         assert!(!curva_observada_e_fracamente_monotona(&r.caixas));
-        assert!(r.caixas.first().expect("tem caixa").taxa_observada > r.caixas.last().expect("tem caixa").taxa_observada);
+        assert!(
+            r.caixas.first().expect("tem caixa").taxa_observada
+                > r.caixas.last().expect("tem caixa").taxa_observada
+        );
     }
 
     #[test]
     fn o_desenho_do_protocolo_poe_dois_itens_por_caixa() {
-        let caixas = caixas_de_massa_igual(&(0..20).map(|i| (i as f64 + 0.5) / 20.0).collect::<Vec<f64>>(),
-            &vec![true; 20], BALDES_DO_PROTOCOLO);
+        let caixas = caixas_de_massa_igual(
+            &(0..20)
+                .map(|i| (i as f64 + 0.5) / 20.0)
+                .collect::<Vec<f64>>(),
+            &[true; 20],
+            BALDES_DO_PROTOCOLO,
+        );
         assert_eq!(caixas.len(), 10);
-        assert!(caixas.iter().all(|c| c.n == 2), "com 20 itens e 10 caixas, n = 2: {caixas:?}");
-        assert!(caixas.iter().all(|c| c.n < CAIXA_N_MINIMO), "o criterio 3 fica vacuoso neste desenho");
+        assert!(
+            caixas.iter().all(|c| c.n == 2),
+            "com 20 itens e 10 caixas, n = 2: {caixas:?}"
+        );
+        assert!(
+            caixas.iter().all(|c| c.n < CAIXA_N_MINIMO),
+            "o criterio 3 fica vacuoso neste desenho"
+        );
     }
 
     #[test]
     fn o_teste_binomial_nao_reprova_a_caixa_calibrada() {
         // a caixa que reprovou o terceiro pré-teste: n = 4, média prevista 0,725, taxa observada 1
-        let caixas = vec![Caixa { indice: 3, n: 4, media_prevista: 0.725, taxa_observada: 1.0 }];
+        let caixas = vec![Caixa {
+            indice: 3,
+            n: 4,
+            media_prevista: 0.725,
+            taxa_observada: 1.0,
+        }];
         let t = caixa(&caixas);
-        assert!(!t[0].sistematica(0.05), "p com Bonferroni {}", t[0].p_com_bonferroni);
+        assert!(
+            !t[0].sistematica(0.05),
+            "p com Bonferroni {}",
+            t[0].p_com_bonferroni
+        );
         assert!(t[0].p_bilateral > 0.5, "p bilateral {}", t[0].p_bilateral);
     }
 
     #[test]
     fn o_teste_binomial_reprova_a_caixa_impossivel() {
         // o caso que ele tem de pegar: prever 0,9 numa caixa e nenhum item sair sim
-        let caixas = vec![Caixa { indice: 0, n: 4, media_prevista: 0.9, taxa_observada: 0.0 }];
+        let caixas = vec![Caixa {
+            indice: 0,
+            n: 4,
+            media_prevista: 0.9,
+            taxa_observada: 0.0,
+        }];
         let t = caixa(&caixas);
-        assert!(t[0].sistematica(0.05), "p com Bonferroni {}", t[0].p_com_bonferroni);
+        assert!(
+            t[0].sistematica(0.05),
+            "p com Bonferroni {}",
+            t[0].p_com_bonferroni
+        );
     }
 
     fn caixa(caixas: &[Caixa]) -> Vec<CaixaTestada> {
@@ -563,7 +665,12 @@ mod testes {
     fn a_caixa_na_media_tem_p_proximo_de_um() {
         for (n, p) in [(4usize, 0.5_f64), (4, 0.25), (4, 0.75), (10, 0.7)] {
             let acertos = (n as f64 * p).round();
-            let caixas = vec![Caixa { indice: 0, n, media_prevista: p, taxa_observada: acertos / n as f64 }];
+            let caixas = vec![Caixa {
+                indice: 0,
+                n,
+                media_prevista: p,
+                taxa_observada: acertos / n as f64,
+            }];
             let t = caixa(&caixas);
             assert!(t[0].p_bilateral > 0.5, "n {n} p {p}: {}", t[0].p_bilateral);
         }
@@ -579,11 +686,24 @@ mod testes {
     fn o_nulo_do_pre_teste_cresce_quando_a_amostra_encolhe() {
         let vinte = nulo_do_pre_teste(2026, 2_000, 20, BALDES_DO_PROTOCOLO);
         let duzentos = nulo_do_pre_teste(2026, 2_000, 200, BALDES_DO_PROTOCOLO);
-        assert!(vinte.ece_p50 > duzentos.ece_p50, "{} contra {}", vinte.ece_p50, duzentos.ece_p50);
+        assert!(
+            vinte.ece_p50 > duzentos.ece_p50,
+            "{} contra {}",
+            vinte.ece_p50,
+            duzentos.ece_p50
+        );
         assert!(vinte.ece_p90 >= vinte.ece_p50);
         assert!(vinte.ece_p95 >= vinte.ece_p90);
-        assert!(vinte.habilidade_p50 > 0.0, "calibrado tem habilidade positiva: {}", vinte.habilidade_p50);
-        assert!(vinte.quantos_passam < 1.0, "o limiar de 0,10 nao deixa todo mundo passar: {}", vinte.quantos_passam);
+        assert!(
+            vinte.habilidade_p50 > 0.0,
+            "calibrado tem habilidade positiva: {}",
+            vinte.habilidade_p50
+        );
+        assert!(
+            vinte.quantos_passam < 1.0,
+            "o limiar de 0,10 nao deixa todo mundo passar: {}",
+            vinte.quantos_passam
+        );
     }
 
     #[test]
