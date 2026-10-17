@@ -25,6 +25,7 @@
 //! - **R2 e R3 no planejamento.** O instrumento mede o par agregado/fino (R0 e R1); as resolucoes mais finas
 //!   ficam declaradas como fora do alcance medido, e nao sao estimadas por extrapolacao.
 
+pub mod banca;
 pub mod calibracao;
 pub mod crenca;
 pub mod estresse;
@@ -43,5 +44,9 @@ pub use hipergrafo::{MundoHipergrafo, Trilha, destino_da_acao, grafo_de_amostra}
 pub use inferencia::{Cadeia, Metropolis, log_beta, log_normal};
 pub use lats::{Decisao, Lats, Mundo, ganancioso};
 pub use planejamento::{Avaliacao, DecisaoDeResolucao, avaliar as avaliar_resolucoes, decidir};
+pub use banca::{
+    Autoridade, Avaliador, Bancada, Designacao, EstadoBancada, Fecho, Leitura, Lente, Peca, Recibo,
+    Recusa, Unidade, Veto, LEITURA_MINIMA, VETOS_POR_JANELA, aplicar, atribuir, fechar,
+};
 pub use calibracao::{Calibracao, Desfecho, AMOSTRA_MINIMA, calibrar, ler_desfechos};
 pub use runner::{RunnerLocal, brier, hash_declarado};

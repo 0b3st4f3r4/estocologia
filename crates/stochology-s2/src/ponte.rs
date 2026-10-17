@@ -372,6 +372,208 @@ pub fn rodar() {
     println!("  o que ja fecha: o portao dos pesos, a decodificacao restrita com abstencao, a prova de determinismo, o custo por chamada, a regra de adequacao do espaco, o runner e o leitor do conjunto rotulado");
 }
 
+
+/// A medida do instrumento, em forma legivel por maquina.
+///
+/// O `labs --jev` imprime para humano; esta estrutura existe para o registro nao ser digitado a mao. Ela sai
+/// como ficha (campo = valor), que e o formato que o repositorio ja usa, e volta a entrar por `de_ficha`.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct Medida {
+    pub pesos: Option<String>,
+    pub respostas: usize,
+    pub pedidos: usize,
+    pub sonda: String,
+    pub abstencoes: usize,
+    pub fracao_de_abstencao: f64,
+    pub g1_identicas: bool,
+    pub g1_hash: String,
+    pub tokens_por_chamada: f64,
+    pub ms_por_chamada: f64,
+    pub n_pares: usize,
+    pub brier: Option<f64>,
+    pub ece: Option<f64>,
+    pub amostra_minima: usize,
+}
+
+/// Mede o que o instrumento sabe medir, sem imprimir nada.
+pub fn medir() -> Medida {
+    let mut m = Medida {
+        amostra_minima: crate::calibracao::AMOSTRA_MINIMA,
+        sonda: String::from("nenhuma: sem artefato"),
+        ..Medida::default()
+    };
+    if let Ok(mut runner) = crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO) {
+        m.pesos = Some(runner.sha256().to_string());
+        m.respostas = runner.respostas();
+        let do_artefato = runner.pedidos();
+        let (ps, sonda) = if do_artefato.is_empty() {
+            (
+                (1..=4).map(|i| pedido(&format!("caso {i}"))).collect::<Vec<String>>(),
+                String::from("sonda propria (artefato v1)"),
+            )
+        } else {
+            (do_artefato, String::from("casos do proprio artefato"))
+        };
+        m.pedidos = ps.len();
+        m.sonda = sonda;
+        let mut c = Contabilidade::default();
+        let (a, _, iguais) = provar_determinismo(&mut runner, &ps, &mut c);
+        m.g1_identicas = iguais;
+        m.g1_hash = a;
+        let mut c2 = Contabilidade::default();
+        let ad = adequacao_do_espaco(&mut runner, &ps, &mut c2);
+        m.abstencoes = ad.abstencoes;
+        m.fracao_de_abstencao = ad.fracao;
+        let (tk, msq) = c2.por_chamada();
+        m.tokens_por_chamada = tk;
+        m.ms_por_chamada = msq;
+    }
+    if let Ok(cal) = crate::calibracao::carregar(
+        crate::calibracao::DIR_PADRAO,
+        0,
+        crate::calibracao::AMOSTRA_MINIMA,
+    ) {
+        if let crate::calibracao::Calibracao::Escore { n, brier, ece, .. } = cal {
+            m.n_pares = n;
+            m.brier = Some(brier);
+            m.ece = Some(ece);
+        }
+    }
+    m
+}
+
+/// Casas decimais declaradas por campo. A escrita e a leitura saem daqui; nao ha epsilon solto.
+pub const CASAS_FRACAO: usize = 6;
+pub const CASAS_ESCORE: usize = 6;
+pub const CASAS_CUSTO: usize = 1;
+
+/// Arredonda para as casas declaradas, para que a ficha seja exata na volta.
+///
+/// Sem isto, escrever `1.0 / 33.0` com seis casas e ler de volta da `0.030303`, que nao e o mesmo
+/// `f64` (`0.030303030303030304`): o teste vira loteria de representacao e o registro ganha um epsilon
+/// que ninguem declarou. Quantizando na borda, a comparacao volta a ser de igualdade.
+pub fn quantizar(x: f64, casas: usize) -> f64 {
+    if !x.is_finite() {
+        return x;
+    }
+    let escala = 10f64.powi(casas as i32);
+    (x * escala).round() / escala
+}
+
+impl Medida {
+    /// A medida com todo campo numerico reduzido as casas que a ficha carrega.
+    pub fn quantizada(mut self) -> Medida {
+        self.fracao_de_abstencao = quantizar(self.fracao_de_abstencao, CASAS_FRACAO);
+        self.tokens_por_chamada = quantizar(self.tokens_por_chamada, CASAS_CUSTO);
+        self.ms_por_chamada = quantizar(self.ms_por_chamada, CASAS_CUSTO);
+        self.brier = self.brier.map(|v| quantizar(v, CASAS_ESCORE));
+        self.ece = self.ece.map(|v| quantizar(v, CASAS_ESCORE));
+        self
+    }
+}
+
+fn escore(v: Option<f64>, casas: usize) -> String {
+    match v {
+        Some(x) if x.is_finite() => format!("{:.*}", casas, x),
+        _ => String::from("(ausente)"),
+    }
+}
+
+/// A medida como ficha, uma linha por campo.
+pub fn ficha_da_medida(m: &Medida) -> String {
+    let m = m.clone().quantizada();
+    let vazio = String::from("(ausente)");
+    let mut s = String::new();
+    s.push_str(&format!("pesos = {}\n", m.pesos.clone().unwrap_or(vazio.clone())));
+    s.push_str(&format!("respostas = {}\n", m.respostas));
+    s.push_str(&format!("pedidos = {}\n", m.pedidos));
+    s.push_str(&format!("sonda = {}\n", m.sonda));
+    s.push_str(&format!("abstencoes = {}\n", m.abstencoes));
+    s.push_str(&format!("fracao_de_abstencao = {:.*}\n", CASAS_FRACAO, m.fracao_de_abstencao));
+    s.push_str(&format!("g1_identicas = {}\n", m.g1_identicas));
+    s.push_str(&format!("g1_hash = {}\n", m.g1_hash));
+    s.push_str(&format!("tokens_por_chamada = {:.*}\n", CASAS_CUSTO, m.tokens_por_chamada));
+    s.push_str(&format!("ms_por_chamada = {:.*}\n", CASAS_CUSTO, m.ms_por_chamada));
+    s.push_str(&format!("n_pares = {}\n", m.n_pares));
+    s.push_str(&format!("brier = {}\n", escore(m.brier, CASAS_ESCORE)));
+    s.push_str(&format!("ece = {}\n", escore(m.ece, CASAS_ESCORE)));
+    s.push_str(&format!("amostra_minima = {}\n", m.amostra_minima));
+    s
+}
+
+/// Le a ficha de volta para a medida. Campo ausente vira o padrao, campo numerico invalido e erro.
+pub fn de_ficha(texto: &str) -> Result<Medida, String> {
+    let mut m = Medida::default();
+    for linha in texto.lines() {
+        let (chave, valor) = match linha.split_once('=') {
+            Some(par) => (par.0.trim(), par.1.trim()),
+            None => continue,
+        };
+        let numero = |v: &str| -> Result<f64, String> {
+            let x = v.parse::<f64>().map_err(|_| format!("{chave}: {v:?} nao e numero"))?;
+            if !x.is_finite() {
+                return Err(format!("{chave}: {v:?} nao e numero finito; ausencia se escreve (ausente)"));
+            }
+            Ok(x)
+        };
+        let opcional = |v: &str| -> Result<Option<f64>, String> {
+            if v == "(ausente)" || v.is_empty() {
+                return Ok(None);
+            }
+            numero(v).map(Some)
+        };
+        let inteiro = |v: &str| v.parse::<usize>().map_err(|_| format!("{chave}: {v:?} nao e inteiro"));
+        match chave {
+            "pesos" => m.pesos = if valor == "(ausente)" || valor.is_empty() { None } else { Some(valor.to_string()) },
+            "respostas" => m.respostas = inteiro(valor)?,
+            "pedidos" => m.pedidos = inteiro(valor)?,
+            "sonda" => m.sonda = valor.to_string(),
+            "abstencoes" => m.abstencoes = inteiro(valor)?,
+            "fracao_de_abstencao" => m.fracao_de_abstencao = numero(valor)?,
+            "g1_identicas" => m.g1_identicas = valor == "true",
+            "g1_hash" => m.g1_hash = valor.to_string(),
+            "tokens_por_chamada" => m.tokens_por_chamada = numero(valor)?,
+            "ms_por_chamada" => m.ms_por_chamada = numero(valor)?,
+            "n_pares" => m.n_pares = inteiro(valor)?,
+            "brier" => m.brier = opcional(valor)?,
+            "ece" => m.ece = opcional(valor)?,
+            "amostra_minima" => m.amostra_minima = inteiro(valor)?,
+            _ => {}
+        }
+    }
+    Ok(m)
+}
+
+/// A linha de registro de uma rodada, ou o motivo de nao haver linha.
+///
+/// A regra e declarada antes: sem peso verificado, sem G1 fechado, sem amostra minima e sem Brier e ECE, nao ha
+/// linha. Registrar meia medida seria pior do que nao registrar nada.
+pub fn linha_de_registro(m: &Medida, data: &str) -> Result<String, String> {
+    let data = data.trim();
+    if data.len() != 10 || data.chars().filter(|c| *c == '-').count() != 2 {
+        return Err(String::from("data tem de vir no formato AAAA-MM-DD"));
+    }
+    let pesos = m.pesos.clone().ok_or("sem peso verificado: o registro exige o sha256 do artefato")?;
+    if !m.g1_identicas {
+        return Err(String::from("G1 nao fechou: duas execucoes com respostas diferentes nao viram registro"));
+    }
+    if m.n_pares < m.amostra_minima {
+        return Err(format!(
+            "amostra insuficiente: {} pares contra o minimo de {}",
+            m.n_pares, m.amostra_minima
+        ));
+    }
+    let brier = m.brier.ok_or("sem Brier medido")?;
+    let ece = m.ece.ok_or("sem ECE medido")?;
+    if !brier.is_finite() || !ece.is_finite() {
+        return Err(String::from("Brier ou ECE nao finito nao vira registro: escore tem de ser numero"));
+    }
+    Ok(format!(
+        "{data}\t{pesos}\t{}\t{}\t{}\t{:.1}\t{:.1}\t{brier:.6}\t{ece:.6}",
+        m.pedidos, m.abstencoes, m.n_pares, m.tokens_por_chamada, m.ms_por_chamada
+    ))
+}
+
 #[cfg(test)]
 mod testes {
     use super::*;
@@ -436,6 +638,108 @@ mod testes {
         let pedidos: Vec<String> = (1..=3).map(|i| pedido(&format!("caso {i}"))).collect();
         let (a, b, iguais) = provar_determinismo(&mut ModeloDeEnsaioInstavel::novo(), &pedidos, &mut contabilidade);
         assert!(!iguais, "o modelo que muda de resposta NAO fecha o G1: {a} contra {b}");
+    }
+
+
+    #[test]
+    fn a_medida_vai_e_volta_pela_ficha() {
+        let m = Medida {
+            pesos: Some(String::from("abc")),
+            respostas: 32,
+            pedidos: 32,
+            sonda: String::from("casos do proprio artefato"),
+            abstencoes: 1,
+            fracao_de_abstencao: 1.0 / 33.0,
+            g1_identicas: true,
+            g1_hash: String::from("deadbeef"),
+            tokens_por_chamada: 95.25,
+            ms_por_chamada: 1.5,
+            n_pares: 32,
+            brier: Some(0.25),
+            ece: Some(0.125),
+            amostra_minima: 30,
+        };
+        let ficha = ficha_da_medida(&m);
+        let volta = de_ficha(&ficha).expect("le de volta");
+        assert_eq!(volta.pesos, m.pesos);
+        assert_eq!(volta.pedidos, 32);
+        assert_eq!(volta.abstencoes, 1);
+        assert!(volta.g1_identicas);
+        assert!((volta.brier.unwrap() - 0.25).abs() < 1e-12);
+        assert!((volta.ece.unwrap() - 0.125).abs() < 1e-12);
+        assert_eq!(volta, m.quantizada(), "a ficha volta identica apos a quantizacao declarada");
+    }
+
+    #[test]
+    fn a_quantizacao_declarada_fecha_o_um_terco() {
+        let m = Medida {
+            fracao_de_abstencao: 1.0 / 33.0,
+            tokens_por_chamada: 95.25,
+            ms_por_chamada: 1.04,
+            ..Medida::default()
+        };
+        let volta = de_ficha(&ficha_da_medida(&m)).expect("le de volta");
+        assert_eq!(volta.fracao_de_abstencao, 0.030303, "seis casas, sem epsilon");
+        assert_eq!(volta.tokens_por_chamada, 95.3, "uma casa: 95.25 sobe");
+        assert_eq!(volta.ms_por_chamada, 1.0, "uma casa: 1.04 desce");
+        assert_eq!(volta, m.quantizada(), "quantizar na borda faz a volta ser igualdade");
+        assert_ne!(volta.fracao_de_abstencao, 1.0 / 33.0, "a ficha e lossy por declaracao, nao por acidente");
+    }
+
+    #[test]
+    fn ausencia_volta_ausente_e_nan_e_recusado() {
+        let m = Medida { pesos: Some(String::from("abc")), ..Medida::default() };
+        let ficha = ficha_da_medida(&m);
+        assert!(ficha.contains("brier = (ausente)"), "{ficha}");
+        let volta = de_ficha(&ficha).expect("le de volta");
+        assert_eq!(volta.brier, None, "ausencia nao ressuscita como NaN");
+        assert_eq!(volta.ece, None, "ausencia nao ressuscita como NaN");
+        assert!(de_ficha("brier = NaN\n").is_err(), "NaN nao entra pela leitura");
+        assert!(de_ficha("ece = inf\n").is_err(), "infinito nao entra pela leitura");
+        assert!(de_ficha("fracao_de_abstencao = (ausente)\n").is_err(), "campo obrigatorio nao fica ausente");
+    }
+
+    #[test]
+    fn escore_nao_finito_nao_vira_registro() {
+        let m = Medida {
+            pesos: Some(String::from("abc")),
+            g1_identicas: true,
+            n_pares: 32,
+            amostra_minima: 30,
+            brier: Some(f64::NAN),
+            ece: Some(0.1),
+            ..Medida::default()
+        };
+        let motivo = linha_de_registro(&m, "2026-10-17").expect_err("NaN nao vira linha");
+        assert!(motivo.contains("finito"), "{motivo}");
+    }
+
+    #[test]
+    fn o_registro_recusa_meia_medida() {
+        let completo = Medida {
+            pesos: Some(String::from("abc")),
+            g1_identicas: true,
+            n_pares: 32,
+            amostra_minima: 30,
+            brier: Some(0.2),
+            ece: Some(0.1),
+            ..Medida::default()
+        };
+        assert!(linha_de_registro(&completo, "2026-10-17").is_ok(), "medida completa registra");
+
+        let sem_peso = Medida { pesos: None, ..completo.clone() };
+        assert!(linha_de_registro(&sem_peso, "2026-10-17").unwrap_err().contains("sha256"));
+
+        let sem_g1 = Medida { g1_identicas: false, ..completo.clone() };
+        assert!(linha_de_registro(&sem_g1, "2026-10-17").unwrap_err().contains("G1"));
+
+        let amostra_curta = Medida { n_pares: 3, ..completo.clone() };
+        assert!(linha_de_registro(&amostra_curta, "2026-10-17").unwrap_err().contains("amostra"));
+
+        let sem_escore = Medida { brier: None, ..completo.clone() };
+        assert!(linha_de_registro(&sem_escore, "2026-10-17").unwrap_err().contains("Brier"));
+
+        assert!(linha_de_registro(&completo, "17/10/2026").unwrap_err().contains("AAAA-MM-DD"));
     }
 
     #[test]
