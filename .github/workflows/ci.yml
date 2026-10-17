@@ -17,10 +17,12 @@ permissions:
 
 jobs:
   verificacao:
-    runs-on: ubuntu-latest
+    # Imagem fixada: `ubuntu-latest` migra para o Ubuntu 26 em 2026-10-19 e trocaria o ambiente
+    # debaixo do portao sem ninguem pedir. Trocar de imagem e decisao, nao efeito colateral.
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # A passada de prosa compara com o commit de base; sem historico nao ha base.
           fetch-depth: 0
@@ -28,12 +30,12 @@ jobs:
       - name: Toolchain fixada em rust-toolchain.toml
         run: rustup show
 
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@v2.9.2
         with:
           workspaces: ". -> target"
           cache-on-failure: true
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
 
@@ -48,7 +50,7 @@ jobs:
 
       - name: Guardar o relatorio dos instrumentos
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: verificacao
           path: |
