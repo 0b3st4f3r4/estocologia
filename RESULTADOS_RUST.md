@@ -1333,7 +1333,29 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 54 tests
+running 81 tests
+test banca::testes::g8_1_atribuicao_reproduzivel ... ok
+test banca::testes::g8_1_bancada_curta_recusa ... ok
+test banca::testes::g8_1_lente_preservada_e_corpos_distintos ... ok
+test banca::testes::g8_1_semente_diferente_muda_matriz ... ok
+test banca::testes::g8_2_leitura_sem_artefato_recusa ... ok
+test banca::testes::g8_2_veto_com_artefato_desconhecido_recusa ... ok
+test banca::testes::g8_3_cota_de_janela_cheia_zera_o_poder_de_veto ... ok
+test banca::testes::g8_3_cota_estourada_recusa ... ok
+test banca::testes::g8_3_veto_duplicado_recusa ... ok
+test banca::testes::g8_4_quorum_completo_sustenta ... ok
+test banca::testes::g8_4_quorum_insuficiente_arquiva ... ok
+test banca::testes::g8_4_silencio_antes_do_prazo_pendente ... ok
+test banca::testes::g8_4_silencio_apos_prazo_arquiva ... ok
+test banca::testes::g8_5_aposta_dogmatica_recusa ... ok
+test banca::testes::g8_6_veto_valido_derruba_e_consome ... ok
+test banca::testes::g8_6_veto_vence_mesmo_sem_quorum ... ok
+test banca::testes::g8_7_lente_fora_da_atribuicao_recusa ... ok
+test banca::testes::g8_8_aplicar_fora_da_funcao_pura ... ok
+test banca::testes::g8_8_lacre_deterministico_e_sensivel ... ok
+test banca::testes::phi4_ficha_sem_quem_paga_recusa ... ok
+test banca::testes::phi4_peca_sem_unidade_recusa ... ok
+test banca::testes::recibo_gera_linha_sem_parecer ... ok
 test calibracao::testes::a_abstencao_sai_do_denominador_e_entra_na_taxa ... ok
 test calibracao::testes::amostra_abaixo_do_minimo_nao_publica_escore ... ok
 test calibracao::testes::desfecho_que_nao_e_0_nem_1_e_artefato_ilegivel ... ok
@@ -1373,10 +1395,15 @@ test planejamento::testes::com_oscilacao_a_perda_paga_a_margem ... ok
 test planejamento::testes::margem_cara_volta_para_o_agregado ... ok
 test planejamento::testes::sem_oscilacao_a_perda_e_zero_e_o_agregado_basta ... ok
 test ponte::testes::a_margem_no_extremo_e_recusada ... ok
+test ponte::testes::a_medida_vai_e_volta_pela_ficha ... ok
 test ponte::testes::a_prova_de_determinismo_passa_no_modelo_de_ensaio ... ok
 test ponte::testes::a_prova_de_determinismo_reprova_o_modelo_instavel ... ok
+test ponte::testes::a_quantizacao_declarada_fecha_o_um_terco ... ok
 test ponte::testes::a_saida_fora_do_esquema_vira_abstencao ... ok
+test ponte::testes::ausencia_volta_ausente_e_nan_e_recusado ... ok
+test ponte::testes::escore_nao_finito_nao_vira_registro ... ok
 test ponte::testes::o_custo_por_chamada_e_a_adequacao_saem_do_ensaio ... ok
+test ponte::testes::o_registro_recusa_meia_medida ... ok
 test ponte::testes::pesos_com_hash_diferente_recusam ... ok
 test ponte::testes::sem_pesos_verificados_a_ponte_nao_roda ... ok
 test runner::testes::cabecalho_errado_e_artefato_ilegivel ... ok
@@ -1389,7 +1416,7 @@ test runner::testes::pedido_sem_resposta_congelada_vira_abstencao ... ok
 test runner::testes::sem_hash_declarado_a_ponte_nao_roda ... ok
 test runner::testes::um_byte_trocado_no_artefato_recusa_a_ponte ... ok
 
-test result: ok. 54 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 81 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1513,6 +1540,6 @@ Cada declaracao de ponto, com o hash do arquivo. A cadeia inteira se confere com
 | p19-segunda-opiniao | DECLARACAO.md | 9df3e1a5815aee060257c995143445c12ce8f71ff0a337ad44258b3eef66174a |
 | p20-jev | DECLARACAO.md | 6dd50c8070a6d9b49860021483f3052d6356a5d890437578743cf2ea2abf0578 |
 
-Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 20 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
+Declaracoes de ponto: 20, das quais 4 sao declaracoes 2 ou mais (retificacao declarada, com os dois valores) | pontos de fundo: 16 | instrumentos do `labs`: 21 (--banco,--cap,--elicitacao,--escala,--escuta,--fila,--gabarito,--genetica,--h3,--jev,--limiar,--medida,--ponte,--preteste,--resolucao,--respostas,--s1,--s2,--schema,--segunda,--todos) | capitulos: 21 | crates: 15
 
 Edicao montada: `estocologia-livro-didatico.md` com **5927 linhas** e **75209 palavras**, sha256 `91166f4b9123ab8bb70a148e83eccb55d2de14151422f1c87eb95b5d0879fdbc`. O arquivo tem de ser o texto que `book/gerar.py` monta, e `python3 book/gerar.py --check` cobra isso caractere por caractere.

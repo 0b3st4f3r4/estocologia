@@ -33,6 +33,7 @@ fn main() {
     let mut schema_flag = false;
     let mut segunda_flag = false;
     let mut jev_flag = false;
+    let mut medida_flag = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
@@ -86,6 +87,7 @@ fn main() {
             "--schema" => schema_flag = true,
             "--segunda" => segunda_flag = true,
             "--jev" => jev_flag = true,
+            "--medida" => medida_flag = true,
             _ => {}
         }
         i += 1;
@@ -142,7 +144,11 @@ fn main() {
         segunda::rodar();
         return;
     }
-    if jev_flag {
+    if jev_flag && medida_flag {
+        // A medida em ficha: e o que o registro recebe, sem digitacao a mao.
+        print!("{}", jev::ficha_da_medida(&jev::medir()));
+        return;
+    } else if jev_flag {
         jev::rodar();
         return;
     }

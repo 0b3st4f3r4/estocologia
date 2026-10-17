@@ -77,6 +77,11 @@ repositório não ter duas definições de calibração.
 
 ## Fase 4 — registro, lacres e o movimento da lista
 
+A linha da rodada não é digitada: o instrumento imprime a medida em ficha (`labs --jev --medida`), e o ingestor
+grava a linha em `rodadas.tsv` com o mesmo portão — `ingestar-jev --registrar <medida> fundo/p20-jev/rodadas.tsv
+--data AAAA-MM-DD`. Ele recusa meia medida: sem peso verificado, sem G1 fechado, abaixo da amostra mínima ou sem
+Brier e ECE, não há linha, e a rodada repetida é recusada em vez de duplicada.
+
 O `registro.tsv` desta pasta ganha uma linha por rodada real, com o formato já declarado:
 
 | campo | de onde sai |

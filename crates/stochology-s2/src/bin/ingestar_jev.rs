@@ -9,6 +9,7 @@
 //! Uso:
 //!   ingestar-jev --conferir <fonte_inferencias.tsv> <fonte_desfechos.tsv>
 //!   ingestar-jev <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>
+//!   ingestar-jev --registrar <medida.txt> <rodadas.tsv> --data AAAA-MM-DD
 //!
 //! O modo --conferir e a fase 1 do fechamento: valida as duas fontes, roda o ensaio e nao escreve em destino
 //! nenhum. Serve para o operador saber, antes de qualquer persistencia, se o conjunto tem volume, intervalo e
@@ -24,6 +25,7 @@ use stochology_s2::{calibracao, runner};
 fn uso_e_abortar(programa: &str) -> ! {
     eprintln!("Uso:");
     eprintln!("  {programa} --conferir <fonte_inferencias.tsv> <fonte_desfechos.tsv>");
+    eprintln!("  {programa} --registrar <medida.txt> <rodadas.tsv> --data AAAA-MM-DD");
     eprintln!("  {programa} <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>");
     eprintln!();
     eprintln!("Argumentos:");
@@ -179,8 +181,39 @@ fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
     }
 }
 
+/// A fase 4 mecanica: le a ficha da medida e grava a linha da rodada, ou recusa com o motivo.
+fn registrar(ficha: &Path, rodadas: &Path, data: &str) {
+    let texto = std::fs::read_to_string(ficha)
+        .unwrap_or_else(|e| morrer(format!("Erro ao abrir a medida {}: {e}", ficha.display())));
+    let medida = stochology_s2::ponte::de_ficha(&texto)
+        .unwrap_or_else(|e| morrer(format!("Medida ilegivel: {e}")));
+    let linha = match stochology_s2::ponte::linha_de_registro(&medida, data) {
+        Ok(l) => l,
+        Err(motivo) => morrer(format!("Registro recusado: {motivo}")),
+    };
+    let cabecalho = "data\thash_pesos\tpedidos\tabstencoes\tn_pares\ttokens_por_chamada\tms_por_chamada\tbrier\tece\n";
+    let existente = std::fs::read_to_string(rodadas).unwrap_or_default();
+    let mut destino = existente.clone();
+    if destino.is_empty() {
+        destino.push_str(cabecalho);
+    }
+    if destino.contains(&linha) {
+        morrer(String::from("esta rodada ja esta no registro: a linha existe"));
+    }
+    destino.push_str(&linha);
+    destino.push('\n');
+    std::fs::write(rodadas, destino.as_bytes())
+        .unwrap_or_else(|e| morrer(format!("Falha ao gravar {}: {e}", rodadas.display())));
+    println!("registro: {linha}");
+    println!("  gravado em {}", rodadas.display());
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args.len() == 6 && args[1] == "--registrar" {
+        registrar(Path::new(&args[2]), Path::new(&args[3]), &args[5]);
+        return;
+    }
     if args.len() == 4 && args[1] == "--conferir" {
         conferir(Path::new(&args[2]), Path::new(&args[3]));
         return;
