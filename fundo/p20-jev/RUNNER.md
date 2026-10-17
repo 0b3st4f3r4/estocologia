@@ -149,10 +149,16 @@ A saída literal dessa rodada, com os hashes e a leitura do instrumento, está e
 arquivos sintéticos foram apagados depois do ensaio, e o instrumento voltou a recusar — número de ensaio não fica
 onde o número real deveria estar.
 
-## 7. Verificação do que aqui se afirma
+## 7. O fechamento do item
+
+O protocolo de fechamento, com os quatro critérios, o formato da linha de registro e a regra de quando o item sai da
+lista de pendências, está em `FECHAMENTO.md`. A conferência da fase 1 é o modo `--conferir` do ingestor: ele lê as
+duas fontes, roda o ensaio e não escreve em destino nenhum — volume abaixo de 30 sai com código 1.
+
+## 8. Verificação do que aqui se afirma
 
 ```bash
 cargo test -p stochology-s2      # os testes do runner e da calibração: carga, hash, adulteração, formato, G1, abstenção, Brier, amostra mínima
-cargo test -p stochology-s2 --test ingestar   # o ingestor: grava, recusa e não toca no destino quando recusa
+cargo test -p stochology-s2 --test ingestar   # o ingestor: grava, recusa, confere sem escrever e não toca no destino quando recusa
 cargo run --release --bin labs -- --jev
 ```

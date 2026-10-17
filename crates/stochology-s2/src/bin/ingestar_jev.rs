@@ -6,7 +6,13 @@
 //! portoes que a ponte usa (hash declarado, formato, id sequencial, intervalo aberto da probabilidade) e so
 //! entao vai para o destino. Se qualquer coisa falhar, o destino nao e tocado.
 //!
-//! Uso: ingestar-jev <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>
+//! Uso:
+//!   ingestar-jev --conferir <fonte_inferencias.tsv> <fonte_desfechos.tsv>
+//!   ingestar-jev <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>
+//!
+//! O modo --conferir e a fase 1 do fechamento: valida as duas fontes, roda o ensaio e nao escreve em destino
+//! nenhum. Serve para o operador saber, antes de qualquer persistencia, se o conjunto tem volume, intervalo e
+//! procedencia para o criterio declarado.
 
 use std::env;
 use std::path::{Path, PathBuf};
@@ -15,7 +21,9 @@ use std::process;
 use stochology_s2::{calibracao, runner};
 
 fn uso_e_abortar(programa: &str) -> ! {
-    eprintln!("Uso: {programa} <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>");
+    eprintln!("Uso:");
+    eprintln!("  {programa} --conferir <fonte_inferencias.tsv> <fonte_desfechos.tsv>");
+    eprintln!("  {programa} <dir_pesos> <fonte_inferencias.tsv> <dir_calibracao> <fonte_desfechos.tsv>");
     eprintln!();
     eprintln!("Argumentos:");
     eprintln!("  dir_pesos                destino do artefato (ex.: fundo/p20-jev/pesos)");
@@ -117,8 +125,45 @@ fn dir_de_ensaio(rotulo: &str) -> PathBuf {
     d
 }
 
+/// A fase 1 do fechamento: confere as fontes e ensaia, sem tocar em destino nenhum.
+fn conferir(fonte_inferencias: &Path, fonte_desfechos: &Path) {
+    println!("== Conferencia das fontes (fase 1), sem escrita em destino ==");
+    let inferencias = ler_inferencias(fonte_inferencias);
+    println!("  inferencias: {} pares pedido/resposta, com os dois campos", inferencias.len());
+    let desfechos = ler_desfechos(fonte_desfechos);
+    println!("  desfechos: {} pares, com p em (0, 1), desfecho 0 ou 1 e fonte declarada", desfechos.len());
+    let ensaio_pesos = dir_de_ensaio("conf-pesos");
+    let ensaio_cal = dir_de_ensaio("conf-cal");
+    runner::escrever_artefato(&ensaio_pesos, &inferencias)
+        .unwrap_or_else(|e| morrer(format!("Falha ao escrever o artefato de ensaio: {e}")));
+    let artefato = runner::RunnerLocal::carregar(&ensaio_pesos.to_string_lossy())
+        .unwrap_or_else(|e| morrer(format!("O artefato de ensaio nao passa no portao: {e:?}")));
+    calibracao::escrever_desfechos(&ensaio_cal, &desfechos)
+        .unwrap_or_else(|e| morrer(format!("Falha ao escrever o conjunto de ensaio: {e}")));
+    let cal = calibracao::carregar(&ensaio_cal.to_string_lossy(), 0, calibracao::AMOSTRA_MINIMA)
+        .unwrap_or_else(|e| morrer(format!("O conjunto de ensaio nao passa no portao: {e:?}")));
+    std::fs::remove_dir_all(&ensaio_pesos).ok();
+    std::fs::remove_dir_all(&ensaio_cal).ok();
+    println!("  artefato de ensaio: {} respostas, hash {}", artefato.respostas(), artefato.sha256());
+    println!("  conjunto de ensaio: {}", cal.leitura());
+    let volume = desfechos.len() >= calibracao::AMOSTRA_MINIMA;
+    println!(
+        "  criterio de volume (N >= {}): {}",
+        calibracao::AMOSTRA_MINIMA,
+        if volume { "cumprido" } else { "NAO cumprido, o escore nao sera publicado" }
+    );
+    println!("  nenhum destino foi tocado.");
+    if !volume {
+        process::exit(1);
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args.len() == 4 && args[1] == "--conferir" {
+        conferir(Path::new(&args[2]), Path::new(&args[3]));
+        return;
+    }
     if args.len() != 5 {
         uso_e_abortar(&args[0]);
     }
