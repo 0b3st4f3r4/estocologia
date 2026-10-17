@@ -64,11 +64,16 @@ cargo run --release --bin labs -- --jev
 | --- | --- | --- |
 | 1. Portão dos pesos | `pesos verificados: <sha256>` | `RECUSADO` por hash ausente, divergente ou artefato ilegível |
 | 2. Determinismo G1 | `identicas: true` com o mesmo `sha256` nas duas passagens | `identicas: false` |
-| 3. Adequação do espaço | `abstencoes (x%)` com x ≤ 30 | x > 30: o item fecha com o veredito formal de que o esquema **não** serve ao modelo, com as recusas contadas, sem imputação |
-| 4. Brier condicional | `Brier <valor> sobre N pares` com N ≥ 30 e abstenções fora do denominador | N < 30: `AmostraInsuficiente`, nenhum escore |
+| 3. Adequação do espaço | `abstencoes (x%)` com x ≤ 30, medida **sobre os casos do próprio artefato** | x > 30: o item fecha com o veredito formal de que o esquema **não** serve ao modelo, com as recusas contadas, sem imputação |
+| 4. Brier e ECE | `Brier <valor> e ECE <valor> em 10 baldes sobre N pares`, com N ≥ 30 e abstenções fora do denominador | N < 30: `AmostraInsuficiente`, nenhum escore |
 
 O critério 3 admite dois desfechos e os dois fecham o item: o esquema serve, ou o esquema não serve. O que não
-fecha é esconder a taxa de abstenção ou imputar 0,5 no lugar da recusa.
+fecha é esconder a taxa de abstenção ou imputar 0,5 no lugar da recusa. Desde 2026-10-17 a adequação é medida sobre
+os casos que o artefato guarda, e não sobre uma sonda fixa do instrumento; artefato sem o texto do pedido (v1) cai
+na sonda, e o instrumento declara qual dos dois usou.
+
+O ECE usa a mesma função do `stochology-h3` — `ece(confianca, acerto, 10)` —, reusada em vez de reescrita, para o
+repositório não ter duas definições de calibração.
 
 ## Fase 4 — registro, lacres e o movimento da lista
 

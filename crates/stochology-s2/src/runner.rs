@@ -62,6 +62,7 @@ pub struct RunnerLocal {
     caminho: String,
     sha256: String,
     tabela: BTreeMap<String, String>,
+    pedidos: BTreeMap<String, String>,
     ultimos_tokens: usize,
 }
 
@@ -73,8 +74,8 @@ impl RunnerLocal {
         let medido = crate::ponte::verificar_pesos(&caminho, &esperado)?;
         let texto = std::fs::read_to_string(&caminho)
             .map_err(|_| Recusa::PesosAusentes(caminho.clone()))?;
-        let tabela = ler_blocos(&texto)?;
-        Ok(RunnerLocal { caminho, sha256: medido, tabela, ultimos_tokens: 0 })
+        let (tabela, pedidos) = ler_blocos(&texto)?;
+        Ok(RunnerLocal { caminho, sha256: medido, tabela, pedidos, ultimos_tokens: 0 })
     }
 
     /// O caminho do artefato que este runner carregou.
@@ -90,6 +91,12 @@ impl RunnerLocal {
     /// Quantas respostas congeladas o artefato traz.
     pub fn respostas(&self) -> usize {
         self.tabela.len()
+    }
+
+    /// Os pedidos que o artefato guarda, em ordem de chave. Formato v1 nao traz o texto do pedido, e a
+    /// lista sai vazia — quem mede adequacao com artefato v1 precisa avisar que esta usando sonda propria.
+    pub fn pedidos(&self) -> Vec<String> {
+        self.pedidos.values().cloned().collect()
     }
 
     /// A resposta congelada para um pedido, se existir.
@@ -121,13 +128,14 @@ impl crate::ponte::ModeloCongelado for RunnerLocal {
 }
 
 /// O formato do artefato: cada bloco começa em `@pedido` e termina em `@end`.
-fn ler_blocos(texto: &str) -> Result<BTreeMap<String, String>, Recusa> {
+fn ler_blocos(texto: &str) -> Result<(BTreeMap<String, String>, BTreeMap<String, String>), Recusa> {
     let mut linhas = texto.lines();
     let cabecalho = linhas.next().unwrap_or("").trim();
     if cabecalho != CABECALHO {
         return Err(Recusa::ArtefatoIlegivel(format!("cabecalho {cabecalho:?}, esperado {CABECALHO:?}")));
     }
     let mut tabela = BTreeMap::new();
+    let mut pedidos: BTreeMap<String, String> = BTreeMap::new();
     let mut chave_atual: Option<String> = None;
     let mut corpo: Vec<String> = Vec::new();
     for linha in linhas {
@@ -136,9 +144,17 @@ fn ler_blocos(texto: &str) -> Result<BTreeMap<String, String>, Recusa> {
             if chave_atual.is_some() {
                 return Err(Recusa::ArtefatoIlegivel("bloco sem @end".into()));
             }
-            let chave = resto.trim().to_lowercase();
+            // v2: @pedido <sha> <texto do pedido>. v1: @pedido <sha>, sem texto.
+            let mut partes = resto.splitn(2, ' ');
+            let chave = partes.next().unwrap_or("").trim().to_lowercase();
             if chave.len() != 64 || !chave.chars().all(|c| c.is_ascii_hexdigit()) {
                 return Err(Recusa::ArtefatoIlegivel(format!("chave invalida: {chave}")));
+            }
+            if let Some(texto_do_pedido) = partes.next() {
+                let texto_do_pedido = texto_do_pedido.trim();
+                if !texto_do_pedido.is_empty() {
+                    pedidos.insert(chave.clone(), texto_do_pedido.replace("\\n", "\n"));
+                }
             }
             chave_atual = Some(chave);
             corpo.clear();
@@ -162,7 +178,7 @@ fn ler_blocos(texto: &str) -> Result<BTreeMap<String, String>, Recusa> {
     if tabela.is_empty() {
         return Err(Recusa::ArtefatoIlegivel("artefato sem nenhuma resposta".into()));
     }
-    Ok(tabela)
+    Ok((tabela, pedidos))
 }
 
 /// A chave de um pedido: o `sha256` do texto que a ponte manda.
@@ -180,7 +196,7 @@ pub fn escrever_artefato_de_ensaio(dir: &std::path::Path, casos: &[&str]) -> std
     texto.push('\n');
     for caso in casos {
         let p = pedido(caso);
-        texto.push_str(&format!("@pedido {}\n", chave(&p)));
+        texto.push_str(&format!("@pedido {} {}\n", chave(&p), p.replace('\n', "\\n")));
         texto.push_str(&ensaio.decodificar(&p).trim_end());
         texto.push_str("\n@end\n");
     }
@@ -199,7 +215,7 @@ pub fn escrever_artefato(dir: &std::path::Path, pares: &[(String, String)]) -> s
     let mut texto = String::from(CABECALHO);
     texto.push('\n');
     for (p, resposta) in pares {
-        texto.push_str(&format!("@pedido {}\n", chave(p)));
+        texto.push_str(&format!("@pedido {} {}\n", chave(p), p.replace('\n', "\\n")));
         texto.push_str(resposta.trim_end());
         texto.push_str("\n@end\n");
     }
@@ -341,6 +357,34 @@ mod testes {
         let primeira = runner.decodificar(&pares[0].0);
         assert!(validar_saida(&primeira).is_ok(), "a resposta colhida devolve ficha valida");
         std::fs::remove_dir_all(&d).ok();
+    }
+
+
+    #[test]
+    fn o_artefato_v2_guarda_o_texto_do_pedido_e_o_v1_continua_lendo() {
+        let d = temp("v2");
+        escrever_artefato_de_ensaio(&d, &["caso 1", "caso 2"]).expect("escreve");
+        let runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
+        let guardados = runner.pedidos();
+        assert_eq!(guardados.len(), 2, "dois pedidos guardados");
+        assert!(guardados.contains(&pedido("caso 1")), "{guardados:?}");
+        assert!(guardados.contains(&pedido("caso 2")), "{guardados:?}");
+        std::fs::remove_dir_all(&d).ok();
+
+        // v1: sem o texto do pedido, a lista sai vazia e o artefato continua legivel.
+        let d1 = temp("v1");
+        std::fs::create_dir_all(&d1).ok();
+        let p = pedido("caso 1");
+        let mut ensaio = crate::ponte::ModeloDeEnsaio::novo();
+        let corpo = ensaio.decodificar(&p);
+        let texto = format!("{CABECALHO}\n@pedido {}\n{}\n@end\n", chave(&p), corpo);
+        std::fs::write(d1.join(ARQUIVO), texto.as_bytes()).expect("escreve");
+        let hash = stochology_audit::sha256_hex(texto.as_bytes());
+        std::fs::write(d1.join("SHA256"), format!("{hash}  {ARQUIVO}\n")).expect("escreve");
+        let antigo = RunnerLocal::carregar(&d1.to_string_lossy()).expect("carrega v1");
+        assert_eq!(antigo.respostas(), 1);
+        assert!(antigo.pedidos().is_empty(), "v1 nao traz pedido");
+        std::fs::remove_dir_all(&d1).ok();
     }
 
     #[test]

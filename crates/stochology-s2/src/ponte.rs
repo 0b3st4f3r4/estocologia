@@ -290,7 +290,18 @@ pub fn rodar() {
     match crate::runner::RunnerLocal::carregar(crate::runner::DIR_PADRAO) {
         Ok(mut runner) => {
             println!("  pesos verificados: {} | {} respostas congeladas no artefato", runner.sha256(), runner.respostas());
-            let ps: Vec<String> = (1..=4).map(|i| pedido(&format!("caso {i}"))).collect();
+            // A adequacao e o G1 sao medidos sobre os casos do proprio artefato quando ele os guarda (v2). Com
+            // artefato v1, que so tem o hash, cai na sonda propria — e o instrumento diz qual dos dois usou.
+            let do_artefato = runner.pedidos();
+            let (ps, sonda) = if do_artefato.is_empty() {
+                (
+                    (1..=4).map(|i| pedido(&format!("caso {i}"))).collect::<Vec<String>>(),
+                    "sonda propria do instrumento (artefato v1, sem o texto do pedido)",
+                )
+            } else {
+                (do_artefato, "os casos do proprio artefato")
+            };
+            println!("  adequacao medida sobre: {sonda} ({} casos)", ps.len());
             let mut c = Contabilidade::default();
             let (a, b, iguais) = provar_determinismo(&mut runner, &ps, &mut c);
             println!("  determinismo na forma do G1: {a:.16} contra {b:.16} | identicas: {iguais}");

@@ -251,7 +251,7 @@ Os pesos congelados nao estao na arvore, e por isso nenhum numero da ponte e pub
 -- a calibracao: o Brier do modelo congelado --
   sem conjunto rotulado: hash nao declarado em fundo/p20-jev/calibracao/SHA256 | o Brier exige pares com procedencia declarada antes de rodar
   regra declarada: 0.0 e 1.0 recusam, id fora de ordem recusa, desfecho fora de 0 e 1 recusa, abaixo de 30 pares o escore nao e publicado, abstencao sai do denominador
-  ensaio do runner (nao sao os pesos reais): 0ea082454dea3bc3 | 4 respostas | G1 identicas: true | abstencoes 0.0% | 87.0 tokens por chamada | 0.0 ms por chamada
+  ensaio do runner (nao sao os pesos reais): 1300e2a7420ad8e5 | 4 respostas | G1 identicas: true | abstencoes 0.0% | 87.0 tokens por chamada | 0.0 ms por chamada
   leitura: o caminho artefato -> hash declarado -> tabela congelada -> portao roda de ponta a ponta; o que falta e o arquivo do modelo
 
 -- o estado declarado --
@@ -1333,12 +1333,13 @@ test testes::preditores_colineares_reprovam ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 52 tests
+running 54 tests
 test calibracao::testes::a_abstencao_sai_do_denominador_e_entra_na_taxa ... ok
 test calibracao::testes::amostra_abaixo_do_minimo_nao_publica_escore ... ok
 test calibracao::testes::desfecho_que_nao_e_0_nem_1_e_artefato_ilegivel ... ok
 test calibracao::testes::id_fora_de_ordem_recusa ... ok
 test calibracao::testes::o_conjunto_rotulado_le_e_o_brier_confere ... ok
+test calibracao::testes::o_ece_usa_a_regra_do_h3_e_os_baldes_declarados ... ok
 test calibracao::testes::o_portao_do_hash_vale_para_o_conjunto_rotulado ... ok
 test calibracao::testes::probabilidade_no_extremo_recusa ... ok
 test calibracao::testes::sem_dado_nao_ha_brier ... ok
@@ -1380,6 +1381,7 @@ test ponte::testes::pesos_com_hash_diferente_recusam ... ok
 test ponte::testes::sem_pesos_verificados_a_ponte_nao_roda ... ok
 test runner::testes::cabecalho_errado_e_artefato_ilegivel ... ok
 test runner::testes::o_artefato_de_ensaio_carrega_e_o_hash_confere ... ok
+test runner::testes::o_artefato_v2_guarda_o_texto_do_pedido_e_o_v1_continua_lendo ... ok
 test runner::testes::o_brier_e_a_regra_propria_fora_do_ajuste ... ok
 test runner::testes::o_operador_escreve_o_artefato_e_o_runner_o_le ... ok
 test runner::testes::o_runner_fecha_o_determinismo_na_forma_do_g1 ... ok
@@ -1387,7 +1389,7 @@ test runner::testes::pedido_sem_resposta_congelada_vira_abstencao ... ok
 test runner::testes::sem_hash_declarado_a_ponte_nao_roda ... ok
 test runner::testes::um_byte_trocado_no_artefato_recusa_a_ponte ... ok
 
-test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 54 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

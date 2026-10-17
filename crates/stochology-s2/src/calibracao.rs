@@ -26,6 +26,9 @@ pub const ARQUIVO: &str = "desfechos.tsv";
 pub const DIR_PADRAO: &str = "fundo/p20-jev/calibracao";
 /// Abaixo desta contagem o escore nao e publicado. Escolha de especificacao, declarada uma vez.
 pub const AMOSTRA_MINIMA: usize = 30;
+/// Baldes do ECE. A regra e a do stochology_h3::ece, reusada e nao reescrita, para nao haver
+/// duas definicoes de calibracao no mesmo repositorio.
+pub const BALDES_ECE: usize = 10;
 
 /// Uma linha do conjunto rotulado.
 #[derive(Debug, Clone, PartialEq)]
@@ -45,7 +48,7 @@ pub enum Calibracao {
     /// Ha dado, e nao ha amostra para publicar escore.
     AmostraInsuficiente { n: usize, minimo: usize },
     /// O escore condicional, com a abstencao ao lado.
-    Escore { n: usize, brier: f64, abstencoes: usize, taxa_de_abstencao: f64 },
+    Escore { n: usize, brier: f64, ece: f64, abstencoes: usize, taxa_de_abstencao: f64 },
 }
 
 impl Calibracao {
@@ -66,8 +69,8 @@ impl Calibracao {
             Calibracao::AmostraInsuficiente { n, minimo } => format!(
                 "AmostraInsuficiente: {n} pares, minimo declarado de {minimo}; o escore nao e publicado"
             ),
-            Calibracao::Escore { n, brier, abstencoes, taxa_de_abstencao } => format!(
-                "Brier {brier:.6} sobre {n} pares | abstencoes {abstencoes} ({:.1}%) fora do denominador",
+            Calibracao::Escore { n, brier, ece, abstencoes, taxa_de_abstencao } => format!(
+                "Brier {brier:.6} e ECE {ece:.6} em {BALDES_ECE} baldes sobre {n} pares | abstencoes {abstencoes} ({:.1}%) fora do denominador",
                 taxa_de_abstencao * 100.0
             ),
         }
@@ -177,9 +180,12 @@ pub fn calibrar(desfechos: &[Desfecho], abstencoes: usize, minimo: usize) -> Cal
     }
     let pares: Vec<(f64, bool)> = desfechos.iter().map(|d| (d.probabilidade, d.desfecho)).collect();
     let brier = crate::runner::brier(&pares);
+    let confianca: Vec<f64> = pares.iter().map(|(p, _)| *p).collect();
+    let acerto: Vec<bool> = pares.iter().map(|(_, y)| *y).collect();
+    let ece = stochology_h3::ece(&confianca, &acerto, BALDES_ECE);
     let total = n + abstencoes;
     let taxa_de_abstencao = abstencoes as f64 / total.max(1) as f64;
-    Calibracao::Escore { n, brier, abstencoes, taxa_de_abstencao }
+    Calibracao::Escore { n, brier, ece, abstencoes, taxa_de_abstencao }
 }
 
 /// Carrega o conjunto rotulado com o hash declarado conferido antes, como no artefato dos pesos.
@@ -304,6 +310,42 @@ mod testes {
             outro => panic!("esperava escore: {outro:?}"),
         }
         std::fs::remove_dir_all(&d).ok();
+    }
+
+
+    #[test]
+    fn o_ece_usa_a_regra_do_h3_e_os_baldes_declarados() {
+        let um = Desfecho {
+            id: 1,
+            caso_id: "C-1".into(),
+            probabilidade: 0.3,
+            desfecho: false,
+            fonte: "f".into(),
+        };
+        match calibrar(&[um], 0, 1) {
+            Calibracao::Escore { ece, .. } => assert!((ece - 0.3).abs() < 1e-12, "ece {ece}"),
+            outro => panic!("esperava escore: {outro:?}"),
+        }
+        let a = Desfecho {
+            id: 1,
+            caso_id: "C-A".into(),
+            probabilidade: 0.55,
+            desfecho: true,
+            fonte: "f".into(),
+        };
+        let b = Desfecho {
+            id: 2,
+            caso_id: "C-B".into(),
+            probabilidade: 0.55,
+            desfecho: false,
+            fonte: "f".into(),
+        };
+        match calibrar(&[a, b], 0, 1) {
+            Calibracao::Escore { ece, .. } => assert!((ece - 0.05).abs() < 1e-12, "ece {ece}"),
+            outro => panic!("esperava escore: {outro:?}"),
+        }
+        assert_eq!(BALDES_ECE, 10, "baldes declarados");
+        assert!(calibrar(&[], 0, 1).leitura().contains("Brier nao publicado"));
     }
 
     #[test]

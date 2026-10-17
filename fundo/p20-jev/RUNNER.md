@@ -74,10 +74,14 @@ Texto, primeira linha o formato, um bloco por resposta congelada:
 
 ```text
 # p20-jev/runner-v1
-@pedido <sha256 do texto do pedido, 64 hex>
+@pedido <sha256 do texto do pedido, 64 hex> <texto do pedido>
 <documento canonico da ficha, uma linha por campo>
 @end
 ```
+
+O texto do pedido depois do hash é o formato **v2**, e existe por um motivo de medição: sem ele o instrumento não
+consegue repetir os casos do próprio artefato, e a adequação do espaço cairia numa sonda fixa sem relação com o dado
+do operador. Artefato **v1**, só com o hash, continua legível, e o instrumento declara que está usando sonda própria.
 
 O `sha256` do pedido é o do texto que a ponte manda, que é `ponte::pedido(pergunta)` — não o da pergunta crua.
 Pedido sem bloco **não** inventa resposta: devolve `fora do esquema`, que a ponte converte em abstenção
