@@ -1470,7 +1470,7 @@ test tests::node_without_lens_is_flagged ... ok
 
 test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 17 tests
+running 26 tests
 test drift::tests::kl_is_zero_against_itself_and_grows_with_distance ... ok
 test drift::tests::surveillance_is_deterministic ... ok
 test drift::tests::the_downward_jump_also_fires ... ok
@@ -1488,8 +1488,17 @@ test icp::tests::the_invariant_predictor_is_accepted_and_the_confounder_is_rejec
 test icp::tests::the_set_count_matches_the_enumeration ... ok
 test icp::tests::the_target_as_predictor_fails ... ok
 test icp::tests::the_threshold_falls_with_the_sample_size ... ok
+test sequential::tests::a_failed_round_costs_evidence_in_the_product_and_not_in_the_bound ... ok
+test sequential::tests::a_zero_p_value_is_clamped_not_trusted ... ok
+test sequential::tests::calibrators_are_decreasing_and_never_negative ... ok
+test sequential::tests::calibrators_have_expectation_at_most_one_under_the_null ... ok
+test sequential::tests::invalid_e_values_are_recorded_as_zero_and_the_ledger_is_deterministic ... ok
+test sequential::tests::real_signal_accumulates_and_crosses ... ok
+test sequential::tests::the_mean_is_valid_under_dependence_and_slower ... ok
+test sequential::tests::the_naive_rule_does_not_survive_the_same_path ... ok
+test sequential::tests::ville_bounds_the_product_under_optional_stopping ... ok
 
-test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 83 tests
 test belief::tests::invalid_evidence_does_not_zero_the_state ... ok
@@ -1701,11 +1710,14 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p15-previsoes-r | DECLARACAO.md | fafe4472e1000f452fcb9907c21c277370a0469d2dad0ba6ed173e876feecb0d |
 | p16-ponte | DECLARACAO.md | 9c0b7b372e298b4a8b86059b1b24716450315f7a285a2464b993a9dd6e63ea46 |
 | p16-ponte | DECLARACAO_2.md | e011c590d9797c3ddf078c492590f911b084b35b2ca9345dd5d841976b3831b6 |
+| p16-ponte | DECLARACAO_3.md | ebc18d4bdfe42b39b9d150305ad93a998d5e43b97d019b8d2cf30b60f7bfc547 |
 | p17-schema | DECLARACAO.md | 86d583d6db7071f1e5106ada4a8b21b5204f9dd617227f6cbac432b16d5e857a |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
 | p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
+| p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
+| p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
 
-Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
 Assembled book: `book/stochology-textbook.md` with **5619 lines** and **71931 words**, sha256 `cb4965999d1b7f91a4a6f54decd65e27a7fddcddaeaea72494baddecd87bc33d`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

@@ -112,7 +112,7 @@ When a claim fails a gate, the verdict is **"unsupported under this test"**, nev
 
 ### The apparatus
 
-All of this runs in Rust: nine crates, 373 tests, seven gates able to fail a claim and 21 laboratories with a fixed
+All of this runs in Rust: nine crates, 386 tests, seven gates able to fail a claim and 21 laboratories with a fixed
 seed, one per chapter of the textbook. Every output block quoted in the book is checked against the instrument that
 produces it.
 

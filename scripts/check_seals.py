@@ -5,7 +5,7 @@ Usage:
     python3 scripts/check_seals.py          # all seals, per-file report
     python3 scripts/check_seals.py --quiet  # summary only
 
-Format rule across all 28 seal files: each active line is
+Format rule across all 30 seal files: each active line is
 
     <64 hex>  <path relative to repository root>
 
