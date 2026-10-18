@@ -104,14 +104,41 @@ pub fn binomial(k: usize, i: usize, p: f64) -> f64 {
     c * p.powi(i as i32) * (1.0 - p).powi((k - i) as i32)
 }
 
-/// Growth in time per month of an insurer with ~contracts~ independent
-/// contracts, each with premium ~premium~ and loss ~loss~ with chance ~p~ and
-/// wealth ~w~: mean minus variance/2 approximation for the sum.
-pub fn insurer_growth(w: f64, contracts: usize, premium: f64, loss: f64, p: f64) -> f64 {
+/// Growth in time per month of an insurer with ~contracts~ independent contracts, each
+/// with premium ~premium~ and loss ~loss~ with chance ~p~, holding the capital
+/// ~capital_per_contract~ for each contract. Exact: the number of claims K is binomial,
+/// and the growth is E[ln(1 + (n premium - K loss) / (n capital))]; no approximation.
+pub fn insurer_growth(
+    capital_per_contract: f64,
+    contracts: usize,
+    premium: f64,
+    loss: f64,
+    p: f64,
+) -> f64 {
     let n = contracts as f64;
-    let mean = n * (premium - p * loss);
-    let var = n * loss * loss * p * (1.0 - p);
-    (1.0 + mean / w).ln() - 0.5 * var / (w + mean).powi(2)
+    let w = capital_per_contract * n;
+    let mut g = 0.0;
+    for k in 0..=contracts {
+        let log_prob = log_binomial(contracts, k, p);
+        if log_prob < -745.0 {
+            continue;
+        }
+        let w_end = w + n * premium - k as f64 * loss;
+        if w_end <= 0.0 {
+            return f64::NEG_INFINITY;
+        }
+        g += log_prob.exp() * (w_end / w).ln();
+    }
+    g
+}
+
+/// ln P(X = k) for a binomial with n trials and chance p, stable for large n.
+pub fn log_binomial(n: usize, k: usize, p: f64) -> f64 {
+    let mut log_c = 0.0;
+    for j in 0..k {
+        log_c += ((n - j) as f64).ln() - ((j + 1) as f64).ln();
+    }
+    log_c + k as f64 * p.ln() + (n - k) as f64 * (1.0 - p).ln()
 }
 // ------------------------------------------------- the value of information
 
@@ -158,18 +185,57 @@ impl TwoActs {
     }
 }
 
+impl TwoActs {
+    /// The best expected gain when the chance of disease is q: ONE act for the whole branch.
+    pub fn best_at(&self, q: f64) -> f64 {
+        let mut e = *self;
+        e.p_sick = q;
+        e.best_without_information().1
+    }
+}
+
 /// Expected value of the information of an imperfect test: (sensitivity, specificity).
+/// After each result the decider updates the chance of disease and chooses one act for
+/// that branch; choosing the best act per state inside a branch would be perfect information.
 pub fn evsi(test: &TwoActs, sensitivity: f64, specificity: f64) -> f64 {
     let p = test.p_sick;
-    let ppv = sensitivity * p / (sensitivity * p + (1.0 - specificity) * (1.0 - p));
-    let npv = specificity * (1.0 - p) / (specificity * (1.0 - p) + (1.0 - sensitivity) * p);
-    let positive_gain = ppv * test.u_act_sick.max(test.u_not_act_sick)
-        + (1.0 - ppv) * test.u_act_healthy.max(test.u_not_act_healthy);
-    let negative_gain = npv * test.u_not_act_sick.max(test.u_act_sick)
-        + (1.0 - npv) * test.u_not_act_healthy.max(test.u_act_healthy);
     let positive_prob = sensitivity * p + (1.0 - specificity) * (1.0 - p);
-    let with_test = positive_prob * positive_gain + (1.0 - positive_prob) * negative_gain;
+    let p_sick_if_positive = sensitivity * p / positive_prob;
+    let p_sick_if_negative = (1.0 - sensitivity) * p / (1.0 - positive_prob);
+    let with_test = positive_prob * test.best_at(p_sick_if_positive)
+        + (1.0 - positive_prob) * test.best_at(p_sick_if_negative);
     with_test - test.best_without_information().1
+}
+
+/// Mutual information, in bits, between the test result and the state.
+pub fn mutual_information(p: f64, sensitivity: f64, specificity: f64) -> f64 {
+    let joint = [
+        (
+            p * sensitivity,
+            p,
+            sensitivity * p + (1.0 - specificity) * (1.0 - p),
+        ),
+        (
+            p * (1.0 - sensitivity),
+            p,
+            (1.0 - sensitivity) * p + specificity * (1.0 - p),
+        ),
+        (
+            (1.0 - p) * (1.0 - specificity),
+            1.0 - p,
+            sensitivity * p + (1.0 - specificity) * (1.0 - p),
+        ),
+        (
+            (1.0 - p) * specificity,
+            1.0 - p,
+            (1.0 - sensitivity) * p + specificity * (1.0 - p),
+        ),
+    ];
+    joint
+        .iter()
+        .filter(|(j, _, _)| *j > 0.0)
+        .map(|(j, a, b)| j * (j / (a * b)).log2())
+        .sum()
 }
 
 // ------------------------------------------------- the dikes of Holland
@@ -180,7 +246,8 @@ pub fn evsi(test: &TwoActs, sensitivity: f64, specificity: f64) -> f64 {
 pub fn gev_level(xi: f64, mu: f64, sigma: f64, period: f64) -> f64 {
     let y = (-(1.0_f64 - 1.0 / period).ln()).powf(-xi);
     if xi.abs() < 1e-9 {
-        mu - sigma * (y - 1.0)
+        // Gumbel limit: mu - sigma ln(-ln(1 - 1/T)).
+        mu - sigma * (-(1.0_f64 - 1.0 / period).ln()).ln()
     } else {
         mu - sigma * (1.0 - y) / xi
     }
@@ -190,14 +257,14 @@ pub fn gev_level(xi: f64, mu: f64, sigma: f64, period: f64) -> f64 {
 /// 3000 x P(maximum > h).
 pub fn dike_cost(xi: f64, mu: f64, sigma: f64, h: f64) -> f64 {
     let works = (h - 2.0).max(0.0);
-    if h <= mu + sigma / xi.max(1e-9) && xi > 0.0 {
-        // above the support the probability is zero
-    }
     let z = 1.0 + xi * (h - mu) / sigma;
-    let prob = if z <= 0.0 {
-        0.0
-    } else if xi.abs() < 1e-9 {
-        (-((h - mu) / sigma).exp()).exp()
+    let prob = if xi.abs() < 1e-9 {
+        // Gumbel: P(maximum > h) = 1 - exp(-exp(-(h - mu) / sigma)).
+        1.0 - (-(-(h - mu) / sigma).exp()).exp()
+    } else if z <= 0.0 {
+        // outside the support: below it (xi > 0) the level is always exceeded,
+        // above it (xi < 0) it is never exceeded
+        if xi > 0.0 { 1.0 } else { 0.0 }
     } else {
         let t = z.powf(-1.0 / xi);
         1.0 - (-t).exp()
@@ -230,18 +297,17 @@ pub struct Group {
     pub observed_fpr: f64,
 }
 
-/// The FPR of a group when the FNR is driven to a target, described by the observed
-/// pair (FNR, FPR). The account is Chouldechova's: with the threshold and the score
-/// statistic z fixed, the FPR and the FNR move together, and one cannot choose both.
-/// With the score tail treated as a gaussian of the same shape in both groups, the
-/// ratio (1-FPR)/(1-FNR) is conserved, so that
-/// FPR_target = 1 - (1 - FPR_obs) * (1 - FNR_target) / (1 - FNR_obs).
+/// The FPR of a group when its threshold is moved until the FNR reaches a target.
+/// Model: the binormal ROC with equal variances. Negatives score N(0, 1), positives N(d, 1),
+/// and the threshold is t, so FPR = 1 - Phi(t) and FNR = Phi(t - d). The observed pair fixes
+/// t = Phi^-1(1 - FPR) and d = t - Phi^-1(FNR); the target FNR moves the threshold to
+/// t' = d + Phi^-1(FNR_target), and the new FPR is 1 - Phi(t'). Lowering the FNR lowers the
+/// threshold and therefore RAISES the FPR: one threshold cannot lower both errors.
 pub fn fpr_for_fnr(observed_fnr: f64, observed_fpr: f64, target_fnr: f64) -> f64 {
-    let denom = 1.0 - observed_fnr;
-    if denom <= 1e-9 {
-        return observed_fpr;
-    }
-    (1.0 - (1.0 - observed_fpr) * (1.0 - target_fnr) / denom).clamp(0.0, 1.0)
+    let t = normal_quantile(1.0 - observed_fpr);
+    let d = t - normal_quantile(observed_fnr);
+    let t_new = d + normal_quantile(target_fnr);
+    1.0 - phi(t_new)
 }
 
 /// The positive predictive value the confusion matrix delivers: TP/(TP+FP).
@@ -251,11 +317,13 @@ pub fn ppv_from_matrix(base_rate: f64, fnr: f64, fpr: f64) -> f64 {
     tp / (tp + fp)
 }
 
-/// The PPV that the Chouldechova identity requires, given the base rate, the FNR and the FPR,
-/// by the inverted form PPV = 1 / (1 + [(1-FPR)(1-p)] / [p(1-FNR)]).
-pub fn ppv_from_identity(base_rate: f64, fnr: f64, fpr: f64) -> f64 {
-    let odds = (1.0 - fpr) * (1.0 - base_rate) / (base_rate * (1.0 - fnr));
-    1.0 / (1.0 + odds)
+/// The FPR that the Chouldechova identity returns from the base rate, the PPV and the FNR:
+/// FPR = p/(1-p) * (1-PPV)/PPV * (1-FNR). It is an algebraic identity of the confusion
+/// matrix, so with the PPV of the same matrix it returns the observed FPR exactly; it cannot
+/// "fail" on one group. Its force is comparative: fix PPV and FNR equal across groups and
+/// different base rates force different FPRs.
+pub fn fpr_from_identity(base_rate: f64, ppv: f64, fnr: f64) -> f64 {
+    base_rate / (1.0 - base_rate) * (1.0 - ppv) / ppv * (1.0 - fnr)
 }
 
 /// The two directions of the trilemma: matching the FNR downwards (to the value
@@ -279,7 +347,7 @@ pub fn trilemma(a: Group, b: Group) -> Trilemma {
     }
 }
 fn bernoulli_ship() {
-    println!("== Chapter 11 :: the Bernoulli ship (C = 1.800, L = 34.000, p = 0,05) ==");
+    println!("== Chapter 11 :: the Bernoulli ship (C = 1,800, L = 34,000, p = 0.05) ==");
     let n = Shipowner {
         wealth: 100_000.0,
         premium: 1_800.0,
@@ -289,7 +357,7 @@ fn bernoulli_ship() {
     };
     let (expected_loss, insurance_result) = n.expectation_accounts();
     println!(
-        "threshold p > C/L: p* = {:.5} ({:.3}%)  ->  p = 0,050 {} the threshold",
+        "threshold p > C/L: p* = {:.5} ({:.3}%)  ->  p = 0.050 {} the threshold",
         n.threshold(),
         100.0 * n.threshold(),
         if n.protects_by_expectation() {
@@ -308,11 +376,12 @@ fn bernoulli_ship() {
         n.owner_growth(1, true),
         n.owner_growth(3, false)
     );
+    println!("insurer holding 50,000 of capital per contract (exact binomial account):");
     for contracts in [1usize, 10, 100, 1_000] {
         println!(
             "insurer with {:>5} contracts: growth in time = {:+.6} per month",
             contracts,
-            insurer_growth(200_000.0, contracts, 1_800.0, 34_000.0, 0.05)
+            insurer_growth(50_000.0, contracts, 1_800.0, 34_000.0, 0.05)
         );
     }
     println!();
@@ -328,7 +397,7 @@ fn value_of_information() {
         p_sick: 0.3,
     };
     println!(
-        "action threshold: p > {:.2}  ->  with p = 0,3 the best act without information {} ({:+.2})",
+        "action threshold: p > {:.2}  ->  with p = 0.3 the best act without information {} ({:+.2})",
         d.action_threshold(),
         if d.best_without_information().0 {
             "treat"
@@ -343,10 +412,15 @@ fn value_of_information() {
     );
     println!("EVPI = {:+.2}", d.evpi());
     for (label, sens, spec) in [
-        ("sensitive  (0,90; 0,70)", 0.9, 0.7),
-        ("specific (0,30; 0,95)", 0.3, 0.95),
+        ("sensitive (0.90; 0.70)", 0.9, 0.7),
+        ("specific  (0.30; 0.95)", 0.3, 0.95),
     ] {
-        println!("  test {}: EVSI = {:+.4}", label, evsi(&d, sens, spec));
+        println!(
+            "  test {}: EVSI = {:+.4} | mutual information = {:.3} bit",
+            label,
+            evsi(&d, sens, spec),
+            mutual_information(d.p_sick, sens, spec)
+        );
     }
     for p in [0.05_f64, 0.3, 0.6] {
         let mut e = d;
@@ -434,8 +508,26 @@ fn dikes() {
         precaution
     );
     println!(
-        "  EVPI of the model set = {:+.3} m",
+        "  spread between precaution and the Gumbel expected value = {:.2} m",
         precaution - heights[1]
+    );
+    // EVPI over the models (equal weights), in cost units: the mean of the best cost of each
+    // model minus the best mean cost of a single height chosen without knowing the model.
+    let mut best_mean_cost = f64::INFINITY;
+    let mut h = 0.0;
+    while h <= 30.0 {
+        let c = xis
+            .iter()
+            .map(|xi| dike_cost(*xi, mu, sigma, h))
+            .sum::<f64>()
+            / 4.0;
+        best_mean_cost = best_mean_cost.min(c);
+        h += 0.001;
+    }
+    let mean_of_best = smallest.iter().sum::<f64>() / 4.0;
+    println!(
+        "  EVPI of knowing the tail model (equal weights, cost units) = {:+.3}",
+        best_mean_cost - mean_of_best
     );
     println!();
 }
@@ -462,10 +554,7 @@ fn trilemma_block() {
         "{:<8} {:>10} {:>10} {:>10} {:>16} {:>16} {:>10}",
         "group", "base rate", "FNR", "FPR", "false positives", "false negatives", "PPV"
     );
-    let vpp = |g: &Group| {
-        (1.0 - g.observed_fpr) * (1.0 - g.base_rate)
-            / ((1.0 - g.observed_fpr) * (1.0 - g.base_rate) + (1.0 - g.observed_fnr) * g.base_rate)
-    };
+    let vpp = |g: &Group| ppv_from_matrix(g.base_rate, g.observed_fnr, g.observed_fpr);
     let mut fp_before = 0.0;
     let mut fn_before = 0.0;
     for g in &t.groups {
@@ -528,25 +617,32 @@ fn trilemma_block() {
     }
     println!("Chouldechova identity: FPR = p/(1-p) * (1-PPV)/PPV * (1-FNR)");
     println!(
-        "{:<8} {:>16} {:>18} {:>14}",
-        "group", "PPV of the matrix", "PPV of the identity", "ratio"
+        "{:<8} {:>12} {:>16} {:>14}",
+        "group", "observed FPR", "FPR of identity", "difference"
     );
     for g in &t.groups {
-        let from_matrix = ppv_from_matrix(g.base_rate, g.observed_fnr, g.observed_fpr);
-        let from_identity = ppv_from_identity(g.base_rate, g.observed_fnr, g.observed_fpr);
+        let ppv = ppv_from_matrix(g.base_rate, g.observed_fnr, g.observed_fpr);
+        let from_identity = fpr_from_identity(g.base_rate, ppv, g.observed_fnr);
         println!(
-            "{:<8} {:>16.4} {:>18.4} {:>14.1}x",
+            "{:<8} {:>12.4} {:>16.4} {:>14.1e}",
             g.name,
-            from_matrix,
+            g.observed_fpr,
             from_identity,
-            from_identity / from_matrix
+            from_identity - g.observed_fpr
         );
     }
-    println!("reading: with the observed FNR and FPR, the score would only be calibrated by group");
-    println!(
-        "if the positive predictive value were the one in the middle column. It is much larger: the score"
+    let white_ppv = ppv_from_matrix(
+        t.groups[0].base_rate,
+        t.groups[0].observed_fnr,
+        t.groups[0].observed_fpr,
     );
-    println!("separates reasonably and is not read as a probability of risk.");
+    println!(
+        "the trilemma: with PPV {:.4} and FNR {:.3} in BOTH groups, the identity forces FPR {:.4} for White and {:.4} for Black",
+        white_ppv,
+        t.groups[0].observed_fnr,
+        fpr_from_identity(t.groups[0].base_rate, white_ppv, t.groups[0].observed_fnr),
+        fpr_from_identity(t.groups[1].base_rate, white_ppv, t.groups[0].observed_fnr)
+    );
     println!();
 }
 
@@ -568,5 +664,66 @@ mod tests {
         assert!(h_frechet > h_gumbel + 2.0);
         let v1 = ppv_from_matrix(0.111, 0.36, 0.196);
         assert!(v1 > 0.2 && v1 < 0.5);
+    }
+
+    /// The Gumbel return level grows with the return period, as every GEV level does.
+    #[test]
+    fn gumbel_level_grows_with_the_period() {
+        let l100 = gev_level(0.0, 1.2567, 0.762, 100.0);
+        let l10000 = gev_level(0.0, 1.2567, 0.762, 10_000.0);
+        assert!(l10000 > l100 + 3.0);
+        // the limit of the GEV as xi -> 0 is the Gumbel
+        assert!((gev_level(1e-6, 1.2567, 0.762, 100.0) - l100).abs() < 1e-3);
+        assert!(
+            (dike_cost(1e-6, 1.2567, 0.762, 5.0) - dike_cost(0.0, 1.2567, 0.762, 5.0)).abs() < 1e-2
+        );
+    }
+
+    /// The EVSI of the two tests, by hand: the sensitive one is worth 0.22 and the specific one 0,
+    /// because after its negative result the chance of disease, 0.24, is still above 0.10.
+    #[test]
+    fn evsi_matches_the_hand_count_and_never_exceeds_evpi() {
+        let d = TwoActs {
+            u_act_sick: -1.0,
+            u_not_act_sick: -10.0,
+            u_act_healthy: -1.0,
+            u_not_act_healthy: 0.0,
+            p_sick: 0.3,
+        };
+        assert!((evsi(&d, 0.9, 0.7) - 0.22).abs() < 1e-12);
+        assert!(evsi(&d, 0.3, 0.95).abs() < 1e-12);
+        for (se, sp) in [(0.5, 0.5), (0.99, 0.99), (0.7, 0.9)] {
+            let v = evsi(&d, se, sp);
+            assert!(v >= -1e-12 && v <= d.evpi() + 1e-12);
+        }
+    }
+
+    /// One threshold cannot lower both errors: a lower FNR target raises the FPR.
+    #[test]
+    fn lowering_the_fnr_raises_the_fpr() {
+        let f = fpr_for_fnr(0.36, 0.196, 0.24);
+        assert!(f > 0.196);
+        assert!((fpr_for_fnr(0.36, 0.196, 0.36) - 0.196).abs() < 1e-6);
+        assert!(fpr_for_fnr(0.24, 0.105, 0.36) < 0.105);
+    }
+
+    /// The identity is algebraic: with the PPV of the same matrix it returns the observed FPR.
+    #[test]
+    fn chouldechova_identity_closes_on_any_matrix() {
+        for (p, fnr, fpr) in [(0.069, 0.24, 0.105), (0.111, 0.36, 0.196), (0.5, 0.1, 0.3)] {
+            let ppv = ppv_from_matrix(p, fnr, fpr);
+            assert!((fpr_from_identity(p, ppv, fnr) - fpr).abs() < 1e-12);
+        }
+    }
+
+    /// Pooling independent contracts with the same capital per contract raises the growth.
+    #[test]
+    fn insurer_growth_rises_with_the_number_of_contracts() {
+        let g: Vec<f64> = [1usize, 10, 100, 1_000]
+            .iter()
+            .map(|n| insurer_growth(50_000.0, *n, 1_800.0, 34_000.0, 0.05))
+            .collect();
+        assert!(g.windows(2).all(|w| w[1] > w[0]), "{g:?}");
+        assert!(g[0] < 0.0 && g[3] > 0.0);
     }
 }

@@ -119,7 +119,7 @@ mod tests {
     fn with_volatility_the_loss_pays_for_the_margin() {
         let loss = chapter_16_post();
         assert!(
-            loss.loss > 40.0,
+            loss.loss > 20.0,
             "the loss measured at the chapter 16 post: {}",
             loss.loss
         );

@@ -61,17 +61,28 @@ fn decompose(forecasts: &[f64], outcomes: &[f64]) -> Decomposition {
         / n as f64;
     let mut order: Vec<usize> = (0..n).collect();
     order.sort_by(|a, b| forecasts[*a].partial_cmp(&forecasts[*b]).unwrap());
+    // Ten boxes of equal mass, except that equal forecasts never straddle a boundary: a box
+    // that cut a run of ties would separate identical forecasts by their arbitrary order and
+    // manufacture resolution that the forecaster does not have (a constant forecaster must
+    // have RES = 0 exactly).
     let boxes = 10usize;
+    let mut bounds = Vec::new();
+    let mut start = 0usize;
+    for k in 1..=boxes {
+        let mut end = (k * n / boxes).max(start);
+        while end < n && end > 0 && forecasts[order[end]] == forecasts[order[end - 1]] {
+            end += 1;
+        }
+        if end > start {
+            bounds.push((start, end));
+            start = end;
+        }
+    }
     let mut rel = 0.0;
     let mut res = 0.0;
     let mut ece = 0.0;
     let mut within = 0.0;
-    for k in 0..boxes {
-        let start = k * n / boxes;
-        let end = (k + 1) * n / boxes;
-        if end <= start {
-            continue;
-        }
+    for (start, end) in bounds {
         let idx = &order[start..end];
         let m = idx.len() as f64;
         let pm = idx.iter().map(|i| forecasts[*i]).sum::<f64>() / m;
@@ -202,6 +213,15 @@ pub fn run() {
         base,
         expert.iter().sum::<f64>() / n as f64
     );
+    // Platt is fitted on the first 2000 days and scored on the last 2000, which it never saw:
+    // a recalibration scored on its own fitting data would flatter itself.
+    let half = n / 2;
+    println!(
+        "Platt fitted on days 1-{} and scored out of the fit on days {}-{} (intercept a, slope b):",
+        half,
+        half + 1,
+        n
+    );
     for (name, p) in [
         ("lazy (0.20 always)", &lazy),
         ("expert", &expert),
@@ -209,12 +229,23 @@ pub fn run() {
         ("noisy", &noisy),
     ] {
         let d = decompose(p, &y);
-        let (a, b) = platt(p, &y);
-        let after = recalibrate(p, a, b);
-        let dd = decompose(&after, &y);
+        let (a, b) = platt(&p[..half], &y[..half]);
+        let before = decompose(&p[half..], &y[half..]);
+        let after = decompose(&recalibrate(&p[half..], a, b), &y[half..]);
         println!(
-            "{:>24}: Brier {:.4} | REL {:.4} RES {:.4} UNC {:.4} | ECE {:.4} | after Platt: Brier {:.4}, ECE {:.4} (a = {:.2}, b = {:.2})",
-            name, d.brier, d.rel, d.res, d.unc, d.ece, dd.brier, dd.ece, a, b
+            "{:>24}: Brier {:.4} | REL {:.4} RES {:.4} UNC {:.4} | ECE {:.4} | out of fit: Brier {:.4} -> {:.4} with Platt, ECE {:.4} -> {:.4} (a = {:.2}, b = {:.2})",
+            name,
+            d.brier,
+            d.rel,
+            d.res,
+            d.unc,
+            d.ece,
+            before.brier,
+            after.brier,
+            before.ece,
+            after.ece,
+            a,
+            b
         );
     }
     let d = decompose(&expert, &y);
@@ -269,6 +300,18 @@ mod tests {
         let p = vec![0.1, 0.2, 0.8, 0.9, 0.15, 0.85, 0.25, 0.75];
         let y = vec![0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0];
         let d = decompose(&p, &y);
+        assert!((d.rel - d.res + d.unc - d.brier_box).abs() < 1e-12);
+    }
+
+    /// A constant forecaster has no resolution: RES is exactly zero, whatever the outcomes.
+    #[test]
+    fn constant_forecaster_has_zero_resolution() {
+        let p = vec![0.2; 1_000];
+        let y: Vec<f64> = (0..1_000)
+            .map(|i| if i % 4 == 0 { 1.0 } else { 0.0 })
+            .collect();
+        let d = decompose(&p, &y);
+        assert_eq!(d.res, 0.0);
         assert!((d.rel - d.res + d.unc - d.brier_box).abs() < 1e-12);
     }
 }

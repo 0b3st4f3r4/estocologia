@@ -57,9 +57,9 @@ measurement remains without an instrument — declaration 2 of `empirical/p14-h3
 
 | Result | Tag | Source / instrument |
 | --- | --- | --- |
-| Resolution loss: 46.24 min where demand oscillates from 5 to 11, 5.97 min where it oscillates from 7 to 9, and 0.00 min where it does not oscillate | **R** | `labs --resolution`; Chapters 16 and 21 |
+| Resolution loss, both arms staffed for a utilisation of 0.8: 22.99 min where demand oscillates from 5 to 11, 2.50 min where it oscillates from 7 to 9, and 0.00 min where it does not oscillate. Rectified 2026-10-18: the earlier 46.24 and 5.97 min were measured with capacity equal to demand (utilisation 1), a critical queue without steady state | **R** | `labs --resolution`; Chapters 5, 16 and 21 |
 | Prediction 3 (oscillation threshold): under the plan calibrated on flat demand, the fraction of failed days grows from 0.095 to 0.330 and crosses one-quarter at amplitude 2.5, with resolution loss turning to +2.87 min at the crossing and negative below it; under the Erlang plan, the prediction **does not hold** (flat demand already fails 1 day in 5, the fraction is non-monotonic, and refining at the crossing incurs a cost) | **R** / **D** | `labs --resolution`; background point 15, with K = 2 declared |
-| Prediction 5 (transfer): 0 violations of the implication (no profile survives R1 and fails R0) and 3 counterexamples across 6 profiles × 200 days, with conservation of the aggregate verified | **R** | `labs --resolution`; background point 15 |
+| Prediction 5 (transfer): 0 violations of the implication (no profile survives R1 and fails R0) and 3 counterexamples across 6 profiles × 200 days, with conservation of the aggregate verified. Read on 2026-10-18 as a consequence of arithmetic (a weighted mean of daily shares cannot cross a threshold that no day crosses), so the run tests the implementation, not the world | **R** | `labs --resolution`; background point 15 |
 
 ## Background Audit
 

@@ -517,7 +517,7 @@ pub fn run() {
             .collect::<Vec<f64>>()
     };
     println!(
-        "Morphonomy: rule 1 -> marginal slope = {:.2} (treated fraction = {:.3}) | by regime = {:?} | invariant(0,5) = {}",
+        "Morphonomy: rule 1 -> marginal slope = {:.2} (treated fraction = {:.3}) | by regime = {:?} | invariant(tolerance 0.5) = {}",
         m.marginal,
         m.treated_fraction,
         rounded(&m.by_regime),
@@ -546,7 +546,7 @@ pub fn run() {
     ];
     let t = measure(2026, &swapped_regimes);
     println!(
-        "Morphonomy: rule 1 with the allocation swapped -> marginal slope = {:.2} | by regime = {:?} | invariant(0,5) = {}",
+        "Morphonomy: rule 1 with the allocation swapped -> marginal slope = {:.2} | by regime = {:?} | invariant(tolerance 0.5) = {}",
         t.marginal,
         rounded(&t.by_regime),
         invariant(&t.by_regime, 0.5)
@@ -574,7 +574,7 @@ pub fn run() {
     ];
     let q = measure(2026, &broken_regimes);
     println!(
-        "Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = {:.2} | by regime = {:?} | invariant(0,5) = {} | step within the regime = {:.2}",
+        "Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = {:.2} | by regime = {:?} | invariant(tolerance 0.5) = {} | step within the regime = {:.2}",
         q.marginal,
         rounded(&q.by_regime),
         invariant(&q.by_regime, 0.5),

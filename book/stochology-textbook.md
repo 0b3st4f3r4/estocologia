@@ -100,6 +100,12 @@ right, it runs.
 | Whoever wants only the architecture | chapters 2, 12, 13, 14, 15 | two weeks |
 | Whoever wants to see the method in action | the whole of Part V, returning to the foundations when needed | two weeks |
 
+**How hard each part is.** The promise to the High School reader holds for Step 1 of Parts I and II, and for the
+*Concept* exercises. Step 2 asks for more as the book advances: probability and logarithms from Chapter 3,
+derivatives from Chapter 5, regression from Chapter 9, and stochastic calculus (Itô and Stratonovich), variational
+free energy and nonparametric tests in Parts III to V. Those passages are written for the undergraduate and the
+professional, and a first reading can skip them without losing the thread of Step 1 and Step 3.
+
 ---
 
 ## Conventions
@@ -375,7 +381,8 @@ Chapter 4 calls that limit Knightian uncertainty.
 - In the **Model**, the statistical bias of an estimator: a formula whose average result misses the true value.
 - In the **Agent**, the cognitive bias of whoever reasons: seeing a pattern where there is only chance.
 
-In all three, the error is not noise that cancels out with more data. It is a distortion that accumulates.
+In all three, the error is not noise that cancels out with more data. It is a distortion that persists, and more data
+only measure it more precisely.
 
 **Biases as forgotten models of chance.** Many biases in the classical catalogue are a model of chance that was
 ignored.
@@ -397,8 +404,12 @@ $P(\text{innocent} \mid \text{evidence})$, the answer about the World. Going fro
 third number: how many people could have left that trace. The fallacy crosses the Model-to-Agent bridge without
 paying the toll.
 
-**The inspection paradox.** The manager of the health centre made the opposite crossing: imposing a stable Model on
-a World that oscillates, and projecting the queue of the average day onto every day.
+**The fallacy of the stable world.** The manager of the health centre made the opposite crossing: imposing a stable
+Model on a World that oscillates, and projecting the queue of the average day onto every day. A second error hides in
+the same queue, and it has a classical name. Asked "how long did *you* wait?", the patients answer from the busy days,
+because most of them arrived on busy days. Counted per patient, the bad days weigh more than counted per day. That is
+the **inspection paradox**, or length-biased sampling: whoever samples by arrival over-represents the long intervals.
+Chapter 5 measures both errors.
 
 ---
 
@@ -483,9 +494,9 @@ They are five different things with the same number on top. When someone reads o
 the error is not in the arithmetic. It is on the bridge.
 
 **The friend who offers two tickets.** Your friend says the chance of rain is 60% and the chance of no rain
-is 50%. You can buy two tickets from him. One pays 1 real if it rains, the other pays 1 real if it does not
+is 50%. You can buy two tickets from him. One pays 1 dollar if it rains, the other pays 1 dollar if it does not
 rain. He charges 0.60 for the first, 0.50 for the second, 1.10 in total. Whether it rains or not, **one** of
-the two tickets pays 1 real. You receive 1.00 and paid 1.10. You lost 0.10 with no risk at all.
+the two tickets pays 1 dollar. You receive 1.00 and paid 1.10. You lost 0.10 with no risk at all.
 
 That is a **Dutch book**: a combination of bets in which one loses money with certainty. The sum rule exists
 to prevent that combination. Beliefs that obey probability have no Dutch book against them.
@@ -505,9 +516,9 @@ When Gigerenzer and colleagues asked 160 gynaecologists this question, **only 21
 is not stupidity; it is the bridge between the likelihood the test declares and the posterior the patient
 wants to know.
 
-**The court's arithmetic.** In the Sally Clark case, the prosecution presented the number "1 in 73 million",
-obtained by squaring 1/8,543, as if the two deaths were independent. The prosecutor treated that number as
-the chance that the mother was innocent. That number was the chance of a coincidence; the answer about
+**The court's arithmetic.** In the Sally Clark case, an expert witness for the prosecution presented the number
+"1 in 73 million", obtained by squaring 1/8,543, as if the two deaths were independent. The court heard that number
+as the chance that the mother was innocent. That number was the chance of a coincidence; the answer about
 innocence required the prevalence in the World. That is the bridge of Chapter 2, now with fatal consequences.
 
 ---
@@ -528,7 +539,10 @@ by the price of a bet. A set of prices admits a Dutch book if and only if it vio
 | Logical (Keynes, Carnap) | A degree of partial support between propositions | Model |
 | Subjective (Ramsey, de Finetti) | The degree of belief of an agent, measured by the price of a bet | Agent |
 
-Stochology does not choose one. **It types every number by the layer it came from**. Many errors of Chapter
+Stochology does not choose one. **It types every number by the layer it came from**. The column of layers is a
+convention of this book, not a theorem: a frequentist limit is also an idealisation of the Model, and a propensity is
+a hypothesis about the World that only a Model can state. The typing is useful because it forces the question "where
+did this number come from?", not because each interpretation belongs to one layer by nature. Many errors of Chapter
 2 are swaps of reading: a frequency of the World read as a degree of belief of the Agent, or a count of equally
 possible cases in the Model read as a property of the World.
 
@@ -571,7 +585,7 @@ To separate a 60% coin from an honest one with odds of 100 to 1, about **229 tos
 evidence rarely deceives. If the null hypothesis is true, the chance that the likelihood ratio ever reaches
 $k$ is at most $1/k$, whatever the sample size:
 
-$$P_{H_0}\Big(\sup_n \mathrm{RV}_n \ge k\Big)\le \frac{1}{k}$$
+$$P_{H_0}\Big(\sup_n \mathrm{LR}_n \ge k\Big)\le \frac{1}{k}$$
 
 In simulation, only **0.85%** of the paths under the null reached 20 decibans (ratio 100), against a bound
 of 1%.
@@ -675,8 +689,10 @@ ignorance about the parameter and disappears when you identify it and have data.
 | Knightian | Model and Agent | Nothing — or worse: false confidence | Scenarios, robustness, stress on assumptions, widening the hypothesis space |
 
 Frank Knight (1921) separated **risk**, with known probabilities, from **uncertainty**, with probabilities
-that cannot be measured. In the extreme case, called here Knightian uncertainty or specification error, the
-real process is **outside** the hypothesis space. That uncertainty is the most dangerous of the
+that cannot be measured. This book stretches Knight's word to a neighbouring case, the one statisticians call
+**misspecification** or the *M-open* setting: the real process is **outside** the hypothesis space. The two are
+related, since a process nobody listed has no measurable probability, but they are not the same, and the label
+"Knightian" here means misspecification first and Knight's unmeasurable odds second. That uncertainty is the most dangerous of the
 three, because it does not appear in the equation. The interval narrows around the wrong answer.
 
 The second column says where each kind is usually met first, not where it is confined. Layer and kind of
@@ -824,9 +840,9 @@ time, and it is the only case in which the two coincide.
 
 $$\mathbb{E}[f(X)] \;\ge\; f(\mathbb{E}[X])$$
 
-In words, the mean of the result is **not** the result of the average case. Equality holds in two cases, and
-only in them, when $f$ is a straight line, or when $X$ does not vary. Outside those two, a difference is left
-over, the toll.
+In words, the mean of the result is **not** the result of the average case. Equality holds when $f$ is a
+straight line over the values that $X$ can take, or when $X$ does not vary. For a strictly convex curve, such as
+the wait of a queue, only the second case remains: any variation leaves a difference over, the toll.
 
 For a concave function, the inequality reverses: $\mathbb{E}[f(X)] \le f(\mathbb{E}[X])$.
 
@@ -849,8 +865,15 @@ $W(5) = 3.57$ min and $W(11) = 55$ min, and the mean of the two is 29.3 minutes,
 minutes of the claim. The second derivative of $W$ at $\lambda = 8$ is
 $f''(8) = 120/(\mu-8)^3 = 1.875$ minute per (patient/hour)². With the variance of $X$ equal to 9, the
 second-order toll is $\tfrac{1}{2}\cdot 1.875\cdot 9 = 8.44$ minutes. That is a lot, but it is less than
-the 19.3 minutes that are missing. **The second-order approximation underestimates the toll when the
-dispersion is large**, because the curve departs from the parabola before the day ends.
+the 19.3 minutes that are missing. **Here the second-order approximation underestimates the toll**, and the
+direction is not a law: it comes from the third derivative of $W$, which is positive, so the curve rises faster
+than its parabola on the busy side. A curve with a negative third derivative would be overestimated instead.
+
+The 29.3 minutes are themselves a long-run figure. A day of 10 hours starts with an empty queue and does not reach
+the long run of $W(11) = 55$ minutes, so the simulated wait (Step 3) stays below the formula. Two corrections pull
+in opposite directions: the short day lowers the wait of the surge day, and counting per patient, rather than per
+day, raises the weight of the surge day, because more patients arrive on it. That second effect is the inspection
+paradox of Chapter 2.
 
 **The mean grade and the threshold.** Not every crooked function is a second-degree curve. Failing is a
 **threshold**, and each student's outcome becomes a step at 6.0. The class mean answers the question "what is
@@ -862,9 +885,11 @@ students.
 it is computed on the **unit that is in fact independent**. At the centre, the question is this. Are the 320
 thousand patients 320 thousand independent observations, or are the 4 thousand days 4 thousand independent
 observations? Patients of one day share the demand of the day, the server and the queue. Treating them as
-independent is **pseudoreplication**, and it makes the margin look five times smaller than it is. The test
-that decides, with no convention at all, is the **halves null**: split the days at random into two halves and
-measure the deviation of the difference between the two means. The null measures what the margin must predict.
+independent is **pseudoreplication**, and it makes the margin look five times smaller than it is. A test that
+checks the choice is the **halves null**: split the days at random into two halves and measure the deviation of
+the difference between the two means. The null measures what the margin must predict. It is not free of
+convention: by splitting days, it already assumes that the days are independent of one another. A weekly calendar
+or a drift across weeks would escape it, and the honest version then splits whole weeks.
 
 **The prohibition of the solitary mean.** When the function is nonlinear, the dynamics multiplicative or the
 tail heavy, reporting only the mean is prohibited. One reports the average case $f(\mathbb{E}[X])$, the
@@ -910,26 +935,30 @@ between the worlds, 10.6 minutes, sits 52.7 null deviations away.
 **The resolution of the question.** The manager's error has a name that outlives the health centre. The
 question "does the service hold?" can be asked at different grains. Asked of the average day, it is the coarse
 question, R0. Asked of each day, it is R1. Asked of each hour, R2. Asked of each hour and of each group of
-patients, R3. Each step refines the one before, and a finer question can only see more failures, never fewer.
+patients, R3. Each step refines the one before. When the failure is a threshold on a mean, a finer question can
+only see more failures, never fewer, because an average above the line needs at least one part above it.
 
 The cost of asking coarsely can be measured with two plans that spend the **same total resource**. The coarse
-plan staffs every day for the mean demand. The fine plan staffs each day for that day's demand. Both face the
-same arrivals and the same service draws, so the only difference between them is the grain of the question.
+plan staffs every day for the mean demand. The fine plan staffs each day for that day's demand. Both aim at the
+same utilisation, a capacity of the demand divided by 0.8, so that neither plan runs a queue at the critical
+point where arrivals equal service. Both face the same arrivals and the same service draws, so the only difference
+between them is the grain of the question.
 
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
+   above 30 min: aggregated 0.4232, fine 0.1782
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
+   above 30 min: aggregated 0.2266, fine 0.1946
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
+   above 30 min: aggregated 0.1969, fine 0.1969
 ```
 
-With demand of 5 or 11, the coarse plan makes patients wait 86.48 minutes on average and the fine plan 40.24: the
-coarse question costs **46.24 minutes** per patient. With a light oscillation, from 7 to 9, it costs 5.97
-minutes. Without oscillation it costs nothing, 0.00, because then the average day is every day. The loss of
+With demand of 5 or 11, the coarse plan makes patients wait 38.94 minutes on average and the fine plan 15.95: the
+coarse question costs **22.99 minutes** per patient. With a light oscillation, from 7 to 9, it costs 2.50
+minutes. Without oscillation it costs nothing, 0.00, because then the average day is every day. On the surge day
+the coarse plan offers a capacity of 10 to a demand of 11, and that queue has no long run at all. The loss of
 resolution is the Jensen toll seen from the side of the decision: it exists only when the world varies, and it
 grows with the variation.
 
@@ -958,8 +987,8 @@ grows with the variation.
 
 - The mean of the input is not the mean of the output when the function is curved. The result is
   $\mathbb{E}[f(X)] \ge f(\mathbb{E}[X])$ for convex $f$.
-- The toll grows with the curvature and with the variance, and the second-order formula **underestimates** the
-  toll when the dispersion is large.
+- The toll grows with the curvature and with the variance; the second-order formula is local, and in the queue,
+  whose third derivative is positive, it **underestimates** the toll when the dispersion is large.
 - Mean demand does not move, and the waits do not look alike. Whoever simulates the world sees what the
   spreadsheet hides.
 - The margin is only worth what the independent unit is worth, and the halves null decides which unit is the
@@ -1013,8 +1042,9 @@ the magazine could compute was 0.03 point, and the error was 18.2 points, or **6
 **The independent unit.** This poison shows up with no ill will at all, in "internal" data. A call
 centre logs 2.65 million calls in 81 working days. An analyst treats each call as an
 observation and computes the margin. The calls of one day, however, share the demand, the staffing
-roster and the weather. They repeat, they do not add up. The independent unit there is the **day**, and 2.65
-million calls are worth **81** observations. That is why a report that treats the calls
+roster and the weather. They repeat, they do not add up. The independent unit there is the **day**: there are
+**81** independent units, and the margin has to be computed over them. That does not make 2.65 million calls worth
+exactly 81 calls; it makes them worth much less than 2.65 million. That is why a report that treats the calls
 as independent promises a precision that the real unit does not sustain.
 
 ---
@@ -1083,8 +1113,14 @@ observations are worth much less than 100.
 $$n_{\text{ef}} \;=\; \frac{p(1-p)}{\operatorname{Var}(\bar X)}$$
 
 In words, compare the spread that the sample mean **actually has** with the one it would have if the
-observations were independent. In real data, 225 thousand New York flights are worth, in independent
-information, 364 days; 2.65 million calls are worth 81 days. Treating the
+observations were independent. Two different numbers hide in that sentence and must not be confused. The
+**number of independent units** is the count of clusters: 364 days of New York flights, 81 days of calls. The
+**effective size** is how many independent rows would give the same margin, and with clusters it follows the
+design effect, $1 + (m - 1)\,\rho$, where $m$ is the size of a cluster and $\rho$ the correlation between rows of
+the same cluster. Only when the rows of a day are identical ($\rho = 1$) does the effective size fall to the number
+of days. At the bank the margin per call comes out about fourteen times narrower than the margin per day, so the
+design effect is about two hundred and the 2.65 million calls weigh like some thousands of independent calls, far
+fewer than 2.65 million and far more than 81. Treating the
 patients of one day, or the calls of one hour, as independent observations is
 **pseudoreplication**: the margin comes out too small and the test approves what it should not.
 
@@ -1128,8 +1164,10 @@ two-state chain with persistence 0.235: variance of the mean of 100 letters = 0.
 ```
 
 Four readings. **(1)** The measured error (−18.2 points) coincides with Meng's identity (−18.24) and is worth
-the standard deviation of a sample of **7.2 people**. The simulation is not a story, it is a closed
-count. **(2)** The margin of error of the poll (0.0276 point) is no margin at all against a poison of
+the standard deviation of a sample of **7.2 people**. The agreement to the third decimal is not evidence: Meng's
+identity is algebraic, so it holds for any sample, and the two response rates were chosen to reproduce the
+known result of 1936. What the simulation shows is the mechanism, not that it was the cause; historians still
+weigh the frame (telephones and subscribers) against the non-response of whoever did not mail the ballot back. **(2)** The margin of error of the poll (0.0276 point) is no margin at all against a poison of
 18 points; they are 661 margins apart. **(3)** The correlation between talent and likeability goes from $+0.001$
 in the population to **−0.679** among those selected with cutoff 1.5. The filter **manufactures** the negative
 association, and it gets stronger the narrower the door (−0.617 with 24% selected, −0.732 with
@@ -1143,7 +1181,8 @@ memory, 25 when the chain is sticky (persistence 0.8) and 327 when the letters a
    precise". Which factor of Meng's identity did it forget, and what does it have to do with the *Literary
    Digest*?
 2. *(Count)* In the Simpson table, recompute the raw rate of each surgery as the mean of the strata
-   weighted by the number of cases (81, 234, 192 and 55) and explain why it reverses the strata. Which is
+   weighted by the number of cases (87, 270, 263 and 80; the successes were 81, 234, 192 and 55) and explain why it
+   reverses the strata. Which is
    the confounding variable?
 3. *(Count)* With $\rho = -0.21$ and $\sigma_Y = 0.488$, which $f$ makes Meng's error worth 10 points?
    And 5 points? Say in one sentence why the 1936 poll could not get there even with 50
@@ -1164,7 +1203,7 @@ memory, 25 when the chain is sticky (persistence 0.8) and 327 when the letters a
   missingness declared as an assumption.
 - The filter does not only distort the mean: it creates relations that do not exist in the population.
 - The effective size of a sample is a property of the process; the margin is always computed in the independent
-  unit.
+  unit, and the number of independent units is a floor for the effective size, not the effective size itself.
 - 2.4 million biased ballots are worth 7 people, and the margin of error of a biased poll measures
   nothing at all.
 
@@ -1189,9 +1228,10 @@ analysed the shots of professional players and treated the belief that whoever h
 hit again as a pattern illusion. The proportion of hits after a hit was equal to the general
 proportion. For three decades the result was cited as the canonical example of illusion.
 
-In 2018, Miller and Sanjurjo showed that the **test** was biased. The original count pooled all
-shots and compared the proportion of "hit after hit" with one half. But that proportion, in a
-process with no memory at all, **is not one half**. In three tosses of an honest coin, the mean of the
+In 2018, Miller and Sanjurjo showed that the **test** was biased. The original analysis computed, player by
+player, the proportion of hits after a run of hits and compared it with the proportion after a run of misses,
+expecting no difference under pure chance. But the proportion of "hit after hit", averaged over finite sequences
+of a process with no memory at all, **is below the hit rate**: with a fair coin it is not one half. In three tosses of an honest coin, the mean of the
 proportions per sequence is $5/12 = 0.4167$. The target was in the wrong place. With the count corrected, the
 difference in the Cornell data goes from $+3$ to $+13$ percentage points. The ghost was not in the
 players. It was in the denominator.
@@ -1230,20 +1270,21 @@ target. The error is 0.0833, eight percentage points of invented "hot hand".
 
 **Mayo's severity.** Deborah Mayo proposed the question that organises everything: *a result is only
 evidence if the procedure would probably have gone wrong had the claim been false.* For a pre-registered
-test that produces $p = 0.04$, the severity of the result is $1 - p = 0.96$. If the hypothesis
-were false, the test would have produced a less extreme result in 96 out of 100 times. When the
-"$p = 0.04$" comes out of a garden of paths, the severity that matters is no longer $1 - p$, but $1$
+one-sided test that produces $p = 0.04$, the severity of the claim "there is a positive effect" is $1 - p = 0.96$:
+had there been no effect, the test would have produced a less extreme result in 96 out of 100 times. When the
+"$p = 0.04$" comes out of a garden of paths, the probability that matters is no longer $1 - p$, but $1$
 minus the false-positive rate **of the procedure**, because what produced the number was the whole
-procedure.
+procedure. That second number is an analogue at the level of the procedure, in the spirit of Mayo, not her
+formula, which is defined claim by claim.
 
 **Ioannidis' theorem.** The predictive value of a positive finding depends on the power $1-\beta$, on the
-odds $R$ that a hypothesis in the field is true and on the significance level $\alpha$:
+pre-study odds $R$ of true against false hypotheses in the field and on the significance level $\alpha$:
 
-$$\text{VPP}=\frac{(1-\beta)R}{R-\beta R+\alpha}$$
+$$\text{PPV}=\frac{(1-\beta)R}{R-\beta R+\alpha}$$
 
 In words: even a well-done study can have little chance of being right, if the field tests many
-false hypotheses. With power 0.80 and $\alpha = 0.05$, if one in every ten hypotheses is true
-($R = 1/10$), the PPV is 0.615; if one in every thousand ($R = 1/1000$), it falls to 0.016. If $\alpha$ is the garden's
+false hypotheses. With power 0.80 and $\alpha = 0.05$, if there is one true hypothesis for every ten false ones
+($R = 1/10$), the PPV is 0.615; if one for every thousand ($R = 1/1000$), it falls to 0.016. If $\alpha$ is the garden's
 instead of 0.05, both values collapse. The Open Science Collaboration (2015) replicated 100
 psychology studies, and **97% of the originals** had $p < 0.05$, against **36% of the replications**.
 
@@ -1299,7 +1340,12 @@ Approval requires that **all** eight reach the minimum severity:
 $$\text{Approved}(X) = \bigwedge_{i=1}^{8}\Big(A_i(X) \ge \text{Severity}_{\min}\Big)$$
 
 with $\text{Severity}_{\min} = 6$ on a scale from 0 to 10, and the same specification sheet, judged again with the
-same seed, always returns the same severity. The rule is hard on purpose. The board's average grade approves nothing, and one weak
+same seed, always returns the same severity. One warning about the word. In the machine of this book the
+"severity" of each band is not measured by running the attack in the table: it is a number drawn, with a declared
+seed, inside a band that the sheet's declared safeguard selects, high when the safeguard is there and low when it is
+not. The board is therefore a **checklist of safeguards** with a reproducible score. It shows that a safeguard was
+declared and anchored, not that it works, and it is not Mayo's severity. The attacks that do run (the audit trail
+tampered on purpose, the planted defects) live in the gates of Chapter 14. The rule is hard on purpose. The board's average grade approves nothing, and one weak
 band declared is worth more than uniform work without an admitted gap. No agent approves the
 work it produced. Three failures eliminate the work before any discussion of merit: temporal leakage, a data
 contract violated without treatment, and the absence of a named human owner.
@@ -1339,7 +1385,8 @@ four points, three sets of covariates, exclusion of the extreme case and two sub
 out of the garden is 0.53, because what produces the number is the procedure. **(5)** The A1–A8 board with
 seed 2026 gives severities 9, 8, 10, 9, 8, 9, 8 and 10 on a sheet with the eight safeguards, approved, and
 one band without its safeguard is enough for the lowest severity to fall to 2 and the approval to vanish. The AND of the eight does not
-forgive.
+forgive. Read the numbers for what they are: the band of each severity was fixed by the declared safeguards, and the
+draw inside the band only shows that the verdict does not depend on the seed.
 
 **Exercises.**
 
@@ -1370,8 +1417,8 @@ forgive.
   in the world.
 - Ioannidis: the predictive value of a finding falls with $\alpha$ and with the chances that the hypothesis is false.
 - Five errors, not two: I (false alarm), II (blindness), III (right answer to the wrong question), S
-  (flipped sign) and M (exaggeration). The defence is institutional: the A1–A8 board and Mayo's severity
-  trade good intention for a test that could have failed.
+  (flipped sign) and M (exaggeration). The defence is institutional: Mayo's severity and a test that could have
+  failed, with the A1–A8 board as a checklist that makes the missing safeguard visible.
 
 ## Chapter 8. The forecaster's thermometer: calibration, resolution and the Brier score
 
@@ -1391,8 +1438,9 @@ called the *expert*, looks at the sky and says: *"today, 70%"*.
 Who is better?
 
 Neither of the two ready-made answers does. The lazy one is, over the long run, **right on average**. In
-every 100 days on which he announced 20%, it rained about 20 times. He is calibrated, and useless for carrying an
-umbrella. In every 100 of his warnings, 80 dry days and 20 wet ones, exactly the rate of the place. The
+every 100 days on which he announced 20%, it rained about 24 times in the simulated city, close to what he said. He is
+nearly calibrated, and useless for carrying an umbrella: every one of his warnings is the same warning, the rate of
+the place. The
 expert **separates** the days. On a day on which he says 70%, it rains far more than on a day on which he
 says 10%. On one side, a calibrated forecaster with no resolution; on the other, a calibrated one with resolution.
 
@@ -1400,12 +1448,13 @@ Measured in a world of 4 thousand days, the numbers are these:
 
 | Forecaster | Brier score | Calibration error (REL) | Resolution (RES) |
 | --- | --- | --- | --- |
-| Lazy (0.20 always) | 0.1858 | 0.0021 | 0.0002 |
+| Lazy (0.20 always) | 0.1858 | 0.0018 | 0.0000 |
 | Expert | 0.1569 | 0.0012 | 0.0267 |
 
-The lazy one has almost no calibration error (0.0021) and no resolution at all (0.0002). He
-gets the frequency right and distinguishes nothing. The expert has an even smaller calibration error and a
-resolution **133 times larger**. That is why he is worth more, and that is what the accuracy rate would not see.
+The lazy one has almost no calibration error (0.0018) and no resolution at all (0.0000, and exactly zero by
+construction: a constant forecast cannot separate anything). He gets the frequency nearly right and distinguishes
+nothing. The expert has an even smaller calibration error and a resolution of 0.0267 where the lazy one has none.
+That is why he is worth more, and that is what the accuracy rate would not see.
 
 **The question the accuracy rate does not answer.** A third forecaster is evaluated by accuracy
 rate. He says "it will rain" when the chance passes 50% and is right 80% of the time. That metric does not
@@ -1452,19 +1501,25 @@ monotone distortions, a forecaster systematically too confident or systematicall
 why it is cheap. What it does **not** do is create information. A noisy forecaster remains
 noisy after recalibration, because the noise was not in the scale, it was in the signal.
 
-Measured in the laboratory, an overconfident forecaster goes from Brier 0.1712 to **0.1559**, practically the
-value of the honest expert (0.1560), and all of the difference was scale distortion. A noisy forecaster
-goes from 0.2119 to **0.1755**, an improvement that still does not reach the expert. The recalibrated lazy
-one gives **0.1840**, which is the UNC of the world. Recalibrating a constant forecaster returns only the
-base rate.
+Measured in the laboratory, with Platt fitted on the first 2,000 days and scored on the last 2,000, which it
+never saw, an overconfident forecaster goes from Brier 0.1708 to **0.1555**, practically the value of the
+recalibrated expert (0.1547), and almost all of the difference was scale distortion. A noisy forecaster goes from
+0.2147 to **0.1741**, an improvement that still does not reach the expert. Recalibrating the constant forecaster
+only replaces his 20% by the base rate of the fitting half; it cannot give him a second number.
 
 **How much calibration can be charged.** The ECE tolerance is the practical point. The rule of the
 $\mathrm{ECE} \le 0.03$ type looks austere, but it is not. The ECE of a **perfectly calibrated** forecaster
 is not zero, but a random number whose scale moves with $1/\sqrt n$. The honest tolerance is the 95% quantile
 of that null, computed with those forecasts at the $n$ of the vault, and it shrinks as $n$ grows. In a
-vault of 1,488 cases the noise is 0.03; in one of 104,489, 0.0035. A fixed tolerance is, then, two
-things. **Too tight** in the small vaults, where it fails an honest forecaster, and
-**too loose** in the large ones, where it lets through perfectly detectable miscalibration.
+vault of 1,488 cases the median noise is 0.0292 and its 95% quantile 0.0425; in one of 104,489, the 95% quantile
+is 0.0037. A fixed tolerance is, then, two things. **Too tight** in the small vaults, where it fails an honest
+forecaster, and **too loose** in the large ones, where it lets through perfectly detectable miscalibration.
+
+Two different questions hide here, and Royall's distinction of Chapter 3 separates them. *Can the miscalibration
+be told apart from noise?* is answered by the null quantile, which shrinks with $n$. *Is the miscalibration large
+enough to matter for the decision?* is answered by a tolerance fixed by the cost of the error, which does not
+shrink with $n$. In a vault of a hundred thousand cases almost any deviation is detectable, including deviations
+too small to change any action. The honest report gives both verdicts: detectable or not, and relevant or not.
 
 Six real binary vaults show it:
 
@@ -1477,9 +1532,13 @@ Six real binary vaults show it:
 | NY flights 2023 | 104,489 | 0.0079 | 0.0035 | passes |
 | Rhode Island 2013–2015 | 24,466 | 0.0048 | 0.0034 | passes |
 
-With the tolerance that depends on $n$, **none** of the six vaults passes, not even the four that the fixed
-rule approved. The Toronto 1997–2002 case is the mirror. There the ECE of 0.0363 was noise of the order
-of the tolerance, because the null q95 is 0.0320, but the observed value passes it, and the failure holds.
+The null q95 of the table was computed with the real forecasts of each vault. Against it, all six vaults show
+**detectable** miscalibration, including the four that the fixed rule approved. Detectable is not yet relevant:
+the 2023 flights miss by 0.0079, a deviation that the null detects and that changes no decision taken on a
+delay forecast. The Toronto 1997–2002 case is the fragile one. Its ECE of 0.0363 sits just above the q95 of 0.0320
+computed with the real forecasts, and below the q95 of 0.0425 that the laboratory measures with simulated
+forecasts of the same size. The verdict on that vault depends on the spread of its forecasts, and it is reported as
+borderline, not as a failure.
 
 **Resolution is the hard part.** The Rhode Island forecast of arrests at traffic stops ended with ECE 0.0048 and skill
 $+0.019$, that is, good calibration and low resolution. Prison at a traffic stop is a rare event and
@@ -1510,10 +1569,11 @@ vault sizes. Run it with `cargo run --release --bin labs -- --chapter 8`.
 ```text
 == Chapter 8 :: the forecaster's thermometer ==
 4000 days, observed base rate = 0.243, mean chance declared by the expert = 0.252
-      lazy (0.20 always): Brier 0.1858 | REL 0.0021 RES 0.0002 UNC 0.1840 | ECE 0.0430 | after Platt: Brier 0.1840, ECE 0.0130 (a = -1.14, b = 0.00)
-                  expert: Brier 0.1569 | REL 0.0012 RES 0.0267 UNC 0.1840 | ECE 0.0281 | after Platt: Brier 0.1560, ECE 0.0115 (a = -0.22, b = 0.81)
-           overconfident: Brier 0.1712 | REL 0.0150 RES 0.0275 UNC 0.1840 | ECE 0.1109 | after Platt: Brier 0.1559, ECE 0.0120 (a = -0.25, b = 0.37)
-                   noisy: Brier 0.2119 | REL 0.0363 RES 0.0083 UNC 0.1840 | ECE 0.1449 | after Platt: Brier 0.1755, ECE 0.0166 (a = -0.82, b = 0.27)
+Platt fitted on days 1-2000 and scored out of the fit on days 2001-4000 (intercept a, slope b):
+      lazy (0.20 always): Brier 0.1858 | REL 0.0018 RES 0.0000 UNC 0.1840 | ECE 0.0430 | out of fit: Brier 0.1831 -> 0.1817 with Platt, ECE 0.0385 -> 0.0090 (a = -1.11, b = 0.00)
+                  expert: Brier 0.1569 | REL 0.0012 RES 0.0267 UNC 0.1840 | ECE 0.0281 | out of fit: Brier 0.1558 -> 0.1547 with Platt, ECE 0.0345 -> 0.0204 (a = -0.18, b = 0.82)
+           overconfident: Brier 0.1712 | REL 0.0150 RES 0.0275 UNC 0.1840 | ECE 0.1109 | out of fit: Brier 0.1708 -> 0.1555 with Platt, ECE 0.1119 -> 0.0129 (a = -0.21, b = 0.37)
+                   noisy: Brier 0.2119 | REL 0.0363 RES 0.0083 UNC 0.1840 | ECE 0.1449 | out of fit: Brier 0.2147 -> 0.1741 with Platt, ECE 0.1544 -> 0.0200 (a = -0.78, b = 0.28)
 Murphy identity on the expert: REL - RES + UNC = 0.1584339, Brier of the forecasts pooled into the boxes = 0.1584339, difference = 3.47e-15
 the raw forecast has Brier 0.1569462; pooling into 10 boxes costs 1.49e-3, and the identity closes
  Toronto prisons 1997-2002: n =    1488 | null q50 0.0292 | null q95 0.0425 | null q99 0.0481 | mean 0.0296 | null ECE above 0.03 in 45.1% of the simulations
@@ -1526,10 +1586,10 @@ n = 1 488, spread 2.0: null q50 0.0243, null q95 0.0349
 
 Five readings. **(1)** Murphy's identity closes to $3.5\times10^{-15}$ when the forecasts are
 pooled into the ten boxes; the raw forecast has Brier 0.1569, and the pooling costs 0.0015. **(2)** The
-lazy one has REL 0.0021 and RES 0.0002. It is calibrated and remains useless, and recalibrating a
-constant forecaster returns exactly the UNC (0.1840). **(3)** The overconfident one falls from 0.1712 to
-0.1559, below the expert (0.1560), because it was only scale. The noisy one falls from 0.2119 to 0.1755 and
-**does not reach** the expert, because it was signal, and lost signal does not come back. **(4)** The tolerance of
+lazy one has REL 0.0018 and RES 0.0000. It is nearly calibrated and remains useless. **(3)** Out of the fit, the
+overconfident one falls from 0.1708 to 0.1555, close to the recalibrated expert (0.1547), because it was mostly
+scale. The noisy one falls from 0.2147 to 0.1741 and **does not reach** the expert, because it was signal, and lost
+signal does not come back. **(4)** The tolerance of
 0.03 is failed by an honest forecaster in **45.1%** of the simulations when $n = 1,488$, and in **0.0%**
 when $n$ is 24,466 or 104,489. In the large vaults it almost prohibits nothing. **(5)** The null depends on the
 forecasts, not only on $n$. With $n = 1,488$, the q50 of the null ECE goes from 0.0320 with concentrated forecasts
@@ -1539,12 +1599,12 @@ to 0.0243 with spread forecasts.
 of sample size. A light oscillation of demand, between 7 and 9, costs little to ignore:
 
 ```text
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
+   above 30 min: aggregated 0.2266, fine 0.1946
 ```
 
-The coarse plan loses 5.97 minutes per patient, and the share of patients waiting more than 30 minutes moves
-from 0.5063 to 0.5168, about one point. A difference of that size is of the order of the calibration noise of a
+The coarse plan loses 2.50 minutes per patient, and the share of patients waiting more than 30 minutes moves
+from 0.1946 to 0.2266, about three points. A difference of that size is of the order of the calibration noise of a
 small vault. Whether a coarse question can be caught costing something depends, like the calibration
 tolerance, on how many cases there are to see it.
 
@@ -1554,7 +1614,7 @@ tolerance, on how many cases there are to see it.
    with the same accuracy rate and very different Brier scores.
 2. *(Count)* A forecaster declares 0.30 on 200 days and it rains on 48 of them. Compute REL and RES in that
    box, assuming base rate 0.24, and say what that forecaster should do with the scale.
-3. *(Count)* The null ECE moves with $1/\sqrt n$. If the null q95 is 0.0320 with $n = 1,488$, what do you
+3. *(Count)* The null ECE moves with $1/\sqrt n$. If the null q95 is 0.0425 with $n = 1,488$, what do you
    expect with $n = 148,800$? Compare with the measured q95 of 104,489 and say whether the growth matches the
    prediction.
 4. *(Laboratory)* In the laboratory, replace Platt recalibration with a simple intercept shift
@@ -1603,15 +1663,16 @@ The explanation is in the left column of the table. The hard cases went to open 
 Comparing the totals is comparing two different groups of patients. If the two procedures
 had served cases with the **same mix, 51% small and 49% large, the one of the whole
 population**, the numbers would be 83.3% for the open surgery and 77.9% for the other. The advantage goes back to the
-open surgery, now by a difference larger than that of any single stratum.
+open surgery. Its size, 5.37 points, is a weighted mean of the differences inside the strata, 6.44 and 4.25 points, and
+so it sits between them: standardising never produces a gap larger than every stratum.
 
 Nothing in that table is wrong. Between the second and the fourth row what changes is **the question**.
 *Among those operated on, which technique did better?* and *for the next patient, which technique to choose?*
 are two questions, and the answer to the first does not serve the second. That distinction has a name and a
 ladder.
 
-**The three steps.** In every 100 headlines with the word "cause", nine out of ten sit on the
-first step. Pearl separated the steps by the question that is asked:
+**The three steps.** Most headlines with the word "cause" sit on the first step. Pearl separated the steps by the
+question that is asked:
 
 | Step | Question | Example |
 | --- | --- | --- |
@@ -1664,7 +1725,11 @@ The canonical worked case is hormone therapy. In 1991, the cohort of the Nurses'
 about 48 thousand women, reported a relative risk of **0.56** of serious coronary disease among
 users of oestrogen. In 2002, the randomised trial of the Women's Health Initiative, with 16,608
 women, found a hazard ratio of **1.29**. The users in the cohort had other habits,
-other income and other access to doctors, and a back door remained open, until the draw closed it.
+other income and other access to doctors, and a back door remained open, until the draw closed it. The case also
+teaches that confounding is not the whole story. Later reanalyses of the same cohort (Hernán and colleagues, 2008),
+designed to imitate the trial (women who start the hormone, compared from the day they start, at the same time since
+menopause), came close to the trial's answer. Much of the gap came from comparing women who had used the hormone for
+years with women who never did: a problem of design and timing, which no adjustment for income or habits repairs.
 
 **Potential outcomes.** Each person has two possible outcomes, $Y(1)$ with the treatment and
 $Y(0)$ without it, and only one is observed. The comparison between the treated and the untreated gives:
@@ -1676,9 +1741,13 @@ for the treatment has the same expected $Y(0)$ as whoever was not. Chapter 17 fi
 LaLonde data, where selection bias flips the sign of the effect. The raw comparison gives $-8,498$
 dollars of income in 1978 and the experiment gives $+1,794$; the difference, $-10,292$, is the middle term.
 
-**The naive difference is not only effect.** The decomposition gives a name to the third element, and it has no
-statistical repair. Nothing in the observed data says how much it is worth, because one of the two
-potential outcomes of each person is missing by construction. Only the draw zeroes that term.
+**The naive difference is not only effect.** The decomposition gives a name to the third element, and the data
+alone do not repair it. Nothing in the observed data says how much it is worth, because one of the two
+potential outcomes of each person is missing by construction. The draw zeroes that term by design. Without a draw,
+the term can still be removed, but only under a premise that the data cannot test: the back door of the formula
+above (every confounder measured), an instrument that moves the treatment and nothing else, a threshold that
+assigns the treatment, or two groups that would have moved in parallel. Each strategy trades the draw for a
+declared assumption.
 
 **Invariance: what survives the change of environment.** A causal relation survives the change of
 environment; a correlation of convenience does not. The Invariant Causal Prediction, by Peters,
@@ -1700,14 +1769,16 @@ range of outcomes:
 
 | Reading | What happened |
 | --- | --- |
-| 6 of the 12 domains | ICP rejected every set: the environments act directly on $Y$ |
+| 6 of the 12 domains | ICP rejected every set: the environments act directly on $Y$, or the linear model was wrong for them |
 | 4 domains | it accepted so much that $\hat S$ came out empty: the environments move $X$ only a little |
-| 1 domain | $\hat S$ not empty, and against the claim: citizenship and employment, not skin colour |
+| 1 domain | $\hat S$ not empty: citizenship and employment entered, skin colour did not |
 
 **The effect transports better than the set.** The same twelve domains taught a second lesson. When ICP
 rejects every set, the model fitted in the training environments predicted well an environment never
 seen in 9 domains, with skill from 0.04 to 0.88. Finding the exact set of causes is more
-demanding than predicting under change.
+demanding than predicting under change. The single non-empty set, in police data, is the one to read with most care:
+ICP only promises a subset of the direct causes, under premises that observational records of who was released do
+not guarantee, and a variable left out of $\hat S$ is not shown to have no effect.
 
 **Why this matters for deciding.** Invariance is also the answer to Lucas' critique
 (Chapter 11). Only what is invariant across regimes deserves use when the regime changes. In a physical
@@ -1730,6 +1801,7 @@ large: open 192/263 = 0.7300  new 55/80 = 0.6875
 raw:   open 273/350 = 0.7800  new 289/350 = 0.8257
 weight of the strata in the whole population: small 0.5100, large 0.4900
 weighted by the whole population: open 0.8325  new 0.7789  -> the advantage flips back
+difference in points: small stones 6.44, large stones 4.25, standardised 5.37 (a weighted mean of the two)
 fraction of hard cases in the open surgery = 0.7514, in the new one = 0.2286
 
 == Chapter 9 :: the three steps of Pearl ==
@@ -1741,47 +1813,39 @@ fraction of hard cases in the open surgery = 0.7514, in the new one = 0.2286
 rows = 12000 (4000 per site), X -> Y with coefficient 2, X -> Z (child) with noise different per site, W pure noise
 naive correlation with Y: corr(X,Y) = 0.9314  corr(Z,Y) = 0.7208  corr(W,Y) = 0.0055
 naive slope (all sites together): X = 1.9885  Z = 0.6003  W = 0.0152
-  candidate {    x}  F =   0.755  p = 4.702e-1  common = 1.985  per site = [1.970, 1.996, 1.990]  ACCEPTED
-  candidate {    z}  F = 976.809  p = 0.000e0  common = 0.477  per site = [0.928, 0.496, 0.299]  rejected
-  candidate {    w}  F =   1.474  p = 2.290e-1  common = 0.011  per site = [0.056, -0.030, 0.008]  ACCEPTED
-  candidate {  x+z}  F =   0.612  p = 6.541e-1  common = 1.991  per site = [1.918, 1.998, 1.999]  ACCEPTED
-  candidate {  x+w}  F =   0.704  p = 5.890e-1  common = 1.985  per site = [1.970, 1.996, 1.990]  ACCEPTED
-  candidate {  z+w}  F = 488.188  p = 0.000e0  common = 0.477  per site = [0.928, 0.496, 0.299]  rejected
-  candidate {x+z+w}  F =   0.624  p = 7.111e-1  common = 1.991  per site = [1.919, 1.998, 1.999]  ACCEPTED
-  candidate {empty}  F = 0.000  p = 1.0  (intercepts only)
-accepted sets: 5 -> intersection S_hat = {}
+  candidate {empty}  F = 3081.848  p = 0.000e0  intercepts only  rejected
+  candidate {    x}  F =    0.633  p = 6.390e-1  common = 1.988  per site = [1.970, 1.996, 1.990]  ACCEPTED
+  candidate {    z}  F = 1079.841  p = 0.000e0  common = 0.600  per site = [0.928, 0.496, 0.299]  rejected
+  candidate {    w}  F = 1541.630  p = 0.000e0  common = 0.015  per site = [0.056, -0.030, 0.008]  rejected
+  candidate {  x+z}  F =    0.579  p = 7.471e-1  common = 1.994  per site = [1.918, 1.998, 1.999]  ACCEPTED
+  candidate {  x+w}  F =    0.640  p = 6.984e-1  common = 1.988  per site = [1.970, 1.996, 1.990]  ACCEPTED
+  candidate {  z+w}  F =  719.620  p = 0.000e0  common = 0.600  per site = [0.928, 0.496, 0.299]  rejected
+  candidate {x+z+w}  F =    0.597  p = 7.815e-1  common = 1.994  per site = [1.919, 1.998, 1.999]  ACCEPTED
+accepted sets: 4 of 8 -> intersection S_hat = {x}
 
 == Chapter 9 :: 200 repetitions, stable mechanism: Y = 2X + noise at every site
 mean naive slope (all sites together): X = 2.0004  Z = 0.6015
-  {    x}  mean F =     1.04  rejection rate = 0.060
-  {    z}  mean F =   973.87  rejection rate = 1.000
-  {    w}  mean F =     1.14  rejection rate = 0.085
-  {  x+z}  mean F =     0.99  rejection rate = 0.050
-  {  x+w}  mean F =     1.04  rejection rate = 0.075
-  {  z+w}  mean F =   487.45  rejection rate = 1.000
-  {x+z+w}  mean F =     1.01  rejection rate = 0.055
-  {x} accepted in 0.940 of the rounds
-  intersection = {x} in 0.080 of the rounds
-  intersection = {z} in 0.000 of the rounds
-  intersection = {w} in 0.025 of the rounds
-  intersection contains x and does not contain w in 0.080 of the rounds
-  empty intersection in 0.895 (of which 0.025 because only the noise W was left, 0.005 because the cause itself was not left, and 0.890 because W entered some sets and not others)
+  {empty}  mean F =  3191.16  rejection rate = 1.000
+  {    x}  mean F =     1.06  rejection rate = 0.065
+  {    z}  mean F =  1111.23  rejection rate = 1.000
+  {    w}  mean F =  1596.08  rejection rate = 1.000
+  {  x+z}  mean F =     1.02  rejection rate = 0.065
+  {  x+w}  mean F =     1.05  rejection rate = 0.080
+  {  z+w}  mean F =   741.13  rejection rate = 1.000
+  {x+z+w}  mean F =     1.03  rejection rate = 0.055
+  intersection = {x} in 0.960 of the rounds | contains z in 0.015 | contains w in 0.010 | empty in 0.025
 
 == Chapter 9 :: 200 repetitions, unstable mechanism: the coefficient of X in Y changes from site to site
-mean naive slope (all sites together): X = 4.0004  Z = 1.2029
-  {    x}  mean F =     1.04  rejection rate = 0.060
-  {    z}  mean F =  1352.54  rejection rate = 1.000
-  {    w}  mean F =     1.10  rejection rate = 0.070
-  {  x+z}  mean F =     0.99  rejection rate = 0.050
-  {  x+w}  mean F =     1.04  rejection rate = 0.075
-  {  z+w}  mean F =   676.76  rejection rate = 1.000
-  {x+z+w}  mean F =     1.01  rejection rate = 0.055
-  {x} accepted in 0.940 of the rounds
-  intersection = {x} in 0.065 of the rounds
-  intersection = {z} in 0.000 of the rounds
-  intersection = {w} in 0.025 of the rounds
-  intersection contains x and does not contain w in 0.065 of the rounds
-  empty intersection in 0.910 (of which 0.025 because only the noise W was left, 0.005 because the cause itself was not left, and 0.905 because W entered some sets and not others)
+mean naive slope (all sites together): X = 2.0001  Z = 0.6013
+  {empty}  mean F =  2921.60  rejection rate = 1.000
+  {    x}  mean F =  6001.61  rejection rate = 1.000
+  {    z}  mean F =   772.13  rejection rate = 1.000
+  {    w}  mean F =  1461.37  rejection rate = 1.000
+  {  x+z}  mean F =  4001.00  rejection rate = 1.000
+  {  x+w}  mean F =  4001.05  rejection rate = 1.000
+  {  z+w}  mean F =   515.10  rejection rate = 1.000
+  {x+z+w}  mean F =  3000.74  rejection rate = 1.000
+  intersection = {x} in 0.000 of the rounds | contains z in 0.000 | contains w in 0.000 | empty in 1.000
 ```
 
 **What each line says.**
@@ -1789,7 +1853,8 @@ mean naive slope (all sites together): X = 4.0004  Z = 1.2029
 **(1) Charig's count closes.** Open surgery wins on the small ones (0.9310 against 0.8667) and on the
 large ones (0.7300 against 0.6875), and loses in the raw total (0.7800 against 0.8257). Weighting the two
 strata by the whole population, with weights 0.5100 and 0.4900, the open surgery gets 0.8325 and the other
-0.7789. The advantage flips back, now to the side of the open surgery, with the difference enlarged. What
+0.7789. The advantage flips back, now to the side of the open surgery, by 5.37 points, between the 6.44 and the 4.25
+of the strata. What
 produced the paradox was the mix of cases. **75% of the patients of the open surgery had large stones,
 against 23% in the other technique**.
 
@@ -1800,35 +1865,36 @@ sites, the outcome $Y$ was generated by $Y = 2X + \text{noise}$, the symptom $Z$
 variables, and the naive regression gives slope **1.9885** for $X$ and **0.6003** for $Z$. If the
 analyst stopped here, they would attribute to the alarm an effect of 0.6.
 
-**(3) ICP separates the two.** In the invariance test, fitting a common slope across the three
-sites against free slopes:
+**(3) ICP separates the two.** The invariance test fits ONE line (one intercept and one slope) for the three sites
+together and compares it with a line per site. Under the null of invariance, the site must not move the
+intercept either, because an environment that shifts the outcome by itself acts directly on $Y$:
 
 | Candidate | F | p | Common slope | Per site | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| $\{X\}$ | 0.755 | 0.470 | 1.985 | 1.970 · 1.996 · 1.990 | accepted |
-| $\{Z\}$ | 976.809 | ~0 | 0.477 | 0.928 · 0.496 · 0.299 | rejected |
+| $\emptyset$ | 3081.848 | ~0 | — | — | rejected |
+| $\{X\}$ | 0.633 | 0.639 | 1.988 | 1.970 · 1.996 · 1.990 | accepted |
+| $\{Z\}$ | 1079.841 | ~0 | 0.600 | 0.928 · 0.496 · 0.299 | rejected |
+| $\{W\}$ | 1541.630 | ~0 | 0.015 | 0.056 · −0.030 · 0.008 | rejected |
 
 The slope of $X$ is practically constant across the three sites (1.970, 1.996, 1.990); that of $Z$ goes from
 0.928 to 0.299, almost tripling from one site to the other. The mechanism that links the cause to the outcome
-did not change; what links the symptom to the outcome changed in every place. The p of $Z$ is indistinguishable from
-zero (F near a thousand) and that of $X$ is 0.470. In other words, the data have no way of distinguishing the
-relation of $X$ from a relation that holds everywhere.
+did not change; what links the symptom to the outcome changed in every place. The empty set and the noise $W$ fall
+for another reason: the sites shift the cause $X$, so the mean of $Y$ moves from site to site, and only a set that
+contains $X$ can explain that move. Four sets pass, all of them containing $X$, and their intersection is
+$\hat S = \{X\}$.
 
-**(4) What the test gets right and where it abstains.** In 200 repetitions with the stable mechanism, the
-set $\{X\}$ is accepted in **94.0%** of the rounds and $\{Z\}$ is rejected in **100%** of them. The
-intersection of all accepted sets, however, returns $\{X\}$ only in **8.0%** of the cases, and comes out
-empty in 89.5%. The set of the cause did not survive in 0.5% of the times, and in 2.5% only the noise
-$W$ was left, because the test accepted the sets that contained it and refused the ones that contained $X$. In the other
-86.5% the noise $W$ entered some sets and stayed out of others, and the intersection lost the common
-denominator. **Abstaining is a result, not a defect of the instrument**, and the test never
-returned $\hat S = \{Z\}$.
+**(4) What the test gets right and how often it errs.** In 200 repetitions with the stable mechanism, the empty set,
+$\{Z\}$ and $\{W\}$ are rejected in **100%** of the rounds, and $\{X\}$ only in **6.5%**, close to the level of 5%.
+The intersection returns exactly $\{X\}$ in **96%** of the rounds (0.960). It contains the child $Z$ in 1.5% and the
+noise $W$ in 1.0%, which together stay below the 5% that the guarantee of ICP allows, and it comes out empty in
+2.5%. **Abstaining is a result, not a defect of the instrument**: when the true cause is rejected by chance, the
+method says nothing rather than something false.
 
 **(5) When the mechanism is unstable, the cause falls too.** In the second battery, the coefficient of
-$X$ in $Y$ changes from site to site. The data now tell the truth about an incoherent world. The
-naive slope of $X$ rises from 2.0004 to **4.0004**, because the estimator is mixing the true
-effect with the variation across sites; $Z$ goes from 0.6015 to 1.2029, and $\{X\}$ stops
-being a stable relation. When the sites intervene in the mechanism, no set is the right answer,
-and the test rejects, as it should.
+$X$ in $Y$ changes from site to site (0.5, 2 and 3.5). The pooled slope of $X$ stays near 2 (2.0001), the average
+of the three, and hides that no site has the slope 2 of the middle one except by coincidence. Every set is now
+rejected in **100%** of the rounds and the intersection is empty in all of them. When the sites intervene in the
+mechanism, no set is invariant, and the test says so, as it should.
 
 **Exercises.**
 
@@ -1842,9 +1908,9 @@ and the test rejects, as it should.
 4. *(Count)* In the laboratory, the naive slope of $Z$ was 0.6003 and the slopes per site
    were 0.928, 0.496 and 0.299. Explain in one sentence why the naive mean is not the mean of those
    three, and what it reveals about reading the coefficient of a single regression.
-5. *(Laboratory)* Make the noise of $Z$ equal across the three sites in the laboratory and show that
-   $\{Z\}$ becomes accepted. What does that say about the strength of ICP? Does it find the cause or merely
-   reject what varies?
+5. *(Laboratory)* Make the noise of $Z$ equal across the three sites **and** remove the shift of $X$ between the
+   sites. Show that $\{Z\}$, $\{W\}$ and the empty set become accepted and that $\hat S$ comes out empty. What does
+   that say about ICP? Does it find the cause, or does it need environments that move the cause?
 6. *(Concept)* Why can ICP return the empty set when it has too much data? Relate it to
    the sensitivity of the test to departures from the model.
 
@@ -1855,9 +1921,10 @@ and the test rejects, as it should.
 - Simpson's paradox is born of a mix of cases. Open surgery wins in every stratum and
   loses in the raw total because 75% of its patients were the hard cases.
 - Confounder, mediator and collider call for three opposite reactions; adjusting everything is not neutral.
-- Naive difference = effect on the treated + selection bias, and only the draw zeroes the second term.
-- ICP separates the cause from the symptom through invariance across environments, and abstaining is a legitimate
-  result. In the laboratory it never returned the child as the cause.
+- Naive difference = effect on the treated + selection bias; the draw zeroes the second term by design, and every
+  other strategy zeroes it only under a declared, untestable premise.
+- ICP separates the cause from the symptom through invariance across environments that move the cause, and abstaining
+  is a legitimate result. In the laboratory it returned exactly the cause in 96% of the rounds.
 
 ## Chapter 10. Time and ruin: the Peters coin, Kelly and wild tails
 
@@ -1928,11 +1995,18 @@ wealth:
 $$f^* = \arg\max_f \; \mathbb{E}[\ln(1 + fR)]$$
 
 In an even-odds bet with chance $p$, the optimal fraction is $f^* = 2p - 1$, that is, stake
-20% with chance 0.6. In a bet that pays 5 to 4, like the Peters coin, $f^* = p|b| - (1-p)a =
-0.9p - 0.4$, that is, 14% of the wealth. Staking everything would take the expectation, in 100 rounds, to
+20% with chance 0.6. Staking everything in that bet would take the expectation, in 100 rounds, to
 $8.3 \times 10^7$ times the capital, with a chance of surviving of $0.6^{100}$, about $10^{-22}$.
-Twice the optimal fraction already impoverishes with that same edge, and a simulation gives $g(0.28)$ already below
-zero and $g(0.70) = -0.0075$ per round.
+In a bet that gains $b$ with chance $p$ and loses $a$ with chance $1-p$, maximising
+$p\ln(1+fb) + (1-p)\ln(1-fa)$ gives
+
+$$f^* = \frac{p}{a} - \frac{1-p}{b},$$
+
+the edge $pb - (1-p)a$ divided by the product $ab$. For the Peters coin, $p = 0.5$, $b = 0.5$ and $a = 0.4$, so
+$f^* = 1.25 - 1 = 0.25$: a quarter of the wealth, with a growth of $+0.006211$ per round. Twice that fraction,
+$0.50$, has growth exactly zero, and above it the trajectory decays: at $f = 0.70$ the growth is $-0.014200$ per
+round. Overbetting does not merely lower the growth; past twice the optimum it turns a favourable bet into a
+losing one.
 
 **Epistemic uncertainty is an argument for staking less.** With the probability estimated over 25
 rounds, full Kelly has a negative growth rate in 16% of the estimates, while half Kelly
@@ -1950,9 +2024,9 @@ because it comes from a uniform prior, but it prevents the absurd conclusion tha
 
 **Insurance and cooperation.** In Bernoulli's ship, taken up by Peters and Adamou, a shipowner with wealth
 of 100,000 pays 1,800 to cover a loss of 34,000 that occurs with chance 5%. In expectation, he
-loses 100 per month and the insurer gains 100. In time growth, both come out ahead, and the shipowner goes
-from 1.94% to 2.18% per month, and the insurer, which holds many independent trajectories, from zero to
-+0.007%. In the Peters coin, three players who split the wealth every round grow 1.6% per
+loses 100 per month and the insurer gains 100. In time growth, the shipowner gains by insuring: his growth goes
+from $-0.0208$ to $-0.0182$ per month. The insurer, which holds many independent contracts, turns the same premium
+into positive growth once the contracts are many enough (Chapter 11 measures it). In the Peters coin, three players who split the wealth every round grow 1.6% per
 round, when each one alone would decay. **The question that decides the case is who holds the trajectories.**
 
 **When the mean ceases to exist.** In a Pareto distribution, with $P(X > x) = x^{-\alpha}$, the
@@ -1994,26 +2068,27 @@ volatility at $1\times$, $2\times$ and $3\times$. Run it with `cargo run --relea
 ensemble mean per round = 1.0500  (+5.00% per round)
 time mean per round      = -0.052680  (-5.268% per round)
 product of one head and one tail: 1.5 x 0.6 = 0.90
-full Kelly (5:4): f* = 0.1400 of the wealth; with an even-odds payoff, 2p - 1 = 0.20
-time growth with full Kelly: +0.0175 per round
+full Kelly (heads +50%, tails -40%): f* = p/0.4 - (1-p)/0.5 = 0.2500 of the wealth; even-odds bet with p = 0.6: 2p - 1 = 0.20
+time growth per round: f* = +0.006211 | 2f* = +0.000000 | f = 0.70 -0.014200 | f = 1 -0.052680
 
 all-in (f = 1.00)          above the start: 10 rounds 0.374  100 rounds 0.128  1000 rounds 0.00000
                            ruin (< 1e-6 of the capital) = 0.9971  final median = 1.322e-23  final mean = 2.725e-6
-full Kelly (f = 0.70)      above the start: 10 rounds 0.374  100 rounds 0.300  1000 rounds 0.07830
-                           ruin (< 1e-6 of the capital) = 0.5089  final median = 6.810e-7  final mean = 4.982e4
-half Kelly (f = 0.35)      above the start: 10 rounds 0.618  100 rounds 0.611  1000 rounds 0.85620
-                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.854e2  final mean = 2.119e6
-quarter Kelly (f = 0.14)   above the start: 10 rounds 0.618  100 rounds 0.811  1000 rounds 0.99560
-                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.506e2  final mean = 1.016e3
+twice Kelly (f = 0.50)     above the start: 10 rounds 0.485  100 rounds 0.527  1000 rounds 0.51960
+                           ruin (< 1e-6 of the capital) = 0.0244  final median = 1.000e0  final mean = 7.375e6
+full Kelly (f = 0.25)      above the start: 10 rounds 0.618  100 rounds 0.684  1000 rounds 0.96120
+                           ruin (< 1e-6 of the capital) = 0.0000  final median = 4.983e2  final mean = 1.127e5
+half Kelly (f = 0.125)     above the start: 10 rounds 0.618  100 rounds 0.811  1000 rounds 0.99650
+                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.062e2  final mean = 4.954e2
 
 all-in: log10 of the final median = -22.9, log10 of the final mean = -5.6
 part of the mean that comes from the richest trajectory (richest 1%): 1.000
 
-== Chapter 10 :: the insurance seller (earns 1% per week, loses 50% with q = 0.004) ==
-time growth of the all-in: +0.00714 per week (negative: ruin is certain)
-observed frequency + full Kelly  no loss = 0.368  all-in = 0.368  ruin in 1000 weeks = 0.0000  final median = 3.531e2  final mean = 1.255e3
-Laplace + full Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 8.983e1  final mean = 2.529e2
-Laplace + half Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 1.097e1  final mean = 1.371e1
+== Chapter 10 :: the insurance seller (earns 1% per week, loses 95% with q = 0.004) ==
+time growth of the all-in: -0.00207 per week (negative: the typical all-in trajectory decays)
+Kelly fraction with the true q: 0.648 | with Laplace after 250 clean weeks: 0.652 | with the raw frequency 0/250: capped at 1
+observed frequency + full Kelly  no loss = 0.368  all-in = 0.368  ruin in 1000 weeks = 0.0194  final median = 3.026e0  final mean = 1.984e2
+Laplace + full Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 4.077e0  final mean = 2.238e1
+Laplace + half Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 2.097e0  final mean = 3.789e0
 theoretical probability of 250 weeks with no loss = 0.3671
 Laplace with zero losses in 250 weeks: q_hat = 1/252 = 0.003968
 
@@ -2021,7 +2096,7 @@ Laplace with zero losses in 250 weeks: q_hat = 1/252 = 0.003968
 true mean (alpha/(alpha-1)) = 11.0
 n =      1000: mean of the sample means =     7.76  median =    6.22  below 11 in 0.94  95% CI covers in 0.24
 n =   1000000: mean of the sample means =     9.53  median =    8.39  below 11 in 0.95  95% CI covers in 0.26
-fraction of the mean that comes from values above the largest seen: 0.000
+share of each sample's sum that comes from its single largest value (n = 1 000 000): 0.088
 in the median, 25.12% of the true mean comes from values above the maximum of a sample of one million
 
 Hill estimator with alpha = 1.1 and n = 200 000:
@@ -2033,47 +2108,49 @@ Hill estimator with alpha = 1.1 and n = 200 000:
 reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
 == Chapter 10 :: volatility drag at 1x, 2x and 3x ==
-L = 1x: arithmetic mean = +0.000317/session, measured growth = +0.000249/session, drag = +0.000068/session (+0.0172/year), wealth in 100000 sessions = 6.363e10
-L = 2x: arithmetic mean = +0.000634/session, measured growth = +0.000267/session, drag = +0.000367/session (+0.0926/year), wealth in 100000 sessions = 3.805e11
-L = 3x: arithmetic mean = +0.000951/session, measured growth = +0.000053/session, drag = +0.000898/session (+0.2264/year), wealth in 100000 sessions = 1.955e2
+L = 1x: arithmetic mean = +0.000299/session, measured growth = +0.000237/session, drag = +0.000062/session (+0.0156/year), wealth in 100000 sessions = 1.903e10
+L = 2x: arithmetic mean = +0.000597/session, measured growth = +0.000350/session, drag = +0.000247/session (+0.0623/year), wealth in 100000 sessions = 1.551e15
+L = 3x: arithmetic mean = +0.000896/session, measured growth = +0.000339/session, drag = +0.000556/session (+0.1402/year), wealth in 100000 sessions = 5.325e14
 horizon of 2000 sessions:
-  L = 1x: measured growth = +0.000196/session, final wealth = 1.480e0
-  L = 2x: measured growth = +0.000162/session, final wealth = 1.384e0
-  L = 3x: measured growth = -0.000101/session, final wealth = 8.168e-1
+  L = 1x: measured growth = +0.000198/session, final wealth = 1.485e0
+  L = 2x: measured growth = +0.000273/session, final wealth = 1.726e0
+  L = 3x: measured growth = +0.000225/session, final wealth = 1.569e0
 horizon of 10000 sessions:
-  L = 1x: measured growth = +0.000352/session, final wealth = 3.385e1
-  L = 2x: measured growth = +0.000472/session, final wealth = 1.126e2
-  L = 3x: measured growth = +0.000360/session, final wealth = 3.649e1
+  L = 1x: measured growth = +0.000313/session, final wealth = 2.276e1
+  L = 2x: measured growth = +0.000501/session, final wealth = 1.496e2
+  L = 3x: measured growth = +0.000565/session, final wealth = 2.835e2
 the 1987 crash (-22.6% in one day) takes 67.8% of the capital at 3x, 22.6% at 1x; ruin starts at L = 4.4
 with a -22.6% crash in one day and 40 days of -3% (20 thousand sessions):
-  L = 1x: measured growth = +0.000147/session, final wealth = 1.890e1
-  L = 2x: measured growth = +0.000058/session, final wealth = 3.167e0
-  L = 3x: measured growth = -0.000274/session, final wealth = 4.188e-3
+  L = 1x: measured growth = +0.000142/session, final wealth = 1.720e1
+  L = 2x: measured growth = +0.000155/session, final wealth = 2.222e1
+  L = 3x: measured growth = +0.000033/session, final wealth = 1.944e0
 ```
 
 **What each line says.**
 
 **(1) The two means.** The ensemble mean of the Peters coin is $1.0500$ per round, or $+5.00\%$.
 The time mean is $-0.052680$, or $-5.268\%$. The product of one head and one tail is
-$1.5 \times 0.6 = 0.90$. The Kelly fraction is $0.14$ of the wealth; with it, the growth in
-time is $+0.0175$ per round, positive for the first time.
+$1.5 \times 0.6 = 0.90$. The Kelly fraction is $0.25$ of the wealth; with it, the growth in
+time is $+0.006211$ per round, positive for the first time. At twice that fraction it is $+0.000000$.
 
 **(2) The cohort of 10,000 trajectories.** Staking everything, the wealth falls to $< 10^{-6}$ of the capital in
 $99.71\%$ of the trajectories, the final median is $1.322 \times 10^{-23}$ and the $\log_{10}$ of the final
 mean is $-5.6$. **The richest trajectory alone accounts for 100% of the cohort mean**, that is, the richest 1%
-explains everything the mean has of wealth. With **full Kelly** $(f = 0.70)$ ruin appears in
-half of the trajectories ($50.89\%$) and the final median collapses to $6.810 \times 10^{-7}$; with
-**half Kelly** $(f = 0.35)$ ruin is zero and the final median is $1.854 \times 10^2$; with
-**quarter Kelly** $(f = 0.14)$ ruin is zero and the final median is $1.506 \times 10^2$. The
-contrast between $f = 0.70$ and $f = 0.35$ is the point of the chapter. **Twice the optimal fraction is no longer
-optimal for anything**, because the bet loses on most trajectories, with the mean still exploding.
-**(3) The insurance seller.** In 10,000 histories of 250 weeks, **36.8%** see no loss at all —
-exactly the theoretical probability $0.996^{250} = 0.3671$, and those are the ones who stake everything ($f = 1$).
-Whoever reads the probability from the raw frequency has a final median of $3.531 \times 10^2$ and mean of
-$1.255 \times 10^3$; whoever uses Laplace's rule estimates $1/252 = 0.003968$ and works with
-$f = 0.484$, with median $8.983 \times 10^1$. Both finish above the starting point, and
-the difference does not show in the gain, but in the **tail**. Whoever ignored the risk, in a bad history, has
-nowhere to come back from.
+explains everything the mean has of wealth. With **twice Kelly** $(f = 0.50)$ the growth is zero: the final median
+is $1.000$, half of the trajectories end above the start (0.51960), ruin touches 0.0244 of them, and the mean
+still explodes to $7.375 \times 10^6$. With **full Kelly** $(f = 0.25)$ ruin is zero, a fraction 0.96120 of the trajectories ends
+above the start and the final median is $4.983 \times 10^2$; with **half Kelly** $(f = 0.125)$ the median is
+$1.062 \times 10^2$ and 0.99650 end above the start. The contrast is the point of the chapter. **Twice the optimal
+fraction is no longer optimal for anything**: it keeps the exploding mean and gives the typical trajectory nothing;
+half the optimum gives up most of the median to buy safety.
+**(3) The insurance seller.** He earns 1% per week and, with chance 0.004, loses 95% of what is staked. Staking
+everything, his growth is $-0.00207$ per week: the typical all-in trajectory decays. In 10,000 histories of 250 weeks,
+**36.8%** see no loss at all, close to the theoretical probability $0.996^{250} = 0.3671$, and those are the ones who
+stake everything ($f = 1$), because the raw frequency $0/250$ says there is no risk. Kelly with the true chance
+stakes 0.648; Laplace's rule estimates $1/252 = 0.003968$ and stakes 0.652, almost the same. The difference shows
+in the **tail**: whoever read the raw frequency is ruined in 1000 weeks in $1.94\%$ of the histories (0.0194),
+whoever used Laplace in none, and the median of the Laplace investors ($4.077$) beats that of the all-in ones
+($3.026$).
 
 **(4) The wild tail.** With a Pareto of $\alpha = 1.1$, whose true mean is 11, the sample mean
 of a million observations has median 8.39 and falls below 11 in 95% of the samples, and the 95%
@@ -2082,14 +2159,16 @@ it gives $\hat\alpha = 1.100$, with approximate interval $[1.032; 1.168]$; with 
 $1.095$ with $[1.080; 1.111]$. A Gaussian model fitted to that tail underestimates the loss in
 every repetition.
 
-**(5) The volatility drag.** Calibrating the model by two numbers measured on the Dow Jones index from 1885
-to 2023 (drag of 0.14 per year at $3\times$ and growth of 0.051 per year at $1\times$), in 100,000 sessions the measured growth
-per session is $+0.000249$ at $1\times$, $+0.000267$ at $2\times$ and $+0.000053$ at $3\times$.
-The measured drag rises from $0.0172$ per year at $1\times$ to $0.0926$ at $2\times$ and $0.2264$ at
-$3\times$; the drag **grows with the square of the leverage**, which is the signature of
-$\mu - \tfrac12 \sigma^2 L^2$. The 1987 crash, alone, takes **67.8%** of the capital at $3\times$ and
+**(5) The volatility drag.** Calibrating a Gaussian model by two numbers measured on the Dow Jones index from 1885
+to 2023 (drag of 0.14 per year at $3\times$ and growth of 0.051 per year at $1\times$, with 252 sessions per year),
+in 100,000 sessions the measured growth per session is $+0.000237$ at $1\times$, $+0.000350$ at $2\times$ and
+$+0.000339$ at $3\times$: $2\times$ beats $3\times$, as in the real index. The measured drag rises from
+$0.0156$ per year at $1\times$ to $0.0623$ at $2\times$ and $0.1402$ at $3\times$, in the proportion 1 to 4 to 9:
+the drag **grows with the square of the leverage**, which is the signature of $\mu - \tfrac12 \sigma^2 L^2$, and
+the three values reproduce the drags of the real index of Chapter 17. The 1987 crash, alone, takes **67.8%** of the capital at $3\times$ and
 22.6% at $1\times$; ruin starts at $L = 4.4$. With a crash planted in the middle of 20,000 sessions,
-the growth of $3\times$ sits at $-0.000274$ per session, below $1\times$ and $2\times$. **A single day changes the order**.
+the growth of $3\times$ falls to $+0.000033$ per session, far below $1\times$ and $2\times$. **A single day changes
+the order**.
 
 **When refining buys nothing.** The volatility drag and the ruin of the coin are measured per day, per round,
 per session: at the grain at which the trajectory is lived. The question of resolution from Chapter 5 has a
@@ -2097,8 +2176,8 @@ limiting case that is worth seeing once. When the world does not oscillate, aski
 answer as asking the average day:
 
 ```text
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
+   above 30 min: aggregated 0.1969, fine 0.1969
 ```
 
 The loss of resolution is exactly zero. A finer question is worth its cost only when the world varies at the
@@ -2110,7 +2189,7 @@ zero here because demand does not.
 1. *(Count)* In the Peters coin, compute $\mathbb{E}[\ln M]$ by hand and explain why the median falls
    even with the expectation growing. Check it against the measured $-0.052680$.
 2. *(Count)* For an even-odds bet with chance $p$, show that $f^* = 2p - 1$. Then
-   compute $f^*$ for the Peters coin and check it against the 0.14 of the laboratory.
+   derive $f^* = p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$, and check the 0.25 of the Peters coin.
 3. *(Concept)* In the Peters coin, three players who split the wealth every round grow 1.6%
    per round, when each one alone would decay. Why does splitting change the growth without changing the
    expectation of any of them?
@@ -2133,8 +2212,9 @@ zero here because demand does not.
   Laplace's rule prevents zero losses from turning into zero risk.
 - With a heavy tail, the sample mean misleads or does not even exist; with $\alpha = 1.1$, the mean of a million
   observations falls below the true value in 95% of the samples.
-- The volatility drag grows with the square of the leverage. Measured per session, 0.000068 at
-  $1\times$ and 0.000898 at $3\times$.
+- Kelly for the Peters coin is a quarter of the wealth; twice that has zero growth, and more than that decays.
+- The volatility drag grows with the square of the leverage. Measured per session, 0.000062 at
+  $1\times$ and 0.000556 at $3\times$.
 
 ## Chapter 11. The price of error, Goodhart's law and who pays the bill
 
@@ -2162,7 +2242,7 @@ says **not** to insure. It is one of the cases in which the answer of expectatio
 coincide, and the chapter shows both.
 
 **In every 100 weeks.** The insurance salesman of the previous chapter has the opposite situation. He
-earns 1% per week and loses half the capital with chance 0.4%. In 100 weeks, 67 end with
+earns 1% per week and loses 95% of what he stakes with chance 0.4%. In 100 weeks, 67 end with
 profit; the danger lives in the other 33. A history of 250 weeks shows no loss at all in
 $0.996^{250} = 37\%$ of the cases, and whoever estimates the chance from the observed frequency concludes that it is
 zero and leverages. It is the **rare event that does not appear in the sample**, and Chapter 10 has already measured the cost.
@@ -2193,9 +2273,11 @@ world before acting, the EVPI, is the ceiling of the value of any information:
 $$\mathrm{EVPI} = \mathbb{E}_\theta\big[\max_a U(a,\theta)\big] - \max_a \mathbb{E}_\theta\big[U(a,\theta)\big]$$
 
 The value of any real test (EVSI) lies between zero and it. **Bits are not value.** In one example, a disease has prevalence 0.3; treating costs 1 and leaving a sick person untreated costs 10,
-so that one treats when the chance passes 0.10. Two tests carry the same mutual information,
-0.319 bit. The sensitive test is worth 0.419, against a ceiling (the EVPI) of 0.70. The specific one is worth zero, because even
-its negative result leaves the chance above the threshold and does not change the action.
+so that one treats when the chance passes 0.10. A sensitive test (sensitivity 0.90, specificity 0.70) carries
+0.241 bit about the state and is worth 0.2200, against a ceiling (the EVPI) of 0.70. A specific test (0.30, 0.95)
+still carries 0.079 bit and is worth exactly zero, because even its negative result leaves the chance of disease at
+0.24, above the threshold, and does not change the action. The value of a test is computed branch by branch: after
+each result the decider picks one act for that result, and the test is worth only what that choice gains.
 
 **Not all information is welcome.** Good (1967) proved that free information never makes the decision
 of someone with preferences over states of the world worse. But whoever has preferences over future
@@ -2227,8 +2309,8 @@ probability the account depends on does not deserve trust.**
 **The forecast that changes what it forecasts.** When a model is published, people react to it. Lucas
 (1976) showed the phenomenon in economics. The parameters of a model estimated under a policy depend
 on the rules the agents expect, and they change when the policy changes. In one example, the old
-Phillips curve promises 4.59% unemployment and the new regime delivers 5.88%. The answer of Kuhn and
-Perdomo and colleagues (2020) is conceptual: **performatively stable** is the model that is optimal for the
+Phillips curve promises 4.59% unemployment and the new regime delivers 5.88%. The answer of Perdomo and
+colleagues (2020) is conceptual: **performatively stable** is the model that is optimal for the
 distribution it induces.
 
 **To learn or to deform?** An agent that minimises the variational free energy can lower surprise in
@@ -2245,9 +2327,12 @@ probability 0.6.
 That parameter was measured in another real support desk, from 1999, with a quasi-experimental design. The queue
 found on arrival, at an identical date and time, serves as an instrument for the abandonment. Under that
 design, abandoning instead of being served increases by **0.145** the chance that that client calls back
-within fifteen minutes, with a 90% interval from 0.132 to 0.157. The sign checks out and the order of
-magnitude does not. The declared loop is about four times the observed one, outside the band from one third to three
-that had been fixed in advance. The excess of arrivals that the measured loop generates in that support desk is 2.3%
+within fifteen minutes, with a 90% interval from 0.132 to 0.157. The two numbers are not the same quantity, and the
+comparison has to say so. The simulation declared a probability of calling back after abandoning, 0.6; the
+measurement is a difference between abandoning and being served, inside a window of fifteen minutes. A client who
+was served may also call back, and a call after the window is not counted, so the measured difference is not a
+measure of the declared probability. What it does show is that the loop exists, with the right sign, and that the
+order of magnitude of the declared value was not supported by the only real data available. The excess of arrivals that the measured loop generates in that support desk is 2.3%
 of the arrivals, against the 29% bias that the declared loop produced in the simulation; the comparison is one of order of
 magnitude, because that bias also depends on the simulated abandonment rate, and not only on the loop. And the
 measured value is probably a lower bound, because a new call is only visible when it enters the
@@ -2264,10 +2349,11 @@ corrected forecast falls to **1.7%**, inside the limit of 3%.
 **Who pays for the error.** When the base rates differ between groups, a single threshold produces different
 error rates. The identity of Chouldechova (2017) shows why:
 
-$$\text{FPR}=\frac{p}{1-p}\cdot\frac{1-\text{VPP}}{\text{VPP}}\cdot(1-\text{FNR})$$
+$$\text{FPR}=\frac{p}{1-p}\cdot\frac{1-\text{PPV}}{\text{PPV}}\cdot(1-\text{FNR})$$
 
-With predictive value (PPV) and false negatives equal between groups, different prevalences $p$ force
-different false positive rates. **Equalising approvals, equalising errors and equalising calibration by group
+The formula is an identity of the confusion matrix: it holds for any predictor, so it cannot fail on a single
+group. Its force is comparative. With predictive value (PPV) and false negatives equal between groups, different
+prevalences $p$ force different false positive rates. **Equalising approvals, equalising errors and equalising calibration by group
 are incompatible requirements when the prevalences differ and the predictor is not perfect.** "I want
 fairness" is not yet a decision. One has to declare which equality was chosen, what it costs, where
 the error migrated to and who comes to pay for it.
@@ -2295,65 +2381,65 @@ and the EVSI in a two-act case, the four tail models of the dike with five decis
 trilemma table with the Chouldechova identity. Run it with `cargo run --release --bin labs -- --chapter 11`.
 
 ```text
-== Chapter 11 :: the Bernoulli ship (C = 1.800, L = 34.000, p = 0,05) ==
-threshold p > C/L: p* = 0.05294 (5.294%)  ->  p = 0,050 does not pass the threshold
+== Chapter 11 :: the Bernoulli ship (C = 1,800, L = 34,000, p = 0.05) ==
+threshold p > C/L: p* = 0.05294 (5.294%)  ->  p = 0.050 does not pass the threshold
 in expectation: expected loss without insurance = 1700, insurance result = +100 per month
 shipowner growth in time: 1 ship without insurance = -0.0208, 1 ship with insurance = -0.0182, 3 ships without insurance = -inf
-insurer with     1 contracts: growth in time = -0.000186 per month
-insurer with    10 contracts: growth in time = -0.001808 per month
-insurer with   100 contracts: growth in time = -0.013466 per month
-insurer with  1000 contracts: growth in time = +0.100410 per month
+insurer holding 50,000 of capital per contract (exact binomial account):
+insurer with     1 contracts: growth in time = -0.018042 per month
+insurer with    10 contracts: growth in time = +0.000854 per month
+insurer with   100 contracts: growth in time = +0.001888 per month
+insurer with  1000 contracts: growth in time = +0.001987 per month
 
 == Chapter 11 :: the EVPI (treating costs 1, leaving a sick patient costs 10) ==
-action threshold: p > 0.10  ->  with p = 0,3 the best act without information treat (-1.00)
+action threshold: p > 0.10  ->  with p = 0.3 the best act without information treat (-1.00)
 gain of whoever knows the state before acting = -0.30
 EVPI = +0.70
-  test sensitive  (0,90; 0,70): EVSI = +0.2400
-  test specific (0,30; 0,95): EVSI = +0.2450
+  test sensitive (0.90; 0.70): EVSI = +0.2200 | mutual information = 0.241 bit
+  test specific  (0.30; 0.95): EVSI = +0.0000 | mutual information = 0.079 bit
   with prevalence 0.05: best act without information = do not treat, EVPI = +0.450
   with prevalence 0.30: best act without information = treat, EVPI = +0.700
   with prevalence 0.60: best act without information = treat, EVPI = +0.400
 
 == Chapter 11 :: the van Dantzig dikes, four tail models ==
   model     xi = -0.1  xi = +0.0  xi = +0.1  xi = +0.2   optimal height
-  T = 100          4.07       1.26       5.71       7.01
-  T = 10000        5.84       1.26      12.78      21.49
+  T = 100          4.07       4.76       5.71       7.01
+  T = 10000        5.84       8.27      12.78      21.49
   optimal height with xi = -0.1: 5.839 m  (cost 4.143)
-  optimal height with xi = +0.0: 3.059 m  (cost 1.130)
+  optimal height with xi = +0.0: 7.564 m  (cost 6.327)
   optimal height with xi = +0.1: 9.809 m  (cost 9.426)
   optimal height with xi = +0.2: 12.584 m  (cost 13.613)
-  expected value with the Gumbel: 3.06 m
-  mean of the models: 7.82 m
+  expected value with the Gumbel: 7.56 m
+  mean of the models: 8.95 m
   Wald maximin: 12.58 m
-  Savage minimax regret: 9.81 m (largest regret 6.68)
+  Savage minimax regret: 9.81 m (largest regret 3.67)
   precaution: 1 in 10 000 in the worst model = 21.49 m
-  EVPI of the model set = +18.427 m
+  spread between precaution and the Gumbel expected value = 13.92 m
+  EVPI of knowing the tail model (equal weights, cost units) = +1.919
 
 == Chapter 11 :: the Chouldechova trilemma ==
 group     base rate        FNR        FPR  false positives  false negatives        PPV
-White         0.069      0.240      0.105              467               79     0.9408
-Black         0.111      0.360      0.196              832              191     0.9096
+White         0.069      0.240      0.105              467               79     0.3491
+Black         0.111      0.360      0.196              832              191     0.2896
 observed cases: White 329 marked by the facts, Black 530
 
 -- FNR matched downwards, to the FNR of White at 0.240 --
 White         0.069      0.240      0.105              467               79
-Black         0.111      0.240      0.045              192              127
-total false positives: 1299 -> 659 (-640)
+Black         0.111      0.240      0.309             1312              127
+total false positives: 1299 -> 1778 (+479)
 total false negatives: 270 -> 206 (-64)
 
 -- FNR matched upwards, to the FNR of Black at 0.360 --
-White         0.069      0.360      0.246             1095              119
+White         0.069      0.360      0.052              230              119
 Black         0.111      0.360      0.196              832              191
-total false positives: 1299 -> 1927 (+628)
+total false positives: 1299 -> 1062 (-237)
 total false negatives: 270 -> 309 (+40)
 
 Chouldechova identity: FPR = p/(1-p) * (1-PPV)/PPV * (1-FNR)
-group    PPV of the matrix PPV of the identity          ratio
-White              0.3491             0.0592            0.2x
-Black              0.2896             0.0904            0.3x
-reading: with the observed FNR and FPR, the score would only be calibrated by group
-if the positive predictive value were the one in the middle column. It is much larger: the score
-separates reasonably and is not read as a probability of risk.
+group    observed FPR  FPR of identity     difference
+White          0.1050           0.1050       -2.8e-17
+Black          0.1960           0.1960       -2.8e-17
+the trilemma: with PPV 0.3491 and FNR 0.240 in BOTH groups, the identity forces FPR 0.1050 for White and 0.1769 for Black
 ```
 
 **What each line says.**
@@ -2367,46 +2453,48 @@ growth without insurance is $\mathbf{-\infty}$, because three simultaneous losse
 cover for the damage; ruin stops being a small probability and becomes an absorbing
 state.
 
-**(2) On the other side of the counter.** The insurer improves when it accumulates independent contracts. With 1
-contract the growth in time is $-0.000186$ per month; with 10, $-0.001808$; with 100,
-$-0.013466$; with **1,000 contracts, $+0.100410$**. The premium does not change in any of those cases;
-what changes is the number of independent trajectories it holds. The first lines go down because the
-formula used is the mean minus variance divided by two approximation, and with few contracts the
-variance is too large for the approximation to hold; from a few hundred contracts the law
-works and the growth becomes positive. **Whoever shares the risk charges the same and grows; whoever carries
+**(2) On the other side of the counter.** The insurer holds 50,000 of capital for each contract, and the account is
+exact: the number of claims is binomial, and the growth is the mean of the logarithm over every possible number of
+claims. With 1 contract the growth in time is $-0.018042$ per month; with 10, $+0.000854$; with 100, $+0.001888$; with
+**1,000 contracts, $+0.001987$**, close to the expected margin of the premium over the capital. The premium does not
+change in any of those cases; what changes is the number of independent contracts it holds, which shrinks the
+relative variance of its result. **Whoever shares the risk charges the same and grows; whoever carries
 the trajectory alone sinks.** It is the answer of Chapter 10, now with an insurance company in
 place of a gambler.
 **(3) The EVPI.** With prevalence 0.3, treating costs 1 and leaving a sick person untreated costs 10, the
 action threshold is $p > 0.10$ and the best action without information is to treat, with gain $-1.00$. Whoever knows
-the state before acting has $-0.30$, and the difference is the **EVPI $= +0.70$**. The two tests of the text
-deliver close values, EVSI of $0.2400$ for the sensitive one $(0.90; 0.70)$ and $0.2450$ for the
-specific one $(0.30; 0.95)$, both below the ceiling. With prevalence 0.05 the EVPI falls to 0.450; with
+the state before acting has $-0.30$, and the difference is the **EVPI $= +0.70$**. The sensitive test is worth
+$0.2200$ and carries $0.241$ bit; the specific one carries $0.079$ bit and is worth $0.0000$, because no result of
+it changes the act. Bits and value part ways. With prevalence 0.05 the EVPI falls to 0.450; with
 0.30, it rises to 0.700; with 0.60, it falls again to 0.400. **The value of information is maximal when the
 probability is close to the action threshold**, and that is where information changes the decision.
 
-**(4) The dikes.** The four models disagree little at the **100-year** level (from 1.26 to 7.01 m) and
-a lot at the **10,000-year** level (from 1.26 to 21.49 m). The tail is where the models separate. The five
-rules give five heights: expected value with the Gumbel, **3.06 m**; mean of the models, **7.82 m**;
-Wald maximin, **12.58 m**; Savage minimax regret, **9.81 m**; precaution of 1 in 10,000
-in the worst model, **21.49 m**. The expected value of a single model chooses the cheapest and the most
-fragile height; precaution chooses the most expensive; Savage limits how much one can regret. The EVPI of the set
-of models, the distance between precaution and the expected value, is worth **18.427 m**, and it is the measure of
-how much it costs not to know which is the right tail.
+**(4) The dikes.** The four models already disagree at the **100-year** level (from 4.07 to 7.01 m) and disagree
+far more at the **10,000-year** level (from 5.84 to 21.49 m). The tail is where the models separate. The five
+rules give five heights: expected value with the Gumbel, **7.56 m**; mean of the models, **8.95 m**;
+Savage minimax regret, **9.81 m**; Wald maximin, **12.58 m**; precaution of 1 in 10,000
+in the worst model, **21.49 m**. The expected value of a single model chooses a cheap and fragile height;
+precaution chooses the most expensive; Savage limits how much one can regret. Two different numbers measure what
+the ignorance of the tail costs. The spread of heights between precaution and the Gumbel is 13.92 m, a distance in
+metres. The EVPI of knowing which model is right, with the four models equally weighted, is $+1.919$ in units of
+annual cost: what a decider who could learn the tail before building would save on average.
 
 **(5) The trilemma table.** The two groups are White, with base rate 0.069, FNR 0.24 and FPR 0.105, and
 Black, with base rate 0.111, FNR 0.36 and FPR 0.196. At the system threshold, there are 467 and 832 false
-positives and 79 and 191 false negatives. Equalising the FNR **downwards**, to the level of White, the false
-positives fall from 1,299 to 659 and the false negatives from 270 to 206. Equalising **upwards**, to the
-level of Black, the false positives rise from 1,299 to 1,927 ($+628$) and the false negatives from 270
-to 309. **The choice of which equality to pursue is not neutral: each direction moves the two errors in
-opposite directions and in different magnitudes.**
+positives and 79 and 191 false negatives. Moving a threshold moves both errors, in opposite directions: in the
+binormal model of the laboratory, lowering the FNR of a group lowers its threshold and raises its FPR. Equalising the
+FNR **downwards**, to the level of White, lowers the threshold for Black: the false negatives fall from 270 to 206
+and the false positives rise from 1,299 to 1778 ($+479$). Equalising **upwards**, to the level of Black, raises the
+threshold for White: the false positives fall to 1,062 ($-237$) and the false negatives rise to 309 ($+40$).
+**The choice of which equality to pursue is not neutral: each direction trades one error for the other, in
+different magnitudes, and falls on different people.**
 
-**(6) The identity closes and accuses.** The positive predictive value that the confusion matrix delivers is
-0.3491 (White) and 0.2896 (Black). The identity of Chouldechova requires, given the base rate, the FNR and the
-FPR observed, 0.0592 and 0.0904, four to six times smaller. **The score separates reasonably and is not
-read as a probability of risk.** It is the numerical translation of what the identity says. With the three
-observed rates, the predictor cannot be calibrated by group and keep the error rates equal in the
-two.
+**(6) The identity closes, and its force is comparative.** The positive predictive value that the confusion matrix
+delivers is 0.3491 (White) and 0.2896 (Black). Fed with those values, the identity of Chouldechova returns the
+observed FPR of each group to the last decimal: it is algebra, and it holds for any predictor. The trilemma appears
+when the two groups are asked to share PPV and FNR: with the PPV 0.3491 and the FNR 0.240 of White in both, the
+identity forces an FPR of 0.1769 on Black against 0.1050 on White. With different base rates, equal predictive
+value and equal miss rates cannot coexist with equal false-alarm rates.
 
 **Exercises.**
 
@@ -2417,8 +2505,9 @@ two.
    information increase or decrease? How does that guide the spending on tests?
 3. *(Concept)* In the example of the two-route app, who errs more, the naive forecaster or the
    forecaster that equalises the times? In what sense is the second one "performatively stable"?
-4. *(Computation)* With the rates of the laboratory (White with 0.069, 0.24, 0.105), check the identity of
-   Chouldechova and say by how much it errs. Is the error one of rounding or of modelling?
+4. *(Computation)* With the rates of the laboratory (White with 0.069, 0.24, 0.105), compute the PPV of the matrix
+   and check that the identity of Chouldechova returns the observed FPR. Then fix the PPV and the FNR of White for
+   Black, with base rate 0.111, and compute the FPR the identity forces.
 5. *(Laboratory)* In the laboratory, change the base rate of the second group from 0.111 to 0.20 and redo the
    trilemma table. Which equality becomes more expensive, and why?
 6. *(Concept)* No forecast may declare a probability of 0% or 100%. Which problem of the ship
@@ -2433,9 +2522,9 @@ two.
 - When the probability does not deserve trust, the criteria of Wald, Savage and precaution replace the
   expected value; the criterion and the list of models are declared choices, never deductions.
 - Published forecasts change the world. A drawn intervention identifies the loop and brings the 29% bias down to
-  1.7%; the real loop measured is four times smaller than the one assumed.
-- Fairness requires choosing between incompatible equalities. Equalising the FNR upwards costs $+628$ false
-  positives, downwards it saves 640, and who pays is declared before running.
+  1.7%; the only real measurement of the loop, of a related but different quantity, did not support the size assumed.
+- Fairness requires choosing between incompatible equalities. Equalising the FNR downwards saves 64 misses and costs
+  479 false alarms; upwards it saves 237 false alarms and costs 40 misses; who pays is declared before running.
 
 # Part IV. Building the auditable machine
 
@@ -2534,7 +2623,8 @@ which the Agent applies a Model incompatible with the World.
 | Pathology | What the edge marks |
 | --- | --- |
 | Fallacy of the mean | $\mathrm{SL}(\mathbb{E}[\Lambda])$ in place of $\mathbb{E}[\mathrm{SL}(\Lambda)]$ |
-| Inspection paradox | The Agent imposes a stable Model on a World that oscillates |
+| Fallacy of the stable world | The Agent imposes a stable Model on a World that oscillates |
+| Inspection paradox | Sampling by arrival over-represents the long intervals: the patient-weighted wait counts the busy days more |
 | Transposition of the conditional | $P(E \mid I)$ read as $P(I \mid E)$ — the prosecutor's fallacy |
 | Russell's turkey | The real process is outside the hypothesis space, and more data only increase confidence in the wrong place |
 | Illusion of the dark room | One looks for the cause of the case, not the cause of the frequency |
@@ -2571,6 +2661,19 @@ Two examples of how a lens becomes an account. In **Fluxonomy**, the data-proces
 says that, if $Z$ is obtained from $Y$, then $I(X; Z) \le I(X; Y)$. Three newspapers that publish the same research
 are worth one. In **Morphonomy**, two representations can give identical forecasts and still authorise
 different conclusions under intervention, and only the conclusion that is conserved across environments serves outside them.
+
+**The lenses under their usual names.** The five names are this book's; the tools under them are not. A reader who
+knows the field can translate each lens at once, and should, because the usual name leads to the literature:
+
+| Lens | What the field usually calls it | Where to read more |
+| --- | --- | --- |
+| Fluxonomy | information theory: mutual information, the data-processing inequality | Cover and Thomas, *Elements of Information Theory* |
+| Chrononomy | ergodicity, mixing and growth-optimal (Kelly) betting | Peters (2019); Kelly (1956) |
+| Scalonomy | extreme-value theory, tail estimation, effective sample size | Embrechts, Klüppelberg and Mikosch (1997) |
+| Morphonomy | invariance and causal identification; minimum description length | Peters, Bühlmann and Meinshausen (2016) |
+| Crisonomy | decision theory, value of information and proper scoring rules | Raiffa and Schlaifer; Gneiting and Raftery (2007) |
+
+The new names add a habit of asking the five questions in order; they add no mathematics of their own.
 
 Non-ergodicity is not a sixth lens. It is the answer "no" to the question of **Chrononomy**: the mean across many
 and the mean over time of a single one come apart, as in the multiplicative coin of Chapter 10. The lens asks the
@@ -2620,9 +2723,9 @@ Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
 Crisonomy: EVPI = 0.0000 | best act without information = 5.8000 | value with perfect information = 7.0000
 Crisonomy: without the option of acting (only betting half = 3.0000 or not betting), the best without information is 2.1000 and the EVPI rises to 3.7000
 Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
-Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(0,5) = true
-Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(0,5) = true
-Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(0,5) = false | step within the regime = 30.13
+Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
 ```
 
 Four readings of the output, in the order in which they matter.
@@ -2774,7 +2877,10 @@ priors were wrong. It is that in five of 33 domains the decision does not surviv
 triage: the same input always gives the same answer, and every probability it emits is **held inside the interval
 from 1% to 99%**. **System 2** deliberates: it searches a tree of options, keeps a belief about where the weak
 point is, runs heavy inference and directs the stress of the panel. The rule of the interval is not aesthetics. A
-probability of 0% or of 100% cannot be scored by a proper rule, never loses and never learns.
+probability of 0% or of 100% can be scored, and when it is wrong it is punished hard: the Brier score charges it
+the maximum of 1, and the logarithmic score charges it an infinite penalty. The real defect is in learning. By
+Bayes' rule a prior of 0 or 1 stays at 0 or 1 whatever the evidence, so a system that emits certainties cannot be
+moved by what it sees next (Lindley called this Cromwell's rule).
 
 ---
 
@@ -2819,7 +2925,12 @@ $$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \mathrm{Severity}_
 The $\bigwedge$ is the logical "and". One single attack below the floor is enough for the assignment to go back.
 The severity is deterministic: it comes from the corresponding safeguard of the card and from an explicit seed,
 and judging the same card again with the same seed always returns the same number. The condition **fails** when a
-safeguard was declared absent, and that is what makes it auditable. No subjective judgement hides in the score.
+safeguard was declared absent, and that is what makes it auditable. No subjective judgement hides in the score,
+and neither does any attack: the score is drawn inside a band that the declared safeguard and its structural anchor
+select, and no band crosses the floor, so the seed never decides a verdict. The panel is a checklist with a
+reproducible score. It answers "was the safeguard declared, with the field that anchors it?", not "does the
+safeguard hold under attack?". The second question belongs to tests that run the attack, such as the tampering of
+the trail in the gates of Chapter 14.
 
 **The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
 replicates of the fitted model; comparison with at least one rival model; separation between parameters
@@ -2858,7 +2969,8 @@ truth is known by construction.
 
 **System 2, in four tools.** Deliberation is not a mood; it is a set of procedures, each with a null to beat.
 
-- **Tree search with estimate (LATS).** A greedy agent takes the option of greatest immediate value and stops.
+- **Tree search with estimate (upper confidence bound, the search behind LATS).** A greedy agent takes the option of
+  greatest immediate value and stops.
   Tree search expands the options, estimates the value of each branch by simulation and balances exploring
   untried branches against exploiting good ones, by the upper confidence bound. It can find a path that begins
   with a worse step and ends somewhere better, which the greedy agent never sees.
@@ -2939,7 +3051,9 @@ category=other probability=0.8718 products=[0.0256, 0.0256, 0.0256, 0.0256, 0.02
 
 The sum is 1.0000 and no probability falls outside [0.01; 0.99]. The last line is an input that matches no theme:
 it falls into `other` with 0.8718, the declared prior, not a guess. The limits are worth stating. The vocabulary is
-closed, the matching is lexical and does not understand negation, and this is triage, not judgement. Judging
+closed, the matching is lexical and does not understand negation, and this is triage, not judgement. The numbers it
+emits are normalised scores that obey the rules of probability; nobody has checked that a card triaged at 0.91 lands
+in its theme 91 times in 100, so they are not yet calibrated probabilities, and the honest name for them is scores. Judging
 belongs to System 2. Run it with `cargo run --release --bin labs -- --s2`.
 
 ```text
@@ -2950,7 +3064,7 @@ greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution 
 board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
 stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
 inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
-R axis: loss of the aggregate 46.24 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis: loss of the aggregate 22.99 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
 R axis without oscillation: loss 0.00 min -> R0-agregada
 ```
 
@@ -2960,7 +3074,7 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
 - **Directed stress** reaches the rejection with 1 attack; the fixed order needs 5 to reach the same one. Learning
   saved four attacks and changed no verdict.
 - **Metropolis** on a Beta(4, 8) gives a chain mean of 0.3346 against the closed form 0.3333, with acceptance 0.676.
-- **The grain:** with oscillating demand, the coarse question loses 46.24 minutes, more than the 12.00 minutes of
+- **The grain:** with oscillating demand, the coarse question loses 22.99 minutes, more than the 12.00 minutes of
   margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
 
 **Exercises.**
@@ -3172,19 +3286,22 @@ $R_0$ to **1.81 to 2.11**. That is not a defect, as long as one declares that th
 agents and the $\Phi$ have already been formalised; the gates **repeat the work and compare**. A repeated input has
 to produce an identical output, and a planted defect has to be detected. Seven gates make a complete set.
 
-| Gate | Who answers | What it verifies |
-| --- | --- | --- |
-| G1 | Orchestrator | Determinism: the Merkle root of the second run is identical to the one of the first |
-| G2 | Code | Fixed seed declared in every card |
-| G3 | Code | Declared scope: only a simulable artifact |
-| G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock |
-| G5 | Governance | SHA-256 trail intact **and** tampering detected |
-| G6 | Orchestrator | Adversarial panel $A_1$–$A_8$ with the floor |
-| G7 | Decision | Declared exit clause and $A_8$ above the floor |
+| Gate | Who answers | What it verifies | What it does not guarantee |
+| --- | --- | --- | --- |
+| G1 | Orchestrator | Determinism: the Merkle root of the second run is identical to the one of the first | That the result is right: a wrong account reproduces as faithfully as a right one |
+| G2 | Code | Fixed seed declared in every card | That the seed was chosen before the result was seen |
+| G3 | Code | Declared scope: only a simulable artifact | That the artifact simulates the claim it is attached to |
+| G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock | That the fields are true, or that the decider question is the decider's: the lock reads a question mark and a quoted action, not meaning |
+| G5 | Governance | SHA-256 trail intact **and** tampering detected | Provenance or truth: a fabricated record sealed before publication passes |
+| G6 | Orchestrator | Adversarial panel $A_1$–$A_8$ with the floor | That any safeguard works: the panel checks declared and anchored safeguards, it runs no attack |
+| G7 | Decision | Declared exit clause and $A_8$ above the floor | That the exit clause will be honoured when its trigger fires |
 
 Two details make the set worth more than the sum. G5 does not verify only that the chain is intact. It
 **tampers on purpose** and requires the verification to fail with the tampered chain. G1, in turn,
-compares two runs of the declared horizon. A gate that never fails is not a gate (Chapter 15).
+compares two runs of the declared horizon. A gate that never fails is not a gate (Chapter 15). The last column is
+there for the same reason. A gate that passes is evidence only of what it checks, and every one of the seven checks
+form, presence or reproducibility; none of them checks that a number is correct. That job stays with the tests that
+compare a result with a known answer, and with readers who redo the account.
 
 ---
 
@@ -3266,8 +3383,8 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
 
 ## Chapter 15. The vault, the cryptographic seal and the audit against itself
 
-**Objectives.** By the end of this chapter you should know how to explain why pre-registration with a SHA-256 hash is the
-only seal against adjustment after seeing the result, what the counter of attempts $K$ measures, why the
+**Objectives.** By the end of this chapter you should know how to explain why pre-registration with a hash published
+before the data is a seal against adjustment after seeing the result, what the counter of attempts $K$ measures, why the
 vault outside time opens a single time, how the forecast diary and the signed opinions work, and
 why the auditor being a stakeholder is a limit that no signature resolves.
 
@@ -3300,8 +3417,8 @@ model needs a correction, the correction is worth something only when tested in 
 **The forecast diary.** Every probabilistic forecast issued stays recorded in a continuous ledger, with
 the source, the filter, whether the system can influence the outcome, how many factors the justification has and the
 step of Pearl. And with a limit: **the forecast is never 0% nor 100%**, but something between "one in a hundred" and
-"ninety-nine in a hundred". Without that limit, whoever bets on certainty never loses points and never learns; with the
-limit, each forecaster accumulates a record that can be charged.
+"ninety-nine in a hundred". A certainty that fails is punished by the score, but it cannot be revised by the
+evidence; with the limit, each forecaster keeps a belief that can still move and a record that can be charged.
 
 ---
 
@@ -3382,13 +3499,16 @@ what the method finds.
 | The assumption | What was measured | Result |
 | --- | --- | --- |
 | Whoever abandons a queue calls back with probability 0.6 | A quasi-experimental design in a real support desk, 1999 | **0.145** [0.132; 0.157], four times less than assumed |
-| The tolerance of the calibration error can be fixed at 0.03 | The null simulated with the same forecasts and the same $n$ | None of the six binary vaults passes the rule that depends on $n$ |
+| The tolerance of the calibration error can be fixed at 0.03 | The null simulated with the same forecasts and the same $n$ | All six binary vaults show detectable miscalibration, one of them only borderline; detectable is not the same as relevant (Chapter 8) |
 | ICP may treat every row as independent | Clustered tests and block permutation, with 16 instants per volunteer and 80 schools | Pharmacology survives intact; Education drops out |
 | A method that checks every bridge catches errors that common practice lets through | A blind pilot of 12 cases, two arms | A tie at the ceiling: 8 of 8 defects found in both arms, so the claim is not supported |
 
-**No published number fell because of an error of arithmetic; the audit narrowed the reach those numbers were
-allowed to claim.** That is the usual outcome of an honest self-audit, and it is why the audit is worth doing
-before anyone else does it.
+**The inward audit found no error of arithmetic and narrowed the reach the numbers were allowed to claim.** A later
+reading from outside found what the inward audit had missed: a Kelly fraction computed with the wrong chance, a
+value of information that chose the best act inside each branch, a test of invariance that let the environment move
+the outcome, a market calibration that dropped a factor of 252 (Appendix E lists every one, with both values).
+That is the strongest argument of this chapter, measured on the book itself: an audit run by the authors of the
+claims is weaker than one run from outside, however honest the authors.
 
 ### Step 3 — Hands on
 
@@ -3455,8 +3575,8 @@ seven for an altered version, the root changes in **7 of 7** cases. That is what
 
 **Summary.**
 
-- Pre-registration with a hash is the only seal against adjustment after seeing the result. The hypothesis is frozen
-  before, and the published hash is the seal.
+- Pre-registration with a hash is a seal against adjustment after seeing the result, as long as the hash is published
+  to someone outside before the data are seen. The hypothesis is frozen before, and the published hash is the seal.
 - The counter $K$ makes the attempts visible, and it must be counted at the level of the claim: 38 tests at the
   gate against 3 per domain.
 - The vault outside time opens only once; a correction asks for a new vault.
@@ -3492,8 +3612,8 @@ difference shows up whole.
 
 | World (patients per hour) | Mean wait per patient | The typical patient waits | 90 in 100 wait less than | In every 100 patients, more than 30 min |
 | --- | --- | --- | --- | --- |
-| Always 8, every day | 9.3 min | 3.8 min | 26.7 min | 8 |
-| Half of the days 5, half 11 | 20.7 min | 9.3 min | 59.3 min | 25 |
+| Always 8, every day | 9.1 min | 3.7 min | 26.1 min | 8 |
+| Half of the days 5, half 11 | 19.3 min | 8.1 min | 55.8 min | 24 |
 
 No mean changed. It is 8 in both cases. What changed was the world, and the wait is **curved** in demand. Whoever arrives on a
 calm day waits little, but whoever arrives on a surge day waits a lot, and the gain of the calm day does not compensate the
@@ -3501,8 +3621,8 @@ damage of the full day. The surge day accounts for about 70 in every 100 patient
 so that the mean per patient weights precisely the bad days.
 
 **The median trap.** Read the second row of the table again. In the world that oscillates, **the typical patient
-waits 9.3 minutes**. It is the same number that the claim promised as a mean. Whoever looks at the "typical patient" sees the
-promise kept; the whole difference is in the tail, where 25 in every 100 patients pass half an hour of wait.
+waits 8.1 minutes**, less than the 10 minutes that the claim promised as a mean. Whoever looks at the "typical patient"
+sees the promise kept; the whole difference is in the tail, where 24 in every 100 patients pass half an hour of wait.
 
 **Reinforcement only on surge days.** With two nurses on the
 days of 11 patients and one on the days of 5, the mean wait falls to 2.5 minutes and fewer than 1 patient in every 100
@@ -3513,8 +3633,8 @@ post measures the mean wait and treats each patient as an independent observatio
 ±0.07 minute; if it treats each *day* as the unit, it stays at ±0.51 minute, seven times larger. Which of the two holds
 is not a matter of taste. It is the world that decides. The test is direct. Take 4,000 days of the claim world, split them
 at random into two halves and measure the difference of mean wait between them. If the patients were independent, that
-difference should walk around 0.047 minute. It walks at 0.216, and the prediction by the *day* unit, 0.227, hits
-the nail. The patients of the same day share the same demand, and sharing is not being independent.
+difference should walk around 0.0473 minute. It walks at 0.2062, and the prediction by the *day* unit, 0.1928, comes
+close. The patients of the same day share the same demand, and sharing is not being independent.
 
 **The real case is the call centre of a bank.** The post was an assumption; the centre is observation. It is 2.65 million
 real calls of a North American bank call centre, counted every 5 minutes, over 164 working days of
@@ -3530,10 +3650,10 @@ The dataset showed this.
   of the week still has a coefficient of variation of 6%.
 - **Jensen lives inside the formula itself.** Applied to the real rate of each day, the Erlang C of the claim gives 57% on
   average, and not 82%. The service level is concave in load.
-- **The unit is the day.** The halves null gives an sd of 0.0474, against 0.0470 predicted by the day and 0.0033 predicted
-  by the call.
+- **The unit is the day.** Splitting the days at random, the halves null gives an sd of 0.0441 for the service level,
+  where the binomial margin that treats every call as independent predicts 0.0006.
 - **Severe test.** In 400 days simulated in the world that the claim describes, none fell below the target. In the real
-  world, about one in every four days did.
+  vault, replayed call by call, about three days in every ten did.
 - **Out of time.** The conformal 90% interval for the total calls of the day, built on the mean of the day of the
   week, covered 86% of the vault days, and the drift between training and vault is mild (KS 0.19, p = 0.08).
 
@@ -3541,14 +3661,15 @@ The decision is also measured in the vault, against the real arrivals:
 
 | Staffing rule | Agent-hours per day | In every 100 days, days below the target | Service level |
 | --- | --- | --- | --- |
-| The claim: mean profile | 2,264 | 26 | 86% |
-| Profile of the day of the week (zero cost) | 2,261 | 12 | 90% |
-| Profile of the day of the week + margin for the residual variation | 2,428 | 4 (3.7) | 96% |
-| The claim + 12 attendants equally | 2,433 | 7 (7.4) | 94% |
+| The claim: mean profile | 2,264 | 31 (30.9) | 83.9% |
+| Profile of the day of the week (zero cost) | 2,261 | 20 (19.8) | 84.4% |
+| Profile of the day of the week + margin for the residual variation | 2,428 | 5 (4.9) | 91.6% |
+| The claim + 12 attendants equally | 2,433 | 10 (9.9) | 90.3% |
 
 The last two rules cost almost the same (about 7% more agent-hours) and put the slack in different
-places. The one that puts the slack where the risk is brings the failure from 26 down to fewer than 4 days in every 100; the one that
-spreads attendants equally brings it down only to 7.
+places. The one that puts the slack where the risk is brings the failure from about 31 down to about 5 days in every 100; the
+one that spreads attendants equally brings it down only to about 10. The figures are those of the exact replay of the vault
+(Step 3); an independent engine, with simulated arrivals, keeps the same order.
 
 ---
 
@@ -3568,7 +3689,7 @@ $\lambda$ approaches $\mu$, the denominator goes to zero and the wait explodes; 
 now in a formula.
 
 **Where the formula fails.** Applied to days that alternate between 5 and 11 patients per hour, it would give
-$(W(5)+W(11))/2 = 29.3$ minutes. The simulation gives 20.7. The difference teaches three things. First, a day of 10 hours
+$(W(5)+W(11))/2 = 29.3$ minutes. The simulation gives 19.3. The difference teaches three things. First, a day of 10 hours
 is not the long run of the formula. On the surge days the wait stays at 28.2 minutes, not at the 55 that $W(11)$ predicts,
 because the queue starts empty and has only 10 hours to grow. Second, about 70% of the patients arrive on the surge
 days, and that is why the mean *per patient* weights the bad days more. Third, the formula is not wrong; it answers
@@ -3587,23 +3708,26 @@ give very different waits:
 
 | World (patients per hour) | Mean wait | In every 100 patients, more than 30 min |
 | --- | --- | --- |
-| 8 every day (the one of the claim) | 9.3 min | 8 |
-| 7 or 9 | 10.5 min | 10 |
-| uniform between 5 and 11 | 12.3 min | 13 |
-| 5 or 11 | 20.7 min | 25 |
+| 8 every day (the one of the claim) | 9.1 min | 8 |
+| 7 or 9 | 10.1 min | 9 |
+| uniform between 5 and 11 | 12.8 min | 14 |
+| 5 or 11 | 19.3 min | 24 |
 | 5 or 11, with reinforcement only on surge days | 2.5 min | fewer than 1 |
 
 **The independent unit decides the margin.** The effective size of a sample is a property of the process, not of the
 count (Chapter 6). Calls of the same day share the rate and the queue; treating them as independent observations
-is **pseudoreplication**, and the margin comes out too small. The 2.65 million calls of the vault are worth,
-in independent information, what 81 days are worth. The halves null model arbitrates the question without convention. It
+is **pseudoreplication**, and the margin comes out too small. The 2.65 million calls of the vault come from 81
+independent days, and the margin is computed over the days; their effective size, in calls, lies between 81 and 2.65
+million, much nearer the first than the second. The halves null model checks the choice, under its own premise that
+the days are independent of one another. It
 splits the days of a known world at random into two halves, measures the difference between them and says which of the two
 predicted margins describes what was seen. The margin per day describes; the data refute the margin per patient.
 
 **The severe test (Mayo).** A difference between two worlds is evidence only if the procedure would have accused the
-difference had it not existed. The difference between the world of 8 and the world of 5 or 11 is 11.4 minutes, and it stays
-53 sd from the null; in 2,000 random splits, the null never passed 0.81 minute. It is the definition of a
-result that could have come out wrong.
+difference had it not existed. The difference between the world of 8 and the world of 5 or 11 is 10.2 minutes, and it stays
+49.4 sd from the null; in 2,000 random splits, the null never passed 0.664 minute. Both worlds are simulated, so the test
+does not confirm anything about a real post; it confirms that the simulation is precise enough for its difference to
+be read, which is what a severe test can say about a model.
 
 **What was assumed in the real case, and how the size of the assumption was measured.** Neither the service time nor the
 patience of the clients is in the dataset; the file brings counts of calls, nothing more. The service was assumed
@@ -3656,7 +3780,6 @@ worlds, and the tail separates far more. **Reinforcement in the surge is 2.5 min
 have. **10.2 min, 49.4 sd, 0.0000.** The difference between the worlds is too large to come from chance, and the
 procedure could have come out wrong and did not.
 
-Another generator, with another seed, gave 9.3 and 20.7 minutes for the same two worlds, the numbers of Step 1.
 Run with six different seeds, the wait of the oscillating world goes from 19.3 to 20.6 minutes. The mean wait per
 patient in the oscillating world is a ratio of heavy-tailed sums, and its second decimal belongs to the seed; the
 doubling belongs to the world.
@@ -3716,25 +3839,25 @@ the coarse question in its purest form:
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
+   above 30 min: aggregated 0.4232, fine 0.1782
 ```
 
-With the same total capacity, staffing every day for the mean costs 46.24 minutes of wait per patient more than
-staffing each day for its own demand. At the bank, the same refinement is worth 26 failing days in 100 against
-fewer than 4.
+With the same total capacity, staffing every day for the mean costs 22.99 minutes of wait per patient more than
+staffing each day for its own demand. At the bank, the same refinement is worth about 31 failing days in 100 against
+about 5.
 
 **Exercises.**
 
 1. *(Account)* Use $W(\lambda)=\lambda/(\mu(\mu-\lambda))$ with $\mu = 12$ to find the long-run wait with
-   $\lambda = 8$, $\lambda = 5$ and $\lambda = 11$; then compute the mean of the last two and compare it with the 20.7
+   $\lambda = 8$, $\lambda = 5$ and $\lambda = 11$; then compute the mean of the last two and compare it with the 19.3
    minutes of the simulation. Why does the formula give more?
 2. *(Concept)* Why does the mean per patient weight the surge days more? Compute, in every 100 patients, how many
    arrive on days of 11 and how many on days of 5.
 3. *(Laboratory)* Run the laboratory with seed 1909 and confirm the wait of the world 5 or 11 and the
    margin per day. Then change the surge reinforcement from 24 to 18 consultations per hour: does the mean wait improve?
    Does the tail change size?
-4. *(Account)* In every 100 patients of the claim world, 8 wait more than 30 minutes; in the real world, 25. How many
+4. *(Account)* In every 100 patients of the claim world, 8 wait more than 30 minutes; in the real world, 24. How many
    more patients are they, if the post serves 8,000 patients per year?
 5. *(Concept)* Write, in four sentences and in natural frequencies, the memo of the call-centre case for the board
    of the bank, with an exit clause (which new fact would make the decision be reviewed).
@@ -3749,8 +3872,8 @@ fewer than 4.
   mean, and the whole difference stays in the tail.
 - The margin is computed on the independent unit, which is the day, and not the patient; the halves null model arbitrates the
   choice and refutes the pseudoreplication.
-- In 2.65 million real calls, the standard schedule of the industry fails in 26 of every 100 days, and spending about 7%
-  more agent-hours where the risk is brings that down to fewer than 4.
+- In 2.65 million real calls, the standard schedule of the industry fails in about 31 of every 100 days, and spending
+  about 7% more agent-hours where the risk is brings that down to about 5.
 
 ## Chapter 17. The illusion of multiplying by 3 in the market and the employment programme
 
@@ -3781,7 +3904,7 @@ drag**, a toll paid every day, without exception, and it grows faster than lever
 (later on, with its square). Leveraging 3 times yields **less** than leveraging 2. There is an
 optimal point, and passing it destroys growth.
 
-**The Friday that erased 68%.** On 19 October 1987 the index fell 22.61% in a single day. In every 100 dollars
+**The Monday that erased 68%.** On Monday, 19 October 1987, the index fell 22.61% in a single day. In every 100 dollars
 of capital:
 
 - without leverage, 77 dollars remain;
@@ -3862,9 +3985,9 @@ ruin, from which one does not leave), the ensemble mean stops being a useful des
 
 **Ruin in one day.** In a world of daily returns, the leverage that zeroes the wealth in a single session is
 
-$$L_{\text{ruin}} = \frac{1}{\min_t |r_t|},$$
+$$L_{\text{ruin}} = \frac{1}{\lvert \min_t r_t \rvert},$$
 
-and in the training set it is worth 4.42. Above that, ruin stops being a matter of probability and becomes a date marked on the calendar.
+the inverse of the size of the worst daily fall, and in the training set it is worth 4.42. Above that, ruin stops being a matter of probability and becomes a date marked on the calendar.
 
 **Kelly.** The leverage that maximises the time rate is $L^* = \arg\max_L g_L$. With the uncertainty about the
 parameters of the series carried into a posterior, the 90% interval goes from **1.26 to 3.44**, with median
@@ -3872,9 +3995,10 @@ parameters of the series carried into a posterior, the 90% interval goes from **
 end, and Chapter 10 showed what epistemic uncertainty says about the upper end: stake less.
 
 **The severe test.** The claim world states that wealth grows 3 times the annual arithmetic sum, without drag. In it,
-the fraction of the 20-year cohorts that end above the starting point has mean **0.933** (with the 1% quantile at
-0.656). In the real index, the fraction is **0.646**, and would the procedure have accused that value?
-Only in 0.95% of the replicas (p = 0.0095). The result is severe.
+the fraction of the 20-year cohorts that end above the starting point has mean **0.9286** (with the 1% quantile at
+0.6354). In the real index, the fraction is **0.6458**. Had the claim been true, a fraction as low as the real one
+would have appeared in a fraction 0.0140 of the replicas. The procedure could have spared the claim and did not:
+the refutation is severe.
 
 **What the refutation does not reach.** Delimiting the target that fell is part of the result. The refuted claim is "yields 3
 times the mean" and "always wins". "Leveraging never pays" survives the refutation. Without financing cost, 2× and 3× still
@@ -3919,7 +4043,8 @@ for the others. Equalising them captures 22 more unemployed people and costs 87 
 measured in numbers. There is no way to get the three things right at once, and someone will pay for the choice (Chapter 11).
 
 **Approval is not truth.** Both analyses of this chapter went through the whole cycle and passed the adversarial
-panel. Passing means that the analyses were sound, not that the claims were true: the market claim was refuted, and
+panel. Passing means that the cards declared and anchored every safeguard, not that the analyses were right, and
+much less that the claims were true: the market claim was refuted, and
 the programme's effect stood only under randomisation. The third real case of this part, the Danish fire losses
 of Chapter 18, met a different end: the data rejected it.
 
@@ -4049,8 +4174,14 @@ happened yet".
 
 **The tail.** The Hill estimator, applied to the 1.714 losses of the training set, gives for the tail index
 $\hat\alpha = 1.81$, with a 95% interval from 1.41 to 2.56 (bootstrap by monthly blocks). That matters because an
-index below $2$ means **undefined variance**, and the long-run mean of the loss does not converge. A single
+index below $2$ means **infinite variance** of the losses. The mean still exists, because the index is above 1, and the
+running mean does converge, but slowly and by jumps: the usual margin, built on a variance, does not apply. A single
 claim can be so large that it dominates all the others added together, and August 1989 is the case.
+
+The reinsurer, however, does not sell the whole tail. Its layer pays at most 100 million per claim, so what it pays
+is bounded, and its annual result has a finite variance whatever the tail of the losses. The heavy tail matters to the
+layer through the **frequency** with which claims reach 50 million, not through an infinite variance of what the
+layer pays. That frequency is what the rest of this chapter estimates.
 
 **The ruin.** With the exposure that the claim would justify (selling a limit equivalent to 3 times the capital), a
 claim that consumes the whole limit takes the capital to **1 − 3 = −2**, that is, to zero. It happened in August 1989:
@@ -4061,7 +4192,9 @@ on the clean window (a much smaller exposure) ends 1989-1990 with **19% of the c
 **The art of failing one's own model.** The analysis took the claim to a vault it had not seen, and the result was uncomfortable for
 everyone, because in the vault **no forecaster beat the simple historical frequency**. The Brier skill of the model
 (which is the difference between predicting well and predicting the historical constant, Chapter 8) stayed at **−0.015**; that of the POT,
-at −0.003; that of the Laplace rule, at −0.024; and that of the claim, at −0.052. Besides, the frequency of claims
+at −0.003; that of the Laplace rule, at −0.024; and that of the claim, at −0.052. With 24 months in the vault and 2
+months hit, those skills are noise of the size of their differences (the lesson of Chapter 8 on small vaults): the
+vault does not rank the forecasters, it only fails to show that any of them beats the constant. Besides, the frequency of claims
 was growing **4.6% per year** (p = 2·10⁻⁶), and the world was not stationary. The elicited (simulated) prior dominated the
 posterior.
 
@@ -4071,7 +4204,9 @@ issued, and the rejection is the published result.
 
 **The clean window in the whole series.** The rule was tested on all the clean windows of the history. Whenever the
 last 36 months had not touched the layer, the decision would have been to leverage at the ceiling. There were 5 such decisions, and the
-**5 ended ruined within 24 months**.
+**5 ended ruined within 24 months**. The five are not five independent trials: the clean windows overlap, and their
+ruins fall on the same two hits of 1989 and 1990. The honest count is one or two episodes, not five, which is the
+independent unit of Chapter 6 again.
 
 ---
 
@@ -4093,8 +4228,9 @@ that is, $\alpha \approx 2.46$, lighter than the Hill. The two methods disagree,
 result.
 
 **Why $\alpha < 2$ changes everything.** The variance of a variable with a power tail is finite only if
-$\alpha > 2$. With $\alpha = 1.81$, the variance does not exist, and there is no "standard deviation" of the annual loss, so that
-any margin computed from an estimated variance will be small. The case repeats the lesson of Chapter 4. A
+$\alpha > 2$. With $\alpha = 1.81$, the variance of the ground-up loss does not exist, and any margin computed from an
+estimated variance will be too small. For the layer, which caps each payment, the variance exists and the danger is
+the frequency of the hits. The case repeats the lesson of Chapter 4. A
 process can be outside the hypothesis space of the model, and the data do not warn with a pretty chart.
 
 **The Laplace rule of succession.** After $s$ successes in $n$ trials, the probability of the next
@@ -4104,8 +4240,9 @@ $$P(\text{success} \mid s, n) = \frac{s+1}{n+2}.$$
 
 It comes from a uniform prior over the probability and treats each month as exchangeable with the others. It holds when the
 months are exchangeable, without memory and without trend, and it fails when the world has drift. And it has. The frequency of
-claims grows 4.6% per year, with a p-value of $2 \times 10^{-6}$. Laplace, therefore, delivers a **floor**. After
-36 clean months, the defensible minimum is 1 in 38 per month, never zero.
+claims grows 4.6% per year, with a p-value of $2 \times 10^{-6}$. Laplace, therefore, delivers an **optimistic**
+estimate, not a lower bound: with a uniform prior and a world that drifts upwards, the true rate is probably higher.
+After 36 clean months, 1 in 38 per month is the least one can defend, never zero.
 
 **How much a clean window is worth.** Here the account stops being about the frequency and becomes about the evidence.
 Compare two hypotheses: "the risk is negligible" (1 month hit per century, $p = 1/1200$) and "the risk is the one of the
@@ -4187,7 +4324,7 @@ read was real, surrounded by years with four and one month hit. **1.9625 / 1.810
 three tail indices according to the number of observations used; the tail is heavy with room to spare, and its exact value
 is not stable. **1.900 with sd 0.265**: in a simulated tail with $\alpha = 1.81$, the Hill estimator
 has that uncertainty in samples of that size, the honest translation of the interval [1.41; 2.56]. **0.1815**: in every
-100 windows of three years, 18 come out clean in the dangerous world. **0.02632**: the Laplace rule puts the floor at 1 in 38.
+100 windows of three years, 18 come out clean in the dangerous world. **0.02632**: the Laplace rule puts the estimate at 1 in 38, never zero.
 **2.24 bits and 69 months**: the clean window is 4.7 times more likely in the negligible world, that is, 2.2 bits of
 evidence, and almost six clean years for a severe test. **4.48 bits**: against the rate of the vault, that window
 would be worth double.
@@ -4212,8 +4349,9 @@ would be worth double.
 
 - 36 clean months between 50 and 150 million kroner are not a safe world. With the rate of the training set, 18 in every 100
   windows of three years come out clean by chance.
-- The tail is heavy ($\hat\alpha = 1.81$, interval 1.41 to 2.56). With $\alpha < 2$ the variance does not exist, and a
-  single month (August 1989, 152 million) decides the fate of the company.
+- The tail is heavy ($\hat\alpha = 1.81$, interval 1.41 to 2.56). With $\alpha < 2$ the variance of the losses does not
+  exist; the layer caps what it pays, so its danger is the frequency of the hits, and a single month (August 1989,
+  152 million) decides the fate of the company.
 - The clean window is worth 2.2 bits of evidence; the Laplace rule gives 1 chance in 38 per month; a severe test
   would need 69 clean months.
 - In the vault, no forecaster beat the simple historical frequency: model −0.015, POT −0.003, Laplace −0.024,
@@ -4247,7 +4385,8 @@ airport, the type of school served. In each of the 12 areas, the result was like
 | It was pruned earlier, by another filter | 1 |
 
 The only area that gave an answer pointed to citizenship and employment as invariant causes of the decision to release a detainee,
-and left skin colour out. The result does not say that colour does not matter. The method only promises to return a
+and left skin colour out. The result does not say that colour does not matter, and in observational police records,
+where colour can act through every other variable that was recorded, it is the reading to treat with most care. The method only promises to return a
 subset of the true causes, and such a promise only holds under conditions that the year and the region violate. The year acts
 **directly** on the outcome, and not only on the input variables. An environment that changes the whole world is not an
 experiment.
@@ -4414,10 +4553,20 @@ $0.002$ in the block permutation, from about 340 bits to 49 and 9. Education did
 as units, they are 266 accepted sets of 512 in the clustered test and 512 in the permutation, without any variable in
 common, and the published set $\{\text{small\_years\_before}, \text{small\_class}\}$ has $p = 0.76$. Even
 before the clustering correction, education was already the fragile area, with the largest p among the non-saturated sets
-at $0.075$, close to the threshold, and $\{\text{small\_class}\}$ alone was rejected ($p = 0.010$). Genetics
-replicated. The counting of areas closes like this. Education leaves, physics stays as it was, pharmacology
-stays and genetics replicates. The gate stays standing with three areas, now with the third supported
-by a new domain, and not by the area that was already fragile.
+at $0.075$, close to the threshold, and $\{\text{small\_class}\}$ alone was rejected ($p = 0.010$). The counting of
+areas closes like this. Education leaves, physics stays as it was, pharmacology stays, and genetics stays only by the
+replica of one gene in one mutant, whose evidence, once the half of the p-value that the deletion produces by itself is
+removed, is $p = 0.031$, marginal, and one pair among 27. The gate stays standing with three areas only if that
+marginal replica is counted.
+
+Read the three areas for what they are. Physics and pharmacology recovered causes that were known before the test:
+the chamber was built with the LEDs as the parents of the current, and the trial gave the drugs whose block of hERG
+was established. That is a check of the method against a known truth, which is valuable and is not a discovery.
+The only area where the method could have found something new is the fragile one. And the gate itself was reached
+after seven rounds, eleven openings of vaults and 38 counted tests, with the first declared version of each choice
+failing it. Every step was sealed before it ran, which makes the path visible; it does not make the path
+innocent. A gate fixed in advance ("three areas") becomes a target, and seven rounds aimed at it are a garden of
+forking paths walked in public.
 
 **The effect transports better than the set.** Still with the ICP rejected, the fitted model predicted the environment
 never seen with positive skill in **9 domains**, from $0.04$ to $0.88$. The strong claim ("holds in any
@@ -4566,8 +4715,8 @@ each effect stops being a point. **The p was never the problem; the row was the 
   $K$: convenience environments, a code error in the test, the exchange of ruler and the saturation rule.
 - Two rounds checked the method against known truth. The light tunnel recovered the three LEDs and the trial of the
   FDA recovered the three drugs that block hERG, with verapamil predicted at $+0.57$.
-- With dependent rows corrected, education leaves, genetics replicates and the gate stays standing with three areas:
-  physics, pharmacology and genetics. The effect transports better than the set. The 9 domains predicted the new environment
+- With dependent rows corrected, education leaves; the gate stays standing with three areas only by counting a marginal
+  genetic replica, and two of the three areas recovered causes that were already known. The effect transports better than the set. The 9 domains predicted the new environment
   with skill from $0.04$ to $0.88$.
 
 ## Chapter 20. The live clock, the leakage canary and the police in the vault
@@ -4618,7 +4767,7 @@ attempts.
 | --- | --- | --- | --- | --- |
 | Energy (Victoria) | demand of each half hour of tomorrow | 2014, 17.376 | coverage of 90% = 0.887 (official reserve 48% of the time) | Passes |
 | Call centre (bank, 2003) | calls per 5 minutes of the next working day | Sep–Oct, 6.084 | coverage 0.900 | Passes |
-| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6.010 | violations 0.98%; Kupiec p = 0.89; clustered (Christoffersen p = 0.02) | Passes |
+| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6.010 | violations 0.98%; Kupiec p = 0.89; clustered (Christoffersen p = 0.02) | Passes the frequency rule; the independence of the violations fails |
 | Flights (New York, 2013) | chance of a delay above 15 minutes, 2 h before | Oct–Dec, 84.301 | bias $+2.7$ points; ECE 0.027 | Fails |
 | Cyclones | chance of gaining 30 knots in 24 hours | 2015–2022, 5.766 | bias 0.001; ECE 0.012 | Passes |
 | Prisons (Toronto, 1997–2002) | chance of release | 2001–2002, 1.488 | bias 0.016; ECE 0.036 | Fails |
@@ -4703,7 +4852,8 @@ forecasts missed the frequency), resolution (how much they knew how to separate 
 (how rare and unpredictable the event is). The Platt recalibration only moves the **reliability**. The resolution lives
 in the data and in the variables, and no output correction invents it. That is why the verdict of Rhode Island is
 "good calibration, low resolution", and that is why it is honest. $\mathrm{REL} - \mathrm{RES}$ comes out positive, but the
-final skill is $+0.019$, far from the $+0.05$ that had been asked for.
+final skill is $+0.019$, far from the $+0.05$ that had been asked for. The stream passed the calibration gate and
+missed its own target of skill, and the two verdicts are reported side by side; neither cancels the other.
 
 **The canary as a severe test.** Mayo asks that a test be capable of erring. The canary is the operational version
 of that request, a column that *is* the label, but only becomes available when the label becomes available. With the
@@ -4714,8 +4864,9 @@ honest clock it enters no emission, and the gain is 0.000; with the clock switch
 so the loop was simulated over the real arrivals of the call centre. The staffing comes out of the forecast, whoever abandons redials with
 probability $r$, and the redials enter the observed count. With $r = 0.6$ declared, the sensor detects the
 dependence ($t = -6.4$, $p = 1.5\times10^{-10}$); with $r = 0$, the sensor does not detect it ($p = 0.70$). The parameter
-declared was a guess. Measured later in a real call centre of 1999, the same loop is worth
-$0.145$ [0.132; 0.157], **four times less** than the declared one. The correction was, therefore, tested in a world
+declared was a guess. Measured later in a real call centre of 1999, a related quantity, the increase in the chance of
+calling back within fifteen minutes when a client abandons instead of being served, is worth $0.145$ [0.132; 0.157].
+It is not the same parameter as the declared redial probability (Chapter 11), but it does not support its size. The correction was, therefore, tested in a world
 more hostile than the observed world, and that asymmetry weakens the correction as proof. And the estimator of the loop had
 **four versions** before passing, all recorded: bias of $+4.7\%$, $-5.9\%$, $-8.4\%$ and $+1.7\%$,
 for a limit of 3%. Only the fourth passes. The first fails by design, and not by account, because staffing by the corrected demand
@@ -4733,11 +4884,13 @@ in the quasi-identifiers, and 2% stay unique with age in bands of 5 years; no re
 $\varepsilon = 2$ per person, and the privacy circuit breaker removed the cohort of 1997 from the publication of 2001.
 
 **The calibration tolerance, again.** Chapter 8 measured the noise of the calibration error in these same six
-vaults: with a tolerance that depends on $n$, none of them passes, not even the three approved ones, because in the
-large vaults the noise is from 0.002 to 0.006 and 0.03 lets detectable miscalibration through. By the secondary
+vaults: against the null of each vault, all six show detectable miscalibration, the Toronto 1997–2002 vault only
+borderline, because in the large vaults the noise is from 0.002 to 0.006 and 0.03 lets detectable miscalibration
+through. Detectable is not the same as relevant, and the gate keeps both readings. By the secondary
 rule, which requires $\max(0.03;\ \text{95\% quantile})$, the picture goes back to what it was: the three approved
-vaults stay approved and the two from Toronto stay failed. And the failure of Toronto of 1997–2002 stops looking
-like noise. It was signal.
+vaults stay approved and the two from Toronto stay failed. The failure of Toronto of 1997–2002 sits on the edge: above
+the null of its real forecasts, below the null that simulated forecasts of the same size give, so it is reported as a
+borderline failure, not as signal.
 
 **The label drift that did not warn.** Would two classical tests of label drift have seen the deviation of 2013 before the original sensor. They did not. The test that compares the realised rate with the predicted
 mean switched on in the vault on 6 November 2013, and the original sensor had already switched on 16 October; worse, it
@@ -4791,7 +4944,7 @@ fitted in the development, where the labels are already known.
 seed 2021 | training 120000 stops (rate 0.0352) | development 58000 (rate 0.0222) | vault 24466 (rate 0.0220)
 raw model (trained in the old period of higher rate): predicted mean 0.0351 (60% above the vault rate)
   CITL = +0.0132 | ECE = 0.0132 | Brier = 0.02155 | skill = -0.0020
-official model with Platt (a = 0.98, b = -0.54): predicted mean 0.0222
+official model with Platt (slope = 0.98, intercept = -0.54): predicted mean 0.0222
   CITL = +0.0002 | ECE = 0.0022 | Brier = 0.02130 | skill = +0.0098
 climatology fixed at the past rate: Brier = 0.02151 (p(1-p) = 0.02171)
 
@@ -4804,8 +4957,8 @@ Read it line by line. **The raw model** predicts, on average, 0.0351 where the r
 That excess appears in the two metrics at the same time, since the bias is worth $+0.0132$ and the expected
 calibration error is worth 0.0132, and the deviation is almost all of **level**. The model learned the base rate of the old
 period and did not notice that the world changed. The Brier skill comes out negative ($-0.0020$), since the model loses
-to the climatologist that only repeats the rate of the past. **The official model**, with Platt ($a = 0.98$, $b =
--0.54$), goes back to the right level, with bias $+0.0002$ and ECE 0.0022, and skill $+0.0098$. Note the point at which
+to the climatologist that only repeats the rate of the past. **The official model**, with Platt (slope 0.98, intercept
+$-0.54$), goes back to the right level, with bias $+0.0002$ and ECE 0.0022, and skill $+0.0098$. Note the point at which
 the correction did **nothing**. The skill rose from $-0.0020$ to $+0.0098$, and not to $+0.5$. The slope
 hardly changed (the fit stayed at 0.98), and the resolution continues to be the one of the data. The calibration is fixed;
 the resolution is not. **The canary** closes the laboratory. With the honest clock, the canary column becomes available in
@@ -4837,8 +4990,8 @@ switched off, it is available in the 24.466 emissions and the gain is $+0.6521$.
   inside the loop undoes the spiral, and the loop declared at 0.6 is four times the measured one, 0.145.
 - Each calibration correction was only accepted in a new vault: flights of 2023 with ECE 0.008, prisons of 2020–2021
   failed by slope (0.067) and Rhode Island approved with Platt, ECE 0.0048 and skill $+0.019$.
-- Calibration is fixed; resolution stays where it is. And with a tolerance that depends on the size of the vault, none of the six
-  binary vaults passes — not even the three approved ones.
+- Calibration is fixed; resolution stays where it is. Against a tolerance that depends on the size of the vault, all six
+  binary vaults show detectable miscalibration, one only borderline; detectable is not yet relevant.
 - Changing the metric of fairness changes who pays for the error; and none of the affected groups was heard in the seven
   decisions that involve people.
 
@@ -4858,13 +5011,13 @@ what it was worth for whoever is going to do statistics, but for whoever is goin
 sentences, and each one was born from a concrete case.
 
 1. **The mean hides the essential.** In the health post, the mean demand is identical in the two worlds, and the wait
-   jumps from 9.3 minutes in the constant world to 20.7 minutes in the world that oscillates. In every 100 patients, 25 wait
+   jumps from 9.1 minutes in the constant world to 19.3 minutes in the world that oscillates. In every 100 patients, 24 wait
    more than half an hour in the world that oscillates, against 8 in the constant world. In a call centre, the schedule
-   dimensioned by the mean fails in **26 of every 100 days**. And the mean wealth of whoever bet 3 times in the market
+   dimensioned by the mean fails in **about 31 of every 100 days**. And the mean wealth of whoever bet 3 times in the market
    appears as 19 times, when the median is 2.1.
-2. **The independent unit decides the margin.** 2.65 million calls are worth **81 days**; 225 thousand flights are worth
-   **364 days**. Counting row by row, where the variation repeats, separates an honest margin from a margin that only
-   looks narrow.
+2. **The independent unit decides the margin.** 2.65 million calls come from **81 independent days**; 225 thousand
+   flights from **364**. The margin is computed over those units, and the calls weigh far less than their count.
+   Counting row by row, where the variation repeats, separates an honest margin from a margin that only looks narrow.
 3. **Hitting is not enough; one must have been able to err.** The propensity fit in the LaLonde experiment hit the
    number, and an innocuous treatment would have reached a similar value. In the 1975 placebo it invented a phantom
    effect of $-12.3$ percentage points. A number that hits without being able to err is not evidence.
@@ -4877,7 +5030,8 @@ sentences, and each one was born from a concrete case.
    intervention, as verapamil showed. When it does not appear, the direction and the size of the effect still usually survive.
    9 domains predicted the never-seen environment with skill from 0.04 to 0.88.
 6. **Calibration is fixed, resolution is not.** Three vaults were needed for the calibration to pass the
-   tolerance of 0.03, and a later measurement showed that this tolerance was loose in the large vaults. The final skill
+   tolerance of 0.03, and a later measurement showed that this tolerance was loose in the large vaults, where a
+   detectable miscalibration is not always a relevant one. The final skill
    stayed at $+0.019$. Saying "it is well calibrated" does not ensure that the model separates the cases well.
 7. **Declaring before running makes the failure useful.** Seven rounds in the search for invariant causes and three vaults in the arrest forecasts only count as
    science because each change was written with a hash **before** running, and because each adjustment made after seeing a
@@ -4885,9 +5039,10 @@ sentences, and each one was born from a concrete case.
 
 **Turning the test inward.** A discipline that demands a severe test of the claims of others has to pass the same
 test. When ten of its own assumptions, things the text affirmed and had never tested, were each put to a declared
-test, the result was uncomfortable and worth the reading. **No published number fell by an error of arithmetic**, and
-the reach of the numbers shrank. The central thesis tied in its direct test. The calibration tolerance was loose.
-The assumed performative loop was four times larger than the measured one. And one of the three areas of the causal
+test, the result was uncomfortable and worth the reading. The inward audit found no error of arithmetic and shrank
+the reach of the numbers; a later reading from outside found several errors that the inward audit had passed over,
+and they are corrected in this text. The central thesis tied in its direct test. The calibration tolerance was loose.
+The only real measurement of the performative loop, of a related quantity, did not support the size assumed. And one of the three areas of the causal
 search depended on which version of each choice counted.
 
 **Whom nobody heard.** In each one of the seven decisions that involve people (cutting the benefit of
@@ -4960,9 +5115,10 @@ frequencies, with an exit clause, defended before a board.
 
 **The resolution of the question, and two predictions that could fail.** The decider question has a grain, and the
 grain is a variable of the model. R0 asks about the average day, R1 about each day, R2 about the hour and R3 about
-the subgroup. With the same total resource and paired arms, asking coarsely costs 46.24 minutes of mean wait where
-demand oscillates from 5 to 11, 5.97 where it oscillates from 7 to 9 and nothing where it does not oscillate
-(Chapters 5, 8 and 10). The axis makes two predictions that could have failed. Prediction 3: there is an amplitude of
+the subgroup. With the same total resource, paired arms and a staffing that aims at a utilisation of 0.8, asking
+coarsely costs 22.99 minutes of mean wait where demand oscillates from 5 to 11, 2.50 where it oscillates from 7 to 9
+and nothing where it does not oscillate (Chapters 5, 8 and 10). The axis states two claims; only one of them is an
+empirical prediction. Prediction 3: there is an amplitude of
 oscillation above which a plan made for the average day fails on more than a quarter of the days. Prediction 5: a
 plan that survives every day also survives the aggregate, while the converse does not hold. Run it with
 `cargo run --release --bin labs -- --resolution`.
@@ -4989,7 +5145,16 @@ With the plan calibrated on flat demand, the threshold appears at amplitude 2.5,
 to cost (2.87 minutes) after costing less than nothing below it; the fraction of failed days grows monotonically.
 (With the uncalibrated Erlang plan of the average day the fraction is not monotone, and the threshold reading is
 weaker.) Across six profiles, no profile survives each day and fails the aggregate, and three pass the aggregate
-while failing some day. Both predictions survived tests that could have refuted them.
+while failing some day.
+
+The two results are not of the same kind. Prediction 5 is a consequence of arithmetic, not of the world: when the day
+fails on a threshold of a share, the aggregate share is a weighted mean of the daily shares, and a mean cannot exceed
+the threshold if no day does. The instrument confirms that the code respects that arithmetic (it checks the
+conservation of the aggregate), which is a test of the code, not of the axis. Prediction 3 is empirical, but it was
+found under a second specification, after the first one (the Erlang plan of the average day) gave a fraction that
+did not grow monotonically; the second specification counts in $K$, and the threshold of 2.5 is a result of that
+specification, not a law. Prediction 3 stands as a supported regularity of one simulated post, and prediction 5 as a
+theorem with a test of its implementation.
 
 **Three more horizons.** *From the argument to the artifact:* the unit of knowledge is the executable artifact, not
 the paragraph; claim, generative process, null model and test stay side by side. *Artificial agents with epistemic
@@ -5091,7 +5256,8 @@ rubber stamp.
 - Each lesson holds under a condition, and a discipline that tests others must test itself: turned inward, the
   severe test narrowed the reach of its own numbers without finding an error of arithmetic.
 - Signing is not listening: in seven decisions that touched people, none of the affected groups was heard.
-- The resolution axis made two predictions that could fail, and both survived.
+- The resolution axis stated two claims: one is a theorem whose implementation was checked, the other an empirical
+  regularity found under a second specification.
 - The final project closes the course: choose a problem of the school or of the city, write the decider question,
   fill the card, fix the seed, build the null, pre-register, run and defend a memo in natural frequencies with an
   exit clause.
@@ -5110,7 +5276,7 @@ example. The order is alphabetical.
 | **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
 | **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
 | **Background audit** | A front that tests an assumption of the program itself, with a declaration written before running | The teacher who redoes the exam before applying it to the students, with the answer key sealed |
-| **Adversarial panel** | The stage in which someone attacks the work live, looking for where it breaks, before approving | The practice in which the coach makes the reserve team play against the starters, without mercy |
+| **Adversarial panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it scores declarations with a reproducible number and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
 | **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
 | **Bayes (rule of)** | The rule that says how today's belief is updated with the evidence of now, starting from yesterday's belief | A positive pregnancy test in a low-risk person can still be a false positive most of the time |
 | **Brier (score of)** | The mean of the squared error of a probabilistic forecast: lower is better, and 0 is perfect | Betting 90% on a game and losing costs more on the scoreboard than betting 55% and losing |
@@ -5131,10 +5297,10 @@ example. The order is alphabetical.
 | **Type I error** | Raising the alarm when there was nothing | The smoke detector that goes off while the bread is toasting |
 | **Type II error** | Not raising the alarm when there was something | The detector with a weak battery that stays silent in the fire |
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
-| **Type M error** | Getting the size of the effect wrong, too large or too small | "3 centimetres of rain" when it was 30 millimetres |
+| **Type M error** | Getting the size of the effect wrong, too large or too small | "3 centimetres of rain" when it was 3 millimetres |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
 | **Scalonomy** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
-| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool in which guessing the most likely outcome, and not your heart's team, is what scores |
+| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
 | **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
 | **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
 | **Fluxonomy** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
@@ -5150,7 +5316,7 @@ example. The order is alphabetical.
 | **Invariants $\Phi_1$ to $\Phi_5$** | The five boundary conditions every claim must satisfy: simulability ($\Phi_1$), independent unit ($\Phi_2$), severe test ($\Phi_3$), scope and exit clause ($\Phi_4$) and resolution of the question ($\Phi_5$) | The five locks of the sheet that reject a work before the argument |
 | **$\Phi_5$ (resolution of the question)** | The invariant that rejects aggregated decision ($R_0$) when the independent unit is the day or coarser | Scaling by the average day when the clinic alternates between calm and surge |
 | **Jensen (inequality of)** | The mean of a curved function is not the function of the mean | The average waiting time grows when arrivals oscillate, even with the same average arrival |
-| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run | Betting 20% when the chance is 60% at 1 to 1; betting everything leads to ruin |
+| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
 | **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
 | **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
 | **Lenses (the five)** | The five fixed ways of looking of the program: scale, current, form, time and judgement | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
@@ -5170,11 +5336,12 @@ example. The order is alphabetical.
 | **Ruin** | Reaching zero and no longer being able to play, regardless of the average of the bets | Whoever uses the whole credit card at the limit loses the right to stay in the game |
 | **Saturation** | When the environment is a function of the variables of the set, and the test has no way of rejecting | Counting the traffic light's colour to forecast the traffic light's colour |
 | **Fixed seed** | The starting point of the draw, declared so that two machines produce the same world | The recipe with the exact amount, so that the cake comes out the same at the neighbour's house |
-| **Severity** | The chance that the procedure would have gone wrong if the claim were false | The exam that is only useful if it detects the disease when it exists |
+| **Severity** | The chance that the procedure would have given a less favourable result if the claim were false | The fire drill that counts only because the alarm would have rung had there been smoke |
 | **SHELF** | The protocol for eliciting experts by median, quartiles and extremes | Asking the doctor not for a guess, but for a range and a most probable value |
 | **$t_{\mathrm{disp}}$ (clock)** | The instant at which each datum becomes knowable | The exam result that only exists after it leaves the laboratory |
 | **Scope term** | The declaration of where the conclusion holds and where it does not | "This holds for the morning shift; at the weekend the queue is another one" |
 | **Chouldechova's trilemma** | With different base rates between groups, calibration and equal error rates are incompatible | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
+| **Inspection paradox** | Sampling by arrival over-represents the long intervals, so the experience of the average arrival is worse than the average interval | Asked how long they waited, most patients answer from the busy days, because most of them came on busy days |
 | **Independent unit** | The smallest unit whose observations do not share the same source of variation | The school, and not the student, when students of the same school resemble one another |
 | **Likelihood** | The chance of seeing what was seen, supposing each hypothesis true | "How likely is this stain on the roof if it is rain? And if it is seepage?" |
 | **Bias (three senses)** | Distortion of the datum, of the estimator and of the mind, and the three accumulate | An uncalibrated scale, an average that mixes weights and the haste of whoever reads the number |
@@ -5187,20 +5354,20 @@ example. The order is alphabetical.
 
 | Symbol | Read in English | In Rust code |
 | --- | --- | --- |
-| $\sum_{k=1}^{n} a_k$ | "Add up everything that comes after, from $k$ equal to 1 to $n$" | `let soma: f64 = a.iter().sum();` |
-| $\mathbb{E}[X]$ | "The long-run mean of $X$" | `let media = x.iter().sum::<f64>() / x.len() as f64;` |
-| $\operatorname{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - media).powi(2)).sum::<f64>() / x.len() as f64;` |
+| $\sum_{k=1}^{n} a_k$ | "Add up everything that comes after, from $k$ equal to 1 to $n$" | `let sum: f64 = a.iter().sum();` |
+| $\mathbb{E}[X]$ | "The long-run mean of $X$" | `let mean = x.iter().sum::<f64>() / x.len() as f64;` |
+| $\operatorname{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - mean).powi(2)).sum::<f64>() / x.len() as f64;` |
 | $\sigma$ or $\mathrm{dp}$ | "Standard deviation: the square root of the variance, in the same unit as $X$" | `let dp = var.sqrt();` |
-| $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_dado_b } else { p_a_dado_nao_b }` |
-| $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = funcao(x_fixo);` — instead of `let y = funcao(x_observado);` |
+| $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_given_b } else { p_a_given_not_b }` |
+| $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = f(x_fixed);` — instead of `let y = f(x_observed);` |
 | $\ln$ | "Natural logarithm: the exponent of Euler's number that returns the value" | `let z = valor.ln();` |
 | $\log_{10}$ | "Logarithm in base 10" | `let d = 10.0 * razao.log10();` (decibans) |
 | $\ge$ | "Is greater than or equal to" | `a >= b` |
 | $\approx$ | "Approximately equal", within a declared tolerance | `(a - b).abs() < 1e-9` |
 | $\sqrt{x}$ | "The square root of $x$" | `x.sqrt()` |
 | $x^2$ | "The square of $x$" | `x.powi(2)` |
-| $\alpha$ | "The false-alarm level that is accepted: 5% is the usual one" | `const ALFA: f64 = 0.05;` |
-| $1 - \alpha$ | "The promised coverage of the procedure: 95% in the usual case" | `let cobertura = 1.0 - ALFA;` |
+| $\alpha$ | "The false-alarm level that is accepted: 5% is the usual one" | `const ALPHA: f64 = 0.05;` |
+| $1 - \alpha$ | "The promised coverage of the procedure: 95% in the usual case" | `let coverage = 1.0 - ALPHA;` |
 | $\hat{S}$ | "The set returned by the method, with the hat of estimated" | `let s_hat: Vec<usize> = ...;` |
 | $\emptyset$ | "The empty set: the method pointed at nothing" | `Vec::new()` |
 | $\cap$ and $\subseteq$ | "The intersection of two sets" and "is contained in" | `a.iter().filter(\|x\| b.contains(x)).count()` |
@@ -5216,12 +5383,12 @@ example. The order is alphabetical.
 | $P(H \mid E) = \frac{P(E \mid H)P(H)}{P(E)}$ | Today's belief is yesterday's multiplied by the strength of the evidence | posterior odds $=$ prior odds $\times$ likelihood ratio |
 | $10\log_{10}\text{RV}$ | The strength of the evidence in decibans: every 10 dB is a factor of 10 | `10.0 * rv.log10()` |
 | $\operatorname{Brier} = \frac{1}{n}\sum (p_i - y_i)^2$ | The mean of the squared error of a probabilistic forecast | `p.iter().zip(y).map(\|(a,b)\| (a-b).powi(2)).sum::<f64>() / n as f64` |
-| $\text{habilidade} = 1 - \operatorname{Brier}/\operatorname{Brier}_{\text{clima}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
+| $\text{skill} = 1 - \operatorname{Brier}/\operatorname{Brier}_{\text{clim}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
 | $\mathrm{ECE} = \sum_k \frac{n_k}{n}\lvert \bar{p}_k - \bar{y}_k\rvert$ | The mean distance between predicted and observed, band by band | 10 boxes of equal mass, summing the weighted absolute difference |
 | $f^* = 2p - 1$ | The Kelly fraction for a bet that pays the same as it risks | `let f = 2.0 * p - 1.0;` |
 | $\frac{s+1}{n+2}$ | The rule of Laplace: one imaginary success and one imaginary failure | `(s + 1.0) / (n + 2.0)` |
 | $W_{M/M/1} = \frac{\rho}{\mu - \lambda}$ | The average wait in a queue with one server grows on a curve | Do not use the mean to decide the scale: simulate the day |
-| $\mathrm{CITL} = \bar{p} - \bar{y}$ | The level deviation: how much the average forecast misses the observed rate | `media(p) - media(y)` |
+| $\mathrm{CITL} = \bar{p} - \bar{y}$ | The level deviation: how much the average forecast misses the observed rate | `mean(p) - mean(y)` |
 
 **A reading warning.** In Rust, `f64` holds about 15 to 16 digits. Therefore $\approx$ is never
 equality, and every comparison of measured numbers needs a **declared** tolerance, such as the band of 0.05
@@ -5245,7 +5412,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 373 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 406 tests pass |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -5273,7 +5440,9 @@ third-party files are not reproduced. The check found no divergence of content, 
 missing, and corrected two earlier citations: the article on the benefit cap is by **Meyer**, Viscusi and Durbin,
 and Baltagi and Levin came out in *Structural Change and Economic Dynamics*. Two source reservations remain: the
 final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the sources consulted. SHELF is a
-protocol, not a book.
+protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
+proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
+check as the other 50 lines.
 
 ### D.2 Classics to begin with
 
@@ -5282,7 +5451,8 @@ protocol, not a book.
 | **[checked]** Bernoulli, *Ars Conjectandi* (1713) | The book that turned "probably" into an account. The rule of Laplace of this book is its daughter |
 | **[checked]** Hume, *Enquiry* (1748; the title *Enquiry* is from the 1758 edition) | The question that no statistics solves: why does the future resemble the past? |
 | **[checked]** Knight, *Risk, Uncertainty and Profit* (1921) | The distinction between measurable risk and uncertainty that cannot be measured, in Chapter 4 |
-| **[checked]** Savage, *The Foundations of Statistics* (1954) and Savage, *JASA* 46:55–67 (1951) | Where the idea of a proper rule comes from: betting against one's own belief is losing money |
+| **[checked]** Savage, *The Foundations of Statistics* (1954) and Savage, *JASA* 46:55–67 (1951) | Belief measured by betting, and the minimax-regret criterion of Chapter 11 |
+| **[to check]** Brier, *Monthly Weather Review* 78(1):1–3 (1950); Good, *JRSS B* 14(1):107–114 (1952); Savage, *JASA* 66(336):783–801 (1971) | Where the proper scoring rules come from: the quadratic score, the logarithmic score, and the theory that ties them to honest elicitation |
 | **[checked]** Wald, *Statistical Decision Functions* (1950) and Chernoff, *Econometrica* 22(4) (1954) | Deciding with loss, and not only with probability: the basis of Chapter 11 |
 | **[checked]** Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | Likelihood as a measure of evidence, and not as a final answer |
 | **[checked]** Tversky and Kahneman, "Judgment under Uncertainty" (1974) | The catalogue of mental shortcuts that Chapter 2 organizes by ignored model of chance |
@@ -5353,6 +5523,46 @@ reproduced; the numpy case of Appendix C shows why.
 The chapters teach with numbers measured by a fixed-seed instrument. Where a measured number differs from the
 value an earlier text or the course outline recorded, both values and the cause are kept here, chapter by
 chapter, so that the chapters can teach without carrying the comparison.
+
+### Rectifications of 2026-10-18
+
+A reading from outside, made after the inward audit of Chapter 15, found errors that the instruments reproduced
+faithfully, because the seed fixes a wrong account as well as a right one. Each was corrected in the code, given a test
+that would have caught it, and corrected in the text. The earlier value stays here, beside the corrected one.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 10 | Kelly fraction of the Peters coin | $f^* = 0.9p - 0.4 = 0.14$, growth $+0.0175$ | $f^* = p/a - (1-p)/b = 0.25$, growth $+0.006211$ | the formula omitted the division by $ab$ and used $p = 0.6$ for a fair coin |
+| 10 | "Full Kelly" in the cohort | $f = 0.70$, ruin 50.89% | $f = 0.25$, no ruin; $f = 0.70$ is 2.8 times Kelly, growth $-0.014200$ | consequence of the line above |
+| 10 | "Twice Kelly impoverishes" | $g(0.28)$ below zero | $g(0.50) = 0$ exactly; $g(0.28) > 0$ | idem |
+| 10 | Insurance seller | loss of 50%, all-in growth $+0.00714$ labelled "negative: ruin is certain" | loss of 95%, all-in growth $-0.00207$; Kelly 0.648 (true chance), 0.652 (Laplace) | with a 50% loss the all-in grew, so the example did not show what it claimed; the Kelly formula divided the edge by the gain only |
+| 10 | Volatility drag of the synthetic market | 0.0172, 0.0926, 0.2264 per year, $3\times$ above $2\times$ | 0.0156, 0.0623, 0.1402 per year, $2\times$ above $3\times$, as in the real index | the calibration dropped the factor of 252 sessions ($\sigma = 0.01518$ instead of 0.01111), and the drag was measured against the population mean instead of the sample mean |
+| 10 | "Fraction of the mean above the largest seen" | 0.000 | replaced by the share of each sample's sum held by its largest value, 0.088 | the old quantity is zero by definition |
+| 10 | Bernoulli's ship in time | shipowner from 1.94% to 2.18% per month | from $-0.0208$ to $-0.0182$, as in Chapter 11 | the two chapters used different accounts |
+| 11 | EVSI of the two tests | text 0.419 and 0; laboratory 0.2400 and 0.2450 | 0.2200 and 0.0000 | the laboratory chose the best act per state inside each branch (perfect information) and swapped the predictive values of the negative branch |
+| 11 | Mutual information of the two tests | "the same, 0.319 bit" | 0.241 and 0.079 bit | never measured; now measured |
+| 11 | Gumbel model of the dikes | levels 1.26 m at 100 and at 10,000 years; height 3.06 m | 4.76 and 8.27 m; height 7.56 m; mean of models 8.95 m | the $\xi \to 0$ branch returned $\mu$ and used $e^{-e^{+z}}$ for the exceedance |
+| 11 | "EVPI of the model set" | 18.427 m | spread of heights 13.92 m; EVPI 1.919 in cost units | a distance in metres is not a value of information |
+| 11 | Equalising the FNR | downwards: false positives 1,299 to 659 and negatives 270 to 206 | false positives to 1,778 ($+479$), negatives to 206 ($-64$); upwards: positives to 1,062, negatives to 309 | the old map lowered both errors at once, which no threshold can do; now a binormal ROC |
+| 11 | Chouldechova identity | "PPV of the identity" 0.0592 and 0.0904, "the identity accuses" | the identity returns the observed FPR exactly; the trilemma forces FPR 0.1769 on Black under the PPV and FNR of White | the formula used $1 - \mathrm{FPR}$ for FPR; an identity cannot fail on one group |
+| 11 | Column "PPV" of the trilemma table | 0.9408 and 0.9096 | 0.3491 and 0.2896 | the column printed another quantity |
+| 11 | Insurer with many contracts | $+0.100410$ per month with 1,000 contracts (mean minus half variance, failing for few contracts) | exact binomial account with 50,000 of capital per contract: $-0.018042$ with 1, $+0.001987$ with 1,000 | the approximation was outside its range |
+| 9 | Simpson standardised difference | "larger than that of any single stratum" | 5.37 points, between 6.44 and 4.25 | a standardised difference is a weighted mean of the stratum differences |
+| 9 | ICP laboratory | intercept free per environment under the null; empty set never tested; $\hat S = \{X\}$ in 8.0% of the rounds | one intercept under the null; empty set tested and rejected; $\hat S = \{X\}$ in 96% | the old test let the environment act directly on $Y$ |
+| 9 | Unstable mechanism | coefficient doubled at every site (naive slope 4.0004), $\{X\}$ accepted in 94% | coefficient 0.5, 2 and 3.5 by site, every set rejected | the instability term did not depend on the site |
+| 8 | Resolution of the constant forecaster | 0.0002 | 0.0000 | the boxes of equal mass split runs of identical forecasts |
+| 8 | Platt recalibration | fitted and scored on the same 4,000 days | fitted on the first 2,000, scored on the last 2,000 | the book's own rule asks for scoring out of the fit |
+| 8, 15, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
+| 5, 8, 10, 13, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
+| 13 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
+| 16 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
+| 17 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
+| 17 | 19 October 1987 | Friday | Monday | date |
+| 18 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
+| 6 | Exercise on Simpson | cases 81, 234, 192 and 55 | cases 87, 270, 263 and 80 | successes printed as cases |
+| 20 | Platt parameters | "a = 0.98, b = -0.54" | slope 0.98, intercept $-0.54$ | labels swapped against Chapter 8 |
+| 15, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
+| C | Test count | 373 | 406 | stale count, plus the tests added with these corrections |
 
 ### Chapter 4
 
@@ -5429,11 +5639,10 @@ do not coincide; both are reported.
 
 The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
 $3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
-in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) **is not reproduced** by this instrument, because, with
-the parameters calibrated by those two numbers, the model gives $3\times$ larger than $2\times$, and not
-smaller. The probable reason is the real tail. The Dow from 1885 to 2023 has 19/10/1987 and the 1929-32 run,
-which the Gaussian model does not have. The crash row, measured, is the evidence that the effect exists; the
-exact value of the growth at $3\times$ depends on which tail enters the count.
+in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
+$3\times$ above $2\times$, and the cause was attributed to the real tail. The cause was a calibration that dropped the
+factor of 252 sessions per year. With it restored, the Gaussian model puts $2\times$ above $3\times$ and gives drags
+that match those of the real index to the second decimal (see the rectifications above). The earlier attribution is recorded and withdrawn.
 
 ### Chapter 11
 
@@ -5442,11 +5651,13 @@ history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4
 value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
 with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. The instrument, with
 $\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
-reaches 4,26 m, measures 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m. The old heights come from a
+reaches 4,26 m, measured 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m until 2026-10-18, when the Gumbel branch was
+corrected (see the rectifications above). The old heights come from a
 set of models calibrated in another way, which this laboratory does not reproduce; the two sets
 stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
-control table of H1; this laboratory measures $+628$ (with $+274$ in the opposite direction), because the computation here
-starts from the rates by group instead of the units. The divergences are declared and no old value
+control table of H1; this laboratory measured $+628$ until 2026-10-18, with a map from FNR to FPR that moved both errors
+the same way, and now measures the trade-off of the rectifications above, because the computation here starts from the
+rates by group instead of the units. The divergences are declared and no old value
 was erased.
 
 ### Chapter 12
@@ -5469,7 +5680,8 @@ text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator 
 (`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
 `AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
 because that is the name of the code. The laboratory of this book measures the
-severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
+machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
 running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
 values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
 

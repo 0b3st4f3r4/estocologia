@@ -128,10 +128,16 @@ fn paired_day(
     (aggregated, fine)
 }
 
+/// The utilisation the staffing aims at: capacity = demand / 0.8. Declared on 2026-10-18; until
+/// then the capacity equalled the demand (utilisation 1), a critical queue with no steady state,
+/// where the measured waits were set by the length of the day rather than by the question.
+pub const TARGET_UTILISATION: f64 = 0.8;
+
 /// Measures the loss of resolving the same capacity question at the aggregate.
 ///
 /// The two arms spend the **same total resource**: the aggregate uses the mean capacity every day;
 /// the fine one uses the capacity of that day. Only the resolution of the question changes.
+/// Both arms staff for the declared utilisation of 0.8 of the demand they plan for.
 pub fn measure(
     seed: u64,
     days: usize,
@@ -139,7 +145,7 @@ pub fn measure(
     arrival_low: f64,
     arrival_high: f64,
 ) -> ResolutionLoss {
-    let mean = (arrival_low + arrival_high) / 2.0;
+    let mean = (arrival_low + arrival_high) / 2.0 / TARGET_UTILISATION;
     let mut rng = Rng::new(seed);
     let mut aggregated = Measure::default();
     let mut fine = Measure::default();
@@ -147,7 +153,7 @@ pub fn measure(
     for day in 0..days {
         let busy = day % 2 == 1;
         let lam = if busy { arrival_high } else { arrival_low };
-        let mu_fine = if busy { arrival_high } else { arrival_low };
+        let mu_fine = if busy { arrival_high } else { arrival_low } / TARGET_UTILISATION;
         let (a, f) = paired_day(&mut rng, hours_per_day, lam, mean, mu_fine);
         aggregated.add(a);
         fine.add(f);

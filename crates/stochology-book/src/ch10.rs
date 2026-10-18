@@ -39,26 +39,26 @@ impl SplitMix64 {
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Stake {
     All,
+    TwiceKelly,
     Kelly,
     HalfKelly,
-    QuarterKelly,
 }
 
 impl Stake {
     pub fn fraction(&self) -> f64 {
         match self {
             Stake::All => 1.0,
-            Stake::Kelly => 0.70,
-            Stake::HalfKelly => 0.35,
-            Stake::QuarterKelly => 0.14,
+            Stake::TwiceKelly => 2.0 * kelly_peters_coin(0.5),
+            Stake::Kelly => kelly_peters_coin(0.5),
+            Stake::HalfKelly => 0.5 * kelly_peters_coin(0.5),
         }
     }
     pub fn name(&self) -> &'static str {
         match self {
             Stake::All => "all-in (f = 1.00)",
-            Stake::Kelly => "full Kelly (f = 0.70)",
-            Stake::HalfKelly => "half Kelly (f = 0.35)",
-            Stake::QuarterKelly => "quarter Kelly (f = 0.14)",
+            Stake::TwiceKelly => "twice Kelly (f = 0.50)",
+            Stake::Kelly => "full Kelly (f = 0.25)",
+            Stake::HalfKelly => "half Kelly (f = 0.125)",
         }
     }
 }
@@ -126,10 +126,17 @@ pub fn kelly_even_odds(p: f64) -> f64 {
     2.0 * p - 1.0
 }
 
-/// Optimal Kelly fraction for the 5:4 payoff (heads +50%, tails -40%):
-/// f* = p|b| - (1-p)a = p(0.5 + 0.4) - 0.4 = 0.9p - 0.4: with p = 0.6, f* = 0.14.
+/// Optimal Kelly fraction for a binary bet that gains `b` with chance p and loses `a`
+/// with chance 1 - p: maximising p ln(1 + f b) + (1 - p) ln(1 - f a) gives
+/// f* = p/a - (1 - p)/b, the edge (p b - (1 - p) a) divided by the product a b.
+pub fn kelly_binary(p: f64, b: f64, a: f64) -> f64 {
+    p / a - (1.0 - p) / b
+}
+
+/// The Peters coin (heads +50%, tails -40%, chance 1/2 each): f* = 0.5/0.4 - 0.5/0.5 = 0.25.
+/// Twice that fraction, 0.50, has growth exactly zero; above it, the trajectory decays.
 pub fn kelly_peters_coin(p: f64) -> f64 {
-    p * 0.9 - 0.4
+    kelly_binary(p, 0.5, 0.4)
 }
 
 /// Ensemble mean and time mean of the Peters coin with the fraction f.
@@ -141,10 +148,13 @@ pub fn peters_coin_with_f(p: f64, f: f64) -> (f64, f64) {
 
 // ------------------------------------------------- the insurance seller
 
-/// Time growth of whoever stakes everything on the insurance seller's strategy:
-/// earns 1% per week with probability 1 - q and loses 50% with probability q.
+/// The insurance seller earns 1% per week and, with chance q, loses 95% of what is staked.
+pub const SELLER_GAIN: f64 = 0.01;
+pub const SELLER_LOSS: f64 = 0.95;
+
+/// Time growth of whoever stakes everything on the insurance seller's strategy.
 pub fn weekly_rate(q: f64) -> f64 {
-    (1.0 - q) * 1.01_f64.ln() + q * 0.5_f64.ln()
+    (1.0 - q) * (1.0 + SELLER_GAIN).ln() + q * (1.0 - SELLER_LOSS).ln()
 }
 
 /// A cohort of investors who estimate q from their own history and lever up.
@@ -198,8 +208,8 @@ pub fn insurers(
         } else {
             losses as f64 / weeks_history as f64
         };
-        let mu = 0.01;
-        let mut f = (((1.0 - q_hat) * mu - q_hat * 0.5) / mu).clamp(0.0, 1.0);
+        // Kelly for a gain of 1% against a loss of 95%, capped at f = 1 (no borrowing).
+        let mut f = kelly_binary(1.0 - q_hat, SELLER_GAIN, SELLER_LOSS).clamp(0.0, 1.0);
         if rule == Rule::HalfLaplace {
             f *= 0.5;
         }
@@ -209,9 +219,9 @@ pub fn insurers(
         let mut wealth = 1.0;
         for _ in 0..steps {
             if rng.uniform() < q {
-                wealth *= 1.0 - f * 0.5;
+                wealth *= 1.0 - f * SELLER_LOSS;
             } else {
-                wealth *= 1.0 + f * mu;
+                wealth *= 1.0 + f * SELLER_GAIN;
             }
         }
         if wealth < RUIN {
@@ -246,7 +256,7 @@ pub struct ParetoSample {
     pub median: f64,
     pub fraction_mean_below_true: f64,
     pub coverage_of_95_interval: f64,
-    pub fraction_of_mean_above_max_seen: f64,
+    pub share_of_sum_from_the_largest: f64,
 }
 
 /// Draws `repetitions` samples of size `n` from a Pareto with P(X > x) = x^(-alpha).
@@ -275,8 +285,7 @@ pub fn pareto_samples(seed: u64, n: usize, alpha: f64, repetitions: usize) -> Pa
             covers += 1;
         }
         let max = xs.iter().cloned().fold(f64::MIN, f64::max);
-        let above_max: f64 = xs.iter().filter(|x| **x > max).sum();
-        fraction_dominated_by_max += above_max / (mean * n as f64);
+        fraction_dominated_by_max += max / (mean * n as f64);
         means.push(mean);
     }
     means.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -287,7 +296,7 @@ pub fn pareto_samples(seed: u64, n: usize, alpha: f64, repetitions: usize) -> Pa
         median: means[repetitions / 2],
         fraction_mean_below_true: below as f64 / repetitions as f64,
         coverage_of_95_interval: covers as f64 / repetitions as f64,
-        fraction_of_mean_above_max_seen: fraction_dominated_by_max / repetitions as f64,
+        share_of_sum_from_the_largest: fraction_dominated_by_max / repetitions as f64,
     }
 }
 
@@ -333,6 +342,7 @@ pub struct Portfolio {
 pub fn long_leverage(seed: u64, sessions: usize, mu: f64, sigma: f64) -> Vec<Portfolio> {
     let mut rng = SplitMix64::new(seed);
     let returns: Vec<f64> = (0..sessions).map(|_| mu + sigma * rng.normal()).collect();
+    let sample_mean = returns.iter().sum::<f64>() / sessions as f64;
     [1.0, 2.0, 3.0]
         .iter()
         .map(|l| {
@@ -343,11 +353,14 @@ pub fn long_leverage(seed: u64, sessions: usize, mu: f64, sigma: f64) -> Vec<Por
                 wealth *= factor;
                 sum_log += factor.ln();
             }
+            // The drag is measured against the arithmetic mean of the returns actually drawn:
+            // measured against the population mu it would carry L times the sampling error
+            // of the mean, which over 100 000 sessions is of the size of the drag itself.
             Portfolio {
                 leverage: *l,
-                arithmetic_mean: *l * mu,
+                arithmetic_mean: *l * sample_mean,
                 time_growth: sum_log / sessions as f64,
-                drag: *l * mu - sum_log / sessions as f64,
+                drag: *l * sample_mean - sum_log / sessions as f64,
                 final_wealth: wealth,
             }
         })
@@ -362,8 +375,8 @@ pub fn theoretical_drag(mu: f64, sigma: f64) -> (f64, f64) {
 fn peters_coin() {
     println!("== Chapter 10 :: the Peters coin (heads +50%, tails -40%) ==");
     let (expectation, log_time) = coin_rates(0.5, 1.5, 0.6);
-    let f_optimal = kelly_peters_coin(0.6);
-    let (_, g_optimal) = peters_coin_with_f(0.6, f_optimal);
+    let f_optimal = kelly_peters_coin(0.5);
+    let (_, g_optimal) = peters_coin_with_f(0.5, f_optimal);
     println!(
         "ensemble mean per round = {:.4}  ({:+.2}% per round)",
         expectation,
@@ -379,17 +392,23 @@ fn peters_coin() {
         1.5 * 0.6
     );
     println!(
-        "full Kelly (5:4): f* = {:.4} of the wealth; with an even-odds payoff, 2p - 1 = {:.2}",
+        "full Kelly (heads +50%, tails -40%): f* = p/0.4 - (1-p)/0.5 = {:.4} of the wealth; even-odds bet with p = 0.6: 2p - 1 = {:.2}",
         f_optimal,
         kelly_even_odds(0.6)
     );
-    println!("time growth with full Kelly: {:+.4} per round", g_optimal);
+    println!(
+        "time growth per round: f* = {:+.6} | 2f* = {:+.6} | f = 0.70 {:+.6} | f = 1 {:+.6}",
+        g_optimal,
+        peters_coin_with_f(0.5, 2.0 * f_optimal).1,
+        peters_coin_with_f(0.5, 0.70).1,
+        peters_coin_with_f(0.5, 1.0).1
+    );
     println!();
     let stakes = [
         Stake::All,
+        Stake::TwiceKelly,
         Stake::Kelly,
         Stake::HalfKelly,
-        Stake::QuarterKelly,
     ];
     for a in stakes {
         let c = cohort(2026, 10_000, 1_000, a);
@@ -432,12 +451,23 @@ fn top_share_of_mean(seed: u64, trajectories: usize, steps: usize) -> f64 {
 
 fn insurance_seller() {
     println!(
-        "== Chapter 10 :: the insurance seller (earns 1% per week, loses 50% with q = 0.004) =="
+        "== Chapter 10 :: the insurance seller (earns 1% per week, loses 95% with q = 0.004) =="
     );
     let q = 0.004;
+    let g = weekly_rate(q);
     println!(
-        "time growth of the all-in: {:+.5} per week (negative: ruin is certain)",
-        weekly_rate(q)
+        "time growth of the all-in: {:+.5} per week ({})",
+        g,
+        if g < 0.0 {
+            "negative: the typical all-in trajectory decays"
+        } else {
+            "positive: the all-in grows in time"
+        }
+    );
+    println!(
+        "Kelly fraction with the true q: {:.3} | with Laplace after 250 clean weeks: {:.3} | with the raw frequency 0/250: capped at 1",
+        kelly_binary(1.0 - q, SELLER_GAIN, SELLER_LOSS),
+        kelly_binary(1.0 - 1.0 / 252.0, SELLER_GAIN, SELLER_LOSS)
     );
     for rule in [Rule::Frequency, Rule::Laplace, Rule::HalfLaplace] {
         let s = insurers(2026, 10_000, 250, 1_000, q, rule);
@@ -475,8 +505,8 @@ fn wild_tail() {
         );
     }
     println!(
-        "fraction of the mean that comes from values above the largest seen: {:.3}",
-        pareto_samples(99, 1_000_000, 1.1, 200).fraction_of_mean_above_max_seen
+        "share of each sample's sum that comes from its single largest value (n = 1 000 000): {:.3}",
+        pareto_samples(99, 1_000_000, 1.1, 200).share_of_sum_from_the_largest
     );
     println!(
         "in the median, {:.2}% of the true mean comes from values above the maximum of a sample of one million",
@@ -498,12 +528,14 @@ fn wild_tail() {
 
 fn dow_leverage() {
     println!("== Chapter 10 :: volatility drag at 1x, 2x and 3x ==");
-    // Calibration by the H1 drag (h1-real/README.md):
-    //   1/2 * sigma^2 * d = 0.14 per year at 3x, and g1 = 0.051 per year at 1x.
-    //   With d = 252 sessions: 4.5 sigma^2 = 0.14 -> sigma = 0.01518;
-    //   1x: m d - 1/2 sigma^2 d = 0.051 -> m d = 0.080 -> m = 0.000317 per session.
-    let mu = 0.000317;
-    let sigma = 0.01518;
+    // Calibration by the two numbers of the Dow (h1-real/README.md): a drag of 0.14 per year
+    // at 3x and a growth of 0.051 per year at 1x, with d = 252 sessions per year.
+    //   3x: 1/2 * 9 * sigma^2 * d = 0.14 -> sigma^2 = 0.14 / 1134 -> sigma = 0.01111 per session;
+    //   1x: (m - 1/2 sigma^2) d = 0.051 -> m d = 0.0666 -> m = 0.000264 per session.
+    // (Rectified 2026-10-18: the earlier calibration dropped the factor d in the first line and
+    // used sigma = 0.01518 and m = 0.000317, which inflated the drag and put 3x above 2x.)
+    let mu = 0.000264;
+    let sigma = 0.01111;
     let sessions = 100_000;
     for c in long_leverage(2026, sessions, mu, sigma) {
         println!(
@@ -585,5 +617,43 @@ mod tests {
         let f_optimal = kelly_peters_coin(0.5);
         let (_, time_kelly) = peters_coin_with_f(0.5, f_optimal);
         assert!(time_kelly > 0.0);
+    }
+
+    /// Property: the closed-form Kelly fraction maximises the growth over a dense grid,
+    /// and twice it has growth zero for the Peters coin.
+    #[test]
+    fn kelly_fraction_is_the_argmax_of_growth() {
+        let f_star = kelly_peters_coin(0.5);
+        assert!((f_star - 0.25).abs() < 1e-12);
+        let g = |f: f64| peters_coin_with_f(0.5, f).1;
+        let best = (1..2_500)
+            .map(|i| i as f64 / 1_000.0)
+            .fold(0.0_f64, |acc, f| if g(f) > g(acc) { f } else { acc });
+        assert!(
+            (best - f_star).abs() < 1e-3,
+            "grid argmax {best} against {f_star}"
+        );
+        assert!(g(2.0 * f_star).abs() < 1e-12);
+        for (p, b, a) in [(0.6, 1.0, 1.0), (0.55, 0.3, 0.2), (0.996, 0.01, 0.95)] {
+            let f = kelly_binary(p, b, a);
+            let h = |x: f64| p * (1.0 + x * b).ln() + (1.0 - p) * (1.0 - x * a).ln();
+            assert!(h(f) >= h(f - 1e-3) && h(f) >= h(f + 1e-3));
+        }
+    }
+
+    /// The drag measured against the sample mean follows L^2 sigma^2 / 2 within 5%.
+    #[test]
+    fn drag_grows_with_the_square_of_leverage() {
+        let sigma = 0.01111;
+        for p in long_leverage(2026, 100_000, 0.000264, sigma) {
+            let theory = 0.5 * p.leverage * p.leverage * sigma * sigma;
+            assert!(
+                (p.drag / theory - 1.0).abs() < 0.05,
+                "L = {}: {} vs {}",
+                p.leverage,
+                p.drag,
+                theory
+            );
+        }
     }
 }

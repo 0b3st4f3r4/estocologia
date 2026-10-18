@@ -111,6 +111,38 @@ if paper.is_file() and bin_labs.is_file() and not use_en:
         if value not in paper_text and value.replace(",", ".") not in paper_text:
             problems.append(f"paper/README.md diverges from {origin}: expected {value!r}")
 
+# Retired values (rectifications of 2026-10-18, Appendix E). Each was wrong and was reproduced faithfully by a
+# fixed-seed instrument; the chapters must not carry them again. Appendix E keeps them, with the corrected value,
+# so only the chapter files are scanned. This guard only stops a known error from coming back; it does not prove
+# that a number is right (the book is still, in part, its own source: docs/DECLARED_PROPOSALS.md, item 16).
+RETIRED = [
+    ("0.9p - 0.4", "Kelly of the Peters coin: f* = p/a - (1-p)/b = 0.25"),
+    ("f = 0.70)", "the old 'full Kelly' of the cohort"),
+    ("+0.0175", "old Kelly growth"),
+    ("50.89", "old ruin of the mislabelled full Kelly"),
+    ("46.24", "R-axis loss at utilisation 1"),
+    ("5.97 min", "R-axis loss at utilisation 1"),
+    ("0.2450", "EVSI that chose the best act per state"),
+    ("0.419", "EVSI of the old text"),
+    ("0.319 bit", "mutual information never measured"),
+    ("0.0592", "PPV of the miscoded identity"),
+    ("18.427", "EVPI in metres"),
+    ("+0.100410", "insurer under the failed approximation"),
+    ("4.0004", "unstable mechanism that was not unstable"),
+    ("RES 0.0002", "resolution of a constant forecaster"),
+    ("133 times", "ratio against a resolution that is zero"),
+    ("Friday that erased", "19 October 1987 was a Monday"),
+    ("min_t |r_t|", "ruin leverage uses |min r|"),
+    ("larger than that of any single stratum", "a standardised difference lies between the strata"),
+    ("No published number fell", "the outside reading found errors"),
+    ("does not converge", "the mean of a tail with index above 1 exists"),
+]
+for chapter in sorted((ROOT / "book").glob("ch*.md")):
+    body = chapter.read_text(encoding="utf-8")
+    for needle, why in RETIRED:
+        if needle in body:
+            problems.append(f"{chapter.name}: retired value {needle!r} is back ({why})")
+
 if problems:
     print("problems in assembled book:")
     for p in problems:

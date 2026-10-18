@@ -114,14 +114,25 @@ pub fn evaluate(f: &Card) -> Vec<Failure> {
         });
     }
 
+    // The type III lock is syntactic, and that is its declared limit: it checks that the
+    // question ends in "?" and quotes the action of the package literally. It cannot tell
+    // whether the question is the one the decision maker needs; a question that quotes the
+    // action and asks something irrelevant passes (see the test that pins this limit).
     let question = f.decision_maker_question.trim();
     let action = f.package_action.trim().to_lowercase();
     let matches_action = !action.is_empty() && question.to_lowercase().contains(&action);
-    if !question.ends_with('?') || !matches_action {
+    let detail = match (question.ends_with('?'), matches_action) {
+        (true, true) => None,
+        (false, true) => Some("decision_maker_question does not end in ?"),
+        (true, false) => Some("decision_maker_question does not quote the package action"),
+        (false, false) => {
+            Some("decision_maker_question neither ends in ? nor quotes the package action")
+        }
+    };
+    if let Some(detail) = detail {
         failures.push(Failure {
             gate: Gate::TypeIII,
-            detail: "decision_maker_question has to end in ? and quote the package action"
-                .to_string(),
+            detail: detail.to_string(),
         });
     }
 
@@ -231,6 +242,28 @@ mod tests {
         f.decision_maker_question = "should we keep the 3x fund".to_string();
         let failures = evaluate(&f);
         assert!(failures.iter().any(|x| x.gate == Gate::TypeIII));
+    }
+
+    #[test]
+    fn the_type_iii_lock_names_the_missing_part() {
+        let mut f = good_card();
+        f.decision_maker_question = "should we keep the 3x fund or reduce it to 1x".to_string();
+        let d = &evaluate(&f)[0].detail;
+        assert!(d.contains("does not end in ?"), "{d}");
+        f.decision_maker_question = "should we keep the 3x fund?".to_string();
+        let d = &evaluate(&f)[0].detail;
+        assert!(d.contains("does not quote the package action"), "{d}");
+    }
+
+    /// Declared limit, pinned so that it cannot be forgotten: the lock is syntactic. A question
+    /// that quotes the action and ends in "?" passes even when it is not the decision maker's
+    /// question. If the lock is ever made semantic, this test must be rewritten, not deleted.
+    #[test]
+    fn declared_limit_the_type_iii_lock_does_not_read_meaning() {
+        let mut f = good_card();
+        f.decision_maker_question =
+            "is the colour of the report nicer if we reduce it to 1x?".to_string();
+        assert!(!evaluate(&f).iter().any(|x| x.gate == Gate::TypeIII));
     }
 
     #[test]

@@ -12,7 +12,7 @@ example. The order is alphabetical.
 | **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
 | **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
 | **Background audit** | A front that tests an assumption of the program itself, with a declaration written before running | The teacher who redoes the exam before applying it to the students, with the answer key sealed |
-| **Adversarial panel** | The stage in which someone attacks the work live, looking for where it breaks, before approving | The practice in which the coach makes the reserve team play against the starters, without mercy |
+| **Adversarial panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it scores declarations with a reproducible number and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
 | **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
 | **Bayes (rule of)** | The rule that says how today's belief is updated with the evidence of now, starting from yesterday's belief | A positive pregnancy test in a low-risk person can still be a false positive most of the time |
 | **Brier (score of)** | The mean of the squared error of a probabilistic forecast: lower is better, and 0 is perfect | Betting 90% on a game and losing costs more on the scoreboard than betting 55% and losing |
@@ -33,10 +33,10 @@ example. The order is alphabetical.
 | **Type I error** | Raising the alarm when there was nothing | The smoke detector that goes off while the bread is toasting |
 | **Type II error** | Not raising the alarm when there was something | The detector with a weak battery that stays silent in the fire |
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
-| **Type M error** | Getting the size of the effect wrong, too large or too small | "3 centimetres of rain" when it was 30 millimetres |
+| **Type M error** | Getting the size of the effect wrong, too large or too small | "3 centimetres of rain" when it was 3 millimetres |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
 | **Scalonomy** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
-| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool in which guessing the most likely outcome, and not your heart's team, is what scores |
+| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
 | **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
 | **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
 | **Fluxonomy** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
@@ -52,7 +52,7 @@ example. The order is alphabetical.
 | **Invariants $\Phi_1$ to $\Phi_5$** | The five boundary conditions every claim must satisfy: simulability ($\Phi_1$), independent unit ($\Phi_2$), severe test ($\Phi_3$), scope and exit clause ($\Phi_4$) and resolution of the question ($\Phi_5$) | The five locks of the sheet that reject a work before the argument |
 | **$\Phi_5$ (resolution of the question)** | The invariant that rejects aggregated decision ($R_0$) when the independent unit is the day or coarser | Scaling by the average day when the clinic alternates between calm and surge |
 | **Jensen (inequality of)** | The mean of a curved function is not the function of the mean | The average waiting time grows when arrivals oscillate, even with the same average arrival |
-| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run | Betting 20% when the chance is 60% at 1 to 1; betting everything leads to ruin |
+| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
 | **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
 | **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
 | **Lenses (the five)** | The five fixed ways of looking of the program: scale, current, form, time and judgement | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
@@ -72,11 +72,12 @@ example. The order is alphabetical.
 | **Ruin** | Reaching zero and no longer being able to play, regardless of the average of the bets | Whoever uses the whole credit card at the limit loses the right to stay in the game |
 | **Saturation** | When the environment is a function of the variables of the set, and the test has no way of rejecting | Counting the traffic light's colour to forecast the traffic light's colour |
 | **Fixed seed** | The starting point of the draw, declared so that two machines produce the same world | The recipe with the exact amount, so that the cake comes out the same at the neighbour's house |
-| **Severity** | The chance that the procedure would have gone wrong if the claim were false | The exam that is only useful if it detects the disease when it exists |
+| **Severity** | The chance that the procedure would have given a less favourable result if the claim were false | The fire drill that counts only because the alarm would have rung had there been smoke |
 | **SHELF** | The protocol for eliciting experts by median, quartiles and extremes | Asking the doctor not for a guess, but for a range and a most probable value |
 | **$t_{\mathrm{disp}}$ (clock)** | The instant at which each datum becomes knowable | The exam result that only exists after it leaves the laboratory |
 | **Scope term** | The declaration of where the conclusion holds and where it does not | "This holds for the morning shift; at the weekend the queue is another one" |
 | **Chouldechova's trilemma** | With different base rates between groups, calibration and equal error rates are incompatible | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
+| **Inspection paradox** | Sampling by arrival over-represents the long intervals, so the experience of the average arrival is worse than the average interval | Asked how long they waited, most patients answer from the busy days, because most of them came on busy days |
 | **Independent unit** | The smallest unit whose observations do not share the same source of variation | The school, and not the student, when students of the same school resemble one another |
 | **Likelihood** | The chance of seeing what was seen, supposing each hypothesis true | "How likely is this stain on the roof if it is rain? And if it is seepage?" |
 | **Bias (three senses)** | Distortion of the datum, of the estimator and of the mind, and the three accumulate | An uncalibrated scale, an average that mixes weights and the haste of whoever reads the number |
@@ -89,20 +90,20 @@ example. The order is alphabetical.
 
 | Symbol | Read in English | In Rust code |
 | --- | --- | --- |
-| $\sum_{k=1}^{n} a_k$ | "Add up everything that comes after, from $k$ equal to 1 to $n$" | `let soma: f64 = a.iter().sum();` |
-| $\mathbb{E}[X]$ | "The long-run mean of $X$" | `let media = x.iter().sum::<f64>() / x.len() as f64;` |
-| $\operatorname{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - media).powi(2)).sum::<f64>() / x.len() as f64;` |
+| $\sum_{k=1}^{n} a_k$ | "Add up everything that comes after, from $k$ equal to 1 to $n$" | `let sum: f64 = a.iter().sum();` |
+| $\mathbb{E}[X]$ | "The long-run mean of $X$" | `let mean = x.iter().sum::<f64>() / x.len() as f64;` |
+| $\operatorname{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - mean).powi(2)).sum::<f64>() / x.len() as f64;` |
 | $\sigma$ or $\mathrm{dp}$ | "Standard deviation: the square root of the variance, in the same unit as $X$" | `let dp = var.sqrt();` |
-| $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_dado_b } else { p_a_dado_nao_b }` |
-| $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = funcao(x_fixo);` — instead of `let y = funcao(x_observado);` |
+| $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_given_b } else { p_a_given_not_b }` |
+| $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = f(x_fixed);` — instead of `let y = f(x_observed);` |
 | $\ln$ | "Natural logarithm: the exponent of Euler's number that returns the value" | `let z = valor.ln();` |
 | $\log_{10}$ | "Logarithm in base 10" | `let d = 10.0 * razao.log10();` (decibans) |
 | $\ge$ | "Is greater than or equal to" | `a >= b` |
 | $\approx$ | "Approximately equal", within a declared tolerance | `(a - b).abs() < 1e-9` |
 | $\sqrt{x}$ | "The square root of $x$" | `x.sqrt()` |
 | $x^2$ | "The square of $x$" | `x.powi(2)` |
-| $\alpha$ | "The false-alarm level that is accepted: 5% is the usual one" | `const ALFA: f64 = 0.05;` |
-| $1 - \alpha$ | "The promised coverage of the procedure: 95% in the usual case" | `let cobertura = 1.0 - ALFA;` |
+| $\alpha$ | "The false-alarm level that is accepted: 5% is the usual one" | `const ALPHA: f64 = 0.05;` |
+| $1 - \alpha$ | "The promised coverage of the procedure: 95% in the usual case" | `let coverage = 1.0 - ALPHA;` |
 | $\hat{S}$ | "The set returned by the method, with the hat of estimated" | `let s_hat: Vec<usize> = ...;` |
 | $\emptyset$ | "The empty set: the method pointed at nothing" | `Vec::new()` |
 | $\cap$ and $\subseteq$ | "The intersection of two sets" and "is contained in" | `a.iter().filter(\|x\| b.contains(x)).count()` |
@@ -118,12 +119,12 @@ example. The order is alphabetical.
 | $P(H \mid E) = \frac{P(E \mid H)P(H)}{P(E)}$ | Today's belief is yesterday's multiplied by the strength of the evidence | posterior odds $=$ prior odds $\times$ likelihood ratio |
 | $10\log_{10}\text{RV}$ | The strength of the evidence in decibans: every 10 dB is a factor of 10 | `10.0 * rv.log10()` |
 | $\operatorname{Brier} = \frac{1}{n}\sum (p_i - y_i)^2$ | The mean of the squared error of a probabilistic forecast | `p.iter().zip(y).map(\|(a,b)\| (a-b).powi(2)).sum::<f64>() / n as f64` |
-| $\text{habilidade} = 1 - \operatorname{Brier}/\operatorname{Brier}_{\text{clima}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
+| $\text{skill} = 1 - \operatorname{Brier}/\operatorname{Brier}_{\text{clim}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
 | $\mathrm{ECE} = \sum_k \frac{n_k}{n}\lvert \bar{p}_k - \bar{y}_k\rvert$ | The mean distance between predicted and observed, band by band | 10 boxes of equal mass, summing the weighted absolute difference |
 | $f^* = 2p - 1$ | The Kelly fraction for a bet that pays the same as it risks | `let f = 2.0 * p - 1.0;` |
 | $\frac{s+1}{n+2}$ | The rule of Laplace: one imaginary success and one imaginary failure | `(s + 1.0) / (n + 2.0)` |
 | $W_{M/M/1} = \frac{\rho}{\mu - \lambda}$ | The average wait in a queue with one server grows on a curve | Do not use the mean to decide the scale: simulate the day |
-| $\mathrm{CITL} = \bar{p} - \bar{y}$ | The level deviation: how much the average forecast misses the observed rate | `media(p) - media(y)` |
+| $\mathrm{CITL} = \bar{p} - \bar{y}$ | The level deviation: how much the average forecast misses the observed rate | `mean(p) - mean(y)` |
 
 **A reading warning.** In Rust, `f64` holds about 15 to 16 digits. Therefore $\approx$ is never
 equality, and every comparison of measured numbers needs a **declared** tolerance, such as the band of 0.05
@@ -147,7 +148,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 373 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 406 tests pass |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -175,7 +176,9 @@ third-party files are not reproduced. The check found no divergence of content, 
 missing, and corrected two earlier citations: the article on the benefit cap is by **Meyer**, Viscusi and Durbin,
 and Baltagi and Levin came out in *Structural Change and Economic Dynamics*. Two source reservations remain: the
 final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the sources consulted. SHELF is a
-protocol, not a book.
+protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
+proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
+check as the other 50 lines.
 
 ### D.2 Classics to begin with
 
@@ -184,7 +187,8 @@ protocol, not a book.
 | **[checked]** Bernoulli, *Ars Conjectandi* (1713) | The book that turned "probably" into an account. The rule of Laplace of this book is its daughter |
 | **[checked]** Hume, *Enquiry* (1748; the title *Enquiry* is from the 1758 edition) | The question that no statistics solves: why does the future resemble the past? |
 | **[checked]** Knight, *Risk, Uncertainty and Profit* (1921) | The distinction between measurable risk and uncertainty that cannot be measured, in Chapter 4 |
-| **[checked]** Savage, *The Foundations of Statistics* (1954) and Savage, *JASA* 46:55–67 (1951) | Where the idea of a proper rule comes from: betting against one's own belief is losing money |
+| **[checked]** Savage, *The Foundations of Statistics* (1954) and Savage, *JASA* 46:55–67 (1951) | Belief measured by betting, and the minimax-regret criterion of Chapter 11 |
+| **[to check]** Brier, *Monthly Weather Review* 78(1):1–3 (1950); Good, *JRSS B* 14(1):107–114 (1952); Savage, *JASA* 66(336):783–801 (1971) | Where the proper scoring rules come from: the quadratic score, the logarithmic score, and the theory that ties them to honest elicitation |
 | **[checked]** Wald, *Statistical Decision Functions* (1950) and Chernoff, *Econometrica* 22(4) (1954) | Deciding with loss, and not only with probability: the basis of Chapter 11 |
 | **[checked]** Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | Likelihood as a measure of evidence, and not as a final answer |
 | **[checked]** Tversky and Kahneman, "Judgment under Uncertainty" (1974) | The catalogue of mental shortcuts that Chapter 2 organizes by ignored model of chance |
@@ -255,6 +259,46 @@ reproduced; the numpy case of Appendix C shows why.
 The chapters teach with numbers measured by a fixed-seed instrument. Where a measured number differs from the
 value an earlier text or the course outline recorded, both values and the cause are kept here, chapter by
 chapter, so that the chapters can teach without carrying the comparison.
+
+### Rectifications of 2026-10-18
+
+A reading from outside, made after the inward audit of Chapter 15, found errors that the instruments reproduced
+faithfully, because the seed fixes a wrong account as well as a right one. Each was corrected in the code, given a test
+that would have caught it, and corrected in the text. The earlier value stays here, beside the corrected one.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 10 | Kelly fraction of the Peters coin | $f^* = 0.9p - 0.4 = 0.14$, growth $+0.0175$ | $f^* = p/a - (1-p)/b = 0.25$, growth $+0.006211$ | the formula omitted the division by $ab$ and used $p = 0.6$ for a fair coin |
+| 10 | "Full Kelly" in the cohort | $f = 0.70$, ruin 50.89% | $f = 0.25$, no ruin; $f = 0.70$ is 2.8 times Kelly, growth $-0.014200$ | consequence of the line above |
+| 10 | "Twice Kelly impoverishes" | $g(0.28)$ below zero | $g(0.50) = 0$ exactly; $g(0.28) > 0$ | idem |
+| 10 | Insurance seller | loss of 50%, all-in growth $+0.00714$ labelled "negative: ruin is certain" | loss of 95%, all-in growth $-0.00207$; Kelly 0.648 (true chance), 0.652 (Laplace) | with a 50% loss the all-in grew, so the example did not show what it claimed; the Kelly formula divided the edge by the gain only |
+| 10 | Volatility drag of the synthetic market | 0.0172, 0.0926, 0.2264 per year, $3\times$ above $2\times$ | 0.0156, 0.0623, 0.1402 per year, $2\times$ above $3\times$, as in the real index | the calibration dropped the factor of 252 sessions ($\sigma = 0.01518$ instead of 0.01111), and the drag was measured against the population mean instead of the sample mean |
+| 10 | "Fraction of the mean above the largest seen" | 0.000 | replaced by the share of each sample's sum held by its largest value, 0.088 | the old quantity is zero by definition |
+| 10 | Bernoulli's ship in time | shipowner from 1.94% to 2.18% per month | from $-0.0208$ to $-0.0182$, as in Chapter 11 | the two chapters used different accounts |
+| 11 | EVSI of the two tests | text 0.419 and 0; laboratory 0.2400 and 0.2450 | 0.2200 and 0.0000 | the laboratory chose the best act per state inside each branch (perfect information) and swapped the predictive values of the negative branch |
+| 11 | Mutual information of the two tests | "the same, 0.319 bit" | 0.241 and 0.079 bit | never measured; now measured |
+| 11 | Gumbel model of the dikes | levels 1.26 m at 100 and at 10,000 years; height 3.06 m | 4.76 and 8.27 m; height 7.56 m; mean of models 8.95 m | the $\xi \to 0$ branch returned $\mu$ and used $e^{-e^{+z}}$ for the exceedance |
+| 11 | "EVPI of the model set" | 18.427 m | spread of heights 13.92 m; EVPI 1.919 in cost units | a distance in metres is not a value of information |
+| 11 | Equalising the FNR | downwards: false positives 1,299 to 659 and negatives 270 to 206 | false positives to 1,778 ($+479$), negatives to 206 ($-64$); upwards: positives to 1,062, negatives to 309 | the old map lowered both errors at once, which no threshold can do; now a binormal ROC |
+| 11 | Chouldechova identity | "PPV of the identity" 0.0592 and 0.0904, "the identity accuses" | the identity returns the observed FPR exactly; the trilemma forces FPR 0.1769 on Black under the PPV and FNR of White | the formula used $1 - \mathrm{FPR}$ for FPR; an identity cannot fail on one group |
+| 11 | Column "PPV" of the trilemma table | 0.9408 and 0.9096 | 0.3491 and 0.2896 | the column printed another quantity |
+| 11 | Insurer with many contracts | $+0.100410$ per month with 1,000 contracts (mean minus half variance, failing for few contracts) | exact binomial account with 50,000 of capital per contract: $-0.018042$ with 1, $+0.001987$ with 1,000 | the approximation was outside its range |
+| 9 | Simpson standardised difference | "larger than that of any single stratum" | 5.37 points, between 6.44 and 4.25 | a standardised difference is a weighted mean of the stratum differences |
+| 9 | ICP laboratory | intercept free per environment under the null; empty set never tested; $\hat S = \{X\}$ in 8.0% of the rounds | one intercept under the null; empty set tested and rejected; $\hat S = \{X\}$ in 96% | the old test let the environment act directly on $Y$ |
+| 9 | Unstable mechanism | coefficient doubled at every site (naive slope 4.0004), $\{X\}$ accepted in 94% | coefficient 0.5, 2 and 3.5 by site, every set rejected | the instability term did not depend on the site |
+| 8 | Resolution of the constant forecaster | 0.0002 | 0.0000 | the boxes of equal mass split runs of identical forecasts |
+| 8 | Platt recalibration | fitted and scored on the same 4,000 days | fitted on the first 2,000, scored on the last 2,000 | the book's own rule asks for scoring out of the fit |
+| 8, 15, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
+| 5, 8, 10, 13, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
+| 13 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
+| 16 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
+| 17 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
+| 17 | 19 October 1987 | Friday | Monday | date |
+| 18 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
+| 6 | Exercise on Simpson | cases 81, 234, 192 and 55 | cases 87, 270, 263 and 80 | successes printed as cases |
+| 20 | Platt parameters | "a = 0.98, b = -0.54" | slope 0.98, intercept $-0.54$ | labels swapped against Chapter 8 |
+| 15, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
+| C | Test count | 373 | 406 | stale count, plus the tests added with these corrections |
 
 ### Chapter 4
 
@@ -331,11 +375,10 @@ do not coincide; both are reported.
 
 The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
 $3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
-in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) **is not reproduced** by this instrument, because, with
-the parameters calibrated by those two numbers, the model gives $3\times$ larger than $2\times$, and not
-smaller. The probable reason is the real tail. The Dow from 1885 to 2023 has 19/10/1987 and the 1929-32 run,
-which the Gaussian model does not have. The crash row, measured, is the evidence that the effect exists; the
-exact value of the growth at $3\times$ depends on which tail enters the count.
+in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
+$3\times$ above $2\times$, and the cause was attributed to the real tail. The cause was a calibration that dropped the
+factor of 252 sessions per year. With it restored, the Gaussian model puts $2\times$ above $3\times$ and gives drags
+that match those of the real index to the second decimal (see the rectifications above). The earlier attribution is recorded and withdrawn.
 
 ### Chapter 11
 
@@ -344,11 +387,13 @@ history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4
 value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
 with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. The instrument, with
 $\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
-reaches 4,26 m, measures 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m. The old heights come from a
+reaches 4,26 m, measured 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m until 2026-10-18, when the Gumbel branch was
+corrected (see the rectifications above). The old heights come from a
 set of models calibrated in another way, which this laboratory does not reproduce; the two sets
 stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
-control table of H1; this laboratory measures $+628$ (with $+274$ in the opposite direction), because the computation here
-starts from the rates by group instead of the units. The divergences are declared and no old value
+control table of H1; this laboratory measured $+628$ until 2026-10-18, with a map from FNR to FPR that moved both errors
+the same way, and now measures the trade-off of the rectifications above, because the computation here starts from the
+rates by group instead of the units. The divergences are declared and no old value
 was erased.
 
 ### Chapter 12
@@ -371,7 +416,8 @@ text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator 
 (`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
 `AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
 because that is the name of the code. The laboratory of this book measures the
-severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
+machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
 running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
 values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
 
