@@ -4735,7 +4735,7 @@ $\varepsilon = 2$ per person, and the privacy circuit breaker removed the cohort
 **The calibration tolerance, again.** Chapter 8 measured the noise of the calibration error in these same six
 vaults: with a tolerance that depends on $n$, none of them passes, not even the three approved ones, because in the
 large vaults the noise is from 0.002 to 0.006 and 0.03 lets detectable miscalibration through. By the secondary
-rule, which requires $\max(0.03;\ \text{95% quantile})$, the picture goes back to what it was: the three approved
+rule, which requires $\max(0.03;\ \text{95\% quantile})$, the picture goes back to what it was: the three approved
 vaults stay approved and the two from Toronto stay failed. And the failure of Toronto of 1997–2002 stops looking
 like noise. It was signal.
 
