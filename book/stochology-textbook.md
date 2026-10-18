@@ -1,6 +1,6 @@
 # Stochology: A Textbook
 
-**Edition in 21 chapters** · five parts · a three-step ramp per chapter
+**21 chapters** · five parts · a three-step ramp per chapter
 
 Oct 16, 2026 · Silvano Neto
 
@@ -12,11 +12,11 @@ This book teaches Stochology from end to end. The text presents the concepts of 
 in an auditable architecture and the behaviour of that architecture when put to the test on real data, from
 horizon H0 to H3. The research that sustains it was closed on October 15, 2026.
 
-**What changed in this edition.** The previous edition had 14 chapters and assumed university-level calculus and
-probability already mastered. This edition unfolds that content into 21 chapters, grouped into five parts, and
+**What changed since the earlier text.** The earlier text had 14 chapters and assumed university-level calculus and
+probability already mastered. This book unfolds that content into 21 chapters, grouped into five parts, and
 builds a **continuous pedagogical ramp**. The first step of each chapter uses only High School mathematics
 (proportions, sets, means, counting trees, graphs of first- and second-degree functions). Nothing from the
-previous edition was thrown away. Every idea, every theorem and every number of the research remains here,
+earlier text was thrown away. Every idea, every theorem and every number of the research remains here,
 redistributed into smaller steps.
 
 **Who it is for.** The book serves four readers. The first is the High School student who wants to understand
@@ -25,16 +25,16 @@ who has already seen basic probability. The third is the data professional, who 
 passed the test fails in production. The fourth is the decision-maker, who reads a number and needs to know how
 far it authorizes them to conclude.
 
-**What is assumed.** In this edition, for Steps 1 and 2, only arithmetic, percentages, proportions and graph
+**What is assumed.** In this book, for Steps 1 and 2, only arithmetic, percentages, proportions and graph
 reading. Calculus and linear algebra appear only where the text warns, and always after the geometric
 intuition. The laboratories are written in **Rust**, with a fixed seed, in the crate
 `crates/stochology-book`; whoever does not program can read the output of the laboratories, which is quoted in
 the text, and skip the exercises marked as *Laboratory*.
 
 **One rule that holds for the whole book.** Every number quoted here comes from an instrument that the reader
-can run. When a number in this edition diverges from the number published in the previous edition or in a
+can run. When a number in this book diverges from the number recorded in the earlier text or in a
 course outline, the divergence is **declared in the text**, with both values, instead of hidden. It is the rule
-that the research applies to itself (section 9.7 of the previous edition, today Part V, Chapter 21).
+that the research applies to itself (section 9.7 of the earlier text, today Part V, Chapter 21).
 
 ---
 
@@ -129,7 +129,7 @@ in commit `1bfec905`. Mentions of the old fronts in the text are **historical**,
 from, not a live path.
 
 **Divergence declaration.** When this book quotes a number from the research repository and the instrument of
-this edition returns another, both appear, with the probable cause.
+this book returns another, both appear, with the probable cause.
 
 The exercises come in three types: *(Concept)* requires words; *(Count)* requires a number; *(Laboratory)*
 requires code that reproduces the result.
@@ -898,7 +898,7 @@ from 0.1564 to 0.0240 while the bias walks out of it. The model that forgets the
 **5.7 times wider**, covers 93.98%, close to the nominal value. The price of honesty is the width of the
 interval; the price of stubbornness is false confidence.
 
-**Divergence declaration.** The previous edition of this book (and the course outline) records 11% coverage
+**Divergence declaration.** The earlier text of this book (and the course outline) records 11% coverage
 for the fixed model and 99% for the model with forgetting, with widths from 0.140 to 0.035. This instrument,
 with 6,400 steps and discount 0.99, measures **12%** and **93.98%**, with widths from 0.1564 to 0.0240 and a
 ratio of 5.7×. The coverage of the fixed model agrees within one percentage point; the coverage of the model
@@ -1429,7 +1429,7 @@ association, and it gets stronger the narrower the door (−0.617 with 24% selec
 memory, 25 when the chain is sticky (persistence 0.8) and 327 when the letters alternate (persistence
 0.235), the number Markov found in *Onegin*.
 
-**Divergence declaration.** The previous edition of this book records, for the same Berkson simulation,
+**Divergence declaration.** The earlier text of this book records, for the same Berkson simulation,
 a correlation of $+0.002$ in the population and $−0.669$ among the selected; this instrument measures
 $+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
 from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
@@ -1705,7 +1705,7 @@ seed 2026 gives severities 9, 8, 10, 9, 8, 9, 8 and 10 on a sheet with the eight
 one band without its safeguard is enough for the lowest severity to fall to 2 and the approval to vanish. The AND of the eight does not
 forgive.
 
-**Divergence declaration.** The previous edition of this book records 73% of winners that "look
+**Divergence declaration.** The earlier text of this book records 73% of winners that "look
 better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
 $p = 0.04$ of the garden. This instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
 with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
@@ -1977,7 +1977,7 @@ when $n$ is 24,466 or 104,489. In the large vaults it almost prohibits nothing. 
 forecasts, not only on $n$. With $n = 1,488$, the q50 of the null ECE goes from 0.0320 with concentrated forecasts
 to 0.0243 with spread forecasts.
 
-**Divergence declaration.** The previous edition records, for an example of 4,000 events, an overconfident
+**Divergence declaration.** The earlier text records, for an example of 4,000 events, an overconfident
 forecaster that goes from Brier 0.1956 to 0.1851 with Platt, an honest expert at 0.1846 and a noisy forecaster
 that goes from 0.2154 to 0.2089. This instrument measures **0.1712 → 0.1559**, **0.1560** and
 **0.2119 → 0.1755**. The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
@@ -2664,7 +2664,7 @@ $\mu - \tfrac12 \sigma^2 L^2$. The 1987 crash, alone, takes **67.8%** of the cap
 22.6% at $1\times$; ruin starts at $L = 4.4$. With a crash planted in the middle of 20,000 sessions,
 the growth of $3\times$ sits at $-0.000274$ per session, below $1\times$ and $2\times$. **A single day changes the order**.
 
-**Divergence declaration.** The previous edition records 35.8% of ruin for whoever stakes by their own
+**Divergence declaration.** The earlier text records 35.8% of ruin for whoever stakes by their own
 history and 0% with Laplace. This instrument measures 36.8% of "all-in" and **0.00% of ruin** with
 any of the rules. A declared lock explains why. Kelly is limited to $f \le 1$ (one does not
 stake more than one has), and with $f = 1$ a trader who earns 1% per week and loses at most
@@ -3046,7 +3046,7 @@ read as a probability of risk.** It is the numerical translation of what the ide
 observed rates, the predictor cannot be calibrated by group and keep the error rates equal in the
 two.
 
-**Divergence declaration.** The previous edition records 35,8% of ruin for whoever bets by their own
+**Divergence declaration.** The earlier text records 35,8% of ruin for whoever bets by their own
 history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4,76 m (expected
 value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
 with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. This instrument, with
@@ -3395,11 +3395,11 @@ two rules pass the invariance test with tolerance 0,5. When the middle regime re
 40 instead of 10, the invariance **fails** (9,96 against 40,09, step of 30,13). The marginal slope is a
 number; the slope by regime is a structure.
 
-**Divergence declaration.** The previous edition of this book, in Chapter 6, presents the three samples of
+**Divergence declaration.** The earlier text of this book, in Chapter 6, presents the three samples of
 Hill with values close to $1{,}81$; this instrument measures 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
 ($k = 1\,000$) and 1,8032 ($k = 2\,000$). The difference is one of sampling and of cutoff, not of formula — the value
 published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
-previous edition and the plan of the repository count gates in different ways: the old book describes
+earlier text and the plan of the repository count gates in different ways: the old book describes
 **five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
 governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
 G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
@@ -3784,11 +3784,11 @@ outside between 1% and 99%. The interval exists for a practical reason. A probab
 scored by a proper rule nor would it be corrected by the scoreboard. The limit separates a forecaster from a
 dogmatic assertion.
 
-**Divergence declaration.** The previous edition of this book speaks of "eight tracks and an orchestrator M15". The
+**Divergence declaration.** The earlier text of this book speaks of "eight tracks and an orchestrator M15". The
 text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
 (`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
 `AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
-because that is the name of the code. The laboratory of this edition measures the
+because that is the name of the code. The laboratory of this book measures the
 severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
 running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
 values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
@@ -4670,7 +4670,7 @@ worlds, and the tail separates far more. **Reinforcement in the surge is 2.5 min
 have. **10.2 min, 49.4 sd, 0.0000.** The difference between the worlds is too large to come from chance, and the
 procedure could have come out wrong and did not.
 
-**Divergence declaration.** The previous edition of this book and `h0-lab0/README.md` record 9.3 min and 20.7 min
+**Divergence declaration.** The earlier text of this book and `h0-lab0/README.md` record 9.3 min and 20.7 min
 for the two worlds, 8 and 25 patients in every 100 above 30 minutes, medians of 3.8 and 9.3, 90th percentiles of 26.7
 and 59.3, and, in the halves null, a measured sd of 0.216 against 0.227 predicted by the day and 0.047 by the call (severe
 test: 11.4 min, 53 sd, ceiling of 0.81 in 2,000 splits). This instrument measures **9.1 and 19.3**, **8 and 24**
@@ -5068,7 +5068,7 @@ whose end falls on the last session of the training set). The published values o
 the ones here (2.13 / 2.67 / 2.10). In the claim world, the published material brings mean 0.9332, 1% quantile of
 0.6563 and p = 0.0095, against **0.9286**, **0.6354** and **0.0140** here: the difference is in the draw of the
 resamplings (2,000 replicas in each case, different generators), and the p-value changes in the third place. One different
-case deserves a note: the previous edition cites "from 1929 to 1932, the capital falls to 0.11 with 1× and to 0.00025 with
+case deserves a note: the earlier text cites "from 1929 to 1932, the capital falls to 0.11 with 1× and to 0.00025 with
 3×". With the window of the **calendar year** (1 January 1929 to the end of 1932), this instrument measures **0.19521** and
 **0.00088**; with the window of the **peak to the trough** (3 September 1929 to 8 July 1932), it measures **0.10814** and
 **0.00025** — exactly the numbers of the material. The divergence was not of method: it was of window, and the two
@@ -5362,7 +5362,7 @@ would be worth double.
 2.56] by bootstrap in blocks; this instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;
 2.61]**, besides 1.9625 and 1.4100 for k = 25 and k = 100 — the three points coincide with the published ones up to the fourth
 place, and the difference of the interval comes from the resampling (300 replicas, different generator). The divergence that deserves
-a paragraph is another one: the previous edition and the README say that 36 clean months are worth **2.2 bits** and that a severe test
+a paragraph is another one: the earlier text and the README say that 36 clean months are worth **2.2 bits** and that a severe test
 would need **69 months**. This instrument confirms the two numbers **exactly** (2.2373 bits and 69 months)
 when it uses the $p$ that the tail of the training set implies, $p = 0{,}04296$, the value of the published POT/GPD fit
 $\xi = 0{,}406$, $\sigma = 7{,}387$, 83 excesses above 10 — and measures **2.42 bits and 64 months** when it uses the
@@ -6943,9 +6943,9 @@ after seeing the result counts as a new declaration and enters the counter of at
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gate runs twice and gives the same result: measured, "7 portões ok", with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 | `cargo run --release --bin labs -- --chapter 19` | That the numbers cited in Step 3 of chapter 19 come out of code, with a fixed seed. It is worth replacing 19 with any chapter; `--all` runs them all |
-| `rustc -O crates/stochology-book/src/ch21.rs -o /tmp/ch21 && /tmp/ch21` | That every laboratory of this edition is self-contained: one file, no dependency, the same result |
+| `rustc -O crates/stochology-book/src/ch21.rs -o /tmp/ch21 && /tmp/ch21` | That every laboratory of this book is self-contained: one file, no dependency, the same result |
 
-The laboratories of this edition live directly in the crate, in `crates/stochology-book/src/capNN.rs`. They are
+The laboratories of this book live directly in the crate, in `crates/stochology-book/src/capNN.rs`. They are
 tested modules (`ch01` to `ch04` carry tests in the file) and **all 21** are served by the `labs` binary. The
 intermediate copies were deleted after integration, because a working file does not stay in the repository.
 No laboratory uses the system clock or an unseeded random number, and that is why verification is
@@ -6980,7 +6980,7 @@ manifest `history/python-removido.txt` carries the blob hash of each removed fil
 `docs/declarations/REMOVED_PYTHON.md`.
 
 On that day the artifacts that do not support a central result left. They are the extensions of scale, health and rare event (points
-9 and 10 of the background audit) and the previous edition of the book. The numbers of those extensions remain in Chapters 15 and 21, with
+9 and 10 of the background audit) and the earlier text of the book. The numbers of those extensions remain in Chapters 15 and 21, with
 the retirement note in the table. Afterwards the whole Python measurement scaffolding left. The fronts `h0` to `h3` also left, with their READMEs, and the data
 that only they used. The numbers stayed in `docs/EMPIRICAL_REGISTRY.md`, with commit `1bfec905` as the anchor
 (`docs/declarations/RUST_CONSOLIDATION.md`).

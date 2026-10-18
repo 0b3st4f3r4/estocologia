@@ -1,4 +1,4 @@
-# Declaration: The English Edition (2026-10-17)
+# Declaration: The English Migration (2026-10-17)
 
 On 2026-10-17 the repository was migrated to English. The apparatus, the tooling, the textbook, the empirical
 audit, the governance record, the paper, and the bibliography now speak one language. **No number moved**, with two
@@ -65,7 +65,7 @@ The English pass changed the text of 23 seal files' targets — 53 hashes in tot
 
 ## The Book After the Migration
 
-The assembled edition is **7 178 lines and 96 018 words** (it was 5 927 and 75 304 in Portuguese: English spells out
+The assembled book is **7 178 lines and 96 018 words** (it was 5 927 and 75 304 in Portuguese: English spells out
 articles the Portuguese elides, and the line wrapping re-flowed). Every chapter keeps its three tiers
 (`### Step 1/2/3`), its `**Exercises.**` and `**Summary.**` blocks, and its place in the five parts. The 48 cited
 blocks are the literal stdout of the English instruments, checked by `scripts/book/check_labs.py`.

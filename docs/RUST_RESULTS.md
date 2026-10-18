@@ -1675,7 +1675,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 ~~~
 
-## 5. Edition Manifest
+## 5. State Manifest
 
 Every empirical point declaration with its file hash. The full chain is verified via `python3 scripts/check_seals.py`, and the table below is generated rather than transcribed.
 
@@ -1704,4 +1704,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled edition: `book/stochology-textbook.md` with **7178 lines** and **96018 words**, sha256 `0e217dd958409cea1550a2d402dff20a526b1fa8a77a3baae39b60f748685248`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7178 lines** and **96017 words**, sha256 `7a6926047ada6d6652cc3f6dabb74567c89d73b2f48add1c83882c8e8ea8ca1c`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

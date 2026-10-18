@@ -1,6 +1,6 @@
 # Everything Remaining as a Declared Proposal
 
-Inventory revised on 2026-10-16, with the **2026-10-17 tree state** declared in `docs/STATE_DECLARATION.md` and the manifest generated in `docs/RUST_RESULTS.md` §5. Prior to publication there are no numbered editions: there is a single state, and the corrections of 2026-10-17 reside in `history/` as dated records. Inventory revised on 2026-10-16. The revision verified each line against the code in this tree rather than against the previous wording: what already exists is listed with the file, line, and test supporting it, and what is missing is listed with what would need to exist in order to close it. Every pointer was opened before entering the table, and one of them did not exist, which gave rise to §6 and the repair of the rows that depended on it.
+Inventory revised on 2026-10-16, with the **2026-10-17 tree state** declared in `docs/STATE_DECLARATION.md` and the manifest generated in `docs/RUST_RESULTS.md` §5. There are no numbered editions or versions, before or after publication: there is a single state, and the corrections of 2026-10-17 reside in `history/` as dated records. Inventory revised on 2026-10-16. The revision verified each line against the code in this tree rather than against the previous wording: what already exists is listed with the file, line, and test supporting it, and what is missing is listed with what would need to exist in order to close it. Every pointer was opened before entering the table, and one of them did not exist, which gave rise to §6 and the repair of the rows that depended on it.
 
 The active list has four items (§1). These consist of the original seven, plus the five fronts that were outside it and entered by the author's decision on 2026-10-16, plus the Jev-LLM bridge in item 13, which entered on the same date, minus item 1 — the ten roadmap crates —, item 2 — the deliberative System 2 —, item 4 — fine-grained genetics resolution —, item 6 — bibliography verification —, item 7 — re-execution of the H3 chain —, item 8 — predictions 3 and 5 of the R-axis —, item 10 — contract migrations —, item 11 — the R-axis in the chapters —, and item 12 — the second opinion on the registry: all nine moved to §2 alongside their proof. The items closed by the Rust consolidation moved to §2 with their accompanying proof, and §3 records the decisions of the day.
 
@@ -49,6 +49,19 @@ They stand as completed records rather than open proposals.
    a second opinion became items 8 through 12.
 3. **Bibliography verification is the next desk task.** Tagging D.2 through D.4 remains desk work requiring
    neither new data nor external participants.
+
+### Decisions Recorded on 2026-10-18
+
+1. **The four live items stop at their synthetic rehearsals.** The owner decided that the program goes no further
+   than the synthetic runs for items 3, 5, 9, and 13 (`labs --rehearsal-shelf`, `labs --rehearsal-listening`,
+   `labs --rehearsal-bridge`, and `empirical/p20-jev/ENSAIO_SINTETICO.md`). The next step is to share the work with
+   outside specialists and seek refinements; the program recruits no panel, listening session, analyst, judge, or
+   weights file on its own. Nothing in the four rows of §1 changes, and the two windows stay as frozen in their
+   protocols (2026-12-15 for listening, 2027-01-14 for the bridge), because moving a frozen deadline would be a new
+   specification counted in $K$; if they expire, the instruments archive as declared.
+2. **History, not versions.** The project keeps no numbered editions, version tags, or releases, before or after
+   publication; what changes is recorded in the git log and in `history/` (`AGENTS.md` §VI). References to the
+   14-chapter text of 2026-10-15 now name it by its date and length rather than as a "previous edition".
 
 ## 4. Declared Decisions **Not** to Do
 

@@ -67,8 +67,8 @@ def section_block(title: str, cmd: list[str], note: str) -> str:
     return f"### {title}\n\n{note}\n\n~~~bash\n{cmd_str}\n~~~\n\n~~~text\n{text}\n~~~\n"
 
 
-def edition_manifest() -> str:
-    """The edition manifest: every empirical point declaration with its SHA-256 hash and tree counts."""
+def state_manifest() -> str:
+    """The state manifest: every empirical point declaration with its SHA-256 hash and tree counts."""
     lines = [
         "Every empirical point declaration with its file hash. The full chain is verified via "
         "`python3 scripts/check_seals.py`, and the table below is generated rather than transcribed.",
@@ -103,7 +103,7 @@ def edition_manifest() -> str:
     )
     lines.append("")
     lines.append(
-        f"Assembled edition: `book/stochology-textbook.md` with **{len(book_text.splitlines())} lines** and "
+        f"Assembled book: `book/stochology-textbook.md` with **{len(book_text.splitlines())} lines** and "
         f"**{len(re.findall(r'\w+', book_text))} words**, "
         f"sha256 `{hashlib.sha256(book_file.read_bytes()).hexdigest()}`. The file on disk must match what "
         f"`scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`."
@@ -267,8 +267,8 @@ def main() -> int:
     ))
     parts.append("## 4. Workspace Tests\n")
     parts.append(section_block("All crates", ["cargo", "test", "--workspace"], "Unit and integration tests across the workspace."))
-    parts.append("## 5. Edition Manifest\n")
-    parts.append(edition_manifest())
+    parts.append("## 5. State Manifest\n")
+    parts.append(state_manifest())
 
     text = "\n".join(parts).replace("BT", chr(96))
     if args.check:

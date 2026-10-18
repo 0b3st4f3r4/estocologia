@@ -10,7 +10,7 @@ measured by this program), plus the textbook, the crates, and the provenance of 
 
 | Artifact | Why it left |
 | --- | --- |
-| `book/edicao-14-capitulos.md` | edition superseded by the 21-chapter edition; the text lives in commit `1bfec905` |
+| `book/edicao-14-capitulos.md` | 14-chapter text superseded by the 21-chapter book; the text lives in commit `1bfec905` |
 | `empirical/p09-escala-dados/` | scale demonstration (329 domains in batch, 26 634 nodes): shows the funnel runs in batch, does not advance the theory |
 | `empirical/p10-saude/` | healthcare extension (early sepsis): standalone result, outside the core |
 | `empirical/p11-eventos-raros/` | rare-event extension (indomethacin, COVID): standalone result, outside the core |

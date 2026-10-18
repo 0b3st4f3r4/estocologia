@@ -1,4 +1,4 @@
-# `book/` — the edition in 21 chapters
+# `book/` — the book in 21 chapters
 
 This folder keeps the textbook being unfolded into **21 chapters and 5 parts**, with **three steps
 per chapter** (high-school intuition, accessible formalization, laboratory in Rust). The plan of the
@@ -10,7 +10,7 @@ unfolding is §9 of `docs/PLAN.md`.
 | `ch01.md` … `ch21.md` | one file per chapter |
 | `appendices.md` | appendices A to D |
 | — | the laboratories live directly in the crate: `crates/stochology-book/src/capNN.rs` |
-| `scripts/book/build.py` | assembles the edition and checks the ramp |
+| `scripts/book/build.py` | assembles the book and checks the ramp |
 
 ## Commands
 
@@ -49,7 +49,7 @@ Every number of Step 3 comes out of code that runs:
 cargo run --release --bin labs -- --chapter 4
 ```
 
-When a number of this edition diverges from the number recorded in the previous book or in a README of the
+When a number of this book diverges from the number recorded in the previous book or in a README of the
 research, the chapter carries a paragraph **Divergence declaration** with both values and the probable
 reason. No old value is deleted.
 
@@ -62,10 +62,10 @@ reason. No old value is deleted.
 | III. Cause, time, and survival | 9 to 11 | written; laboratories in the crate and output blocks checked |
 | IV. Building the auditable machine | 12 to 15 | written; laboratories in the crate and output blocks checked |
 | V. The machine in the real world | 16 to 21 | written; laboratories in the crate and output blocks checked |
-| Appendices A to D | — | written; checked against the previous edition (the old Appendix C, selected answers, became material embedded in Step 3) |
+| Appendices A to D | — | written; checked against the earlier text (the old Appendix C, selected answers, became material embedded in Step 3) |
 
 The edition in `book/stochology-textbook.md` is already the 21-chapter one, assembled from here, and `scripts/book/build.py --check`
 demands two things: that the 21 chapters be on the ramp and that the file on disk be, character by
 character, the text that `montar()` produces. The assembly on disk fell 353 lines behind `book/` between the
 commits `a59803c` and `5393515` without any gate noticing — `scripts/book/build.py --check` compared only the ramp. The
-edition of 14 chapters lives in the history, in commit `1bfec905`.
+text of 14 chapters lives in the history, in commit `1bfec905`.
