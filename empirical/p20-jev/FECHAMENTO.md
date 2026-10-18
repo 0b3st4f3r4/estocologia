@@ -13,15 +13,15 @@ letting the list change out of enthusiasm.
 | `inferencias_reais.tsv` | `pedido<TAB>resposta`, with the internal break of the card escaped as `\n` | answer in the formal schema of the card, without free text and without a loose tag |
 | `desfechos_auditados.tsv` | `caso_id<TAB>prob<TAB>desfecho<TAB>fonte` | N ≥ 30, p in the strict (0, 1), outcome 0 or 1, exogenous provenance in the column `fonte` |
 
-The catalog of cases can be assembled by hand or with `tools/gerar_fontes_incendios.py`, which has two decoupled
-stages: `conferir-casos` validates the catalog without calling any model, and `inferir` submits each prompt to the runner
+The catalog of cases can be assembled by hand or with `scripts/generate_fire_sources.py`, which has two decoupled
+stages: `check-cases` validates the catalog without calling any model, and `infer` submits each prompt to the runner
 — `llama-cli` by subprocess, `vllm` by `/v1/completions`, `api` by `/v1/chat/completions` with the key read from
-`JEV_API_KEY`, `arquivo` for answers already gathered, and `demo` to attest the plumbing with a deterministic card —,
+`JEV_API_KEY`, `file` for answers already gathered, and `demo` to attest the plumbing with a deterministic card —,
 validates the schema, and writes the two sources with the break escaped.
 
 **Strict decoding, and what it costs.** `grammar/ficha_jev.gbnf` restricts the output to the canonical document: 23
 fields in the right order and `margem` in the format `0.<digits with at least one non-zero>`, which excludes 0.0 and 1.0 **by
-syntax** instead of by validation. The generator uses `--gramatica <arquivo>`: with `llama-cli` it becomes `--grammar-file`,
+syntax** instead of by validation. The generator uses `--grammar <file>`: with `llama-cli` it becomes `--grammar-file`,
 with `llama-server` it goes in the body of the request. Attention to the price: with the grammar on, the form ceases to be measured and
 comes to be guaranteed, so criterion 3 (abstention rate) becomes 1 by construction. The adequacy of the schema is only
 truly measured **without** the grammar; the round with the grammar measures another thing — the distribution of the margin and the
@@ -53,7 +53,7 @@ frozen weight, and the bridge reports that instead of pretending determinism. Th
 The checking of phase 1 is mechanical and writes nothing:
 
 ~~~bash
-cargo run --release --bin ingestar-jev -- --conferir \
+cargo run --release --bin ingest-jev -- --check \
   caminho/para/inferencias_reais.tsv \
   caminho/para/desfechos_auditados.tsv
 ~~~
@@ -65,7 +65,7 @@ code 1.
 ## Phase 2 — the ingestion and the seals
 
 ~~~bash
-cargo run --release --bin ingestar-jev -- \
+cargo run --release --bin ingest-jev -- \
   empirical/p20-jev/pesos \
   caminho/para/inferencias_reais.tsv \
   empirical/p20-jev/calibracao \
@@ -88,7 +88,7 @@ cargo run --release --bin labs -- --jev
 | 1. Weights gate | `pesos verificados: <sha256>` | `RECUSADO` for an absent or divergent hash, or an illegible artifact |
 | 2. Determinism G1 | `identicas: true` with the same `sha256` in the two passes | `identicas: false` |
 | 3. Adequacy of the space | `abstencoes (x%)` with x ≤ 30, measured **over the cases of the artifact itself** | x > 30: the item closes with the formal verdict that the schema does **not** serve the model, with the refusals counted, without imputation |
-| 4. Brier and ECE | `Brier <valor> e ECE <valor> em 10 baldes sobre N pares`, with N ≥ 30 and abstentions outside the denominator | N < 30: `AmostraInsuficiente`, no score |
+| 4. Brier and ECE | `Brier <valor> e ECE <valor> em 10 baldes sobre N pares`, with N ≥ 30 and abstentions outside the denominator | N < 30: `InsufficientSample`, no score |
 
 Criterion 3 admits two outcomes and both close the item: the schema serves, or the schema does not serve. What does not
 close is hiding the abstention rate or imputing 0.5 in place of the refusal. Since 2026-10-17 the adequacy is measured over
@@ -100,9 +100,9 @@ repository does not have two definitions of calibration.
 
 ## Phase 4 — registry, seals, and the movement of the list
 
-The line of the round is not typed: the instrument prints the measurement as a card (`labs --jev --medida`), and the ingestor
-writes the line in `rodadas.tsv` with the same gate — `ingestar-jev --registrar <medida> empirical/p20-jev/rodadas.tsv
---data AAAA-MM-DD`. It refuses half a measurement: without verified weight, without G1 closed, below the minimum sample, or without
+The line of the round is not typed: the instrument prints the measurement as a card (`labs --jev --measure`), and the ingestor
+writes the line in `rodadas.tsv` with the same gate — `ingest-jev --record <measure> empirical/p20-jev/rodadas.tsv
+--date YYYY-MM-DD`. It refuses half a measurement: without verified weight, without G1 closed, below the minimum sample, or without
 Brier and ECE, there is no line, and a repeated round is refused instead of duplicated.
 
 The `registro.tsv` of this folder gains one line per real round, with the format already declared:
@@ -122,7 +122,7 @@ python3 scripts/check_seals.py
 python3 scripts/book/generate_results.py && python3 scripts/book/generate_results.py --check
 python3 scripts/book/build.py --check
 python3 scripts/book/check_labs.py
-python3 scripts/style/conferir-passada.py
+python3 scripts/style/check_pass.py
 cargo test --workspace
 ~~~
 
