@@ -100,6 +100,12 @@ right, it runs.
 | Whoever wants only the architecture | chapters 2, 12, 13, 14, 15 | two weeks |
 | Whoever wants to see the method in action | the whole of Part V, returning to the foundations when needed | two weeks |
 
+**How hard each part is.** The promise to the High School reader holds for Step 1 of Parts I and II, and for the
+*Concept* exercises. Step 2 asks for more as the book advances: probability and logarithms from Chapter 3,
+derivatives from Chapter 5, regression from Chapter 9, and stochastic calculus (Itô and Stratonovich), variational
+free energy and nonparametric tests in Parts III to V. Those passages are written for the undergraduate and the
+professional, and a first reading can skip them without losing the thread of Step 1 and Step 3.
+
 ---
 
 ## Conventions

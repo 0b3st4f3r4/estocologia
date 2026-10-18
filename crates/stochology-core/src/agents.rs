@@ -1,4 +1,12 @@
 //! Adversarial panel A1-A8: each agent carries the severity of its test.
+//!
+//! What this module is, said plainly (review of 2026-10-18): the severity is NOT measured by
+//! executing an attack. It is a number drawn, with a declared seed, inside a band that the
+//! card's declared safeguard and structural anchor select. The panel is therefore a checklist
+//! of safeguards with a reproducible score, not a severe test in Mayo's sense: it verifies that
+//! a safeguard was declared and anchored, not that it works. The attacks that do run (the hash
+//! trail tampered on purpose, the planted defects) live in the gates, not here. Approval is a
+//! function of the flags only: no band crosses the floor, so the seed never decides a verdict.
 
 use crate::layer::Card;
 use crate::rng::Rng;
@@ -75,7 +83,7 @@ impl AgentA {
         }
     }
 
-    /// The structural anchor of the card in this agent's band: a declared safeguard without a structural field falls in the 5..=6 edge.
+    /// The structural anchor of the card in this agent's band: a declared safeguard without a structural field falls in the 4..=5 band, below the floor.
     pub fn structural_anchor(self, f: &Card) -> bool {
         match self {
             AgentA::A1Code => {
@@ -117,14 +125,16 @@ impl AgentA {
 ///
 /// Four regimes cover the scale 1..=10 without leaving the floor 6 unreachable:
 /// - safeguard + structural anchor: 8..=10 (approved with room to spare);
-/// - declared safeguard without structural anchor: 5..=6 (the exact edge of floor 6);
+/// - declared safeguard without structural anchor: 4..=5 (below floor 6: a declaration
+///   without its anchor does not pass; until 2026-10-18 this band was 5..=6, and the seed
+///   alone decided whether such a card passed);
 /// - structural anchor without safeguard: 3..=5 (fails at the lower edge of the floor);
 /// - no safeguard and no anchor: 1..=3 (fails).
 pub fn stress(agent: AgentA, card: &Card, seed: u64) -> Severity {
     let mut rng = Rng::new(agent.seed(seed));
     match (agent.safeguard_met(card), agent.structural_anchor(card)) {
         (true, true) => Severity((8 + rng.uniform(3)) as u8),
-        (true, false) => Severity((5 + rng.uniform(2)) as u8),
+        (true, false) => Severity((4 + rng.uniform(2)) as u8),
         (false, true) => Severity((3 + rng.uniform(3)) as u8),
         (false, false) => Severity((1 + rng.uniform(3)) as u8),
     }
@@ -197,16 +207,14 @@ mod tests {
     }
 
     #[test]
-    fn safeguard_without_structural_anchor_tests_the_5_and_6_edge_and_fails_an_empty_stamp() {
+    fn safeguard_without_structural_anchor_stays_below_the_floor_under_every_seed() {
         let mut without_anchor =
             Card::new("empty.stamp", Layer::Model, UncertaintyType::Epistemic).with_safeguards();
         without_anchor.exit_clause = Some("stop".into());
         // Without .complete(), the artifact, the seed, the unit, the null model and who pays for
-        // the error are missing: the agents fall in the (true, false) regime -> 5 or 6, touching
-        // the exact edge of floor 6.
-        let mut saw_five = false;
-        let mut saw_six = false;
-        for seed in 1..=32 {
+        // the error are missing: the agents fall in the (true, false) regime -> 4 or 5, below
+        // floor 6 under every seed.
+        for seed in 1..=500 {
             for a in [
                 AgentA::A1Code,
                 AgentA::A2Data,
@@ -214,20 +222,39 @@ mod tests {
                 AgentA::A6Fairness,
             ] {
                 let s = stress(a, &without_anchor, seed);
-                assert!(s.0 == 5 || s.0 == 6, "expected the edge 5..=6, got {}", s.0);
-                if s.0 == 5 {
-                    saw_five = true;
+                assert!(s.0 == 4 || s.0 == 5, "expected the band 4..=5, got {}", s.0);
+                assert!(s < MINIMUM_SEVERITY);
+            }
+            assert!(
+                !approve(&without_anchor, seed).approved,
+                "a card with booleans set but no structural anchor cannot pass"
+            );
+        }
+    }
+
+    /// No band crosses the floor: for every combination of safeguard and anchor, the verdict
+    /// is the same under every seed. A gate that a seed can open is not a gate.
+    #[test]
+    fn approval_never_depends_on_the_seed() {
+        for safeguards in [true, false] {
+            let mut base = good_card();
+            if !safeguards {
+                base.trail_intact = false;
+            }
+            for strip_anchor in [false, true] {
+                let mut card = base.clone();
+                if strip_anchor {
+                    card.simulable_artifact = None;
                 }
-                if s.0 == 6 {
-                    saw_six = true;
-                }
+                let verdicts: std::collections::HashSet<bool> = (0..500u64)
+                    .map(|seed| approve(&card, seed).approved)
+                    .collect();
+                assert_eq!(
+                    verdicts.len(),
+                    1,
+                    "seed-dependent verdict: {safeguards} {strip_anchor}"
+                );
             }
         }
-        assert!(saw_five && saw_six, "the edge 5 and 6 has to be reachable");
-        let r = approve(&without_anchor, 2026);
-        assert!(
-            !r.approved,
-            "a card with booleans set but no structural anchor cannot pass"
-        );
     }
 }

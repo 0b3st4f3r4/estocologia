@@ -171,7 +171,7 @@ pub struct Row {
 
 /// Generates the world. `instability = 0` is the honest case:
 /// Y = 2X + noise (same mechanism in every environment), X -> Z, W pure noise.
-/// With `instability = 1`, the environment acts directly on Y and the mechanism changes.
+/// With `instability = 1`, the coefficient of X in Y differs between the sites.
 pub fn generate(seed: u64, environments: &[Environment], instability: f64) -> Vec<Row> {
     let mut rng = SplitMix64::new(seed);
     let mut rows = Vec::new();
@@ -181,8 +181,10 @@ pub fn generate(seed: u64, environments: &[Environment], instability: f64) -> Ve
             let z = 2.0 * x + env.noise_z * rng.normal();
             let w = rng.normal();
             // instability = 0: the mechanism X -> Y is the same at every site.
-            // instability > 0: the site also enters through X and the coefficient changes.
-            let y = 2.0 * x + rng.normal() + instability * 2.0 * x;
+            // instability > 0: the coefficient of X in Y changes from site to site
+            // (2 - 1.5, 2 and 2 + 1.5 at instability 1), so no set can be invariant.
+            let site_term = instability * 1.5 * (e as f64 - 1.0);
+            let y = (2.0 + site_term) * x + rng.normal();
             rows.push(Row {
                 environment: e,
                 x,
@@ -302,116 +304,69 @@ fn solve(a: &mut [Vec<f64>], b: &mut [f64]) -> Vec<f64> {
     x
 }
 
+/// Least squares of y on an intercept and the given columns: returns (rss, coefficients).
+fn ols(columns: &[Vec<f64>], ys: &[f64]) -> (f64, Vec<f64>) {
+    let p = columns.len();
+    let n = ys.len();
+    let mut m = vec![vec![0.0; p + 1]; p + 1];
+    let mut v = vec![0.0; p + 1];
+    m[0][0] = n as f64;
+    v[0] = ys.iter().sum::<f64>();
+    for k in 0..p {
+        let sk: f64 = columns[k].iter().sum();
+        m[0][k + 1] = sk;
+        m[k + 1][0] = sk;
+        v[k + 1] = columns[k].iter().zip(ys).map(|(x, y)| x * y).sum::<f64>();
+        for l in 0..p {
+            m[k + 1][l + 1] = columns[k]
+                .iter()
+                .zip(columns[l].iter())
+                .map(|(x, z)| x * z)
+                .sum::<f64>();
+        }
+    }
+    let solution = solve(&mut m, &mut v);
+    let mut rss = 0.0;
+    for r in 0..n {
+        let mut predicted = solution[0];
+        for k in 0..p {
+            predicted += solution[k + 1] * columns[k][r];
+        }
+        rss += (ys[r] - predicted) * (ys[r] - predicted);
+    }
+    (rss, solution)
+}
+
 /// The invariance test (linear ICP) for one candidate set of variables.
-/// Null hypothesis: P(Y | X_S, E = e) is the same in every environment.
+/// Null hypothesis: P(Y | X_S, E = e) is the same in every environment, so the
+/// restricted model has ONE intercept and ONE vector of slopes for all environments,
+/// and the free model has both per environment (a Chow test). An intercept left free
+/// per environment under the null would let the environment act directly on Y and
+/// would make the empty set pass by construction.
 pub fn icp(rows: &[Row], environments: &[Environment], names: &[&str]) -> Test {
     let n_total: usize = environments.iter().map(|a| a.n).sum();
     let e = environments.len();
     let p = names.len();
     let k_free = e * (1 + p);
-    let k_restricted = e + p;
+    let k_restricted = 1 + p;
 
-    if p == 0 {
-        // the empty set has intercepts only: it never rejects on slope.
-        let slopes = vec![0.0; environments.len()];
-        return Test {
-            name: "(empty)".into(),
-            f: 0.0,
-            p: 1.0,
-            common_slope: 0.0,
-            slopes_by_environment: slopes,
-        };
-    }
+    // Restricted: pooled regression with a common intercept and common slopes.
+    let pooled_columns: Vec<Vec<f64>> = names
+        .iter()
+        .map(|nm| rows.iter().map(|l| value(l, nm)).collect())
+        .collect();
+    let pooled_y: Vec<f64> = rows.iter().map(|l| l.y).collect();
+    let (rss_restricted, beta) = ols(&pooled_columns, &pooled_y);
 
-    // Restricted: free intercept per environment + slope common to all.
-    // Equivalent to subtracting each environment's mean before fitting.
-    let mut a = vec![vec![0.0; p]; p];
-    let mut b = vec![0.0; p];
-    let mut columns_by_environment: Vec<Vec<Vec<f64>>> = Vec::new();
-    for (i, env) in environments.iter().enumerate() {
-        let columns: Vec<Vec<f64>> = names.iter().map(|nm| column(rows, i, nm)).collect();
-        let ys = column(rows, i, "y");
-        let (mx, my, _, _) = moments(&columns[0], &ys);
-        let mxs: Vec<f64> = columns
-            .iter()
-            .map(|c| c.iter().sum::<f64>() / env.n as f64)
-            .collect();
-        let _ = mx;
-        for k in 0..p {
-            for l in 0..p {
-                let mut s = 0.0;
-                for r in 0..env.n {
-                    s += (columns[k][r] - mxs[k]) * (columns[l][r] - mxs[l]);
-                }
-                a[k][l] += s;
-            }
-            let mut s = 0.0;
-            for r in 0..env.n {
-                s += (columns[k][r] - mxs[k]) * (ys[r] - my);
-            }
-            b[k] += s;
-        }
-        columns_by_environment.push(columns);
-    }
-    let beta = solve(&mut a, &mut b);
-    let mut rss_restricted = 0.0;
-    for (i, env) in environments.iter().enumerate() {
-        let columns = &columns_by_environment[i];
-        let ys = column(rows, i, "y");
-        let mxs: Vec<f64> = columns
-            .iter()
-            .map(|c| c.iter().sum::<f64>() / env.n as f64)
-            .collect();
-        let my = ys.iter().sum::<f64>() / env.n as f64;
-        let mut a0 = my;
-        for k in 0..p {
-            a0 -= beta[k] * mxs[k];
-        }
-        for r in 0..env.n {
-            let mut predicted = a0;
-            for k in 0..p {
-                predicted += beta[k] * columns[k][r];
-            }
-            rss_restricted += (ys[r] - predicted) * (ys[r] - predicted);
-        }
-    }
-
-    // Free: intercept and slope per environment (system of (p+1) unknowns).
+    // Free: intercept and slopes per environment.
     let mut rss_free = 0.0;
     let mut slopes_free = Vec::new();
-    for (i, env) in environments.iter().enumerate() {
-        let columns = &columns_by_environment[i];
+    for i in 0..e {
+        let columns: Vec<Vec<f64>> = names.iter().map(|nm| column(rows, i, nm)).collect();
         let ys = column(rows, i, "y");
-        let mut m = vec![vec![0.0; p + 1]; p + 1];
-        let mut v = vec![0.0; p + 1];
-        m[0][0] = env.n as f64;
-        v[0] = ys.iter().sum::<f64>();
-        for k in 0..p {
-            let sk: f64 = columns[k].iter().sum();
-            m[0][k + 1] = sk;
-            m[k + 1][0] = sk;
-            v[k + 1] = columns[k]
-                .iter()
-                .zip(ys.iter())
-                .map(|(x, y)| x * y)
-                .sum::<f64>();
-            for l in 0..p {
-                m[k + 1][l + 1] = columns[k]
-                    .iter()
-                    .zip(columns[l].iter())
-                    .map(|(x, z)| x * z)
-                    .sum::<f64>();
-            }
-        }
-        let solution = solve(&mut m, &mut v);
-        for r in 0..env.n {
-            let mut predicted = solution[0];
-            for k in 0..p {
-                predicted += solution[k + 1] * columns[k][r];
-            }
-            rss_free += (ys[r] - predicted) * (ys[r] - predicted);
-        }
-        slopes_free.push(solution[1]);
+        let (rss, solution) = ols(&columns, &ys);
+        rss_free += rss;
+        slopes_free.push(if p > 0 { solution[1] } else { 0.0 });
     }
 
     let df_num = (k_free - k_restricted) as f64;
@@ -419,10 +374,14 @@ pub fn icp(rows: &[Row], environments: &[Environment], names: &[&str]) -> Test {
     let f = ((rss_restricted - rss_free) / df_num) / (rss_free / df_den);
     let p_value = p_f_greater(f, df_num, df_den);
     Test {
-        name: names.join("+"),
+        name: if p == 0 {
+            "empty".into()
+        } else {
+            names.join("+")
+        },
         f,
         p: p_value,
-        common_slope: beta[0],
+        common_slope: if p > 0 { beta[1] } else { 0.0 },
         slopes_by_environment: slopes_free,
     }
 }
@@ -554,6 +513,12 @@ fn kidney_stones() {
         weighted_open, weighted_new
     );
     println!(
+        "difference in points: small stones {:.2}, large stones {:.2}, standardised {:.2} (a weighted mean of the two)",
+        100.0 * (small_open / n_small_open - small_new / n_small_new),
+        100.0 * (large_open / n_large_open - large_new / n_large_new),
+        100.0 * (weighted_open - weighted_new)
+    );
+    println!(
         "fraction of hard cases in the open surgery = {:.4}, in the new one = {:.4}",
         n_large_open / n_open,
         n_large_new / n_new
@@ -588,75 +553,66 @@ fn one_round() {
         naive_slope(&rows, "z"),
         naive_slope(&rows, "w")
     );
-    let sets: [&[&str]; 7] = [
-        &["x"],
-        &["z"],
-        &["w"],
-        &["x", "z"],
-        &["x", "w"],
-        &["z", "w"],
-        &["x", "z", "w"],
-    ];
     let mut accepted: Vec<Vec<&str>> = Vec::new();
-    for set in sets {
+    for set in ALL_SETS {
         let t = icp(&rows, &THREE_SITES, set);
         let slopes: Vec<String> = t
             .slopes_by_environment
             .iter()
             .map(|b| format!("{:.3}", b))
             .collect();
+        let per_site = if set.is_empty() {
+            "intercepts only".to_string()
+        } else {
+            format!(
+                "common = {:.3}  per site = [{}]",
+                t.common_slope,
+                slopes.join(", ")
+            )
+        };
         println!(
-            "  candidate {{{:>5}}}  F = {:>7.3}  p = {:.3e}  common = {:.3}  per site = [{}]  {}",
+            "  candidate {{{:>5}}}  F = {:>8.3}  p = {:.3e}  {}  {}",
             t.name,
             t.f,
             t.p,
-            t.common_slope,
-            slopes.join(", "),
+            per_site,
             if t.p > 0.05 { "ACCEPTED" } else { "rejected" }
         );
         if t.p > 0.05 {
             accepted.push(set.to_vec());
         }
     }
-    let t = icp(&rows, &THREE_SITES, &[]);
     println!(
-        "  candidate {{empty}}  F = {:.3}  p = {:.1}  (intercepts only)",
-        t.f, t.p
-    );
-    println!(
-        "accepted sets: {} -> intersection S_hat = {{{}}}",
+        "accepted sets: {} of {} -> intersection S_hat = {{{}}}",
         accepted.len(),
+        ALL_SETS.len(),
         intersection(&accepted).join(", ")
     );
     println!();
 }
 
+/// Every subset of the three candidates, the empty set included: ICP tests the whole family.
+const ALL_SETS: [&[&str]; 8] = [
+    &[],
+    &["x"],
+    &["z"],
+    &["w"],
+    &["x", "z"],
+    &["x", "w"],
+    &["z", "w"],
+    &["x", "z", "w"],
+];
+
 fn many_rounds(repetitions: usize, instability: f64, label: &str) {
-    let sets: [&[&str]; 7] = [
-        &["x"],
-        &["z"],
-        &["w"],
-        &["x", "z"],
-        &["x", "w"],
-        &["z", "w"],
-        &["x", "z", "w"],
-    ];
-    let mut rejections = [0usize; 7];
-    let mut sum_f = [0.0f64; 7];
-    let mut accepted_x = 0usize;
-    let mut inter_x = 0usize;
-    let mut inter_z = 0usize;
-    let mut inter_empty = 0usize;
-    let mut all_accepted = 0usize;
-    let mut empty_by_power = 0usize;
-    let mut inter_w = 0usize;
-    let mut inter_with_x_without_w = 0usize;
-    let mut naive_x = 0.0;
-    let mut naive_z = 0.0;
+    let mut rejections = [0usize; 8];
+    let mut sum_f = [0.0f64; 8];
+    let (mut inter_x, mut inter_contains_z, mut inter_contains_w, mut inter_empty) =
+        (0usize, 0usize, 0usize, 0usize);
+    let (mut naive_x, mut naive_z) = (0.0, 0.0);
     for r in 0..repetitions {
         let rows = generate(2026 + r as u64, &THREE_SITES, instability);
         let mut accepted: Vec<Vec<&str>> = Vec::new();
-        for (i, set) in sets.iter().enumerate() {
+        for (i, set) in ALL_SETS.iter().enumerate() {
             let t = icp(&rows, &THREE_SITES, set);
             sum_f[i] += t.f;
             if t.p <= 0.05 {
@@ -665,29 +621,18 @@ fn many_rounds(repetitions: usize, instability: f64, label: &str) {
                 accepted.push(set.to_vec());
             }
         }
-        if icp(&rows, &THREE_SITES, &["x"]).p > 0.05 {
-            accepted_x += 1;
-        }
         let inter = intersection(&accepted);
         if inter == vec!["x".to_string()] {
             inter_x += 1;
         }
-        if inter == vec!["z".to_string()] {
-            inter_z += 1;
+        if inter.contains(&"z".to_string()) {
+            inter_contains_z += 1;
         }
-        if inter == vec!["w".to_string()] {
-            inter_w += 1;
-        }
-        if inter.contains(&"x".to_string()) && !inter.contains(&"w".to_string()) {
-            inter_with_x_without_w += 1;
+        if inter.contains(&"w".to_string()) {
+            inter_contains_w += 1;
         }
         if inter.is_empty() {
             inter_empty += 1;
-            if accepted.len() == sets.len() {
-                all_accepted += 1;
-            } else if !accepted.iter().any(|c| c.contains(&"x")) {
-                empty_by_power += 1;
-            }
         }
         naive_x += naive_slope(&rows, "x");
         naive_z += naive_slope(&rows, "z");
@@ -699,42 +644,25 @@ fn many_rounds(repetitions: usize, instability: f64, label: &str) {
         naive_x / n,
         naive_z / n
     );
-    for (i, set) in sets.iter().enumerate() {
+    for (i, set) in ALL_SETS.iter().enumerate() {
+        let name = if set.is_empty() {
+            "empty".to_string()
+        } else {
+            set.join("+")
+        };
         println!(
             "  {{{:>5}}}  mean F = {:>8.2}  rejection rate = {:.3}",
-            set.join("+"),
+            name,
             sum_f[i] / n,
             rejections[i] as f64 / n
         );
     }
     println!(
-        "  {{x}} accepted in {:.3} of the rounds",
-        accepted_x as f64 / n
-    );
-    println!(
-        "  intersection = {{x}} in {:.3} of the rounds",
-        inter_x as f64 / n
-    );
-    println!(
-        "  intersection = {{z}} in {:.3} of the rounds",
-        inter_z as f64 / n
-    );
-    println!(
-        "  intersection = {{w}} in {:.3} of the rounds",
-        inter_w as f64 / n
-    );
-    println!(
-        "  intersection contains x and does not contain w in {:.3} of the rounds",
-        inter_with_x_without_w as f64 / n
-    );
-    let empty_by_w =
-        (inter_empty as f64 / n) - (all_accepted as f64 / n) - (empty_by_power as f64 / n);
-    println!(
-        "  empty intersection in {:.3} (of which {:.3} because only the noise W was left, {:.3} because the cause itself was not left, and {:.3} because W entered some sets and not others)",
-        inter_empty as f64 / n,
-        inter_w as f64 / n,
-        empty_by_power as f64 / n,
-        empty_by_w
+        "  intersection = {{x}} in {:.3} of the rounds | contains z in {:.3} | contains w in {:.3} | empty in {:.3}",
+        inter_x as f64 / n,
+        inter_contains_z as f64 / n,
+        inter_contains_w as f64 / n,
+        inter_empty as f64 / n
     );
     println!();
 }
@@ -763,6 +691,32 @@ mod tests {
         assert_eq!(
             intersection(&[vec!["x", "z"], vec!["x"]]),
             vec!["x".to_string()]
+        );
+    }
+
+    /// The guarantee of ICP on the stable world: the empty set, the child Z and the noise W
+    /// are rejected, because the environment shifts X and therefore the mean of Y; {x} passes.
+    #[test]
+    fn icp_recovers_the_cause_and_rejects_the_empty_set() {
+        let rows = generate(2026, &THREE_SITES, 0.0);
+        assert!(
+            icp(&rows, &THREE_SITES, &[]).p < 0.05,
+            "empty set must fail"
+        );
+        assert!(icp(&rows, &THREE_SITES, &["z"]).p < 0.05, "child must fail");
+        assert!(icp(&rows, &THREE_SITES, &["w"]).p < 0.05, "noise must fail");
+        assert!(icp(&rows, &THREE_SITES, &["x"]).p > 0.05, "cause must pass");
+    }
+
+    /// When the coefficient differs by site, the true cause is no longer invariant.
+    #[test]
+    fn icp_rejects_the_cause_when_the_mechanism_changes_by_site() {
+        let rows = generate(2026, &THREE_SITES, 1.0);
+        assert!(icp(&rows, &THREE_SITES, &["x"]).p < 0.05);
+        let slopes = icp(&rows, &THREE_SITES, &["x"]).slopes_by_environment;
+        assert!(
+            slopes[2] - slopes[0] > 2.0,
+            "per-site slopes must differ: {slopes:?}"
         );
     }
 }

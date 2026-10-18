@@ -232,7 +232,7 @@ pub fn run() {
         skill(&p_raw, &vault.y, rate_dev)
     );
     println!(
-        "official model with Platt (a = {:.2}, b = {:.2}): predicted mean {:.4}",
+        "official model with Platt (slope = {:.2}, intercept = {:.2}): predicted mean {:.4}",
         b_platt[1],
         b_platt[0],
         mean(&p_platt)

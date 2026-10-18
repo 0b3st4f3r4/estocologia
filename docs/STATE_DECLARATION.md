@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 373 tests passed, none failed
+cargo test --workspace                                  # 406 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **5 619 lines**, **71 931 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **5 831 lines**, **76 919 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book is **5 619 lines and 71 931 words**, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 831 lines and 76 919 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -192,3 +192,26 @@ record is `history/estado-2026-10-18T2036Z.md`.
 | `empirical/p16-ponte/README.md` | reproduction command `--ponte`, refused since the English migration | `--bridge`, by a dated rectification |
 
 What did not change: `registro.tsv`, the verdict on thesis (c), and every number of the book.
+
+## The rectifications of 2026-10-18 (second outside review)
+
+Later the same day the owner asked for a critical review of the textbook and then for its corrections to be applied
+end to end. The reviewer is again a language model (Claude, Anthropic), of the same family as the first, so this is
+not the independent audit that item 17 of `docs/DECLARED_PROPOSALS.md` now declares. The dated record, with the hashes
+before and after, is `history/estado-2026-10-18T2227Z.md`. Unlike the earlier records, this one **changes numbers of
+the book**: every change is listed with both values in Appendix E, rectifications of 2026-10-18.
+
+| What | Before | After |
+| --- | --- | --- |
+| `cargo test --workspace` | 395 | **406**: eleven tests that fail on the old code (Kelly as the argmax of growth, drag as $L^2\sigma^2/2$, EVSI by hand, Gumbel level, FNR against FPR, Chouldechova identity, exact insurer, ICP rejects the empty set and the child, ICP under an unstable mechanism, RES of a constant forecaster, a board verdict that no seed can change), plus two that pin the type III lock |
+| laboratories | Chapters 8, 9, 10, 11 and 12 printed values from wrong accounts | corrected accounts; every cited block still equals its instrument (31 of 31) |
+| R axis | resolution loss 46.24 and 5.97 min at utilisation 1 | 22.99 and 2.50 min at a declared utilisation of 0.8 |
+| review board A1–A8 | a safeguard without anchor drew 5 or 6, so the seed decided the verdict | 4 or 5, below the floor under every seed; the module states that the board runs no attack |
+| type III lock | one message for two defects | three messages; a test pins its declared limit (it reads no meaning) |
+| `scripts/book/check_book.py` | parts, chapters, fences | also refuses 20 retired values in the chapters |
+| assembled book, line count | 5 619 | 5 831 (with 76 919 words) |
+| live declared proposals | 6 | **8**: item 16, the book as its own source, and item 17, an audit from outside (`docs/OUTSIDE_AUDIT.md`) |
+
+What did not change: the data, the seals of the empirical points, the `gates` merkle root, and every verdict of §3 that
+does not rest on a corrected laboratory. The conclusions of Chapters 15 and 21 that no published number had fallen by an
+error of arithmetic are withdrawn in the text, with both statements kept in Appendix E.

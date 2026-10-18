@@ -132,7 +132,7 @@ greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution 
 board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
 stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
 inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
-R axis: loss of the aggregate 46.24 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis: loss of the aggregate 22.99 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
 R axis without oscillation: loss 0.00 min -> R0-agregada
 ~~~
 
@@ -418,12 +418,12 @@ Paired arms under identical total resources measuring resolution loss.
 ~~~text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
+   above 30 min: aggregated 0.4232, fine 0.1782
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
+   above 30 min: aggregated 0.2266, fine 0.1946
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
+   above 30 min: aggregated 0.1969, fine 0.1969
 resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
 
 -- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
@@ -459,10 +459,10 @@ chapter  1 | no loss measured in this chapter | the chapter presents the target 
 chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
 chapter  3 | no loss measured in this chapter | probability without a scale decision
 chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
+chapter  5 | resolution loss 22.99 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
 chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
 chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
+chapter  8 | resolution loss 2.50 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
 chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
 chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
 chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
@@ -470,11 +470,11 @@ chapter 12 | no loss measured in this chapter | the map of knowledge; no scale d
 chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
 chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
 chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
+chapter 16 | resolution loss 22.99 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
 chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
 chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
 chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
+chapter 20 | resolution loss 22.99 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
 chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
 ~~~
 
@@ -551,10 +551,11 @@ board A1-A8 with seed 2026, card with the eight safeguards: severities [9, 8, 10
 the same card without one band's safeguard: the lowest severity drops to 2 (rejected)
 == Chapter 8 :: the forecaster's thermometer ==
 4000 days, observed base rate = 0.243, mean chance declared by the expert = 0.252
-      lazy (0.20 always): Brier 0.1858 | REL 0.0021 RES 0.0002 UNC 0.1840 | ECE 0.0430 | after Platt: Brier 0.1840, ECE 0.0130 (a = -1.14, b = 0.00)
-                  expert: Brier 0.1569 | REL 0.0012 RES 0.0267 UNC 0.1840 | ECE 0.0281 | after Platt: Brier 0.1560, ECE 0.0115 (a = -0.22, b = 0.81)
-           overconfident: Brier 0.1712 | REL 0.0150 RES 0.0275 UNC 0.1840 | ECE 0.1109 | after Platt: Brier 0.1559, ECE 0.0120 (a = -0.25, b = 0.37)
-                   noisy: Brier 0.2119 | REL 0.0363 RES 0.0083 UNC 0.1840 | ECE 0.1449 | after Platt: Brier 0.1755, ECE 0.0166 (a = -0.82, b = 0.27)
+Platt fitted on days 1-2000 and scored out of the fit on days 2001-4000 (intercept a, slope b):
+      lazy (0.20 always): Brier 0.1858 | REL 0.0018 RES 0.0000 UNC 0.1840 | ECE 0.0430 | out of fit: Brier 0.1831 -> 0.1817 with Platt, ECE 0.0385 -> 0.0090 (a = -1.11, b = 0.00)
+                  expert: Brier 0.1569 | REL 0.0012 RES 0.0267 UNC 0.1840 | ECE 0.0281 | out of fit: Brier 0.1558 -> 0.1547 with Platt, ECE 0.0345 -> 0.0204 (a = -0.18, b = 0.82)
+           overconfident: Brier 0.1712 | REL 0.0150 RES 0.0275 UNC 0.1840 | ECE 0.1109 | out of fit: Brier 0.1708 -> 0.1555 with Platt, ECE 0.1119 -> 0.0129 (a = -0.21, b = 0.37)
+                   noisy: Brier 0.2119 | REL 0.0363 RES 0.0083 UNC 0.1840 | ECE 0.1449 | out of fit: Brier 0.2147 -> 0.1741 with Platt, ECE 0.1544 -> 0.0200 (a = -0.78, b = 0.28)
 Murphy identity on the expert: REL - RES + UNC = 0.1584339, Brier of the forecasts pooled into the boxes = 0.1584339, difference = 3.47e-15
 the raw forecast has Brier 0.1569462; pooling into 10 boxes costs 1.49e-3, and the identity closes
  Toronto prisons 1997-2002: n =    1488 | null q50 0.0292 | null q95 0.0425 | null q99 0.0481 | mean 0.0296 | null ECE above 0.03 in 45.1% of the simulations
@@ -569,6 +570,7 @@ large: open 192/263 = 0.7300  new 55/80 = 0.6875
 raw:   open 273/350 = 0.7800  new 289/350 = 0.8257
 weight of the strata in the whole population: small 0.5100, large 0.4900
 weighted by the whole population: open 0.8325  new 0.7789  -> the advantage flips back
+difference in points: small stones 6.44, large stones 4.25, standardised 5.37 (a weighted mean of the two)
 fraction of hard cases in the open surgery = 0.7514, in the new one = 0.2286
 
 == Chapter 9 :: the three steps of Pearl ==
@@ -580,72 +582,65 @@ fraction of hard cases in the open surgery = 0.7514, in the new one = 0.2286
 rows = 12000 (4000 per site), X -> Y with coefficient 2, X -> Z (child) with noise different per site, W pure noise
 naive correlation with Y: corr(X,Y) = 0.9314  corr(Z,Y) = 0.7208  corr(W,Y) = 0.0055
 naive slope (all sites together): X = 1.9885  Z = 0.6003  W = 0.0152
-  candidate {    x}  F =   0.755  p = 4.702e-1  common = 1.985  per site = [1.970, 1.996, 1.990]  ACCEPTED
-  candidate {    z}  F = 976.809  p = 0.000e0  common = 0.477  per site = [0.928, 0.496, 0.299]  rejected
-  candidate {    w}  F =   1.474  p = 2.290e-1  common = 0.011  per site = [0.056, -0.030, 0.008]  ACCEPTED
-  candidate {  x+z}  F =   0.612  p = 6.541e-1  common = 1.991  per site = [1.918, 1.998, 1.999]  ACCEPTED
-  candidate {  x+w}  F =   0.704  p = 5.890e-1  common = 1.985  per site = [1.970, 1.996, 1.990]  ACCEPTED
-  candidate {  z+w}  F = 488.188  p = 0.000e0  common = 0.477  per site = [0.928, 0.496, 0.299]  rejected
-  candidate {x+z+w}  F =   0.624  p = 7.111e-1  common = 1.991  per site = [1.919, 1.998, 1.999]  ACCEPTED
-  candidate {empty}  F = 0.000  p = 1.0  (intercepts only)
-accepted sets: 5 -> intersection S_hat = {}
+  candidate {empty}  F = 3081.848  p = 0.000e0  intercepts only  rejected
+  candidate {    x}  F =    0.633  p = 6.390e-1  common = 1.988  per site = [1.970, 1.996, 1.990]  ACCEPTED
+  candidate {    z}  F = 1079.841  p = 0.000e0  common = 0.600  per site = [0.928, 0.496, 0.299]  rejected
+  candidate {    w}  F = 1541.630  p = 0.000e0  common = 0.015  per site = [0.056, -0.030, 0.008]  rejected
+  candidate {  x+z}  F =    0.579  p = 7.471e-1  common = 1.994  per site = [1.918, 1.998, 1.999]  ACCEPTED
+  candidate {  x+w}  F =    0.640  p = 6.984e-1  common = 1.988  per site = [1.970, 1.996, 1.990]  ACCEPTED
+  candidate {  z+w}  F =  719.620  p = 0.000e0  common = 0.600  per site = [0.928, 0.496, 0.299]  rejected
+  candidate {x+z+w}  F =    0.597  p = 7.815e-1  common = 1.994  per site = [1.919, 1.998, 1.999]  ACCEPTED
+accepted sets: 4 of 8 -> intersection S_hat = {x}
 
 == Chapter 9 :: 200 repetitions, stable mechanism: Y = 2X + noise at every site
 mean naive slope (all sites together): X = 2.0004  Z = 0.6015
-  {    x}  mean F =     1.04  rejection rate = 0.060
-  {    z}  mean F =   973.87  rejection rate = 1.000
-  {    w}  mean F =     1.14  rejection rate = 0.085
-  {  x+z}  mean F =     0.99  rejection rate = 0.050
-  {  x+w}  mean F =     1.04  rejection rate = 0.075
-  {  z+w}  mean F =   487.45  rejection rate = 1.000
-  {x+z+w}  mean F =     1.01  rejection rate = 0.055
-  {x} accepted in 0.940 of the rounds
-  intersection = {x} in 0.080 of the rounds
-  intersection = {z} in 0.000 of the rounds
-  intersection = {w} in 0.025 of the rounds
-  intersection contains x and does not contain w in 0.080 of the rounds
-  empty intersection in 0.895 (of which 0.025 because only the noise W was left, 0.005 because the cause itself was not left, and 0.890 because W entered some sets and not others)
+  {empty}  mean F =  3191.16  rejection rate = 1.000
+  {    x}  mean F =     1.06  rejection rate = 0.065
+  {    z}  mean F =  1111.23  rejection rate = 1.000
+  {    w}  mean F =  1596.08  rejection rate = 1.000
+  {  x+z}  mean F =     1.02  rejection rate = 0.065
+  {  x+w}  mean F =     1.05  rejection rate = 0.080
+  {  z+w}  mean F =   741.13  rejection rate = 1.000
+  {x+z+w}  mean F =     1.03  rejection rate = 0.055
+  intersection = {x} in 0.960 of the rounds | contains z in 0.015 | contains w in 0.010 | empty in 0.025
 
 == Chapter 9 :: 200 repetitions, unstable mechanism: the coefficient of X in Y changes from site to site
-mean naive slope (all sites together): X = 4.0004  Z = 1.2029
-  {    x}  mean F =     1.04  rejection rate = 0.060
-  {    z}  mean F =  1352.54  rejection rate = 1.000
-  {    w}  mean F =     1.10  rejection rate = 0.070
-  {  x+z}  mean F =     0.99  rejection rate = 0.050
-  {  x+w}  mean F =     1.04  rejection rate = 0.075
-  {  z+w}  mean F =   676.76  rejection rate = 1.000
-  {x+z+w}  mean F =     1.01  rejection rate = 0.055
-  {x} accepted in 0.940 of the rounds
-  intersection = {x} in 0.065 of the rounds
-  intersection = {z} in 0.000 of the rounds
-  intersection = {w} in 0.025 of the rounds
-  intersection contains x and does not contain w in 0.065 of the rounds
-  empty intersection in 0.910 (of which 0.025 because only the noise W was left, 0.005 because the cause itself was not left, and 0.905 because W entered some sets and not others)
+mean naive slope (all sites together): X = 2.0001  Z = 0.6013
+  {empty}  mean F =  2921.60  rejection rate = 1.000
+  {    x}  mean F =  6001.61  rejection rate = 1.000
+  {    z}  mean F =   772.13  rejection rate = 1.000
+  {    w}  mean F =  1461.37  rejection rate = 1.000
+  {  x+z}  mean F =  4001.00  rejection rate = 1.000
+  {  x+w}  mean F =  4001.05  rejection rate = 1.000
+  {  z+w}  mean F =   515.10  rejection rate = 1.000
+  {x+z+w}  mean F =  3000.74  rejection rate = 1.000
+  intersection = {x} in 0.000 of the rounds | contains z in 0.000 | contains w in 0.000 | empty in 1.000
 
 == Chapter 10 :: the Peters coin (heads +50%, tails -40%) ==
 ensemble mean per round = 1.0500  (+5.00% per round)
 time mean per round      = -0.052680  (-5.268% per round)
 product of one head and one tail: 1.5 x 0.6 = 0.90
-full Kelly (5:4): f* = 0.1400 of the wealth; with an even-odds payoff, 2p - 1 = 0.20
-time growth with full Kelly: +0.0175 per round
+full Kelly (heads +50%, tails -40%): f* = p/0.4 - (1-p)/0.5 = 0.2500 of the wealth; even-odds bet with p = 0.6: 2p - 1 = 0.20
+time growth per round: f* = +0.006211 | 2f* = +0.000000 | f = 0.70 -0.014200 | f = 1 -0.052680
 
 all-in (f = 1.00)          above the start: 10 rounds 0.374  100 rounds 0.128  1000 rounds 0.00000
                            ruin (< 1e-6 of the capital) = 0.9971  final median = 1.322e-23  final mean = 2.725e-6
-full Kelly (f = 0.70)      above the start: 10 rounds 0.374  100 rounds 0.300  1000 rounds 0.07830
-                           ruin (< 1e-6 of the capital) = 0.5089  final median = 6.810e-7  final mean = 4.982e4
-half Kelly (f = 0.35)      above the start: 10 rounds 0.618  100 rounds 0.611  1000 rounds 0.85620
-                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.854e2  final mean = 2.119e6
-quarter Kelly (f = 0.14)   above the start: 10 rounds 0.618  100 rounds 0.811  1000 rounds 0.99560
-                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.506e2  final mean = 1.016e3
+twice Kelly (f = 0.50)     above the start: 10 rounds 0.485  100 rounds 0.527  1000 rounds 0.51960
+                           ruin (< 1e-6 of the capital) = 0.0244  final median = 1.000e0  final mean = 7.375e6
+full Kelly (f = 0.25)      above the start: 10 rounds 0.618  100 rounds 0.684  1000 rounds 0.96120
+                           ruin (< 1e-6 of the capital) = 0.0000  final median = 4.983e2  final mean = 1.127e5
+half Kelly (f = 0.125)     above the start: 10 rounds 0.618  100 rounds 0.811  1000 rounds 0.99650
+                           ruin (< 1e-6 of the capital) = 0.0000  final median = 1.062e2  final mean = 4.954e2
 
 all-in: log10 of the final median = -22.9, log10 of the final mean = -5.6
 part of the mean that comes from the richest trajectory (richest 1%): 1.000
 
-== Chapter 10 :: the insurance seller (earns 1% per week, loses 50% with q = 0.004) ==
-time growth of the all-in: +0.00714 per week (negative: ruin is certain)
-observed frequency + full Kelly  no loss = 0.368  all-in = 0.368  ruin in 1000 weeks = 0.0000  final median = 3.531e2  final mean = 1.255e3
-Laplace + full Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 8.983e1  final mean = 2.529e2
-Laplace + half Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 1.097e1  final mean = 1.371e1
+== Chapter 10 :: the insurance seller (earns 1% per week, loses 95% with q = 0.004) ==
+time growth of the all-in: -0.00207 per week (negative: the typical all-in trajectory decays)
+Kelly fraction with the true q: 0.648 | with Laplace after 250 clean weeks: 0.652 | with the raw frequency 0/250: capped at 1
+observed frequency + full Kelly  no loss = 0.368  all-in = 0.368  ruin in 1000 weeks = 0.0194  final median = 3.026e0  final mean = 1.984e2
+Laplace + full Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 4.077e0  final mean = 2.238e1
+Laplace + half Kelly             no loss = 0.368  all-in = 0.000  ruin in 1000 weeks = 0.0000  final median = 2.097e0  final mean = 3.789e0
 theoretical probability of 250 weeks with no loss = 0.3671
 Laplace with zero losses in 250 weeks: q_hat = 1/252 = 0.003968
 
@@ -653,7 +648,7 @@ Laplace with zero losses in 250 weeks: q_hat = 1/252 = 0.003968
 true mean (alpha/(alpha-1)) = 11.0
 n =      1000: mean of the sample means =     7.76  median =    6.22  below 11 in 0.94  95% CI covers in 0.24
 n =   1000000: mean of the sample means =     9.53  median =    8.39  below 11 in 0.95  95% CI covers in 0.26
-fraction of the mean that comes from values above the largest seen: 0.000
+share of each sample's sum that comes from its single largest value (n = 1 000 000): 0.088
 in the median, 25.12% of the true mean comes from values above the maximum of a sample of one million
 
 Hill estimator with alpha = 1.1 and n = 200 000:
@@ -665,82 +660,82 @@ Hill estimator with alpha = 1.1 and n = 200 000:
 reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
 == Chapter 10 :: volatility drag at 1x, 2x and 3x ==
-L = 1x: arithmetic mean = +0.000317/session, measured growth = +0.000249/session, drag = +0.000068/session (+0.0172/year), wealth in 100000 sessions = 6.363e10
-L = 2x: arithmetic mean = +0.000634/session, measured growth = +0.000267/session, drag = +0.000367/session (+0.0926/year), wealth in 100000 sessions = 3.805e11
-L = 3x: arithmetic mean = +0.000951/session, measured growth = +0.000053/session, drag = +0.000898/session (+0.2264/year), wealth in 100000 sessions = 1.955e2
+L = 1x: arithmetic mean = +0.000299/session, measured growth = +0.000237/session, drag = +0.000062/session (+0.0156/year), wealth in 100000 sessions = 1.903e10
+L = 2x: arithmetic mean = +0.000597/session, measured growth = +0.000350/session, drag = +0.000247/session (+0.0623/year), wealth in 100000 sessions = 1.551e15
+L = 3x: arithmetic mean = +0.000896/session, measured growth = +0.000339/session, drag = +0.000556/session (+0.1402/year), wealth in 100000 sessions = 5.325e14
 horizon of 2000 sessions:
-  L = 1x: measured growth = +0.000196/session, final wealth = 1.480e0
-  L = 2x: measured growth = +0.000162/session, final wealth = 1.384e0
-  L = 3x: measured growth = -0.000101/session, final wealth = 8.168e-1
+  L = 1x: measured growth = +0.000198/session, final wealth = 1.485e0
+  L = 2x: measured growth = +0.000273/session, final wealth = 1.726e0
+  L = 3x: measured growth = +0.000225/session, final wealth = 1.569e0
 horizon of 10000 sessions:
-  L = 1x: measured growth = +0.000352/session, final wealth = 3.385e1
-  L = 2x: measured growth = +0.000472/session, final wealth = 1.126e2
-  L = 3x: measured growth = +0.000360/session, final wealth = 3.649e1
+  L = 1x: measured growth = +0.000313/session, final wealth = 2.276e1
+  L = 2x: measured growth = +0.000501/session, final wealth = 1.496e2
+  L = 3x: measured growth = +0.000565/session, final wealth = 2.835e2
 the 1987 crash (-22.6% in one day) takes 67.8% of the capital at 3x, 22.6% at 1x; ruin starts at L = 4.4
 with a -22.6% crash in one day and 40 days of -3% (20 thousand sessions):
-  L = 1x: measured growth = +0.000147/session, final wealth = 1.890e1
-  L = 2x: measured growth = +0.000058/session, final wealth = 3.167e0
-  L = 3x: measured growth = -0.000274/session, final wealth = 4.188e-3
+  L = 1x: measured growth = +0.000142/session, final wealth = 1.720e1
+  L = 2x: measured growth = +0.000155/session, final wealth = 2.222e1
+  L = 3x: measured growth = +0.000033/session, final wealth = 1.944e0
 
-== Chapter 11 :: the Bernoulli ship (C = 1.800, L = 34.000, p = 0,05) ==
-threshold p > C/L: p* = 0.05294 (5.294%)  ->  p = 0,050 does not pass the threshold
+== Chapter 11 :: the Bernoulli ship (C = 1,800, L = 34,000, p = 0.05) ==
+threshold p > C/L: p* = 0.05294 (5.294%)  ->  p = 0.050 does not pass the threshold
 in expectation: expected loss without insurance = 1700, insurance result = +100 per month
 shipowner growth in time: 1 ship without insurance = -0.0208, 1 ship with insurance = -0.0182, 3 ships without insurance = -inf
-insurer with     1 contracts: growth in time = -0.000186 per month
-insurer with    10 contracts: growth in time = -0.001808 per month
-insurer with   100 contracts: growth in time = -0.013466 per month
-insurer with  1000 contracts: growth in time = +0.100410 per month
+insurer holding 50,000 of capital per contract (exact binomial account):
+insurer with     1 contracts: growth in time = -0.018042 per month
+insurer with    10 contracts: growth in time = +0.000854 per month
+insurer with   100 contracts: growth in time = +0.001888 per month
+insurer with  1000 contracts: growth in time = +0.001987 per month
 
 == Chapter 11 :: the EVPI (treating costs 1, leaving a sick patient costs 10) ==
-action threshold: p > 0.10  ->  with p = 0,3 the best act without information treat (-1.00)
+action threshold: p > 0.10  ->  with p = 0.3 the best act without information treat (-1.00)
 gain of whoever knows the state before acting = -0.30
 EVPI = +0.70
-  test sensitive  (0,90; 0,70): EVSI = +0.2400
-  test specific (0,30; 0,95): EVSI = +0.2450
+  test sensitive (0.90; 0.70): EVSI = +0.2200 | mutual information = 0.241 bit
+  test specific  (0.30; 0.95): EVSI = +0.0000 | mutual information = 0.079 bit
   with prevalence 0.05: best act without information = do not treat, EVPI = +0.450
   with prevalence 0.30: best act without information = treat, EVPI = +0.700
   with prevalence 0.60: best act without information = treat, EVPI = +0.400
 
 == Chapter 11 :: the van Dantzig dikes, four tail models ==
   model     xi = -0.1  xi = +0.0  xi = +0.1  xi = +0.2   optimal height
-  T = 100          4.07       1.26       5.71       7.01
-  T = 10000        5.84       1.26      12.78      21.49
+  T = 100          4.07       4.76       5.71       7.01
+  T = 10000        5.84       8.27      12.78      21.49
   optimal height with xi = -0.1: 5.839 m  (cost 4.143)
-  optimal height with xi = +0.0: 3.059 m  (cost 1.130)
+  optimal height with xi = +0.0: 7.564 m  (cost 6.327)
   optimal height with xi = +0.1: 9.809 m  (cost 9.426)
   optimal height with xi = +0.2: 12.584 m  (cost 13.613)
-  expected value with the Gumbel: 3.06 m
-  mean of the models: 7.82 m
+  expected value with the Gumbel: 7.56 m
+  mean of the models: 8.95 m
   Wald maximin: 12.58 m
-  Savage minimax regret: 9.81 m (largest regret 6.68)
+  Savage minimax regret: 9.81 m (largest regret 3.67)
   precaution: 1 in 10 000 in the worst model = 21.49 m
-  EVPI of the model set = +18.427 m
+  spread between precaution and the Gumbel expected value = 13.92 m
+  EVPI of knowing the tail model (equal weights, cost units) = +1.919
 
 == Chapter 11 :: the Chouldechova trilemma ==
 group     base rate        FNR        FPR  false positives  false negatives        PPV
-White         0.069      0.240      0.105              467               79     0.9408
-Black         0.111      0.360      0.196              832              191     0.9096
+White         0.069      0.240      0.105              467               79     0.3491
+Black         0.111      0.360      0.196              832              191     0.2896
 observed cases: White 329 marked by the facts, Black 530
 
 -- FNR matched downwards, to the FNR of White at 0.240 --
 White         0.069      0.240      0.105              467               79
-Black         0.111      0.240      0.045              192              127
-total false positives: 1299 -> 659 (-640)
+Black         0.111      0.240      0.309             1312              127
+total false positives: 1299 -> 1778 (+479)
 total false negatives: 270 -> 206 (-64)
 
 -- FNR matched upwards, to the FNR of Black at 0.360 --
-White         0.069      0.360      0.246             1095              119
+White         0.069      0.360      0.052              230              119
 Black         0.111      0.360      0.196              832              191
-total false positives: 1299 -> 1927 (+628)
+total false positives: 1299 -> 1062 (-237)
 total false negatives: 270 -> 309 (+40)
 
 Chouldechova identity: FPR = p/(1-p) * (1-PPV)/PPV * (1-FNR)
-group    PPV of the matrix PPV of the identity          ratio
-White              0.3491             0.0592            0.2x
-Black              0.2896             0.0904            0.3x
-reading: with the observed FNR and FPR, the score would only be calibrated by group
-if the positive predictive value were the one in the middle column. It is much larger: the score
-separates reasonably and is not read as a probability of risk.
+group    observed FPR  FPR of identity     difference
+White          0.1050           0.1050       -2.8e-17
+Black          0.1960           0.1960       -2.8e-17
+the trilemma: with PPV 0.3491 and FNR 0.240 in BOTH groups, the identity forces FPR 0.1050 for White and 0.1769 for Black
 
 == Chapter 12 :: the map of knowledge ==
 graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
@@ -757,9 +752,9 @@ Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
 Crisonomy: EVPI = 0.0000 | best act without information = 5.8000 | value with perfect information = 7.0000
 Crisonomy: without the option of acting (only betting half = 3.0000 or not betting), the best without information is 2.1000 and the EVPI rises to 3.7000
 Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
-Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(0,5) = true
-Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(0,5) = true
-Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(0,5) = false | step within the regime = 30.13
+Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
 == Chapter 13 :: the A1-A8 adversarial panel ==
 complete card (card h3.voos): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=8 A6-fairness=9 A7-domain=8 A8-decision=10 | lowest=8 floor=6 approved=true
 card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=2 A6-fairness=3 A7-domain=8 A8-decision=10 | lowest=2 floor=6 approved=false
@@ -921,7 +916,7 @@ world C: world A plus x5, the column that is the environment itself (5 candidate
 seed 2021 | training 120000 stops (rate 0.0352) | development 58000 (rate 0.0222) | vault 24466 (rate 0.0220)
 raw model (trained in the old period of higher rate): predicted mean 0.0351 (60% above the vault rate)
   CITL = +0.0132 | ECE = 0.0132 | Brier = 0.02155 | skill = -0.0020
-official model with Platt (a = 0.98, b = -0.54): predicted mean 0.0222
+official model with Platt (slope = 0.98, intercept = -0.54): predicted mean 0.0222
   CITL = +0.0002 | ECE = 0.0022 | Brier = 0.02130 | skill = +0.0098
 climatology fixed at the past rate: Brier = 0.02151 (p(1-p) = 0.02171)
 
@@ -1225,7 +1220,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 75 tests
+running 85 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1244,10 +1239,20 @@ test ch04::tests::the_fixed_model_is_almost_always_wrong_and_the_forgetting_mode
 test ch05::tests::jensen_in_the_queue_varies_above_the_constant ... ok
 test ch06::tests::berkson_induces_negative_correlation_and_persistence_reduces_effective_n ... ok
 test ch07::tests::garden_inflates_false_positive_and_hot_hand_has_negative_bias ... ok
+test ch08::tests::constant_forecaster_has_zero_resolution ... ok
 test ch08::tests::murphy_identity_closes_and_platt_reduces_rel ... ok
+test ch09::tests::icp_recovers_the_cause_and_rejects_the_empty_set ... ok
+test ch09::tests::icp_rejects_the_cause_when_the_mechanism_changes_by_site ... ok
 test ch09::tests::pearl_steps_and_icp_intersection_work ... ok
+test ch10::tests::drag_grows_with_the_square_of_leverage ... ok
+test ch10::tests::kelly_fraction_is_the_argmax_of_growth ... ok
 test ch10::tests::peters_coin_grows_in_the_ensemble_and_decays_in_time ... ok
+test ch11::tests::chouldechova_identity_closes_on_any_matrix ... ok
 test ch11::tests::dike_gev_underestimates_with_gumbel_and_chouldechova_closes ... ok
+test ch11::tests::evsi_matches_the_hand_count_and_never_exceeds_evpi ... ok
+test ch11::tests::gumbel_level_grows_with_the_period ... ok
+test ch11::tests::insurer_growth_rises_with_the_number_of_contracts ... ok
+test ch11::tests::lowering_the_fnr_raises_the_fpr ... ok
 test ch12::tests::valid_graph_passes_and_lenses_agree_with_hypergraph ... ok
 test ch13::tests::panel_approves_complete_card_and_rejects_when_a_concern_is_missing ... ok
 test ch14::tests::complete_card_passes_and_a_defect_triggers_a_gate ... ok
@@ -1302,16 +1307,17 @@ test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_div
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
 
-test result: ok. 75 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 84 tests
+running 87 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
+test agents::tests::approval_never_depends_on_the_seed ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
-test agents::tests::safeguard_without_structural_anchor_tests_the_5_and_6_edge_and_fails_an_empty_stamp ... ok
+test agents::tests::safeguard_without_structural_anchor_stays_below_the_floor_under_every_seed ... ok
 test agents::tests::severity_reproduces_with_the_same_seed ... ok
 test audit::tests::sha256_matches_the_known_vectors ... ok
 test audit::tests::the_chain_detects_tampering ... ok
@@ -1349,7 +1355,9 @@ test invariants::tests::a_resolution_finer_than_the_day_also_passes ... ok
 test invariants::tests::a_unit_finer_than_the_day_stays_outside_the_declared_phi5 ... ok
 test invariants::tests::a_week_unit_also_fails_with_r0_aggregated ... ok
 test invariants::tests::an_aggregated_action_against_a_day_unit_fails_phi5 ... ok
+test invariants::tests::declared_limit_the_type_iii_lock_does_not_read_meaning ... ok
 test invariants::tests::the_phi5_gate_code_appears_in_the_failure_report ... ok
+test invariants::tests::the_type_iii_lock_names_the_missing_part ... ok
 test invariants::tests::without_a_decision_maker_question_type_iii_fails ... ok
 test invariants::tests::without_a_seed_phi1_fails ... ok
 test invariants::tests::without_a_unit_phi5_does_not_fire_and_phi2_does ... ok
@@ -1394,7 +1402,7 @@ test schema::tests::the_chain_applies_rename_drop_and_addition ... ok
 test schema::tests::the_chain_does_not_touch_a_document_already_at_the_card_version ... ok
 test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_version ... ok
 
-test result: ok. 84 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -1741,4 +1749,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **5619 lines** and **71931 words**, sha256 `cb4965999d1b7f91a4a6f54decd65e27a7fddcddaeaea72494baddecd87bc33d`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **5831 lines** and **76919 words**, sha256 `987e5e77e0a618397644ff0a778de4ad2162d492b4900c5267e693e4039ca914`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
