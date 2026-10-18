@@ -133,8 +133,8 @@ signed transcript hash, which does not exist today.
 No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, a
 **divergence declaration** states both values and the cause in Appendix E (provenance of the numbers), chapter by chapter.
 The chapters themselves carry content only: no path, no reference to the book, the repository or the program, and the R-axis
-block only in the chapters that measure a resolution loss (5, 8, 10, 16, 18, 20, and 21). This is the owner's rule of 2026-10-18,
-which moved the declarations out of the chapters and rewrites the book part by part; during that rewrite,
+block, or the slice of it that teaches, only in the chapters that measure a resolution loss or a threshold (5, 8, 10, 16, and 21). This is the owner's rule of 2026-10-18,
+which moved the declarations out of the chapters and rewrote the book part by part (`docs/declarations/BOOK_REWRITE.md`); since then,
 `scripts/style/check_pass.py` checks each rewritten file for the ramp markers, the word floor, and number provenance (every number
 in running prose must exist in a source or in an output block of the same file), and `check_labs.py` keeps every block equal to
 its instrument.
