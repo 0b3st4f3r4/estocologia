@@ -17,3 +17,4 @@ dados_brutos/
 # versionado, por arquivo: regra por diretorio inteiro esconderia o que precisa ser lido.
 saida/armazem/
 empirical/p03-multiplicidade/copias/
+_site/
