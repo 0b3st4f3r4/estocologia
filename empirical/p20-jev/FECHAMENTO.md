@@ -10,7 +10,7 @@ letting the list change out of enthusiasm.
 
 | input | format | what the source has to fulfil |
 | --- | --- | --- |
-| `inferencias_reais.tsv` | `pedido<TAB>resposta`, with the internal break of the card escaped as `\n` | answer in the formal schema of the card, without free text and without a loose tag |
+| `inferencias_reais.tsv` | `pedido<TAB>resposta`, with the internal break of the card escaped as `\n`, and a first line `# model-sha256<TAB><hex><TAB><revision>` | answer in the formal schema of the card, without free text and without a loose tag; the first line carries the `sha256` of the weights file and its revision |
 | `desfechos_auditados.tsv` | `caso_id<TAB>prob<TAB>desfecho<TAB>fonte` | N ≥ 30, p in the strict (0, 1), outcome 0 or 1, exogenous provenance in the column `fonte` |
 
 The catalog of cases can be assembled by hand or with `scripts/generate_fire_sources.py`, which has two decoupled
@@ -85,7 +85,7 @@ cargo run --release --bin labs -- --jev
 
 | criterion | what the output has to show | what fails it |
 | --- | --- | --- |
-| 1. Weights gate | `pesos verificados: <sha256>` | `RECUSADO` for an absent or divergent hash, or an illegible artifact |
+| 1. Weights gate | `weights verified: <sha256>` and `model file declared: <sha256> \| revision <revision>` | `REFUSED` for an absent or divergent hash, or an illegible artifact; `model file: not declared` for a table without the model it came from |
 | 2. Determinism G1 | `identicas: true` with the same `sha256` in the two passes | `identicas: false` |
 | 3. Adequacy of the space | `abstencoes (x%)` with x ≤ 30, measured **over the cases of the artifact itself** | x > 30: the item closes with the formal verdict that the schema does **not** serve the model, with the refusals counted, without imputation |
 | 4. Brier and ECE | `Brier <valor> e ECE <valor> em 10 baldes sobre N pares`, with N ≥ 30 and abstentions outside the denominator | N < 30: `InsufficientSample`, no score |
@@ -102,7 +102,7 @@ repository does not have two definitions of calibration.
 
 The line of the round is not typed: the instrument prints the measurement as a card (`labs --jev --measure`), and the ingestor
 writes the line in `rodadas.tsv` with the same gate — `ingest-jev --record <measure> empirical/p20-jev/rodadas.tsv
---date YYYY-MM-DD`. It refuses half a measurement: without verified weight, without G1 closed, below the minimum sample, or without
+--date YYYY-MM-DD`. It refuses half a measurement: without verified weight, without a declared model file, without G1 closed, below the minimum sample, or without
 Brier and ECE, there is no line, and a repeated round is refused instead of duplicated.
 
 The `registro.tsv` of this folder gains one line per real round, with the format already declared:
@@ -110,6 +110,7 @@ The `registro.tsv` of this folder gains one line per real round, with the format
 | field | where it comes from |
 | --- | --- |
 | `data` | the date of the execution, not that of the declaration |
+| `modelo` | the `sha256` of the weights file, from the `@model` line of the artifact |
 | `N` | the number of pairs of the verified set |
 | `abstencoes` | the count that the instrument printed |
 | `custo_por_chamada` | tokens and milliseconds per call, as the instrument printed |

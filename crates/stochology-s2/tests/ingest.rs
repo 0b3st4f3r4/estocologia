@@ -275,3 +275,63 @@ fn the_escape_of_the_request_does_not_break_the_key_of_the_artifact() {
     );
     std::fs::remove_dir_all(&d).ok();
 }
+
+#[test]
+fn the_model_line_of_the_source_enters_the_sealed_artifact() {
+    let d = temp("model");
+    let sha = "ab".repeat(32);
+    let inf = d.join("inferences.tsv");
+    std::fs::write(
+        &inf,
+        format!("# model-sha256\t{sha}\torg/model@rev 2026-10-18\nquestion A\tanswer A\n"),
+    )
+    .expect("writes");
+    let out = d.join("outcomes.tsv");
+    std::fs::write(&out, "C-001\t0.7000\t1\trecord\n").expect("writes");
+    let weights = d.join("weights");
+    let cal = d.join("calibration");
+    let output = Command::new(bin())
+        .arg(&weights)
+        .arg(&inf)
+        .arg(&cal)
+        .arg(&out)
+        .output()
+        .expect("runs the ingestor");
+    assert!(
+        output.status.success(),
+        "the ingestor should pass: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    check_seal(&weights, "modelo.congelado");
+    let artifact = std::fs::read_to_string(weights.join("modelo.congelado")).expect("reads");
+    assert!(
+        artifact.contains(&format!("@model {sha} org/model@rev 2026-10-18\n")),
+        "the model line is inside the sealed text: {artifact}"
+    );
+    std::fs::remove_dir_all(&d).ok();
+}
+
+#[test]
+fn a_malformed_model_line_aborts_and_writes_nothing() {
+    let d = temp("bad-model");
+    let inf = d.join("inferences.tsv");
+    std::fs::write(
+        &inf,
+        "# model-sha256\tnot-a-hash\trev\nquestion A\tanswer A\n",
+    )
+    .expect("writes");
+    let out = d.join("outcomes.tsv");
+    std::fs::write(&out, "C-001\t0.7000\t1\trecord\n").expect("writes");
+    let weights = d.join("weights");
+    let cal = d.join("calibration");
+    let output = Command::new(bin())
+        .arg(&weights)
+        .arg(&inf)
+        .arg(&cal)
+        .arg(&out)
+        .output()
+        .expect("runs the ingestor");
+    assert!(!output.status.success(), "a bad model hash aborts");
+    assert!(!weights.exists(), "the destination is not touched");
+    std::fs::remove_dir_all(&d).ok();
+}

@@ -360,6 +360,15 @@ pub fn run() {
                 runner.sha256(),
                 runner.answers()
             );
+            match runner.model() {
+                Some(f) => println!(
+                    "  model file declared: {} | revision {}",
+                    f.sha256, f.revision
+                ),
+                None => println!(
+                    "  model file: not declared | the hash above proves the table did not change, not which model wrote it, and the round does not enter the record"
+                ),
+            }
             // The adequacy and G1 are measured on the cases of the artifact itself when it stores them (v2). With a
             // v1 artifact, which has only the hash, it falls back to its own probe — and the instrument says which of
             // the two it used.
@@ -504,6 +513,8 @@ pub fn run() {
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Measure {
     pub weights: Option<String>,
+    /// The `sha256` of the model file that the `@model` line declares; the table hash does not prove it.
+    pub model: Option<String>,
     pub answers: usize,
     pub requests: usize,
     pub probe: String,
@@ -528,6 +539,7 @@ pub fn measure() -> Measure {
     };
     if let Ok(mut runner) = crate::runner::LocalRunner::load(crate::runner::DEFAULT_DIR) {
         m.weights = Some(runner.sha256().to_string());
+        m.model = runner.model().map(|f| f.sha256.clone());
         m.answers = runner.answers();
         let from_artifact = runner.requests();
         let (ps, probe) = if from_artifact.is_empty() {
@@ -614,6 +626,10 @@ pub fn measure_card(m: &Measure) -> String {
         "weights = {}\n",
         m.weights.clone().unwrap_or(absent.clone())
     ));
+    s.push_str(&format!(
+        "model = {}\n",
+        m.model.clone().unwrap_or(absent.clone())
+    ));
     s.push_str(&format!("answers = {}\n", m.answers));
     s.push_str(&format!("requests = {}\n", m.requests));
     s.push_str(&format!("probe = {}\n", m.probe));
@@ -679,6 +695,13 @@ pub fn from_card(text: &str) -> Result<Measure, String> {
                     Some(value.to_string())
                 }
             }
+            "model" => {
+                m.model = if value == "(absent)" || value.is_empty() {
+                    None
+                } else {
+                    Some(value.to_string())
+                }
+            }
             "answers" => m.answers = integer(value)?,
             "requests" => m.requests = integer(value)?,
             "probe" => m.probe = value.to_string(),
@@ -700,7 +723,7 @@ pub fn from_card(text: &str) -> Result<Measure, String> {
 
 /// The registry line of a round, or the reason there is no line.
 ///
-/// The rule is declared beforehand: without a verified weight, without G1 closed, without a minimum sample and
+/// The rule is declared beforehand: without a verified weight, without a declared model file, without G1 closed, without a minimum sample and
 /// without Brier and ECE, there is no line. Registering half a measure would be worse than registering nothing.
 pub fn registry_line(m: &Measure, date: &str) -> Result<String, String> {
     let date = date.trim();
@@ -713,6 +736,9 @@ pub fn registry_line(m: &Measure, date: &str) -> Result<String, String> {
         .weights
         .clone()
         .ok_or("without a verified weight: the record demands the sha256 of the artifact")?;
+    let model = m.model.clone().ok_or(
+        "without a declared model file: the artifact hash proves the table did not change, not which model wrote it",
+    )?;
     if !m.g1_identical {
         return Err(String::from(
             "G1 did not close: two runs with different answers do not become a record",
@@ -732,7 +758,7 @@ pub fn registry_line(m: &Measure, date: &str) -> Result<String, String> {
         ));
     }
     Ok(format!(
-        "{date}\t{weights}\t{}\t{}\t{}\t{:.1}\t{:.1}\t{brier:.6}\t{ece:.6}",
+        "{date}\t{weights}\t{model}\t{}\t{}\t{}\t{:.1}\t{:.1}\t{brier:.6}\t{ece:.6}",
         m.requests, m.abstentions, m.n_pairs, m.tokens_per_call, m.ms_per_call
     ))
 }
@@ -837,6 +863,7 @@ mod tests {
     fn the_measure_goes_and_returns_through_the_card() {
         let m = Measure {
             weights: Some(String::from("abc")),
+            model: Some(String::from("def")),
             answers: 32,
             requests: 32,
             probe: String::from("cases of the artifact itself"),
@@ -854,6 +881,7 @@ mod tests {
         let card = measure_card(&m);
         let back = from_card(&card).expect("reads back");
         assert_eq!(back.weights, m.weights);
+        assert_eq!(back.model, m.model);
         assert_eq!(back.requests, 32);
         assert_eq!(back.abstentions, 1);
         assert!(back.g1_identical);
@@ -922,6 +950,7 @@ mod tests {
     fn a_non_finite_score_does_not_become_a_record() {
         let m = Measure {
             weights: Some(String::from("abc")),
+            model: Some(String::from("def")),
             g1_identical: true,
             n_pairs: 32,
             min_sample: 30,
@@ -937,6 +966,7 @@ mod tests {
     fn the_record_refuses_half_a_measure() {
         let complete = Measure {
             weights: Some(String::from("abc")),
+            model: Some(String::from("def")),
             g1_identical: true,
             n_pairs: 32,
             min_sample: 30,
@@ -957,6 +987,17 @@ mod tests {
             registry_line(&without_weight, "2026-10-17")
                 .unwrap_err()
                 .contains("sha256")
+        );
+
+        let without_model = Measure {
+            model: None,
+            ..complete.clone()
+        };
+        assert!(
+            registry_line(&without_model, "2026-10-17")
+                .unwrap_err()
+                .contains("model file"),
+            "the table hash alone does not register a round"
         );
 
         let without_g1 = Measure {

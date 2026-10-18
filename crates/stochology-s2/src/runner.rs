@@ -21,6 +21,17 @@
 //! @end
 //! ```
 //!
+//! Between the header and the first block, an optional line names the model file the table came from:
+//!
+//! ```text
+//! @model <sha256 of the model file, 64 hex> <revision: repository, identifier, date>
+//! ```
+//!
+//! The hash in `SHA256` covers the table, and so it proves that the table did not change; it does not prove which
+//! model wrote it. The `@model` line is that second fact: the operator hashes the weights file itself (the GGUF, for
+//! instance) and writes the hash here, inside the sealed text. Without it, the bridge still runs, and the round does
+//! not enter the record (`bridge::registry_line` refuses it).
+//!
 //! Each block is a frozen answer. A request without a block **does not** invent an answer: the bridge abstains in
 //! `Category::Others`, and the abstention enters the count of the adequacy of the space. The text is auditable
 //! and diffable, and the hash covers the whole file: swapping one byte invalidates the whole bridge.
@@ -58,10 +69,42 @@ pub fn declared_hash(dir: &str) -> Result<String, Refusal> {
     Ok(hash)
 }
 
+/// The model file that the table came from, as the `@model` line declares it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ModelFile {
+    /// The `sha256` of the weights file itself, not of the table.
+    pub sha256: String,
+    /// The revision, as the operator names it: repository, identifier and date.
+    pub revision: String,
+}
+
+impl ModelFile {
+    /// Checks the two fields: 64 hex for the hash and a revision that is not empty and fits on one line.
+    pub fn new(sha256: &str, revision: &str) -> Result<Self, Refusal> {
+        let sha256 = sha256.trim().to_lowercase();
+        let revision = revision.trim();
+        if sha256.len() != 64 || !sha256.chars().all(|c| c.is_ascii_hexdigit()) {
+            return Err(Refusal::ArtifactUnreadable(format!(
+                "model hash is not 64 hex: {sha256:?}"
+            )));
+        }
+        if revision.is_empty() || revision.contains('\n') {
+            return Err(Refusal::ArtifactUnreadable(String::from(
+                "the model line needs a revision on one line",
+            )));
+        }
+        Ok(ModelFile {
+            sha256,
+            revision: revision.to_string(),
+        })
+    }
+}
+
 /// The runner: verified weights and the table of frozen answers.
 pub struct LocalRunner {
     path: String,
     sha256: String,
+    model: Option<ModelFile>,
     table: BTreeMap<String, String>,
     requests: BTreeMap<String, String>,
     last_tokens: usize,
@@ -75,10 +118,11 @@ impl LocalRunner {
         let measured = crate::bridge::verify_weights(&path, &expected)?;
         let text =
             std::fs::read_to_string(&path).map_err(|_| Refusal::WeightsMissing(path.clone()))?;
-        let (table, requests) = read_blocks(&text)?;
+        let (table, requests, model) = read_blocks(&text)?;
         Ok(LocalRunner {
             path,
             sha256: measured,
+            model,
             table,
             requests,
             last_tokens: 0,
@@ -93,6 +137,11 @@ impl LocalRunner {
     /// The verified hash of the weights.
     pub fn sha256(&self) -> &str {
         &self.sha256
+    }
+
+    /// The model file that the artifact declares, if it declares one.
+    pub fn model(&self) -> Option<&ModelFile> {
+        self.model.as_ref()
     }
 
     /// How many frozen answers the artifact carries.
@@ -137,8 +186,12 @@ impl crate::bridge::FrozenModel for LocalRunner {
 }
 
 /// The format of the artifact: each block starts at `@request` and ends at `@end`.
-/// The two blocks of the artifact: header by key and body by key.
-type Blocks = (BTreeMap<String, String>, BTreeMap<String, String>);
+/// The two blocks of the artifact, body by key and request text by key, and the declared model file.
+type Blocks = (
+    BTreeMap<String, String>,
+    BTreeMap<String, String>,
+    Option<ModelFile>,
+);
 
 fn read_blocks(text: &str) -> Result<Blocks, Refusal> {
     let mut lines = text.lines();
@@ -152,9 +205,23 @@ fn read_blocks(text: &str) -> Result<Blocks, Refusal> {
     let mut requests: BTreeMap<String, String> = BTreeMap::new();
     let mut current_key: Option<String> = None;
     let mut body: Vec<String> = Vec::new();
+    let mut model: Option<ModelFile> = None;
     for line in lines {
         let l = line.trim_end();
-        if let Some(rest) = l.strip_prefix("@request ") {
+        if let Some(rest) = l.strip_prefix("@model ") {
+            if current_key.is_some() || !table.is_empty() {
+                return Err(Refusal::ArtifactUnreadable(String::from(
+                    "the model line comes before the first block",
+                )));
+            }
+            if model.is_some() {
+                return Err(Refusal::ArtifactUnreadable(String::from(
+                    "more than one model line",
+                )));
+            }
+            let (sha, revision) = rest.trim().split_once(' ').unwrap_or((rest.trim(), ""));
+            model = Some(ModelFile::new(sha, revision)?);
+        } else if let Some(rest) = l.strip_prefix("@request ") {
             if current_key.is_some() {
                 return Err(Refusal::ArtifactUnreadable("block without @end".into()));
             }
@@ -200,7 +267,7 @@ fn read_blocks(text: &str) -> Result<Blocks, Refusal> {
             "artifact without a single answer".into(),
         ));
     }
-    Ok((table, requests))
+    Ok((table, requests, model))
 }
 
 /// The key of a request: the `sha256` of the text that the bridge sends.
@@ -240,9 +307,21 @@ pub fn write_artifact(
     dir: &std::path::Path,
     pairs: &[(String, String)],
 ) -> std::io::Result<String> {
+    write_artifact_with_model(dir, pairs, None)
+}
+
+/// The same as `write_artifact`, with the `@model` line of the model file the answers came from.
+pub fn write_artifact_with_model(
+    dir: &std::path::Path,
+    pairs: &[(String, String)],
+    model: Option<&ModelFile>,
+) -> std::io::Result<String> {
     std::fs::create_dir_all(dir)?;
     let mut text = String::from(HEADER);
     text.push('\n');
+    if let Some(m) = model {
+        text.push_str(&format!("@model {} {}\n", m.sha256, m.revision));
+    }
     for (p, answer) in pairs {
         text.push_str(&format!("@request {} {}\n", key(p), p.replace('\n', "\\n")));
         text.push_str(answer.trim_end());
@@ -446,5 +525,63 @@ mod tests {
             brier(&pairs)
         );
         assert!(brier(&[]).is_nan(), "without a pair there is no score");
+    }
+
+    fn rehearsal_pairs() -> Vec<(String, String)> {
+        let mut rehearsal = crate::bridge::RehearsalModel::new();
+        (1..=2)
+            .map(|i| {
+                let p = request(&format!("case {i}"));
+                let r = rehearsal.decode(&p);
+                (p, r)
+            })
+            .collect()
+    }
+
+    #[test]
+    fn the_model_line_goes_inside_the_seal_and_comes_back() {
+        let d = temp("model");
+        let model = ModelFile::new(&"ab".repeat(32), "org/model@rev 2026-10-18").expect("valid");
+        let hash = write_artifact_with_model(&d, &rehearsal_pairs(), Some(&model)).expect("writes");
+        let runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
+        assert_eq!(runner.sha256(), hash);
+        assert_eq!(
+            runner.model(),
+            Some(&model),
+            "the declared model file comes back"
+        );
+        let without = temp("no-model");
+        write_artifact(&without, &rehearsal_pairs()).expect("writes");
+        let other = LocalRunner::load(&without.to_string_lossy()).expect("loads");
+        assert_eq!(
+            other.model(),
+            None,
+            "without the line, no model is declared"
+        );
+        assert_ne!(
+            other.sha256(),
+            hash,
+            "the model line is covered by the hash"
+        );
+        std::fs::remove_dir_all(&d).ok();
+        std::fs::remove_dir_all(&without).ok();
+    }
+
+    #[test]
+    fn a_malformed_or_misplaced_model_line_is_an_unreadable_artifact() {
+        let block = format!("@request {} x\nversao = 1.2\n@end\n", "c".repeat(64));
+        let good = format!("@model {} rev", "a".repeat(64));
+        let cases = [
+            format!("{HEADER}\n@model abc rev\n{block}"),
+            format!("{HEADER}\n@model {}\n{block}", "a".repeat(64)),
+            format!("{HEADER}\n{good}\n{good}\n{block}"),
+            format!("{HEADER}\n{block}{good}\n"),
+        ];
+        for text in &cases {
+            match read_blocks(text) {
+                Err(Refusal::ArtifactUnreadable(_)) => {}
+                other => panic!("expected an unreadable artifact for {text:?}: {other:?}"),
+            }
+        }
     }
 }

@@ -30,7 +30,11 @@ The order matters: **the hash is declared before the execution**. Declaring afte
 specification while looking at the number, and that counts in the K.
 
 1. **Choose the revision of the model.** One only, named and dated: repository, identifier of the revision, and date of the
-   freezing. Changing revision afterwards is a new declaration.
+   freezing. Changing revision afterwards is a new declaration. Hash the weights file itself at this step: with
+   `llama-cli`, `scripts/generate_fire_sources.py infer --model M.gguf --revision "<repository> <identifier> <date>"`
+   measures it and writes it as the first line of the inference source (`# model-sha256<TAB><hex><TAB><revision>`);
+   with `vllm`, `api`, or `file`, the script does not read the weights, and the operator passes the hash measured where
+   they are with `--model-sha256`. The ingestor carries that line into the artifact as `@model` (§3).
 2. **Produce the artifact and the labeled set, in one go.** The format is in §3 and §4. The operator gathers the
    answers of the model that it froze and the observed outcome, and runs the ingestor:
 
@@ -70,10 +74,11 @@ specification while looking at the number, and that counts in the K.
 
 ## 3. The format of the artifact
 
-Text, first line the format, one block per frozen answer:
+Text, first line the format, an optional line naming the model file, one block per frozen answer:
 
 ```text
 # p20-jev/runner-v1
+@model <sha256 do arquivo do modelo, 64 hex> <revisao: repositorio, identificador, data>
 @pedido <sha256 do texto do pedido, 64 hex> <texto do pedido>
 <documento canonico da ficha, uma linha por campo>
 @end
@@ -87,6 +92,13 @@ The `sha256` of the request is that of the text that the bridge sends, which is 
 A request without a block does **not** invent an answer: it returns `fora do esquema`, which the bridge converts into abstention
 (`Category::Others`) and counts in the adequacy.
 
+The `@model` line exists because the `sha256` in `SHA256` covers the table, so it proves that the table did not change after
+the declaration, and it does not prove which model wrote it. The line carries the `sha256` of the weights file itself and
+the revision, inside the sealed text, so swapping it also invalidates the artifact. It is optional for the bridge: without it,
+`labs --jev` runs and prints `model file: not declared`, and `bridge::registry_line` refuses the round, so no row of a real
+round enters the record without the model it came from. The line names the file; it does not prove that the operator ran it.
+That last step stays with whoever repeats the round with the same file and compares the tables.
+
 What invalidates the artifact, and the runner refuses instead of tolerating:
 
 | defect | what happens |
@@ -94,6 +106,7 @@ What invalidates the artifact, and the runner refuses instead of tolerating:
 | the file is missing | `WeightsMissing` — the bridge does not run |
 | the `SHA256` is missing | `HashNotDeclared` — the bridge does not run |
 | one byte swapped in the artifact | `WeightsHashMismatch` — the bridge does not run |
+| a `@model` line that is not 64 hex plus a revision, a second `@model` line, or one after the first block | `ArtifactUnreadable` — the bridge does not run |
 | wrong header, block without `@end`, key that is not `sha256`, empty block | `ArtifactUnreadable` — the bridge does not run |
 
 ## 4. The labeled set that feeds the Brier

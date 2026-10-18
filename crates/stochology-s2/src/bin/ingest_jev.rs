@@ -52,7 +52,12 @@ fn die(message: String) -> ! {
 }
 
 /// Reads the frozen inferences, with two fields and nothing empty.
-fn read_inferences(path: &Path) -> Vec<(String, String)> {
+/// The provenance line of the inference source: the hash of the model file and its revision.
+const MODEL_LINE: &str = "# model-sha256\t";
+
+type Inferences = (Vec<(String, String)>, Option<runner::ModelFile>);
+
+fn read_inferences(path: &Path) -> Inferences {
     let content = std::fs::read_to_string(path).unwrap_or_else(|e| {
         die(format!(
             "Error opening the inference source {}: {e}",
@@ -60,8 +65,27 @@ fn read_inferences(path: &Path) -> Vec<(String, String)> {
         ))
     });
     let mut pairs = Vec::new();
+    let mut model: Option<runner::ModelFile> = None;
     for (i, line) in content.lines().enumerate() {
         let l = line.trim_end();
+        if let Some(rest) = l.strip_prefix(MODEL_LINE) {
+            if model.is_some() {
+                die(format!(
+                    "Error on line {} of {}: more than one model line",
+                    i + 1,
+                    path.display()
+                ));
+            }
+            let (sha, revision) = rest.split_once('\t').unwrap_or((rest, ""));
+            model = Some(runner::ModelFile::new(sha, revision).unwrap_or_else(|e| {
+                die(format!(
+                    "Error on line {} of {}: {e:?}",
+                    i + 1,
+                    path.display()
+                ))
+            }));
+            continue;
+        }
         if l.is_empty() || l.starts_with('#') {
             continue;
         }
@@ -96,7 +120,16 @@ fn read_inferences(path: &Path) -> Vec<(String, String)> {
     if pairs.is_empty() {
         die(format!("{} has no inference at all", path.display()));
     }
-    pairs
+    (pairs, model)
+}
+
+fn print_model(model: &Option<runner::ModelFile>) {
+    match model {
+        Some(m) => println!("  model file: {} | revision {}", m.sha256, m.revision),
+        None => println!(
+            "  model file: not declared | the artifact will run, and the round will not enter the record"
+        ),
+    }
 }
 
 /// Reads the outcomes, with the rules of the front applied before any write.
@@ -179,11 +212,12 @@ fn rehearsal_dir(label: &str) -> PathBuf {
 /// Phase 1 of the closure: checks the sources and rehearses, without touching any destination.
 fn check(source_inferences: &Path, source_outcomes: &Path) {
     println!("== Check of the sources (phase 1), without writing to a destination ==");
-    let inferences = read_inferences(source_inferences);
+    let (inferences, model) = read_inferences(source_inferences);
     println!(
         "  inferences: {} request/answer pairs, with both fields",
         inferences.len()
     );
+    print_model(&model);
     let outcomes = read_outcomes(source_outcomes);
     println!(
         "  outcomes: {} pairs, with p in (0, 1), outcome 0 or 1 and a declared source",
@@ -191,7 +225,7 @@ fn check(source_inferences: &Path, source_outcomes: &Path) {
     );
     let rehearsal_weights = rehearsal_dir("check-weights");
     let rehearsal_cal = rehearsal_dir("check-cal");
-    runner::write_artifact(&rehearsal_weights, &inferences)
+    runner::write_artifact_with_model(&rehearsal_weights, &inferences, model.as_ref())
         .unwrap_or_else(|e| die(format!("Failure writing the rehearsal artifact: {e}")));
     let artifact =
         runner::LocalRunner::load(&rehearsal_weights.to_string_lossy()).unwrap_or_else(|e| {
@@ -258,7 +292,7 @@ fn record(card: &Path, rounds: &Path, date: &str) {
         Err(reason) => die(format!("Record refused: {reason}")),
     };
     let header =
-        "date	weights_hash	requests	abstentions	n_pairs	tokens_per_call	ms_per_call	brier	ece
+        "date	weights_hash	model_hash	requests	abstentions	n_pairs	tokens_per_call	ms_per_call	brier	ece
 ";
     let existing = std::fs::read_to_string(rounds).unwrap_or_default();
     let mut destination = existing.clone();
@@ -302,11 +336,12 @@ fn main() {
         "\n[1/3] Reading inferences from {}...",
         source_inferences.display()
     );
-    let inferences = read_inferences(source_inferences);
+    let (inferences, model) = read_inferences(source_inferences);
     println!(
         "  {} request/answer pairs, all of them with both fields",
         inferences.len()
     );
+    print_model(&model);
 
     println!(
         "\n[2/3] Reading outcomes from {}...",
@@ -323,7 +358,7 @@ fn main() {
     );
     let rehearsal_weights = rehearsal_dir("weights");
     let rehearsal_cal = rehearsal_dir("calibration");
-    runner::write_artifact(&rehearsal_weights, &inferences)
+    runner::write_artifact_with_model(&rehearsal_weights, &inferences, model.as_ref())
         .unwrap_or_else(|e| die(format!("Failure writing the rehearsal artifact: {e}")));
     let artifact =
         runner::LocalRunner::load(&rehearsal_weights.to_string_lossy()).unwrap_or_else(|e| {
@@ -345,7 +380,7 @@ fn main() {
     std::fs::remove_dir_all(&rehearsal_cal).ok();
 
     println!("\nPersisting to the declared destinations...");
-    let weights_hash = runner::write_artifact(weights_dir, &inferences)
+    let weights_hash = runner::write_artifact_with_model(weights_dir, &inferences, model.as_ref())
         .unwrap_or_else(|e| die(format!("Failure in runner::write_artifact: {e}")));
     println!(
         "  {} -> modelo.congelado + SHA256 ({weights_hash})",
