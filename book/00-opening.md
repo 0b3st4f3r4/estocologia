@@ -8,16 +8,10 @@ Oct 16, 2026 · Silvano Neto
 
 ## Preface: how to use this book
 
-This book teaches Stochology from end to end. The text presents the concepts of the field, the way of operating
-in an auditable architecture and the behaviour of that architecture when put to the test on real data, from
-horizon H0 to H3. The research that sustains it was closed on October 15, 2026.
-
-**What changed since the earlier text.** The earlier text had 14 chapters and assumed university-level calculus and
-probability already mastered. This book unfolds that content into 21 chapters, grouped into five parts, and
-builds a **continuous pedagogical ramp**. The first step of each chapter uses only High School mathematics
-(proportions, sets, means, counting trees, graphs of first- and second-degree functions). Nothing from the
-earlier text was thrown away. Every idea, every theorem and every number of the research remains here,
-redistributed into smaller steps.
+This book teaches Stochology, the science (or art) of judgement and decision under uncertainty, from end to end.
+It presents the concepts of the field, the way of operating in an auditable architecture, and what happens when
+that architecture meets real data: a health post and a bank call centre, a stock index and a training programme,
+fire losses, the search for invariant causes in four sciences, and live forecasts of flights and arrests.
 
 **Who it is for.** The book serves four readers. The first is the High School student who wants to understand
 decision under uncertainty without waiting for university. The second is the undergraduate or graduate student
@@ -25,16 +19,14 @@ who has already seen basic probability. The third is the data professional, who 
 passed the test fails in production. The fourth is the decision-maker, who reads a number and needs to know how
 far it authorizes them to conclude.
 
-**What is assumed.** In this book, for Steps 1 and 2, only arithmetic, percentages, proportions and graph
-reading. Calculus and linear algebra appear only where the text warns, and always after the geometric
-intuition. The laboratories are written in **Rust**, with a fixed seed, in the crate
-`crates/stochology-book`; whoever does not program can read the output of the laboratories, which is quoted in
-the text, and skip the exercises marked as *Laboratory*.
+**What is assumed.** For Steps 1 and 2, only arithmetic, percentages, proportions and graph reading. Calculus and
+linear algebra appear only where the text warns, and always after the geometric intuition. The laboratories are
+written in **Rust**, with a fixed seed; whoever does not program can read the output of the laboratories, which is
+quoted in the text, and skip the exercises marked as *Laboratory*.
 
-**One rule that holds for the whole book.** Every number quoted here comes from an instrument that the reader
-can run. When a number in this book diverges from the number recorded in the earlier text or in a
-course outline, the divergence is **declared in the text**, with both values, instead of hidden. It is the rule
-that the research applies to itself (section 9.7 of the earlier text, today Part V, Chapter 21).
+**One rule that holds for the whole book.** Every number quoted here comes from an instrument that the reader can
+run, or from a cited source. Where a measured number differs from one recorded elsewhere, both values and the cause
+are kept in Appendix E, so that the chapters can teach without carrying the comparison.
 
 ---
 
@@ -70,7 +62,7 @@ right, it runs.
 | **II. The traps of the world and of the data** | 5 to 8 | Why does the mean lie, how do gigantic samples deceive and how is good forecasting measured? |
 | **III. Cause, time and survival** | 9 to 11 | What is a cause, why does time ruin it and who pays for the error? |
 | **IV. Building the auditable machine** | 12 to 15 | How do you turn that thinking into a machine that audits itself? |
-| **V. The machine in the real world** | 16 to 21 | How does the machine face real data, horizon by horizon? |
+| **V. The machine in the real world** | 16 to 21 | How does the machine face real data, case by case? |
 
 | Ch. | Title | Central idea |
 | --- | --- | --- |
@@ -86,15 +78,15 @@ right, it runs.
 | 10 | Time and ruin | non-ergodicity; volatility drag; Kelly; wild tails |
 | 11 | The price of error | cost/loss; EVPI; Goodhart; Chouldechova's trilemma; exit clause |
 | 12 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
-| 13 | The team of specialists | bands F1–F8; the adversarial panel A1–A8; AI under contract |
-| 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ4; gates |
-| 15 | The vault and the password | pre-registration with hash; counter K; auditing against itself |
-| 16 | H0: the health centre and the bank | the same mean, two waits; Erlang C against the real queue |
-| 17 | H1, part 1: the stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
-| 18 | H1, part 2: the fires | wild tail; Laplace; failing your own model is a victory |
-| 19 | H2: seven rounds of ICP | five honest failures; light, heart and yeast |
-| 20 | H3: the live clock | zero leakage with a canary; Goodhart measured; three vaults |
-| 21 | Seven lessons and what is missing | balance, background audit and the student's final project |
+| 13 | The team of specialists and the two systems | eight specialists; the adversarial panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
+| 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
+| 15 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
+| 16 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
+| 17 | The stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
+| 18 | The Danish fires | wild tail; Laplace; failing your own model is a victory |
+| 19 | Seven rounds of ICP | five honest failures; light, heart and yeast |
+| 20 | The live clock | zero leakage with a canary; Goodhart measured; three vaults |
+| 21 | The seven lessons and the final project | the lessons with their conditions; objections; the resolution axis; the final project |
 
 ---
 
@@ -118,18 +110,9 @@ numbers; that is what makes the check possible (Chapter 1, Step 3).
 **Measured numbers.** The values quoted in Step 3 come from the instrument:
 
 ```bash
-cargo run --release --bin labs -- --chapter 4     # um capítulo
-cargo run --release --bin labs -- --all     # todos os laboratórios
+cargo run --release --bin labs -- --chapter 4     # one chapter
+cargo run --release --bin labs -- --all           # every laboratory
 ```
-
-**Consolidated registry.** On 2026-10-16 the Python measurement scaffolding left the tree. The fronts quoted in
-the chapters (`h0-real/`, `h1-real/`, `h2*/`, `h3/`) were consolidated in `docs/EMPIRICAL_REGISTRY.md`, which
-carries each number with the mark of the Rust instrument that reproduces it, and the original material lives
-in commit `1bfec905`. Mentions of the old fronts in the text are **historical**, and say where the number came
-from, not a live path.
-
-**Divergence declaration.** When this book quotes a number from the research repository and the instrument of
-this book returns another, both appear, with the probable cause.
 
 The exercises come in three types: *(Concept)* requires words; *(Count)* requires a number; *(Laboratory)*
 requires code that reproduces the result.

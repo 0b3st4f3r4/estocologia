@@ -134,143 +134,48 @@ after seeing the result counts as a new declaration and enters the counter of at
 
 ## Appendix C. Reproduction guide
 
-### C.1 The crates in Rust
+### C.1 Running the laboratories
 
-| Command | What it proves |
+Every number in Step 3 of a chapter comes out of a command that anyone can run on another machine and obtain the
+same output, because no laboratory reads the system clock or draws an unseeded random number.
+
+| Command | What it shows |
 | --- | --- |
-| `cargo test --workspace` | That the types and the gates of the architecture work: measured in this tree, 373 tests pass in the nine crates |
-| `cargo run --release --bin gates -- --horizon all --reproduction` | That the gate runs twice and gives the same result: measured, "7 portões ok", with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
+| `cargo run --release --bin labs -- --chapter 19` | The output block of a chapter; replace 19 with any chapter, or use `--all` |
+| `cargo run --release --bin labs -- --bank` | The real call-centre data measured (Chapter 16) |
+| `cargo run --release --bin labs -- --queue` | The queue with abandonment and the four staffing rules (Chapter 16) |
+| `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
+| `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
+| `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 373 tests pass |
+| `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
-| `cargo run --release --bin labs -- --chapter 19` | That the numbers cited in Step 3 of chapter 19 come out of code, with a fixed seed. It is worth replacing 19 with any chapter; `--all` runs them all |
-| `rustc -O crates/stochology-book/src/ch21.rs -o /tmp/ch21 && /tmp/ch21` | That every laboratory of this book is self-contained: one file, no dependency, the same result |
 
-The laboratories of this book live directly in the crate, in `crates/stochology-book/src/capNN.rs`. They are
-tested modules (`ch01` to `ch04` carry tests in the file) and **all 21** are served by the `labs` binary. The
-intermediate copies were deleted after integration, because a working file does not stay in the repository.
-No laboratory uses the system clock or an unseeded random number, and that is why verification is
-possible.
+### C.2 The environment is part of the number
 
-### C.2 The empirical registry (the Python code was retired)
-
-| Folder | What it reproduces | Main command |
-| --- | --- | --- |
-| `h0-lab0/` | The simulated health clinic (Chapter 16) | `python3 portoes.py` |
-| `h0-real/` | The bank call centre (Chapter 16) | `python3 portoes.py` |
-| `h1/` | The simulated H1, with the panel (Chapter 17) | `python3 rodar.py` and `python3 portoes.py --reproduction` |
-| `h1-real/` | Dow Jones, LaLonde and the Danish fires (Chapters 17 and 18) | `python3 rodar.py` and `python3 portoes.py --reproduction` |
-| `h2/` to `h2g/` | The seven rounds of ICP (Chapter 19) | `python3 rodar.py` and `python3 portoes.py --reproduction` in each folder |
-| `h3/` | The six streams and the revisions H3b to H3d (Chapter 20) | `python3 rodar.py` and `python3 portoes.py --reproduction` |
-| `governance/` | The record of the signatures of the 21 opinions (Chapters 15 and 21) | Reading |
-| `empirical/` | The background audit and the extensions (Chapter 21) | Reading; `rodar.sh` in p02 and p05, a script of its own in the others; p12 has only the protocol and the forms |
-
-The commands that tied the registry together, copied from the research plan, today demand the code back:
-
-```bash
-git checkout 1bfec905 -- h1/          # the Python code of the fronts lives in the history
-cd h1 && python3 rodar.py && python3 portoes.py --reproduction && python3 grafo.py
-cd h3 && python3 rodar.py && python3 grafo.py && python3 figura.py && python3 portoes.py --reproduction
-cd empirical/p07-icp/codigo && python3 nulo_validacao.py          # the null rate of the genetics, 0.5 s
-```
-
-**The Python simulation code was retired on 2026-10-16** (576 files, about 2.9 MB), because the engineering
-apparatus of the project became the Rust workspace. What stays in the tree is the record. They are the data and the sums, the
-`README.md` of each front with the published numbers, the declarations, the opinions and the checked outputs. The
-manifest `history/python-removido.txt` carries the blob hash of each removed file, and the complete declaration is in
-`docs/declarations/REMOVED_PYTHON.md`.
-
-On that day the artifacts that do not support a central result left. They are the extensions of scale, health and rare event (points
-9 and 10 of the background audit) and the earlier text of the book. The numbers of those extensions remain in Chapters 15 and 21, with
-the retirement note in the table. Afterwards the whole Python measurement scaffolding left. The fronts `h0` to `h3` also left, with their READMEs, and the data
-that only they used. The numbers stayed in `docs/EMPIRICAL_REGISTRY.md`, with commit `1bfec905` as the anchor
-(`docs/declarations/RUST_CONSOLIDATION.md`).
-
-Three checks that keep running without Python, and that cost seconds:
-
-```bash
-python3 scripts/book/check_labs.py       # checks every output block against the instrument
-python3 scripts/book/build.py --check       # checks the three-step ramp of the 21 chapters
-cargo test --workspace               # the book crates and the architecture
-```
-
-### C.3 The recording environment, and how to read a divergence
-
-The H3 record is: **Python 3.13.7**, **numpy 2.5.1** (obtained with `PYTHONNOUSERSITE=1 python3`), pandas 3.0.5,
-scipy 1.18.0, pyarrow 26.0.0, rdata 1.1.0, duckdb 1.5.5, PyYAML 6.0.3, pytest 9.1.1 and hypothesis 6.165.7, with
-`export OMP_NUM_THREADS=1` and at most two processes in parallel. Two dependencies are missing on this machine, and the
-environment file says how to install them. The first is `statsmodels`, which only the answer key of point 1 uses, and the second is `pyreadr`, which only
-one step of point 8 uses.
-
-The numpy case shows why the environment is part of the number. The estimated effect of the performative loop was
-published as 0.5632 with 2,375 shocks, and the identical code, run with the same seed, gave 0.5529 and 2,395
-shocks. There were no two versions of the code. There were two numpys in the interpreter, and the default path imported
-2.4.6 before 2.5.1. The point of the divergence was isolated. In the two versions, the generator started from the same state,
-and a binomial draw of 248 trials with probability 0.6 returns 171 in one and 150 in the other, because 2.5
-fixed the Stirling series of the acceptance test of the BTPE. If you meet a divergence like this, the path is
-always this one. **First the environment, then the code**, because no published number is exchanged without a written declaration
-before running.
+The numpy case shows why. The estimated effect of the performative loop was published as 0.5632 with 2,375
+shocks, and the identical code, run with the same seed, gave 0.5529 and 2,395 shocks. There were no two versions of
+the code. There were two numerical libraries in the interpreter, and the default path imported 2.4.6 before 2.5.1.
+The point of the divergence was isolated. In the two versions, the generator started from the same state, and a
+binomial draw of 248 trials with probability 0.6 returns 171 in one and 150 in the other, because 2.5 fixed the
+Stirling series of the acceptance test of the BTPE algorithm. If you meet a divergence like this, the path is always
+the same. **First the environment, then the code**: record the version of every library next to the number, because
+a number without its environment is a number nobody can audit.
 
 ---
 
 ## Appendix D. Annotated bibliography for young scientists
 
-### D.0 How this list was checked
+### D.1 How this list was checked
 
-This bibliography follows three rules, and all three are declarations.
-
-**1. The check was remote, and not by downloaded file.** On 2026-10-16 the author checked the metadata
-of the links in this list against the Crossref API, the publishers' pages, PubMed, the PMLR proceedings and library
-catalogues. No third-party PDF exists in the tree, and none is claimed as `[file]`: what the tree keeps is
-the check of the metadata, recorded line by line. The five documents of the project were **integrated** into the
-repository (architecture, scalable plan, foundation and the article) and the loose copies were deleted, as the
-rule of new files demands. The integrated material is in `docs/PLAN.md` §9.13, in `paper/` and in this appendix. Of them
-what remains is the citation, the DOI and the number that the book uses.
-
-**2. Every item has a state of checking.**
-
-| Mark | Means |
-| --- | --- |
-| **[checked]** | the number cited in the book was checked against the article itself, against the DOI or against the publisher's page |
-| **[file]** | there is a downloaded file for consultation, still without item-by-item checking against the text of the book. No line of this list uses this mark: no third-party PDF is on disk, and the check is of the metadata |
-| **[historical]** | retired material, which stays only as a record of where a number came from |
-
-**The state of each line is in the line.** After the check of 2026-10-16, every line of D.2 to D.4 carries
-the mark **[checked]**, and the source of each check is in `references/CONFERENCIA.md`. The route and the date of
-each pass are in the table below, because the mark alone does not say when it was applied.
-
-| pass | date | lines | route | what stayed in the line |
-| --- | --- | --- | --- | --- |
-| first | 2026-10-15 | the 23 of D.3 | Crossref, IDEAS/RePEc, RAND, NeurIPS proceedings and the author's page | checked, **without** the mark applied |
-| second | 2026-10-16 | the 27 of D.2 and D.4 | Crossref, publishers' pages, PubMed and PMLR | checked and marked |
-| third | 2026-10-17 | the 23 of D.3, again | the same sources of the first, line by line | mark applied: **50 of 50** |
-
-The third pass exists because the first left the check recorded outside the line, and reading the table
-gave less than the total. It re-ran the metadata of that section against the same sources, one by one, and the result is
-what the table above declares. Divergence of content in that re-run: none.
-
-**3. Every experiment in this book is Rust.** Python appears only as a retired historical record
-(see Appendix C). No number of Step 3 depends on Python, and none depends on the course.
-
-**Warning: the course was retired.** The course *Pensamento Crítico e Modelos Estocásticos*, from which
-several simulation numbers and a good part of the internal numbering (M0 to M15, ME1 to ME24, MB1 to MB8) came, was
-**made obsolete on 2026-10-16**. The mentions of "course script" and "course material" that still appear in the
-chapters are **historical**. They say where a number came from, and they are not current material. What holds is what this
-repository keeps. It is the checked empirical registry, the declarations and the laboratories in Rust.
-
-### D.1 Documents of the project
-
-- [Architecture](https://docs.google.com/document/d/1l0YQHrV_UrKisAjQcz2BqT9KpwhcT0s0WVoXm_muxtE/edit),
-  [Master plan (`docs/PLAN.md`)](https://docs.google.com/document/d/1hXvDuJyckooL1_qx9gspkSkBqgjyhAUVQvQ3F-Crinc/edit),
-  [AGENTS.md](https://docs.google.com/document/d/1hniAsjLqgNVGqR1wZ1845GVkS5lZTEjhlH7MaI3U2Xk/edit) and
-  [Estocologia: Fundamentação, Três Camadas e Inferência sob Incerteza](https://docs.google.com/document/d/1L5ittj7-RiSacEvNrkR4IS6yrQUyhusFpcDIWazINLI/edit)
-  are the design of the machine, the master plan and the foundation.
-- [Estocologia: Velhas Fronteiras, Novos Horizontes](https://claude.ai/code/artifact/69dbc377-114b-4cb7-a3c1-322387abc674)
-  is the article, with the complete list of references.
-- **[historical]** The course *Pensamento Crítico e Modelos Estocásticos*, **retired on 2026-10-16**. It stays cited because several numbers of the book came from its simulations, with the source now declared in the chapters; nothing in the book depends on it.
-- `references/CONFERENCIA.md`: the check of the references, made on October 15, 2026 against the Crossref
-  API, the publishers' pages, PubMed and RePEc. It is the model of what to do with your bibliography. They are
-  25 references checked one by one, one correction applied (the article is by **Meyer**, Viscusi and Durbin, and not by
-  Viscusi and Durbin), one journal swapped (Baltagi and Levin came out in *Structural Change and Economic Dynamics*), and the
-  note that SHELF is a protocol, not the book by O'Hagan and colleagues.
+The metadata of every line of D.2 to D.4 was checked against the Crossref API, the publishers' pages, PubMed, the
+PMLR proceedings, IDEAS/RePEc and library catalogues, and every line carries the mark **[checked]**: 50 of 50. The
+check is of the metadata (authors, year, title, journal, volume, pages and DOI) and of the number the text uses;
+third-party files are not reproduced. The check found no divergence of content, completed the DOIs that were
+missing, and corrected two earlier citations: the article on the benefit cap is by **Meyer**, Viscusi and Durbin,
+and Baltagi and Levin came out in *Structural Change and Economic Dynamics*. Two source reservations remain: the
+final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the sources consulted. SHELF is a
+protocol, not a book.
 
 ### D.2 Classics to begin with
 
@@ -343,38 +248,7 @@ Read in the order that curiosity asks for, and distrust whoever presents any of 
 final answer. Three practical pieces of advice. First, read the data before the method, because almost every error of
 reading is born from not asking where the table came from. Second, when an article cites a number, look for the
 number in the code or in the appendix, and not in the abstract. Third, keep the version of the environment next to the number you
-reproduced; this book has a whole chapter that exists only because someone did that.
-
-### D.6 What has already been checked and what remains to be checked
-
-The check of the references of the project is in `references/CONFERENCIA.md`. They are 25 references checked
-one by one against the Crossref API, the publishers' pages, PubMed and RePEc, with one correction applied (the
-article on the benefit cap is by **Meyer**, Viscusi and Durbin, and not by Viscusi and Durbin) and one journal
-swapped (Baltagi and Levin came out in *Structural Change and Economic Dynamics*).
-
-**The check ended on 2026-10-16.** The 50 lines of D.2 to D.4 were checked item by item against the Crossref
-API, the publishers' pages, PubMed, the PMLR proceedings and library catalogues: the 23 of D.3 in the first
-pass (2026-10-15) and the 27 of D.2 and D.4 in the second. Every line of this appendix carries the mark **[checked]** and every
-check is in its line of `references/CONFERENCIA.md`, with the source beside it.
-
-The route of each line of the methods and data section, and what it proves:
-
-| route | lines of D.3 | what it proves |
-| --- | --- | --- |
-| Crossref API, with the deposited DOI | 17 | author, year, journal, volume, number and pages |
-| IDEAS/RePEc, citation metadata | 3 | the three AER articles before 1999, which have no DOI |
-| RAND, catalogue DOI | 1 | the book of the insurance experiment, with publisher and year |
-| NeurIPS proceedings | 1 | the conformal adaptive inference paper, with the pages |
-| author's page, at Princeton | 1 | the textbook and the chapter on instrumental variables |
-
-What appeared: **no divergence of content** in the 27 new lines — authors, years, titles, journals and
-pages check out —, **eleven completions** (the DOIs that were missing in ten lines and the working paper number of
-Sweeney) and **two source reservations declared**: the final page of Chernoff 1954 and that of van Dantzig 1956
-did not come out in the sources consulted, and the year of Sweeney (2000) comes from the CMU record.
-
-Rule 1 of this appendix still holds, and now with the exact sense: the check is of the metadata, and what the
-book keeps of each one is the citation, the DOI and the number that it uses. What does not enter the repository are the third-party
-files, for copyright, and none of them is claimed to be present on disk.
+reproduced; the numpy case of Appendix C shows why.
 
 ## Appendix E. Provenance of the numbers
 
@@ -524,3 +398,124 @@ exactly in that way that the clean reproduction of G1 works. (2) The previous bo
 support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
 recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
 No old value was erased.
+
+### Chapter 16
+
+The earlier text and the README of the first simulation record 9.3 min and 20.7 min
+for the two worlds, 8 and 25 patients in every 100 above 30 minutes, medians of 3.8 and 9.3, 90th percentiles of 26.7
+and 59.3, and, in the halves null, a measured sd of 0.216 against 0.227 predicted by the day and 0.047 by the call (severe
+test: 11.4 min, 53 sd, ceiling of 0.81 in 2,000 splits). The instrument measures **9.1 and 19.3**, **8 and 24**
+in every 100, medians of **3.7 and 8.1**, 90th percentiles of **26.1 and 55.8**, and, in the null, **0.2062** measured against
+**0.1928** by the day and **0.0473** by the call (severe test: **10.2 min**, **49.4** sd, ceiling of **0.664**). The
+margin per patient coincides up to the third place, because it is a standard deviation account over the number of patients.
+
+Four readings, with the two divergences declared. **(1)** The agent-hours match the record:
+2,264, 2,261, 2,428 and 2,433 per day in the four rules. **(2)** The order is the one of the record: R2 is the best, R3 loses
+to R2 while spending the same, and the claim (R0) is the worst. **(3)** The service levels come out a little below the
+published ones (83.9% against 86% in R0, 91.6% against 96% in R2) and the failures per day a little above: 30.9% against
+26% in R0, 19.8% against 12% in R1, 4.9% against 3.7% in R2, 9.9% against 7.4% in R3. **(4)** The independent
+verification, with Poisson arrivals event by event, reaches R2 with 95.0% and 4.9% of failing days, touching the
+published figure. The record measured with another simulation engine and another seed; the difference stays declared, and what
+matters for the decision, R2 winning at the same cost, holds in both engines. The instrument was
+rebuilt from the retired code, which stays in the history (`git show HEAD:h0-real/estocologia/central.py`),
+with two extra verifications proving the engine: the mean wait without abandonment of R0 comes out at **1,040 s** against the
+956 s published, and the claim world gives **96.3%** and zero failing day in 81, against 97% and zero. A grid difference
+stays on the record. This instrument includes the 21:00 interval, and therefore counts 2,654,950 calls in the
+vault against the 2,649,354 of the Erlang C instrument, which cuts that row.
+
+The instrument of the Erlang C Table reproduces in Rust the central numbers of the real $H_0$. The mean profile stays at
+**82%** (0.8193), the schedule of the claim meets the real day at **57%** (0.5683) and **65%** of the days stay below the
+target (0.6543); the sd between days of
+**2,841** against the **181** that Poisson would predict; and the `Var/mean` of **272.6 in the training set**, which is the published 273.
+In the vault it is 246.7 and in the whole series 261.1, and the reason is the cut of the window. The halves null per day comes out at
+0.0441 against the 0.0474 published (different splitting scheme), and the null per call of this account is 0.0006
+by the binomial, against the 0.0033 of the script, which used another design of intraday correlation. The two
+divergences stay declared, together with the Rust reconstruction of the decision table of the schemes R0 to
+R3 by the queue simulation with abandonment (`fila.rs`, measured just above with `labs --queue`).
+The other values differ because the number generator is another (SplitMix64 here, PCG64 in the original material) and
+because the mean wait per patient in the oscillating world is a ratio of heavy-tailed sums. Running the instrument
+with six different seeds, the wait of the world 5 or 11 goes from **19.3 to 20.6 minutes**. The difference
+is inside the variation of the instrument, and the two sets of numbers stay on the record.
+
+### Chapter 17
+
+The report of the market case records 0.051, 0.072 and 0.060 of growth per year;
+the instrument measures **0.0515, 0.0719 and 0.0601** — the coincidence is of three places, because the account is the same. The
+published cohorts with a monthly start are 1,135 and the ones here are 1,134 (the difference is the border criterion: one cohort
+whose end falls on the last session of the training set). The published values of the fraction above the start are 0.9586 / 0.7841 /
+0.6405; the ones here are **0.9577 / 0.7848 / 0.6429**, and the published median wealths (2.13 / 2.68 / 2.08) match
+the ones here (2.13 / 2.67 / 2.10). In the claim world, the published material brings mean 0.9332, 1% quantile of
+0.6563 and p = 0.0095, against **0.9286**, **0.6354** and **0.0140** here: the difference is in the draw of the
+resamplings (2,000 replicas in each case, different generators), and the p-value changes in the third place. One different
+case deserves a note: the earlier text cites "from 1929 to 1932, the capital falls to 0.11 with 1× and to 0.00025 with
+3×". With the window of the **calendar year** (1 January 1929 to the end of 1932), the instrument measures **0.19521** and
+**0.00088**; with the window of the **peak to the trough** (3 September 1929 to 8 July 1932), it measures **0.10814** and
+**0.00025** — exactly the numbers of the material. The divergence was not of method: it was of window, and the two
+appear now, with the date of each one.
+
+### Chapter 18
+
+The report of the fire case records $\hat\alpha = 1{,}81$ with interval [1.41;
+2.56] by bootstrap in blocks; the instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;
+2.61]**, besides 1.9625 and 1.4100 for k = 25 and k = 100 — the three points coincide with the published ones up to the fourth
+place, and the difference of the interval comes from the resampling (300 replicas, different generator). The divergence that deserves
+a paragraph is another one: the earlier text and the README say that 36 clean months are worth **2.2 bits** and that a severe test
+would need **69 months**. The instrument confirms the two numbers **exactly** (2.2373 bits and 69 months)
+when it uses the $p$ that the tail of the training set implies, $p = 0{,}04296$, the value of the published POT/GPD fit
+$\xi = 0{,}406$, $\sigma = 7{,}387$, 83 excesses above 10 — and measures **2.42 bits and 64 months** when it uses the
+simple monthly frequency of the training set, $p = 5/108 = 0{,}04630$. The difference is not of account: it is of which world
+"dangerous" one places on the other side. The adjusted tail is more pessimistic than the raw count of months, and that is why it
+requires more clean months. The two values stay on the record; none was erased.
+
+### Chapter 19
+
+The numbers above are of data **simulated** by this laboratory, and not of the
+research repository; the three simulations show a single mechanism, at toy scale. The values of the
+repository cited in this chapter (128 of 1,024 accepted sets in the light tunnel with $p = 0{,}29$ for
+$\{$vermelho, verde, azul$\}$; 35 of 512 in the FDA trial; 57 accepted sets in STAR in H2d; 2 of 1,024 in
+the yeast with best $p = 0{,}0072$) are not reproduced here, and cannot be: they require the real data and the
+framework in Python of the horizons, whose commands are in Appendix C. The laboratory measures what it can with
+its own data: that the method finds the two causes in world A, that it returns empty in world B and that the rule of
+saturation is the difference between $\emptyset$ and the truth in world C. The design of the validation by intervention of the
+yeast is the exception: the resolution of the replica is measured again, in Rust, by `labs --genetics`, with the true mover
+and the row artefact planted by the instrument — what the instrument measures there is the **design**, and not
+the 40 real genes, which continue without an instrument.
+
+### Chapter 20
+
+**The Platt balance.** The record of the live replay says that, in the flights stream of 2023, the
+intercept of the correction varied from $-0{,}52$ to $+0{,}43$ along the year. The diary of 2023 shows that this is the
+interval **inside the vault**; in the whole year, the same intercept goes from $-1{,}01$ to $+1{,}25$. The two values
+are right and measure different things: one is the vault, the other is the year. It stays on the record instead of hidden.
+
+**The numpy case.** The published number of the performative loop — estimated effect
+$0{,}5632$ with 2,375 shocks — was contested once, and it is worth telling how it ended. The code, with the seed
+declared, gave $0{,}5529$ and 2,395 shocks when it ran with the standard `python3` of the machine. There were not two versions
+of the code. The file is one, and the four copies of the tree bring the identical cryptographic digest. What there was were
+two numeric packages inside a single interpreter: numpy 2.5.1 of the record and numpy 2.4.6 that the standard path
+imports first. The exact point of the divergence was found: with the state of the generator identical, a binomial draw
+of 248 trials with probability 0.6 returns 171 in one version and 150 in the other, because version 2.5 corrected the
+Stirling series of the acceptance test of BTPE — the third and the fourth terms were added instead of subtracted, and the
+main coefficient said 13680 where it should say 13860. From there on the two simulations decorrelate, and the
+exploration draw changes pattern. **No published number changed**: the r̂ of 0.5632 with 2,375 shocks reproduces
+in the record environment, and the other value is the one of the other package. The lesson for whoever goes to check: record the version of the
+environment together with the number, because a number without an environment is a number that nobody can audit.
+
+The experiment above is simulated and was calibrated to have the structure of the vault of
+Rhode Island — rate of 2.26%, 24,466 stops, correction fitted in the previous period —, not to reproduce its
+numbers. The values measured here and the ones of the real vault, side by side: bias of the raw model, $+0{,}0132$
+here against $0{,}013$ there; bias with Platt, $+0{,}0002$ here against $0{,}0020$ there; ECE with Platt, 0.0022
+here against **0.0048** there; skill with Platt, $+0{,}0098$ here against **$+0{,}019$** there; excess of the rate by the
+raw model, 60% here against 58% there. The order of magnitude and the sign of all of them coincide, and the reason for the
+differences is the data: the one here is generated by a simple additive model, with three covariates and without the noise of a
+real police record. The gain of the canary with the clock switched off, $+0{,}6521$, falls inside the range measured in the
+real vaults, which goes from $+0{,}55$ (arrests of 2020–2021) to $+0{,}97$ (Rhode Island).
+
+### Chapter 21
+
+The verifier of the laboratory is a reduced reimplementation of the validator of the
+repository. The validator of the research demands, besides the rules above, at least 60 characters in the text of the question,
+refuses a larger list of generic names and runs over 18 packages of H2g, 12 of H2 and the card of H0, without any
+published number changing; the one of the laboratory runs over 12 test cards and touches nobody's data. What
+the two have in common is the essential: the decider question is only worth something if it names who decides, copies the action
+literally and ends in a question.
