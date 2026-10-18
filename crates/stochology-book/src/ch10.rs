@@ -491,7 +491,7 @@ fn wild_tail() {
         );
     }
     println!(
-        "gregarine: a Gaussian model fitted to this tail underestimates the loss in every repetition"
+        "reading: a Gaussian model fitted to this tail underestimates the loss in every repetition"
     );
     println!();
 }
