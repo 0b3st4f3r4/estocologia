@@ -158,3 +158,23 @@ stdout of the English instruments. What moved by construction -- the two wave se
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
 end of the pass.
+
+## The outside review (2026-10-18)
+
+On 2026-10-18 the owner asked for an outside review of the thesis as a whole and then for its proposals to be applied.
+The reviewer is a language model (Claude, Anthropic), plausibly of the same family as the models that played every
+role of P01, so what it brought is a refinement proposal and not the independent judgment that §2 still waits for. The
+dated record, with the hashes before and after, is `history/estado-2026-10-18T2014Z.md`. What changed in this state,
+with both values:
+
+| What | Before | After |
+| --- | --- | --- |
+| `cargo test --workspace` | **373** written here and in `README.md`; the tree actually measured **377** before this change | **386**: nine tests of the e-process ledger in `crates/stochology-methods/src/sequential.rs` |
+| point declarations in the manifest | 20, of which 4 second-or-later | **23**, of which 5: `p16-ponte/DECLARACAO_3.md`, `p21-camadas/DECLARACAO.md`, `p22-parada/DECLARACAO.md` |
+| empirical points | 16 | **18** |
+| seals | 28 files, 82 verified targets | **30 files, 88 verified targets**, 9 declared outside the tree, 0 issues |
+| live declared proposals | 4 (items 3, 5, 9, 13) | **6**: item 14, whether the layers can fail (people), and item 15, the H2 gate under an e-process (desk work) |
+| the thesis in `paper/README.md` | one sentence carrying three claims | claims (a), (b), and (c) separated, with their status; the Knightian and specification-error rows of the table no longer say the same thing, by a dated rectification with both definitions |
+
+What did not change: every verdict of §3, both frozen windows of §4, `empirical/p16-ponte/registro.tsv`, and every
+number of the book. Thesis (c) stays not sustained under its own rule; thesis (c′) is declared and not enforced.

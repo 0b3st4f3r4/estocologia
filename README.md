@@ -5,7 +5,7 @@ Stochology is the science (or art) of studying judgment and decision-making unde
 This repository holds the research conducted under the project architecture (typed hypergraph, World/Model/Agent
 layers, adversarial review board A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
 H3, on real-world data. The research concluded on 2026-10-15 and the engineering apparatus is **Rust** (Edition 2024):
-**nine crates**, **373 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
+**nine crates**, **386 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
 that are capable of failing a claim.
 
 ## Repository Contents
@@ -14,37 +14,37 @@ that are capable of failing a claim.
 |---|---|
 | `book/stochology-textbook.md` | The textbook in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 5 619 lines and 71 931 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
-| `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, review board A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, and subgroup fairness), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (textbook laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
+| `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, review board A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (textbook laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
 | `docs/RUST_RESULTS.md` | The registry generated directly from the instruments themselves: each block is the literal output of the command above it. §5 is the state manifest, with the `sha256` of every point declaration |
 | `data/` | The five datasets read by the instruments (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), with provenance in `SOURCES.md` and checksums in `SHA256SUMS` |
-| `empirical/` | The foundational empirical points: central thesis, independence, multiplicity, priors, performative loop, ICP, calibration, genetics, H3, R-axis predictions, bridge at scale, SHELF, affected-party listening, second opinion, and Jev. Each folder contains its declaration and `*.sha256` seal |
+| `empirical/` | The foundational empirical points: central thesis, independence, multiplicity, priors, performative loop, ICP, calibration, genetics, H3, R-axis predictions, bridge at scale, SHELF, affected-party listening, second opinion, Jev, whether the layers can fail, and the stopping rule. Each folder contains its declaration and `*.sha256` seal |
 | `governance/` | Risk opinions and the audit of who pays for the error |
 | `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the review board, the cycle, and the **mandatory verification of §V** |
 | `docs/PLAN.md` | Master plan: epistemology, pedagogy, architecture, adversarial review board A1–A8, and governance |
-| `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **four live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), and the Jev-LLM bridge (13). The nine closed items are in §2, alongside their proofs |
+| `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **six live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), the Jev-LLM bridge (13), whether the layers can fail (14), and the H2 gate under an e-process (15). The nine closed items are in §2, alongside their proofs |
 | `docs/STATE_DECLARATION.md` | **The state of the tree, not an edition.** There are no numbered editions or versions, before or after publication: there is a live state recording what it measured, what it rejected against itself, what it could not do, and how it is reproduced. Its seal is `docs/STATE_DECLARATION.sha256`. The corrections of 2026-10-17 live in `history/` as dated records with before-and-after hashes |
 | `references/` | Verification of the bibliographic references |
 | `paper/` | The paper "Stochology: Old Frontiers, New Horizons", with figures |
 | `scripts/style/` | The prose-pass tooling: `scripts/style/check_pass.py` compares each file against its version in `HEAD` |
-| `scripts/check_seals.py` | The verifier for the 28 SHA-256 seals across the tree, executed in a single command from a single directory |
+| `scripts/check_seals.py` | The verifier for the 30 SHA-256 seals across the tree, executed in a single command from a single directory |
 | `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, nineteen instruments, and all verifiers. CI invokes this exact file, not a copy of the list |
 | `docs/JEV_INTEGRATION.md` | The audit of the transcript *Integration of Jev Models into Stochology*: every claim checked against the code, with declared divergences — the legacy syllabus numbering versus the current nomenclature ($M_{15}$ and $MB_1$–$MB_8$ on one side, $\mathcal{M}$ and $A_1$–$A_8$ on the other), four filters versus five, $\Phi_1$–$\Phi_4$ versus $\Phi_1$–$\Phi_5$, and *LLM-as-Jev* — plus the Jev-LLM bridge as a declared proposal |
 | `docs/declarations/REMOVED_PYTHON.md`, `docs/declarations/REMOVED_NON_SIGNIFICANT.md` | What left the tree on 2026-10-16, with the recovery commit and the blob-hash manifests |
 
 ## Measured State
 
-Measurement of this tree on **2026-10-17**, each row with the command that produces it:
+Measurement of this tree on **2026-10-18**, each row with the command that produces it:
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **373 passed**, 0 failed, across the nine crates | `cargo test --workspace` |
+| Tests | **386 passed**, 0 failed, across the nine crates (the 373 written here before 2026-10-18 was already stale: the tree measured 377 before the e-process ledger added nine) | `cargo test --workspace` |
 | Instruments | **19** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
 | Assembled book | **5 619 lines**, **71 931 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
-| Seals | **28 files**, **82 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
+| Seals | **30 files**, **88 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
 ## How to Verify
 
@@ -86,10 +86,12 @@ and the results registry, compares them against what `montar()` measures, and ex
 
 ## What Remains Open
 
-The four open items are not of the same nature. The first three depend on **people outside the program** and cannot be closed with
-more code: what is missing is consent, listening, and blind judgment. The fourth depends on **artifact and code**: frozen
+The six open items are not of the same nature. Items 3, 5, 9, and 14 depend on **people outside the program** and cannot be closed with
+more code: what is missing is consent, listening, blind judgment, and independent coding. Item 13 depends on **artifact and code**: frozen
 weights with a declared `sha256` and a runner that loads them, which closes with a download, a hash declaration, and an
-implementation.
+implementation. Item 15 is **desk work**: a declaration written before a recomputation. Items 14 and 15, and the second
+thesis (c′) of item 9, came from an outside review on 2026-10-18 by a language model plausibly of the same family as the
+program's own agents, so they are refinements, not independent judgment.
 
 | Item | Dependency | What is missing | Deadline |
 |---|---|---|---|
@@ -97,6 +99,8 @@ implementation.
 | 5. The voice of those who pay for the error | **people outside the program** | listening sessions with affected groups: **0 of 7** heard, minimum coverage of 2 | **2026-12-15** |
 | 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases | **2027-01-14** |
 | 13. The Jev-LLM bridge | **artifact and code** | the weights with a declared `sha256`; the local runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | no date |
+| 14. Can the layers fail? | **people outside the program** | three coders, two from outside, over at least 60 documented errors (`empirical/p21-camadas/`) | no date |
+| 15. The H2 gate under an e-process | **desk work** | the declaration of which null each of the 38 tests tested and which data it used, before recomputing (`empirical/p22-parada/`) | no date |
 
 Once the listening window expires without minimum coverage, the seven decisions are archived as a sensitivity
 exercise and do not become public policy guidelines. Once the bridge window expires, the thesis becomes **definitively

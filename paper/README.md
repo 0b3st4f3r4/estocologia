@@ -1,10 +1,12 @@
 # "Stochology": Old Frontiers, New Horizons
 
-Silvano Neto · October 14, 2026, updated on October 15, 2026
+Silvano Neto · October 14, 2026, updated on October 15 and October 18, 2026
 
 ## Abstract
 
 Stochology is the science (or art) that studies judgment and decision under uncertainty. This paper argues that it is not a new branch of statistics, but a seam: it joins three traditions that grew apart (the philosophy of induction, statistical inference, and the mechanics of stochastic processes) and organizes them into three layers, World, Model, and Agent. The central thesis is that most of the errors of reasoning under uncertainty are not errors of arithmetic, but misalignment between those layers.
+
+That sentence carries three claims of different nature, and the paper keeps them apart: (a) that errors live in the seams between layers, which is a claim about where errors are; (b) that each classical bias is an ignored model of chance, which is a claim about the catalogue; and (c) that the architecture built to operate the discipline catches errors that competent ordinary practice lets through, which is a claim about an instrument. Only (c) has been tested, once, and it was not sustained. (a) and (b) give the program its name without yet being at risk, and section 9 says what would put them there.
 
 The paper goes through the old frontiers that the discipline inherits, presents the architecture with which the project intends to operate it (a typed hypergraph, audited by specialized agents and by five invariants), and reports the first results. In a simulated health clinic, the same average demand produces an average wait of 9.1 or 19.3 minutes (9.3 and 20.7 in the old Python generator), depending on whether the world varies or not. In real data, the same logic shows that the standard staffing of a bank call center, which promises to meet the target every day, fails on 26 out of every 100. The program passed the four horizons of its plan, but not on the first try: the third, the search for causal structures invariant across areas, required seven rounds, and the fourth, continuous calibration out of time, three attempts in the hardest flow. The paper treats the failures of the path as a result and ends with the horizons that open up and the objections that the discipline must face.
 
@@ -82,22 +84,28 @@ The first gesture of Stochology is to separate three things that common sense mi
 
 The separation has a strong consequence: **a fallacy is not an error of arithmetic, it is a misalignment between layers.** The prosecutor's fallacy happens when the Agent reads the likelihood of the Model, P(evidence | innocent), as if it were the answer about the World, P(innocent | evidence). The inspection paradox happens when the Agent imposes a stable Model on a World that oscillates. In both cases the arithmetic can be right; what is wrong is the bridge.
 
-The thesis has an operational version: each bias of the classical catalogue corresponds to an ignored model of chance. Base-rate neglect is the likelihood taken for the posterior. Availability and survival are a filtered sample taken for the population. The pattern illusion is the null hypothesis of chance forgotten. The gambler's fallacy attributes memory to a process without memory. The neglect of rare events models a heavy tail as Gaussian. Overconfidence is bad calibration, and motivated reasoning is choosing the model by the desired result. The word "bias" thus gains three senses that the discipline separates in order to reunite later: the statistical bias of an estimator, the bias of the process that produced the data, and the cognitive bias of whoever reasons. In all three, the error is not noise that cancels out with more data; it is a distortion that accumulates.
+This is claim (a), and it has a weakness that the paper must name before anyone else does. World, Model, and Agent cover by construction the reality, the representation, and whoever decides, so any error can be redescribed as a wrong bridge. A classification that absorbs every case is a vocabulary, not a thesis. What would make (a) a thesis is that independent coders, with the same codebook, put the same documented error in the same place, and that they can and sometimes do code an error as pure arithmetic with the bridges right. That test is declared, with its decision rule, and not yet run (section 9).
 
-Each layer has its type of uncertainty, and confusing them is a classical error. **Aleatory** uncertainty belongs to the World: it is the chance of the next toss of a known coin, and no amount of data eliminates it. **Epistemic** uncertainty belongs to the Model: it is our ignorance about the bias of the coin, and it shrinks with each toss. The law of total variance separates the two with precision:
+Claim (b) is the operational version: each bias of the classical catalogue corresponds to an ignored model of chance. Base-rate neglect is the likelihood taken for the posterior. Availability and survival are a filtered sample taken for the population. The pattern illusion is the null hypothesis of chance forgotten. The gambler's fallacy attributes memory to a process without memory. The neglect of rare events models a heavy tail as Gaussian. Overconfidence is bad calibration, and motivated reasoning is choosing the model by the desired result. The mapping fits well at the layer of the Model and is strained at the layer of the Agent. Motivated reasoning is not an ignored model of chance: it is the utility of the Agent contaminating the choice of the Model. And "overconfidence is bad calibration" redescribes the phenomenon in the language of scores without explaining it. Claim (b) is a good teaching map, and it holds as a map, not as a law. The word "bias" thus gains three senses that the discipline separates in order to reunite later: the statistical bias of an estimator, the bias of the process that produced the data, and the cognitive bias of whoever reasons. In all three, the error is not noise that cancels out with more data; it is a distortion that accumulates.
+
+Each layer has its type of uncertainty, and confusing them is a classical error. The assignment of a type to a layer, however, is relative to a description, and the paper reads it that way. **Aleatory** uncertainty belongs to the World: it is the chance of the next toss of a known coin, and no amount of data eliminates it. **Epistemic** uncertainty belongs to the Model: it is our ignorance about the bias of the coin, and it shrinks with each toss. The law of total variance separates the two with precision, once θ is chosen:
 
 $$
 \operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{random (World)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}
 $$
 
-The third, **Knightian** uncertainty, is the most dangerous because it does not appear in the equation. It arises when the real process is outside the hypothesis space. There, more data do not help: they narrow the confidence interval around the wrong answer, as in the case of the turkey.
+The split depends on what is put inside θ. A tossed coin is a deterministic mechanical system: with the initial conditions measured, the face is predictable, and Diaconis, Holmes, and Montgomery (2007) found that a vigorously flipped coin lands on the side it started about 51% of the time. Whoever conditions only on the coin sees aleatory uncertainty; whoever conditions on the hand sees epistemic uncertainty. The line between the two is a choice of coarse-graining, like entropy in statistical mechanics. The layers are therefore roles in an inference, relative to a declared partition, and not regions of reality; the architecture asks that the partition be declared because the type of the uncertainty is not a property of the World alone.
+
+The third, **Knightian** uncertainty, is the most dangerous because it does not appear in the equation. It arises when the space of outcomes itself is incomplete: the event that matters is not one the model can even name. There, more data do not help: they narrow the confidence interval around the wrong answer, as in the case of the turkey, whose slaughter was not a low-probability outcome but no outcome at all. Specification error is its milder neighbour: the outcomes are the right ones and the family of distributions is wrong, which a predictive check can detect and Knightian uncertainty, by definition, cannot.
 
 | Uncertainty | Layer | What more data do | How it is mitigated |
 | --- | --- | --- | --- |
 | Aleatory | World | Nothing | Safety margins and redundancy |
 | Epistemic | Model | Reduce it to zero | Sampling and Bayesian updating |
 | Knightian | Model and Agent | Nothing, or worse: false confidence | Scenarios, robustness, stress-testing of premises |
-| Specification error | Model | Precision around the error | Widening the hypothesis space and auditing premises |
+| Specification error | Model | Precision around the error | Predictive checks, widening the family of models, and auditing premises |
+
+*Rectification of 2026-10-18.* The text before this date defined Knightian uncertainty as "the real process is outside the hypothesis space", which is also the definition of specification error, so the two rows of the table said the same thing twice. The two are now separated by what is missing: the outcome space (Knightian) or the right family over a correct outcome space (specification). The mitigation of specification error gained the predictive check, which is the instrument section 6 already uses at the call center.
 
 The mathematical tool that crosses the three layers is modest: Jensen's inequality. For a convex function f, the average result is not the result of the average case:
 
@@ -446,7 +454,10 @@ instruction to analyse rigorously, without the agents or the gates. Both pointed
 alarms in the 4 clean cases. The rule declared beforehand said that a tie at the ceiling does not sustain the thesis, and that is what the
 result says. It does not refute it either: it shows that, for the ten errors of that list, a competent analyst finds
 everything that the other one finds. If the thesis holds, it holds for errors that the list does not cover, and a fair test of that requires
-harder cases chosen outside the program, human analysts, and a human judge.
+harder cases chosen outside the program, human analysts, and a human judge. The design of the pilot also made the tie
+likely: the list is canonical, every role was played by models of the same family, and the list is about errors of the
+Model layer, while the advantage the paper claims is at the seams. Section 9 states the second thesis that follows from
+that diagnosis.
 
 **Independence.** Four results that sustain the approved exits were reimplemented from scratch, without reading the
 code or the original outputs, from the READMEs and the declarations. All of them agreed with the published one within the
@@ -578,13 +589,25 @@ Dynamics*, and not in *Empirical Economics*; and the work of Hume from 1748, who
 
 ## 9. Limits and objections
 
-A discipline that demands a severe test of other people's claims must apply it to itself. Seven objections deserve a direct answer.
+A discipline that demands a severe test of other people's claims must apply it to itself. Nine objections deserve a direct answer.
 
-**"This is just statistics with another name."** In part, yes: almost all the tools have had an owner for decades. What Stochology adds is the organization: the separation into layers, the typing of uncertainty, and the requirement that each claim pass through the same gates. The hypothesis that the program needs to demonstrate, and has not demonstrated yet, is that this organization catches errors that ordinary statistical practice lets through. Its first direct test, the blind pilot of section 8, tied at the ceiling: the two arms pointed out the same eight planted defects and gave the same zero false alarms.
+**"This is just statistics with another name."** In part, yes: almost all the tools have had an owner for decades, and the closest neighbours are not statistics in general but specific programs: Box's loop of criticism and estimation, Mayo's severe testing, the Bayesian workflow of Gelman and colleagues (2020), which already joins model building, predictive checks, and model criticism in a declared sequence, and the model and data cards of machine learning. Against the Bayesian workflow in particular, the layers, the cards, and the gates add little at the layer of the Model. What none of those neighbours makes central is the layer of the Agent: who decides, under which question resolution, and who pays for the error. That is where Stochology can be distinct, and it is also the part least executed: the seven groups affected by the decisions that involve people have not been heard. What Stochology adds is the organization: the separation into layers, the typing of uncertainty, and the requirement that each claim pass through the same gates. The hypothesis that the program needs to demonstrate, and has not demonstrated yet, is that this organization catches errors that ordinary statistical practice lets through. Its first direct test, the blind pilot of section 8, tied at the ceiling: the two arms pointed out the same eight planted defects and gave the same zero false alarms.
 
 The course documentation gives the shortest answer when it compares the field with its neighbours: Stochology does not seek new theorems, it uses them to judge arguments and presuppositions, and it asks what a model authorizes one to conclude, not how to optimize it.
 
+The pilot also suggests what a fairer form of the hypothesis would be. If the advantage lives at the seams, the architecture should beat ordinary analysis on seam errors (question resolution, non-ergodic dynamics, performative loops, selection inside a decision, tails without a usable mean, and the choice of who pays) and tie on classical errors. That is thesis (c′), declared in `empirical/p16-ponte/DECLARACAO_3.md`: it predicts an interaction between arm and stratum, which can fail in more ways than "more" can, and it adds the axis the pilot never measured, the agreement of an arm with itself over repeated runs. Thesis (c) keeps its rule and its window.
+
 **"The real data are old and from public databases."** It is true, and it was a choice: calls from 2003, jobs from 1978, fires from 1980 to 1990. They are known databases, verifiable by hash and with an outcome already known, which allows auditing the method, but does not replace a real operation. Several pieces remain assumed: the service time and the patience of the call center, which the database does not bring and whose mesh of 4 × 6 points (section 6) shows that no point switches the winning rule, with the worst case — 5 min of service and 10 min of patience — leaving 14.2% of the days below the target against 37.7% for the rule of the claim; the decision costs, which are a declared assumption; and the human elicitation panel, with five domains elicited by the first internal expert ($n = 1$) and the other two people per domain and the expert from outside still missing, which is what is missing for the informative priors to stop being sensitivity with a single person. What the measurement has already covered leaves the list: the performative loop of H3, which the real call center puts at about 0.15 against the declared 0.6 (section 8), and the sensitivity of the priors, which closed with a firm verdict. What the audit could not look at stays recorded: none of the seven groups affected by the decisions that involve people was heard, and there is no record in the repository of consultation, interview, panel of the affected groups, or consent. And the last two gates only passed after several rounds, with declared changes along the way. The architecture records all of this as a declared pending item, which is exactly what it demands of any claim.
+
+**"The layers cannot fail."** Claim (a) is the name of the program, and as stated it absorbs every case: any error can be told as a wrong bridge. The answer is a test that lets the frame lose. `empirical/p21-camadas/DECLARACAO.md` freezes it: at least sixty documented errors from outside the program, three coders of whom two from outside, seven codes that include pure arithmetic and outside the frame, Fleiss' κ, typing at κ ≥ 0.60 and vocabulary below 0.40. If nobody ever reaches for the arithmetic code, the sentence "most errors are not arithmetic" is not refuted, but it is not tested either, and the paper will say so.
+
+**"The gates approved what the audit rejected."** H2 and H3 passed their gates, and the background audit showed afterwards that neither would have passed if only the first declared version of each choice counted. The instrument that caught the errors was the retrospective count of attempts, not the gate at the moment of passage. The diagnosis is precise: a hash on every round makes each step honest, but "run another round until it passes" is optional stopping, and the stopping rule was never declared; a Bonferroni chosen after the path is known divides α by a number the path chose. The repair is a rule that holds at any stopping time. Each round contributes an e-value, a statistic with expectation at most 1 under the null, and the running product of conditionally valid e-values obeys Ville's inequality,
+
+$$
+P_{H_0}\Big(\sup_n E_n \ge 1/\alpha\Big)\le \alpha ,
+$$
+
+which is Royall's bound of section 3.1 with the likelihood ratio replaced by any e-value (Vovk and Wang, 2021; Ramdas and colleagues, 2023). From 2026-10-18 on, gates attempted in rounds keep that ledger (`empirical/p22-parada/DECLARACAO.md`); its application to the 38 past tests of H2 waits for a declaration, written before computing, of which null each round tested.
 
 **"Formalizing judgment is eliminating judgment."** The architecture does not decide what is worth asking, nor how much an error costs for whoever suffers it. Those values enter through elicitation and through the cost/loss ratio, which are declared, not computed. The ambition is to make judgment visible and countable, not to replace it; that is why the definition says "science (or art)".
 
@@ -603,6 +626,8 @@ Stochology proposes a change of question. Instead of "what is the probability?",
 The real data confirmed that lesson and added another, less comfortable one. The mean hid 26 bad days in every 100 in a bank call center, and the typical trajectory of a leveraged investor stayed far below the average of all. But the program needed seven rounds to pass one of its own gates and three attempts to pass another, and an imprudent reinsurer was ruined without the rival model winning the right to decide. A discipline about uncertainty is also measured by what it admits not to have achieved.
 
 The simulated health clinic summarizes the lesson in one sentence: the same mean can hide 9 or 19 minutes of wait (21 in the old generator), and only whoever simulates the world instead of computing the average case discovers the difference. Bernoulli called this the art of conjecturing. Three centuries later, with reproducible code, null models, and agents that do not approve their own work, that art can also become an auditable science, as long as it stays humble about what it does not yet know.
+
+What the repository demonstrates today is narrower than the name of the program and, for that reason, firmer. It does not yet show that the layers are a typing, nor that the architecture catches what competent practice misses. It shows that pre-declaration, the count of attempts, and negative proofs can turn a program against itself and make it retract, in the open, what its own gates had approved. That procedural claim is the one the evidence supports; the others stay declared, with the tests that could make them fail.
 
 ## References and readings
 
@@ -657,9 +682,11 @@ The simulated health clinic summarizes the lesson in one sentence: the same mean
 - Chouldechova, A. "Fair prediction with disparate impact", *Big Data*, 2017.
 - Clauset, A.; Shalizi, C. R.; Newman, M. E. J. "Power-law distributions in empirical data", 2009.
 - Cox, R. T. "Probability, frequency and reasonable expectation", *American Journal of Physics* 14, 1946.
+- Diaconis, P.; Holmes, S.; Montgomery, R. "Dynamical bias in the coin toss", *SIAM Review* 49(2):211–235, 2007. DOI: 10.1137/S0036144504446436.
 - Doctor, J. N.; Wakker, P. P.; Wang, T. V. "Economists' views on the ergodicity problem", *Nature Physics* 16, 2020.
 - Dwork, C.; Roth, A. *The Algorithmic Foundations of Differential Privacy*, 2014.
 - Erev, I.; Wallsten, T.; Budescu, D. *Psychological Review* 101(3), 1994.
+- Gelman, A.; Vehtari, A.; Simpson, D.; Margossian, C. C.; Carpenter, B.; Yao, Y.; Kennedy, L.; Gabry, J.; Bürkner, P.-C.; Modrák, M. "Bayesian workflow", arXiv:2011.01808, 2020.
 - Gigerenzer, G. et al. "Helping doctors and patients make sense of health statistics", *Psychological Science in the Public Interest* 8, 2007.
 - Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3), 1985.
 - Good, I. J. "On the principle of total evidence", *BJPS* 17(4), 1967.
@@ -683,6 +710,7 @@ The simulated health clinic summarizes the lesson in one sentence: the same mean
 - Peters, O. "The ergodicity problem in economics", *Nature Physics* 15, 2019.
 - Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015.
 - Rabin, M. "Risk aversion and expected-utility theory: a calibration theorem", *Econometrica* 68(5), 2000.
+- Ramdas, A.; Grünwald, P.; Vovk, V.; Shafer, G. "Game-theoretic statistics and safe anytime-valid inference", *Statistical Science* 38(4), 2023. DOI: 10.1214/23-STS894.
 - Rossouw, J. E. et al. (Women's Health Initiative), *JAMA* 288(3), 2002.
 - Royall, R. *Statistical Evidence: A Likelihood Paradigm*, 1997.
 - Rubin, D. B. *Journal of Educational Psychology* 66(5), 1974.
@@ -693,3 +721,4 @@ The simulated health clinic summarizes the lesson in one sentence: the same mean
 - Taleb, N. N. "How much data do you need?", *International Journal of Forecasting* 35(2), 2019.
 - Tversky, A.; Kahneman, D. *Journal of Risk and Uncertainty* 5(4), 1992.
 - Vapnik, V.; Chervonenkis, A. *Theory of Probability and Its Applications* 16(2), 1971.
+- Vovk, V.; Wang, R. "E-values: calibration, combination and applications", *Annals of Statistics* 49(3), 2021. DOI: 10.1214/20-AOS2020.

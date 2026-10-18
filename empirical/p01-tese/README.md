@@ -56,6 +56,12 @@ SHA-256 of the answer key matches `GABARITO.sha256` (4d5450eb…).
    correct conclusion, the objective criterion of the judge and the calculated numbers) and `gerar_casos.py` (generates the 12 cases and the
    answer key) stay in the `p01-gabarito` folder of the coordinator, outside the repository, because both reveal the defect.
    Hashes in `GABARITO.sha256` and `GERADORES.sha256`.
+   *Rectification of 2026-10-18:* this item describes the state **before** the scoring. After it, the answer key
+   entered the tree at `gabarito/gabarito.yaml`, as the Result section says, and `GABARITO.sha256` now verifies a live
+   target (4d5450eb…); the generator stayed outside, and `GERADORES.sha256` remains declared without a live target. The
+   sealed `DECLARACAO.md` still says that the answer key "stays outside the repository", which was true when it was
+   frozen. For the fair test of point 16, the answer key must stay out of the tree until the judge has scored, and the
+   selector must not hand it to any arm.
 
 ## Numbers
 

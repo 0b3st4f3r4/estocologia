@@ -68,7 +68,7 @@ python3 scripts/book/check_book.py
 step "the generated record docs/RUST_RESULTS.md"
 python3 scripts/book/generate_results.py --check
 
-step "all 28 SHA-256 seals"
+step "all 30 SHA-256 seals"
 python3 scripts/check_seals.py
 
 step "prose pass against baseline"

@@ -179,3 +179,17 @@ row below is a response read, not a citation from memory.
   them claims a file on disk.
 - **The mark was applied on 2026-10-17**, and Appendix D.0 gained the table of the three passes, with the date of each
   one. The count stops being 27 of 50 and becomes **50 of 50**.
+
+## Four references added to the paper (verification of 2026-10-18)
+
+The rewrite of the thesis in `paper/README.md` §3 and §9 cites four works that the paper did not cite before. Each was
+checked against an authoritative page before entering the text.
+
+| # | Reference as cited | Result | What the source says | Route |
+| --- | --- | --- | --- | --- |
+| 1 | Diaconis, Holmes, and Montgomery, *SIAM Review* 49(2):211–235, 2007 | MATCHES | "Dynamical Bias in the Coin Toss", v. 49, n. 2, p. 211–235, 2007 | first page of the article (copy hosted at stat.berkeley.edu), DOI 10.1137/S0036144504446436 printed there |
+| 2 | Gelman et al., "Bayesian workflow", arXiv:2011.01808, 2020 | MATCHES | same title and identifier | arXiv abstract page; a book of the same title later appeared with CRC Press, and the paper cites the 2020 preprint |
+| 3 | Ramdas, Grünwald, Vovk, and Shafer, *Statistical Science* 38(4), 2023 | MATCHES | "Game-Theoretic Statistics and Safe Anytime-Valid Inference", v. 38, n. 4 | Project Euclid, DOI 10.1214/23-STS894 |
+| 4 | Vovk and Wang, *Annals of Statistics* 49(3), 2021 | MATCHES | "E-values: Calibration, combination and applications", v. 49, n. 3 | Project Euclid, DOI 10.1214/20-AOS2020 |
+
+No content divergence. Pages are given only where the source printed them.
