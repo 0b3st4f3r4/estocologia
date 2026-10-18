@@ -375,3 +375,20 @@ did not come out in the sources consulted, and the year of Sweeney (2000) comes 
 Rule 1 of this appendix still holds, and now with the exact sense: the check is of the metadata, and what the
 book keeps of each one is the citation, the DOI and the number that it uses. What does not enter the repository are the third-party
 files, for copyright, and none of them is claimed to be present on disk.
+
+## Appendix E. Provenance of the numbers
+
+The chapters teach with numbers measured by a fixed-seed instrument. Where a measured number differs from the
+value an earlier text or the course outline recorded, both values and the cause are kept here, chapter by
+chapter, so that the chapters can teach without carrying the comparison.
+
+### Chapter 4
+
+The earlier text (and the course outline) records 11% coverage
+for the fixed model and 99% for the model with forgetting, with widths from 0.140 to 0.035. The instrument,
+with 6,400 steps and discount 0.99, measures **12%** and **93.98%**, with widths from 0.1564 to 0.0240 and a
+ratio of 5.7×. The coverage of the fixed model agrees within one percentage point; the coverage of the model
+with forgetting is lower because the width of the interval used here is that of the standard error of the
+EWMA, and a wider interval (or a smaller discount) raises coverage above 97% — the parameter grid in
+`crates/stochology-book/examples/grade_ch04.rs` shows the effect. Both values remain recorded; neither was
+erased.

@@ -66,7 +66,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 | tree hygiene | **measured and corrected**: `cargo fmt --check` and `clippy -D warnings` pass across all nine crates (down from 615 formatting diffs and 35 warnings), the toolchain is pinned in `rust-toolchain.toml`, `scripts/verify.sh` is now the single list of §V — CI previously ran 11 of the 29 commands —, and dead root files moved to `history/`. No published number changed: **373 tests** and `docs/RUST_RESULTS.md` identical byte for byte | `scripts/verify.sh` |
 | the per-instrument registry | **was machine-bound**: each block cited the absolute binary path (`/home/silvano-neto/…/target/release/labs`), so `scripts/book/generate_results.py --check` could only pass on this machine and failed in CI from 2026-10-17T16:23Z onward. The command is now recorded relative to the root (`./target/release/labs`), and `--check` now prints the diff divergence instead of merely failing | `python3 scripts/book/generate_results.py --check` |
 | the English migration of 2026-10-18 | **broke CI and left stale pointers**: renaming `verificar.sh` to `scripts/verify.sh` dropped the executable bit (mode `100644`), so CI run 8 on `85d3ade` failed with `Permission denied` before any check ran; the registry also captured cargo's `has been running for over 60 seconds` notice on a slow machine, making `--check` depend on the clock. The bit is restored, `normalize` drops that notice, and `docs/DECLARED_PROPOSALS.md` and this file now point to the nine crates and the English file and test names (`bridge.rs`, `calibration.rs`, `vault.rs`, `layer.rs`, `invariants.rs`). No published number changed | `scripts/verify.sh` |
-| versions in the prose | **replaced by history** at the owner's rule of 2026-10-18: "edition" no longer names a state of this project. The book calls the 14-chapter text of 2026-10-15 "the earlier text", the docs say "migration" and "state manifest", and `scripts/verify.sh` fails if any tag exists. The assembled book lost one word (96 018 to 96 017) and kept its 7 178 lines; no number in it changed | `scripts/verify.sh` |
+| versions in the prose | **replaced by history** at the owner's rule of 2026-10-18: "edition" no longer names a state of this project. The book calls the 14-chapter text of 2026-10-15 "the earlier text", the docs say "migration" and "state manifest", and `scripts/verify.sh` fails if any tag exists. The assembled book lost one word (96 018 to 92 923) and kept its 6 973 lines; no number in it changed | `scripts/verify.sh` |
 
 ## 4. What Would Change Each Verdict
 
@@ -89,7 +89,7 @@ cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
 python3 scripts/book/build.py --check                   # the 21-chapter ramp AND the file on disk
-python3 scripts/book/check_labs.py                      # 48 cited blocks, 0 divergent
+python3 scripts/book/check_labs.py                      # 44 cited blocks, 0 divergent
 python3 scripts/book/check_book.py
 python3 scripts/book/generate_results.py --check        # the registry and the state manifest
 python3 scripts/check_seals.py                          # the 28 seals: 82 targets, 9 outside the tree, 0 issues
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 178 lines**, **96 017 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 973 lines**, **92 923 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book is **7 178 lines and 96 017 words**, and its 48 cited blocks are the literal
+root `802e84b6...`. The assembled book is **6 973 lines and 92 923 words**, and its 44 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the

@@ -40,6 +40,64 @@ MARKERS_EN = ["### Step 1", "### Step 2", "### Step 3", "**Exercises.**", "**Sum
 
 BASE = os.environ.get("ESTOCOLOGIA_BASE", "HEAD")
 
+# Files rewritten from scratch under the owner's decision of 2026-10-18: content only, no metacommentary, the
+# whole theory of the research. A rewrite is not a prose pass, so numbers and fences may move. These files are
+# checked for the ramp markers, the word floor, and number provenance instead: every number in running prose
+# must already exist in a source (the baseline book, the paper, the plan, the empirical registry, or the
+# bibliography check) or in an output block of the same file, which check_labs.py holds to the instrument.
+REWRITTEN = {"00-opening.md", "appendices.md"} | {f"ch{n:02d}.md" for n in range(1, 22)}
+SOURCES = ["paper/README.md", "docs/PLAN.md", "docs/EMPIRICAL_REGISTRY.md", "references/VERIFICATION.md"]
+
+
+def source_numbers() -> set[str]:
+    texts = []
+    proc = subprocess.run(
+        ["git", "show", f"{BASE}:book/stochology-textbook.md"], cwd=ROOT, capture_output=True, text=True
+    )
+    if proc.returncode == 0:
+        texts.append(proc.stdout)
+    for rel in SOURCES:
+        path = ROOT / rel
+        if path.is_file():
+            texts.append(path.read_text(encoding="utf-8"))
+    known: set[str] = set()
+    for text in texts:
+        # "1 800" is one number written with a thin thousands space; read it whole as well as in parts.
+        for joined in (text, re.sub(r"(\d) (\d{3})(?!\d)", r"\1\2", text)):
+            for n in NUMBER_RE.findall(joined):
+                # A source may write 0,294 or 1.800 (Portuguese decimal comma and thousands point): keep every
+                # reading, so that a number moved into English notation still finds its source.
+                known.update({n, n.replace(",", "."), n.replace(",", ""), n.replace(".", "")})
+    return known
+
+
+def canonical(n: str) -> str:
+    """Read a number written in English notation: 1,299 is one thousand two hundred ninety-nine."""
+    if re.fullmatch(r"[1-9]\d{0,2}(?:,\d{3})+(?:\.\d+)?", n):
+        return n.replace(",", "")
+    return n.replace(",", ".")
+
+
+def check_rewrite(name: str, text: str, known: set[str]) -> list[str]:
+    body = extract_section(name, text)
+    problems: list[str] = []
+    if name.startswith("ch"):
+        for marker in MARKERS_EN:
+            if marker not in body:
+                problems.append(f"missing marker: {marker}")
+    words = len(re.findall(r"\w+", prose(body)))
+    if words < 700 and name.startswith("ch"):
+        problems.append(f"word floor: {words}")
+    own = {n for _, block in FENCE_RE.findall(body) for n in NUMBER_RE.findall(block)}
+    running = FENCE_RE.sub("", body)
+    running = "\n".join(l for l in running.splitlines() if not l.startswith("|"))
+    unknown = sorted(
+        {n for n in NUMBER_RE.findall(running) if n not in known and canonical(n) not in known and n not in own}
+    )
+    if unknown:
+        problems.append(f"numbers without a source: {', '.join(unknown[:12])}")
+    return problems
+
 
 def file_baseline(name: str) -> str | None:
     proc = subprocess.run(
@@ -120,8 +178,20 @@ def main() -> int:
     ]
 
     failures = 0
+    known: set[str] | None = None
     for path in files:
         name = path.name
+        if name in REWRITTEN:
+            known = source_numbers() if known is None else known
+            problems = check_rewrite(name, path.read_text(encoding="utf-8"), known)
+            if problems:
+                failures += 1
+                print(f"{name}: FAIL (rewrite)")
+                for p in problems:
+                    print(f"   REGRESSION: {p}")
+            else:
+                print(f"{name}: rewrite verified (markers, word floor, every number has a source)")
+            continue
         if name.startswith("00-"):
             key = "opening"
         elif name in ("apendices.md", "appendices.md"):

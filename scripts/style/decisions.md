@@ -167,3 +167,20 @@ comparação contra `HEAD` enxerga:
 
 O que a normalização **não** afrouxa: contagem de números, presença dos cinco marcadores de degrau, piso de
 palavras e os dois tetos de prosa corrente (`virgula_nao` e `travessao_fecha_com_e`) seguem estritos.
+
+## Reescrita de 2026-10-18: conteúdo puro
+
+Decisão da dona do projeto: o livro gastava prosa demais com metacomentário (caminhos, "este livro", o programa,
+declarações de divergência, o bloco do eixo R repetido nos 21 capítulos). O livro é reescrito parte por parte,
+com o conteúdo da teoria e sem autorreferência. Uma reescrita não é uma passada de prosa, então números e cercas
+mudam por desenho, e a comparação contra `HEAD` reprovaria tudo.
+
+Por isso `check_pass.py` passou a tratar os arquivos do livro em **modo reescrita**:
+
+1. **Marcadores e piso.** Os cinco marcadores de degrau e o piso de 700 palavras seguem estritos.
+2. **Procedência dos números.** Todo número da prosa corrente (fora das cercas e das linhas de tabela) precisa
+   existir numa fonte (o livro montado na base, `paper/README.md`, `docs/PLAN.md`, `docs/EMPIRICAL_REGISTRY.md`,
+   `references/VERIFICATION.md`) ou num bloco de saída do mesmo arquivo, que `check_labs.py` prende ao
+   instrumento. Um número inventado reprova.
+3. **Declarações de divergência** saem dos capítulos e vão para o Apêndice E (procedência dos números), com os
+   dois valores e a causa.
