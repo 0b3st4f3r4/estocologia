@@ -178,3 +178,17 @@ with both values:
 
 What did not change: every verdict of §3, both frozen windows of §4, `empirical/p16-ponte/registro.tsv`, and every
 number of the book. Thesis (c) stays not sustained under its own rule; thesis (c′) is declared and not enforced.
+
+## Thesis (c′) enforced (2026-10-18, later the same day)
+
+The second thesis of point 16 left the "declared and not enforced" column on the same day it was declared. The dated
+record is `history/estado-2026-10-18T2036Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| `cargo test --workspace` | 386 | **395**: nine tests of the (c′) gate in `crates/stochology-book/src/costura.rs` |
+| `labs --bridge` | two sections: the pilot re-derived and the fair test of (c) | **three**: the third reads `empirical/p16-ponte/registro_c_linha.tsv` and prints **(c′) not supported, box closed**, with a negative and a positive proof on synthetic records |
+| seals | 30 files, 88 verified targets | 30 files, **90** verified targets: the (c′) record and this record |
+| `empirical/p16-ponte/README.md` | reproduction command `--ponte`, refused since the English migration | `--bridge`, by a dated rectification |
+
+What did not change: `registro.tsv`, the verdict on thesis (c), and every number of the book.

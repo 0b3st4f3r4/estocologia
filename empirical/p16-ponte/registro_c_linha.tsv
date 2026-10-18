@@ -1,0 +1,11 @@
+# tese	c_linha: a vantagem da arquitetura se concentra nas costuras (DECLARACAO_3.md)
+# registros	2026-10-18
+# casos_por_estrato	12
+# defeituosos_por_estrato	8
+# limpos_por_estrato	4
+# repeticoes_por_braco_de_maquina	5
+# tipos_de_costura	resolucao_da_pergunta,dinamica_nao_ergodica,laco_performativo,selecao_dentro_da_decisao,cauda_sem_media,quem_paga_o_erro
+estrato	casos	apontados_A	apontados_B	alarmes_A	alarmes_B
+S	0 de 12	-	-	-	-
+C	0 de 12	-	-	-	-
+status_c_linha	nao sustentada ate o teste justo	-	-	-	nao sustentada

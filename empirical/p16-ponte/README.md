@@ -24,9 +24,23 @@ without the minimum coverage, the thesis stays **not sustained definitively** as
 **How to reproduce.**
 
 ~~~bash
-cargo run --release --bin labs -- --ponte
+cargo run --release --bin labs -- --bridge
 ~~~
+
+*Rectification of 2026-10-18:* the command above read `--ponte` until this date; the flag was renamed `--bridge` in the
+English migration of 2026-10-17, and `labs --ponte` is refused as an unknown flag.
 
 The instrument reads the record (`registro.tsv`) and the scores of the judge, prints the re-derivation, the state of the roles, and the
 two proofs: a record that says the thesis is sustained without the fair test is rejected, and with the roles designated and the
 cases at the minimum the test can run — the status only changes with the result of the judge.
+
+## Thesis (c′), enforced since 2026-10-18
+
+`DECLARACAO_3.md` declared a second thesis, (c′): the advantage of the architecture concentrated at the seams, with
+a seam stratum and a classical stratum of 12 cases each. Its record is `registro_c_linha.tsv`, separate from
+`registro.tsv` so that thesis (c), its rule, and its window stay exactly as frozen. `labs --bridge` now prints a third
+section that reads it (`crates/stochology-book/src/costura.rs`, nine tests): the seam kinds must be the closed list of
+six; while either stratum is below its minimum or the roles of the fair test are pending, the box is closed and no
+line may say `sustentada`; with both strata scored, the status is computed from the judge's scores and a declared
+status that differs is rejected. Today: **(c′) not supported, box closed**, both strata at 0 of 12. The reliability
+axis (κ over five runs per machine arm) stays descriptive and outside the gate, as declared.

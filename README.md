@@ -5,7 +5,7 @@ Stochology is the science (or art) of studying judgment and decision-making unde
 This repository holds the research conducted under the project architecture (typed hypergraph, World/Model/Agent
 layers, adversarial review board A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
 H3, on real-world data. The research concluded on 2026-10-15 and the engineering apparatus is **Rust** (Edition 2024):
-**nine crates**, **386 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
+**nine crates**, **395 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
 that are capable of failing a claim.
 
 ## Repository Contents
@@ -38,13 +38,13 @@ Measurement of this tree on **2026-10-18**, each row with the command that produ
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **386 passed**, 0 failed, across the nine crates (the 373 written here before 2026-10-18 was already stale: the tree measured 377 before the e-process ledger added nine) | `cargo test --workspace` |
+| Tests | **395 passed**, 0 failed, across the nine crates (the 373 written here before 2026-10-18 was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
 | Instruments | **19** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
 | Assembled book | **5 619 lines**, **71 931 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
-| Seals | **30 files**, **88 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
+| Seals | **30 files**, **90 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
 ## How to Verify
 
@@ -97,7 +97,7 @@ program's own agents, so they are refinements, not independent judgment.
 |---|---|---|---|
 | 3. SHELF elicitation | **people outside the program** | the other two participants per domain and the external control; the first specialist's track is closed across five domains | no date |
 | 5. The voice of those who pay for the error | **people outside the program** | listening sessions with affected groups: **0 of 7** heard, minimum coverage of 2 | **2026-12-15** |
-| 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases | **2027-01-14** |
+| 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases; for thesis (c′), 0 of 12 in each of the seam and classical strata (`registro_c_linha.tsv`, enforced by `labs --bridge`) | **2027-01-14** |
 | 13. The Jev-LLM bridge | **artifact and code** | the weights with a declared `sha256`; the local runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | no date |
 | 14. Can the layers fail? | **people outside the program** | three coders, two from outside, over at least 60 documented errors (`empirical/p21-camadas/`) | no date |
 | 15. The H2 gate under an e-process | **desk work** | the declaration of which null each of the 38 tests tested and which data it used, before recomputing (`empirical/p22-parada/`) | no date |

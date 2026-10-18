@@ -338,6 +338,18 @@ verdict: THESIS NOT SUPPORTED and box closed — with 5 pending, the thesis does
   box closed: true
 -- positive proof: designated roles and cases at the minimum --
   divergences: [] | box closed: false
+
+-- thesis (c′): the advantage at the seams (DECLARACAO_3.md) --
+per stratum: 12 cases (8 defective, 4 clean) | machine runs per arm: 5 (reliability, descriptive)
+seam kinds: resolucao_da_pergunta, dinamica_nao_ergodica, laco_performativo, selecao_dentro_da_decisao, cauda_sem_media, quem_paga_o_erro
+  stratum S  0 of 12 cases  not scored
+  stratum C  0 of 12 cases  not scored
+divergences: none
+verdict: (c′) NOT SUPPORTED and box closed — stratum S at 0 of 12 cases; stratum C at 0 of 12 cases; the fair test of thesis (c) has 5 role(s) pending
+-- negative proof: an advantage of A equal in both strata is (c), not (c′) --
+  computed Some("nao sustentada") | divergences ["declared status \"sustentada\" but the scores give \"nao sustentada\""]
+-- positive proof: advantage at the seams, parity in the classical stratum --
+  computed Some("sustentada") | divergences []
 ~~~
 
 ### Seal of the seven decisions affecting people
@@ -1213,7 +1225,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 66 tests
+running 75 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1246,6 +1258,15 @@ test ch18::tests::laplace_avoids_zero_and_hill_recovers_tail ... ok
 test ch19::tests::ols_recovers_a_line_and_kruskal_is_zero_on_identical_groups ... ok
 test ch20::tests::sigmoid_inverts_logit_and_brier_measures_squared_error ... ok
 test ch21::tests::verifier_accepts_a_complete_card_and_rejects_a_generic_decider ... ok
+test costura::tests::a_changed_list_of_seam_kinds_is_rejected ... ok
+test costura::tests::a_general_advantage_is_not_c_prime ... ok
+test costura::tests::a_supported_c_prime_with_the_box_closed_is_rejected ... ok
+test costura::tests::an_advantage_paid_in_false_alarms_is_not_c_prime ... ok
+test costura::tests::complete_strata_without_the_roles_keep_the_box_closed ... ok
+test costura::tests::partial_scores_and_unknown_strata_are_not_read ... ok
+test costura::tests::the_located_advantage_is_c_prime ... ok
+test costura::tests::the_record_in_the_tree_keeps_the_box_closed_and_does_not_lie ... ok
+test costura::tests::the_tie_at_the_ceiling_in_s_is_not_c_prime ... ok
 test ensaio::tests::fluent_and_yes_bias_stay_below_the_expert ... ok
 test ensaio::tests::the_coin_has_no_skill ... ok
 test ensaio::tests::the_five_real_pools_have_items ... ok
@@ -1281,7 +1302,7 @@ test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_div
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
 
-test result: ok. 66 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 75 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 

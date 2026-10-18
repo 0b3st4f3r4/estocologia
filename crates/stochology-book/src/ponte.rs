@@ -490,6 +490,9 @@ pub fn run(registry_path: &str, notes_path: &str) {
         }
         Err(e) => println!("  synthetic case not read: {e}"),
     }
+
+    let fair_test = bridge.as_ref().map(Bridge::verdict);
+    crate::costura::run(crate::costura::REGISTRY, fair_test.as_ref());
 }
 
 #[cfg(test)]
