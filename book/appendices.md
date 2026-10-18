@@ -392,3 +392,135 @@ with forgetting is lower because the width of the interval used here is that of 
 EWMA, and a wider interval (or a smaller discount) raises coverage above 97% — the parameter grid in
 `crates/stochology-book/examples/grade_ch04.rs` shows the effect. Both values remain recorded; neither was
 erased.
+
+### Chapter 5
+
+The course material and the H0 README publish, for these worlds, 9.3 min and 20.7
+min of mean wait, **8** and **25** patients in each 100 above 30 minutes, a margin of ±0.51 minute per day
+against ±0.07 per patient, and a halves null of 0.216 minute with predicted margins of 0.227 (per day) and
+0.047 (per patient). The instrument measures **9.1** and **19.6** minutes, **7.6** and **23.7** in each 100,
+a null of **0.201** minute with margins of **0.185** (per day) and **0.046** (per patient) in the constant
+world, and, in the oscillating world, a null of **0.742** with margins of **0.563** and **0.097**. The
+uniform world gives 13.8 min here against 12.3 in the material. The numbers are all in a close neighbourhood.
+The difference has two probable causes: the generator (the material uses NumPy's PCG64 with
+`SeedSequence(1909)`; here, SplitMix64 with seed 1909) and the start of each day, which here is always an
+empty queue. Jensen's identity, the sign of the toll and the conclusion about the unit of the margin depend on
+neither of them. No old value was erased.
+
+### Chapter 6
+
+The earlier text records, for the same Berkson simulation,
+a correlation of $+0.002$ in the population and $−0.669$ among the selected; the instrument measures
+$+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
+from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
+million ballots, 57.4% for Landon against the published 57%, and the equivalence of 7 people. No old
+value was deleted.
+
+### Chapter 7
+
+The earlier text records 73% of winners that "look
+better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
+$p = 0.04$ of the garden. The instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
+with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
+old garden swept more combinations — two outcomes, two sexes, more covariates, more optional stopping
+points —, and every extra combination pushes the false positive up; in the garden of models, the
+size of the validation and the range of predictors per candidate change the result, and here the winner still
+fails on fresh data (error 1.191 against 1.000). What does not change is the direction: the pre-registered
+test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by nine. The
+two values are recorded; none was deleted.
+
+### Chapter 8
+
+The earlier text records, for an example of 4,000 events, an overconfident
+forecaster that goes from Brier 0.1956 to 0.1851 with Platt, an honest expert at 0.1846 and a noisy forecaster
+that goes from 0.2154 to 0.2089. The instrument measures **0.1712 → 0.1559**, **0.1560** and
+**0.2119 → 0.1755**. The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
+old example —, and the order of magnitudes is the same: recalibration takes the confident one to the level of the
+honest one and leaves the noisy one behind. The ECE tolerance also diverges in level: H3 publishes a null q95 of
+0.0320 for $n = 1,488$, 0.0034 for 24,466 and 0.0035 for 104,489; here they come out **0.0425**, **0.0043** and
+**0.0037**. The difference is the distribution of the forecasts, which the README does not publish — with concentrated
+forecasts ($n = 1,488$, spread 0.4) the null q50 of this instrument is 0.0320, the number of the
+report. What matters does not change: the ECE noise moves with $1/\sqrt n$, and that is why a fixed tolerance
+is tight in a small vault and loose in a large one. No old value was deleted.
+
+### Chapter 10
+
+The earlier text records 35.8% of ruin for whoever stakes by their own
+history and 0% with Laplace. The instrument measures 36.8% of "all-in" and **0.00% of ruin** with
+any of the rules. A declared lock explains why. Kelly is limited to $f \le 1$ (one does not
+stake more than one has), and with $f = 1$ a trader who earns 1% per week and loses at most
+half per loss needs seven consecutive extreme events to fall below $10^{-6}$, and those
+events do not happen in 1,000 weeks with chance 0.004. The old value is recorded. The two numbers measure
+the same thing, with different leverage ceilings. And the drag also diverges from the course script.
+The table of five rules in Chapter 11 uses a tail model of its own, and the two sets of heights
+do not coincide; both are reported.
+
+The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
+$3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
+in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) **is not reproduced** by this instrument, because, with
+the parameters calibrated by those two numbers, the model gives $3\times$ larger than $2\times$, and not
+smaller. The probable reason is the real tail. The Dow from 1885 to 2023 has 19/10/1987 and the 1929-32 run,
+which the Gaussian model does not have. The crash row, measured, is the evidence that the effect exists; the
+exact value of the growth at $3\times$ depends on which tail enters the count.
+
+### Chapter 11
+
+The earlier text records 35,8% of ruin for whoever bets by their own
+history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4,76 m (expected
+value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
+with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. The instrument, with
+$\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
+reaches 4,26 m, measures 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m. The old heights come from a
+set of models calibrated in another way, which this laboratory does not reproduce; the two sets
+stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
+control table of H1; this laboratory measures $+628$ (with $+274$ in the opposite direction), because the computation here
+starts from the rates by group instead of the units. The divergences are declared and no old value
+was erased.
+
+### Chapter 12
+
+The earlier text, in Chapter 6, presents the three samples of
+Hill with values close to $1{,}81$; the instrument measures 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
+($k = 1\,000$) and 1,8032 ($k = 2\,000$). The difference is one of sampling and of cutoff, not of formula — the value
+published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
+earlier text and the plan of the repository count gates in different ways: the old book describes
+**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
+governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
+G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
+$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 14 details the seven; no old value
+was erased.
+
+### Chapter 13
+
+The earlier text speaks of "eight tracks and an orchestrator M15". The
+text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
+(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
+`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
+because that is the name of the code. The laboratory of this book measures the
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
+running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
+
+### Chapter 14
+
+Two accounts of this chapter diverge between the sources, and both stay
+recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
+and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
+the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
+book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
+count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
+repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
+that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
+gate G4, in the horizon `todos`, reproduces here.
+
+### Chapter 15
+
+Two points stay recorded. (1) The plan publishes, for the
+horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
+horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
+five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
+accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
+exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
+support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
+recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
+No old value was erased.

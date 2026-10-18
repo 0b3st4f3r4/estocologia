@@ -793,8 +793,8 @@ The manager looks at the spreadsheet and says: *"average demand is 8, the centre
 the mean wait has to stay around 10 minutes, and there is no reason to hire"*. No arithmetic was done wrong.
 And yet the world the spreadsheet describes does not exist.
 
-The table below returns to the two worlds of Chapter 1, repeated here to measure the toll, and mean demand
-does not change from one row to the other.
+The table below returns to the two worlds of Chapter 2, and mean demand does not change from one row to the
+other.
 
 | World | Mean wait per patient | In each 100 patients, how many wait more than 30 min |
 | --- | --- | --- |
@@ -869,7 +869,7 @@ the typical grade?" and does not answer the question "how many fail?". Whoever n
 uses the first is swapping the summary for the result, and the swap cannot be repaired by adding more
 students.
 
-**The unit of the margin.** Every number in this book comes with a margin, and the margin only makes sense if
+**The unit of the margin.** Every estimate comes with a margin, and the margin only makes sense if
 it is computed on the **unit that is in fact independent**. At the centre, the question is this. Are the 320
 thousand patients 320 thousand independent observations, or are the 4 thousand days 4 thousand independent
 observations? Patients of one day share the demand of the day, the server and the queue. Treating them as
@@ -879,16 +879,15 @@ measure the deviation of the difference between the two means. The null measures
 
 **The prohibition of the solitary mean.** When the function is nonlinear, the dynamics multiplicative or the
 tail heavy, reporting only the mean is prohibited. One reports the average case $f(\mathbb{E}[X])$, the
-simulated mean $\mathbb{E}[f(X)]$, the median, the quantiles and the cumulative curve. Chapter 14 formalizes
-the prohibition; here it is born from the toll we have just measured.
+simulated mean $\mathbb{E}[f(X)]$, the median, the quantiles and the cumulative curve. Each of them answers a
+different question, and the toll we have just measured is the distance between the first two.
 
 ---
 
 ### Step 3 — Hands on
 
 The laboratory runs four worlds of the centre, all with mean demand 8, measures the halves null in two of them
-and counts the failures of the class. Code in `crates/stochology-book/src/ch05.rs`; output measured with
-`cargo run --release`:
+and counts the failures of the class. Run it with `cargo run --release --bin labs -- --chapter 5`.
 
 ```text
 == Chapter 5 :: when the mean lies ==
@@ -919,20 +918,14 @@ the oscillating world is 8.6 minutes, practically the mean of 9.1 min that the c
 at "the typical patient" sees the promise kept, and the whole difference is in the tail. The difference
 between the worlds, 10.6 minutes, sits 52.7 null deviations away.
 
-**Divergence declaration.** The course material and the H0 README publish, for these worlds, 9.3 min and 20.7
-min of mean wait, **8** and **25** patients in each 100 above 30 minutes, a margin of ±0.51 minute per day
-against ±0.07 per patient, and a halves null of 0.216 minute with predicted margins of 0.227 (per day) and
-0.047 (per patient). This instrument measures **9.1** and **19.6** minutes, **7.6** and **23.7** in each 100,
-a null of **0.201** minute with margins of **0.185** (per day) and **0.046** (per patient) in the constant
-world, and, in the oscillating world, a null of **0.742** with margins of **0.563** and **0.097**. The
-uniform world gives 13.8 min here against 12.3 in the material. The numbers are all in a close neighbourhood.
-The difference has two probable causes: the generator (the material uses NumPy's PCG64 with
-`SeedSequence(1909)`; here, SplitMix64 with seed 1909) and the start of each day, which here is always an
-empty queue. Jensen's identity, the sign of the toll and the conclusion about the unit of the margin depend on
-neither of them. No old value was erased.
+**The resolution of the question.** The manager's error has a name that outlives the health centre. The
+question "does the service hold?" can be asked at different grains. Asked of the average day, it is the coarse
+question, R0. Asked of each day, it is R1. Asked of each hour, R2. Asked of each hour and of each group of
+patients, R3. Each step refines the one before, and a finer question can only see more failures, never fewer.
 
-**The grain of this question.** Every chapter has a decision with a grain, and the R axis measures what it
-costs to ask coarsely. The line of this chapter, from the axis instrument (`labs --resolution`):
+The cost of asking coarsely can be measured with two plans that spend the **same total resource**. The coarse
+plan staffs every day for the mean demand. The fine plan staffs each day for that day's demand. Both face the
+same arrivals and the same service draws, so the only difference between them is the grain of the question.
 
 ```text
 == R horizon :: resolution of the question ==
@@ -943,59 +936,13 @@ demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min,
    above 30 min: aggregated 0.5168, fine 0.5063
 demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
    above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
 ```
+
+With demand of 5 or 11, the coarse plan makes patients wait 86.48 minutes on average and the fine plan 40.24: the
+coarse question costs **46.24 minutes** per patient. With a light oscillation, from 7 to 9, it costs 5.97
+minutes. Without oscillation it costs nothing, 0.00, because then the average day is every day. The loss of
+resolution is the Jensen toll seen from the side of the decision: it exists only when the world varies, and it
+grows with the variation.
 
 **Exercises.**
 
@@ -1056,7 +1003,7 @@ for Roosevelt and for Landon voters.
 **In every 100 people.** The count is worth seeing in natural frequencies. Imagine 100 voters. If the
 chance of answering the poll were the same for all of them, the 100 would answer in the proportion of each
 one's vote. That is not what happened. Running the world of 1936 with 10 million voters and a chance of
-answering that depends on the vote, this book measures as follows:
+answering that depends on the vote, the simulation gives:
 
 - of Roosevelt's supporters, **16.8 in every 100** answered;
 - of Landon's supporters, **35.2 in every 100** answered;
@@ -1088,8 +1035,8 @@ as independent promises a precision that the real unit does not sustain.
 **Meng's identity.** Meng (2018) showed that the error of any sample mean decomposes into
 three factors, whose product is exact:
 
-$$\bar Y_n - \bar Y_N \;=\; \underbrace{\rho_{R,Y}}_{\text{qualidade}}\times
-\underbrace{\sqrt{\tfrac{1-f}{f}}}_{\text{quantidade}}\times \underbrace{\sigma_Y}_{\text{dificuldade}}$$
+$$\bar Y_n - \bar Y_N \;=\; \underbrace{\rho_{R,Y}}_{\text{quality}}\times
+\underbrace{\sqrt{\tfrac{1-f}{f}}}_{\text{quantity}}\times \underbrace{\sigma_Y}_{\text{difficulty}}$$
 
 | Factor | What it is | What it does |
 | --- | --- | --- |
@@ -1119,7 +1066,7 @@ different from zero after conditioning on what was observed. The sentinel value,
 
 **The filter manufactures relations.** Berkson (1946) showed that two independent diseases appear
 associated among inpatients, because each one raises the chance of admission. Looking only at the selected is
-conditioning on a **collider**. In the simulation of this chapter, talent and likeability have correlation $+0.001$ in the
+conditioning on a **collider**. In a simulation, talent and likeability have correlation $+0.001$ in the
 population and $-0.679$ among the selected. The relation was not hidden in the data; the filter
 **created** it.
 
@@ -1161,25 +1108,19 @@ needing simulation. The unit comes out of the halves null. The deviations are 0.
 by the day and 0.0033 predicted by the call. The per-call reading promises a margin fourteen times smaller.
 In 400 days simulated in the world of the claim, none fell below the target; in the real one, about one in four.
 The decision that comes out of this costs **+7.2% of agent-hours**, 2,428 per day against 2,264, and takes the failure
-from 26 down to **less than 4 in every 100 days**. The sensitivity grid, declared before running in
-`h0-real/DECLARACAO_PACIENCIA.md`, sweeps service from 3 to 6 minutes against patience from 1 to 10
+from 26 down to **less than 4 in every 100 days**. The sensitivity grid, declared before running, sweeps service from 3 to 6 minutes against patience from 1 to 10
 minutes, 24 points. The winning rule is right in 20 of them; in the four remaining, all with 1 minute of
 patience, the four rules tie because none leaves more than 1 day below the target. There is no turning
 point. In the worst corner of the grid, not even the best rule holds the target. It is 14.2% of the days below it, against
 37.7% for the rule of the claim.
-
-**How this is checked.** None of this is a matter of opinion about who is right. The traces of the
-poll (logs, hypergraphs, results) stay outside Git for size, with the SHA-256 sums
-published in `FORA_DO_GIT.md` and in each front's `SHA256SUMS`; whoever wants to redo the count downloads the
-raw data, regenerates the trace and checks it byte by byte. The filter is invisible in the report and in the file.
 
 ---
 
 ### Step 3 — Hands on
 
 The laboratory rebuilds the 1936 poll, measures the correlation that the filter creates, redoes the
-Simpson table and measures the effective size of a chain with memory. Code in `crates/stochology-book/src/ch06.rs`, output
-measured with `cargo run --release`:
+Simpson table and measures the effective size of a chain with memory. Run it with
+`cargo run --release --bin labs -- --chapter 6`.
 
 ```text
 == Chapter 6 :: the invisible filter ==
@@ -1206,79 +1147,6 @@ association, and it gets stronger the narrower the door (−0.617 with 24% selec
 7.9%). **(4)** The effective size follows the process. There are 100 letters that are worth 101 observations when there is no
 memory, 25 when the chain is sticky (persistence 0.8) and 327 when the letters alternate (persistence
 0.235), the number Markov found in *Onegin*.
-
-**Divergence declaration.** The earlier text of this book records, for the same Berkson simulation,
-a correlation of $+0.002$ in the population and $−0.669$ among the selected; this instrument measures
-$+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
-from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
-million ballots, 57.4% for Landon against the published 57%, and the equivalence of 7 people. No old
-value was deleted.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarse. The line of this chapter, by the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -1322,8 +1190,8 @@ value of a finding with Ioannidis' formula; name the five types of error; and di
 ### Step 1 — The real world and the paradox
 
 **One hundred people tossing coins.** Gather 100 people. Each one tosses an honest coin 20 times and writes down the
-longest run of heads obtained. Nobody cheats. Even so, in **100 out of every 100 experiments** that this book
-simulates, someone strings 6 heads in a row or more, and the longest run is, on average, **9.5 heads**. If the reporter chooses to tell the story of the person with the longest run,
+longest run of heads obtained. Nobody cheats. Even so, in **100 out of every 100 experiments** of a simulation,
+someone strings 6 heads in a row or more, and the longest run is, on average, **9.5 heads**. If the reporter chooses to tell the story of the person with the longest run,
 tomorrow's paper carries a talent that does not exist. There was no measurement error, only a forgotten
 **null model**.
 
@@ -1343,13 +1211,15 @@ players. It was in the denominator.
 researchers to declare the plan before collecting the data. Four common decisions are:
 *when to stop collecting*, *which variables to use*, *which cases to exclude* and *which comparisons
 to report*. Each one looks reasonable on its own. Together, in an experiment in which **there is no effect
-at all**, they take the false-positive rate from 5% to **60.7%**. In every 100 studies done
-this way, 61 show a "significant effect" that does not exist.
+at all**, they took the false-positive rate from 5% to **60.7%** in their simulations. In every 100 studies
+done this way, 61 show a "significant effect" that does not exist. The exact figure depends on how many
+variants of each decision are tried; what does not depend on it is the direction, because every extra path is
+one more chance for noise to cross the line.
 
-**Fifty cases, fifty predictors, nothing.** An analyst has 50 cases and 50 measured variables, with
-no relation to the response. They fit 500 different models and keep the one with the smallest validation
-error. The winner looks better than "predicting zero" in **73% of the repetitions**, and in the face of fresh
-data the advantage vanishes, because there is no wrong count and no invented datum: only 500 shots at a target that
+**Fifty predictors, nothing.** An analyst has 25 training cases and 50 measured variables, with no
+relation to the response. They fit 500 different models and keep the one with the smallest validation error.
+On validation, the winner looks better than "predicting zero" in **79.5% of the repetitions**; on fresh data,
+in only 30.0%. The advantage vanishes because there is no wrong count and no invented datum: only 500 shots at a target that
 does not exist, and the best shot chosen after seeing where it landed.
 
 ---
@@ -1411,8 +1281,8 @@ misalignment between the Agent's question and the question the Model answers. Ch
 example of the manager who asked about the mean wait and received the answer of a world that does not exist.
 
 **Shortcut against environment.** Kahneman and Tversky catalogued how people depart from the rules of
-probability; Simon and Gigerenzer answered that a shortcut is an error only **relative to an environment**. The
-Stochology proposes a criterion instead of choosing a side. A departure is an **error** when the right
+probability; Simon and Gigerenzer answered that a shortcut is an error only **relative to an environment**. Stochology
+proposes a criterion instead of choosing a side. A departure is an **error** when the right
 information was available and the combination rule was violated; it is a **candidate adaptation** when the norm
 assumes information that the environment does not supply reliably.
 
@@ -1421,7 +1291,7 @@ has a Brier score of **0.083**, against **0.009** for whoever uses it. In a refe
 real prevalence is 33%, whoever insists on 1% has **0.28**, against **0.084** for whoever ignores it. A single
 heuristic is an error in one environment and a success in the other. The Brier score is the subject of Chapter 8.
 
-**The adversarial board.** In a research architecture, the defence against the garden is a formal attack, not
+**The adversarial board.** In a research process, the defence against the garden is a formal attack, not
 a good intention. Eight agents try to break the artefact before approval, each one in a band:
 
 | Band attacked | The attack |
@@ -1437,10 +1307,10 @@ a good intention. Eight agents try to break the artefact before approval, each o
 
 Approval requires that **all** eight reach the minimum severity:
 
-$$\text{Aprovado}(X) = \bigwedge_{i=1}^{8}\Big(A_i(X) \ge \text{Severity}_{\min}\Big)$$
+$$\text{Approved}(X) = \bigwedge_{i=1}^{8}\Big(A_i(X) \ge \text{Severity}_{\min}\Big)$$
 
-with $\text{Severity}_{\min} = 6$ on a scale from 0 to 10, and the sheet repeated with the fixed seed always
-returns the same severity. The rule is hard on purpose. The board's average grade approves nothing, and one weak
+with $\text{Severity}_{\min} = 6$ on a scale from 0 to 10, and the same specification sheet, judged again with the
+same seed, always returns the same severity. The rule is hard on purpose. The board's average grade approves nothing, and one weak
 band declared is worth more than uniform work without an admitted gap. No agent approves the
 work it produced. Three failures eliminate the work before any discussion of merit: temporal leakage, a data
 contract violated without treatment, and the absence of a named human owner.
@@ -1450,8 +1320,7 @@ contract violated without treatment, and the absence of a named human owner.
 ### Step 3 — Hands on
 
 The laboratory measures four things: the garden of models on pure noise, the exact null model of the hot hand,
-the garden of paths and the severity of the board. Code in `crates/stochology-book/src/ch07.rs`; output measured with
-`cargo run --release`:
+the garden of paths and the severity of the board. Run it with `cargo run --release --bin labs -- --chapter 7`.
 
 ```text
 == Chapter 7 :: hunting ghosts in the noise ==
@@ -1482,83 +1351,6 @@ out of the garden is 0.53, because what produces the number is the procedure. **
 seed 2026 gives severities 9, 8, 10, 9, 8, 9, 8 and 10 on a sheet with the eight safeguards, approved, and
 one band without its safeguard is enough for the lowest severity to fall to 2 and the approval to vanish. The AND of the eight does not
 forgive.
-
-**Divergence declaration.** The earlier text of this book records 73% of winners that "look
-better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
-$p = 0.04$ of the garden. This instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
-with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
-old garden swept more combinations — two outcomes, two sexes, more covariates, more optional stopping
-points —, and every extra combination pushes the false positive up; in the garden of models, the
-size of the validation and the range of predictors per candidate change the result, and here the winner still
-fails on fresh data (error 1.191 against 1.000). What does not change is the direction: the pre-registered
-test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by nine. The
-two values are recorded; none was deleted.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarse. The line of this chapter, by the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -1647,7 +1439,7 @@ error of the probability, and it is that property that makes it a metric in whic
 belief always makes the grade worse**. The accuracy rate is not proper.
 
 **Passing on average is not passing.** The predictive check of Box, Gelman and Shalizi compares the real data with replicas of the fitted model. A Poisson fitted to the demand of the call centre passes on the mean and fails on the variance. The observed
-variance/mean ratio is **273**, and the model underestimates by tens of times the chance of a peak day (**180 against 2,900** calls, `h0-real/README.md`). A model that gets the mean value right and the dispersion wrong gets the day that matters wrong.
+variance/mean ratio is **273**, and the model underestimates by tens of times the chance of a peak day (**180 against 2,900** calls). A model that gets the mean value right and the dispersion wrong gets the day that matters wrong.
 
 **Murphy's decomposition.** Murphy (1973) split the Brier score into three parts:
 
@@ -1685,7 +1477,7 @@ vault of 1,488 cases the noise is 0.03; in one of 104,489, 0.0035. A fixed toler
 things. **Too tight** in the small vaults, where it fails an honest forecaster, and
 **too loose** in the large ones, where it lets through perfectly detectable miscalibration.
 
-H3 measured this in six binary vaults:
+Six real binary vaults show it:
 
 | vault | n | observed ECE | null q95 | fixed tolerance 0.03 |
 | --- | --- | --- | --- | --- |
@@ -1696,27 +1488,27 @@ H3 measured this in six binary vaults:
 | NY flights 2023 | 104,489 | 0.0079 | 0.0035 | passes |
 | Rhode Island 2013–2015 | 24,466 | 0.0048 | 0.0034 | passes |
 
-Applied the tolerance that depends on $n$, **no** binary vault of H3 passes, not even the three that the
-fixed rule approved. The Toronto 1997–2002 case is the mirror. There the ECE of 0.0363 was noise of the order
+With the tolerance that depends on $n$, **none** of the six vaults passes, not even the four that the fixed
+rule approved. The Toronto 1997–2002 case is the mirror. There the ECE of 0.0363 was noise of the order
 of the tolerance, because the null q95 is 0.0320, but the observed value passes it, and the failure holds.
 
-**Resolution is the hard part.** The Rhode Island flow ended with ECE 0.0048 and skill
+**Resolution is the hard part.** The Rhode Island forecast of arrests at traffic stops ended with ECE 0.0048 and skill
 $+0.019$, that is, good calibration and low resolution. Prison at a traffic stop is a rare event and
 not very predictable from the available variables, and the model makes up for that with Platt (intercept and
 slope) and with the circuit breaker, which puts the reserve as the official forecast in 12% of the vault. A forecast
 can be honest and uninformative at the same time, and the two things are reported **separately**, because
 the first is repaired and the second is not.
 
-**Putting calibration to the test requires a new vault.** The intercept correction of H3b ($\delta \leftarrow
-\delta + 0.002(y - p')$) was designed after seeing the 2013 deviation. To be honest, it needed a
-vault nobody had seen, the 435 thousand New York flights in 2023, in the quarter that had
+**Putting calibration to the test requires a new vault.** In the flight forecast, an intercept correction
+($\delta \leftarrow \delta + 0.002(y - p')$) was designed after seeing the 2013 deviation. To be honest, it
+needed a vault nobody had seen, the 435 thousand New York flights in 2023, in the quarter that had
 failed. It passed, with CITL 0.0015 and ECE 0.008, but the model without the correction would also have passed, because
-2023 did not repeat the 2013 deviation. It is declared that the correction improved the calibration and **was not
-decisive** for the gate.
+2023 did not repeat the 2013 deviation. The honest report says that the correction improved the calibration and **was not decisive** for passing.
 
-**Two tools that come for free.** **Conformal prediction** gives guaranteed coverage without assuming the shape
-of the distribution, $P(Y \in C(X)) \ge 1-\alpha$, and it is the one H3 used in an adaptive version under drift.
-One rule holds for both. Every forecast is scored by a proper rule **outside the fit**, and no
+**A guarantee that comes for free.** **Conformal prediction** gives guaranteed coverage without assuming the
+shape of the distribution, $P(Y \in C(X)) \ge 1-\alpha$. It needs only that the new cases be exchangeable with
+the ones used to set the interval; under drift, an adaptive version widens or narrows the interval as the
+recent misses accumulate. One rule holds for every forecast. Every forecast is scored by a proper rule **outside the fit**, and no
 forecast declares 0% or 100%.
 
 ---
@@ -1724,8 +1516,7 @@ forecast declares 0% or 100%.
 ### Step 3 — Hands on
 
 The laboratory scores four forecasters, recalibrates all of them with Platt and measures the ECE tolerance at three
-vault sizes. The code is in `crates/stochology-book/src/ch08.rs`, and the output was measured with
-`cargo run --release`:
+vault sizes. Run it with `cargo run --release --bin labs -- --chapter 8`.
 
 ```text
 == Chapter 8 :: the forecaster's thermometer ==
@@ -1755,83 +1546,18 @@ when $n$ is 24,466 or 104,489. In the large vaults it almost prohibits nothing. 
 forecasts, not only on $n$. With $n = 1,488$, the q50 of the null ECE goes from 0.0320 with concentrated forecasts
 to 0.0243 with spread forecasts.
 
-**Divergence declaration.** The earlier text records, for an example of 4,000 events, an overconfident
-forecaster that goes from Brier 0.1956 to 0.1851 with Platt, an honest expert at 0.1846 and a noisy forecaster
-that goes from 0.2154 to 0.2089. This instrument measures **0.1712 → 0.1559**, **0.1560** and
-**0.2119 → 0.1755**. The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
-old example —, and the order of magnitudes is the same: recalibration takes the confident one to the level of the
-honest one and leaves the noisy one behind. The ECE tolerance also diverges in level: H3 publishes a null q95 of
-0.0320 for $n = 1,488$, 0.0034 for 24,466 and 0.0035 for 104,489; here they come out **0.0425**, **0.0043** and
-**0.0037**. The difference is the distribution of the forecasts, which the README does not publish — with concentrated
-forecasts ($n = 1,488$, spread 0.4) the null q50 of this instrument is 0.0320, the number of the
-report. What matters does not change: the ECE noise moves with $1/\sqrt n$, and that is why a fixed tolerance
-is tight in a small vault and loose in a large one. No old value was deleted.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarse. The line of this chapter, by the axis instrument (`labs --resolution`):
+**Calibration has a grain too.** The resolution of the question, met in Chapter 5, raises the same problem
+of sample size. A light oscillation of demand, between 7 and 9, costs little to ignore:
 
 ```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
 demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
    above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
 ```
+
+The coarse plan loses 5.97 minutes per patient, and the share of patients waiting more than 30 minutes moves
+from 0.5063 to 0.5168, about one point. A difference of that size is of the order of the calibration noise of a
+small vault. Whether a coarse question can be caught costing something depends, like the calibration
+tolerance, on how many cases there are to see it.
 
 **Exercises.**
 
@@ -1934,8 +1660,8 @@ is in the equation that generates $Y$. Three arrangements receive names worth me
 | Collider | $X \to Z \leftarrow Y$ | Opens a false path | Adjusting makes it worse |
 
 Berkson (1946) showed the third case with two independent diseases. If each one raises the
-chance of admission, looking only at the admitted makes them look associated. In a simulation of the course,
-talent and likeability have correlation $+0.002$ in the population and $-0.669$ among those above
+chance of admission, looking only at the admitted makes them look associated. In the simulation of Chapter 6,
+talent and likeability have correlation $+0.001$ in the population and $-0.679$ among those above
 a threshold. **"Controlling for everything that was measured" is not neutral**. Adjusting a mediator erases the
 effect, adjusting a collider manufactures it and adjusting an instrument amplifies the bias that is left.
 
@@ -1980,7 +1706,8 @@ rejects every set, or accepts so many that the intersection comes out empty.
 
 The test treats each row as an independent unit. When one volunteer gives 16 measurements, or one
 school gives 403 pupils, the honest unit is the volunteer or the school, and the verdict changes from
-field to field. In H2 this appeared in full:
+field to field. Twelve real domains, each with environments that intervened on the predictors, show the whole
+range of outcomes:
 
 | Reading | What happened |
 | --- | --- |
@@ -1988,14 +1715,14 @@ field to field. In H2 this appeared in full:
 | 4 domains | it accepted so much that $\hat S$ came out empty: the environments move $X$ only a little |
 | 1 domain | $\hat S$ not empty, and against the claim: citizenship and employment, not skin colour |
 
-**A lesson that H2 added: the effect transports better than the set.** When ICP
+**The effect transports better than the set.** The same twelve domains taught a second lesson. When ICP
 rejects every set, the model fitted in the training environments predicted well an environment never
 seen in 9 domains, with skill from 0.04 to 0.88. Finding the exact set of causes is more
 demanding than predicting under change.
 
 **Why this matters for deciding.** Invariance is also the answer to Lucas' critique
-(Chapter 11). Only what is invariant across regimes deserves use when the regime changes. In H2g, with the
-reference truth declared beforehand, ICP recovered the true parents of the electrical current
+(Chapter 11). Only what is invariant across regimes deserves use when the regime changes. In a physical
+experiment whose true causal structure was known and declared beforehand, ICP recovered the true parents of the electrical current
 in a physical chamber, $\hat S = \{red, green, blue\}$, and left out light sensors strongly
 correlated with them, because they were children of the LEDs.
 
@@ -2004,8 +1731,8 @@ correlated with them, because they were children of the LEDs.
 ### Step 3 — Hands on
 
 Three tasks: redo Charig's count with the counts, classify questions into the three steps and
-build a minimal ICP that chooses the cause and rejects the false alarm. Code verified in
-`crates/stochology-book/src/ch09.rs`; output measured with `cargo run --release --bin labs -- --chapter 09`:
+build a minimal ICP that chooses the cause and rejects the false alarm. Run it with
+`cargo run --release --bin labs -- --chapter 9`.
 
 ```text
 == Chapter 9 :: Simpson's paradox in kidney-stone surgery ==
@@ -2075,12 +1802,11 @@ large ones (0.7300 against 0.6875), and loses in the raw total (0.7800 against 0
 strata by the whole population, with weights 0.5100 and 0.4900, the open surgery gets 0.8325 and the other
 0.7789. The advantage flips back, now to the side of the open surgery, with the difference enlarged. What
 produced the paradox was the mix of cases. **75% of the patients of the open surgery had large stones,
-against 23% in the other technique**. The lesson of the 12 cases of Chapter 2 repeats here, now with numbers
-from a real trial.
+against 23% in the other technique**.
 
 **(2) Naive correlation cannot separate the cause from the symptom.** With 12,000 rows across three
 sites, the outcome $Y$ was generated by $Y = 2X + \text{noise}$, the symptom $Z$ by $Z = 2X +
-\text{ruído do sítio}$ and $W$ is pure noise. Looking at everything together, $\operatorname{corr}(X,Y) =
+\text{site noise}$ and $W$ is pure noise. Looking at everything together, $\operatorname{corr}(X,Y) =
 0.9314$ and $\operatorname{corr}(Z,Y) = 0.7208$. The cause and the symptom look like two explanatory
 variables, and the naive regression gives slope **1.9885** for $X$ and **0.6003** for $Z$. If the
 analyst stopped here, they would attribute to the alarm an effect of 0.6.
@@ -2114,72 +1840,6 @@ naive slope of $X$ rises from 2.0004 to **4.0004**, because the estimator is mix
 effect with the variation across sites; $Z$ goes from 0.6015 to 1.2029, and $\{X\}$ stops
 being a stable relation. When the sites intervene in the mechanism, no set is the right answer,
 and the test rejects, as it should.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarse. The line of this chapter, by the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -2232,9 +1892,8 @@ someone stakes the whole wealth, round after round, starting with 1 unit.
 
 In every 100 bettors who stake everything, at the end of **10 rounds** 37 finish above the start, at the end
 of **100 rounds** 13, and at the end of **1,000 rounds** none. The mean wealth, that one, explodes. In a
-simulation measured with 10,000 trajectories of 1,000 rounds, the final median of whoever stakes everything is
-the probability that the cohort ends at that value is $1.322 \times 10^{-23}$; in the following modules we will see why the sample mean of that cohort
-still grows.
+simulation with 10,000 trajectories of 1,000 rounds, the final median of whoever stakes everything is
+$1.322 \times 10^{-23}$ of the starting capital. Step 2 shows why the mean of that cohort still grows.
 
 The name of this is **non-ergodicity**, and it forces a simple question. *Whose mean is it?* The mean of 10,000 people at an instant is not the mean of one person over 10,000
 rounds. Whoever lives one trajectory needs the second; whoever manages a fund with many holders
@@ -2254,12 +1913,12 @@ $$X_t = X_0 \prod_{s=1}^{t} M_s$$
 
 the ensemble mean grows when $\mathbb{E}[M] > 1$, but along one trajectory the logarithm of the
 product accumulates, and by the law of large numbers it goes to $\mathbb{E}[\ln M]$. When
-$$\mathbb{E}[M] > 1 \quad \text{e} \quad \mathbb{E}[\ln M] < 0,$$
+$$\mathbb{E}[M] > 1 \quad \text{and} \quad \mathbb{E}[\ln M] < 0,$$
 the crowd grows rich and almost every trajectory decays. In the Peters coin:
 
 $$\ln \mathbb{E}[M] \approx +0.049, \qquad \mathbb{E}[\ln M] = \tfrac12\ln 1.5 + \tfrac12\ln 0.6 \approx -0.053$$
 
-The instrument of the chapter measures $-0.052680$ per round, which gives $-5.268\%$ of time growth.
+Measured by simulation, it is $-0.052680$ per round, which gives $-5.268\%$ of time growth.
 The difference between the two counts, $+5.00\%$ and $-5.27\%$, measures the distance between the line of a
 spreadsheet and the life of whoever bets.
 
@@ -2283,7 +1942,7 @@ In an even-odds bet with chance $p$, the optimal fraction is $f^* = 2p - 1$, tha
 20% with chance 0.6. In a bet that pays 5 to 4, like the Peters coin, $f^* = p|b| - (1-p)a =
 0.9p - 0.4$, that is, 14% of the wealth. Staking everything would take the expectation, in 100 rounds, to
 $8.3 \times 10^7$ times the capital, with a chance of surviving of $0.6^{100}$, about $10^{-22}$.
-Twice the optimal fraction already impoverishes with that same edge, and the instrument measures $g(0.28)$ already below
+Twice the optimal fraction already impoverishes with that same edge, and a simulation gives $g(0.28)$ already below
 zero and $g(0.70) = -0.0075$ per round.
 
 **Epistemic uncertainty is an argument for staking less.** With the probability estimated over 25
@@ -2309,9 +1968,9 @@ round, when each one alone would decay. **The question that decides the case is 
 
 **When the mean ceases to exist.** In a Pareto distribution, with $P(X > x) = x^{-\alpha}$, the
 moment of order $k$ exists if and only if $k < \alpha$. With $\alpha = 1.1$, the mean exists and is worth
-11, but the mean of a million observations has median 8.3, falls below 11 in 91% of the samples, and
+11, but the mean of a million observations has median 8.39, falls below 11 in 95% of the samples, and
 the usual 95% interval contains the true value in only 26% of them. The fraction of the mean that comes from
-values above $m$ is $m^{1-\alpha}$; in the median, 28% of the true mean comes from values larger than
+values above $m$ is $m^{1-\alpha}$; in the median, 25.12% of the true mean comes from values larger than
 the largest the sample of one million saw.
 
 **The three states of chance (Mandelbrot).** Mandelbrot classified chance by the way sums behave.
@@ -2322,8 +1981,10 @@ the largest the sample of one million saw.
 | Slow | Lognormal | Every moment exists, but convergence misleads in real samples |
 | Wild | Pareto with $\alpha \le 2$ | One observation can dominate the sum; the variance, or the mean, does not exist |
 
-The name of this is **Fisher–Tippett–Gnedenko**. The maximum of many draws can only converge to three
-families, Gumbel, Fréchet or Weibull, and that is why the tail is estimated from the maximum, not from the mean. In the course registry, the 1-in-100-year loss comes out at 17.4% by the GEV against 3.9% for the Gaussian: more than four times.
+The theorem of **Fisher, Tippett and Gnedenko** says that the normalised maximum of many draws can only
+converge to three families, Gumbel, Fréchet or Weibull, and that is why the tail is estimated from the maximum,
+not from the mean. In an example with 50 years of heavy-tailed returns, the 1-in-100-year loss comes out at 17.4%
+by the extremes distribution against 3.9% for a Gaussian fitted to the daily returns: more than four times.
 
 Taleb called the first Mediocristan and the last Extremistan, and added the type of
 consequence. The "fourth quadrant", where the tail is wild and the loss depends on the size of the event, is
@@ -2337,8 +1998,7 @@ $\alpha$ estimated at 1.81 (interval from 1.41 to 2.56), are in that territory (
 
 Four tasks make up the laboratory. Measure the Peters coin with the optimal fraction and with the all-in
 stake; measure 10,000 insurance sellers with and without Laplace; estimate the tail with Hill; and measure the drag of
-volatility at $1\times$, $2\times$ and $3\times$. Code verified in `crates/stochology-book/src/ch10.rs`; output measured with
-`cargo run --release --bin labs -- --chapter 10`:
+volatility at $1\times$, $2\times$ and $3\times$. Run it with `cargo run --release --bin labs -- --chapter 10`.
 
 ```text
 == Chapter 10 :: the Peters coin (heads +50%, tails -40%) ==
@@ -2381,7 +2041,7 @@ Hill estimator with alpha = 1.1 and n = 200 000:
   k =   1000  alpha_hat = 1.100  95% CI approx [1.032; 1.168]
   k =   5000  alpha_hat = 1.101  95% CI approx [1.070; 1.131]
   k =  20000  alpha_hat = 1.095  95% CI approx [1.080; 1.111]
-gregarine: a Gaussian model fitted to this tail underestimates the loss in every repetition
+reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
 == Chapter 10 :: volatility drag at 1x, 2x and 3x ==
 L = 1x: arithmetic mean = +0.000317/session, measured growth = +0.000249/session, drag = +0.000068/session (+0.0172/year), wealth in 100000 sessions = 6.363e10
@@ -2433,8 +2093,8 @@ it gives $\hat\alpha = 1.100$, with approximate interval $[1.032; 1.168]$; with 
 $1.095$ with $[1.080; 1.111]$. A Gaussian model fitted to that tail underestimates the loss in
 every repetition.
 
-**(5) The volatility drag.** Calibrating the model by the H1 of the repository (drag of 0.14 per year
-at $3\times$ and growth of 0.051 per year at $1\times$), in 100,000 sessions the measured growth
+**(5) The volatility drag.** Calibrating the model by two numbers measured on the Dow Jones index from 1885
+to 2023 (drag of 0.14 per year at $3\times$ and growth of 0.051 per year at $1\times$), in 100,000 sessions the measured growth
 per session is $+0.000249$ at $1\times$, $+0.000267$ at $2\times$ and $+0.000053$ at $3\times$.
 The measured drag rises from $0.0172$ per year at $1\times$ to $0.0926$ at $2\times$ and $0.2264$ at
 $3\times$; the drag **grows with the square of the leverage**, which is the signature of
@@ -2442,89 +2102,19 @@ $\mu - \tfrac12 \sigma^2 L^2$. The 1987 crash, alone, takes **67.8%** of the cap
 22.6% at $1\times$; ruin starts at $L = 4.4$. With a crash planted in the middle of 20,000 sessions,
 the growth of $3\times$ sits at $-0.000274$ per session, below $1\times$ and $2\times$. **A single day changes the order**.
 
-**Divergence declaration.** The earlier text records 35.8% of ruin for whoever stakes by their own
-history and 0% with Laplace. This instrument measures 36.8% of "all-in" and **0.00% of ruin** with
-any of the rules. A declared lock explains why. Kelly is limited to $f \le 1$ (one does not
-stake more than one has), and with $f = 1$ a trader who earns 1% per week and loses at most
-half per loss needs seven consecutive extreme events to fall below $10^{-6}$, and those
-events do not happen in 1,000 weeks with chance 0.004. The old value is recorded. The two numbers measure
-the same thing, with different leverage ceilings. And the drag also diverges from the course script.
-The table of five rules in Chapter 11 uses a tail model of its own, and the two sets of heights
-do not coincide; both are reported.
-
-The repository's time-growth table (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
-$3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
-in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) **is not reproduced** by this instrument, because, with
-the parameters calibrated by those two numbers, the model gives $3\times$ larger than $2\times$, and not
-smaller. The probable reason is the real tail. The Dow from 1885 to 2023 has 19/10/1987 and the 1929-32 run,
-which the Gaussian model does not have. The crash row, measured, is the evidence that the effect exists; the
-exact value of the growth at $3\times$ depends on which tail enters the count.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarse. The line of this chapter, by the axis instrument (`labs --resolution`):
+**When refining buys nothing.** The volatility drag and the ruin of the coin are measured per day, per round,
+per session: at the grain at which the trajectory is lived. The question of resolution from Chapter 5 has a
+limiting case that is worth seeing once. When the world does not oscillate, asking each day gives the same
+answer as asking the average day:
 
 ```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
 demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
    above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
 ```
+
+The loss of resolution is exactly zero. A finer question is worth its cost only when the world varies at the
+grain of that question; the drag is large in this chapter because daily returns vary, and the queue loss is
+zero here because demand does not.
 
 **Exercises.**
 
@@ -2567,34 +2157,34 @@ trusting, recognise a loop in which the forecast changes the forecast and declar
 
 ### Step 1 — The real world and the paradox
 
-**The shipowner who asks whether insurance is worth it.** A shipowner has 100 000 in the account. The insurance
-contract costs 1 800 per month and covers a loss of 34 000 that happens with chance 5%. Is it worth it?
+**The shipowner who asks whether insurance is worth it.** A shipowner has 100,000 in the account. The insurance
+contract costs 1,800 per month and covers a loss of 34,000 that happens with chance 5%. Is it worth it?
 
-- **In expectation**, the shipowner pays 1 800 and receives, on average, $0{,}05 \times 34\,000 = 1\,700$. He loses
+- **In expectation**, the shipowner pays 1,800 and receives, on average, $0.05 \times 34,000 = 1,700$. He loses
   100 per month. The insurer earns 100 per month. Whoever looks only at that account concludes that insurance is expensive.
 - **In time**, each month multiplies wealth by a factor. Without insurance, in 95% of the months it is
-  multiplied by 1,0 and in 5% by 0,66. With insurance, the multiplication is 0,982 every month, without
+  multiplied by 1.0 and in 5% by 0.66. With insurance, the multiplication is 0.982 every month, without
   exception. The two accounts give different numbers.
 
 The criterion that settles the impasse is a one-line rule: **pay to protect yourself when the chance
-of the event is greater than the cost divided by the loss**, that is, $p > C/L$. Here $C/L = 1\,800/34\,000 =
-5{,}294\%$. The chance is 5%, therefore below the threshold by 0,294 percentage point, and the rule
+of the event is greater than the cost divided by the loss**, that is, $p > C/L$. Here $C/L = 1,800/34,000 =
+5.294\%$. The chance is 5%, therefore below the threshold by 0.294 percentage point, and the rule
 says **not** to insure. It is one of the cases in which the answer of expectation and the answer of time do not
 coincide, and the chapter shows both.
 
 **In every 100 weeks.** The insurance salesman of the previous chapter has the opposite situation. He
-earns 1% per week and loses half the capital with chance 0,4%. In 100 weeks, 67 end with
+earns 1% per week and loses half the capital with chance 0.4%. In 100 weeks, 67 end with
 profit; the danger lives in the other 33. A history of 250 weeks shows no loss at all in
-$0{,}996^{250} = 37\%$ of the cases, and whoever estimates the chance from the observed frequency concludes that it is
+$0.996^{250} = 37\%$ of the cases, and whoever estimates the chance from the observed frequency concludes that it is
 zero and leverages. It is the **rare event that does not appear in the sample**, and Chapter 10 has already measured the cost.
 
 **The forecast that changes what it forecasts.** A published forecast is not a thermometer, because people
 react to it. A traffic app that sends every user to yesterday's fastest route
 moves the traffic jam to the route it recommended. With half of the drivers following the
-app, those who use it take 41,0 minutes and those who do not, 36,8. The forecaster who splits the users to
-equalise the times is wrong by 0,3 minute, and everybody takes 35,0. **The metric became a target and stopped
-measuring.** That is Goodhart's law and the inverse of the version of the chapter. Here the forecaster *designed* the
-loop and stabilised it.
+app, those who use it take 41.0 minutes and those who do not, 36.8. The forecaster who splits the users to
+equalise the times is wrong by 0.3 minute, and everybody takes 35.0. **The metric became a target and stopped
+measuring.** That is Goodhart's law. The second forecaster did not escape the loop: he *designed* it and
+stabilised it.
 
 **Who pays when the error rate is different for different groups.** A triage system
 decides who enters a programme. It gets the probability right within each group (it is calibrated) and,
@@ -2613,21 +2203,19 @@ world before acting, the EVPI, is the ceiling of the value of any information:
 
 $$\mathrm{EVPI} = \mathbb{E}_\theta\big[\max_a U(a,\theta)\big] - \max_a \mathbb{E}_\theta\big[U(a,\theta)\big]$$
 
-The value of any real test (EVSI) lies between zero and it. **Bits are not value.** In one example of the
-course, a disease has prevalence 0,3; treating costs 1 and leaving a sick person untreated costs 10,
-so that one treats when the chance passes 0,10. Two tests carry the same mutual information,
-0,319 bit. The sensitive test is worth 0,419, against a ceiling (the EVPI) of 0,70. The specific one is worth zero, because even
+The value of any real test (EVSI) lies between zero and it. **Bits are not value.** In one example, a disease has prevalence 0.3; treating costs 1 and leaving a sick person untreated costs 10,
+so that one treats when the chance passes 0.10. Two tests carry the same mutual information,
+0.319 bit. The sensitive test is worth 0.419, against a ceiling (the EVPI) of 0.70. The specific one is worth zero, because even
 its negative result leaves the chance above the threshold and does not change the action.
 
 **Not all information is welcome.** Good (1967) proved that free information never makes the decision
 of someone with preferences over states of the world worse. But whoever has preferences over future
 observations may pay not to know. Among people at risk of Huntington's disease, only a minority
-take the genetic test before the symptoms, 17,4% in the United Kingdom between 1994 and 2014 (Baig et al., 2016).
+take the genetic test before the symptoms, 17.4% in the United Kingdom between 1994 and 2014 (Baig et al., 2016).
 
 **Criteria that dispense with probabilities.** The threshold $C/L$ and the EVPI presuppose a distribution over the
 states of the world. In the uncertainty corner of the Stirling matrix (Chapter 4), it does not exist in a
-trustworthy way, and decision theory offers robust criteria. The invariant $\Phi_4$ (Chapter 14) requires
-declaring which one was used:
+trustworthy way, and decision theory offers robust criteria. Whoever uses one must declare which, and why:
 
 | Criterion | Rule | Posture |
 | --- | --- | --- |
@@ -2637,9 +2225,9 @@ declaring which one was used:
 | Hurwicz | Weight the worst and the best case by an optimism index | Declared middle ground |
 
 **The dikes of Holland.** After the 1953 flood, the Delta Commission adopted for the central Netherlands
-a standard of 1 in 10 000 years, and van Dantzig (1956) treated the height of the dike as a decision
+a standard of 1 in 10,000 years, and van Dantzig (1956) treated the height of the dike as a decision
 problem, balancing the cost of the works and the expected damage. The laboratory redoes the problem with a
-model. The annual maxima follow a GEV of unknown shape $\xi$, between $-0{,}1$ and $0{,}2$, and the
+model. The annual maxima follow a GEV of unknown shape $\xi$, between $-0.1$ and $0.2$, and the
 annual cost of a height $h$ is the works, $h - 2$, plus the expected damage, $3000 \times P(\text{maximum} > h)$.
 Five decision rules give five different heights, and the criterion and the list of models have to be
 declared before seeing the answer. Chernoff (1954) showed that Savage's criterion can change its
@@ -2649,8 +2237,8 @@ probability the account depends on does not deserve trust.**
 
 **The forecast that changes what it forecasts.** When a model is published, people react to it. Lucas
 (1976) showed the phenomenon in economics. The parameters of a model estimated under a policy depend
-on the rules the agents expect, and they change when the policy changes. In one example of the course, the old
-Phillips curve promises 4,59% unemployment and the new regime delivers 5,88%. The answer of Kuhn and
+on the rules the agents expect, and they change when the policy changes. In one example, the old
+Phillips curve promises 4.59% unemployment and the new regime delivers 5.88%. The answer of Kuhn and
 Perdomo and colleagues (2020) is conceptual: **performatively stable** is the model that is optimal for the
 distribution it induces.
 
@@ -2661,27 +2249,28 @@ $$F[q] = D\big(q \,\|\, p(s \mid o)\big) - \ln p(o) \;\ge\; -\ln p(o)$$
 
 A thermostat that "believes" in 22 °C in a room at 18 °C reaches an identical $F$ when it learns that the
 room is cold and when it heats it to 22 °C. Only a counterfactual from outside separates the two cases, and for that
-reason the architecture requires running the model with and without the action.
+reason an honest audit runs the model with and without the action.
 
-**The H3 loop, measured.** H3 assumed that whoever abandons the queue calls back with probability 0,6.
+**A loop, measured.** A simulated call centre assumed that whoever abandons the queue calls back with
+probability 0.6.
 That parameter was measured in another real support desk, from 1999, with a quasi-experimental design. The queue
 found on arrival, at an identical date and time, serves as an instrument for the abandonment. Under that
-design, abandoning instead of being served increases by **0,145** the chance that that client calls back
-within fifteen minutes, with a 90% interval from 0,132 to 0,157. The sign checks out and the order of
+design, abandoning instead of being served increases by **0.145** the chance that that client calls back
+within fifteen minutes, with a 90% interval from 0.132 to 0.157. The sign checks out and the order of
 magnitude does not. The declared loop is about four times the observed one, outside the band from one third to three
-that had been fixed in advance. The excess of arrivals that the measured loop generates in that support desk is 2,3%
-of the arrivals, against the 29% bias that the declared loop produced in H3; the comparison is one of order of
-magnitude, because the H3 bias also depends on the simulated abandonment rate, and not only on the loop. And the
+that had been fixed in advance. The excess of arrivals that the measured loop generates in that support desk is 2.3%
+of the arrivals, against the 29% bias that the declared loop produced in the simulation; the comparison is one of order of
+magnitude, because that bias also depends on the simulated abandonment rate, and not only on the loop. And the
 measured value is probably a lower bound, because a new call is only visible when it enters the
 queue.
 
-In H3, the control of the loop was made with a small experiment embedded in the operation. In 10% of the
-intervals, a draw multiplied the staffing level by 0,7 or 1,3. As the draw is independent of
+In the simulated operation, the control of the loop was made with a small experiment embedded in the operation. In 10% of the
+intervals, a draw multiplied the staffing level by 0.7 or 1.3. As the draw is independent of
 the demand, the regression of the following arrivals on the drawn deficit identifies the effect of the action. The
 naive forecaster, trained on the observed arrivals, **overestimates the exogenous demand by 29%** and even
 so hits the observed values with 1% error. The target metric approves a forecaster that is wrong about
-the world. With the instrument, $\hat r$ comes out at 0,56 (90% interval from 0,51 to 0,61) and the error of the
-corrected forecast falls to **1,7%**, inside the limit of 3%.
+the world. With the instrument, $\hat r$ comes out at 0.56 (90% interval from 0.51 to 0.61) and the error of the
+corrected forecast falls to **1.7%**, inside the limit of 3%.
 
 **Who pays for the error.** When the base rates differ between groups, a single threshold produces different
 error rates. The identity of Chouldechova (2017) shows why:
@@ -2693,6 +2282,13 @@ different false positive rates. **Equalising approvals, equalising errors and eq
 are incompatible requirements when the prevalences differ and the predictor is not perfect.** "I want
 fairness" is not yet a decision. One has to declare which equality was chosen, what it costs, where
 the error migrated to and who comes to pay for it.
+
+**Signing is not listening.** A governance officer who signs a risk opinion stands on the side of whoever
+decides to use the model. Whoever pays for the error stands on the other side. In three real streams of police
+data, the 5,226 detainees of Toronto in 1997–2002, the 65,276 of 2020–2021 and the 86,113 traffic stops in
+Rhode Island 2005–2015, all recorded with a perceived colour, the opinions were signed and none of the seven
+affected groups was heard in any of the seven decisions. A signature answers the question "who authorised
+this?"; it does not answer "who was asked?". Chapter 21 returns to this point.
 
 **Communicating is part of the decision.** A badly communicated result failed in the Agent layer. "30%
 chance" does not say 30% of what; "of every 100 people like you, 30" does. The rules are fixed
@@ -2707,8 +2303,7 @@ and an objective clause for when it stops holding.
 
 Four tasks: the cost/loss calculator on the Bernoulli ship with the growth in time, the EVPI
 and the EVSI in a two-act case, the four tail models of the dike with five decision rules, and the
-trilemma table with the Chouldechova identity. Code verified in `crates/stochology-book/src/ch11.rs`; output
-measured with `cargo run --release --bin labs -- --chapter 11`:
+trilemma table with the Chouldechova identity. Run it with `cargo run --release --bin labs -- --chapter 11`.
 
 ```text
 == Chapter 11 :: the Bernoulli ship (C = 1.800, L = 34.000, p = 0,05) ==
@@ -2774,173 +2369,84 @@ separates reasonably and is not read as a probability of risk.
 
 **What each line says.**
 
-**(1) The Bernoulli ship.** The threshold is $C/L = 0{,}05294$, or 5,294%, and the chance of 5% stays **below**
-it. The cost/loss rule says not to insure. In expectation, the loss without insurance is 1 700 and the
+**(1) The Bernoulli ship.** The threshold is $C/L = 0.05294$, or 5.294%, and the chance of 5% stays **below**
+it. The cost/loss rule says not to insure. In expectation, the loss without insurance is 1,700 and the
 result of the insurance is $+100$ per month for the insurer. The growth in time reverses the reading for
-the shipowner. With one ship, $-0{,}0208$ per month without insurance and $-0{,}0182$ with insurance, both negative,
+the shipowner. With one ship, $-0.0208$ per month without insurance and $-0.0182$ with insurance, both negative,
 and insurance **improves** the result in spite of expectation saying the opposite. With **three** ships, the
 growth without insurance is $\mathbf{-\infty}$, because three simultaneous losses leave the wealth without
 cover for the damage; ruin stops being a small probability and becomes an absorbing
 state.
 
 **(2) On the other side of the counter.** The insurer improves when it accumulates independent contracts. With 1
-contract the growth in time is $-0{,}000186$ per month; with 10, $-0{,}001808$; with 100,
-$-0{,}013466$; with **1 000 contracts, $+0{,}100410$**. The premium does not change in any of those cases;
+contract the growth in time is $-0.000186$ per month; with 10, $-0.001808$; with 100,
+$-0.013466$; with **1,000 contracts, $+0.100410$**. The premium does not change in any of those cases;
 what changes is the number of independent trajectories it holds. The first lines go down because the
 formula used is the mean minus variance divided by two approximation, and with few contracts the
 variance is too large for the approximation to hold; from a few hundred contracts the law
 works and the growth becomes positive. **Whoever shares the risk charges the same and grows; whoever carries
 the trajectory alone sinks.** It is the answer of Chapter 10, now with an insurance company in
 place of a gambler.
-**(3) The EVPI.** With prevalence 0,3, treating costs 1 and leaving a sick person untreated costs 10, the
-action threshold is $p > 0{,}10$ and the best action without information is to treat, with gain $-1{,}00$. Whoever knows
-the state before acting has $-0{,}30$, and the difference is the **EVPI $= +0{,}70$**. The two tests of the text
-deliver close values, EVSI of $0{,}2400$ for the sensitive one $(0{,}90; 0{,}70)$ and $0{,}2450$ for the
-specific one $(0{,}30; 0{,}95)$, both below the ceiling. With prevalence 0,05 the EVPI falls to 0,450; with
-0,30, it rises to 0,700; with 0,60, it falls again to 0,400. **The value of information is maximal when the
+**(3) The EVPI.** With prevalence 0.3, treating costs 1 and leaving a sick person untreated costs 10, the
+action threshold is $p > 0.10$ and the best action without information is to treat, with gain $-1.00$. Whoever knows
+the state before acting has $-0.30$, and the difference is the **EVPI $= +0.70$**. The two tests of the text
+deliver close values, EVSI of $0.2400$ for the sensitive one $(0.90; 0.70)$ and $0.2450$ for the
+specific one $(0.30; 0.95)$, both below the ceiling. With prevalence 0.05 the EVPI falls to 0.450; with
+0.30, it rises to 0.700; with 0.60, it falls again to 0.400. **The value of information is maximal when the
 probability is close to the action threshold**, and that is where information changes the decision.
 
-**(4) The dikes.** The four models disagree little at the **100-year** level (from 1,26 to 7,01 m) and
-a lot at the **10 000-year** level (from 1,26 to 21,49 m). The tail is where the models separate. The five
-rules give five heights: expected value with the Gumbel, **3,06 m**; mean of the models, **7,82 m**;
-Wald maximin, **12,58 m**; Savage minimax regret, **9,81 m**; precaution of 1 in 10 000
-in the worst model, **21,49 m**. The expected value of a single model chooses the cheapest and the most
+**(4) The dikes.** The four models disagree little at the **100-year** level (from 1.26 to 7.01 m) and
+a lot at the **10,000-year** level (from 1.26 to 21.49 m). The tail is where the models separate. The five
+rules give five heights: expected value with the Gumbel, **3.06 m**; mean of the models, **7.82 m**;
+Wald maximin, **12.58 m**; Savage minimax regret, **9.81 m**; precaution of 1 in 10,000
+in the worst model, **21.49 m**. The expected value of a single model chooses the cheapest and the most
 fragile height; precaution chooses the most expensive; Savage limits how much one can regret. The EVPI of the set
-of models, the distance between precaution and the expected value, is worth **18,427 m**, and it is the measure of
+of models, the distance between precaution and the expected value, is worth **18.427 m**, and it is the measure of
 how much it costs not to know which is the right tail.
 
-**(5) The trilemma table.** The two groups are White, with base rate 0,069, FNR 0,24 and FPR 0,105, and
-Black, with base rate 0,111, FNR 0,36 and FPR 0,196. At the system threshold, there are 467 and 832 false
+**(5) The trilemma table.** The two groups are White, with base rate 0.069, FNR 0.24 and FPR 0.105, and
+Black, with base rate 0.111, FNR 0.36 and FPR 0.196. At the system threshold, there are 467 and 832 false
 positives and 79 and 191 false negatives. Equalising the FNR **downwards**, to the level of White, the false
-positives fall from 1 299 to 659 and the false negatives from 270 to 206. Equalising **upwards**, to the
-level of Black, the false positives rise from 1 299 to 1 927 ($+628$) and the false negatives from 270
+positives fall from 1,299 to 659 and the false negatives from 270 to 206. Equalising **upwards**, to the
+level of Black, the false positives rise from 1,299 to 1,927 ($+628$) and the false negatives from 270
 to 309. **The choice of which equality to pursue is not neutral: each direction moves the two errors in
 opposite directions and in different magnitudes.**
 
 **(6) The identity closes and accuses.** The positive predictive value that the confusion matrix delivers is
-0,3491 (White) and 0,2896 (Black). The identity of Chouldechova requires, given the base rate, the FNR and the
-FPR observed, 0,0592 and 0,0904, four to six times smaller. **The score separates reasonably and is not
+0.3491 (White) and 0.2896 (Black). The identity of Chouldechova requires, given the base rate, the FNR and the
+FPR observed, 0.0592 and 0.0904, four to six times smaller. **The score separates reasonably and is not
 read as a probability of risk.** It is the numerical translation of what the identity says. With the three
 observed rates, the predictor cannot be calibrated by group and keep the error rates equal in the
 two.
 
-**Divergence declaration.** The earlier text records 35,8% of ruin for whoever bets by their own
-history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4,76 m (expected
-value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
-with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. This instrument, with
-$\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
-reaches 4,26 m, measures 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m. The old heights come from a
-set of models calibrated in another way, which this laboratory does not reproduce; the two sets
-stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
-control table of H1; this laboratory measures $+628$ (with $+274$ in the opposite direction), because the computation here
-starts from the rates by group instead of the units. The divergences are declared and no old value
-was erased.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarsely. The line of this chapter, from the instrument of the axis (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
-
 **Exercises.**
 
-1. *(Computation)* In the Bernoulli ship, insurance costs 1 800 and covers a loss of 34 000 with chance of
+1. *(Computation)* In the Bernoulli ship, insurance costs 1,800 and covers a loss of 34,000 with chance of
    5%. By the cost/loss rule, should the shipowner insure? How does the growth in time answer?
    Explain the two answers in one sentence each.
-2. *(Computation)* Redo the EVPI with prevalence 0,10 (exactly the threshold). Does the value of perfect
+2. *(Computation)* Redo the EVPI with prevalence 0.10 (exactly the threshold). Does the value of perfect
    information increase or decrease? How does that guide the spending on tests?
 3. *(Concept)* In the example of the two-route app, who errs more, the naive forecaster or the
    forecaster that equalises the times? In what sense is the second one "performatively stable"?
-4. *(Computation)* With the rates of the laboratory (White with 0,069, 0,24, 0,105), check the identity of
+4. *(Computation)* With the rates of the laboratory (White with 0.069, 0.24, 0.105), check the identity of
    Chouldechova and say by how much it errs. Is the error one of rounding or of modelling?
-5. *(Laboratory)* In the laboratory, change the base rate of the second group from 0,111 to 0,20 and redo the
+5. *(Laboratory)* In the laboratory, change the base rate of the second group from 0.111 to 0.20 and redo the
    trilemma table. Which equality becomes more expensive, and why?
-6. *(Concept)* Rule 14.2 of the book forbids 0% and 100% probability. Which problem of the ship
+6. *(Concept)* No forecast may declare a probability of 0% or 100%. Which problem of the ship
    laboratory does that prohibition avoid?
 
 **Summary.**
 
-- One decides by the threshold $C/L$. With $C = 1\,800$ and $L = 34\,000$, the threshold is 5,294% and the chance of 5%
+- One decides by the threshold $C/L$. With $C = 1,800$ and $L = 34,000$, the threshold is 5.294% and the chance of 5%
   stays below it. The growth in time can say the opposite, and the two numbers have to be
   declared.
 - Information is worth as much as it moves the decision. The EVPI is the ceiling, and bits are not value.
 - When the probability does not deserve trust, the criteria of Wald, Savage and precaution replace the
   expected value; the criterion and the list of models are declared choices, never deductions.
-- Published forecasts change the world. The Goodhart measured in H3 brings the 29% bias down to 1,7%, and the
-  real loop measured is four times smaller than the declared one.
+- Published forecasts change the world. A drawn intervention identifies the loop and brings the 29% bias down to
+  1.7%; the real loop measured is four times smaller than the one assumed.
 - Fairness requires choosing between incompatible equalities. Equalising the FNR upwards costs $+628$ false
   positives, downwards it saves 640, and who pays is declared before running.
-
-### Who pays, in the research
-
-The research closed the seven governance opinions and the three prison streams. On 15 October
-2026, `governance/GRUPOS.md` records that **none of the seven affected groups was heard, in any of the
-seven decisions.** The file is the answer of the front to the objection "the auditor is a stakeholder".
-The signature of the officer is not the listening of the affected group. The officer is on the side of whoever decides
-to use the artifact; whoever pays for the error stays on the other side. The list includes the 5 226 detainees of Toronto in
-1997–2002, the 65 276 of 2020–2021 and the 86 113 traffic stops in Rhode Island 2005–2015, all
-flagged by perceived colour. The audit could not look at three things: who authorises, the human panel
-that was never done and the decisions that never reached anyone. Chapter 21 returns to this point.
 
 # Part IV. Building the auditable machine
 
@@ -2957,7 +2463,7 @@ questions that one asks of any problem.
 
 **The conclusion that lives in the middle of the paragraph.** In a support desk, a report begins like this:
 *"Considering the two-year history, the mean arrival rate of 312 calls per hour, the mean
-service time of 6,2 minutes and the application of the Erlang C formula with 36 agents, the estimated
+service time of 6.2 minutes and the application of the Erlang C formula with 36 agents, the estimated
 level of service is 82% of the calls answered within 20 seconds, and it is recommended to keep the current
 staffing."* It is a long sentence, correct in its arithmetic and almost impossible to audit. If the conclusion is wrong, the error
 is hidden somewhere between "considering" and "it is recommended", and nobody knows where.
@@ -2999,32 +2505,34 @@ $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
 
 | Component | What it keeps | Example from the support desk |
 | --- | --- | --- |
-| $V$, nodes | Concepts, hypotheses, variables, data sets | `L1_demanda_real`: call counts every 5 minutes |
+| $V$, nodes | Concepts, hypotheses, variables, data sets | `L1_demand`: call counts every 5 minutes |
 | $E_{\mathrm{tree}}$, tree | What depends on what: deductive prerequisites | `L1_demanda` $\to$ `L2_erlang_c`, with the label "input of the model" |
 | $E_{\mathrm{graph}}$, transversal | Mathematical bridges, causal edges $\operatorname{do}(x)$ and pathology edges | Jensen links the mean function to information and to ergodicity |
 | $H$, hyperedges | The five lenses, which wrap whole groups of nodes | Chrononomy over `L1_demanda` and `L2_erlang_c`: "the demand has a calendar" |
 | $\Phi$, invariants | The invariants that every claim fulfils to enter the graph | $\Phi_2$: the margin on the independent unit |
 
-**Every claim becomes executable code.** The central node of the map, `N_Core`, carries the one-line definition and the pointer to the artifact that executes it. Whoever asserts delivers the code that runs the assertion. The sentence of the programme, every empirical claim becomes executable code, is literal.
+**Every claim becomes executable code.** Each node carries a one-line definition and a pointer to the artifact
+that executes it with a fixed seed. Whoever asserts delivers the code that runs the assertion, and a claim that
+nobody else can run cannot be checked by anybody else.
 
 **The five mandatory fields of a node.** A node without any of them is refused on writing.
 
 | Field | What it declares |
 | --- | --- |
 | `id` | Unique identifier |
-| `camada` | $L_1$ World, $L_2$ Model or $L_3$ Agent |
-| `tipo_incerteza` | Aleatory, epistemic or knightian |
-| `definicao_formal` | The mathematical definition, in one line |
-| `artefato_simulavel` | The pointer to the code that reproduces it with a fixed seed |
+| `layer` | $L_1$ World, $L_2$ Model or $L_3$ Agent |
+| `uncertainty` | Aleatory, epistemic or knightian |
+| `definition` | The mathematical definition, in one line |
+| `artifact` | The pointer to the code that reproduces it with a fixed seed |
 
-A real node, copied from the card of $H_0$ in a real domain:
+The node of the call-centre formula reads:
 
 ```yaml
 - id: L2_erlang_c
-  camada: L2
-  tipo_incerteza: Knightiana_Especificacao
-  definicao_formal: SL(c, λ) = 1 − C(c, λ·AHT) e^{−(c − λ·AHT) t / AHT}, estacionária, sem abandono
-  artefato_simulavel: estocologia/central.py::nivel_servico
+  layer: L2
+  uncertainty: Knightian (specification)
+  definition: SL(c, λ) = 1 − C(c, λ·AHT) e^{−(c − λ·AHT) t / AHT}, stationary, no abandonment
+  artifact: queue::service_level
 ```
 
 Notice that the Erlang C formula is typed as a **knightian uncertainty**. It assumes stationarity and
@@ -3043,12 +2551,12 @@ which the Agent applies a Model incompatible with the World.
 | Illusion of the dark room | One looks for the cause of the case, not the cause of the frequency |
 
 **The mathematical bridges.** The transversal edges link distant modules by an explicit relation,
-navigable in both directions. The contract of the agents fixes four.
+navigable in both directions. Four of them recur across the whole theory.
 
 | Bridge | Relation | What it links |
 | --- | --- | --- |
 | Jensen | $\mathbb{E}[f(X)] \ge f(\mathbb{E}[X])$ for convex $f$ | The mean function to information and to ergodicity |
-| Prior as regularisation | $-\ln P(\theta) \leftrightarrow \lambda\Omega(\theta)$ | Bayes to learning with a penalty and to the SHELF elicitation of $F_7$ |
+| Prior as regularisation | $-\ln P(\theta) \leftrightarrow \lambda\Omega(\theta)$ | Bayes to learning with a penalty and to the elicitation of expert priors |
 | Information as growth | $\Delta W \le I(X; Y)$ | Mutual information to the Kelly growth gain |
 | Noise as temperature | Minibatch noise $\leftrightarrow$ temperature $T$ | Stochastic mechanics to active inference and to learning |
 
@@ -3075,31 +2583,22 @@ says that, if $Z$ is obtained from $Y$, then $I(X; Z) \le I(X; Y)$. Three newspa
 are worth one. In **Morphonomy**, two representations can give identical forecasts and still authorise
 different conclusions under intervention, and only the conclusion that is conserved across environments serves outside them.
 
-**How a new domain triggers the lenses.** The practical rule is in the plan. Is it a financial, career or
+**How a new domain triggers the lenses.** A practical rule: Is it a financial, career or
 insurance process? It triggers **Chrononomy**. Does it involve claims, incomes, virality or the size of
 companies? It triggers **Scalonomy**. Does it involve recommendation, regulation or a published forecast? It triggers
 **Fluxonomy** and **Morphonomy**, with simulation with and without the action.
 
 **Where the data live.** The hypergraph keeps only the light topology: nodes, edges, YAML contracts and hashes.
 Microdata and series stay in partitioned Parquet, queried with explicit column projection, partition
-pruning and a rigid budget of bytes scanned. The plan also fixes the rule of scale. A model that
+pruning and a rigid budget of bytes scanned. A rule of scale follows. A model that
 requires a full scan per forecast does not scale, however good its test error.
 
-The size of the graph grew with the research, but below the targets of the plan. There are 85 nodes in the real $H_1$ and
-**454 178** nodes in $H_3$, of which 453 973 are forecasts and only 205 are topology. $H_3$ reached 45% of the
-million that the plan foresaw.
-
-The number of $H_2$ deserves a correction, because it shows how easy it is to inflate that account. The "1 538 nodes" that the
-first version of this chapter cited are from an old run of the graph generator. Running the
-`grafo.py` of $H_{2g}$ over the results of $H_{2g}$, the graph has **12 797 nodes**, and
-12 288 of them, 96%, are ICP hypotheses, one per subset tested, which grow like $2^k$ and are not new
-knowledge.
-
-The scale test of the background audit ran the funnel in batch over **329** domains generated by rule from
-a public catalogue (327 up to the end, at 3,8 seconds of processor per domain) and took the graph to
-**26 634 nodes**, 28 619 tree edges, 26 795 bridges and 4 628 hyperedges. Only **6 494** of the nodes are
+**Counting nodes inflates easily.** A scale test ran the filter funnel in batch over **329** domains generated by rule from
+a public catalogue (327 up to the end, at 3.8 seconds of processor per domain) and took the graph to
+**26,634 nodes**, 28,619 tree edges, 26,795 bridges and 4,628 hyperedges. Only **6,494** of the nodes are
 concept nodes (domain, layers, variables, environments, filters, decision), and only **554** come from curated packages;
-the other 20 140 belong to that family of hypotheses. The bottleneck is not in the machine but in semantic
+the other 20,140 are ICP hypotheses, one per subset of predictors tested, which grow like $2^k$ and are not new
+knowledge. The bottleneck is not in the machine but in semantic
 curation, which does not scale by rule, in the supply of data sets with identifiable environments (9% of the catalogue
 pass), in the bridges, which grow with the square of the number of domains, and in keeping everything in memory.
 
@@ -3110,9 +2609,7 @@ pass), in the bridges, which grow with the square of the number of domains, and 
 Three tasks: build a mini-hypergraph with three nodes and three lenses, prove that the validator bites in four
 cases, and run the lenses with a measured number. **Scalonomy** enters through the Hill estimator,
 **Crisonomy** through the expected value of perfect information (EVPI), and **Morphonomy** through the test of
-invariance across regimes. Code in `crates/stochology-book/src/ch12.rs`; output measured with
-`cargo run --release --bin labs -- --chapter 12` (self-contained module, without external
-dependencies):
+invariance across regimes. Run it with `cargo run --release --bin labs -- --chapter 12`.
 
 ```text
 == Chapter 12 :: the map of knowledge ==
@@ -3140,7 +2637,8 @@ Four readings of the output, in the order in which they matter.
 **The validator refuses.** The valid graph passes with zero problems. The four proofs show that the refusal is not
 decorative: an edge to a node that does not exist, a deductive cycle (the "return" that turns the tree into a wheel),
 a hyperedge with a single member, and an orphan node outside every lens. Proof 4 shows the structural validator
-letting the orphan node through: the validation `[]` stays empty, while `nos_sem_lente()` points at `L2_orfao`.
+letting the orphan node through: the validation `[]` stays empty, while the coverage check points at
+`L2_orphan`.
 The two screens take care of distinct things; one takes care of the form, the other of coverage.
 
 **Not every lens is triggered.** The mini-hypergraph triggers three lenses (Chrononomy, Scalonomy and
@@ -3148,107 +2646,30 @@ Crisonomy) and leaves Fluxonomy and Morphonomy without a hyperedge. The absence 
 would be if some **node** stayed outside every lens, and none does. A lens without use is a question that
 has not yet been asked.
 
-**Scalonomy reproduces the number of the instrument of the repository.** With the same seed (1909), 20 000
-values of a Pareto with $\alpha = 1{,}81$ and the cutoff at $k = 500$, the Hill estimator returns
-**1,7901**, and the gate of the repository publishes 1,7901 in that account. The tail is wild
+**Scalonomy measures the tail.** With seed 1909, 20,000 values of a Pareto with $\alpha = 1.81$ (the
+exponent estimated for the Danish fire losses) and the cutoff at $k = 500$, the Hill estimator returns
+**1.7901**. The tail is wild
 ($\hat\alpha < 2$), and for that reason the theoretical variance does not exist. At the edges of the cutoff the number moves, with
-1,8444 at $k = 250$ and 1,8032 at $k = 2\,000$, and the sensitivity is the lesson. The tail exponent is an
+1.8444 at $k = 250$ and 1.8032 at $k = 2,000$, and the sensitivity is the lesson. The tail exponent is an
 estimate, and not a constant of nature.
 
 **Crisonomy depends on which actions exist.** The perfect sensor says whether the year will be good or bad, with
-probability 0,70 of good. Profiting yields 10, losing costs 4. Whoever can *act or not act* already acts without the
-sensor, because the expected value of acting is 5,80, greater than zero, and so the sensor is worth **0,0000**, because
-it never changes the decision. Without the option of acting, leaving *bet half* (value 3,00) or *not bet*
-(0,00), the best without information falls to 2,1000 and the sensor comes to be worth **3,7000**. If the payoff is
-equal in both states, it is worth 0,0000 again. **The value of information is not a property of the datum: it is a
+probability 0.70 of good. Profiting yields 10, losing costs 4. Whoever can *act or not act* already acts without the
+sensor, because the expected value of acting is 5.80, greater than zero, and so the sensor is worth **0.0000**, because
+it never changes the decision. Without the option of acting, leaving *bet half* (value 3.00) or *not bet*
+(0.00), the best without information falls to 2.1000 and the sensor comes to be worth **3.7000**. If the payoff is
+equal in both states, it is worth 0.0000 again. **The value of information is not a property of the datum: it is a
 property of the set of available actions.**
 
 **Morphonomy prefers the map to the number.** Three regimes, bases 100, 140 and 120, true effect 10 in all
-three. In the first rule, the slope computed over all the data together gives **24,37**, more than double
+three. In the first rule, the slope computed over all the data together gives **24.37**, more than double
 the true effect, because those who received the treatment are concentrated in the high-base regime. Swapping
-only the allocation, and keeping the effect of 10, the marginal slope becomes **−4,60**, negative, when every
+only the allocation, and keeping the effect of 10, the marginal slope becomes **−4.60**, negative, when every
 effect within each regime is positive. It is the classic misalignment that Chapter 9 called
-confounding. The slopes by regime, those, stay at 9,96 / 10,09 / 10,15 and 10,34 / 9,92 / 10,15. The
-two rules pass the invariance test with tolerance 0,5. When the middle regime really responds
-40 instead of 10, the invariance **fails** (9,96 against 40,09, step of 30,13). The marginal slope is a
+confounding. The slopes by regime, those, stay at 9.96 / 10.09 / 10.15 and 10.34 / 9.92 / 10.15. The
+two rules pass the invariance test with tolerance 0.5. When the middle regime really responds
+40 instead of 10, the invariance **fails** (9.96 against 40.09, step of 30.13). The marginal slope is a
 number; the slope by regime is a structure.
-
-**Divergence declaration.** The earlier text of this book, in Chapter 6, presents the three samples of
-Hill with values close to $1{,}81$; this instrument measures 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
-($k = 1\,000$) and 1,8032 ($k = 2\,000$). The difference is one of sampling and of cutoff, not of formula — the value
-published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
-earlier text and the plan of the repository count gates in different ways: the old book describes
-**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
-governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
-G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
-$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 14 details the seven; no old value
-was erased.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarsely. The line of this chapter, from the instrument of the axis (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -3256,13 +2677,13 @@ chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chap
    wait will be about 9 minutes". Which pathology edge links them, and in which sense does it point?
 2. *(Concept)* Which lenses must a credit-granting model published to clients trigger?
    Justify each one in one sentence.
-3. *(Computation)* In the output above, the EVPI is 0,0000 with the option of acting and 3,7000 without it. Explain why the same
-   sensor is worth zero in one case and 3,70 in the other, and compute the EVPI for a third option whose best value
-   without information is 4,00.
+3. *(Computation)* In the output above, the EVPI is 0.0000 with the option of acting and 3.7000 without it. Explain why the same
+   sensor is worth zero in one case and 3.70 in the other, and compute the EVPI for a third option whose best value
+   without information is 4.00.
 4. *(Laboratory)* Add a fourth node `L3_auditor` to the mini-hypergraph and check what the
    validator does before and after putting it into a hyperedge. Then create a second cycle in the tree and
    confirm that the message points at the cycle.
-5. *(Laboratory)* Change the tolerance of the invariance test from 0,5 to 2,0 and to 0,05 in the two
+5. *(Laboratory)* Change the tolerance of the invariance test from 0.5 to 2.0 and to 0.05 in the two
    first rules. In which of them does the structure by regime stop being distinguishable from noise?
 6. *(Concept)* Why was the Erlang C formula typed as knightian and not as epistemic?
 
@@ -3273,70 +2694,73 @@ chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chap
   endpoints, deductive cycles and hyperedges with fewer than two members.
 - The five lenses are transversal questions with their own quantities: information, time, tail, invariance
   and cost of information.
-- The same graph gives different numbers according to the lens: Hill returns 1,7901 for $k = 500$; the EVPI returns
-  0,0000 or 3,7000 depending on the available actions; the marginal slope changes sign while the
+- The same graph gives different numbers according to the lens: Hill returns 1.7901 for $k = 500$; the EVPI returns
+  0.0000 or 3.7000 depending on the available actions; the marginal slope changes sign while the
   slopes by regime stay equal.
-- The node count inflates easily: of the 26 634 nodes of the scale audit, only 6 494 are concept nodes.
+- The node count inflates easily: of the 26,634 nodes of the scale audit, only 6,494 are concept nodes.
 
-## Chapter 13. The team of specialists, the adversarial panel and AI under control
+## Chapter 13. The team of specialists, the adversarial panel and the two systems of thought
 
-**Objectives.** By the end of this chapter you should know the blind spot of each of the eight tracks Track 1 to Track 8,
-go through the six-stage cycle, apply the approval condition of the adversarial panel
-$\mathrm{Aprovado}(X) = \bigwedge_{i=1}^{8} \left( A_i(X) \ge \mathrm{Severidade}_{\min} \right)$ and
-distinguish System 1 (fast triage, probabilities trapped between 1% and 99%) from System 2
-(deliberation over the graph).
+**Objectives.** By the end of this chapter you should know the blind spot of each of eight specialists, go
+through the six-stage cycle, apply the approval condition of the adversarial panel
+$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} \left( A_i(X) \ge \mathrm{Severity}_{\min} \right)$, correct a forecast
+when the base rate moves, check a posterior by simulation, and distinguish System 1 (fast triage, probabilities
+held between 1% and 99%) from System 2 (deliberation: tree search, belief state, heavy inference and directed
+stress).
 
 ---
 
 ### Step 1 — The real world and the paradox
 
-**The group that approves itself.** A student hands in a statistics assignment. The student chose the
-sample, cleaned the data, ran the test, looked at the result, changed the test, ran it again and wrote
-the conclusion. When the conclusion finally pleased him, he stopped. Nobody cheated. Each step seemed
-reasonable at the moment it was taken.
+**The group that approves itself.** A student hands in a statistics assignment. The student chose the sample,
+cleaned the data, ran the test, looked at the result, changed the test, ran it again and wrote the conclusion.
+When the conclusion finally pleased them, they stopped. Nobody cheated. Each step seemed reasonable at the moment
+it was taken.
 
-Now split the work among eight colleagues, each responsible for one single thing, and hand a
-ninth colleague the **artifacts** in place of the report: the code, the data file, the saved model, the
-audit trail, and their task is to break them. In every 100 assignments made by one person alone, the
-most fragile part is the one nobody looked at from outside. In 100 assignments with a team that attacks, the fragile
-part is the one that survived the attack.
+Now split the work among eight colleagues, each responsible for one single thing, and hand a ninth colleague the
+**artifacts** in place of the report: the code, the data file, the saved model, the audit trail. The ninth
+colleague's task is to break them. In an assignment made by one person alone, the most fragile part is the one
+nobody looked at from outside. In an assignment with a team that attacks, the fragile part is the one that
+survived the attack.
 
-The ninth colleague has one rule: **do not read the report**. They run the code with a seed that the author did not
-choose, inject a corrupted batch, tamper with a line of the trail to see whether the verifier notices. Whoever
-only reads reports agrees with them.
+The ninth colleague has one rule: **do not read the report**. They run the code with a seed that the author did
+not choose, inject a corrupted batch, tamper with a line of the trail to see whether the verifier notices.
+Whoever only reads reports agrees with them.
 
-**The eight tracks and the blind spot of each one.** Each track exists because there is a way of erring that it
-sees better than the others, a blind spot that the others do not cover.
+**The eight specialists and the blind spot of each one.** Each specialist exists because there is a way of erring
+that they see better than the others.
 
-| Track | What it does | The blind spot it covers | What it delivers |
+| Specialist | What they do | The blind spot they cover | What they deliver |
 | --- | --- | --- | --- |
-| Track 1 Code | Turns hypotheses into executable generating processes | "The code runs" is not "the code is the hypothesis" | Fixed seed, pre- and post-conditions, property tests, `cProfile` and `tracemalloc` |
-| Track 2 Data | Audits the entry of the World | What a row is, and why the datum is missing | `datacontract.yaml`, quarantine of defective records, idempotent ingestion, byte budget |
-| Track 3 Lifecycle | Tests the model in time | The world changes and the model does not warn | Temporal cutoff without leakage, drift sensors, policy of ignorance, post-mortem |
-| Track 4 Frontier | Runs the heavy inference | One sample is not an answer | Diagnostics of chains (the several chains must agree among themselves), calibration by simulation, conformal prediction |
-| Track 5 Governance | Takes care of legality, privacy and trail | Personal data is a combination of fields, not a file type | Impact opinion, differential privacy, named human officer, SHA-256 |
-| Track 6 Fairness | Asks who pays for the error | The chosen metric decides who pays | Audit of error rates between groups, fairness trilemma |
-| Track 7 Domain | Translates problems from other areas | The parameter that does not come from the data comes from someone | Glossary, SHELF elicitation, scope term |
-| Track 8 Decision | Converts the result into action | A number without a natural frequency decides nothing | Natural frequencies, HOPs, C/L tree, exit clause |
-| Orchestrator | Coordinates and commands the panel | No step approves its own result | Card of the model critique and attack on the artifact before approval |
+| Code | Turns hypotheses into executable generating processes | "The code runs" is not "the code is the hypothesis" | Fixed seed, pre- and post-conditions, property tests, profiles of time and memory |
+| Data | Audits the entry of the World | What a row is, and why the datum is missing | A data contract, quarantine of defective records, idempotent ingestion, a byte budget |
+| Lifecycle | Tests the model in time | The world changes and the model does not warn | Temporal cutoff without leakage, drift sensors, a policy for ignorance, post-mortem |
+| Inference | Runs the heavy inference | One sample is not an answer | Chain diagnostics, calibration by simulation, conformal prediction |
+| Governance | Takes care of legality, privacy and trail | Personal data is a combination of fields, not a file type | Impact opinion, differential privacy, a named human officer, a hash chain |
+| Fairness | Asks who pays for the error | The chosen metric decides who pays | Audit of error rates between groups, the fairness trilemma |
+| Domain | Translates problems from other areas | The parameter that does not come from the data comes from someone | Glossary, structured elicitation, scope term |
+| Decision | Converts the result into action | A number without a natural frequency decides nothing | Natural frequencies, HOPs, the C/L tree, exit clause |
+| Orchestrator | Coordinates and convenes the panel | No step approves its own result | The model-critique card and the attack on the artifact before approval |
 
-**The craft of each track, in one case.** Track 2 begins with a decision that nobody sees: **what
-a row is**. One row per person, per day or per event changes the mean, the variance and the margin, and for that
-reason the grain is declared and proved with a count. That agent hunts the **sentinel value**, the
-absent recorded as 0, the −1 or the 9 999 that enters the sum as if it were data, and requires idempotent
-ingestion. Running the load twice cannot change the number.
+**The craft of each specialist, in one case.** The data specialist begins with a decision that nobody sees:
+**what a row is**. One row per person, per day or per event changes the mean, the variance and the margin, and for
+that reason the grain is declared and proved with a count. The same specialist hunts the **sentinel value**, the
+absence recorded as 0, −1 or 9 999 that enters the sum as if it were data, and requires idempotent ingestion:
+running the load twice cannot change the number. And they ask the question that a limit on nulls does not ask:
+**why is the datum missing?** The mechanism (MCAR, MAR or MNAR, Chapter 6) decides whether discarding the
+incomplete cases is harmless, and a contract that only counts the nulls is silent on the day one appears.
 
-Track 5 recalls that personal data is not a file type: it is the **combination of fields** that decides.
-Postcode, date of birth and sex, together, probably identify 87% of the people in the United
-States, by the 1990 census. Differential privacy limits how much the presence of one person can
-change any answer. In two databases that differ in the record of a single person, the result of
-any query cannot change by more than a fixed factor. That factor is a budget, spent on each
-query. The cheapest measure remains not collecting.
+The governance specialist recalls that personal data is not a file type: it is the **combination of fields**
+that decides. Postcode, date of birth and sex, together, probably identify 87% of the people in the United
+States, by the 1990 census. Differential privacy limits how much the presence of one person can change any
+answer. In two databases that differ in the record of a single person, the result of any query cannot change by
+more than a fixed factor. That factor is a budget, spent on each query. The cheapest measure remains not
+collecting.
 
-It falls to Track 3 to require that every model in operation declares its behaviour in three cases: input outside the
-domain, missing field and low confidence. The options are to refuse, to activate a safe deterministic
-fallback or to return calibrated uncertainty. A model in use degrades for different reasons, which ask for different
-answers.
+The lifecycle specialist requires that every model in operation declares its behaviour in three cases: input
+outside the domain, missing field and low confidence. The options are to refuse, to fall back on a safe
+deterministic rule or to return calibrated uncertainty. A model in use degrades for different reasons, which ask
+for different answers.
 
 | Situation | What changes | The right answer |
 | --- | --- | --- |
@@ -3345,63 +2769,44 @@ answers.
 | Concept drift | The relation between attribute and outcome itself changes | No reweighting saves it: rebuild the model |
 | Served population changed | The metric falls because the audience changed | It is not a degradation of the model: read the metric against the base rate |
 
-The correction of label drift has a closed form. If the distribution of the attribute within each
-class does not change, the corrected probability is the old one multiplied by the ratio between the new base rate
-and the old one, then renormalised. With two outcomes, the correction adds a constant to the logit. It is an
-**intercept correction**. The hierarchy of Van Calster and colleagues (2016) separates two levels that the
-third horizon found. One of them is calibration in the mean, measured by the intercept; the other is
-**weak calibration**, which requires intercept 0 and slope 1. In the third horizon, the 2023 flights passed with
-the intercept correction and the Toronto prisons did not, because their error was one of slope.
+The domain specialist does not ask an expert for a mean. The Sheffield protocol (SHELF) asks for the **median**,
+the **quartiles** and the **plausible extremes**, fits a distribution to those quantiles and gives it back so that
+the expert confirms it, controlling the interviewer's anchor, the order of the scenarios and overconfidence. When
+no expert can be heard, the least one can do is measure **how much the decision depends on the prior**. In 33
+domains, the prior in use was replaced by a prior from the literature and by a deliberately weak one: five domains
+change status or action with the literature prior and two with the weak one. The lesson is not that the first
+priors were wrong. It is that in five of 33 domains the decision does not survive the replacement.
 
-Track 7 does not ask the specialist for a mean. The Sheffield protocol (SHELF) asks for the **median**,
-the **quartiles** and the **plausible extremes**, fits a distribution to those quantiles and gives it back
-so that the specialist confirms it, controlling the interviewer's anchor, the order of the scenarios and overconfidence.
-In the research, no elicitation was done with a human specialist. The audit managed to
-measure the **sensitivity to the choice of the prior**. In 33 domains, the prior of the package was replaced by the
-literature prior and by a deliberately weak one, and five domains change status or action with the
-literature one and two with the weak one. The conclusion is not that the simulated priors were wrong. It is that
-in five of 33 domains the decision does not survive the replacement of the prior.
-
-**An honest gap.** The architecture lacks a question that Track 2 should ask. **Why is the
-datum missing?** The data contract limits the nullity but does not classify the mechanism of the
-absence (MCAR, MAR or MNAR, Chapter 6), and it is that class that decides whether discarding the incomplete
-cases is harmless. The audit later added an `ausencia` block to the contract, and in the three
-contracts of the real horizon 1 and in the 18 tables of the second horizon the rule is **vacuous today**, since
-no column has a single missing value. The lock starts to bite on the day one appears.
-
-**System 1 and System 2.** The computer that helps thinking has two modes. **System 1** does
-fast and categorical triage and closes the card with a deterministic suffix tree (same input,
-same answer), emitting probabilities **trapped in the interval from 1% to 99%**. **System 2**
-deliberates: tree search over the hypergraph, code synthesis, heavy inference, adversarial
-stress. The rule of the interval is not aesthetics. A probability of 0% or of 100% cannot be
-scored by a proper rule, never loses and never learns.
+**System 1 and System 2.** A machine that helps thinking has two modes. **System 1** does fast, categorical
+triage: the same input always gives the same answer, and every probability it emits is **held inside the interval
+from 1% to 99%**. **System 2** deliberates: it searches a tree of options, keeps a belief about where the weak
+point is, runs heavy inference and directs the stress of the panel. The rule of the interval is not aesthetics. A
+probability of 0% or of 100% cannot be scored by a proper rule, never loses and never learns.
 
 ---
 
 ### Step 2 — The rule of the game
 
-**The six-stage cycle.** A question goes through six stages, each with its output cards. The path
-to the decision passes through all of them.
+**The six-stage cycle.** A question goes through six stages, each with its output cards. The path to the decision
+passes through all of them.
 
-1. **Translation and elicitation (Track 7).** Card of the transfer, SHELF elicitation, scope term.
-2. **Ingestion, grain, causality and ethics (Track 2, Track 5, Track 6).** Data contract, card of the sample, causal
-   graph with the Pearl step, privacy opinion, fairness audit.
-3. **Simulation, null model and frontier (Track 1, Track 4, Track 3).** Executable generating process, null model
-   simulated **before** reading any pattern, inference diagnostics, partition outside time, count
-   of attempts.
-4. **Projection onto the five lenses (the orchestrator).** Sweep of Fluxonomy, Chrononomy, Scalonomy,
-   Morphonomy and Crisonomy.
-5. **Adversarial panel (the orchestrator).** Rejected goes back to the stage that failed; approved moves on.
-6. **Decision and closure (Track 8).** Memorandum in natural frequencies, HOPs, C/L tree and exit clause.
+1. **Translation and elicitation (Domain).** Card of the transfer, elicitation, scope term.
+2. **Ingestion, grain, causality and ethics (Data, Governance, Fairness).** Data contract, card of the sample,
+   causal graph with the Pearl step, privacy opinion, fairness audit.
+3. **Simulation, null model and frontier (Code, Inference, Lifecycle).** Executable generating process, null model
+   simulated **before** reading any pattern, inference diagnostics, partition outside time, count of attempts.
+4. **Projection onto the five lenses (Orchestrator).** Sweep of Fluxonomy, Chrononomy, Scalonomy, Morphonomy and
+   Crisonomy.
+5. **Adversarial panel (Orchestrator).** Rejected goes back to the stage that failed; approved moves on.
+6. **Decision and closure (Decision).** Memorandum in natural frequencies, HOPs, the C/L tree and exit clause.
 
-The only path to the decision passes through the panel. A rejected assignment goes back to the **stage in which
-it failed**, instead of going back to the beginning.
+A rejected assignment goes back to the **stage in which it failed**, instead of going back to the beginning.
 
 **The adversarial panel.** Three failures eliminate the assignment before any discussion of merit: temporal
 leakage, a violated data contract without treatment and the absence of a named human officer. After that, each
-track receives its attack, eight in total.
+specialist's work receives its attack, eight in total.
 
-| Track under attack ($A_i$) | The attack | The concern the card must have |
+| Attack ($A_i$) | The attack | The safeguard the card must carry |
 | --- | --- | --- |
 | $A_1$ Code | A new battery of properties, with a seed the author did not choose | property test |
 | $A_2$ Data | A batch with corrupted records, which must be isolated | handling of missing values |
@@ -3412,38 +2817,80 @@ track receives its attack, eight in total.
 | $A_7$ Domain | An atypical scenario of the domain, with an alternative prior | elicited prior |
 | $A_8$ Decision | A crisis that violates the exit clause itself | declared exit clause |
 
-The eight attacks appear in old records as **MB1–MB8**. The new name is $A_1$–$A_8$, and the list is one only.
+**The approval condition.** Each attack $A_i$ returns a **severity** on the scale from 0 to 10, and the artifact
+$X$ is approved only if **all** eight reach the floor:
 
-**Calibration by simulation (track 4).** $\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniforme}\{0, \dots, L\}$. If the posterior is calibrated, the rank of the true value among the $L$ replicates is uniform. That is how track 4 checks whether the heavy inference returns uncertainty of the right size, instead of just a number.
+$$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \mathrm{Severity}_{\min} \Big),\qquad
+\mathrm{Severity}_{\min} = 6.$$
 
-**The approval condition.** Each agent $A_i$ returns a **severity** on the scale from 0 to 10, and the artifact
-$X$ is only approved if **all** eight reach the floor. The condition is this:
+The $\bigwedge$ is the logical "and". One single attack below the floor is enough for the assignment to go back.
+The severity is deterministic: it comes from the corresponding safeguard of the card and from an explicit seed,
+and judging the same card again with the same seed always returns the same number. The condition **fails** when a
+safeguard was declared absent, and that is what makes it auditable. No subjective judgement hides in the score.
 
-$$\mathrm{Aprovado}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \mathrm{Severidade}_{\min} \Big),\qquad
-\mathrm{Severidade}_{\min} = 6.$$
+**The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
+replicates of the fitted model; comparison with at least one rival model; separation between parameters
+identified by the data and parameters brought from outside; analysis of performativity, Goodhart and Lucas; and a
+defence of the undecidable premises by the **cost of the error**.
 
-The $\bigwedge$ is the logical "and". One single agent below the floor is enough for the assignment to go back. The severity is
-deterministic. It comes from the corresponding concern in the card and from an explicit seed, and repeating the
-card with the declared seed always returns the same number. The condition **fails** when a concern
-was declared absent, and that is what makes it auditable. There is no subjective judgment hidden in the
-score.
+**An assignment with a declared gap is worth more than a uniform one.** The complete artifact with one admitted
+weak point beats the uniform artifact that admits no gap at all. In the Danish fire-insurance case, the panel
+rejected the claim; the claim lost, but the rival model **did not win the right to decide** either.
 
-**The card of the model critique.** The orchestrator only approves after filling five items: predictive
-check against replicates of the fitted model; comparison with at least one rival model; separation between
-parameters identified by the data and parameters brought from outside; analysis of performativity, Goodhart and Lucas; and
-defence of the premises that are undecidable by the **cost of the error**.
+**Correcting a forecast when the base rate moves.** Label drift has a closed-form correction. If the distribution
+of the attribute within each class does not change, the corrected probability is the old one multiplied by the
+ratio between the new base rate and the old one, then renormalised:
 
-**An assignment with a declared gap is worth more than a uniform assignment.** The complete artifact with one
-admitted weak track beats the uniform artifact that admits no gap at all. In the real horizon 1,
-it was the panel that rejected the Danish fire project. The claim lost, but the rival model **did not win the right to decide**.
+$$P_{\text{new}}(y \mid x) \;\propto\; P_{\text{old}}(y \mid x)\,\frac{\pi_{\text{new}}(y)}{\pi_{\text{old}}(y)}$$
+
+With two outcomes, the correction adds a constant to the logit: it is an **intercept correction**. When the new
+base rate is unknown, Saerens, Latinne and Decaestecker (2002) estimate it from the unlabelled new cases
+themselves, alternating two steps until they agree: correct the forecasts with the current guess of the base
+rate, then take the mean of the corrected forecasts as the next guess. The hierarchy of Van Calster and colleagues
+(2016) separates two levels of calibration. One is calibration in the mean, measured by the intercept; the other
+is **weak calibration**, which requires intercept 0 and slope 1. A flight-delay forecast for 2023 passed with the
+intercept correction alone; an arrest forecast for Toronto did not, because its error was one of slope, and no
+shift of base rate repairs a slope.
+
+**Checking a posterior by simulation.** Heavy inference returns a cloud of samples, and the cloud can be the wrong
+size without any warning. Calibration by simulation (SBC) tests the machinery itself. Draw a parameter
+$\tilde\theta$ from the prior, simulate data with it, run the inference on those data and record where the true
+value falls among the $L$ posterior samples. Repeat many times. If the inference is right, the rank is uniform:
+
+$$\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniform}\{0, \dots, L\}$$
+
+A histogram of ranks with a hump in the middle means posteriors that are too wide; a U shape means posteriors that
+are too narrow, the overconfident case; a slope means a biased sampler. The check needs no real data, because the
+truth is known by construction.
+
+**System 2, in four tools.** Deliberation is not a mood; it is a set of procedures, each with a null to beat.
+
+- **Tree search with estimate (LATS).** A greedy agent takes the option of greatest immediate value and stops.
+  Tree search expands the options, estimates the value of each branch by simulation and balances exploring
+  untried branches against exploiting good ones, by the upper confidence bound. It can find a path that begins
+  with a worse step and ends somewhere better, which the greedy agent never sees.
+- **The belief state.** System 2 keeps a probability for each hypothesis about where the weak point is, updated
+  with every card the panel has rejected. The belief has a floor and a ceiling: no hypothesis falls to 0% or rises
+  to 100%, so that a surprise can always move it. Its entropy says how concentrated it is.
+- **Directed stress.** The ordinary panel attacks the eight points in a fixed order. Directed stress attacks first
+  where the belief points and stops at the first rejection. The null is the fixed order: if learning adds nothing,
+  both orders find the same rejection with the same number of attacks.
+- **Heavy inference (Metropolis).** When the posterior has no closed form, a random walk proposes a new value near
+  the current one and accepts it with probability $\min\{1, p(\text{new})/p(\text{current})\}$. The chain spends time
+  in each region in proportion to its posterior probability. Its honesty is tested where the answer is known: on a
+  Beta distribution, the mean of the chain must meet the closed form.
+
+The same discipline decides the grain of a question. Refining from the average day to each day is worth it only
+when the measured loss of the coarse question pays for the margin the fine one requires; finer grains that the
+instrument cannot measure stay declared, never guessed.
 
 ---
 
 ### Step 3 — Hands on
 
-Two measurements: run the complete panel over a card with the eight concerns and over a card with concerns
-removed, printing the eight severities; and check that the triage of System 1 never leaves the interval
-between 1% and 99%. Code in `crates/stochology-book/src/ch13.rs`; output measured with `cargo run --release --bin labs -- --chapter 13`:
+Three measurements: run the complete panel over a card with the eight safeguards and over cards with safeguards
+removed; check that the triage of System 1 never leaves the interval between 1% and 99%; and let System 2
+deliberate. Run the first with `cargo run --release --bin labs -- --chapter 13`.
 
 ```text
 == Chapter 13 :: the A1-A8 adversarial panel ==
@@ -3464,148 +2911,96 @@ complete card with seed 999983: lowest=8 approved=true
 system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
 ```
 
-The laboratory above uses a triage of two probabilities, enough to show the lock. The **real System 1** is
-implemented in `crates/stochology-core/src/s1.rs`, with a closed vocabulary of six categories and
-35 themes, a canonical suffix tree of 136 entries and the sum checked at every run. The output measured with
-`cargo run --release --bin labs -- --s1`:
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
-
-Six lines, and the contract repeats in all of them. The sum is 1,0000 and no probability falls outside
-[0,01; 0,99]. The unknown input (`xyzzy plugh abracadabra`) falls into `outros` with 0,8718. That
-value is the declared prior, and not a guess. The limits stay recorded. The vocabulary is closed,
-the matching is lexical and does not understand negation, and this is triage, and not judgement. Judging belongs to System
-2.
-
 Four readings.
 
-**The complete card passes, and passes with room to spare.** The eight severities stay between 8 and 10, and the smallest is
-8, two points above the floor 6. The gate of the repository, in the horizon `todos` with 12 cards, also
-publishes worst = 8, and changing the seed of the laboratory (7, 2026, 999 983) does not alter the verdict. The
-rejection comes from a missing concern, and not from luck of the seed.
+**The complete card passes, with room to spare.** The eight severities stay between 8 and 10, and the smallest is
+8, two points above the floor 6. Changing the seed (7, 2026, 999983) does not alter the verdict. A rejection comes
+from a missing safeguard, not from the luck of the seed.
 
-**Each concern removed brings down exactly the agent that charges for it.** In the eight lines of the sweep, the
-set of rejected agents always has **one** element, and it is always the corresponding agent. Without an intact
-trail $A_5$ is rejected (severity 2), without an exit clause $A_8$ is rejected (4), without a property
-test $A_1$ is rejected (3). The other seven stay intact. The panel is not a mean score that
-dilutes, but a logical "and" that locates the failure.
+**Each safeguard removed brings down exactly the attack that charges for it.** In the eight lines of the sweep,
+the set of rejecting attacks always has **one** element, and it is always the corresponding one. Without an intact
+trail $A_5$ rejects (severity 2), without an exit clause $A_8$ rejects (4), without a property test $A_1$ rejects
+(3). The other seven stay intact. The panel is not a mean score that dilutes, but a logical "and" that locates the
+failure.
 
-**Removing two concerns rejects the whole card.** With A5 and A6 removed, the severities fall to 2
-and 3 and the card is rejected, with 8 rejections in 8 defective cards and the smallest global severity at
-2. Compare with the real gate. The command `gates --horizon h3 --defect h3.voos23` returns
-`G6 reprovado banca A1-A8 com piso 6 e pior 2`. The laboratory reproduces the worst = 2 by removing the
-governance concern and the fairness one.
+**Removing two safeguards rejects the whole card.** With the governance and fairness safeguards removed, the
+severities fall to 2 and 3 and the card is rejected, with 8 rejections in 8 defective cards and the smallest
+global severity at 2.
 
-**System 1 respects the interval.** The triage returns 0,06 and 0,94, sum 1,0000, and zero values
-outside between 1% and 99%. The interval exists for a practical reason. A probability of 0% would not be
-scored by a proper rule nor would it be corrected by the scoreboard. The limit separates a forecaster from a
-dogmatic assertion.
+**The triage respects the interval.** The last line returns 0.06 and 0.94, sum 1.0000, and zero values outside
+1% to 99%.
 
-**Divergence declaration.** The earlier text of this book speaks of "eight tracks and an orchestrator M15". The
-text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
-(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
-`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
-because that is the name of the code. The laboratory of this book measures the
-severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
-running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
-values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarsely. The line of this chapter, from the instrument of the axis (`labs --resolution`):
+A fuller System 1 sorts a card into one of six declared themes with a suffix tree, and the same contract holds on
+every line. Run it with `cargo run --release --bin labs -- --s1`.
 
 ```text
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
+== System 1 :: deterministic triage of cards ==
+suffix tree: 129 suffixes indexed over 6 declared themes
+category=queue probability=0.9117 products=[0.9117, 0.0177, 0.0177, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
+category=causal probability=0.9297 products=[0.0141, 0.9297, 0.0141, 0.0141, 0.0141, 0.0141] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9297 | sum 1.0000 | outside [0.01;0.99] 0
+category=tail probability=0.9117 products=[0.0177, 0.0177, 0.9117, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
+category=calibration probability=0.9415 products=[0.0117, 0.0117, 0.0117, 0.9415, 0.0117, 0.0117] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9415 | sum 1.0000 | outside [0.01;0.99] 0
+category=fairness probability=0.9217 products=[0.0157, 0.0157, 0.0157, 0.0157, 0.9217, 0.0157] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9217 | sum 1.0000 | outside [0.01;0.99] 0
+category=other probability=0.8718 products=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.8718 | sum 1.0000 | outside [0.01;0.99] 0
 ```
+
+The sum is 1.0000 and no probability falls outside [0.01; 0.99]. The last line is an input that matches no theme:
+it falls into `other` with 0.8718, the declared prior, not a guess. The limits are worth stating. The vocabulary is
+closed, the matching is lexical and does not understand negation, and this is triage, not judgement. Judging
+belongs to System 2. Run it with `cargo run --release --bin labs -- --s2`.
+
+```text
+== System 2 :: deliberation over the hypergraph ==
+declared graph: 8 nodes, 6 tree edges, 2 graph edges, 5 hyperedges | validation ok
+nodes that no lens covers: ["f1.code-synthesis"]
+greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution -> f1.code-synthesis (value 1.000, node without lens true)
+board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
+stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
+inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
+R axis: loss of the aggregate 46.24 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis without oscillation: loss 0.00 min -> R0-agregada
+```
+
+- **The greedy agent stops at the queue** with value 0.600. Tree search goes further and reaches value 1.000, at a
+  node that no lens covers, which is itself a finding: the deliberation found the hole in the map.
+- **The belief** points at governance with probability 0.9205, and entropy 0.4324 says the belief is concentrated.
+- **Directed stress** reaches the rejection with 1 attack; the fixed order needs 5 to reach the same one. Learning
+  saved four attacks and changed no verdict.
+- **Metropolis** on a Beta(4, 8) gives a chain mean of 0.3346 against the closed form 0.3333, with acceptance 0.676.
+- **The grain:** with oscillating demand, the coarse question loses 46.24 minutes, more than the 12.00 minutes of
+  margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
 
 **Exercises.**
 
-1. *(Concept)* A database has one row per medical appointment, and the question is about patients. Which track must
-   block the analysis, and with which test?
-2. *(Concept)* Draw the attack of the panel for a credit triage model. Which crisis would violate the
-   exit clause? Which group would come to pay if the metric were inverted?
-3. *(Computation)* The complete card has smallest severity 8 and floor 6. What is the maximum number of agents that can
-   fall to the low track (2 to 4) without rejecting the card? Justify with the definition of $\bigwedge$.
-4. *(Laboratory)* Implement calibration by simulation (SBC) for a Beta-Binomial model: draw the
-   parameter from the prior, simulate the data with it and run the sampler. Check that the rank of the true
-   value among the posterior samples is uniform. Then introduce an error in the sampler and see the
-   histogram stop being flat.
-5. *(Concept)* Give one example of each of the three modes of degradation of a model in use: covariate
-   drift, label drift and concept drift; give also an example of the fourth situation, which
-   is not a degradation. Say the right answer for each one.
-6. *(Concept)* Why must the answer of System 1 be deterministic (repeated input,
-   equal probability)? Relate it to the fixed seed of Chapter 1.
+1. *(Concept)* A database has one row per medical appointment, and the question is about patients. Which
+   specialist must block the analysis, and with which test?
+2. *(Concept)* Draw the attack of the panel for a credit triage model. Which crisis would violate the exit clause?
+   Which group would come to pay if the metric were inverted?
+3. *(Computation)* The complete card has smallest severity 8 and floor 6. How many attacks can fall to the low range
+   (2 to 4) without rejecting the card? Justify with the definition of $\bigwedge$.
+4. *(Laboratory)* Implement calibration by simulation (SBC) for a Beta-Binomial model: draw the parameter from the
+   prior, simulate the data with it and run the sampler. Check that the rank of the true value among the posterior
+   samples is uniform. Then introduce an error in the sampler and watch the histogram stop being flat.
+5. *(Computation)* A classifier was trained where the base rate was 10% and now serves a population where it is
+   30%. A case receives 0.20 from the old model. What is the corrected probability? Which assumption must hold for
+   the correction to be right?
+6. *(Concept)* Give one example of each mode of degradation of a model in use (covariate drift, label drift and
+   concept drift) and an example of the fourth situation, which is not a degradation. Say the right answer for
+   each one.
+7. *(Concept)* Why must System 1 be deterministic (repeated input, equal probability)? Relate it to the fixed seed
+   of Chapter 1. Why, in contrast, must the belief of System 2 never reach 0% or 100%?
 
 **Summary.**
 
-- Eight tracks, each linked to a way of erring, plus an orchestrator that attacks; the agents exchange
-  structured cards, never free text, and nobody approves the assignment they produced.
-- The cycle has six stages, and the return loop leads to the stage that failed, instead of the beginning.
-- Approval is a logical "and" of the eight severities against the floor 6; each missing concern brings down the
-  agent that charges for it.
-- System 1 deterministic triage with probabilities between 1% and 99%; System 2 deliberates over the
-  hypergraph.
-- An artifact with a declared weak track is worth more than a uniform artifact without an admitted gap.
+- Eight specialists, each linked to a way of erring, plus an orchestrator that attacks; nobody approves the work
+  they produced.
+- The cycle has six stages, and a rejection returns to the stage that failed, not to the beginning.
+- Approval is a logical "and" of the eight severities against the floor 6; each missing safeguard brings down the
+  attack that charges for it.
+- A moved base rate is corrected on the logit; a wrong slope is not. SBC checks the inference where the truth is
+  known by construction.
+- System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
+  bounded belief state, directed stress and Metropolis, each tested against a null.
 
 ## Chapter 14. The iron contract: cards, prohibitions, invariants and gates
 
@@ -3639,8 +3034,8 @@ manager reads it as the answer to his question, *"should I open a second room?"*
 anywhere. In 100 hurried decisions, a respectable part dies from a right account on the
 wrong question, and not from a wrong account.
 
-**How the contract locks that.** The domain package comes to carry a mandatory field, the
-`pergunta_do_decisor`, with three parts in order: **who decides**, **which action the decision changes**
+**How the contract locks that.** The domain package carries a mandatory field, the
+`decision_maker_question`, with three parts in order: **who decides**, **which action the decision changes**
 (copied literally from the decision field of the package) and **the question that decision uses**,
 ending in an interrogation mark. The validator is the code, which refuses generic text without who decides and rejects an action
 different from the one of the package. After that, "the question the model answers is the one the decider asked"
@@ -3668,34 +3063,34 @@ questions.
 
 | Field | Question |
 | --- | --- |
-| `processo_gerador` | Which hidden mechanism generates the data, written in a simulable way, and in which layer can the claim fail? |
-| `nao_linearidade` | Is the result a non-linear function of something that varies? Compare $f(\mathbb{E}[X])$ with $\mathbb{E}[f(X)]$; is the dynamics additive or multiplicative? |
-| `unidade_e_margem` | What is the de facto independent unit, and was the margin computed with it? |
-| `fisica_do_ruido` | What noise is this (gaussian or with jumps)? Are there absorbing states? Is the agent passive or does it deform the world? |
-| `escada_causal` | At which step of Pearl is the statement, with which identification strategy and which untestable premise? |
+| `generating_process` | Which hidden mechanism generates the data, written in a simulable way, and in which layer can the claim fail? |
+| `nonlinearity` | Is the result a non-linear function of something that varies? Compare $f(\mathbb{E}[X])$ with $\mathbb{E}[f(X)]$; is the dynamics additive or multiplicative? |
+| `unit_and_margin` | What is the de facto independent unit, and was the margin computed with it? |
+| `noise_physics` | What noise is this (gaussian or with jumps)? Are there absorbing states? Is the agent passive or does it deform the world? |
+| `causal_ladder` | At which step of Pearl is the statement, with which identification strategy and which untestable premise? |
 
-The real header of $H_0$ in a real domain, abbreviated:
+The header of a real claim about a bank call centre, abbreviated:
 
 ```yaml
-alegacao: >
-  "Escalando cada meia hora pelo Erlang C sobre a taxa média do histórico, a central atende
-  82% das chamadas em até 20 s, com espera média de 10 s, todo dia."
-cabecalho:
-  nao_linearidade: >
-    O nível de serviço do Erlang C é côncavo e despenca perto da saturação: aplicada à taxa
-    real de cada dia do cofre, a própria fórmula da alegação dá em média 57%, não 82%.
-  unidade_e_margem: >
-    A unidade independente é o DIA: as chamadas de um dia compartilham a taxa e a fila.
-    n_efetivo = 81 dias de cofre, não 2,65 milhões de chamadas.
-  fisica_do_ruido: >
-    A demanda diária NÃO é Poisson: dispersão Var/média = 273 (Poisson: 1).
-  escada_causal: >
-    Degrau 2 (intervenção): as regras de escala são do(escala) simuladas sobre a demanda real.
-    Premissa não testável: a demanda não reage à escala.
+claim: >
+  "Staffing each half hour by Erlang C on the historical mean rate, the centre answers
+  82% of the calls within 20 s, with a mean wait of 10 s, every day."
+header:
+  nonlinearity: >
+    The Erlang C service level is concave and collapses near saturation: applied to the real
+    rate of each day of the vault, the claim's own formula gives 57% on average, not 82%.
+  unit_and_margin: >
+    The independent unit is the DAY: the calls of one day share the rate and the queue.
+    Effective n = 81 days of vault, not 2.65 million calls.
+  noise_physics: >
+    Daily demand is NOT Poisson: dispersion Var/mean = 273 (Poisson: 1).
+  causal_ladder: >
+    Step 2 (intervention): the staffing rules are do(staffing) simulated on the real demand.
+    Untestable premise: demand does not react to staffing.
 ```
 
-Each module of the course adds questions to the five of the header. The card of the evidence asks for the base rate, the
-two likelihoods and the posterior computed in two ways, in odds and in a tree of 10 000 cases, which
+Other cards add questions to the five of the header. The card of the evidence asks for the base rate, the
+two likelihoods and the posterior computed in two ways, in odds and in a tree of 10,000 cases, which
 have to coincide. The card of the causal graph begins with the step. The card of the model critique closes the series and says in which
 item each previous card enters.
 
@@ -3727,7 +3122,7 @@ temperature $T$:
 $$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
 
 For high barriers, that time has almost no memory. Whoever waited a long time is not closer to the jump.
-Looked at only in the jumps, however, the noise looks like a push. In 591 jumps simulated in the course, the noise just
+Looked at only in the jumps, however, the noise looks like a push. In 591 simulated jumps, the noise just
 before the jump pointed in its direction in 99% of the cases, with no external force at all. Looking for the cause of a
 jump is a selection error; looking for the cause of a change in the frequency of the jumps is not.
 
@@ -3743,52 +3138,56 @@ locks. The first four are required from the beginning; the fifth entered with th
 | $\Phi_4$ Ecological scope | Judge the decision in the environment in which it will operate, with a scope term and an objective exit clause | A recommendation without a validity date |
 | $\Phi_5$ Resolution of the question | The declared action has to be at the same grain as the independent unit: with the datum at the day or coarser, aggregate resolution (R0) is rejected | An action by day with an account at the aggregate. A unit finer than the day stays outside this lock, and that is declared |
 
+**Testing a property, not an example.** An ordinary test checks one case: with these inputs, this output. A
+**property test** states a rule that must hold for every input, and lets the machine search for a counterexample.
+"The margin of a proportion is never negative and never larger than one half", "the wait of a queue never falls
+when the service gets slower", "running the load twice gives the same table". A generator draws thousands of
+random inputs with a declared seed; when one breaks the rule, the tool shrinks it to the smallest input that still
+breaks it, and that small case is usually the bug. The property is a claim about the code, written in the form of
+a severe test: it could fail on any of the inputs, and it is worth something only because it did not.
+
 **The funnel of four filters.** A system that simulates every hypothesis it meets collapses from cost and from
-inflation of false discoveries. The funnel, the pruning by value of information and the counter of attempts live in
-Rust, in `crates/stochology-core/src/funil.rs`, with 17 tests. The four filters refuse by the header (without a
+inflation of false discoveries. The funnel works with two companions: pruning by value of information and a counter
+of attempts. The four filters refuse by the header (without a
 question, without a generating process, without a unit or null, without an action with an exit). The pruning cuts when the quota of the value
-of information cannot cross the threshold: with $C/L = 0{,}1$ the quota is worth 0,0090 at $p = 0{,}001$ and the test of
-0,05 is pruned, while at the threshold $p = 0{,}10$ the quota is 0,9000. Finally, the counter closes the account in the form
-`K = 3 tentativas (F1 1, F2 0, F3 0, F4 1); aprovadas 1; versao final: v3`. The declared limit is that the quota
-is the expected value of perfect information, exact in the model of two acts and two states. Each front organises
+of information cannot cross the threshold: with $C/L = 0.1$ the quota is worth 0.0090 at $p = 0.001$ and the test of
+0.05 is pruned, while at the threshold $p = 0.10$ the quota is 0.9000. Finally, the counter closes the account: how many specifications were tried, at which filter each one fell, how
+many were approved and which one is final. Its limit is declared: the quota is the expected value of perfect
+information, exact only in the model of two acts and two states. Each front organises
 itself as a funnel, and in it most of the weak hypotheses fall before touching heavy simulation.
 
 1. **Value of information.** The hypothesis that would not change any decision even with a perfect answer is cut. The
    standard log is "pruned by Crisonomy: curiosity without operational use".
 2. **Topological pruning and unit.** By d-separation, every node that stays outside the Markov blanket of the
    variable of interest is cut, including the colliders that, if conditioned on, would create Berkson's bias. The claim
-   that the data do not identify is also cut, or the one whose effective size, counted on the independent unit
-   by $F_2$, stays too small to conclude. The data contract also checks an `ausencia` block for the
-   mechanism of the absence: MCAR, MAR, MNAR or not declared, with the columns that the classification covers and the analysis
-   of sensitivity required when the absence may depend on the value of the variable. Absence without classification
-   is refused; in the three contracts of the real $H_1$ and in the 18 tables of $H_{2g}$ the rule is vacuous today, and it starts
-   to bite on the day one appears.
+   that the data do not identify is also cut, or the one whose effective size, counted on the independent unit, stays too small to conclude. The data contract also classifies the mechanism of
+   every absence (MCAR, MAR, MNAR or not declared), with the columns the classification covers and a sensitivity
+   analysis when the absence may depend on the value itself. An absence without classification is refused.
 3. **Severe test against the null.** If the alleged pattern already appears in the null model, or in a reference with a single
-   parameter such as the base rate, the research closes there. When the simulation is expensive, $F_4$ makes that test
-   first in a cheap emulator.
+   parameter such as the base rate, the research closes there. When the simulation is expensive, that test runs first in a
+   cheap emulator.
 4. **Heavy inference, lenses and panel.** Only the remainder receives the expensive treatment.
 
 **Worked case: the identifiability of $R_0$.** At the beginning of an epidemic, the cases grow like
 $\exp((\beta - \gamma)t)$, and the data determine the **difference** $\beta - \gamma$, not the ratio
 $R_0 = \beta/\gamma$. With 25 days of simulated cases, in which the truth is $R_0 = 2$, the compatible values
-go from **1,38 to 5,90**, and the predicted final size goes from **50% to 100%** of the population. With 45 days, $R_0$
-stays between **2,00 and 2,24**, but by then the curve has already doubled. Taking the duration of the infection from other studies narrows
-$R_0$ to **1,81 to 2,11**. That is not a defect, as long as one declares that the margin became the one of the source.
+go from **1.38 to 5.90**, and the predicted final size goes from **50% to 100%** of the population. With 45 days, $R_0$
+stays between **2.00 and 2.24**, but by then the curve has already doubled. Taking the duration of the infection from other studies narrows
+$R_0$ to **1.81 to 2.11**. That is not a defect, as long as one declares that the margin became the one of the source.
 
 **The automatic gates.** No delivery is consolidated without passing the gates on a clean machine. The
 agents and the $\Phi$ have already been formalised; the gates **repeat the work and compare**. A repeated input has
-to produce an identical output, and a planted defect has to be detected. The binary
-`gates` implements seven.
+to produce an identical output, and a planted defect has to be detected. Seven gates make a complete set.
 
-| Gate | Track | What it verifies |
+| Gate | Who answers | What it verifies |
 | --- | --- | --- |
-| G1 | $\mathcal{M}$ | Determinism: the Merkle root of the second run is identical to the one of the first |
-| G2 | $F_1$ | Fixed seed declared in every card |
-| G3 | $F_1$ | Declared scope: only a simulable artifact |
-| G4 | $F_1$/$F_7$ | Invariants $\Phi_1$–$\Phi_4$ and the type III lock |
-| G5 | $F_5$ | SHA-256 trail intact **and** tampering detected |
-| G6 | $\mathcal{M}$ | Adversarial panel $A_1$–$A_8$ with the floor |
-| G7 | $F_8$ | Declared exit clause and $A_8$ above the floor |
+| G1 | Orchestrator | Determinism: the Merkle root of the second run is identical to the one of the first |
+| G2 | Code | Fixed seed declared in every card |
+| G3 | Code | Declared scope: only a simulable artifact |
+| G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock |
+| G5 | Governance | SHA-256 trail intact **and** tampering detected |
+| G6 | Orchestrator | Adversarial panel $A_1$–$A_8$ with the floor |
+| G7 | Decision | Declared exit clause and $A_8$ above the floor |
 
 Two details make the set worth more than the sum. G5 does not verify only that the chain is intact. It
 **tampers on purpose** and requires the verification to fail with the tampered chain. G1, in turn,
@@ -3799,8 +3198,7 @@ compares two runs of the declared horizon. A gate that never fails is not a gate
 ### Step 3 — Hands on
 
 The laboratory validates a complete card and a card with one planted defect at a time, printing the failures by
-gate, in the spirit of `gates --defect`. Code in `crates/stochology-book/src/ch14.rs`; output measured with
-`cargo run --release --bin labs -- --chapter 14`:
+gate. Run it with `cargo run --release --bin labs -- --chapter 14`.
 
 ```text
 == Chapter 14 :: the iron contract ==
@@ -3840,90 +3238,10 @@ to improve.
 an edge to a ghost node, a deductive cycle and a hyperedge with a single member. That is on purpose. A lock that only
 exists in one chapter is a lock that nobody uses.
 
-**The property test and the seed.** Ten thousand simulated cards with margin $1{,}96\sqrt{p(1-p)/n}$ for
-$n$ between 100 and 999 and $p$ between 0,01 and 0,99 give **zero violations**, with margins between 0,00617 and 0,09798. The
+**The property test and the seed.** Ten thousand simulated cards with margin $1.96\sqrt{p(1-p)/n}$ for
+$n$ between 100 and 999 and $p$ between 0.01 and 0.99 give **zero violations**, with margins between 0.00617 and 0.09798. The
 confidence interval is never negative nor greater than a half. The two validators run over the declared
 seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
-
-**The pipeline by horizon.** In the repository each horizon has its own pipeline. $H_0$ applies $\Phi_1$–$\Phi_4$, the runs $H_{2b}$ to $H_{2g}$ apply five criteria and $H_3$ applies seven. Each `portoes.py` repeats the run, compares the cryptographic digests and exits with 0 or 1; the seven of this chapter
-are the ones of the `gates` binary. (The `portoes.py` of each front was retired on 2026-10-16 and lives in the commit
-`1bfec905`; the gate stays in the binary.)
-
-**Divergence declaration.** Two accounts of this chapter diverge between the sources, and both stay
-recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
-and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
-the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
-book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
-count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
-repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and this laboratory measures exactly
-that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
-gate G4, in the horizon `todos`, reproduces here.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarsely. The line of this chapter, from the instrument of the axis (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -3944,12 +3262,14 @@ chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chap
 **Summary.**
 
 - The card is a closed list of questions; five are mandatory in every payload, and the field
-  `pergunta_do_decisor` locks the type III error.
+  `decision_maker_question` locks the type III error.
 - The four prohibitions and the five invariants are locks, and not recommendations; $\Phi_5$ is the newest and the narrowest.
 - The funnel cuts cheaply before spending expensively: value of information, topological and unit pruning, severe test
   against the null, and only then heavy inference and panel.
-- The `gates` binary implements seven gates, with exit code 0 or 1, and a gate that never
-  fails is not a gate.
+- Seven gates repeat the work and compare, each with a pass or a fail and no third outcome, and a gate that
+  never fails is not a gate.
+- A property test states a rule that must hold for every input and lets the machine hunt for the
+  counterexample.
 
 ## Chapter 15. The vault, the cryptographic seal and the audit against itself
 
@@ -3981,9 +3301,8 @@ show the content now, but afterwards nobody opens the envelope without it showin
 **The vault.** Imagine a bank that receives a payment slip from each client. One day the bank decides to build a
 "vault outside time": a folder with the data of the next three months, which no analyst may open. The
 model is built with the past; when it is finished, someone opens the vault and runs the model against data it
-never saw. Opening the vault costs the one thing it had: surprise. In the research, when a vault has already been
-opened and the model needs a correction, the correction is only worth anything tested in a **new vault**, which nobody saw. There were
-three vaults until the calibration of the Toronto prisons was right.
+never saw. Opening the vault costs the one thing it had: surprise. When a vault has already been opened and the
+model needs a correction, the correction is worth something only when tested in a **new vault**, which nobody saw.
 
 **The forecast diary.** Every probabilistic forecast issued stays recorded in a continuous ledger, with
 the source, the filter, whether the system can influence the outcome, how many factors the justification has and the
@@ -3996,118 +3315,83 @@ limit, each forecaster accumulates a record that can be charged.
 ### Step 2 — The rule of the game
 
 **The risk of scale is epistemological.** When a system tests hundreds of hypotheses and specifications in
-parallel, the greatest risk is not technical; it is overfitting at industrial scale, the garden of forking
-paths walked by indefatigable machines. The plan imposes three mechanisms of containment.
+parallel, the greatest risk is not technical; it is overfitting at industrial scale, the garden of forking paths
+walked by indefatigable machines. Three mechanisms contain it: the sealed pre-registration with a counter of
+attempts, the vault outside time, and the forecast diary on a chained bus.
 
-**Pre-registration with hash and counter of attempts.** Before any agent accesses the test partition, the
-hypothesis is frozen with a hash. Every change of criterion, of test or of data is written in a declaration
-file, with its SHA-256 recorded **before** running. No rule was changed after seeing the result
-of the run to which it applied, but each new run was written knowing about the previous ones, and the corrections made
-after seeing results stayed recorded and **count in $K$**.
+**Pre-registration with hash and counter of attempts.** Before anyone touches the test partition, the hypothesis
+is frozen with a hash. Every change of criterion, of test or of data is written in a declaration, with its SHA-256
+recorded **before** running. The rule does not forbid learning from a failure: a new run may be written knowing
+the previous ones. What it forbids is hiding that it was. Every correction made after seeing a result stays on
+record and **counts in $K$**, the number of specifications tried for the question, and the final report is obliged
+to declare it.
 
-The system keeps a counter $K$ of specifications tried per question. Every failed attempt stays
-recorded, and the final report is obliged to declare $K$. The plan goes further and asks that $K$ penalise
-complexity, by the minimum description length (MDL) or by the Occam factor, together with the correction for
-multiple comparisons. In the research, $K$ was declared, but **none of those penalties was applied**. It was
-because of that counter that the respecification of the $H_2$ domains stopped at $K = 3$, and the next step was to seek
-new data. The counter per domain does not record, however, that the gate was tried in seven runs, and
-no correction for that was applied. The background audit after that step measured the **honest** $K$ of the
-$H_2$ gate: **38 distinct tests** (with the band from 32 to 72 according to the counting criterion), and with
-Bonferroni $H_{2g}$ keeps the four areas of then, with the sets $\hat S$ shrinking.
+Counting honestly is harder than it looks. In a real search for causal structure across twelve domains, the
+counter per domain stopped at $K = 3$, and the search stopped there because of it. But the same transfer gate had
+been tried across seven runs, and the counter per domain did not see that. Recounted across the whole gate, the
+honest number was **38 distinct tests**, within a band from 32 to 72 according to the counting criterion. Both
+numbers are right; they count different things. The lesson is that $K$ must be counted at the level at which the
+claim is made. With a Bonferroni correction at $K = 38$, the conclusion survived, with smaller sets of causes.
 
-**The vault outside time.** The future temporal partition stays under the exclusive custody of the lifecycle agent
-($F_3$). No modelling agent reads it during development; it is opened a single time to score
-calibration and verify the absence of leakage. The rule is hard and has a consequence. When a vault has already been
-opened and the model needs a correction, the correction is only worth anything tested in a new vault. $H_3$ did that three
-times: with the 2023 flights, with the Toronto prisons of 2020–2021 and with the traffic stops of Rhode
-Island.
+A counter alone only makes the attempts visible. To make them cost something, $K$ should also penalise complexity,
+by the minimum description length (MDL) or by the Occam factor, together with the correction for multiple
+comparisons. A model that needed many tries and many parameters to fit has said less about the world than one that
+fitted at the first attempt with few.
 
-**The forecast diary and the bus.** Each agent that issues probabilistic forecasts records them in a
-continuous ledger, restricted to the interval $[1\%, 99\%]$. Agents whose Brier score loses to the
-base rate, or whose Kelly capital collapses, have their weight reduced by the orchestrator. The card bus is
-**chained by hash**: each message carries the hash of the previous one, and the trail cannot be rewritten without breaking
-the chain. An implementation lesson came early. In $H_1$, the score of the diary added into a single one the forecaster
-that appeared in different projects, and the error was corrected and declared in the README; the numbers of $H_1$
-published after that already come from the corrected version.
+**The vault outside time.** The future temporal partition stays in the exclusive custody of the lifecycle
+specialist. No one who builds models reads it during development; it is opened a single time, to score calibration
+and to verify the absence of leakage. The rule is hard and has a consequence: when a vault has been opened and the
+model needs a correction, the correction is worth something only when tested in a **new** vault. One real study
+opened three new vaults this way: the 2023 flights, the Toronto arrests of 2020–2021 and the Rhode Island traffic
+stops.
 
-**Risk opinions and the named officer.** The governance agent ($F_5$) issues a risk opinion for
-each project evaluated, including the ones that do not reach the decision. In the research there were **21**: 18 from $H_2$ and 3 from the
-real $H_1$. Four of them involve decisions about people: Law (rule of labour indemnity),
-Education (the STAR classes), Health (the RAND insurance experiment) and the LaLonde training programme.
+**The forecast diary and the bus.** Each forecaster records every probabilistic forecast in a continuous ledger,
+restricted to the interval $[1\%, 99\%]$. Forecasters whose Brier score loses to the base rate, or whose Kelly
+capital collapses, have their weight reduced. The bus that carries the cards is **chained by hash**: each message
+carries the hash of the previous one, and the trail cannot be rewritten without breaking the chain. The chain has
+its own failure modes. One real diary added into a single score a forecaster that appeared in different projects
+under the same name; the error was invisible in any single line and showed only when the scores were recomputed
+by project.
 
-The 21 opinions were signed on 15 October 2026, after reading a summary of them that highlighted the
-four that involve people. The signature stays in a separate record, in which each opinion is identified by the
-SHA-256 of the file at the moment of signing. The result files **were not rewritten**, so as not to change
-the outputs that the clean reproduction compares. The opinion of Law carries a factual caveat. The recommendation to
-adopt a 10% cutoff comes from a decision and a cost **invented** in $F_1$, and it is not policy advice.
+**Risk opinions and the named officer.** The governance specialist issues a risk opinion for each project
+evaluated, including the ones that never reach a decision, and a **named human officer** signs it. The signature
+is recorded apart from the result files, with each opinion identified by the SHA-256 of the file at the moment of
+signing, so that signing does not rewrite the outputs a clean reproduction compares. An opinion may carry a factual
+caveat that the signature does not remove: a recommendation derived from a decision and a cost that were
+**assumed** for the exercise is not policy advice, and the opinion has to say so.
 
-The signatures are nominal. Each opinion carries the short name of the officer (**sil**) and the cryptographic digest of the file, in `governance/ASSINATURAS.md`.
+**The limit: the auditor is a stakeholder.** An audit authorised by whoever is audited has limited value. The named
+officer answers the questions an audit has to answer (who decided to use it, who approved it, who watches the
+scoreboard, who switches it off), but naming an officer **does not make the audit independent**. What an honest
+audit can do from inside is record what it **could not look at** and which affected groups were heard. In seven
+real decisions that involved people (cutting a benefit by 10%, reducing class sizes, replacing free care with a
+copayment, judging a training programme against survey controls, and three review marks on police data streams),
+**none of the seven affected groups was heard**, and an elicitation with human experts was never done. A signature
+on a summary is worth what it is: the declaration of whoever runs the work that they read a summary.
 
-**The limit: the auditor is a stakeholder.** The opinions were signed by whoever runs the programme. An
-audit authorised by whoever is audited has limited value. The named officer answers the question that
-an audit has to answer (who decided to use it, who approved it, who watches the scoreboard, who switches it off), but
-naming an officer **does not make the audit independent**. In the direction that an audit requires, the programme
-recorded the points that the audit **could not look at** and which affected groups were heard. The record
-declares that, in the seven decisions that involve people (cutting the benefit by 10%, reducing the STAR
-classes, replacing free care with copayment, comparing the NSW training with CPS controls and the
-three review marks of the prison streams), **none of the seven affected groups was heard**. There is no record in the
-repository of consultation, interview, panel or consent. The cheapest and
-most obvious step of the list is missing as well: the elicitation with human specialists.
+**Auditing your own claims.** Governance also serves to mark the points **not** measured, and then to measure them.
+The method is the one of every severe test, turned inward: list the claims the work sustains but never tested,
+write for each one a declaration with a hash **before** measuring, measure, and report the result with its limits.
+A change of criterion after seeing the result enters as a new declaration and counts in $K$. Four such checks show
+what the method finds.
 
-**The background audit: what was assumed and what was measured.** Governance also serves to mark the points
-**not** measured, and to measure them afterwards. The research turns against itself in a background audit. Ten
-points that the text sustained and that had never been put to the test became fronts of work, to which were
-added, later, the extensions (rare event, health, card and contract) and the front of human elicitation, which
-waits for people. Each front repeats the rule of the horizons: the declaration with hash comes **before** running, the
-result is reported with the limits, and a change of criterion after seeing the result enters as a new
-declaration and counts in the number of attempts.
+| The assumption | What was measured | Result |
+| --- | --- | --- |
+| Whoever abandons a queue calls back with probability 0.6 | A quasi-experimental design in a real support desk, 1999 | **0.145** [0.132; 0.157], four times less than assumed |
+| The tolerance of the calibration error can be fixed at 0.03 | The null simulated with the same forecasts and the same $n$ | None of the six binary vaults passes the rule that depends on $n$ |
+| ICP may treat every row as independent | Clustered tests and block permutation, with 16 instants per volunteer and 80 schools | Pharmacology survives intact; Education drops out |
+| A method that checks every bridge catches errors that common practice lets through | A blind pilot of 12 cases, two arms | A tie at the ceiling: 8 of 8 defects found in both arms, so the claim is not supported |
 
-| Point | The assumption | What was measured | Result |
-| --- | --- | --- | --- |
-| 1. Central thesis | The architecture catches errors that common practice lets through | Blind pilot of 12 cases, two arms | Tie at the ceiling: 8 of 8 defects in both, 0 false alarm in the 4 clean cases — the thesis does not stay supported |
-| 2. Independence | The approved outputs do not depend on who wrote them | Four results reimplemented only from the specification | All agree; zero errors in the original; several choices that the specification does not fix coincide with those of the author, three of them only in STAR (weak evidence) |
-| 3 and 4. Multiplicity | The $H_2$ gate was tried few times, and nothing was adjusted afterwards | Inventory of the attempts and of the vault openings | $K = 38$ distinct tests (32 to 72); with Bonferroni $H_{2g}$ keeps the 4 areas of then and the sets shrink |
-| 5. Priors | The literature priors were not checked with specialists; the control run had no declared tolerance | Three runs in 33 domains (package, literature and weak) and the equivalence band of 0,05 sd | Five domains change status or action with the literature one and two with the weak one; the verdict stops being conditional — maximum deviation of **0,0071 sd** and **33 of 33** domains identical |
-| 6. Performative loop | Whoever abandons the queue calls back with probability 0,6 | Quasi-experimental design in a real support desk, 1999 | **0,145** [0,132; 0,157] — four times less than the declared one |
-| 7. Dependent rows | ICP assumes independent rows, and there are 16 instants per volunteer and 80 schools | Clustered Wald and block permutation; replication of Genetics with 40 new genes and null rate by permutation ($B = 999$) | Pharmacology survives intact, Education drops out; Genetics replicates in one validated gene, with $p = 0{,}001$ of the null rate |
-| 8. Calibration | The tolerance of the ECE can be fixed at 0,03 | Null simulated with the same forecasts and the same $n$ | None of the six binary vaults of $H_3$ passes the rule that depends on $n$; by the secondary rule, the picture does not change |
-| 9 and 10. Scale and data | The funnel scales and the graph measures knowledge | 329 domains in batch; two new health domains | Two pruned in the severe test; 327 up to the end; 26 634 nodes, of which 6 494 are concept nodes |
-| Rare event | A forecaster of a rare event is useful for deciding when it has good calibration | Brier decomposition in three vaults: indomethacin, COVID and Rhode Island | No pathway wins in the three: only in Rhode Island does RES − REL stay above zero (+2,74643e-4 in the logistic, +3,11655e-4 in the ranking), and the Brier skill stays at +0,018629 and +0,017952, below the declared +0,05; in COVID the AUC is 0,7685 and the skill is −0,020853 |
-| Health | The circle that Lab 0 opened closes with real health data, in an open mirror | PhysioNet/CinC Challenge 2019 (early sepsis) in the PhysioNet mirror; the funnel of $H_{2g}$ ran end to end without a single line changed, with the vault in the second hospital system | The effect exists and is precise ($\beta = 0{,}0388$ in log-odds ratio per breath per minute, 90% CI 0,0257 to 0,0523), but the invariance does not: 0 of 512 accepted subsets, $\hat S = \emptyset$, and G3 fails; the skill in the vault is +0,00568 and the recorded decision rate is 8,4% in the admissions of one system and 3,9% in those of the other |
-| Card and contract | The question the model answers is the one the decider asked; the data contract does not say why the datum is missing | Mandatory field `pergunta_do_decisor` in the domain package and `ausencia` block in the contract of $F_2$ | The two fields enter validated in the code; in the three contracts of the real $H_1$ and in the 18 tables of $H_{2g}$ the rule of the absence is vacuous today and no published number changes |
-| Human elicitation (SHELF) | The simulated prior would be replaced by a panel of specialists | Protocol of the panel and six written forms; criterion of $K = 2$ fixed | Nothing was elicited: no interview, no corrected forecast and no signed decision line — the front has only the instrument |
-
-**Retirement note.** The artifacts of the rare event, health and scale extensions left the tree on 2026-10-16 for not
-sustaining a central result of the theory; the numbers above stay recorded here, and the material comes back with `git checkout 1bfec905 -- fundo/p09-escala-dados fundo/p10-saude fundo/p11-eventos-raros`.
-
-Three of those results tighten the reach authorised by the previous chapters. The loop of 0,6 that $H_3$
-corrected is about four times the measurement of a real case. The tolerance of 0,03 of the calibration error is greater
-than the noise in all the large vaults, and none of them passes the rule that depends on $n$. And the transfer gate of
-$H_2$ depends on which version of each choice counts. The area of Education does not survive the
-correction of clustering, and what sustains the third area now is the replicated Genetics. **No published number fell because of an error of account; the audit narrows the authorised reach of those numbers.**
-
-The open questions have names. The elicitation with real human specialists, because the audit
-measured the sensitivity to the priors and that does not replace a panel. The protocol and the six forms are
-written, with the criterion of $K = 2$ ready, and **no interview was done**. The null rate of the validation by
-intervention of Genetics, which decides with a single gene in 27, came out at $p = 0{,}001$, the floor of 999
-draws; the resolution stays open there, and not the $p$. And the service time and the patience of the
-clients of the support desk, which the database does not bring and which remain assumed.
-
-The limit of the auditor being a stakeholder also stays, and the audit did not resolve it. One of the steps it
-proposes is that whoever signed rereads the 21 signed opinions in full, one by one, and confirms or withdraws
-the signature recording that they read the whole text. The form of rereading of the 21 lines exists, with the
-hashes checked one by one (**21 of 21 match**), and it is **blank on purpose**. Nothing was reread, nothing was
-confirmed and nothing was signed there. While that does not happen, the signature is worth what it is: the
-declaration of whoever runs the programme that they read a summary.
-
----
+**No published number fell because of an error of arithmetic; the audit narrowed the reach those numbers were
+allowed to claim.** That is the usual outcome of an honest self-audit, and it is why the audit is worth doing
+before anyone else does it.
 
 ### Step 3 — Hands on
 
 Two tasks: build a ledger chained by SHA-256 and prove that changing **one character** in the past
 brings the chain down; and compute the Merkle root of a batch of cards. The code brings SHA-256 written by hand,
-without dependencies, and checks the implementation against the known vectors. Code in `crates/stochology-book/src/ch15.rs`;
-output measured with `cargo run --release --bin labs -- --chapter 15`:
+without dependencies, and checks the implementation against the known vectors. Run it with
+`cargo run --release --bin labs -- --chapter 15`.
 
 ```text
 == Chapter 15 :: the vault, the seal and the audit ==
@@ -4148,110 +3432,35 @@ seal.
 seven for an altered version, the root changes in **7 of 7** cases. That is what allows sealing a whole batch with
 64 characters instead of 64 per file.
 
-**Divergence declaration.** Two points stay recorded. (1) The plan of the repository publishes, for the
-horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
-horizons, and a hash of the report `08e7c8f0...`; this laboratory uses a **own** chain of
-five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
-accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
-exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
-support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
-recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
-No old value was erased.
-
-**The grain of this question.** Every chapter has a decision with grain, and the R axis measures what it costs to ask
-coarsely. The line of this chapter, from the instrument of the axis (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
-
 **Exercises.**
 
 1. *(Concept)* Why does opening the vault twice destroy its value? Relate it to Mayo's severity,
    that is, to the requirement that a test could have given another result.
 2. *(Concept)* A colleague proposes rewriting the result files with the signature inside. Which property
    of the clean reproduction would that break?
-3. *(Computation)* The counter of the $H_2$ gate stopped at $K = 3$ per domain; the background audit measured $K = 38$
-   distinct tests in the set. Explain, in three sentences, why the two numbers coexist without either of them
+3. *(Computation)* The counter per domain stopped at $K = 3$; the recount across the whole gate measured $K = 38$
+   distinct tests. Explain, in three sentences, why the two numbers coexist without either of them
    being wrong.
 4. *(Laboratory)* Extend the laboratory to a bus in which each message carries the hash of the previous one
    **and** the index, and write a verifier that detects not only the alteration of content but also the exchange of
    order of two messages.
 5. *(Laboratory)* Compute the Merkle root of the batch of seven cards down to the intermediate roots and confirm
    how many hashes are recomputed when only the last card changes.
-6. *(Concept)* Propose a procedure to make the audit of the four opinions that involve people
-   less dependent on whoever runs the programme.
+6. *(Concept)* Propose a procedure to make the audit of decisions that involve people less dependent on whoever
+   runs the work.
 
 **Summary.**
 
 - Pre-registration with a hash is the only seal against adjustment after seeing the result. The hypothesis is frozen
   before, and the published hash is the seal.
-- The counter $K$ makes the attempts visible; the background audit measured $K = 38$ at the $H_2$ gate, against
-  the $K = 3$ per domain.
-- The vault outside time opens only once; corrections ask for a new vault, and there were three until the calibration was right.
+- The counter $K$ makes the attempts visible, and it must be counted at the level of the claim: 38 tests at the
+  gate against 3 per domain.
+- The vault outside time opens only once; a correction asks for a new vault.
 - The diary scores each forecaster with a proper rule, inside $[1\%, 99\%]$, and weighs the agents by the scoreboard; the
   chain of cards is chained by SHA-256.
 - Signed opinions name the officer of record, but they do not make the audit independent. None of the seven affected
-  groups was heard, and the form of rereading of the 21 opinions is blank on purpose.
+  groups was heard.
+- A self-audit applies the severe test to the work's own assumptions, and usually narrows the reach of its numbers.
 
 # Part V. The machine in the real world
 
@@ -6971,3 +6180,135 @@ with forgetting is lower because the width of the interval used here is that of 
 EWMA, and a wider interval (or a smaller discount) raises coverage above 97% — the parameter grid in
 `crates/stochology-book/examples/grade_ch04.rs` shows the effect. Both values remain recorded; neither was
 erased.
+
+### Chapter 5
+
+The course material and the H0 README publish, for these worlds, 9.3 min and 20.7
+min of mean wait, **8** and **25** patients in each 100 above 30 minutes, a margin of ±0.51 minute per day
+against ±0.07 per patient, and a halves null of 0.216 minute with predicted margins of 0.227 (per day) and
+0.047 (per patient). The instrument measures **9.1** and **19.6** minutes, **7.6** and **23.7** in each 100,
+a null of **0.201** minute with margins of **0.185** (per day) and **0.046** (per patient) in the constant
+world, and, in the oscillating world, a null of **0.742** with margins of **0.563** and **0.097**. The
+uniform world gives 13.8 min here against 12.3 in the material. The numbers are all in a close neighbourhood.
+The difference has two probable causes: the generator (the material uses NumPy's PCG64 with
+`SeedSequence(1909)`; here, SplitMix64 with seed 1909) and the start of each day, which here is always an
+empty queue. Jensen's identity, the sign of the toll and the conclusion about the unit of the margin depend on
+neither of them. No old value was erased.
+
+### Chapter 6
+
+The earlier text records, for the same Berkson simulation,
+a correlation of $+0.002$ in the population and $−0.669$ among the selected; the instrument measures
+$+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
+from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
+million ballots, 57.4% for Landon against the published 57%, and the equivalence of 7 people. No old
+value was deleted.
+
+### Chapter 7
+
+The earlier text records 73% of winners that "look
+better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
+$p = 0.04$ of the garden. The instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
+with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
+old garden swept more combinations — two outcomes, two sexes, more covariates, more optional stopping
+points —, and every extra combination pushes the false positive up; in the garden of models, the
+size of the validation and the range of predictors per candidate change the result, and here the winner still
+fails on fresh data (error 1.191 against 1.000). What does not change is the direction: the pre-registered
+test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by nine. The
+two values are recorded; none was deleted.
+
+### Chapter 8
+
+The earlier text records, for an example of 4,000 events, an overconfident
+forecaster that goes from Brier 0.1956 to 0.1851 with Platt, an honest expert at 0.1846 and a noisy forecaster
+that goes from 0.2154 to 0.2089. The instrument measures **0.1712 → 0.1559**, **0.1560** and
+**0.2119 → 0.1755**. The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
+old example —, and the order of magnitudes is the same: recalibration takes the confident one to the level of the
+honest one and leaves the noisy one behind. The ECE tolerance also diverges in level: H3 publishes a null q95 of
+0.0320 for $n = 1,488$, 0.0034 for 24,466 and 0.0035 for 104,489; here they come out **0.0425**, **0.0043** and
+**0.0037**. The difference is the distribution of the forecasts, which the README does not publish — with concentrated
+forecasts ($n = 1,488$, spread 0.4) the null q50 of this instrument is 0.0320, the number of the
+report. What matters does not change: the ECE noise moves with $1/\sqrt n$, and that is why a fixed tolerance
+is tight in a small vault and loose in a large one. No old value was deleted.
+
+### Chapter 10
+
+The earlier text records 35.8% of ruin for whoever stakes by their own
+history and 0% with Laplace. The instrument measures 36.8% of "all-in" and **0.00% of ruin** with
+any of the rules. A declared lock explains why. Kelly is limited to $f \le 1$ (one does not
+stake more than one has), and with $f = 1$ a trader who earns 1% per week and loses at most
+half per loss needs seven consecutive extreme events to fall below $10^{-6}$, and those
+events do not happen in 1,000 weeks with chance 0.004. The old value is recorded. The two numbers measure
+the same thing, with different leverage ceilings. And the drag also diverges from the course script.
+The table of five rules in Chapter 11 uses a tail model of its own, and the two sets of heights
+do not coincide; both are reported.
+
+The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
+$3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
+in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) **is not reproduced** by this instrument, because, with
+the parameters calibrated by those two numbers, the model gives $3\times$ larger than $2\times$, and not
+smaller. The probable reason is the real tail. The Dow from 1885 to 2023 has 19/10/1987 and the 1929-32 run,
+which the Gaussian model does not have. The crash row, measured, is the evidence that the effect exists; the
+exact value of the growth at $3\times$ depends on which tail enters the count.
+
+### Chapter 11
+
+The earlier text records 35,8% of ruin for whoever bets by their own
+history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4,76 m (expected
+value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
+with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. The instrument, with
+$\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
+reaches 4,26 m, measures 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m. The old heights come from a
+set of models calibrated in another way, which this laboratory does not reproduce; the two sets
+stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
+control table of H1; this laboratory measures $+628$ (with $+274$ in the opposite direction), because the computation here
+starts from the rates by group instead of the units. The divergences are declared and no old value
+was erased.
+
+### Chapter 12
+
+The earlier text, in Chapter 6, presents the three samples of
+Hill with values close to $1{,}81$; the instrument measures 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
+($k = 1\,000$) and 1,8032 ($k = 2\,000$). The difference is one of sampling and of cutoff, not of formula — the value
+published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
+earlier text and the plan of the repository count gates in different ways: the old book describes
+**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
+governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
+G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
+$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 14 details the seven; no old value
+was erased.
+
+### Chapter 13
+
+The earlier text speaks of "eight tracks and an orchestrator M15". The
+text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
+(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
+`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
+because that is the name of the code. The laboratory of this book measures the
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves:
+running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
+
+### Chapter 14
+
+Two accounts of this chapter diverge between the sources, and both stay
+recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
+and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
+the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
+book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
+count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
+repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
+that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
+gate G4, in the horizon `todos`, reproduces here.
+
+### Chapter 15
+
+Two points stay recorded. (1) The plan publishes, for the
+horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
+horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
+five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
+accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
+exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
+support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
+recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
+No old value was erased.
