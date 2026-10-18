@@ -668,7 +668,7 @@ $$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(
 The first parcel is born from the draw and persists when the parameter is known. The second is born from
 ignorance about the parameter and disappears when you identify it and have data.
 
-| Uncertainty | Layer | What more data does | How it is mitigated |
+| Uncertainty | Where it is usually first met | What more data does | How it is mitigated |
 | --- | --- | --- | --- |
 | Aleatory | World | Nothing | Safety margins, redundancy |
 | Epistemic | Model | It reduces them to zero, if the parameter is identifiable | Sampling, Bayesian updating |
@@ -678,6 +678,12 @@ Frank Knight (1921) separated **risk**, with known probabilities, from **uncerta
 that cannot be measured. In the extreme case, called here Knightian uncertainty or specification error, the
 real process is **outside** the hypothesis space. That uncertainty is the most dangerous of the
 three, because it does not appear in the equation. The interval narrows around the wrong answer.
+
+The second column says where each kind is usually met first, not where it is confined. Layer and kind of
+uncertainty are two independent questions, and every claim answers both. An unlisted mechanism in the World is
+Knightian; the decision-maker's doubt about their own calibration is epistemic, and it lives in the Agent. What
+the kind fixes is the treatment: frequency and margins for the aleatory, belief charged by calibration for the
+epistemic, scope and an exit clause for the Knightian.
 
 **The Stirling matrix.** Two questions organize the diagnosis. Do we know which outcomes are possible? Do we
 know their probabilities?
@@ -2565,6 +2571,10 @@ Two examples of how a lens becomes an account. In **Fluxonomy**, the data-proces
 says that, if $Z$ is obtained from $Y$, then $I(X; Z) \le I(X; Y)$. Three newspapers that publish the same research
 are worth one. In **Morphonomy**, two representations can give identical forecasts and still authorise
 different conclusions under intervention, and only the conclusion that is conserved across environments serves outside them.
+
+Non-ergodicity is not a sixth lens. It is the answer "no" to the question of **Chrononomy**: the mean across many
+and the mean over time of a single one come apart, as in the multiplicative coin of Chapter 10. The lens asks the
+question of every process; most additive processes answer "yes", and there the mean across many is legitimate.
 
 **How a new domain triggers the lenses.** A practical rule: Is it a financial, career or
 insurance process? It triggers **Chrononomy**. Does it involve claims, incomes, virality or the size of

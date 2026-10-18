@@ -522,7 +522,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 609 lines, 71 782 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 619 lines, 71 931 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
