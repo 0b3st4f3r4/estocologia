@@ -57,6 +57,18 @@ refusing, and that is the correct behavior. The seal of this folder was redone: 
 it, and the previous hashes of the record (`27596bdf…`, `b777a213…`) and of the `README.md` (`e4c3fe9f…`) stay recorded
 here instead of vanishing with the line of the seal.
 
+**Note of 2026-10-18: the operator's manual follows the English migration.** `RUNNER.md`, `FECHAMENTO.md`, and
+`README.md` still named the pre-migration binary (`ingestar-jev`, with `--conferir` and `--registrar`), the generator
+at `tools/gerar_fontes_incendios.py`, the example `rodada_sintetica`, the modules `ponte.rs` and `calibracao.rs`, and the
+Portuguese refusal names; and `RUNNER.md` §4 gave the header of `desfechos.tsv` as `id caso_id probabilidade_declarada
+desfecho_observado fonte_desfecho`, which `calibration::read_outcomes` refuses, because the reader expects
+`id case_id declared_probability observed_outcome outcome_source`. An operator following the manual literally would have
+been stopped at the first command. The three files now name what exists in the tree; `ENSAIO_SINTETICO.md` keeps its
+2026-10-17 commands as the record of that run and gains a dated rectification with today's. No gate, rule, threshold, or
+number changed, so the K stays 1. The seal of this folder was redone; the previous hashes were `README.md`
+`6c9aa1c9…`, `RUNNER.md` `2a6459e4…`, `ENSAIO_SINTETICO.md` `d96e2074…`, `FECHAMENTO.md` `a99888f2…`, and
+`DECLARACAO.md` `cae8cf4a…`.
+
 ## Verification
 
 Run on 2026-10-16, after the freezing, and updated on 2026-10-17. Exit code in parentheses.

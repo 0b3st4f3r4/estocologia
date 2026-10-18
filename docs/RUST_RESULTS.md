@@ -1700,7 +1700,7 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p17-schema | DECLARACAO.md | 86d583d6db7071f1e5106ada4a8b21b5204f9dd617227f6cbac432b16d5e857a |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
-| p20-jev | DECLARACAO.md | cae8cf4a22eeeade7cf9ea579f2e4729403f6b969ec6c58f4afc26cce5f2932b |
+| p20-jev | DECLARACAO.md | ec60ada67df98ad7201d63d63b9e31faf92b4e88b0fb45b31fa9b22d838952db |
 
 Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 

@@ -28,6 +28,24 @@ cargo run --release --bin ingestar-jev -- \
 cargo run --release --bin labs -- --jev
 ~~~
 
+**Rectification of 2026-10-18.** The commands above are those of 2026-10-17, before the English migration renamed the
+example, the binary, and the two files it writes; they no longer run as written, and they stay here because they are the
+record of that run. The same round today is:
+
+~~~bash
+cargo run --release --example synthetic_round -- /tmp/sint
+cargo run --release --bin ingest-jev -- \
+  empirical/p20-jev/pesos \
+  /tmp/sint/frozen_inferences.tsv \
+  empirical/p20-jev/calibracao \
+  /tmp/sint/audited_outcomes.tsv
+~~~
+
+Re-run on 2026-10-18 with these commands, it printed Brier `0.348000` and ECE `0.306667` in 10 buckets over 30 pairs, with
+0 abstentions: the same Brier as the record of 2026-10-17. The artifact hash changed to
+`2a2fa44663078ef85d9b71799dee5a6ac1e68a18fc969d63b8356c19cd5d6f21`, against `39d42d7d…` in §2, because the request text
+and the card that the bridge writes are now in English. The two synthetic files were removed again after the run.
+
 Output of the ingestion: 30 frozen answers in the artifact, hash verified
 `39d42d7d15320b00d35939eccf7e40e254a308969c03daa608840c29d423a5e5`; labeled set with Brier `0.348000`
 over 30 pairs and 0 abstentions; `modelo.congelado: OK` and `desfechos.tsv: OK` in the check of the two seals.
