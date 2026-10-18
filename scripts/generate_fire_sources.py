@@ -21,6 +21,7 @@ Usage:
     generate_fire_sources.py example --output dados_brutos/casos_exemplo.tsv
     generate_fire_sources.py check-cases --cases dados_brutos/casos_incendios.tsv
     generate_fire_sources.py infer --cases CASES --runner llama-cli --model M.gguf \
+        --revision "<repository> <identifier> <date>" \
         --inferences-output dados_brutos/inferencias_reais.tsv \
         --outcomes-output dados_brutos/desfechos_auditados.tsv
 
@@ -37,6 +38,7 @@ translation still runs unchanged.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -342,6 +344,46 @@ def read_collected_answers(path: Path) -> dict[str, str]:
     return answers
 
 
+def file_sha256(path: Path) -> str:
+    """The sha256 of the model file, read in blocks: a GGUF runs to gigabytes and does not fit in memory."""
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def model_provenance(args: argparse.Namespace) -> str | None:
+    """The provenance line of the inference source: the hash of the weights file and its revision.
+
+    The artifact hash that the ingestor declares covers the table of answers, so it proves the table did not
+    change; it does not prove which model wrote it. This line is that second fact. With llama-cli the file is
+    local and the hash is measured here; with vllm, api or file the weights are not read by this script, and the
+    operator passes the hash measured where the weights are (--model-sha256). Without the line, the round runs and
+    does not enter the record.
+    """
+    declared = args.model_sha256.strip().lower()
+    if args.runner == "demo" and declared:
+        raise SystemExit("the demo runner is never the model: it takes no --model-sha256")
+    measured = ""
+    if args.runner == "llama-cli":
+        measured = file_sha256(Path(args.model))
+        if declared and declared != measured:
+            raise SystemExit(f"--model-sha256 {declared} differs from the measured {measured} of {args.model}")
+    sha = measured or declared
+    if not sha:
+        if args.runner != "demo":
+            print("  model file: not declared (--model-sha256): the round will not enter the record", file=sys.stderr)
+        return None
+    if not re.fullmatch(r"[0-9a-f]{64}", sha):
+        raise SystemExit(f"--model-sha256 is not 64 hex: {sha!r}")
+    revision = args.revision.strip()
+    if not revision or "\t" in revision or "\n" in revision:
+        raise SystemExit("the model hash requires --revision on one line: repository, identifier and date")
+    print(f"  model file: {sha} | revision {revision}")
+    return f"# model-sha256\t{sha}\t{revision}"
+
+
 def write_example(output: Path, n: int) -> None:
     """Synthetic catalog, labeled as synthetic: it attests the plumbing, it does not calibrate."""
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -392,6 +434,14 @@ def main() -> int:
         "--outcomes-output", "--saida-desfechos", required=True, dest="outcomes_output"
     )
     p_in.add_argument("--model", "--modelo", default="", dest="model")
+    p_in.add_argument(
+        "--model-sha256", default="", dest="model_sha256",
+        help="sha256 of the weights file; measured from --model with llama-cli, required by hand otherwise",
+    )
+    p_in.add_argument(
+        "--revision", default="",
+        help="the frozen revision of the model: repository, identifier and date",
+    )
     p_in.add_argument("--binary", "--binario", default="llama-cli", dest="binary")
     p_in.add_argument("--url", default="http://127.0.0.1:8000/v1/completions")
     p_in.add_argument(
@@ -443,6 +493,8 @@ def main() -> int:
     if args.runner == "file" and not collected:
         print("runner file requires --answers with at least one row", file=sys.stderr)
         return 1
+
+    provenance = model_provenance(args)
 
     grammar = ""
     if args.grammar:
@@ -586,7 +638,8 @@ def main() -> int:
     outcomes_output = Path(args.outcomes_output)
     inferences_output.parent.mkdir(parents=True, exist_ok=True)
     outcomes_output.parent.mkdir(parents=True, exist_ok=True)
-    inferences_output.write_text("\n".join(inference_lines) + "\n", encoding="utf-8")
+    header = [provenance] if provenance else []
+    inferences_output.write_text("\n".join(header + inference_lines) + "\n", encoding="utf-8")
     outcomes_output.write_text("\n".join(outcome_lines) + "\n", encoding="utf-8")
     print(f"-> {inferences_output} ({len(inference_lines)} inferences)")
     print(f"-> {outcomes_output} ({len(outcome_lines) - 1} labeled pairs)")

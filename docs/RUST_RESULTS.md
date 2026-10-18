@@ -1491,7 +1491,7 @@ test icp::tests::the_threshold_falls_with_the_sample_size ... ok
 
 test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 81 tests
+running 83 tests
 test belief::tests::invalid_evidence_does_not_zero_the_state ... ok
 test belief::tests::the_belief_state_never_hits_zero_nor_one ... ok
 test belief::tests::the_card_evidence_moves_belief_to_the_layer_of_the_card ... ok
@@ -1559,10 +1559,12 @@ test planning::tests::the_evaluation_declares_the_steps_out_of_reach ... ok
 test planning::tests::the_resolution_ladder_comes_from_the_core ... ok
 test planning::tests::with_volatility_the_loss_pays_for_the_margin ... ok
 test planning::tests::without_volatility_the_loss_is_zero_and_the_aggregate_suffices ... ok
+test runner::tests::a_malformed_or_misplaced_model_line_is_an_unreadable_artifact ... ok
 test runner::tests::a_request_without_a_frozen_answer_becomes_an_abstention ... ok
 test runner::tests::a_wrong_header_is_an_unreadable_artifact ... ok
 test runner::tests::one_swapped_byte_in_the_artifact_refuses_the_bridge ... ok
 test runner::tests::the_brier_is_the_own_rule_outside_the_fit ... ok
+test runner::tests::the_model_line_goes_inside_the_seal_and_comes_back ... ok
 test runner::tests::the_operator_writes_the_artifact_and_the_runner_reads_it ... ok
 test runner::tests::the_rehearsal_artifact_loads_and_the_hash_matches ... ok
 test runner::tests::the_runner_closes_determinism_in_the_form_of_g1 ... ok
@@ -1574,22 +1576,24 @@ test stress::tests::the_attack_is_deterministic ... ok
 test stress::tests::the_panel_belief_respects_the_floor_and_the_ceiling ... ok
 test stress::tests::without_learning_the_deliberative_order_is_the_declared_one ... ok
 
-test result: ok. 81 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 83 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 7 tests
+running 9 tests
+test a_malformed_model_line_aborts_and_writes_nothing ... ok
 test a_probability_at_the_extreme_aborts_and_writes_nothing ... ok
 test the_check_mode_passes_with_thirty_pairs ... ok
 test the_check_mode_refuses_an_answer_outside_the_schema ... ok
 test the_check_mode_validates_without_touching_a_destination ... ok
 test the_escape_of_the_request_does_not_break_the_key_of_the_artifact ... ok
 test the_ingestor_writes_the_artifact_and_the_set_with_the_seals ... ok
+test the_model_line_of_the_source_enters_the_sealed_artifact ... ok
 test without_arguments_the_ingestor_prints_the_usage_and_exits_with_1 ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::coin_matches_the_probability_and_does_not_depend_on_the_clock ... ok
@@ -1700,7 +1704,7 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p17-schema | DECLARACAO.md | 86d583d6db7071f1e5106ada4a8b21b5204f9dd617227f6cbac432b16d5e857a |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
-| p20-jev | DECLARACAO.md | ec60ada67df98ad7201d63d63b9e31faf92b4e88b0fb45b31fa9b22d838952db |
+| p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
 
 Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 

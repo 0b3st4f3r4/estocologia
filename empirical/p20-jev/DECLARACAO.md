@@ -69,6 +69,19 @@ number changed, so the K stays 1. The seal of this folder was redone; the previo
 `6c9aa1c9…`, `RUNNER.md` `2a6459e4…`, `ENSAIO_SINTETICO.md` `d96e2074…`, `FECHAMENTO.md` `a99888f2…`, and
 `DECLARACAO.md` `cae8cf4a…`.
 
+**Note of 2026-10-18, later the same day: the artifact names the model file it came from (owner's request).** The
+`sha256` declared in `pesos/SHA256` is that of the table of answers: it proves that the table did not change after the
+declaration, and it does not prove which model wrote it, and `scripts/generate_fire_sources.py` did not record the hash of
+the weights file. The artifact now accepts one `@model <sha256> <revision>` line before the first block, inside the sealed
+text; the generator measures the hash of the GGUF with `llama-cli` and takes `--model-sha256` with the other runners (and
+refuses it with `demo`, which is never the model); the ingestor carries the line from the inference source into the artifact;
+`labs --jev` prints the declared model file or says it is missing; and `bridge::registry_line` refuses a round without it,
+with a `model_hash` column in `rodadas.tsv`. Tests: 83 unit and 9 integration in `stochology-s2` (81 and 7 before), the new
+ones being the line inside the seal, the four malformed or misplaced lines, the refusal of the record without the model, and
+the ingestor carrying the line and aborting on a bad one. The line names the file and does not prove the operator ran it; that
+stays with whoever repeats the round with the same file. No threshold of the four criteria changed, and the record gained a
+condition of provenance, not of decision, so the K stays 1. The seal of this folder was redone again.
+
 ## Verification
 
 Run on 2026-10-16, after the freezing, and updated on 2026-10-17. Exit code in parentheses.
