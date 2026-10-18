@@ -160,7 +160,7 @@ which name the specifications that were tried and are the record that the counte
 | Layer | Location | State |
 | --- | --- | --- |
 | Book | `book/stochology-textbook.md`, authored in `book/` | 21 chapters, 5 parts, assembled and verified |
-| Site | `site/` (the Docsify page and `build.sh`), published by `.github/workflows/pages.yml` at obestafera.com | assembled from `book/` on each push to `main`, with the sidebar generated from the headings; the site keeps no copy of the text in the tree |
+| Site | `site/` (the Docsify page, the landing text `home.md` and `build.sh`), published by `.github/workflows/pages.yml` at obestafera.com | assembled from `book/` on each push to `main`, with the sidebar generated from the headings; apart from the landing text, the site keeps no copy of the book in the tree |
 | Apparatus | `crates/stochology-*` | nine live crates after the consolidation of 2026-10-17: `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book`, `-wasm`, and `-wave`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
 | Results | `docs/RUST_RESULTS.md` | registry generated directly from the instruments |
 | Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
