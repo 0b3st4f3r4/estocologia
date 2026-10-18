@@ -1,6 +1,6 @@
 # Stochology: A Textbook
 
-**Edition in 21 chapters** · five parts · a three-step ramp per chapter
+**21 chapters** · five parts · a three-step ramp per chapter
 
 Oct 16, 2026 · Silvano Neto
 
@@ -12,11 +12,11 @@ This book teaches Stochology from end to end. The text presents the concepts of 
 in an auditable architecture and the behaviour of that architecture when put to the test on real data, from
 horizon H0 to H3. The research that sustains it was closed on October 15, 2026.
 
-**What changed in this edition.** The previous edition had 14 chapters and assumed university-level calculus and
-probability already mastered. This edition unfolds that content into 21 chapters, grouped into five parts, and
+**What changed since the earlier text.** The earlier text had 14 chapters and assumed university-level calculus and
+probability already mastered. This book unfolds that content into 21 chapters, grouped into five parts, and
 builds a **continuous pedagogical ramp**. The first step of each chapter uses only High School mathematics
 (proportions, sets, means, counting trees, graphs of first- and second-degree functions). Nothing from the
-previous edition was thrown away. Every idea, every theorem and every number of the research remains here,
+earlier text was thrown away. Every idea, every theorem and every number of the research remains here,
 redistributed into smaller steps.
 
 **Who it is for.** The book serves four readers. The first is the High School student who wants to understand
@@ -25,16 +25,16 @@ who has already seen basic probability. The third is the data professional, who 
 passed the test fails in production. The fourth is the decision-maker, who reads a number and needs to know how
 far it authorizes them to conclude.
 
-**What is assumed.** In this edition, for Steps 1 and 2, only arithmetic, percentages, proportions and graph
+**What is assumed.** In this book, for Steps 1 and 2, only arithmetic, percentages, proportions and graph
 reading. Calculus and linear algebra appear only where the text warns, and always after the geometric
 intuition. The laboratories are written in **Rust**, with a fixed seed, in the crate
 `crates/stochology-book`; whoever does not program can read the output of the laboratories, which is quoted in
 the text, and skip the exercises marked as *Laboratory*.
 
 **One rule that holds for the whole book.** Every number quoted here comes from an instrument that the reader
-can run. When a number in this edition diverges from the number published in the previous edition or in a
+can run. When a number in this book diverges from the number recorded in the earlier text or in a
 course outline, the divergence is **declared in the text**, with both values, instead of hidden. It is the rule
-that the research applies to itself (section 9.7 of the previous edition, today Part V, Chapter 21).
+that the research applies to itself (section 9.7 of the earlier text, today Part V, Chapter 21).
 
 ---
 
@@ -129,7 +129,7 @@ in commit `1bfec905`. Mentions of the old fronts in the text are **historical**,
 from, not a live path.
 
 **Divergence declaration.** When this book quotes a number from the research repository and the instrument of
-this edition returns another, both appear, with the probable cause.
+this book returns another, both appear, with the probable cause.
 
 The exercises come in three types: *(Concept)* requires words; *(Count)* requires a number; *(Laboratory)*
 requires code that reproduces the result.

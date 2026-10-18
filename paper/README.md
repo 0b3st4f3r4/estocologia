@@ -289,7 +289,7 @@ The experiment produced three results that go beyond the didactic example.
 
 Pseudoreplication has a theory behind it. In 1913, Markov counted vowels and consonants in the first 20,000 letters of *Eugene Onegin* and showed that the law of large numbers survives dependence. But dependence changes how much the sample is worth. As the letters tend to alternate, a block of 100 of them is worth about 330 independent letters; in a "sticky" chain, in which each state tends to repeat, 100 observations are worth well less than 100. The effective size of a sample is a property of the process, not of the count, and that is why the patients of the same day, who share the same demand, do not count as independent observations.
 
-All of this passed through the gates and reproduced, in the Rust edition (`labs --cap 5` and `stochology-horizons`), the declared divergence against the old generator (161,867 and 160,220 patients). The result is small, but its value lies in the method: anyone can run the code again and obtain the same numbers, with the same hash.
+All of this passed through the gates and reproduced, in the Rust apparatus (`labs --cap 5` and `stochology-horizons`), the declared divergence against the old generator (161,867 and 160,220 patients). The result is small, but its value lies in the method: anyone can run the code again and obtain the same numbers, with the same hash.
 
 ## 6. From the simulated to the real: what the data said
 

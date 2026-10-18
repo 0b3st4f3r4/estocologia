@@ -1,4 +1,4 @@
-# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology, Rust Edition)
+# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology, in Rust)
 
 Binding contract for any agent or contributor operating in this repository. The machine described here is
 an **auditable epistemological machine**: claim, generative process, null model, and severe test in the same place, with
@@ -98,6 +98,7 @@ python3 scripts/book/check_book.py                  # parts, chapters, fences, a
 python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
 python3 scripts/check_seals.py                      # the 28 SHA-256 seals, paths relative to root
 python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
+git tag --list                                      # must be empty: history only, no versions (§VI)
 ~~~
 
 The instruments that prove what the items in `docs/DECLARED_PROPOSALS.md` §2 closed also enter the
@@ -140,6 +141,15 @@ integration**. Only artifacts with an ongoing function (`scripts/book/build.py`,
 the results generator, the seal verifier, the style tooling, the crates) or permanent records
 (chapters, declarations, manifests, reports) remain in the repository.
 
+**History, not versions** (owner's rule, 2026-10-18). The project has no versions: no numbered editions, no
+version tags or releases, no "v2" of a document, and no second copy of a file kept alongside the first. What
+changes is recorded as history only — the git log and the dated records in `history/` — and a correction is a
+dated rectification in the file it corrects, with both values. `scripts/verify.sh` fails if the repository
+carries any tag. Three things keep a number because they are not versions of the project: the Rust language
+edition and the crate `version` fields that Cargo requires; the card schema version (1.0 to 1.2), which is a data
+contract whose migration chain is itself its history; and the labels v1 to v4 in `empirical/p03-multiplicidade/`,
+which name the specifications that were tried and are the record that the counter $K$ counts.
+
 ## VII. Project State
 
 | Layer | Location | State |
@@ -148,9 +158,9 @@ the results generator, the seal verifier, the style tooling, the crates) or perm
 | Apparatus | `crates/stochology-*` | nine live crates after the consolidation of 2026-10-17: `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book`, `-wasm`, and `-wave`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
 | Results | `docs/RUST_RESULTS.md` | registry generated directly from the instruments |
 | Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
-| Language | every layer | **English edition of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |
+| Language | every layer | **English migration of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |
 | Retired | commit `1bfec905` | the Python simulation code and artifacts not significant to the theory |
-| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **four live items**, and they are not of the same nature: **3** human SHELF elicitation (the full panel), **5** the voice of those who pay for the error (0 of 7 groups heard, deadline 2026-12-15), and **9** the bridge thesis at scale (0 of 12 cases, window 2027-01-14) depend on **people outside the program** — consent, listening, and blind judgment, which no line of code can replace; **13** the Jev-LLM bridge depends on **artifact and code** — open weights frozen with a declared `sha256` and a local runner to load them —, and the runner has existed in `crates/stochology-s2/src/runner.rs` since 2026-10-17, with the operator manual in `empirical/p20-jev/RUNNER.md`; what is missing is the weights file and the hash declaration, which is a machine and operator operation rather than a panel. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
+| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **four live items, held at their synthetic rehearsals by the owner's decision of 2026-10-18** (the next step is sharing with outside specialists), and they are not of the same nature: **3** human SHELF elicitation (the full panel), **5** the voice of those who pay for the error (0 of 7 groups heard, deadline 2026-12-15), and **9** the bridge thesis at scale (0 of 12 cases, window 2027-01-14) depend on **people outside the program** — consent, listening, and blind judgment, which no line of code can replace; **13** the Jev-LLM bridge depends on **artifact and code** — open weights frozen with a declared `sha256` and a local runner to load them —, and the runner has existed in `crates/stochology-s2/src/runner.rs` since 2026-10-17, with the operator manual in `empirical/p20-jev/RUNNER.md`; what is missing is the weights file and the hash declaration, which is a machine and operator operation rather than a panel. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
 
 ## VIII. What Does Not Enter This Repository
 

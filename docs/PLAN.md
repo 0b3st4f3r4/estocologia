@@ -285,7 +285,7 @@ pub enum AgenteA {
 
 ## 9. Pedagogy: The Textbook Restructured into 21 Chapters
 
-### 9.1 Pedagogical philosophy of the 21-chapter edition
+### 9.1 Pedagogical philosophy of the 21-chapter book
 
 In the previous 14-chapter version, dense topics (Bayes, entropy, three types of uncertainty, Jensen's
 inequality) were compressed into a single chapter, requiring university-level prerequisites in calculus
@@ -341,7 +341,7 @@ confidence) uncertainty. Law of total variance, maximum entropy (Jaynes's honest
 matrix. *Laboratory:* a coin whose bias shifts from 0.2 to 0.6 — the fixed-coin model covers the truth
 in 12% of steps (missing 88% of the time), whereas the model with a 0.99 forgetting factor covers
 93.98%, with an interval 5.7 times wider. The coverage measured by `cargo run --release --bin labs -- --chapter 4`
-is 0.1199 and 0.9398; the previous edition recorded 11% and 99%, and Chapter 4 declares the divergence
+is 0.1199 and 0.9398; the 14-chapter text recorded 11% and 99%, and Chapter 4 declares the divergence
 along with the parameter grid that explains the effect.
 
 ### 9.4 Part II — The traps of the world and of data
@@ -514,15 +514,15 @@ fill out `ficha.yaml`, simulate the world, and defend the conclusion.
 reader identical regardless of folder language. The assembled textbook file is now at
 `book/stochology-textbook.md`.
 
-### 9.10 Edition status and how to build
+### 9.10 Book status and how to build
 
-The edition is authored in `book/`, one file per chapter, and assembled into
+The book is authored in `book/`, one file per chapter, and assembled into
 `book/stochology-textbook.md` once all 21 chapters are ready.
 
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | edition assembled in `book/stochology-textbook.md` (7 178 lines, 96 018 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (7 178 lines, 96 017 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
@@ -531,7 +531,7 @@ The edition is authored in `book/`, one file per chapter, and assembled into
 
 ```bash
 python3 scripts/book/build.py --check    # requires, per chapter: title, three steps, exercises, and summary
-python3 scripts/book/build.py            # assembles the edition when all 21 exist
+python3 scripts/book/build.py            # assembles the book when all 21 exist
 cargo run --release --bin labs -- --all    # runs all laboratories with a fixed seed
 ```
 
@@ -632,7 +632,7 @@ cd h3 && python3 rodar.py && python3 grafo.py && python3 figura.py && python3 po
 
 Measurement taken prior to retirement: `cd h1 && python3 -m pytest -q` returned `24 passed in 17.51s`.
 The textbook in `book/stochology-textbook.md` is already the 21-chapter edition: Section 9 of this plan
-ceased to be a specification and now describes what is on disk. The 14-chapter edition lives in the git
+ceased to be a specification and now describes what is on disk. The 14-chapter text lives in the git
 history at commit `1bfec905`.
 
 ---

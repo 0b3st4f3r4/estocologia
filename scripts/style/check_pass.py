@@ -129,7 +129,7 @@ def main() -> int:
         elif (name.startswith("cap") and name[3:5].isdigit()) or (name.startswith("ch") and name[2:4].isdigit()):
             key = name.split(".")[0]
         else:
-            print(f"{name}: outside assembled edition — skipped")
+            print(f"{name}: outside assembled book — skipped")
             continue
 
         raw_before = file_baseline(name)

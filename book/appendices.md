@@ -142,9 +142,9 @@ after seeing the result counts as a new declaration and enters the counter of at
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gate runs twice and gives the same result: measured, "7 portões ok", with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 | `cargo run --release --bin labs -- --chapter 19` | That the numbers cited in Step 3 of chapter 19 come out of code, with a fixed seed. It is worth replacing 19 with any chapter; `--all` runs them all |
-| `rustc -O crates/stochology-book/src/ch21.rs -o /tmp/ch21 && /tmp/ch21` | That every laboratory of this edition is self-contained: one file, no dependency, the same result |
+| `rustc -O crates/stochology-book/src/ch21.rs -o /tmp/ch21 && /tmp/ch21` | That every laboratory of this book is self-contained: one file, no dependency, the same result |
 
-The laboratories of this edition live directly in the crate, in `crates/stochology-book/src/capNN.rs`. They are
+The laboratories of this book live directly in the crate, in `crates/stochology-book/src/capNN.rs`. They are
 tested modules (`ch01` to `ch04` carry tests in the file) and **all 21** are served by the `labs` binary. The
 intermediate copies were deleted after integration, because a working file does not stay in the repository.
 No laboratory uses the system clock or an unseeded random number, and that is why verification is
@@ -179,7 +179,7 @@ manifest `history/python-removido.txt` carries the blob hash of each removed fil
 `docs/declarations/REMOVED_PYTHON.md`.
 
 On that day the artifacts that do not support a central result left. They are the extensions of scale, health and rare event (points
-9 and 10 of the background audit) and the previous edition of the book. The numbers of those extensions remain in Chapters 15 and 21, with
+9 and 10 of the background audit) and the earlier text of the book. The numbers of those extensions remain in Chapters 15 and 21, with
 the retirement note in the table. Afterwards the whole Python measurement scaffolding left. The fronts `h0` to `h3` also left, with their READMEs, and the data
 that only they used. The numbers stayed in `docs/EMPIRICAL_REGISTRY.md`, with commit `1bfec905` as the anchor
 (`docs/declarations/RUST_CONSOLIDATION.md`).

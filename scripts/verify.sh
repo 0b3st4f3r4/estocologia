@@ -74,6 +74,15 @@ python3 scripts/check_seals.py
 step "prose pass against baseline"
 python3 scripts/style/check_pass.py
 
+step "history, not versions: no tags in the repository"
+tags=$(git tag --list)
+if [ -n "$tags" ]; then
+  echo "FAIL: the project keeps history only, and these tags version it (AGENTS.md §VI):" >&2
+  printf '%s\n' "$tags" >&2
+  exit 1
+fi
+echo "no tags: the git log and history/ are the only record"
+
 step "no drift: generated and sealed artifacts are committed"
 if [ "${CI:-}" = "true" ]; then
   drift=$(git status --porcelain -- book/stochology-textbook.md docs/RUST_RESULTS.md \
