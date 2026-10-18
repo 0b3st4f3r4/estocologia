@@ -3,25 +3,14 @@
 version = 4
 
 [[package]]
-name = "stochology-audit"
-version = "0.1.0"
-
-[[package]]
 name = "stochology-book"
 version = "0.1.0"
 dependencies = [
- "stochology-audit",
  "stochology-core",
- "stochology-drift",
- "stochology-fairness",
- "stochology-h0",
- "stochology-h1",
- "stochology-h2",
- "stochology-h3",
+ "stochology-horizons",
  "stochology-hypergraph",
- "stochology-icp",
+ "stochology-methods",
  "stochology-s2",
- "stochology-schema",
 ]
 
 [[package]]
@@ -29,60 +18,21 @@ name = "stochology-core"
 version = "0.1.0"
 
 [[package]]
-name = "stochology-drift"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
-]
-
-[[package]]
-name = "stochology-fairness"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-h3",
-]
-
-[[package]]
 name = "stochology-gates"
 version = "0.1.0"
 dependencies = [
- "stochology-audit",
  "stochology-core",
- "stochology-drift",
- "stochology-fairness",
- "stochology-h1",
+ "stochology-horizons",
  "stochology-hypergraph",
+ "stochology-methods",
 ]
 
 [[package]]
-name = "stochology-h0"
+name = "stochology-horizons"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
-]
-
-[[package]]
-name = "stochology-h1"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-h0",
-]
-
-[[package]]
-name = "stochology-h2"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-icp",
-]
-
-[[package]]
-name = "stochology-h3"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
+ "stochology-methods",
 ]
 
 [[package]]
@@ -93,7 +43,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "stochology-icp"
+name = "stochology-methods"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
@@ -103,18 +53,9 @@ dependencies = [
 name = "stochology-s2"
 version = "0.1.0"
 dependencies = [
- "stochology-audit",
  "stochology-core",
- "stochology-h3",
+ "stochology-horizons",
  "stochology-hypergraph",
- "stochology-schema",
-]
-
-[[package]]
-name = "stochology-schema"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
 ]
 
 [[package]]
@@ -122,7 +63,7 @@ name = "stochology-wasm"
 version = "0.1.0"
 dependencies = [
  "stochology-core",
- "stochology-h0",
+ "stochology-horizons",
 ]
 
 [[package]]

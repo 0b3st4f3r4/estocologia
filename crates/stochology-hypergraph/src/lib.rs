@@ -1,239 +1,236 @@
-//! Hipergrafo tipado G = (V, E_tree, E_graph, H, Phi) e as cinco lentes.
+//! Typed hypergraph G = (V, E_tree, E_graph, H, Phi) and the five lenses.
 
-pub mod lentes;
+pub mod lenses;
 
-use stochology_core::{Camada, TipoIncerteza};
+use stochology_core::{Layer, UncertaintyType};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct No {
+pub struct Node {
     pub id: String,
-    pub camada: Camada,
-    pub incerteza: TipoIncerteza,
-    pub definicao: String,
-    pub artefato: Option<String>,
+    pub layer: Layer,
+    pub uncertainty: UncertaintyType,
+    pub definition: String,
+    pub artifact: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ArestaTree {
-    pub de: String,
-    pub para: String,
+pub struct TreeEdge {
+    pub from: String,
+    pub to: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum TipoAresta {
-    Dedutiva,
-    PonteMatematica,
+pub enum EdgeKind {
+    Deductive,
+    MathematicalBridge,
     Causal,
-    Patologia,
+    Pathology,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ArestaGraph {
-    pub de: String,
-    pub para: String,
-    pub tipo: TipoAresta,
+pub struct GraphEdge {
+    pub from: String,
+    pub to: String,
+    pub kind: EdgeKind,
 }
 
-/// As cinco lentes operacionais.
+/// The five operational lenses.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Lente {
-    Fluxonomia,
-    Crononomia,
-    Escalonomia,
-    Morfonomia,
-    Crisonomia,
+pub enum Lens {
+    Fluxonomy,
+    Chrononomy,
+    Scalonomy,
+    Morphonomy,
+    Crisonomy,
 }
 
-impl Lente {
-    pub const TODAS: [Lente; 5] = [
-        Lente::Fluxonomia,
-        Lente::Crononomia,
-        Lente::Escalonomia,
-        Lente::Morfonomia,
-        Lente::Crisonomia,
+impl Lens {
+    pub const ALL: [Lens; 5] = [
+        Lens::Fluxonomy,
+        Lens::Chrononomy,
+        Lens::Scalonomy,
+        Lens::Morphonomy,
+        Lens::Crisonomy,
     ];
 
-    pub fn nome(self) -> &'static str {
+    pub fn name(self) -> &'static str {
         match self {
-            Lente::Fluxonomia => "Fluxonomia",
-            Lente::Crononomia => "Crononomia",
-            Lente::Escalonomia => "Escalonomia",
-            Lente::Morfonomia => "Morfonomia",
-            Lente::Crisonomia => "Crisonomia",
+            Lens::Fluxonomy => "Fluxonomy",
+            Lens::Chrononomy => "Chrononomy",
+            Lens::Scalonomy => "Scalonomy",
+            Lens::Morphonomy => "Morphonomy",
+            Lens::Crisonomy => "Crisonomy",
         }
     }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Hiperaresta {
+pub struct Hyperedge {
     pub id: String,
-    pub lente: Lente,
-    pub membros: Vec<String>,
+    pub lens: Lens,
+    pub members: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
-pub struct Grafo {
-    pub nos: Vec<No>,
-    pub arestas_tree: Vec<ArestaTree>,
-    pub arestas_graph: Vec<ArestaGraph>,
-    pub hiperarestas: Vec<Hiperaresta>,
+pub struct Graph {
+    pub nodes: Vec<Node>,
+    pub tree_edges: Vec<TreeEdge>,
+    pub graph_edges: Vec<GraphEdge>,
+    pub hyperedges: Vec<Hyperedge>,
 }
 
-impl Grafo {
-    /// Valida estrutura: ids únicos, pontas existentes, árvore sem ciclo,
-    /// hiperarestas com pelo menos dois membros.
-    pub fn validar(&self) -> Vec<String> {
-        let mut problemas = Vec::new();
-        let mut vistos: Vec<&str> = Vec::new();
-        for no in &self.nos {
-            if no.id.trim().is_empty() || no.definicao.trim().is_empty() {
-                problemas.push(format!("no incompleto: {}", no.id));
+impl Graph {
+    /// Validates structure: unique ids, existing endpoints, cycle-free tree,
+    /// hyperedges with at least two members.
+    pub fn validate(&self) -> Vec<String> {
+        let mut problems = Vec::new();
+        let mut seen: Vec<&str> = Vec::new();
+        for node in &self.nodes {
+            if node.id.trim().is_empty() || node.definition.trim().is_empty() {
+                problems.push(format!("incomplete node: {}", node.id));
             }
-            if vistos.contains(&no.id.as_str()) {
-                problemas.push(format!("no duplicado: {}", no.id));
+            if seen.contains(&node.id.as_str()) {
+                problems.push(format!("duplicate node: {}", node.id));
             }
-            vistos.push(no.id.as_str());
+            seen.push(node.id.as_str());
         }
 
-        let existe = |id: &str| self.nos.iter().any(|n| n.id == id);
+        let exists = |id: &str| self.nodes.iter().any(|n| n.id == id);
 
-        for a in &self.arestas_tree {
-            if !existe(&a.de) || !existe(&a.para) {
-                problemas.push(format!(
-                    "aresta tree para no ausente: {} -> {}",
-                    a.de, a.para
+        for a in &self.tree_edges {
+            if !exists(&a.from) || !exists(&a.to) {
+                problems.push(format!("tree edge to missing node: {} -> {}", a.from, a.to));
+            }
+        }
+        for a in &self.graph_edges {
+            if !exists(&a.from) || !exists(&a.to) {
+                problems.push(format!(
+                    "graph edge to missing node: {} -> {}",
+                    a.from, a.to
                 ));
             }
         }
-        for a in &self.arestas_graph {
-            if !existe(&a.de) || !existe(&a.para) {
-                problemas.push(format!(
-                    "aresta graph para no ausente: {} -> {}",
-                    a.de, a.para
-                ));
+        for h in &self.hyperedges {
+            if h.members.len() < 2 {
+                problems.push(format!("hyperedge with fewer than two members: {}", h.id));
             }
-        }
-        for h in &self.hiperarestas {
-            if h.membros.len() < 2 {
-                problemas.push(format!("hiperaresta com menos de dois membros: {}", h.id));
-            }
-            for m in &h.membros {
-                if !existe(m) {
-                    problemas.push(format!("hiperaresta {} cita no ausente: {}", h.id, m));
+            for m in &h.members {
+                if !exists(m) {
+                    problems.push(format!("hyperedge {} cites missing node: {}", h.id, m));
                 }
             }
         }
 
-        if let Some(ciclo) = self.ciclo_em_tree() {
-            problemas.push(format!("ciclo em E_tree: {:?}", ciclo));
+        if let Some(cycle) = self.cycle_in_tree() {
+            problems.push(format!("cycle in E_tree: {:?}", cycle));
         }
 
-        problemas
+        problems
     }
 
-    /// Ordenação topológica dos pré-requisitos; detecta ciclo dedutivo.
-    pub fn ordem_topologica(&self) -> Result<Vec<String>, Vec<String>> {
-        let mut ordem = Vec::new();
-        let mut visitando: Vec<String> = Vec::new();
-        for no in &self.nos {
-            if !self.dfs_ok(&no.id, &mut ordem, &mut visitando) {
-                return Err(visitando);
+    /// Topological ordering of the prerequisites; detects a deductive cycle.
+    pub fn topological_order(&self) -> Result<Vec<String>, Vec<String>> {
+        let mut order = Vec::new();
+        let mut visiting: Vec<String> = Vec::new();
+        for node in &self.nodes {
+            if !self.dfs_ok(&node.id, &mut order, &mut visiting) {
+                return Err(visiting);
             }
         }
-        Ok(ordem)
+        Ok(order)
     }
 
-    fn dfs_ok(&self, id: &str, ordem: &mut Vec<String>, visitando: &mut Vec<String>) -> bool {
-        if ordem.iter().any(|x| x == id) {
+    fn dfs_ok(&self, id: &str, order: &mut Vec<String>, visiting: &mut Vec<String>) -> bool {
+        if order.iter().any(|x| x == id) {
             return true;
         }
-        if visitando.iter().any(|x| x == id) {
+        if visiting.iter().any(|x| x == id) {
             return false;
         }
-        visitando.push(id.to_string());
-        for a in &self.arestas_tree {
-            if a.de == id && !self.dfs_ok(&a.para, ordem, visitando) {
+        visiting.push(id.to_string());
+        for a in &self.tree_edges {
+            if a.from == id && !self.dfs_ok(&a.to, order, visiting) {
                 return false;
             }
         }
-        visitando.retain(|x| x != id);
-        ordem.push(id.to_string());
+        visiting.retain(|x| x != id);
+        order.push(id.to_string());
         true
     }
 
-    fn ciclo_em_tree(&self) -> Option<Vec<String>> {
-        self.ordem_topologica().err()
+    fn cycle_in_tree(&self) -> Option<Vec<String>> {
+        self.topological_order().err()
     }
 
-    /// Cobertura: todo nó precisa estar em ao menos uma hiperaresta (lente).
-    pub fn nos_sem_lente(&self) -> Vec<String> {
-        self.nos
+    /// Coverage: every node must sit in at least one hyperedge (lens).
+    pub fn nodes_without_lens(&self) -> Vec<String> {
+        self.nodes
             .iter()
-            .filter(|n| !self.hiperarestas.iter().any(|h| h.membros.contains(&n.id)))
+            .filter(|n| !self.hyperedges.iter().any(|h| h.members.contains(&n.id)))
             .map(|n| n.id.clone())
             .collect()
     }
 }
 
 #[cfg(test)]
-mod testes {
-    use super::{ArestaTree, Grafo, Hiperaresta, Lente, No};
-    use stochology_core::{Camada, TipoIncerteza};
+mod tests {
+    use super::{Graph, Hyperedge, Lens, Node, TreeEdge};
+    use stochology_core::{Layer, UncertaintyType};
 
-    fn no(id: &str) -> No {
-        No {
+    fn node(id: &str) -> Node {
+        Node {
             id: id.to_string(),
-            camada: Camada::Modelo,
-            incerteza: TipoIncerteza::Epistemica,
-            definicao: format!("definicao curta de {}", id),
-            artefato: Some(format!("artefato/{}", id)),
+            layer: Layer::Model,
+            uncertainty: UncertaintyType::Epistemic,
+            definition: format!("short definition of {}", id),
+            artifact: Some(format!("artifact/{}", id)),
         }
     }
 
-    fn grafo_ok() -> Grafo {
-        Grafo {
-            nos: vec![no("jensen"), no("fila"), no("espera")],
-            arestas_tree: vec![ArestaTree {
-                de: "jensen".to_string(),
-                para: "espera".to_string(),
+    fn ok_graph() -> Graph {
+        Graph {
+            nodes: vec![node("jensen"), node("queue"), node("wait")],
+            tree_edges: vec![TreeEdge {
+                from: "jensen".to_string(),
+                to: "wait".to_string(),
             }],
-            arestas_graph: vec![],
-            hiperarestas: vec![Hiperaresta {
+            graph_edges: vec![],
+            hyperedges: vec![Hyperedge {
                 id: "H1".to_string(),
-                lente: Lente::Escalonomia,
-                membros: vec!["fila".to_string(), "espera".to_string()],
+                lens: Lens::Scalonomy,
+                members: vec!["queue".to_string(), "wait".to_string()],
             }],
         }
     }
 
     #[test]
-    fn grafo_completo_valida() {
-        assert!(grafo_ok().validar().is_empty());
+    fn complete_graph_validates() {
+        assert!(ok_graph().validate().is_empty());
     }
 
     #[test]
-    fn aresta_para_no_ausente_reprova() {
-        let mut g = grafo_ok();
-        g.arestas_tree.push(ArestaTree {
-            de: "fila".to_string(),
-            para: "no-fantasma".to_string(),
+    fn edge_to_missing_node_fails() {
+        let mut g = ok_graph();
+        g.tree_edges.push(TreeEdge {
+            from: "queue".to_string(),
+            to: "ghost-node".to_string(),
         });
-        assert!(g.validar().iter().any(|p| p.contains("no ausente")));
+        assert!(g.validate().iter().any(|p| p.contains("missing node")));
     }
 
     #[test]
-    fn ciclo_dedutivo_reprova() {
-        let mut g = grafo_ok();
-        g.arestas_tree.push(ArestaTree {
-            de: "espera".to_string(),
-            para: "jensen".to_string(),
+    fn deductive_cycle_fails() {
+        let mut g = ok_graph();
+        g.tree_edges.push(TreeEdge {
+            from: "wait".to_string(),
+            to: "jensen".to_string(),
         });
-        assert!(g.validar().iter().any(|p| p.contains("ciclo")));
+        assert!(g.validate().iter().any(|p| p.contains("cycle")));
     }
 
     #[test]
-    fn no_sem_lente_e_apontado() {
-        let g = grafo_ok();
-        assert_eq!(g.nos_sem_lente(), vec!["jensen".to_string()]);
+    fn node_without_lens_is_flagged() {
+        let g = ok_graph();
+        assert_eq!(g.nodes_without_lens(), vec!["jensen".to_string()]);
     }
 }

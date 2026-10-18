@@ -1,93 +1,90 @@
-//! O ponto 13 da pesquisa: a escuta de quem paga o erro e o lacre da caixa.
+//! Point 13 of the research: listening to those who pay for the error and the seal on the box.
 //!
-//! O programa tem sete decisões que mexem com pessoas reais e o registro diz **nenhum** ouvido nas sete
-//! (`governanca/GRUPOS.md`). O protocolo da frente está em `fundo/p13-escuta/protocolo.md`, o registro em
-//! máquina em `fundo/p13-escuta/registro.tsv`, e este módulo é o que lê o registro e **sabe reprovar**: uma
-//! decisão que se diz emitida com a coluna "ouvidos" em nenhum é divergência, e enquanto a cobertura de escuta não
-//! chega ao mínimo declarado a caixa fica lacrada.
+//! The program has seven decisions that touch real people and the registry says **none** heard across the seven
+//! (`governance/GRUPOS.md`). The protocol of this front is in `empirical/p13-escuta/protocolo.md`, the machine
+//! registry in `empirical/p13-escuta/registro.tsv`, and this module is what reads the registry and **knows how to
+//! reject**: a decision that claims to be issued with the "heard" column at none is a divergence, and while the listening
+//! coverage does not reach the declared minimum the box stays sealed.
 //!
-//! Rodar: ~labs --escuta~
+//! Run: ~labs --listening~
 
 use std::path::Path;
 
-/// O caminho do registro, relativo à raiz do repositório — a mesma convenção dos instrumentos que leem `dados-reais/`.
-pub const REGISTRO: &str = "fundo/p13-escuta/registro.tsv";
+/// The registry path, relative to the repository root — the same convention as the instruments that read `data/`.
+pub const REGISTRY: &str = "empirical/p13-escuta/registro.tsv";
 
-/// Uma decisão do programa, com quem paga o erro dela.
+/// A decision of the program, with whoever pays for its error.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Linha {
-    pub decisao: String,
-    pub grupos: String,
-    /// Quantos titulares a decisão alcança, quando o número existe ("-" quando não).
-    pub titulares: String,
-    /// Quem foi ouvido; "nenhum" enquanto ninguém falou.
-    pub ouvidos: String,
-    /// Onde está o registro assinado da escuta; "-" enquanto não houver.
-    pub registro: String,
-    /// Se a decisão pode ser emitida como diretriz: "sim" ou "nao".
-    pub pode_emitir: String,
+pub struct Row {
+    pub decision: String,
+    pub groups: String,
+    /// How many holders the decision reaches, when the number exists ("-" when it does not).
+    pub holders: String,
+    /// Who was heard; "nenhum" while nobody has spoken.
+    pub heard: String,
+    /// Where the signed record of the listening session is; "-" while there is none.
+    pub record: String,
+    /// Whether the decision may be issued as a guideline: "sim" or "nao".
+    pub may_issue: String,
 }
 
-impl Linha {
-    /// A escuta existe quando há alguém ouvido **e** o registro assinado está apontado.
-    pub fn tem_escuta(&self) -> bool {
-        self.ouvidos != "nenhum"
-            && self.ouvidos != "-"
-            && self.registro != "-"
-            && !self.registro.is_empty()
+impl Row {
+    /// Listening exists when someone was heard **and** the signed record is pointed to.
+    pub fn has_listening(&self) -> bool {
+        self.heard != "nenhum" && self.heard != "-" && self.record != "-" && !self.record.is_empty()
     }
 
-    /// A divergência que o portão pega: a decisão se diz emitida sem ninguém ouvido.
-    pub fn divergente(&self) -> bool {
-        self.pode_emitir == "sim" && !self.tem_escuta()
+    /// The divergence the gate catches: the decision claims to be issued with nobody heard.
+    pub fn divergent(&self) -> bool {
+        self.may_issue == "sim" && !self.has_listening()
     }
 }
 
-/// O registro inteiro, com o carimbo, o prazo da janela e a cobertura mínima declarada.
+/// The whole registry, with the stamp, the window deadline and the declared minimum coverage.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Registro {
-    pub carimbo: String,
-    pub prazo: String,
-    /// Como a escuta é conduzida: "protocolo cego" ou "facilitador neutro", declarado antes do primeiro contato.
-    pub conducao: String,
-    pub grupos_minimos: usize,
-    pub linhas: Vec<Linha>,
+pub struct Registry {
+    pub stamp: String,
+    pub deadline: String,
+    /// How the listening is conducted: "protocolo cego" or "facilitador neutro", declared before the first contact.
+    pub conduct: String,
+    pub min_groups: usize,
+    pub rows: Vec<Row>,
 }
 
-/// O que o registro decide: quantos grupos já foram ouvidos, se a caixa segue lacrada e quem está divergente.
+/// What the registry decides: how many groups have been heard, whether the box remains sealed and who is divergent.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Veredito {
-    pub cobertura: usize,
-    pub grupos_minimos: usize,
-    pub lacrado: bool,
-    pub divergencias: Vec<String>,
+pub struct Verdict {
+    pub coverage: usize,
+    pub min_groups: usize,
+    pub sealed: bool,
+    pub divergences: Vec<String>,
 }
 
-/// Lê o registro: linhas de comentário com `# chave<TAB>valor` e a tabela separada por tabulação.
-pub fn ler(texto: &str) -> Result<Registro, String> {
-    let mut carimbo = String::new();
-    let mut prazo = String::new();
-    let mut conducao = String::new();
-    let mut grupos_minimos: Option<usize> = None;
-    let mut linhas = Vec::new();
-    for linha in texto.lines() {
-        let linha = linha.trim_end();
-        if linha.trim().is_empty() {
+/// Reads the registry: comment lines with `# key<TAB>value` and the tab-separated table.
+pub fn parse(text: &str) -> Result<Registry, String> {
+    let mut stamp = String::new();
+    let mut deadline = String::new();
+    let mut conduct = String::new();
+    let mut min_groups: Option<usize> = None;
+    let mut rows = Vec::new();
+    for line in text.lines() {
+        let line = line.trim_end();
+        if line.trim().is_empty() {
             continue;
         }
-        if let Some(resto) = linha.strip_prefix('#') {
-            let campos: Vec<&str> = resto.trim().split('\t').collect();
-            if campos.len() >= 2 {
-                match campos[0] {
-                    "registros" => carimbo = campos[1].trim().to_string(),
-                    "prazo" => prazo = campos[1].trim().to_string(),
-                    "conducao" => conducao = campos[1].trim().to_string(),
+        if let Some(rest) = line.strip_prefix('#') {
+            let fields: Vec<&str> = rest.trim().split('\t').collect();
+            if fields.len() >= 2 {
+                match fields[0] {
+                    "registros" => stamp = fields[1].trim().to_string(),
+                    "prazo" => deadline = fields[1].trim().to_string(),
+                    "conducao" => conduct = fields[1].trim().to_string(),
                     "grupos_minimos" => {
-                        grupos_minimos = Some(
-                            campos[1]
+                        min_groups = Some(
+                            fields[1]
                                 .trim()
                                 .parse()
-                                .map_err(|_| "grupos_minimos nao e numero")?,
+                                .map_err(|_| "grupos_minimos is not a number")?,
                         )
                     }
                     _ => {}
@@ -95,221 +92,216 @@ pub fn ler(texto: &str) -> Result<Registro, String> {
             }
             continue;
         }
-        let campos: Vec<&str> = linha.split('\t').collect();
-        if campos.len() < 6 || campos[0] == "decisao" {
+        let fields: Vec<&str> = line.split('\t').collect();
+        if fields.len() < 6 || fields[0] == "decisao" {
             continue;
         }
-        linhas.push(Linha {
-            decisao: campos[0].to_string(),
-            grupos: campos[1].to_string(),
-            titulares: campos[2].to_string(),
-            ouvidos: campos[3].to_string(),
-            registro: campos[4].to_string(),
-            pode_emitir: campos[5].to_string(),
+        rows.push(Row {
+            decision: fields[0].to_string(),
+            groups: fields[1].to_string(),
+            holders: fields[2].to_string(),
+            heard: fields[3].to_string(),
+            record: fields[4].to_string(),
+            may_issue: fields[5].to_string(),
         });
     }
-    if prazo.is_empty() || grupos_minimos.is_none() || conducao.is_empty() {
-        return Err("registro sem prazo, sem conducao ou sem grupos_minimos".to_string());
+    if deadline.is_empty() || min_groups.is_none() || conduct.is_empty() {
+        return Err("registry without deadline, without conduct or without min_groups".to_string());
     }
-    Ok(Registro {
-        carimbo,
-        prazo,
-        conducao,
-        grupos_minimos: grupos_minimos.unwrap(),
-        linhas,
+    Ok(Registry {
+        stamp,
+        deadline,
+        conduct,
+        min_groups: min_groups.unwrap(),
+        rows,
     })
 }
 
-/// Lê o registro de um arquivo. Devolve o erro em vez de entrar em pânico, para o portão poder reprovar.
-pub fn ler_arquivo(caminho: &str) -> Result<Registro, String> {
-    if !Path::new(caminho).exists() {
-        return Err(format!("registro ausente: {caminho}"));
+/// Reads the registry from a file. Returns the error instead of panicking, so the gate can reject.
+pub fn parse_file(path: &str) -> Result<Registry, String> {
+    if !Path::new(path).exists() {
+        return Err(format!("registry missing: {path}"));
     }
-    let texto = std::fs::read_to_string(caminho).map_err(|e| e.to_string())?;
-    ler(&texto)
+    let text = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
+    parse(&text)
 }
 
-impl Registro {
-    /// A cobertura é o número de decisões com escuta registrada; o lacre cai quando ela chega ao mínimo.
-    pub fn veredito(&self) -> Veredito {
-        let cobertura = self.linhas.iter().filter(|l| l.tem_escuta()).count();
-        Veredito {
-            cobertura,
-            grupos_minimos: self.grupos_minimos,
-            lacrado: cobertura < self.grupos_minimos,
-            divergencias: self
-                .linhas
+impl Registry {
+    /// Coverage is the number of decisions with a registered listening session; the seal falls when it reaches the minimum.
+    pub fn verdict(&self) -> Verdict {
+        let coverage = self.rows.iter().filter(|l| l.has_listening()).count();
+        Verdict {
+            coverage,
+            min_groups: self.min_groups,
+            sealed: coverage < self.min_groups,
+            divergences: self
+                .rows
                 .iter()
-                .filter(|l| l.divergente())
-                .map(|l| l.decisao.clone())
+                .filter(|l| l.divergent())
+                .map(|l| l.decision.clone())
                 .collect(),
         }
     }
 
-    pub fn sem_escuta(&self) -> Vec<&Linha> {
-        self.linhas.iter().filter(|l| !l.tem_escuta()).collect()
+    pub fn without_listening(&self) -> Vec<&Row> {
+        self.rows.iter().filter(|l| !l.has_listening()).collect()
     }
 }
 
-/// Relatório do portão: a tabela do registro, a cobertura, o prazo e o veredito.
-pub fn relatar(registro: &Registro) -> String {
-    let veredito = registro.veredito();
-    let mut saida = String::new();
-    saida.push_str(&format!(
-        "decisoes: {} | carimbo do registro: {} | conducao: {} | prazo da janela: {} | cobertura minima: {} de {}\n",
-        registro.linhas.len(),
-        registro.carimbo,
-        registro.conducao,
-        registro.prazo,
-        registro.grupos_minimos,
-        registro.linhas.len()
+/// Report of the gate: the registry table, the coverage, the deadline and the verdict.
+pub fn report(registry: &Registry) -> String {
+    let verdict = registry.verdict();
+    let mut out = String::new();
+    out.push_str(&format!(
+        "decisions: {} | registry stamp: {} | conduct: {} | window deadline: {} | minimum coverage: {} of {}\n",
+        registry.rows.len(),
+        registry.stamp,
+        registry.conduct,
+        registry.deadline,
+        registry.min_groups,
+        registry.rows.len()
     ));
-    saida.push_str(&format!(
+    out.push_str(&format!(
         "{:<36} {:>9} {:<12} {:<10} {}\n",
-        "decisao", "titulares", "ouvidos", "registro", "pode emitir"
+        "decision", "holders", "heard", "record", "may issue"
     ));
-    for linha in &registro.linhas {
-        saida.push_str(&format!(
+    for row in &registry.rows {
+        out.push_str(&format!(
             "{:<36} {:>9} {:<12} {:<10} {}\n",
-            linha.decisao, linha.titulares, linha.ouvidos, linha.registro, linha.pode_emitir
+            row.decision, row.holders, row.heard, row.record, row.may_issue
         ));
     }
-    saida.push_str(&format!(
-        "\ncobertura de escuta: {} de {} grupos ouvidos\n",
-        veredito.cobertura,
-        registro.linhas.len()
+    out.push_str(&format!(
+        "\nlistening coverage: {} of {} groups heard\n",
+        verdict.coverage,
+        registry.rows.len()
     ));
-    if veredito.divergencias.is_empty() {
-        saida.push_str(
-            "divergencias: nenhuma — nenhuma decisao se diz emitida sem ninguem ouvido\n",
-        );
+    if verdict.divergences.is_empty() {
+        out.push_str("divergences: none — no decision claims to be issued with nobody heard\n");
     } else {
-        saida.push_str(&format!(
-            "divergencias: REPROVADO em {:?}\n",
-            veredito.divergencias
+        out.push_str(&format!(
+            "divergences: REJECTED on {:?}\n",
+            verdict.divergences
         ));
     }
-    if veredito.lacrado {
-        saida.push_str(&format!(
-            "veredito: CAIXA LACRADA — a cobertura de {} fica abaixo do minimo de {}; as decisoes ficam como analise de sensibilidade (n = 1) e nao viram diretriz de politica publica nem decisao de portao F8 ate {} ou ate a cobertura minima\n",
-            veredito.cobertura, veredito.grupos_minimos, registro.prazo
+    if verdict.sealed {
+        out.push_str(&format!(
+            "verdict: BOX SEALED — the coverage of {} stays below the minimum of {}; the decisions remain as sensitivity analysis (n = 1) and do not become public-policy guidance nor an F8 gate decision until {} or until the minimum coverage\n",
+            verdict.coverage, verdict.min_groups, registry.deadline
         ));
     } else {
-        saida.push_str(&format!(
-            "veredito: CAIXA ABERTA para as decisoes cobertas — a cobertura de {} alcancou o minimo de {}\n",
-            veredito.cobertura, veredito.grupos_minimos
+        out.push_str(&format!(
+            "verdict: BOX OPEN for the covered decisions — the coverage of {} reached the minimum of {}\n",
+            verdict.coverage, verdict.min_groups
         ));
     }
-    saida
+    out
 }
 
-/// O laboratorio: o registro do programa, a prova negativa e a prova positiva.
-pub fn rodar(caminho: &str) {
-    println!("== Ponto 13 :: a escuta de quem paga o erro ==");
-    match ler_arquivo(caminho) {
-        Ok(registro) => {
-            print!("{}", relatar(&registro));
-            let sem = registro.sem_escuta();
-            println!("\nsem escuta, uma por uma:");
-            for linha in sem {
-                println!("  {:<34} | {}", linha.decisao, linha.grupos);
+/// The laboratory: the program registry, the negative proof and the positive proof.
+pub fn run(path: &str) {
+    println!("== Point 13 :: listening to those who pay for the error ==");
+    match parse_file(path) {
+        Ok(registry) => {
+            print!("{}", report(&registry));
+            let unheard = registry.without_listening();
+            println!("\nwithout listening, one by one:");
+            for row in unheard {
+                println!("  {:<34} | {}", row.decision, row.groups);
             }
         }
-        Err(erro) => println!("registro nao lido: {erro}"),
+        Err(error) => println!("registry not read: {error}"),
     }
 
-    println!("\n-- prova negativa: a decisao que se diz emitida sem ninguem ouvido --");
-    let mentiroso = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\nh3/prisoes20\tprisoes\t65276\tnenhum\t-\tnao\nh3/prisoes_ri\tparadas\t86113\tnenhum\t-\tnao\n";
-    match ler(mentiroso) {
-        Ok(r) => println!("{}", relatar(&r)),
-        Err(e) => println!("nao li o caso sintetico: {e}"),
+    println!("\n-- negative proof: the decision that claims to be issued with nobody heard --");
+    let liar = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\nh3/prisoes20\tprisoes\t65276\tnenhum\t-\tnao\nh3/prisoes_ri\tparadas\t86113\tnenhum\t-\tnao\n";
+    match parse(liar) {
+        Ok(r) => println!("{}", report(&r)),
+        Err(e) => println!("could not read the synthetic case: {e}"),
     }
 
-    println!("-- prova positiva: dois grupos ouvidos, com registro assinado --");
-    let honesto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tassociacao de defesa publica de TORONTO\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo de ex-detentos\tregistro-02.md\tsim\n";
-    match ler(honesto) {
-        Ok(r) => println!("{}", relatar(&r)),
-        Err(e) => println!("nao li o caso sintetico: {e}"),
+    println!("-- positive proof: two groups heard, with a signed record --");
+    let honest = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tassociacao de defesa publica de TORONTO\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo de ex-detentos\tregistro-02.md\tsim\n";
+    match parse(honest) {
+        Ok(r) => println!("{}", report(&r)),
+        Err(e) => println!("could not read the synthetic case: {e}"),
     }
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
 
-    fn caminho_do_registro() -> String {
-        let raiz = Path::new(env!("CARGO_MANIFEST_DIR"))
+    fn registry_path() -> String {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .and_then(Path::parent)
-            .expect("raiz")
+            .expect("root")
             .to_path_buf();
-        raiz.join(REGISTRO).to_string_lossy().to_string()
+        root.join(REGISTRY).to_string_lossy().to_string()
     }
 
     #[test]
-    fn o_registro_do_programa_tem_sete_decisoes_e_nenhum_ouvido() {
-        let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
+    fn the_program_registry_has_seven_decisions_and_none_heard() {
+        let registry = parse_file(&registry_path()).expect("registry of point 13");
         assert_eq!(
-            registro.linhas.len(),
+            registry.rows.len(),
             7,
-            "as sete decisoes de governanca/GRUPOS.md"
+            "the seven decisions of governance/GRUPOS.md"
         );
-        assert_eq!(registro.sem_escuta().len(), 7);
-        assert_eq!(registro.veredito().cobertura, 0);
-        assert_eq!(registro.veredito().grupos_minimos, 2);
+        assert_eq!(registry.without_listening().len(), 7);
+        assert_eq!(registry.verdict().coverage, 0);
+        assert_eq!(registry.verdict().min_groups, 2);
         assert_eq!(
-            registro.veredito().divergencias.len(),
+            registry.verdict().divergences.len(),
             0,
-            "o registro nao mente"
+            "the registry does not lie"
         );
-        assert!(registro.veredito().lacrado);
+        assert!(registry.verdict().sealed);
     }
 
     #[test]
-    fn a_decisao_emitida_sem_ninguem_ouvido_reprova() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\n";
-        let registro = ler(texto).expect("caso sintetico");
-        let veredito = registro.veredito();
-        assert_eq!(veredito.divergencias, vec!["h3/prisoes".to_string()]);
-        assert!(
-            veredito.lacrado,
-            "com um grupo ouvido a caixa continua lacrada"
-        );
+    fn a_decision_issued_with_nobody_heard_is_rejected() {
+        let text = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tnenhum\t-\tsim\n";
+        let registry = parse(text).expect("synthetic case");
+        let verdict = registry.verdict();
+        assert_eq!(verdict.divergences, vec!["h3/prisoes".to_string()]);
+        assert!(verdict.sealed, "with one group heard the box stays sealed");
     }
 
     #[test]
-    fn a_cobertura_minima_abre_a_caixa() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tdefensoria\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo\tregistro-02.md\tsim\n";
-        let veredito = ler(texto).expect("caso sintetico").veredito();
-        assert_eq!(veredito.cobertura, 2);
-        assert!(!veredito.lacrado);
-        assert!(veredito.divergencias.is_empty());
+    fn the_minimum_coverage_opens_the_box() {
+        let text = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tdefensoria\tregistro-01.md\tsim\nh3/prisoes20\tprisoes\t65276\tcoletivo\tregistro-02.md\tsim\n";
+        let verdict = parse(text).expect("synthetic case").verdict();
+        assert_eq!(verdict.coverage, 2);
+        assert!(!verdict.sealed);
+        assert!(verdict.divergences.is_empty());
     }
 
     #[test]
-    fn a_escuta_sem_registro_assinado_nao_conta() {
-        let texto = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tconversa informal\t-\tnao\n";
-        let registro = ler(texto).expect("caso sintetico");
+    fn listening_without_a_signed_record_does_not_count() {
+        let text = "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\nh3/prisoes\tdetidos\t5226\tconversa informal\t-\tnao\n";
+        let registry = parse(text).expect("synthetic case");
         assert_eq!(
-            registro.veredito().cobertura,
+            registry.verdict().coverage,
             0,
-            "conversa sem registro nao e escuta"
+            "a conversation without a record is not listening"
         );
     }
 
     #[test]
-    fn o_prazo_e_a_cobertura_minima_saem_do_registro() {
-        let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
-        assert_eq!(registro.prazo, "2026-12-15");
-        assert_eq!(registro.carimbo, "2026-10-16");
+    fn the_deadline_and_the_minimum_coverage_come_from_the_registry() {
+        let registry = parse_file(&registry_path()).expect("registry of point 13");
+        assert_eq!(registry.deadline, "2026-12-15");
+        assert_eq!(registry.stamp, "2026-10-16");
     }
 
     #[test]
-    fn a_conducao_declarada_e_protocolo_cego() {
-        let registro = ler_arquivo(&caminho_do_registro()).expect("registro do ponto 13");
+    fn the_declared_conduct_is_protocolo_cego() {
+        let registry = parse_file(&registry_path()).expect("registry of point 13");
         assert_eq!(
-            registro.conducao, "protocolo cego",
-            "a forma escolhida na declaracao 2"
+            registry.conduct, "protocolo cego",
+            "the form chosen in declaration 2"
         );
     }
 }

@@ -10,7 +10,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 stochology-core = { path = "../stochology-core" }
-stochology-h0 = { path = "../stochology-h0" }
+stochology-horizons = { path = "../stochology-horizons" }
 
 [lints]
 workspace = true

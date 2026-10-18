@@ -1,49 +1,55 @@
-//! CLI dos portões determinísticos.
+//! Deterministic gates CLI.
 //!
-//! Uso:
-//!   cargo run --release --bin portoes -- --horizonte todos --reproducao
-//!   cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23
+//! Usage:
+//!   cargo run --release --bin gates -- --horizon all --reproduction
+//!   cargo run --release --bin gates -- --horizon h3 --defect h3.voos23
+//!
+//! Frozen data, kept byte-identical on purpose: the card identifiers, the one-line
+//! definitions of the registered cards, the "sessao-" session prefix and the data tokens
+//! ("dia", "media-historica", "decisor-declarado", "parar-se-ECE>0.10"). They are hashed
+//! into the published Merkle root 9716e28a87bec9cf... or matched by keyword lists inside
+//! stochology-core, so translating them would move the root and break the Phi5 grain check.
 
-use stochology_audit::{LivroRazao, sha256_hex};
+use stochology_core::audit::{Ledger, sha256_hex};
 use stochology_core::{
-    AgenteA, Camada, Ficha, OrquestradorM, Rng, SEVERIDADE_MINIMA, TipoIncerteza, avaliar,
+    AgentA, Card, Layer, MINIMUM_SEVERITY, OrchestratorM, Rng, UncertaintyType, evaluate,
 };
-use stochology_drift::{Opcoes as OpcoesDeriva, cusum, nulo_estacionario};
-use stochology_fairness::{Grupo as GrupoJustica, paridade_demografica};
-use stochology_h1::hill;
-use stochology_hypergraph::lentes;
+use stochology_horizons::h1::hill;
+use stochology_hypergraph::lenses;
+use stochology_methods::drift::{Options as DriftOptions, cusum, stationary_null};
+use stochology_methods::fairness::{Group as JusticeGroup, demographic_parity};
 
 struct Config {
-    horizonte: String,
-    reproducao: bool,
-    defeito: Option<String>,
+    horizon: String,
+    reproduction: bool,
+    defect: Option<String>,
 }
 
 fn config() -> Config {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let mut cfg = Config {
-        horizonte: "todos".to_string(),
-        reproducao: false,
-        defeito: None,
+        horizon: "all".to_string(),
+        reproduction: false,
+        defect: None,
     };
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
-            "--horizonte" => {
+            "--horizon" => {
                 if i + 1 < args.len() {
-                    cfg.horizonte = args[i + 1].clone();
+                    cfg.horizon = args[i + 1].clone();
                     i += 1;
                 }
             }
-            "--reproducao" => cfg.reproducao = true,
-            "--defeito" => {
+            "--reproduction" => cfg.reproduction = true,
+            "--defect" => {
                 if i + 1 < args.len() {
-                    cfg.defeito = Some(args[i + 1].clone());
+                    cfg.defect = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
-            outra => {
-                eprintln!("flag desconhecida: {outra}");
+            other => {
+                eprintln!("unknown flag: {other}");
                 std::process::exit(1);
             }
         }
@@ -52,185 +58,194 @@ fn config() -> Config {
     cfg
 }
 
-fn ficha(
-    id: &str,
-    camada: Camada,
-    incerteza: TipoIncerteza,
-    definicao: &str,
-    pergunta: &str,
-    acao: &str,
-) -> Ficha {
-    let mut f = Ficha::nova(id, camada, incerteza);
-    f.definicao = definicao.to_string();
-    f.artefato_simulavel = Some(format!("crates/stochology-core#{id}"));
-    f.semente = Some(2026);
-    f.unidade_independente = Some("dia".to_string());
-    f.margem = Some(0.51);
-    f.modelo_nulo = Some("media-historica".to_string());
-    f.escopo_ecologico = true;
-    f.quem_paga_pelo_erro = Some("decisor-declarado".to_string());
-    f.clausula_de_saida = Some("parar-se-ECE>0.10".to_string());
-    f.pergunta_do_decisor = pergunta.to_string();
-    f.acao_do_pacote = acao.to_string();
-    f.teste_de_propriedade = AgenteA::A1Codigo.ancora_estrutural(&f);
-    f.trata_ausentes = AgenteA::A2Dados.ancora_estrutural(&f);
-    f.deriva_declarada = AgenteA::A3CicloVida.ancora_estrutural(&f);
-    f.patologias_cobertas = AgenteA::A4Inferencia.ancora_estrutural(&f);
-    f.trilha_integra = AgenteA::A5Governanca.ancora_estrutural(&f);
-    f.subgrupos_auditados = AgenteA::A6Justica.ancora_estrutural(&f);
-    f.priori_elicitada = AgenteA::A7Dominio.ancora_estrutural(&f);
-    f
+/// Session key hashed into every ledger event.
+///
+/// The published Merkle root was sealed with the Portuguese originals, so the "all"
+/// horizon keeps the frozen key "todos" while the flag itself reads "all".
+fn session_key(horizon: &str) -> &str {
+    if horizon == "all" { "todos" } else { horizon }
 }
 
-/// As três fichas intermediárias que a banca reprovou ao longo dos horizontes H1, H2 e H3,
-/// cada uma com cuidados e âncoras estruturais efetivamente ausentes.
-fn fichas_reprovadas_no_historico() -> Vec<Ficha> {
-    let mut h1_incendios_alavancar = ficha(
-        "h1.c-incendios.alavancar",
-        Camada::Agente,
-        TipoIncerteza::Knightiana,
-        "resseguradora triplica aposta apos 36 meses limpos com Brier skill -0,015",
-        "devemos triplicar a aposta da seguradora?",
-        "triplicar a aposta",
-    );
-    h1_incendios_alavancar.patologias_cobertas = false;
-    h1_incendios_alavancar.clausula_de_saida = None;
+fn card(
+    id: &str,
+    layer: Layer,
+    uncertainty: UncertaintyType,
+    definition: &str,
+    question: &str,
+    action: &str,
+) -> Card {
+    let mut c = Card::new(id, layer, uncertainty);
+    c.definition = definition.to_string();
+    c.simulable_artifact = Some(format!("crates/stochology-core#{id}"));
+    c.seed = Some(2026);
+    // "dia" is matched by the Phi5 grain keyword list in stochology-core.
+    c.independent_unit = Some("dia".to_string());
+    c.margin = Some(0.51);
+    c.null_model = Some("media-historica".to_string());
+    c.ecological_scope = true;
+    c.who_pays_for_the_error = Some("decisor-declarado".to_string());
+    c.exit_clause = Some("parar-se-ECE>0.10".to_string());
+    c.decision_maker_question = question.to_string();
+    c.package_action = action.to_string();
+    c.property_test = AgentA::A1Code.structural_anchor(&c);
+    c.handles_missing = AgentA::A2Data.structural_anchor(&c);
+    c.declared_drift = AgentA::A3Lifecycle.structural_anchor(&c);
+    c.pathologies_covered = AgentA::A4Inference.structural_anchor(&c);
+    c.trail_intact = AgentA::A5Governance.structural_anchor(&c);
+    c.subgroups_audited = AgentA::A6Fairness.structural_anchor(&c);
+    c.elicited_prior = AgentA::A7Domain.structural_anchor(&c);
+    c
+}
 
-    let mut h2_levedura_1linha = ficha(
-        "h2.icp-levedura.1linha",
-        Camada::Modelo,
-        TipoIncerteza::Epistemica,
-        "validacao por intervencao com uma unica linha por mutante (4 de 40 aprovados)",
-        "devemos aceitar a genetica com uma linha?",
-        "aceitar com uma linha",
+/// The three intermediate cards the panel rejected along horizons H1, H2 and H3, each one
+/// with the safeguards and the structural anchors actually missing.
+fn cards_rejected_in_history() -> Vec<Card> {
+    let mut h1_fire_triple_bet = card(
+        "h1.fire.triple-bet",
+        Layer::Agent,
+        UncertaintyType::Knightian,
+        "reinsurer triples the bet after 36 clean months with Brier skill -0,015",
+        "should we triple the insurer's bet?",
+        "triple the insurer's bet",
     );
-    h2_levedura_1linha.priori_elicitada = false;
-    h2_levedura_1linha.modelo_nulo = None;
+    h1_fire_triple_bet.pathologies_covered = false;
+    h1_fire_triple_bet.exit_clause = None;
 
-    let mut h3_prisoes_toronto = ficha(
-        "h3.prisoes.toronto",
-        Camada::Agente,
-        TipoIncerteza::Knightiana,
-        "recalibracao apenas de intercepto em Toronto 2020-2021 com ECE 0,067",
-        "devemos operar o modelo em Toronto?",
-        "operar em Toronto",
+    let mut h2_icp_yeast_one_line = card(
+        "h2.icp-yeast.one-line",
+        Layer::Model,
+        UncertaintyType::Epistemic,
+        "intervention validation with a single line per mutant (4 of 40 approved)",
+        "should we accept genetics with one line?",
+        "accept with one line",
     );
-    h3_prisoes_toronto.deriva_declarada = false;
-    h3_prisoes_toronto.subgrupos_auditados = false;
+    h2_icp_yeast_one_line.elicited_prior = false;
+    h2_icp_yeast_one_line.null_model = None;
+
+    let mut h3_prisons_toronto = card(
+        "h3.prisons.toronto",
+        Layer::Agent,
+        UncertaintyType::Knightian,
+        "intercept-only recalibration in Toronto 2020-2021 with ECE 0,067",
+        "should we operate the model in Toronto?",
+        "operate in Toronto",
+    );
+    h3_prisons_toronto.declared_drift = false;
+    h3_prisons_toronto.subgroups_audited = false;
 
     vec![
-        h1_incendios_alavancar,
-        h2_levedura_1linha,
-        h3_prisoes_toronto,
+        h1_fire_triple_bet,
+        h2_icp_yeast_one_line,
+        h3_prisons_toronto,
     ]
 }
 
-fn fichas(horizonte: &str) -> Vec<Ficha> {
+fn cards(horizon: &str) -> Vec<Card> {
     let h0 = vec![
-        ficha(
+        card(
             "h0.posto-saude",
-            Camada::Mundo,
-            TipoIncerteza::Aleatoria,
+            Layer::World,
+            UncertaintyType::Aleatory,
             "fila com chegada nao linear e espera convexa",
-            "devemos abrir uma segunda sala nos dias cheios?",
-            "abrir uma segunda sala",
+            "should we open a second room on busy days?",
+            "open a second room",
         ),
-        ficha(
+        card(
             "h0.banco-2003",
-            Camada::Modelo,
-            TipoIncerteza::Epistemica,
+            Layer::Model,
+            UncertaintyType::Epistemic,
             "2,65 milhoes de chamadas que valem 81 dias de unidade independente",
-            "devemos reforcar o atendimento nos picos?",
-            "reforcar o atendimento",
+            "should we reinforce service at the peaks?",
+            "reinforce service",
         ),
     ];
     let h1 = vec![
-        ficha(
+        card(
             "h1.a-multiplicativo",
-            Camada::Modelo,
-            TipoIncerteza::Aleatoria,
+            Layer::Model,
+            UncertaintyType::Aleatory,
             "fundo alavancado 3x sofre arrasto da volatilidade",
-            "devemos reduzir a alavancagem de 3x para 1x?",
-            "reduzir a alavancagem",
+            "should we reduce leverage from 3x to 1x?",
+            "reduce leverage",
         ),
-        ficha(
+        card(
             "h1.b-lalonde",
-            Camada::Modelo,
-            TipoIncerteza::Epistemica,
+            Layer::Model,
+            UncertaintyType::Epistemic,
             "comparacao ingenua carrega vies de selecao de -10292 dolares",
-            "devemos manter o programa de treinamento?",
-            "manter o programa",
+            "should we keep the training program?",
+            "keep the training program",
         ),
-        ficha(
+        card(
             "h1.c-incendios",
-            Camada::Mundo,
-            TipoIncerteza::Knightiana,
+            Layer::World,
+            UncertaintyType::Knightian,
             "incendios acima de 50 milhoes tem cauda com alfa 1,81",
-            "devemos triplicar a aposta da seguradora?",
-            "triplicar a aposta",
+            "should we triple the bet of the insurer?",
+            "triple the bet",
         ),
     ];
     let h2 = vec![
-        ficha(
+        card(
             "h2.icp-tunel-de-luz",
-            Camada::Modelo,
-            TipoIncerteza::Epistemica,
+            Layer::Model,
+            UncertaintyType::Epistemic,
             "1024 sensores, causas invariantes entre regimes",
-            "devemos declarar os tres LEDs como causa da corrente?",
-            "declarar os tres LEDs",
+            "should we declare the three LEDs as the cause of the current?",
+            "declare the three LEDs",
         ),
-        ficha(
+        card(
             "h2.icp-fda-herg",
-            Camada::Modelo,
-            TipoIncerteza::Epistemica,
+            Layer::Model,
+            UncertaintyType::Epistemic,
             "16 medidas por voluntario e tres canais ionicos",
-            "devemos prever o verapamil pelo teste de invariancia?",
-            "prever o verapamil",
+            "should we predict verapamil by the invariance test?",
+            "predict verapamil",
         ),
-        ficha(
+        card(
             "h2.icp-estrela-levedura",
-            Camada::Modelo,
-            TipoIncerteza::Epistemica,
+            Layer::Model,
+            UncertaintyType::Epistemic,
             "40 genes de levedura com p igual a 0,001",
-            "devemos manter a genetica como terceiro pilar?",
-            "manter a genetica",
+            "should we keep genetics as the third pillar?",
+            "keep genetics",
         ),
     ];
     let h3 = vec![
-        ficha(
+        card(
             "h3.voos23",
-            Camada::Agente,
-            TipoIncerteza::Epistemica,
+            Layer::Agent,
+            UncertaintyType::Epistemic,
             "malha sob relogio com ECE 0,0048 e habilidade 0,019",
-            "devemos manter o modelo no fluxo de voos?",
-            "manter o modelo",
+            "should we keep the model in the flight pipeline?",
+            "keep the model",
         ),
-        ficha(
+        card(
             "h3.bolsa",
-            Camada::Agente,
-            TipoIncerteza::Knightiana,
+            Layer::Agent,
+            UncertaintyType::Knightian,
             "Goodhart medido por instrumento quatro vezes menor",
-            "devemos corrigir a meta do fluxo de bolsa?",
-            "corrigir a meta",
+            "should we correct the target of the stock pipeline?",
+            "correct the target",
         ),
-        ficha(
+        card(
             "h3.energia",
-            Camada::Agente,
-            TipoIncerteza::Epistemica,
+            Layer::Agent,
+            UncertaintyType::Epistemic,
             "carga com canario de vazamento armado",
-            "devemos soltar o canario no fluxo de energia?",
-            "soltar o canario",
+            "should we release the canary in the energy pipeline?",
+            "release the canary",
         ),
-        ficha(
+        card(
             "h3.prisoes",
-            Camada::Agente,
-            TipoIncerteza::Knightiana,
+            Layer::Agent,
+            UncertaintyType::Knightian,
             "tres cofres ate acertar a calibracao policial",
-            "devemos trocar o cofre de Toronto por Rhode Island?",
-            "trocar o cofre",
+            "should we swap the vault from Toronto to Rhode Island?",
+            "swap the vault",
         ),
     ];
-    match horizonte {
+    match horizon {
         "h0" => h0,
         "h1" => h1,
         "h2" => h2,
@@ -239,309 +254,311 @@ fn fichas(horizonte: &str) -> Vec<Ficha> {
     }
 }
 
-struct Execucao {
-    relatorio: Vec<String>,
-    portoes: Vec<(String, bool, String)>,
-    raiz: String,
-    falhas: usize,
+struct Execution {
+    report: Vec<String>,
+    gates: Vec<(String, bool, String)>,
+    root: String,
+    failures: usize,
 }
 
-/// Lista de fichas do horizonte, com o defeito injetado quando pedido.
-fn lista_com_defeito(cfg: &Config) -> Vec<Ficha> {
-    let mut l = fichas(&cfg.horizonte);
-    if let Some(alvo) = &cfg.defeito {
-        for f in l.iter_mut() {
-            if &f.id == alvo {
-                f.trilha_integra = false;
-                f.subgrupos_auditados = false;
+/// Card list of the horizon, with the defect injected when asked for.
+fn list_with_defect(cfg: &Config) -> Vec<Card> {
+    let mut l = cards(&cfg.horizon);
+    if let Some(target) = &cfg.defect {
+        for c in l.iter_mut() {
+            if &c.id == target {
+                c.trail_intact = false;
+                c.subgroups_audited = false;
             }
         }
     }
     l
 }
 
-fn executar(cfg: &Config) -> Execucao {
-    let mut relatorio = Vec::new();
-    let mut portoes: Vec<(String, bool, String)> = Vec::new();
-    let lista = lista_com_defeito(cfg);
+fn run(cfg: &Config) -> Execution {
+    let mut report = Vec::new();
+    let mut gates: Vec<(String, bool, String)> = Vec::new();
+    let list = list_with_defect(cfg);
 
-    relatorio.push(format!(
-        "horizonte={} fichas={} defeito={}",
-        cfg.horizonte,
-        lista.len(),
-        cfg.defeito.clone().unwrap_or_else(|| "nenhum".to_string())
+    report.push(format!(
+        "horizon={} cards={} defect={}",
+        cfg.horizon,
+        list.len(),
+        cfg.defect.clone().unwrap_or_else(|| "none".to_string())
     ));
 
-    let id_sessao = format!("sessao-{}", cfg.horizonte);
-    let orq = OrquestradorM::novo(&id_sessao, "");
-    let mut livro = LivroRazao::novo(&id_sessao);
-    let mut banca_ok = true;
-    let mut pior = 10u8;
+    let session_id = format!("sessao-{}", session_key(&cfg.horizon));
+    let orchestrator = OrchestratorM::new(&session_id, "");
+    let mut ledger = Ledger::new(&session_id);
+    let mut panel_ok = true;
+    let mut worst = 10u8;
 
-    for f in &lista {
-        let veredito = orq.banca(f);
-        let mut menor = 10u8;
-        for a in AgenteA::TODOS {
-            let s = veredito.severidade(a).0;
-            if s < menor {
-                menor = s;
+    for c in &list {
+        let verdict = orchestrator.panel(c);
+        let mut lowest = 10u8;
+        for agent in AgentA::ALL {
+            let s = verdict.severity(agent).0;
+            if s < lowest {
+                lowest = s;
             }
         }
-        if menor < pior {
-            pior = menor;
+        if lowest < worst {
+            worst = lowest;
         }
-        if !veredito.aprovado {
-            banca_ok = false;
+        if !verdict.approved {
+            panel_ok = false;
         }
-        relatorio.push(format!(
-            "  ficha {} severidade_min={} aprovada={}",
-            f.id, menor, veredito.aprovado
+        report.push(format!(
+            "  card {} severity_min={} approved={}",
+            c.id, lowest, verdict.approved
         ));
-        livro.registrar(&f.id, &format!("{}|{}", f.definicao, veredito.aprovado));
+        ledger.record(&c.id, &format!("{}|{}", c.definition, verdict.approved));
     }
 
-    // Amostra das lentes, tudo com semente fixa.
-    let mut rng = Rng::novo(1909);
-    let serie: Vec<f64> = (0..20_000)
+    // Lens sample, all of it with a fixed seed.
+    let mut rng = Rng::new(1909);
+    let series: Vec<f64> = (0..20_000)
         .map(|_| {
-            let u = (rng.proximo() as f64) / (u64::MAX as f64);
+            let u = (rng.next_u64() as f64) / (u64::MAX as f64);
             (1.0 - u).powf(-1.0 / 1.81)
         })
         .collect();
-    let alfa = lentes::indice_hill(&serie, 500);
-    let (mediana, arruinadas) = lentes::simular_multiplicativo(2026, 200, 2_000, 0.50, 0.40);
-    let (rel, resol, unc) = lentes::decomposicao_murphy(
+    let alpha = lenses::hill_index(&series, 500);
+    let (median, ruined) = lenses::simulate_multiplicative(2026, 200, 2_000, 0.50, 0.40);
+    let (rel, resol, unc) = lenses::murphy_decomposition(
         &[0.1, 0.1, 0.2, 0.2, 0.8, 0.8, 0.9, 0.9],
         &[0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     );
-    relatorio.push(format!(
-        "  lentes: hill_alfa={:.4} cauda_selvagem={} mediana_log_riqueza={:.4} arruinadas={:.3} murphy_rel={:.4} res={:.4} unc={:.4}",
-        alfa,
-        lentes::cauda_selvagem(alfa),
-        mediana,
-        arruinadas,
+    report.push(format!(
+        "  lenses: hill_alpha={:.4} wild_tail={} median_log_wealth={:.4} ruined={:.3} murphy_rel={:.4} res={:.4} unc={:.4}",
+        alpha,
+        lenses::wild_tail(alpha),
+        median,
+        ruined,
         rel,
         resol,
         unc
     ));
 
-    // G1 determinismo: mesma entrada, mesma raiz.
-    let espelho = executar_sem_portoes(cfg);
-    let determinista = espelho.raiz == livro.raiz_merkle();
+    // G1 determinism: same input, same root.
+    let mirror = run_without_gates(cfg);
+    let deterministic = mirror.root == ledger.merkle_root();
 
-    // G2 semente fixa.
-    let semente_ok = lista.iter().all(|f| f.semente.is_some());
+    // G2 fixed seed.
+    let seed_ok = list.iter().all(|c| c.seed.is_some());
 
-    // G3 escopo: artefato simulável declarado para toda ficha.
-    let escopo_ok = lista.iter().all(|f| f.artefato_simulavel.is_some());
+    // G3 scope: simulable artifact declared for every card.
+    let scope_ok = list.iter().all(|c| c.simulable_artifact.is_some());
 
-    // G4 invariantes Phi1-Phi4 e trava de tipo III.
-    let mut falhas_invariante = 0;
-    for f in &lista {
-        falhas_invariante += avaliar(f).len();
+    // G4 invariants Phi1-Phi4 and the type III lock.
+    let mut invariant_failures = 0;
+    for c in &list {
+        invariant_failures += evaluate(c).len();
     }
-    let invariantes_ok = falhas_invariante == 0;
+    let invariants_ok = invariant_failures == 0;
 
-    // G5 trilha: corrente íntegra e adulteração detectada.
-    let mut adulterado = livro.clone();
-    if !adulterado.eventos.is_empty() {
-        adulterado.eventos[0].conteudo.push('!');
+    // G5 trail: intact chain and tampering detected.
+    let mut tampered = ledger.clone();
+    if !tampered.events.is_empty() {
+        tampered.events[0].content.push('!');
     }
-    let trilha_ok = livro.verificar() && !adulterado.verificar();
+    let trail_ok = ledger.verify() && !tampered.verify();
 
-    // G6 banca adversarial A1-A8, com vigilancia de deriva (A3), paridade de subgrupos (A6), Hill de H1 (A4)
-    // e reprovação obrigatória das três fichas intermediárias com cuidados e âncoras ausentes.
-    let alfa_h1 = hill(&serie, 500);
-    let vigilancia_nula = cusum(
-        &nulo_estacionario(2026, 500, 0.0, 1.0),
-        &OpcoesDeriva::default(),
+    // G6 adversarial panel A1-A8, with drift surveillance (A3), subgroup parity (A6), the
+    // H1 Hill (A4) and the mandatory rejection of the three intermediate cards whose
+    // safeguards and anchors are missing.
+    let alpha_h1 = hill(&series, 500);
+    let null_surveillance = cusum(
+        &stationary_null(2026, 500, 0.0, 1.0),
+        &DriftOptions::default(),
     );
-    let paridade_nula = paridade_demografica(&[
-        GrupoJustica::novo("coorte-a", 100, 30, 24, 6),
-        GrupoJustica::novo("coorte-b", 100, 30, 24, 6),
+    let null_parity = demographic_parity(&[
+        JusticeGroup::new("cohort-a", 100, 30, 24, 6),
+        JusticeGroup::new("cohort-b", 100, 30, 24, 6),
     ]);
-    let historico_reprovado_ok = fichas_reprovadas_no_historico()
+    let history_rejected_ok = cards_rejected_in_history()
         .iter()
-        .all(|f| !orq.banca(f).aprovado);
-    let modulos_banca_ok = (alfa - alfa_h1).abs() < 1e-12
-        && vigilancia_nula.alarme.is_none()
-        && paridade_nula.abs() < 1e-12
-        && historico_reprovado_ok;
-    let banca_portao_ok = banca_ok && pior >= SEVERIDADE_MINIMA.0 && modulos_banca_ok;
+        .all(|c| !orchestrator.panel(c).approved);
+    let panel_modules_ok = (alpha - alpha_h1).abs() < 1e-12
+        && null_surveillance.alarm.is_none()
+        && null_parity.abs() < 1e-12
+        && history_rejected_ok;
+    let panel_gate_ok = panel_ok && worst >= MINIMUM_SEVERITY.0 && panel_modules_ok;
 
-    // G7 cláusula de saída declarada e A8 acima do piso.
-    let saida_ok = lista.iter().all(|f| f.clausula_de_saida.is_some())
-        && lista.iter().all(|f| {
-            orq.conduzir_ataque(AgenteA::A8Decisao, f)
-                .map(|s| s >= SEVERIDADE_MINIMA)
+    // G7 declared exit clause and A8 above the floor.
+    let exit_ok = list.iter().all(|c| c.exit_clause.is_some())
+        && list.iter().all(|c| {
+            orchestrator
+                .conduct_attack(AgentA::A8Decision, c)
+                .map(|s| s >= MINIMUM_SEVERITY)
                 .unwrap_or(false)
         });
 
-    let raiz = livro.raiz_merkle();
-    portoes.push((
+    let root = ledger.merkle_root();
+    gates.push((
         "G1".to_string(),
-        determinista,
-        format!("determinismo da raiz {}", &raiz[..16]),
+        deterministic,
+        format!("root determinism {}", &root[..16]),
     ));
-    portoes.push((
+    gates.push((
         "G2".to_string(),
-        semente_ok,
-        format!("semente fixa em {} fichas", lista.len()),
+        seed_ok,
+        format!("fixed seed in {} cards", list.len()),
     ));
-    portoes.push((
+    gates.push((
         "G3".to_string(),
-        escopo_ok,
-        "escopo declarado: so artefato simulado".to_string(),
+        scope_ok,
+        "declared scope: simulated artifact only".to_string(),
     ));
-    portoes.push((
+    gates.push((
         "G4".to_string(),
-        invariantes_ok,
-        format!("Phi1-Phi5 e tipo III (falhas={})", falhas_invariante),
+        invariants_ok,
+        format!("Phi1-Phi5 and type III (failures={})", invariant_failures),
     ));
-    portoes.push((
+    gates.push((
         "G5".to_string(),
-        trilha_ok,
-        "corrente SHA-256 integra e adulteracao detectada".to_string(),
+        trail_ok,
+        "SHA-256 chain intact and tampering detected".to_string(),
     ));
-    portoes.push((
+    gates.push((
         "G6".to_string(),
-        banca_portao_ok,
+        panel_gate_ok,
         format!(
-            "banca A1-A8 com piso {} e pior {}",
-            SEVERIDADE_MINIMA.0, pior
+            "panel A1-A8 with floor {} and worst {}",
+            MINIMUM_SEVERITY.0, worst
         ),
     ));
-    portoes.push((
+    gates.push((
         "G7".to_string(),
-        saida_ok,
-        "clausula de saida declarada e A8 acima do piso".to_string(),
+        exit_ok,
+        "declared exit clause and A8 above the floor".to_string(),
     ));
 
-    let falhas = portoes.iter().filter(|(_, ok, _)| !ok).count();
-    // A raiz entra no relatório para que duas execuções possam ser comparadas byte a byte.
-    relatorio.push(format!("raiz_merkle={}", raiz));
+    let failures = gates.iter().filter(|(_, ok, _)| !ok).count();
+    // The root enters the report so that two runs can be compared byte by byte.
+    report.push(format!("merkle_root={}", root));
 
-    Execucao {
-        relatorio,
-        portoes,
-        raiz,
-        falhas,
+    Execution {
+        report,
+        gates,
+        root,
+        failures,
     }
 }
 
-/// Mesma passada, sem portões: serve de espelho para o G1.
-fn executar_sem_portoes(cfg: &Config) -> Execucao {
-    let lista = lista_com_defeito(cfg);
-    let id_sessao = format!("sessao-{}", cfg.horizonte);
-    let mut livro = LivroRazao::novo(&id_sessao);
-    let orq = OrquestradorM::novo(&id_sessao, "");
-    for f in &lista {
-        let veredito = orq.banca(f);
-        livro.registrar(&f.id, &format!("{}|{}", f.definicao, veredito.aprovado));
+/// Same pass, no gates: it serves as the mirror for G1.
+fn run_without_gates(cfg: &Config) -> Execution {
+    let list = list_with_defect(cfg);
+    let session_id = format!("sessao-{}", session_key(&cfg.horizon));
+    let mut ledger = Ledger::new(&session_id);
+    let orchestrator = OrchestratorM::new(&session_id, "");
+    for c in &list {
+        let verdict = orchestrator.panel(c);
+        ledger.record(&c.id, &format!("{}|{}", c.definition, verdict.approved));
     }
-    let raiz = livro.raiz_merkle();
-    Execucao {
-        relatorio: Vec::new(),
-        portoes: Vec::new(),
-        raiz,
-        falhas: 0,
+    let root = ledger.merkle_root();
+    Execution {
+        report: Vec::new(),
+        gates: Vec::new(),
+        root,
+        failures: 0,
     }
 }
 
 fn main() {
     let cfg = config();
-    let exec = executar(&cfg);
-    println!("== Estocologia :: portoes deterministicos ==");
-    for linha in &exec.relatorio {
-        println!("{}", linha);
+    let exec = run(&cfg);
+    println!("== Stochology :: deterministic gates ==");
+    for line in &exec.report {
+        println!("{}", line);
     }
 
-    if cfg.reproducao {
-        let segunda = executar(&cfg);
-        let identico = segunda.relatorio == exec.relatorio && segunda.raiz == exec.raiz;
+    if cfg.reproduction {
+        let second = run(&cfg);
+        let identical = second.report == exec.report && second.root == exec.root;
         println!(
-            "reproducao: segunda execucao identica = {} (raiz {})",
-            identico,
-            &segunda.raiz[..16]
+            "reproduction: second run identical = {} (root {})",
+            identical,
+            &second.root[..16]
         );
     }
 
-    for (nome, ok, detalhe) in &exec.portoes {
+    for (name, ok, detail) in &exec.gates {
         println!(
             "{} {} {}",
-            nome,
-            if *ok { "ok      " } else { "reprovado" },
-            detalhe
+            name,
+            if *ok { "ok      " } else { "failed  " },
+            detail
         );
     }
 
-    let hash_relatorio = sha256_hex(exec.relatorio.join("|").as_bytes());
-    println!("hash_do_relatorio={}", hash_relatorio);
+    let report_hash = sha256_hex(exec.report.join("|").as_bytes());
+    println!("report_hash={}", report_hash);
 
-    if exec.falhas == 0 {
-        println!("veredito: 7 portoes ok");
+    if exec.failures == 0 {
+        println!("verdict: 7 gates ok");
         std::process::exit(0);
     }
-    println!("veredito: {} portoes reprovados", exec.falhas);
+    println!("verdict: {} gates failed", exec.failures);
     std::process::exit(1);
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
 
     #[test]
-    fn sete_portoes_aprovam_horizonte_todos_com_reproducao_identica() {
+    fn seven_gates_pass_the_all_horizon_with_an_identical_reproduction() {
         let cfg = Config {
-            horizonte: "todos".to_string(),
-            reproducao: true,
-            defeito: None,
+            horizon: "all".to_string(),
+            reproduction: true,
+            defect: None,
         };
-        let a = executar(&cfg);
-        let b = executar(&cfg);
-        assert_eq!(a.falhas, 0);
-        assert_eq!(a.portoes.len(), 7);
-        assert_eq!(a.relatorio, b.relatorio);
-        assert_eq!(a.raiz, b.raiz);
-        assert!(a.raiz.starts_with("9716e28a87bec9cf"));
+        let a = run(&cfg);
+        let b = run(&cfg);
+        assert_eq!(a.failures, 0);
+        assert_eq!(a.gates.len(), 7);
+        assert_eq!(a.report, b.report);
+        assert_eq!(a.root, b.root);
+        assert!(a.root.starts_with("9716e28a87bec9cf"));
     }
 
     #[test]
-    fn defeito_em_h3_voos23_reprova_portao_g6() {
+    fn defect_in_h3_voos23_fails_gate_g6() {
         let cfg = Config {
-            horizonte: "h3".to_string(),
-            reproducao: false,
-            defeito: Some("h3.voos23".to_string()),
+            horizon: "h3".to_string(),
+            reproduction: false,
+            defect: Some("h3.voos23".to_string()),
         };
-        let exec = executar(&cfg);
-        assert_eq!(exec.falhas, 1);
-        let g6 = exec.portoes.iter().find(|(n, _, _)| n == "G6").expect("G6");
+        let exec = run(&cfg);
+        assert_eq!(exec.failures, 1);
+        let g6 = exec.gates.iter().find(|(n, _, _)| n == "G6").expect("G6");
         assert!(
             !g6.1,
-            "G6 deve reprovar quando h3.voos23 perde trilha e subgrupos"
+            "G6 must fail when h3.voos23 loses trail and subgroups"
         );
     }
 
     #[test]
-    fn cada_horizonte_individual_fecha_os_sete_portoes() {
+    fn each_individual_horizon_closes_the_seven_gates() {
         for h in ["h0", "h1", "h2", "h3"] {
             let cfg = Config {
-                horizonte: h.to_string(),
-                reproducao: false,
-                defeito: None,
+                horizon: h.to_string(),
+                reproduction: false,
+                defect: None,
             };
-            let exec = executar(&cfg);
-            assert_eq!(exec.falhas, 0, "horizonte {h} falhou");
+            let exec = run(&cfg);
+            assert_eq!(exec.failures, 0, "horizon {h} failed");
         }
-        let orq = OrquestradorM::novo("sessao-todos", "");
-        let reprovadas = fichas_reprovadas_no_historico();
-        assert_eq!(reprovadas.len(), 3);
-        for f in &reprovadas {
-            let v = orq.banca(f);
+        let orchestrator = OrchestratorM::new("sessao-todos", "");
+        let rejected = cards_rejected_in_history();
+        assert_eq!(rejected.len(), 3);
+        for c in &rejected {
+            let v = orchestrator.panel(c);
             assert!(
-                !v.aprovado,
-                "ficha historica {} deveria reprovar na banca",
-                f.id
+                !v.approved,
+                "historical card {} should be rejected by the panel",
+                c.id
             );
         }
     }

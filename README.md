@@ -1,111 +1,111 @@
-# Estocologia
+# Stochology
 
-Estocologia é a ciência (ou arte) que estuda o julgamento e a decisão sob incerteza.
+Stochology is the science (or art) of studying judgment and decision-making under uncertainty.
 
-Este repositório guarda a pesquisa conduzida segundo a arquitetura do projeto (hipergrafo tipado, camadas
-Mundo/Modelo/Agente, banca adversarial A1–A8, orquestrador M, fichas estruturadas, invariantes Φ1–Φ5), do H0 ao
-H3, em dados reais. A pesquisa foi encerrada em 2026-10-15 e o aparato de engenharia é **Rust** (Edition 2024):
-**dezesseis crates**, **373 testes**, **dezenove instrumentos** (e 5 flags modificadoras) no binário `labs` e **sete portões** (G1 a G7) no binário `portoes` (distintos dos seis portões G1 a G6 do motor ondulatório `onda`)
-que sabem reprovar.
+This repository holds the research conducted under the project architecture (typed hypergraph, World/Model/Agent
+layers, adversarial review board A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
+H3, on real-world data. The research concluded on 2026-10-15 and the engineering apparatus is **Rust** (Edition 2024):
+**nine crates**, **373 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
+that are capable of failing a claim.
 
-## O que está aqui
+## Repository Contents
 
-| Caminho | Conteúdo |
+| Path | Contents |
 |---|---|
-| `estocologia-livro-didatico.md` | O livro didático em **21 capítulos e 5 partes**, três degraus por capítulo, com a saída dos laboratórios citada no texto. É o artefato do leitor humano, e é **gerado**: 5 927 linhas e 75 290 palavras montadas de `book/` |
-| `book/` | A edição em fonte, um arquivo por capítulo, com `gerar.py` (monta e confere), os dois conferidores e o gerador do registro |
-| `crates/` | O workspace Rust: núcleo, hipergrafo e lentes, trilha SHA-256, portões, laboratórios do livro, contrato em arquivo (`-schema`), deliberativo (`-s2`), os quatro horizontes (`-h0` a `-h3`), causalidade invariante (`-icp`), deriva (`-drift`), justiça (`-fairness`), o playground WebAssembly (`-wasm`) e o motor ondulatório (`-wave`: superposição fasorial, Laplaciano magnético, plasticidade Kuramoto-Oja e espículas com STDP) |
-| `REGISTRO_EMPIRICO.md` | Os números da pesquisa, com o instrumento Rust que reproduz cada um e a marca de divergência declarada |
-| `RESULTADOS_RUST.md` | O registro gerado a partir dos próprios instrumentos: cada bloco é a saída literal do comando acima dele. §5 é o manifesto da edição, com o `sha256` de cada declaração de ponto |
-| `dados-reais/` | Os cinco dados que os instrumentos leem (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), com origens em `FONTES.md` e somas em `SHA256SUMS` |
-| `fundo/` | Os pontos de fundo: tese central, independência, multiplicidade, prioris, laço performativo, ICP, calibração, genética, H3, previsões do eixo R, ponte em escala, SHELF, escuta, segunda opinião e Jev. Cada pasta traz a declaração e o seu `*.sha256` |
-| `governanca/` | Pareceres de risco e a auditoria de quem paga pelo erro |
-| `AGENTS.md` | O contrato de governança, engenharia e orquestração: as quatro proibições, os invariantes, a banca, o ciclo e a **verificação obrigatória de §V** |
-| `PLAN.md` | Plano diretor: epistemologia, pedagogia, arquitetura, banca adversarial A1–A8 e governança |
-| `PROPOSTAS_DECLARADAS.md` | O inventário do que está declarado e ainda não exigido nem medido: **quatro itens vivos** — SHELF (3), a voz de quem paga o erro (5), a tese da ponte em escala (9) e a ponte Jev-LLM (13). Os nove que fecharam estão em §2, com a prova ao lado |
-| `DECLARACAO_DO_ESTADO.md` | **O estado da árvore, não uma edição.** Antes de publicar não há edições numeradas: há um estado vivo, com o que ele mediu, o que reprovou contra si mesmo, o que não pôde fazer e como se reproduz. O selo é `DECLARACAO_DO_ESTADO.sha256`. As correções de 2026-10-17 estão em `historico/`, como registros datados com os hashes de antes e depois |
-| `referencias/` | A conferência das referências bibliográficas |
-| `artigo/` | O artigo "Estocologia: Velhas Fronteiras, Novos Horizontes", com as figuras |
-| `estilo/` | O instrumental da passada de prosa: `conferir-passada.py` compara cada arquivo com a versão dele no `HEAD` |
-| `conferir_lacres.py` | O conferidor dos 28 lacres SHA-256 da árvore, de um comando e de um diretório |
-| `scripts/verificar.sh` | **A verificação obrigatória de §V em um só comando**: formato, lints, testes, oito portões, dezenove instrumentos e os conferidores. O CI chama este arquivo, não uma cópia da lista |
-| `INTEGRACAO_JEV.md` | A auditoria da transcrição *Integração de Modelos Jev à Estocologia*: cada alegação conferida contra o código, com as divergências declaradas — a numeração do roteiro antigo contra a vigente ($M_{15}$ e $MB_1$–$MB_8$ de um lado, $\mathcal{M}$ e $A_1$–$A_8$ do outro), quatro filtros contra cinco, $\Phi_1$–$\Phi_4$ contra $\Phi_1$–$\Phi_5$, e o *LLM-as-Jev* — e a ponte Jev-LLM como proposta declarada |
-| `DECLARACAO_REMOVIDO_PYTHON.md`, `DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md` | O que saiu da árvore em 2026-10-16, com o commit de recuperação e os manifestos de hash de blob |
+| `book/stochology-textbook.md` | The textbook in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 178 lines and 96 018 words assembled from `book/` |
+| `book/` | The source edition, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
+| `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, review board A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, and subgroup fairness), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (textbook laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
+| `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
+| `docs/RUST_RESULTS.md` | The registry generated directly from the instruments themselves: each block is the literal output of the command above it. §5 is the edition manifest, with the `sha256` of every point declaration |
+| `data/` | The five datasets read by the instruments (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), with provenance in `SOURCES.md` and checksums in `SHA256SUMS` |
+| `empirical/` | The foundational empirical points: central thesis, independence, multiplicity, priors, performative loop, ICP, calibration, genetics, H3, R-axis predictions, bridge at scale, SHELF, affected-party listening, second opinion, and Jev. Each folder contains its declaration and `*.sha256` seal |
+| `governance/` | Risk opinions and the audit of who pays for the error |
+| `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the review board, the cycle, and the **mandatory verification of §V** |
+| `docs/PLAN.md` | Master plan: epistemology, pedagogy, architecture, adversarial review board A1–A8, and governance |
+| `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **four live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), and the Jev-LLM bridge (13). The nine closed items are in §2, alongside their proofs |
+| `docs/STATE_DECLARATION.md` | **The state of the tree, not an edition.** Prior to publication there are no numbered editions: there is a live state recording what it measured, what it rejected against itself, what it could not do, and how it is reproduced. Its seal is `docs/STATE_DECLARATION.sha256`. The corrections of 2026-10-17 live in `history/` as dated records with before-and-after hashes |
+| `references/` | Verification of the bibliographic references |
+| `paper/` | The paper "Stochology: Old Frontiers, New Horizons", with figures |
+| `scripts/style/` | The prose-pass tooling: `scripts/style/check_pass.py` compares each file against its version in `HEAD` |
+| `scripts/check_seals.py` | The verifier for the 28 SHA-256 seals across the tree, executed in a single command from a single directory |
+| `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, nineteen instruments, and all verifiers. CI invokes this exact file, not a copy of the list |
+| `docs/JEV_INTEGRATION.md` | The audit of the transcript *Integration of Jev Models into Stochology*: every claim checked against the code, with declared divergences — the legacy syllabus numbering versus the current nomenclature ($M_{15}$ and $MB_1$–$MB_8$ on one side, $\mathcal{M}$ and $A_1$–$A_8$ on the other), four filters versus five, $\Phi_1$–$\Phi_4$ versus $\Phi_1$–$\Phi_5$, and *LLM-as-Jev* — plus the Jev-LLM bridge as a declared proposal |
+| `docs/declarations/REMOVED_PYTHON.md`, `docs/declarations/REMOVED_NON_SIGNIFICANT.md` | What left the tree on 2026-10-16, with the recovery commit and the blob-hash manifests |
 
-## Estado medido
+## Measured State
 
-Medição desta árvore em **2026-10-17**, cada linha com o comando que a produz:
+Measurement of this tree on **2026-10-17**, each row with the command that produces it:
 
-| Medida | Valor | Comando |
+| Metric | Value | Command |
 |---|---|---|
-| Testes | **373 aprovados**, 0 reprovados, nos dezesseis crates | `cargo test --workspace` |
-| Instrumentos | **19** no `labs` (mais 5 flags modificadoras), todos com código 0 | `labs --todos`, `--banco`, `--fila`, `--s1`, `--s2`, `--resolucao`, `--genetica`, `--h3`, `--segunda`, `--ponte`, `--escuta`, `--schema`, `--jev` e os demais |
-| Portões | **7 ok**, raiz de Merkle `9716e28a87bec9cf…` e segunda execução idêntica | `portoes --horizonte todos --reproducao` |
-| Prova negativa | **1 portão reprovado**, como declarado, com a banca no pior valor 2 contra o piso 6 | `portoes --horizonte h3 --defeito h3.voos23` |
-| Livro montado | **5 927 linhas**, **75 290 palavras**, 21 capítulos, 5 partes | `book/gerar.py --check` |
-| Blocos citados | **48**, nenhum divergente | `book/conferir_labs.py` |
-| Lacres | **28 arquivos**, **82 alvos conferidos**, 9 linhas declaradas fora da árvore, 0 problemas | `conferir_lacres.py` |
+| Tests | **373 passed**, 0 failed, across the nine crates | `cargo test --workspace` |
+| Instruments | **19** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
+| Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
+| Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
+| Assembled book | **7 178 lines**, **96 018 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
+| Seals | **28 files**, **82 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
-## Como verificar
+## How to Verify
 
 ~~~bash
-# a máquina
+# the machine
 cargo test --workspace
-cargo run --release --bin labs -- --todos
+cargo run --release --bin labs -- --all
 cargo run --release --bin labs -- --s2
-cargo run --release --bin portoes -- --horizonte todos --reproducao
-cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23   # sai com 1
+cargo run --release --bin gates -- --horizon all --reproduction
+cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1
 
-# o livro: a rampa, o disco, os blocos e a prosa
-python3 book/gerar.py --check          # compara com o disco caractere por caractere e cobra a contagem declarada
-python3 book/conferir_labs.py          # cada bloco citado contra o instrumento que o gerou
-python3 book/conferir_livro.py         # partes, capítulos, cercas e ordem
-python3 book/gerar_resultados.py --check
-python3 estilo/conferir-passada.py     # a passada de prosa contra HEAD:book/, arquivo por arquivo
+# the book: the ramp, the disk, the cited blocks, and the prose
+python3 scripts/book/build.py --check          # compares with disk character by character and enforces the declared count
+python3 scripts/book/check_labs.py             # checks every cited block against the instrument that generated it
+python3 scripts/book/check_book.py             # parts, chapters, fences, and ordering
+python3 scripts/book/generate_results.py --check
+python3 scripts/style/check_pass.py            # prose pass against HEAD:book/, file by file
 
-# os lacres, de um só comando, de qualquer diretório
-python3 conferir_lacres.py
+# the seals, in a single command, from any directory
+python3 scripts/check_seals.py
 
-# o playground
+# the playground
 cargo build --release --target wasm32-unknown-unknown -p stochology-wasm
 ~~~
 
-A lista vinculante é a de `AGENTS.md` §V: nenhum número entra no livro sem sair de um daqueles comandos.
+The binding list is in `AGENTS.md` §V: no number enters the book without coming from one of those commands.
 
-## A regra que a edição aprendeu
+## The Rule the Edition Learned
 
-Portão que não olha o alvo é portão cego. O `book/gerar.py --check` de antes montava o livro na memória e
-conferia só a rampa dos 21 capítulos: passava com código 0 enquanto o arquivo em disco estava **353 linhas atrás**
-de `book/`. Hoje o `--check` compara `montar()` com `estocologia-livro-didatico.md` caractere por caractere,
-imprime a diferença e sai com 1 quando o disco não é o livro montado. O mesmo princípio vale para os lacres: um
-comando, uma convenção de caminho (relativa à raiz) e lacre sem alvo vivo aparece como **declarado**, nunca como
-aprovado. E vale para a contagem: o livro ganhou duas linhas em `book/cap13.md`, o manifesto foi regerado e três
-documentos continuaram afirmando 5 903 linhas — com o `--check` passando, porque ele só olhava o texto. Desde a
-retificação de 2026-10-17 ele lê os pares "N linhas ... N palavras" do `README.md`, do `PLAN.md`, da declaração
-e do registro, compara com o que o mesmo `montar()` mede e sai com 1 quando divergem.
+A gate that does not inspect its target is a blind gate. Previously, `scripts/book/build.py --check` assembled the book in memory and
+checked only the 21-chapter ramp: it exited with code 0 while the file on disk was **353 lines behind**
+`book/`. Today `--check` compares `montar()` against `book/stochology-textbook.md` character by character,
+prints the diff, and exits with 1 whenever the disk does not match the assembled book. The same principle applies to the seals: one
+command, one path convention (relative to the repository root), and any seal without a live target is reported as **declared**, never as
+passed. And it applies to the line/word count: the book gained two lines in `book/cap13.md`, the manifest was regenerated, and three
+documents continued claiming 5 903 lines — while `--check` passed because it only inspected the text. Since the
+rectification of 2026-10-17, it parses the "N lines ... N words" pairs in `README.md`, `docs/PLAN.md`, the state declaration,
+and the results registry, compares them against what `montar()` measures, and exits with 1 if they diverge.
 
-## O que segue aberto
+## What Remains Open
 
-Os quatro não são da mesma natureza. Os três primeiros dependem de **gente de fora do programa**, e não fecham com
-mais código: o que falta é consentimento, escuta e julgamento cego. O quarto depende de **artefato e código**: os
-pesos congelados com `sha256` e o runner que os carregue, e ele fecha com um download, uma declaração de hash e uma
-implementação.
+The four open items are not of the same nature. The first three depend on **people outside the program** and cannot be closed with
+more code: what is missing is consent, listening, and blind judgment. The fourth depends on **artifact and code**: frozen
+weights with a declared `sha256` and a runner that loads them, which closes with a download, a hash declaration, and an
+implementation.
 
-| Item | Dependência | O que falta | Prazo |
+| Item | Dependency | What is missing | Deadline |
 |---|---|---|---|
-| 3. Elicitação SHELF | **gente de fora do programa** | as outras duas pessoas por domínio e o controle de fora do programa; a trilha do primeiro especialista está fechada em cinco domínios | sem data |
-| 5. A voz de quem paga o erro | **gente de fora do programa** | a escuta dos grupos afetados: **0 de 7** ouvidos, cobertura mínima de 2 | **2026-12-15** |
-| 9. A tese da ponte em escala | **gente de fora do programa** | escolhedor de casos de fora, dois analistas humanos e um juiz humano cego: **0 de 12** casos | **2027-01-14** |
-| 13. A ponte Jev-LLM | **artefato e código** | os pesos com o `sha256` declarado; o runner local existe desde 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | sem data |
+| 3. SHELF elicitation | **people outside the program** | the other two participants per domain and the external control; the first specialist's track is closed across five domains | no date |
+| 5. The voice of those who pay for the error | **people outside the program** | listening sessions with affected groups: **0 of 7** heard, minimum coverage of 2 | **2026-12-15** |
+| 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases | **2027-01-14** |
+| 13. The Jev-LLM bridge | **artifact and code** | the weights with a declared `sha256`; the local runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | no date |
 
-Vencida a janela da escuta sem a cobertura mínima, as sete decisões ficam arquivadas como exercício de
-sensibilidade e não viram diretriz de política pública. Vencida a janela da ponte, a tese fica **não sustentada
-em definitivo**, como o dono aceitou por escrito.
+Once the listening window expires without minimum coverage, the seven decisions are archived as a sensitivity
+exercise and do not become public policy guidelines. Once the bridge window expires, the thesis becomes **definitively
+unsupported**, as the project owner accepted in writing.
 
-## O que saiu da árvore
+## What Left the Tree
 
-Em 2026-10-16 o andaime de medição em Python saiu da árvore — o código, as frentes `h0` a `h3` com os seus
-READMEs e os dados que só elas usavam. O número ficou: em `REGISTRO_EMPIRICO.md` e no livro, com o commit
-`1bfec905` como âncora de recuperação e os manifestos `historico/python-removido.txt`, `historico/registro-python-removido.txt` e
-`historico/nao-significante-removido.txt` com o hash de blob de cada arquivo. O que resta em Python são as ferramentas de
-conferência do livro, do registro e dos lacres — e nada mais.
+On 2026-10-16 the Python measurement scaffolding left the tree — the code, the `h0` through `h3` fronts with their
+READMEs, and the datasets used exclusively by them. The numbers remained: in `docs/EMPIRICAL_REGISTRY.md` and in the book, with commit
+`1bfec905` as the recovery anchor and the manifests `history/python-removido.txt`, `history/registro-python-removido.txt`, and
+`history/nao-significante-removido.txt` recording the blob hash of every file. What remains in Python are the verification tools for
+the book, the registry, and the seals — and nothing else.

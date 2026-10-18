@@ -1,0 +1,87 @@
+nome: clima_tempestades
+area: Clima
+titulo: Relação vento-pressão nos ciclones do Atlântico Norte (best track, 1975–2024)
+pergunta: Quanto o vento máximo sustentado cresce com a raiz do déficit de pressão central, e a relação aprendida em tempestades nascidas fora do Golfo do México vale para as que nascem nele?
+alegacao: '"O vento máximo de um ciclone segue a raiz quadrada da queda de pressão central, uns 15 nós por raiz de hPa, em qualquer parte do Atlântico."'
+glossario:
+  vento_maximo_sustentado: maior vento médio de 1 minuto a 10 m de altura no ciclone (nós)
+  pressao_central: pressão mínima ao nível do mar no centro do ciclone (hPa)
+  deficit_de_pressao: pressão do ambiente (1013 hPa) menos a pressão central
+  relacao_vento_pressao: lei empírica que liga o vento máximo ao déficit de pressão (WPR)
+  equilibrio_ciclostrofico: balanço entre gradiente de pressão e força centrífuga que dá V ∝ √Δp
+  best_track: reanálise oficial pós-temporada do NHC (HURDAT2), a cada 6 horas
+  velocidade_de_translacao: velocidade de deslocamento do centro do ciclone (km/h)
+  transicao_extratropical: perda do núcleo quente; o campo de vento se espalha e enfraquece para a mesma pressão
+  ciclone_subtropical: sistema híbrido, com ventos máximos longe do centro
+  tecnica_de_Dvorak: estimativa de intensidade por imagem de satélite, que usa tabelas vento-pressão
+fontes:
+  - "NOAA/NHC, HURDAT2 Atlantic best track (via dplyr::storms)"
+  - "Atkinson & Holliday (1977), Tropical cyclone minimum sea level pressure/maximum sustained wind relationship for the western North Pacific, Monthly Weather Review — citado de memória, por conferir"
+  - "Knaff & Zehr (2007), Reexamination of tropical cyclone wind-pressure relationships, Weather and Forecasting — citado de memória, por conferir"
+  - "Dvorak (1984), NOAA Technical Report NESDIS 11 (tabela vento-pressão do Atlântico) — citado de memória, por conferir"
+  - data/h2/dplyr_storms.csv (Rdatasets)
+arquivos: [dplyr_storms.csv]
+familia: gaussiana
+desfecho: vento máximo sustentado no ponto de trajetória (nós)
+chave: raiz_deficit_pressao
+candidatos:
+  raiz_deficit_pressao: {tipo: num, descricao: "√max(1013 − pressão central, 0), em √hPa"}
+  latitude: {tipo: num, descricao: latitude do centro (°N), substituto do parâmetro de Coriolis}
+  translacao_kmh: {tipo: num, descricao: velocidade de deslocamento desde o ponto anterior (km/h, teto 100)}
+  estrutura: {tipo: cat, descricao: "tropical, extratropical, subtropical ou outra baixa (classes definidas pela estrutura, não pelo vento)"}
+icp_candidatos: [raiz_deficit_pressao, latitude, translacao_kmh, estrutura]
+ajuste: [latitude, translacao_kmh, estrutura]
+dag:
+  - [raiz_deficit_pressao, y]
+  - [latitude, y]
+  - [latitude, raiz_deficit_pressao]
+  - [latitude, translacao_kmh]
+  - [latitude, estrutura]
+  - [translacao_kmh, y]
+  - [estrutura, y]
+  - [estrutura, raiz_deficit_pressao]
+  - [temperatura_do_mar, raiz_deficit_pressao]
+  - [latitude, temperatura_do_mar]
+ambientes:
+  descricao: >-
+    Região de gênese da tempestade (primeiro ponto da trajetória): atlântico tropical, atlântico subtropical e Caribe no
+    treino; Golfo do México no cofre, nunca visto. O ambiente é atribuído à tempestade inteira, para que nenhuma
+    tempestade tenha pontos no treino e no cofre. Por que a região de gênese e não a década: a gênese muda a
+    distribuição dos preditores (tempestades do Golfo são curtas, rasas, de déficit pequeno; as do atlântico tropical
+    chegam a déficits grandes e recurvam para latitudes altas), enquanto a relação vento-pressão é um balanço de forças
+    que, dados latitude, translação e estrutura, não deveria depender de onde a tempestade nasceu. A década foi
+    descartada porque muda a própria medição de Y (aviões, Dvorak, revisões do HURDAT2), isto é, age direto em Y.
+    Violação plausível declarada: a pressão do ambiente real varia (alta subtropical), e o tamanho do ciclone não está
+    entre os candidatos (só existe de 2004 em diante e é parcialmente definido pelo próprio vento).
+  cofre: [golfo_mexico]
+unidade: >-
+  a tempestade (nome + ano, 693 tempestades); os pontos de 6 em 6 horas da mesma tempestade são fortemente
+  autocorrelacionados e dividem o mesmo erro de análise do best track
+cabecalho:
+  processo_gerador: O ciclone aprofunda a pressão central pelo calor latente do oceano; o gradiente de pressão, equilibrado pela força centrífuga e de Coriolis, sustenta o vento; o NHC estima ambos a cada 6 h, muitas vezes um a partir do outro.
+  nao_linearidade: O equilíbrio ciclostrófico dá V ∝ √Δp; usamos a raiz do déficit para linearizar. Expoentes empíricos entre 0,5 e 0,65 deixam curvatura residual.
+  unidade_e_margem: A tempestade é a unidade (~560 no treino contra ~17,6 mil pontos); erro padrão agrupado por tempestade.
+  fisica_do_ruido: Erro de análise do best track (±10 nós), vento arredondado a 5 nós, variância maior em tempestades intensas (heterocedástico).
+  escada_causal: "Degrau 1 (observacional); a relação é de balanço físico, não de intervenção. Premissa não testável e circular: parte dos ventos do best track foi derivada da pressão por tabelas vento-pressão, o que infla a invariância."
+shelf:
+  quantidade: nós de vento máximo por √hPa de déficit de pressão
+  fonte: >-
+    relações vento-pressão publicadas (Atkinson & Holliday 1977, V ≈ 6,7·Δp^0,644; tabela de Dvorak 1984 para o
+    Atlântico; Knaff & Zehr 2007), linearizadas em √Δp por nós; citadas de memória e por conferir;
+    nenhum especialista humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  quartis: {q05: 9, q25: 13, q50: 15, q75: 17, q95: 21}
+decisao:
+  acao: acionar alertas de intensidade a partir da pressão central medida (boias e aviões) quando não há medida de vento
+  beneficio_por_unidade: 1.0
+  custo: 12.0
+  custo_pesquisa: 0.05
+  nota: >-
+    utilidade em nós de vento antecipados por √hPa (escala do próprio θ); o gatilho de pressão compensa se a
+    sensibilidade passa de 12 nós por √hPa, abaixo disso gera alarmes falsos demais. Custo (12) e custo de pesquisa
+    (0,05) são suposições a elicitar com o serviço de previsão, não medidas
+termo_escopo:
+  vale_para: ciclones do Atlântico Norte no best track do NHC, 1975–2024, pontos de 6 h com pressão central registrada
+  nao_vale_para: outras bacias (Pacífico, Índico), ventos de rajada, tempestades sem pressão medida, extrapolação para déficits acima de ~110 hPa
+tentativas_de_especificacao: 1
+tem_titulares: false

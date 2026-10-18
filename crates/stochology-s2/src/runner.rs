@@ -1,453 +1,450 @@
-//! O runner local dos pesos congelados: o que faltava para o item 13 deixar de ser arcabouço.
+//! The local runner of the frozen weights: what was missing for item 13 to stop being a framework.
 //!
-//! O `ponte` tem os portões; este módulo tem o que os alimenta. Ele é o lado de máquina do item 13:
-//! um artefato em disco, o `sha256` declarado **antes** da execução, e uma tabela de respostas que o
-//! runner devolve byte por byte igual em duas execuções — que é o que o G1 cobra.
+//! `bridge` has the gates; this module has what feeds them. It is the machine side of item 13: an artifact on
+//! disk, the `sha256` declared **before** the run, and a table of answers that the runner returns byte for byte
+//! identical across two runs — which is what G1 charges.
 //!
-//! # O artefato
+//! # The artifact
 //!
-//! `fundo/p20-jev/pesos/SHA256` declara o hash antes de qualquer chamada:
+//! `empirical/p20-jev/pesos/SHA256` declares the hash before any call:
 //!
 //! ```text
 //! <64 hex>  modelo.congelado
 //! ```
 //!
-//! `fundo/p20-jev/pesos/modelo.congelado` é texto, e a primeira linha é o formato:
+//! `empirical/p20-jev/pesos/modelo.congelado` is text, and the first line is the format:
 //!
 //! ```text
 //! # p20-jev/runner-v1
-//! @pedido <sha256 do pedido>
-//! <documento canonico da ficha, uma linha por campo>
+//! @request <sha256 of the request>
+//! <canonical document of the card, one line per field>
 //! @end
 //! ```
 //!
-//! Cada bloco é uma resposta congelada. Pedido sem bloco **não** inventa resposta: a ponte abstém em
-//! `Categoria::Outros`, e a abstenção entra na conta da adequação do espaço. O texto é auditável e diffável,
-//! e o hash cobre o arquivo inteiro: trocar um byte invalida a ponte inteira.
+//! Each block is a frozen answer. A request without a block **does not** invent an answer: the bridge abstains in
+//! `Category::Others`, and the abstention enters the count of the adequacy of the space. The text is auditable
+//! and diffable, and the hash covers the whole file: swapping one byte invalidates the whole bridge.
 //!
-//! # O que este módulo não faz
+//! # What this module does not do
 //!
-//! Não gera resposta nem carrega tensor: o artefato é a tabela congelada que o operador produz a partir do modelo
-//! que ele congelou. Um formato de tensor fica declarado como passo seguinte, e não como meio-caminho: enquanto
-//! não existir, o que roda é a tabela, e ela é suficiente para o portão, o determinismo, o custo e a abstenção.
+//! It neither generates answers nor loads tensors: the artifact is the frozen table that the operator produces from
+//! the model he froze. A tensor format remains declared as the next step, and not as a halfway house: while it does
+//! not exist, what runs is the table, and it is enough for the gate, the determinism, the cost and the abstention.
 
-use crate::ponte::{Recusa, pedido};
+use crate::bridge::{Refusal, request};
 use std::collections::BTreeMap;
 
-/// O diretório onde o operador deixa o artefato.
-pub const DIR_PADRAO: &str = "fundo/p20-jev/pesos";
-/// O nome do arquivo dos pesos congelados.
-pub const ARQUIVO: &str = "modelo.congelado";
-/// A primeira linha do artefato.
-pub const CABECALHO: &str = "# p20-jev/runner-v1";
+/// The directory where the operator leaves the artifact.
+pub const DEFAULT_DIR: &str = "empirical/p20-jev/pesos";
+/// The file name of the frozen weights.
+pub const FILE_NAME: &str = "modelo.congelado";
+/// The first line of the artifact.
+pub const HEADER: &str = "# p20-jev/runner-v1";
 
-/// Lê o hash declarado em `SHA256`, no formato que o `sha256sum` escreve.
-pub fn hash_declarado(dir: &str) -> Result<String, Recusa> {
-    let caminho = format!("{dir}/SHA256");
-    let texto =
-        std::fs::read_to_string(&caminho).map_err(|_| Recusa::HashNaoDeclarado(caminho.clone()))?;
-    let linha = texto
+/// Reads the hash declared in `SHA256`, in the format that `sha256sum` writes.
+pub fn declared_hash(dir: &str) -> Result<String, Refusal> {
+    let path = format!("{dir}/SHA256");
+    let text =
+        std::fs::read_to_string(&path).map_err(|_| Refusal::HashNotDeclared(path.clone()))?;
+    let line = text
         .lines()
         .map(str::trim)
         .find(|l| !l.is_empty() && !l.starts_with('#'))
-        .ok_or_else(|| Recusa::HashNaoDeclarado(caminho.clone()))?;
-    let hash = linha.split_whitespace().next().unwrap_or("").to_lowercase();
+        .ok_or_else(|| Refusal::HashNotDeclared(path.clone()))?;
+    let hash = line.split_whitespace().next().unwrap_or("").to_lowercase();
     if hash.len() != 64 || !hash.chars().all(|c| c.is_ascii_hexdigit()) {
-        return Err(Recusa::HashNaoDeclarado(format!("{caminho}: {linha}")));
+        return Err(Refusal::HashNotDeclared(format!("{path}: {line}")));
     }
     Ok(hash)
 }
 
-/// O runner: pesos verificados e a tabela de respostas congeladas.
-pub struct RunnerLocal {
-    caminho: String,
+/// The runner: verified weights and the table of frozen answers.
+pub struct LocalRunner {
+    path: String,
     sha256: String,
-    tabela: BTreeMap<String, String>,
-    pedidos: BTreeMap<String, String>,
-    ultimos_tokens: usize,
+    table: BTreeMap<String, String>,
+    requests: BTreeMap<String, String>,
+    last_tokens: usize,
 }
 
-impl RunnerLocal {
-    /// Carrega o artefato, confere o hash declarado e lê os blocos. Sem hash declarado, não roda.
-    pub fn carregar(dir: &str) -> Result<Self, Recusa> {
-        let esperado = hash_declarado(dir)?;
-        let caminho = format!("{dir}/{ARQUIVO}");
-        let medido = crate::ponte::verificar_pesos(&caminho, &esperado)?;
-        let texto = std::fs::read_to_string(&caminho)
-            .map_err(|_| Recusa::PesosAusentes(caminho.clone()))?;
-        let (tabela, pedidos) = ler_blocos(&texto)?;
-        Ok(RunnerLocal {
-            caminho,
-            sha256: medido,
-            tabela,
-            pedidos,
-            ultimos_tokens: 0,
+impl LocalRunner {
+    /// Loads the artifact, checks the declared hash and reads the blocks. Without a declared hash, it does not run.
+    pub fn load(dir: &str) -> Result<Self, Refusal> {
+        let expected = declared_hash(dir)?;
+        let path = format!("{dir}/{FILE_NAME}");
+        let measured = crate::bridge::verify_weights(&path, &expected)?;
+        let text =
+            std::fs::read_to_string(&path).map_err(|_| Refusal::WeightsMissing(path.clone()))?;
+        let (table, requests) = read_blocks(&text)?;
+        Ok(LocalRunner {
+            path,
+            sha256: measured,
+            table,
+            requests,
+            last_tokens: 0,
         })
     }
 
-    /// O caminho do artefato que este runner carregou.
-    pub fn caminho(&self) -> &str {
-        &self.caminho
+    /// The path of the artifact that this runner loaded.
+    pub fn path(&self) -> &str {
+        &self.path
     }
 
-    /// O hash verificado dos pesos.
+    /// The verified hash of the weights.
     pub fn sha256(&self) -> &str {
         &self.sha256
     }
 
-    /// Quantas respostas congeladas o artefato traz.
-    pub fn respostas(&self) -> usize {
-        self.tabela.len()
+    /// How many frozen answers the artifact carries.
+    pub fn answers(&self) -> usize {
+        self.table.len()
     }
 
-    /// Os pedidos que o artefato guarda, em ordem de chave. Formato v1 nao traz o texto do pedido, e a
-    /// lista sai vazia — quem mede adequacao com artefato v1 precisa avisar que esta usando sonda propria.
-    pub fn pedidos(&self) -> Vec<String> {
-        self.pedidos.values().cloned().collect()
+    /// The requests that the artifact stores, in key order. The v1 format does not carry the request text, and the
+    /// list comes out empty — whoever measures adequacy with a v1 artifact has to warn that it is using its own probe.
+    pub fn requests(&self) -> Vec<String> {
+        self.requests.values().cloned().collect()
     }
 
-    /// A resposta congelada para um pedido, se existir.
-    pub fn resposta(&self, pedido: &str) -> Option<&str> {
-        self.tabela.get(&chave(pedido)).map(String::as_str)
+    /// The frozen answer for a request, if it exists.
+    pub fn answer(&self, request: &str) -> Option<&str> {
+        self.table.get(&key(request)).map(String::as_str)
     }
 }
 
-impl crate::ponte::ModeloCongelado for RunnerLocal {
-    fn nome(&self) -> &str {
-        "runner local (pesos congelados)"
+impl crate::bridge::FrozenModel for LocalRunner {
+    fn name(&self) -> &str {
+        "local runner (frozen weights)"
     }
 
-    fn decodificar(&mut self, pedido: &str) -> String {
-        let saida = match self.tabela.get(&chave(pedido)) {
-            Some(saida) => saida.clone(),
-            None => {
-                String::from("fora do esquema: este pedido nao tem resposta congelada no artefato")
-            }
+    fn decode(&mut self, request: &str) -> String {
+        let output = match self.table.get(&key(request)) {
+            Some(output) => output.clone(),
+            None => String::from(
+                "outside the schema: this request has no frozen answer in the artifact",
+            ),
         };
-        // O custo declarado e o do documento devolvido: palavras separadas por espaco. Nao e o tokenizador do
-        // modelo, e o numero fica declarado como tal — a comparacao com o custo real entra quando o artefato real
-        // trouxer a contagem do proprio modelo.
-        self.ultimos_tokens = saida.split_whitespace().count();
-        saida
+        // The declared cost is that of the document returned: words separated by spaces. It is not the tokenizer of
+        // the model, and the number stays declared as such — the comparison with the real cost enters when the real
+        // artifact brings the count of the model itself.
+        self.last_tokens = output.split_whitespace().count();
+        output
     }
 
     fn tokens(&self) -> usize {
-        self.ultimos_tokens
+        self.last_tokens
     }
 }
 
-/// O formato do artefato: cada bloco começa em `@pedido` e termina em `@end`.
-/// Os dois blocos do artefato: cabecalho por chave e corpo por chave.
-type Blocos = (BTreeMap<String, String>, BTreeMap<String, String>);
+/// The format of the artifact: each block starts at `@request` and ends at `@end`.
+/// The two blocks of the artifact: header by key and body by key.
+type Blocks = (BTreeMap<String, String>, BTreeMap<String, String>);
 
-fn ler_blocos(texto: &str) -> Result<Blocos, Recusa> {
-    let mut linhas = texto.lines();
-    let cabecalho = linhas.next().unwrap_or("").trim();
-    if cabecalho != CABECALHO {
-        return Err(Recusa::ArtefatoIlegivel(format!(
-            "cabecalho {cabecalho:?}, esperado {CABECALHO:?}"
+fn read_blocks(text: &str) -> Result<Blocks, Refusal> {
+    let mut lines = text.lines();
+    let header = lines.next().unwrap_or("").trim();
+    if header != HEADER {
+        return Err(Refusal::ArtifactUnreadable(format!(
+            "header {header:?}, expected {HEADER:?}"
         )));
     }
-    let mut tabela = BTreeMap::new();
-    let mut pedidos: BTreeMap<String, String> = BTreeMap::new();
-    let mut chave_atual: Option<String> = None;
-    let mut corpo: Vec<String> = Vec::new();
-    for linha in linhas {
-        let l = linha.trim_end();
-        if let Some(resto) = l.strip_prefix("@pedido ") {
-            if chave_atual.is_some() {
-                return Err(Recusa::ArtefatoIlegivel("bloco sem @end".into()));
+    let mut table = BTreeMap::new();
+    let mut requests: BTreeMap<String, String> = BTreeMap::new();
+    let mut current_key: Option<String> = None;
+    let mut body: Vec<String> = Vec::new();
+    for line in lines {
+        let l = line.trim_end();
+        if let Some(rest) = l.strip_prefix("@request ") {
+            if current_key.is_some() {
+                return Err(Refusal::ArtifactUnreadable("block without @end".into()));
             }
-            // v2: @pedido <sha> <texto do pedido>. v1: @pedido <sha>, sem texto.
-            let mut partes = resto.splitn(2, ' ');
-            let chave = partes.next().unwrap_or("").trim().to_lowercase();
-            if chave.len() != 64 || !chave.chars().all(|c| c.is_ascii_hexdigit()) {
-                return Err(Recusa::ArtefatoIlegivel(format!("chave invalida: {chave}")));
+            // v2: @request <sha> <request text>. v1: @request <sha>, without the text.
+            let mut parts = rest.splitn(2, ' ');
+            let key = parts.next().unwrap_or("").trim().to_lowercase();
+            if key.len() != 64 || !key.chars().all(|c| c.is_ascii_hexdigit()) {
+                return Err(Refusal::ArtifactUnreadable(format!("invalid key: {key}")));
             }
-            if let Some(texto_do_pedido) = partes.next() {
-                let texto_do_pedido = texto_do_pedido.trim();
-                if !texto_do_pedido.is_empty() {
-                    pedidos.insert(chave.clone(), texto_do_pedido.replace("\\n", "\n"));
+            if let Some(request_text) = parts.next() {
+                let request_text = request_text.trim();
+                if !request_text.is_empty() {
+                    requests.insert(key.clone(), request_text.replace("\\n", "\n"));
                 }
             }
-            chave_atual = Some(chave);
-            corpo.clear();
+            current_key = Some(key);
+            body.clear();
         } else if l == "@end" {
-            let chave = chave_atual
+            let key = current_key
                 .take()
-                .ok_or_else(|| Recusa::ArtefatoIlegivel("@end sem @pedido".into()))?;
-            if corpo.is_empty() {
-                return Err(Recusa::ArtefatoIlegivel(format!("bloco vazio: {chave}")));
+                .ok_or_else(|| Refusal::ArtifactUnreadable("@end without @request".into()))?;
+            if body.is_empty() {
+                return Err(Refusal::ArtifactUnreadable(format!("empty block: {key}")));
             }
-            tabela.insert(chave, corpo.join("\n"));
-        } else if chave_atual.is_some() {
+            table.insert(key, body.join("\n"));
+        } else if current_key.is_some() {
             if !l.trim().is_empty() {
-                corpo.push(l.to_string());
+                body.push(l.to_string());
             }
         } else if !l.trim().is_empty() && !l.trim_start().starts_with('#') {
-            return Err(Recusa::ArtefatoIlegivel(format!(
-                "linha fora de bloco: {l}"
+            return Err(Refusal::ArtifactUnreadable(format!(
+                "line outside a block: {l}"
             )));
         }
     }
-    if chave_atual.is_some() {
-        return Err(Recusa::ArtefatoIlegivel(
-            "bloco sem @end no fim do arquivo".into(),
+    if current_key.is_some() {
+        return Err(Refusal::ArtifactUnreadable(
+            "block without @end at the end of the file".into(),
         ));
     }
-    if tabela.is_empty() {
-        return Err(Recusa::ArtefatoIlegivel(
-            "artefato sem nenhuma resposta".into(),
+    if table.is_empty() {
+        return Err(Refusal::ArtifactUnreadable(
+            "artifact without a single answer".into(),
         ));
     }
-    Ok((tabela, pedidos))
+    Ok((table, requests))
 }
 
-/// A chave de um pedido: o `sha256` do texto que a ponte manda.
-pub fn chave(pedido: &str) -> String {
-    stochology_audit::sha256_hex(pedido.as_bytes())
+/// The key of a request: the `sha256` of the text that the bridge sends.
+pub fn key(request: &str) -> String {
+    stochology_core::audit::sha256_hex(request.as_bytes())
 }
 
-/// Escreve um artefato de ensaio em `dir`: a mesma forma do artefato real, com as respostas do modelo de
-/// ensaio. Serve para provar o runner antes de existir peso de verdade, e não é o modelo.
-pub fn escrever_artefato_de_ensaio(
-    dir: &std::path::Path,
-    casos: &[&str],
-) -> std::io::Result<String> {
-    use crate::ponte::ModeloCongelado;
+/// Writes a rehearsal artifact in `dir`: the same shape as the real artifact, with the answers of the rehearsal
+/// model. It serves to prove the runner before a real weight exists, and it is not the model.
+pub fn write_rehearsal_artifact(dir: &std::path::Path, cases: &[&str]) -> std::io::Result<String> {
+    use crate::bridge::FrozenModel;
     std::fs::create_dir_all(dir)?;
-    let mut ensaio = crate::ponte::ModeloDeEnsaio::novo();
-    let mut texto = String::from(CABECALHO);
-    texto.push('\n');
-    for caso in casos {
-        let p = pedido(caso);
-        texto.push_str(&format!(
-            "@pedido {} {}\n",
-            chave(&p),
+    let mut rehearsal = crate::bridge::RehearsalModel::new();
+    let mut text = String::from(HEADER);
+    text.push('\n');
+    for case in cases {
+        let p = request(case);
+        text.push_str(&format!(
+            "@request {} {}\n",
+            key(&p),
             p.replace('\n', "\\n")
         ));
-        texto.push_str(ensaio.decodificar(&p).trim_end());
-        texto.push_str("\n@end\n");
+        text.push_str(rehearsal.decode(&p).trim_end());
+        text.push_str("\n@end\n");
     }
-    let caminho = dir.join(ARQUIVO);
-    std::fs::write(&caminho, texto.as_bytes())?;
-    let hash = stochology_audit::sha256_hex(texto.as_bytes());
-    std::fs::write(dir.join("SHA256"), format!("{hash}  {ARQUIVO}\n"))?;
+    let path = dir.join(FILE_NAME);
+    std::fs::write(&path, text.as_bytes())?;
+    let hash = stochology_core::audit::sha256_hex(text.as_bytes());
+    std::fs::write(dir.join("SHA256"), format!("{hash}  {FILE_NAME}\n"))?;
     Ok(hash)
 }
 
-/// Escreve um artefato a partir de respostas colhidas do modelo que o operador congelou: cada par é o texto do
-/// pedido e o documento canônico que o modelo devolveu. É o que o operador usa no passo 2 de `RUNNER.md`; a ordem
-/// continua sendo declarar o hash **depois** de escrever e **antes** de rodar a ponte.
-pub fn escrever_artefato(
+/// Writes an artifact from answers collected from the model that the operator froze: each pair is the text of the
+/// request and the canonical document that the model returned. It is what the operator uses in step 2 of
+/// `RUNNER.md`; the order remains to declare the hash **after** writing and **before** running the bridge.
+pub fn write_artifact(
     dir: &std::path::Path,
-    pares: &[(String, String)],
+    pairs: &[(String, String)],
 ) -> std::io::Result<String> {
     std::fs::create_dir_all(dir)?;
-    let mut texto = String::from(CABECALHO);
-    texto.push('\n');
-    for (p, resposta) in pares {
-        texto.push_str(&format!(
-            "@pedido {} {}\n",
-            chave(p),
-            p.replace('\n', "\\n")
-        ));
-        texto.push_str(resposta.trim_end());
-        texto.push_str("\n@end\n");
+    let mut text = String::from(HEADER);
+    text.push('\n');
+    for (p, answer) in pairs {
+        text.push_str(&format!("@request {} {}\n", key(p), p.replace('\n', "\\n")));
+        text.push_str(answer.trim_end());
+        text.push_str("\n@end\n");
     }
-    let caminho = dir.join(ARQUIVO);
-    std::fs::write(&caminho, texto.as_bytes())?;
-    let hash = stochology_audit::sha256_hex(texto.as_bytes());
-    std::fs::write(dir.join("SHA256"), format!("{hash}  {ARQUIVO}\n"))?;
+    let path = dir.join(FILE_NAME);
+    std::fs::write(&path, text.as_bytes())?;
+    let hash = stochology_core::audit::sha256_hex(text.as_bytes());
+    std::fs::write(dir.join("SHA256"), format!("{hash}  {FILE_NAME}\n"))?;
     Ok(hash)
 }
 
-/// A regra própria de pontuação, fora do ajuste: Brier sobre pares (probabilidade, desfecho).
-pub fn brier(pares: &[(f64, bool)]) -> f64 {
-    if pares.is_empty() {
+/// The scoring rule of its own, outside the fit: Brier over (probability, outcome) pairs.
+pub fn brier(pairs: &[(f64, bool)]) -> f64 {
+    if pairs.is_empty() {
         return f64::NAN;
     }
-    let soma: f64 = pares
+    let sum: f64 = pairs
         .iter()
         .map(|(p, y)| {
-            let alvo = if *y { 1.0 } else { 0.0 };
-            (p - alvo) * (p - alvo)
+            let target = if *y { 1.0 } else { 0.0 };
+            (p - target) * (p - target)
         })
         .sum();
-    soma / pares.len() as f64
+    sum / pairs.len() as f64
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
-    use crate::ponte::{
-        Contabilidade, ModeloCongelado, adequacao_do_espaco, provar_determinismo, validar_saida,
+    use crate::bridge::{
+        Accounting, FrozenModel, prove_determinism, space_adequacy, validate_output,
     };
 
-    fn temp(nome: &str) -> std::path::PathBuf {
-        let d = std::env::temp_dir().join(format!("p20-jev-{nome}-{}", std::process::id()));
+    fn temp(name: &str) -> std::path::PathBuf {
+        let d = std::env::temp_dir().join(format!("p20-jev-{name}-{}", std::process::id()));
         std::fs::create_dir_all(&d).ok();
         d
     }
 
     #[test]
-    fn o_artefato_de_ensaio_carrega_e_o_hash_confere() {
-        let d = temp("carrega");
-        let hash = escrever_artefato_de_ensaio(&d, &["caso 1", "caso 2"]).expect("escreve");
-        let runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
-        assert_eq!(runner.sha256(), hash, "o hash medido e o declarado");
-        assert_eq!(runner.respostas(), 2, "duas respostas congeladas");
+    fn the_rehearsal_artifact_loads_and_the_hash_matches() {
+        let d = temp("loads");
+        let hash = write_rehearsal_artifact(&d, &["case 1", "case 2"]).expect("writes");
+        let runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
+        assert_eq!(
+            runner.sha256(),
+            hash,
+            "the measured hash is the declared one"
+        );
+        assert_eq!(runner.answers(), 2, "two frozen answers");
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn um_byte_trocado_no_artefato_recusa_a_ponte() {
-        let d = temp("adultera");
-        escrever_artefato_de_ensaio(&d, &["caso 1"]).expect("escreve");
-        let caminho = d.join(ARQUIVO);
-        let mut bytes = std::fs::read(&caminho).expect("le");
+    fn one_swapped_byte_in_the_artifact_refuses_the_bridge() {
+        let d = temp("tamper");
+        write_rehearsal_artifact(&d, &["case 1"]).expect("writes");
+        let path = d.join(FILE_NAME);
+        let mut bytes = std::fs::read(&path).expect("reads");
         let n = bytes.len();
         bytes[n - 1] ^= 0b1;
-        std::fs::write(&caminho, bytes).expect("escreve");
-        match RunnerLocal::carregar(&d.to_string_lossy()) {
-            Err(Recusa::PesosComHashDiferente { .. }) => {}
-            outro => panic!("esperava recusa por hash: {:?}", outro.err()),
+        std::fs::write(&path, bytes).expect("writes");
+        match LocalRunner::load(&d.to_string_lossy()) {
+            Err(Refusal::WeightsHashMismatch { .. }) => {}
+            other => panic!("expected a refusal by hash: {:?}", other.err()),
         }
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn sem_hash_declarado_a_ponte_nao_roda() {
-        let d = temp("semhash");
-        escrever_artefato_de_ensaio(&d, &["caso 1"]).expect("escreve");
+    fn without_a_declared_hash_the_bridge_does_not_run() {
+        let d = temp("nohash");
+        write_rehearsal_artifact(&d, &["case 1"]).expect("writes");
         std::fs::remove_file(d.join("SHA256")).ok();
-        match RunnerLocal::carregar(&d.to_string_lossy()) {
-            Err(Recusa::HashNaoDeclarado(c)) => assert!(c.contains("SHA256"), "{c}"),
-            outro => panic!("esperava hash nao declarado: {:?}", outro.err()),
+        match LocalRunner::load(&d.to_string_lossy()) {
+            Err(Refusal::HashNotDeclared(c)) => assert!(c.contains("SHA256"), "{c}"),
+            other => panic!("expected a hash not declared: {:?}", other.err()),
         }
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn cabecalho_errado_e_artefato_ilegivel() {
-        let d = temp("ilegivel");
-        escrever_artefato_de_ensaio(&d, &["caso 1"]).expect("escreve");
-        let caminho = d.join(ARQUIVO);
-        let mut texto = std::fs::read_to_string(&caminho).expect("le");
-        texto = texto.replacen(CABECALHO, "# outro formato", 1);
-        std::fs::write(&caminho, texto.as_bytes()).expect("escreve");
-        let hash = stochology_audit::sha256_hex(texto.as_bytes());
-        std::fs::write(d.join("SHA256"), format!("{hash}  {ARQUIVO}\n")).expect("escreve");
-        match RunnerLocal::carregar(&d.to_string_lossy()) {
-            Err(Recusa::ArtefatoIlegivel(_)) => {}
-            outro => panic!("esperava artefato ilegivel: {:?}", outro.err()),
+    fn a_wrong_header_is_an_unreadable_artifact() {
+        let d = temp("unreadable");
+        write_rehearsal_artifact(&d, &["case 1"]).expect("writes");
+        let path = d.join(FILE_NAME);
+        let mut text = std::fs::read_to_string(&path).expect("reads");
+        text = text.replacen(HEADER, "# another format", 1);
+        std::fs::write(&path, text.as_bytes()).expect("writes");
+        let hash = stochology_core::audit::sha256_hex(text.as_bytes());
+        std::fs::write(d.join("SHA256"), format!("{hash}  {FILE_NAME}\n")).expect("writes");
+        match LocalRunner::load(&d.to_string_lossy()) {
+            Err(Refusal::ArtifactUnreadable(_)) => {}
+            other => panic!("expected an unreadable artifact: {:?}", other.err()),
         }
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn o_runner_fecha_o_determinismo_na_forma_do_g1() {
+    fn the_runner_closes_determinism_in_the_form_of_g1() {
         let d = temp("g1");
-        escrever_artefato_de_ensaio(&d, &["caso 1", "caso 2", "caso 3"]).expect("escreve");
-        let mut runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
-        let pedidos: Vec<String> = (1..=3).map(|i| pedido(&format!("caso {i}"))).collect();
-        let mut contabilidade = Contabilidade::default();
-        let (a, b, iguais) = provar_determinismo(&mut runner, &pedidos, &mut contabilidade);
+        write_rehearsal_artifact(&d, &["case 1", "case 2", "case 3"]).expect("writes");
+        let mut runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
+        let requests: Vec<String> = (1..=3).map(|i| request(&format!("case {i}"))).collect();
+        let mut accounting = Accounting::default();
+        let (a, b, identical) = prove_determinism(&mut runner, &requests, &mut accounting);
         assert!(
-            iguais,
-            "o runner devolve o mesmo sha256 nas duas execucoes: {a} contra {b}"
+            identical,
+            "the runner returns the same sha256 on both runs: {a} against {b}"
         );
-        assert_eq!(contabilidade.chamadas, 6, "duas execucoes de tres pedidos");
+        assert_eq!(accounting.calls, 6, "two runs of three requests");
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn pedido_sem_resposta_congelada_vira_abstencao() {
-        let d = temp("abstencao");
-        escrever_artefato_de_ensaio(&d, &["caso 1"]).expect("escreve");
-        let mut runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
-        let conhecido = runner.decodificar(&pedido("caso 1"));
+    fn a_request_without_a_frozen_answer_becomes_an_abstention() {
+        let d = temp("abstention");
+        write_rehearsal_artifact(&d, &["case 1"]).expect("writes");
+        let mut runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
+        let known = runner.decode(&request("case 1"));
         assert!(
-            validar_saida(&conhecido).is_ok(),
-            "o pedido congelado devolve ficha valida"
+            validate_output(&known).is_ok(),
+            "the frozen request returns a valid card"
         );
-        let desconhecido = runner.decodificar(&pedido("caso 99"));
+        let unknown = runner.decode(&request("case 99"));
         assert!(
-            validar_saida(&desconhecido).is_err(),
-            "pedido sem resposta congela abstencao"
+            validate_output(&unknown).is_err(),
+            "a request without an answer freezes an abstention"
         );
-        let mut c = Contabilidade::default();
-        let pedidos: Vec<String> = vec![pedido("caso 1"), pedido("caso 99")];
-        let ad = adequacao_do_espaco(&mut runner, &pedidos, &mut c);
-        assert_eq!(ad.abstencoes, 1, "uma abstencao em dois pedidos");
+        let mut c = Accounting::default();
+        let requests: Vec<String> = vec![request("case 1"), request("case 99")];
+        let ad = space_adequacy(&mut runner, &requests, &mut c);
+        assert_eq!(ad.abstentions, 1, "one abstention in two requests");
         assert!(
-            ad.veredito.contains("NAO serve") || ad.veredito.contains("serve"),
+            ad.verdict.contains("does NOT serve") || ad.verdict.contains("serves"),
             "{}",
-            ad.veredito
+            ad.verdict
         );
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn o_operador_escreve_o_artefato_e_o_runner_o_le() {
-        let d = temp("operador");
-        let mut ensaio = crate::ponte::ModeloDeEnsaio::novo();
-        let pares: Vec<(String, String)> = (1..=2)
+    fn the_operator_writes_the_artifact_and_the_runner_reads_it() {
+        let d = temp("operator");
+        let mut rehearsal = crate::bridge::RehearsalModel::new();
+        let pairs: Vec<(String, String)> = (1..=2)
             .map(|i| {
-                let p = pedido(&format!("caso {i}"));
-                let r = ensaio.decodificar(&p);
+                let p = request(&format!("case {i}"));
+                let r = rehearsal.decode(&p);
                 (p, r)
             })
             .collect();
-        let hash = escrever_artefato(&d, &pares).expect("escreve");
-        let mut runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
+        let hash = write_artifact(&d, &pairs).expect("writes");
+        let mut runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
         assert_eq!(runner.sha256(), hash);
-        assert_eq!(runner.respostas(), 2);
-        let primeira = runner.decodificar(&pares[0].0);
+        assert_eq!(runner.answers(), 2);
+        let first = runner.decode(&pairs[0].0);
         assert!(
-            validar_saida(&primeira).is_ok(),
-            "a resposta colhida devolve ficha valida"
+            validate_output(&first).is_ok(),
+            "the collected answer returns a valid card"
         );
         std::fs::remove_dir_all(&d).ok();
     }
 
     #[test]
-    fn o_artefato_v2_guarda_o_texto_do_pedido_e_o_v1_continua_lendo() {
+    fn the_v2_artifact_stores_the_request_text_and_v1_keeps_reading() {
         let d = temp("v2");
-        escrever_artefato_de_ensaio(&d, &["caso 1", "caso 2"]).expect("escreve");
-        let runner = RunnerLocal::carregar(&d.to_string_lossy()).expect("carrega");
-        let guardados = runner.pedidos();
-        assert_eq!(guardados.len(), 2, "dois pedidos guardados");
-        assert!(guardados.contains(&pedido("caso 1")), "{guardados:?}");
-        assert!(guardados.contains(&pedido("caso 2")), "{guardados:?}");
+        write_rehearsal_artifact(&d, &["case 1", "case 2"]).expect("writes");
+        let runner = LocalRunner::load(&d.to_string_lossy()).expect("loads");
+        let stored = runner.requests();
+        assert_eq!(stored.len(), 2, "two stored requests");
+        assert!(stored.contains(&request("case 1")), "{stored:?}");
+        assert!(stored.contains(&request("case 2")), "{stored:?}");
         std::fs::remove_dir_all(&d).ok();
 
-        // v1: sem o texto do pedido, a lista sai vazia e o artefato continua legivel.
+        // v1: without the request text, the list comes out empty and the artifact remains readable.
         let d1 = temp("v1");
         std::fs::create_dir_all(&d1).ok();
-        let p = pedido("caso 1");
-        let mut ensaio = crate::ponte::ModeloDeEnsaio::novo();
-        let corpo = ensaio.decodificar(&p);
-        let texto = format!("{CABECALHO}\n@pedido {}\n{}\n@end\n", chave(&p), corpo);
-        std::fs::write(d1.join(ARQUIVO), texto.as_bytes()).expect("escreve");
-        let hash = stochology_audit::sha256_hex(texto.as_bytes());
-        std::fs::write(d1.join("SHA256"), format!("{hash}  {ARQUIVO}\n")).expect("escreve");
-        let antigo = RunnerLocal::carregar(&d1.to_string_lossy()).expect("carrega v1");
-        assert_eq!(antigo.respostas(), 1);
-        assert!(antigo.pedidos().is_empty(), "v1 nao traz pedido");
+        let p = request("case 1");
+        let mut rehearsal = crate::bridge::RehearsalModel::new();
+        let body = rehearsal.decode(&p);
+        let text = format!("{HEADER}\n@request {}\n{}\n@end\n", key(&p), body);
+        std::fs::write(d1.join(FILE_NAME), text.as_bytes()).expect("writes");
+        let hash = stochology_core::audit::sha256_hex(text.as_bytes());
+        std::fs::write(d1.join("SHA256"), format!("{hash}  {FILE_NAME}\n")).expect("writes");
+        let old = LocalRunner::load(&d1.to_string_lossy()).expect("loads v1");
+        assert_eq!(old.answers(), 1);
+        assert!(old.requests().is_empty(), "v1 does not carry the request");
         std::fs::remove_dir_all(&d1).ok();
     }
 
     #[test]
-    fn o_brier_e_a_regra_propria_fora_do_ajuste() {
-        let pares = [(0.9, true), (0.1, false), (0.5, true)];
-        let esperado =
+    fn the_brier_is_the_own_rule_outside_the_fit() {
+        let pairs = [(0.9, true), (0.1, false), (0.5, true)];
+        let expected =
             ((0.9f64 - 1.0).powi(2) + (0.1f64 - 0.0).powi(2) + (0.5f64 - 1.0).powi(2)) / 3.0;
         assert!(
-            (brier(&pares) - esperado).abs() < 1e-12,
+            (brier(&pairs) - expected).abs() < 1e-12,
             "{}",
-            brier(&pares)
+            brier(&pairs)
         );
-        assert!(brier(&[]).is_nan(), "sem par nao ha pontuacao");
+        assert!(brier(&[]).is_nan(), "without a pair there is no score");
     }
 }

@@ -1,0 +1,13 @@
+[package]
+name = "stochology-horizons"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }
+stochology-methods = { path = "../stochology-methods" }
+
+[lints]
+workspace = true

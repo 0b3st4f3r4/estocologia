@@ -1,173 +1,173 @@
-# AGENTS.md — Contrato de governança, engenharia e orquestração (Estocologia, edição Rust)
+# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology, Rust Edition)
 
-Contrato vinculante para qualquer agente ou colaborador que opere neste repositório. A máquina descrita aqui é
-uma **máquina epistemológica auditável**: alegação, processo gerador, modelo nulo e teste no mesmo lugar, com
-semente fixa e portão que sabe reprovar. Quem lê o resultado é **humano** — estudante, docente ou decisor.
+Binding contract for any agent or contributor operating in this repository. The machine described here is
+an **auditable epistemological machine**: claim, generative process, null model, and severe test in the same place, with
+a fixed seed and a gate capable of failing a claim. The reader of the output is **human** — student, instructor, or decision-maker.
 
-Este arquivo substitui a versão em Python do contrato, integrada em 2026-10-16. O que mudou: o aparato é
-**Rust**; o código Python de simulação foi aposentado; o curso que dava a numeração interna foi obsoletado; e
-tudo o que segue declarado e ainda não exigido está em `PROPOSTAS_DECLARADAS.md`.
+This file replaces the Python version of the contract, integrated on 2026-10-16. What changed: the apparatus is
+**Rust**; the Python simulation code has been retired; the course that provided the internal numbering has been obsoleted; and
+everything that remains declared and not yet enforced lives in `docs/DECLARED_PROPOSALS.md`.
 
 ---
 
-## I. Regras de ouro — as quatro proibições
+## I. Golden Rules — The Four Prohibitions
 
-1. **Proibida a linguagem natural livre entre agentes.** A comunicação passa por fichas estruturadas
-   (`Ficha`, em `crates/stochology-core/src/camada.rs`), com identificador, camada, tipo de incerteza,
-   definição em uma linha, artefato simulável, semente, unidade independente, modelo nulo, escopo, quem paga
-   pelo erro e cláusula de saída.
-2. **Proibida a média solitária.** Onde a função é não linear, a dinâmica é multiplicativa ou a cauda é
-   pesada, é proibido reportar só a média: reporte o caso médio $f(E[X])$, a média simulada $E[f(X)]$, a
-   mediana, os quantis e a curva acumulada. O Capítulo 5 do livro mede o pedágio; o instrumento
-   `labs --cap 5` o reproduz.
-3. **Proibido confundir aprendizado com performatividade.** Erro de previsão pequeno não prova que o modelo é
-   verdadeiro. Rode com e sem a ação (`do(a)` contra observação passiva) e declare o laço: o Goodhart
-   medido está no Capítulo 20 e vale 0,145, quatro vezes menos que os 0,6 declarados.
-4. **Proibidos os extremos dogmáticos e a omissão de tentativas.** Nenhuma probabilidade pode ser 0% ou 100%;
-   toda previsão é pontuada por regra própria (Brier ou log) fora do ajuste; e o número de especificações
-   tentadas tem de ser declarado — no passado foi o contador K, que hoje é registro (`K = 38` no portão do
-   H2).
+1. **No free-form natural language between agents.** Communication passes through structured specification sheets
+   (`Ficha`, in `crates/stochology-core/src/layer.rs`), carrying an identifier, layer, uncertainty type,
+   one-line definition, simulable artifact, seed, independent unit, null model, scope, who pays
+   for the error, and an exit clause.
+2. **No solitary mean.** Wherever the function is nonlinear, the dynamics are multiplicative, or the tail is
+   heavy, reporting only the mean is prohibited: report the evaluation at the mean $f(E[X])$, the simulated expectation $E[f(X)]$, the
+   median, the quantiles, and the cumulative distribution curve. Chapter 5 of the textbook measures the Jensen toll; the instrument
+   `labs --chapter 5` reproduces it.
+3. **No confusing learning with performativity.** Small prediction error does not prove that a model is
+   true. Run with and without the intervention (`do(a)` versus passive observation) and declare the feedback loop: the measured Goodhart effect
+   is in Chapter 20 and equals 0.145, four times smaller than the declared 0.6.
+4. **No dogmatic extremes and no omission of trials.** No probability may be 0% or 100%;
+   every forecast is scored by a strictly proper scoring rule (Brier or log) out of sample; and the number of specifications
+   tried must be declared — formerly the counter K, now recorded in the registry (`K = 38` at the H2 gate).
 
-## II. Invariantes de contorno
+## II. Boundary Invariants
 
-| Invariante | O que exige | Onde vive no código |
+| Invariant | Requirement | Where it lives in code |
 | --- | --- | --- |
-| Phi1 — simulabilidade | semente fixa e artefato que roda | `crates/stochology-core/src/invariantes.rs` e `rng.rs` |
-| Phi2 — unidade independente | margem na unidade real, nunca pseudorreplicação | validado na ficha; medido em `labs --cap 16` e `labs --banco` |
-| Phi3 — teste severo | modelo nulo simulado antes de ler padrão | validado na ficha; `labs --cap 7` e `labs --cap 14` |
-| Phi4 — escopo e saída | quem paga pelo erro e cláusula objetiva de saída | validado na ficha; banca A8 |
-| Phi5 — resolução da pergunta | exigido quando a unidade é o dia ou mais grossa: aí resolução agregada (R0) reprova; unidade mais fina fica fora, declarado | `crates/stochology-core/src/invariantes.rs` e `src/resolucao.rs` |
+| Phi1 — simulability | fixed seed and executable artifact | `crates/stochology-core/src/invariants.rs` and `rng.rs` |
+| Phi2 — independent unit | margin on the true independent unit, never pseudoreplication | validated in the sheet; measured in `labs --chapter 16` and `labs --bank` |
+| Phi3 — severe test | null model simulated before reading any pattern | validated in the sheet; `labs --chapter 7` and `labs --chapter 14` |
+| Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; review board agent A8 |
+| Phi5 — question resolution | enforced when the unit is a day or coarser: aggregate resolution (R0) fails; finer units remain exempt, as declared | `crates/stochology-core/src/invariants.rs` and `src/resolution.rs` |
 
-O binário `portoes` cobra os invariantes e a banca em sete portões (G1 a G7, distintos dos seis portões G1 a G6 do motor ondulatório `onda`) e sai com código 0 ou 1.
+The `gates` binary enforces the invariants and the review board across seven gates (G1 to G7, distinct from the six gates G1 to G6 of the wave engine `wave`) and exits with code 0 or 1.
 
-## III. Ontologia e as cinco lentes
+## III. Ontology and the Five Lenses
 
-O conhecimento é um hipergrafo tipado G = (V, E_tree, E_graph, H, Phi). Nó tem camada (L1 Mundo, L2 Modelo,
-L3 Agente), tipo de incerteza (aleatória, epistêmica, knightiana), definição e ponteiro para o artefato.
-Arestas de patologia marcam desalinhamento entre camadas. As cinco lentes — **Fluxonomia, Crononomia,
-Escalonomia, Morfonomia, Crisonomia** — vivem em `crates/stochology-hypergraph/src/lentes.rs`, com testes.
+Knowledge is represented as a typed hypergraph G = (V, E_tree, E_graph, H, Phi). Each node has a layer (L1 World, L2 Model,
+L3 Agent), an uncertainty type (aleatory, epistemic, Knightian), a definition, and a pointer to its artifact.
+Pathology edges mark misalignments across layers. The five lenses — **Fluxonomy, Chrononomy,
+Scalonomy, Morphonomy, Crisonomy** — live in `crates/stochology-hypergraph/src/lenses.rs`, with tests.
 
-## IV. Banca adversarial, orquestrador e ciclo
+## IV. Adversarial Review Board, Orchestrator, and Cycle
 
-Os oito agentes da banca são A1 a A8 (código, dados, ciclo de vida, inferência, governança, justiça, domínio,
-decisão), em `crates/stochology-core/src/agentes.rs`, com a condição
+The eight agents of the adversarial review board are A1 to A8 (code, data, lifecycle, inference, governance, fairness, domain,
+decision), in `crates/stochology-core/src/agents.rs`, governed by the condition
 
-    Aprovado(X) = E de i=1..8 ( A_i(X) >= Severidade_min ), Severidade_min = 6.
+    Approved(X) = AND_{i=1..8} ( A_i(X) >= Severity_min ), Severity_min = 6.
 
-Registros antigos usam os rótulos MB1–MB8: é a mesma lista. O orquestrador M
-(`crates/stochology-core/src/orquestrador.rs`) conduz o ciclo de seis estágios: tradução e escopo, ingestão
-e grão, simulação e modelo nulo, projeção nas cinco lentes, banca e portão, decisão e fechamento. Dos dois
-modos, o **Sistema 1** já vive em `crates/stochology-core/src/s1.rs`, com o funil de filtros ao lado, e o
-**Sistema 2** vive em `crates/stochology-s2`: LATS, motor de estado de crença, inferência de Metropolis e
-estresse deliberativo da banca, com a síntese de código (F1) declarada e não implementada. Veja
-`PROPOSTAS_DECLARADAS.md`.
+Legacy records use the labels MB1–MB8: it is the same list. The orchestrator M
+(`crates/stochology-core/src/orchestrator.rs`) drives the six-stage cycle: translation and scope, ingestion
+and grain, simulation and null model, projection onto the five lenses, review board and gate, decision and closure. Of the two
+modes, **System 1** lives in `crates/stochology-core/src/s1.rs`, with the filter funnel alongside it, and
+**System 2** lives in `crates/stochology-s2`: LATS, belief-state engine, Metropolis inference, and
+deliberative board stress-testing, with code synthesis (F1) declared and not implemented. See
+`docs/DECLARED_PROPOSALS.md`.
 
-## V. Verificação obrigatória antes de consolidar
+## V. Mandatory Verification Before Consolidation
 
-Um comando, e ele é a lista:
-
-~~~bash
-scripts/verificar.sh            # §V inteiro: formato, lints, testes, instrumentos e conferidores
-scripts/verificar.sh --rapido   # o mesmo sem os laboratórios pesados, para o laço de edição
-~~~
-
-A lista mora em `scripts/verificar.sh` e o CI chama **esse arquivo**, não uma cópia. Enquanto ela morava em dois
-lugares, o contrato cobrava 29 comandos e o CI rodava 11 — a divergência que este parágrafo fecha. O que segue é a
-leitura da lista, com o que cada linha cobra:
+One command, and it is the list:
 
 ~~~bash
-cargo fmt --all --check                             # o formato é do rustfmt, não do gosto
-cargo clippy --workspace --all-targets -- -D warnings   # nenhum aviso tolerado nos dezesseis crates
-cargo test --workspace                              # os dezesseis crates
-cargo run --release --bin labs -- --todos           # os 21 laboratórios do livro
-cargo run --release --bin labs -- --banco           # o H0 real, lendo dados-reais/bank_calls.csv
-cargo run --release --bin labs -- --resolucao       # o horizonte R
-cargo run --release --bin labs -- --s1              # a triagem do Sistema 1
-cargo run --release --bin labs -- --s2              # o Sistema 2: hipergrafo, crença, inferência e eixo R
-cargo run --release --bin labs -- --fila            # a fila com desistência e a tabela R0 a R3
-cargo run --release --bin portoes -- --horizonte todos --reproducao   # os sete portões
-cargo run --release --bin portoes -- --horizonte h3 --defeito h3.voos23  # prova negativa: sai com 1
-cargo run --release --bin onda -- --check            # os seis portões do motor ondulatório
-cargo run --release --bin onda -- --defeito mutacao  # prova negativa da cadeia de selos: sai com 1
-cargo run --release --bin onda -- --defeito inversao # prova negativa da seta causal: sai com 1
-cargo run --release --bin labs -- --ensaio-shelf      # o piso sintetico do painel SHELF
-cargo run --release --bin labs -- --ensaio-escuta     # a aritmetica da cobertura e o limite do portao da escuta
-cargo run --release --bin labs -- --ensaio-ponte      # papeis, casos e status no portao da ponte
-python3 book/gerar.py --check                       # a rampa E o disco: o arquivo tem de ser o livro montado
-python3 book/conferir_labs.py                       # cada bloco citado contra o instrumento
-python3 book/conferir_livro.py                      # partes, capítulos, cercas e ordem
-python3 book/gerar_resultados.py --check            # o registro RESULTADOS_RUST.md
-python3 conferir_lacres.py                          # os 28 lacres SHA-256, caminho relativo à raiz
-python3 estilo/conferir-passada.py                  # a passada de prosa contra HEAD:book/, arquivo por arquivo
+scripts/verify.sh            # all of §V: formatting, lints, tests, instruments, and verifiers
+scripts/verify.sh --rapido   # the same without the heavy laboratories, for the editing loop
 ~~~
 
-Os instrumentos que provam o que os itens de `PROPOSTAS_DECLARADAS.md` §2 fecharam também entram na
-verificação, porque cada linha daquela tabela cita um deles:
+The list lives in `scripts/verify.sh` and CI invokes **this file**, not a copy. While it lived in two
+places, the contract required 29 commands and CI ran 11 — the divergence that this paragraph closes. Below is the
+reading of the list, with what each line enforces:
 
 ~~~bash
-cargo run --release --bin labs -- --genetica    # a resolução fina da genética
-cargo run --release --bin labs -- --h3          # a cadeia do H3
-cargo run --release --bin labs -- --segunda     # a segunda opinião do registro
-cargo run --release --bin labs -- --ponte       # a tese da ponte em escala
-cargo run --release --bin labs -- --escuta      # a voz de quem paga o erro
-cargo run --release --bin labs -- --schema      # a cadeia de migrações do contrato
-cargo run --release --bin labs -- --jev         # a ponte Jev-LLM
-cargo run --release --bin labs -- --resolucao   # o eixo R e as previsões 3 e 5
+cargo fmt --all --check                             # formatting belongs to rustfmt, not personal taste
+cargo clippy --workspace --all-targets -- -D warnings   # zero warnings tolerated across all nine crates
+cargo test --workspace                              # all nine crates
+cargo run --release --bin labs -- --all           # the 21 textbook laboratories
+cargo run --release --bin labs -- --bank           # real H0, reading data/bank_calls.csv
+cargo run --release --bin labs -- --resolution       # the R horizon
+cargo run --release --bin labs -- --s1              # System 1 triage
+cargo run --release --bin labs -- --s2              # System 2: hypergraph, belief, inference, and R-axis
+cargo run --release --bin labs -- --queue            # queue with abandonment and the R0-to-R3 table
+cargo run --release --bin gates -- --horizon all --reproduction   # the seven gates
+cargo run --release --bin gates -- --horizon h3 --defect h3.voos23  # negative proof: exits with 1
+cargo run --release --bin wave -- --check            # the six gates of the wave engine
+cargo run --release --bin wave -- --defect mutation  # negative proof of the seal chain: exits with 1
+cargo run --release --bin wave -- --defect inversion # negative proof of the causal arrow: exits with 1
+cargo run --release --bin labs -- --rehearsal-shelf      # synthetic floor of the SHELF panel
+cargo run --release --bin labs -- --rehearsal-listening     # coverage arithmetic and boundary of the listening gate
+cargo run --release --bin labs -- --rehearsal-bridge      # roles, cases, and status in the bridge gate
+python3 scripts/book/build.py --check               # the ramp AND the disk: the file must match the assembled book
+python3 scripts/book/check_labs.py                  # every cited block checked against its instrument
+python3 scripts/book/check_book.py                  # parts, chapters, fences, and ordering
+python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
+python3 scripts/check_seals.py                      # the 28 SHA-256 seals, paths relative to root
+python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
 ~~~
 
-O motor ondulatório entra no primeiro bloco porque é instrumento, não capítulo: ele não
-produz número publicado e não substitui nenhum laboratório. As duas divergências dele contra o rascunho que o
-originou estão declaradas em `crates/stochology-wave/src/lib.rs` — a frustração `<Psi, L Psi>` não serve de
-gatilho de conflito, porque na antifase simétrica ela vale zero exatamente quando o conflito existe, e o portão
-da plasticidade cobra ganho de ressonância no alvo em vez de queda monotônica de frustração.
+The instruments that prove what the items in `docs/DECLARED_PROPOSALS.md` §2 closed also enter the
+verification suite, because every row in that table cites one of them:
 
-Os três ensaios são ensaio, não cobertura: rodam os instrumentos dos pontos 12, 13 e 16 sobre registros
-sintéticos para medir o piso de um respondente fluente e sem calibração, e para descobrir o que o portão não
-distingue. Nenhuma linha deles conta grupo ouvido, caso escolhido ou papel designado, e a saída carrega o
-rótulo SINTÉTICO. O ensaio do painel já mediu duas coisas que ficam declaradas: o respondente fluente (p = 0,75
-sem informação) tem habilidade negativa, e o oráculo perfeito é reprovado pela guarda de habilidade, porque com
-acerto 1 a variância do clima é zero e a razão 0/0 é lida como 0. O ensaio da escuta mediu o limite do portão:
-ele confere campo, não proveniência, e sete registros fabricados abrem a caixa — a cobertura real precisa de
-hash da transcrição assinada, que hoje não existe.
+~~~bash
+cargo run --release --bin labs -- --genetics    # fine resolution in genetics
+cargo run --release --bin labs -- --h3          # the H3 chain
+cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
+cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
+cargo run --release --bin labs -- --listening      # the voice of those who pay for the error
+cargo run --release --bin labs -- --schema      # the contract migration chain
+cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
+cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 and 5
+~~~
 
-Nenhum número entra no livro sem sair de um destes comandos. Quando um valor divergir do registro antigo, o
-capítulo traz uma **declaração de divergência** com os dois valores e o motivo — é o que os Capítulos 4, 5, 8,
-16, 17, 18, 20 e 21 fazem.
+The wave engine enters the first block because it is an instrument, not a chapter: it produces no
+published number and replaces no laboratory. Its two divergences from the draft that
+originated it are declared in `crates/stochology-wave/src/lib.rs` — the frustration `<Psi, L Psi>` cannot serve as a
+conflict trigger because in symmetric antiphase it equals zero precisely when conflict exists, and the
+plasticity gate enforces target resonance gain rather than monotonic frustration decay.
 
-## VI. Regra dos arquivos novos
+The three dry-run rehearsals (`--rehearsal-*`) are rehearsals, not coverage: they run the instruments of points 12, 13, and 16 over synthetic
+records to measure the floor of a fluent uncalibrated respondent and to expose what the gate cannot
+distinguish. No line in them counts a heard group, a selected case, or an assigned role, and their output carries the
+`SYNTHETIC` label. The panel rehearsal measured two things that remain declared: the fluent respondent (p = 0.75
+without information) has negative skill, and the perfect oracle fails the skill guard because with
+perfect accuracy the climatological variance is zero and the 0/0 ratio evaluates to 0. The listening rehearsal measured the boundary of the gate:
+it checks fields rather than provenance, so seven fabricated records open the box — true coverage requires a
+signed transcript hash, which does not exist today.
 
-Arquivo novo de trabalho — cópia intermediária, script de uma vez, rascunho — é **apagado depois da
-integração**. Fica no repositório só artefato com função contínua (`book/gerar.py`, os dois conferidores do
-livro, o gerador do registro, o conferidor de lacres, o instrumental de estilo, os crates) ou registro
-(capítulos, declarações, manifestos, relatórios).
+No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, the
+chapter includes a **divergence declaration** stating both values and the cause — as Chapters 4, 5, 8,
+16, 17, 18, 20, and 21 do.
 
-## VII. Estado do projeto
+## VI. Rule on New Files
 
-| Camada | Onde | Estado |
+New working files — intermediate copies, one-off scripts, drafts — are **deleted after
+integration**. Only artifacts with an ongoing function (`scripts/book/build.py`, the two book verifiers,
+the results generator, the seal verifier, the style tooling, the crates) or permanent records
+(chapters, declarations, manifests, reports) remain in the repository.
+
+## VII. Project State
+
+| Layer | Location | State |
 | --- | --- | --- |
-| Livro | `estocologia-livro-didatico.md`, escrito em `book/` | 21 capítulos, 5 partes, montado e conferido |
-| Aparato | `crates/stochology-*` | dezesseis crates vivos; nenhum nome do roteiro ficou para trás. O décimo sexto é `-wave` (2026-10-17): superposição fasorial local, Laplaciano magnético com propagador de Cayley, plasticidade Kuramoto-Oja e barramento de espículas com STDP, com as divergências declaradas na documentação do crate |
-| Resultados | `RESULTADOS_RUST.md` | registro gerado dos próprios instrumentos |
-| Registro empírico | `REGISTRO_EMPIRICO.md`, `fundo/`, `governanca/`, `dados-reais/` | cada número com a marca do instrumento que o reproduz; o andaime Python saiu em 2026-10-16 |
-| Aposentado | commit `1bfec905` | o código Python de simulação e os artefatos não significativos para a teoria |
-| Declarado e não exigido | `PROPOSTAS_DECLARADAS.md` | **quatro itens vivos**, e eles não são da mesma natureza: **3** elicitação humana SHELF (o painel completo), **5** a voz de quem paga o erro (0 de 7 grupos ouvidos, prazo 2026-12-15) e **9** a tese da ponte em escala (0 de 12 casos, janela 2027-01-14) dependem de **gente de fora do programa** — consentimento, escuta e julgamento cego, e nenhuma linha de código os substitui; **13** a ponte Jev-LLM depende de **artefato e código** — os pesos abertos congelados com `sha256` declarado e o runner local que os carregue —, e o runner já existe em `crates/stochology-s2/src/runner.rs` desde 2026-10-17, com o manual do operador em `fundo/p20-jev/RUNNER.md`; falta o arquivo dos pesos e a declaração do hash, que é operação de máquina e de operador, não de painel. Os itens 1, 2, 4, 6, 7, 8, 10, 11 e 12 saíram da lista em 2026-10-16, com a prova em §2 do mesmo arquivo; o Phi5, o campo de resolução, o Sistema 1, o funil, o cofre, a fila e o Sistema 2 saíram antes, ao serem implementados |
+| Book | `book/stochology-textbook.md`, authored in `book/` | 21 chapters, 5 parts, assembled and verified |
+| Apparatus | `crates/stochology-*` | nine live crates after the consolidation of 2026-10-17: `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book`, `-wasm`, and `-wave`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
+| Results | `docs/RUST_RESULTS.md` | registry generated directly from the instruments |
+| Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
+| Language | every layer | **English edition of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |
+| Retired | commit `1bfec905` | the Python simulation code and artifacts not significant to the theory |
+| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **four live items**, and they are not of the same nature: **3** human SHELF elicitation (the full panel), **5** the voice of those who pay for the error (0 of 7 groups heard, deadline 2026-12-15), and **9** the bridge thesis at scale (0 of 12 cases, window 2027-01-14) depend on **people outside the program** — consent, listening, and blind judgment, which no line of code can replace; **13** the Jev-LLM bridge depends on **artifact and code** — open weights frozen with a declared `sha256` and a local runner to load them —, and the runner has existed in `crates/stochology-s2/src/runner.rs` since 2026-10-17, with the operator manual in `empirical/p20-jev/RUNNER.md`; what is missing is the weights file and the hash declaration, which is a machine and operator operation rather than a panel. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
 
-## VIII. O que não entra neste repositório
+## VIII. What Does Not Enter This Repository
 
-- **Python de simulação:** aposentado em 2026-10-16 (`DECLARACAO_REMOVIDO_PYTHON.md`). O que resta em Python
-  são as ferramentas de conferência do livro e do registro, e nada mais: `book/gerar.py`, os dois conferidores
-  do livro, `book/gerar_resultados.py`, `conferir_lacres.py` e o instrumental de estilo em `estilo/`. O
-  instrumental de estilo é autorizado aqui porque a passada de prosa é parte do ciclo de verificação contínua,
-  está declarada em `estilo/decisoes.md` e entra na verificação obrigatória de §V. Ferramenta de conferência
-  que não entra em §V não fica na árvore: os quatro instrumentais que sobraram fora da lista passam por dentro dela
-  (`estilo/varredura.py` é importado por `conferir-passada.py`) ou servem à releitura declarada em
-  `estilo/decisoes.md`, e o que não servia — os três manifestos e as duas transcrições — saiu para `historico/`.
-- **O curso e a sua numeração:** o curso *Pensamento Crítico e Modelos Estocásticos* foi obsoletado; os rótulos
-  M0–M15, ME1–ME24 e MB1–MB8 são históricos e não são nomenclatura vigente.
-- **Ferramenta de operador em Python:** `tools/gerar_fontes_incendios.py` é autorizada aqui porque prepara os
-  insumos brutos do item 13 fora da árvore — catálogo de casos, inferência congelada e serialização com a quebra
-  escapada —, e o insumo que ela produz entra pela rampa do `ingestar-jev`, que é Rust e cobra o esquema. Ela não
-  calcula número publicado: o que ela escreve é fonte bruta, e a fonte só vira número depois dos lacres e do
-  instrumento. Fonte sintética que ela gera sai etiquetada como sintética.
-- **Artefato sem significância para a teoria:** o critério está em `book/resultados-significantes.md`, e a
-  última aplicação está em `DECLARACAO_REMOVIDO_NAO_SIGNIFICANTE.md`.
+- **Simulation Python:** retired on 2026-10-16 (`docs/declarations/REMOVED_PYTHON.md`). What remains in Python
+  are the verification tools for the book and the registry, and nothing else: `scripts/book/build.py`, the two book
+  verifiers, `scripts/book/generate_results.py`, `scripts/check_seals.py`, and the style tooling in `scripts/style/`. The
+  style tooling is authorized here because the prose pass is part of the continuous verification cycle,
+  is declared in `scripts/style/decisions.md`, and is part of the mandatory verification in §V. Any verification tool
+  that does not enter §V does not stay in the tree: the four tools remaining outside the direct command list either run through it
+  (`scripts/style/scan.py` is imported by `scripts/style/check_pass.py`) or serve the rereading declared in
+  `scripts/style/decisions.md`, and what did not serve — the three manifests and two transcripts — moved to `history/`.
+- **The legacy course and its numbering:** the course *Critical Thinking and Stochastic Models* has been obsoleted; the labels
+  M0–M15, ME1–ME24, and MB1–MB8 are historical and are not current nomenclature.
+- **Python operator tool:** `scripts/generate_fire_sources.py` is authorized here because it prepares the
+  raw inputs for item 13 outside the tree — case catalog, frozen inference, and newline-escaped
+  serialization —, and the input it produces enters through the ramp of `ingest-jev`, which is Rust and enforces the schema. It
+  computes no published number: what it writes is a raw source, and a source only becomes a number after the seals and the
+  instrument. Any synthetic source it generates is labeled as synthetic.
+- **Artifacts without significance for the theory:** the criterion lives in `book/significant-results.md`, and its
+  latest application is recorded in `docs/declarations/REMOVED_NON_SIGNIFICANT.md`.

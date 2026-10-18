@@ -1,0 +1,94 @@
+nome: genetica_y05
+area: Genética (expressão gênica em levedura)
+titulo: "Expressão do gene Y nº 5 (sorteado) sob deleções de genes únicos em levedura (Kemmeren et al. 2014)"
+pergunta: >-
+  A expressão do gene Y nº 5 (sorteado entre os nunca deletados) segue a mesma lei, dada a expressão de algum dos
+  genes candidatos, nas amostras selvagens e nos mutantes de deleção, de modo que valha para deleções em
+  cromossomos nunca vistos?
+alegacao: '"A expressão de Y é regulada pelos genes mais correlacionados com ele: a mesma lei vale com ou sem deleções."'
+glossario:
+  delecao: remoção completa de um gene do genoma (knockout); intervenção de alvo conhecido
+  mutante: linhagem com uma deleção de gene único; um perfil de expressão por mutante
+  selvagem: linhagem BY4742 sem deleção; amostras de controle cultivadas ao longo do projeto
+  log_razao: log2 da expressão na amostra sobre a de um pool de referência selvagem (microarranjo de duas cores)
+  orf: nome sistemático do gene (ex. YAL001C); a 2ª letra é o cromossomo
+  pre_selecao: escolha dos candidatos pela correlação com Y só nas amostras selvagens (como em Meinshausen et al. 2016)
+  plate: coluna técnica sem documentação; parece marcar lote ou formato de cultivo
+  efeito_global: mudança de muitos genes ao mesmo tempo por crescimento mais lento ou ciclo celular, não medida
+  efeito_forte_de_intervencao: Y fora da faixa de todas as outras amostras no mutante ΔX (validação do PNAS)
+  bonferroni: α = 0,05/10 por Y, para controlar o erro na família dos 10 genes Y
+fontes:
+  - "Kemmeren et al. (2014), Large-scale genetic perturbations reveal regulatory networks and an abundance of gene-specific repressors, Cell 157:740 — citada de memória, conferir"
+  - "Meinshausen, Hauser, Mooij, Peters, Versteeg & Bühlmann (2016), Methods for causal inference from gene perturbation experiments and validation, PNAS 113:7361 — citada de memória, conferir"
+  - data/h2f/kemmeren2014_obs_int.parquet (ver FONTES.md)
+arquivos: [kemmeren2014_obs_int.parquet]
+familia: gaussiana
+desfecho: log2 da razão de expressão do gene Y nº 5
+chave: x1
+candidatos:
+  x1: {tipo: num, descricao: "1º gene deletável mais correlacionado com Y nas selvagens (orientado positivamente)"}
+  x2: {tipo: num, descricao: 2º gene da pré-seleção}
+  x3: {tipo: num, descricao: 3º gene da pré-seleção}
+  x4: {tipo: num, descricao: 4º gene da pré-seleção}
+  x5: {tipo: num, descricao: 5º gene da pré-seleção}
+  x6: {tipo: num, descricao: 6º gene da pré-seleção}
+  x7: {tipo: num, descricao: 7º gene da pré-seleção}
+  x8: {tipo: num, descricao: 8º gene da pré-seleção}
+  x9: {tipo: num, descricao: 9º gene da pré-seleção}
+  plate: {tipo: num, descricao: indicador técnico de lote (0/1)}
+icp_candidatos: [x1, x2, x3, x4, x5, x6, x7, x8, x9, plate]
+ajuste: [x2, x3, x4, x5, x6, x7, x8, x9, plate]
+alfa_icp: 0.005
+dag:
+  - [plate, x1]
+  - [plate, x2]
+  - [plate, x3]
+  - [plate, x4]
+  - [plate, x5]
+  - [plate, x6]
+  - [plate, x7]
+  - [plate, x8]
+  - [plate, x9]
+  - [x1, y]
+  - [x2, y]
+  - [x3, y]
+  - [x4, y]
+  - [x5, y]
+  - [x6, y]
+  - [x7, y]
+  - [x8, y]
+  - [x9, y]
+  - [plate, y]
+ambientes:
+  descricao: >-
+    obs (262 selvagens), del_EJ (deleções nos cromossomos E–J), del_KP (K–P); cofre del_AD (A–D, nunca visto).
+    Regra que não olha Y. Violações declaradas: efeitos globais de deleções fora dos candidatos (crescimento, ciclo
+    celular) agem em Y sem estar medidos; plate é técnico e entra como candidato. Ver ../../DECLARACAO_H2f.md.
+  cofre: [del_AD]
+unidade: a amostra (perfil de expressão)
+cabecalho:
+  processo_gerador: Cada amostra é uma cultura (selvagem ou mutante de deleção) cujo transcriptoma é medido contra um pool de referência; deleções propagam-se pela rede reguladora.
+  nao_linearidade: Aproximadamente linear em log-razão perto do equilíbrio; deleções são intervenções extremas (knockout), fora da faixa observacional.
+  unidade_e_margem: A amostra é a unidade; lotes de cultivo e experimentadores diferentes (plate captura uma parte).
+  fisica_do_ruido: Ruído de microarranjo multiplicativo, aproximadamente gaussiano em log; lotes.
+  escada_causal: "Degrau 2 (deleções de alvo conhecido). Premissas não testáveis: as deleções fora dos candidatos não agem em Y diretamente (sabidamente violada em parte)."
+shelf:
+  quantidade: coeficiente de log-razão de Y em x1 (orientado positivamente), ajustado pelos outros candidatos
+  fonte: argumento genérico; correlações de expressão moderadas, coeficiente parcial menor que a correlação; nenhum especialista humano consultado
+  painel: argumento genérico; nenhum especialista humano consultado
+  quartis: {q05: -0.1, q25: 0.1, q50: 0.3, q75: 0.5, q95: 0.9}
+decisao:
+  acao: usar a deleção de x1 como alavanca para baixar a expressão de Y
+  beneficio_por_unidade: 1.0
+  custo: 0.3
+  custo_pesquisa: 0.02
+  nota: decisão inventada, custo perto da mediana da priori; o F1 aqui não informa sobre o mundo
+termo_escopo:
+  vale_para: levedura BY4742 nas condições de cultivo do Deleteome; deleções de gene único
+  nao_vale_para: deleções múltiplas, outras linhagens ou condições, expressão absoluta
+tentativas_de_especificacao: 1
+historico_especificacoes:
+  - K: 1
+    quando: H2f (2026-10-15, declarado antes de rodar em ../../DECLARACAO_H2f.md)
+    o_que: especificação original; ICP com o teste K = 2 e a regra K = 3, α = 0,005 (Bonferroni em 10 Y)
+tem_titulares: false

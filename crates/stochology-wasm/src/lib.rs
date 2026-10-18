@@ -1,124 +1,127 @@
-//! stochology-wasm — o playground: os instrumentos no navegador, sem servidor.
+//! stochology-wasm — the playground: the instruments in the browser, with no server.
 //!
-//! O crate exporta a funcao pura em `api` e a ponte C em `estocologia_*`, a unica coisa que o
-//! navegador precisa. Sem dependencia externa: o alvo e `wasm32-unknown-unknown`.
+//! The crate exports the pure function in `api` and the C bridge in `estocologia_*`, the only thing
+//! the browser needs. No external dependency: the target is `wasm32-unknown-unknown`.
 //!
-//! Comando declarado:
+//! Declared command:
 //! `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm`
-//! e, para abrir, `crates/stochology-wasm/www/index.html`.
+//! and, to open it, `crates/stochology-wasm/www/index.html`.
 //!
-//! Declarado e nao implementado: a interface de memoria (hoje tudo passa por inteiros) e o
-//! carregamento do hipergrafo no navegador.
+//! Declared and not implemented: the memory interface (today everything goes through integers) and
+//! loading the hypergraph in the browser.
 
-// A ponte C exporta com `#[unsafe(no_mangle)]`, que o lint de unsafe_code conta como
-// declaracao insegura. Nao ha bloco unsafe neste crate: o allow e pelo atributo de export,
-// e o resto da arvore continua com unsafe_code = "deny".
+// The C bridge exports with `#[unsafe(no_mangle)]`, which the unsafe_code lint counts as an unsafe
+// declaration. There is no unsafe block in this crate: the allow is for the export attribute,
+// and the rest of the tree keeps unsafe_code = "deny".
 #![allow(unsafe_code)]
 
 use stochology_core::Rng;
 
-/// As funcoes puras que a ponte C e o navegador usam.
+/// The pure functions that the C bridge and the browser use.
 pub mod api {
     use super::*;
 
-    /// Versao do playground, para o HTML saber com o que esta falando.
-    pub fn versao() -> u32 {
+    /// Playground version, so the HTML knows what it is talking to.
+    pub fn version() -> u32 {
         1
     }
 
-    /// Cara ou coroa deterministico: quantas caras em `lances`, com a probabilidade em centesimos.
-    pub fn moeda(semente: u64, lances: u32, centesimos_de_cara: u64) -> u64 {
-        let p = (centesimos_de_cara.min(100) as f64) / 100.0;
-        let mut rng = Rng::novo(semente);
-        let mut caras = 0u64;
-        for _ in 0..lances {
-            let u = ((rng.proximo() >> 11) as f64 + 0.5) / (1u64 << 53) as f64;
+    /// Deterministic coin toss: how many heads in `tosses`, with the probability in hundredths.
+    pub fn coin(seed: u64, tosses: u32, heads_hundredths: u64) -> u64 {
+        let p = (heads_hundredths.min(100) as f64) / 100.0;
+        let mut rng = Rng::new(seed);
+        let mut heads = 0u64;
+        for _ in 0..tosses {
+            let u = ((rng.next_u64() >> 11) as f64 + 0.5) / (1u64 << 53) as f64;
             if u < p {
-                caras += 1;
+                heads += 1;
             }
         }
-        caras
+        heads
     }
 
-    /// Erlang C em decimilessimos (0 a 10 000): a mesma formula do H0.
-    pub fn erlang_c_decimilessimos(agentes: u32, carga_centesimos: u64) -> u64 {
-        let carga = carga_centesimos as f64 / 100.0;
-        (stochology_h0::erlang_c(agentes, carga) * 10_000.0).round() as u64
+    /// Erlang C in ten-thousandths (0 to 10 000): the same formula as H0.
+    pub fn erlang_c_ten_thousandths(agents: u32, load_hundredths: u64) -> u64 {
+        let load = load_hundredths as f64 / 100.0;
+        (stochology_horizons::h0::erlang_c(agents, load) * 10_000.0).round() as u64
     }
 
-    /// Indice de dispersao do nulo de Poisson, em milesimos. Poisson fica perto de 1000.
-    pub fn dispersao_do_nulo(semente: u64, passos: u32, media_centesimos: u64) -> u64 {
-        let nulo = stochology_h0::NuloPoisson::novo(media_centesimos as f64 / 100.0);
-        let serie = nulo.serie(semente, passos.max(2) as usize);
-        (stochology_h0::indice_de_dispersao(&serie) * 1000.0).round() as u64
+    /// Dispersion index of the Poisson null, in thousandths. Poisson stays close to 1000.
+    pub fn null_dispersion(seed: u64, steps: u32, mean_hundredths: u64) -> u64 {
+        let null = stochology_horizons::h0::PoissonNull::new(mean_hundredths as f64 / 100.0);
+        let series = null.series(seed, steps.max(2) as usize);
+        (stochology_horizons::h0::dispersion_index(&series) * 1000.0).round() as u64
     }
 
-    /// A regra do contrato em codigo: nenhuma probabilidade bate em 0 nem em 1.
-    pub fn probabilidade_presa(centesimos: u64) -> u64 {
-        centesimos.clamp(1, 99)
+    /// The contract rule in code: no probability hits 0 or 1.
+    pub fn trapped_probability(hundredths: u64) -> u64 {
+        hundredths.clamp(1, 99)
     }
 }
+
+// The exported ABI symbol names stay in the historical form on purpose: the playground page and
+// any external caller link against them, so they are part of the contract, not of the source prose.
 
 #[unsafe(no_mangle)]
 pub extern "C" fn estocologia_versao() -> u32 {
-    api::versao()
+    api::version()
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_moeda(semente: u64, lances: u32, centesimos_de_cara: u64) -> u64 {
-    api::moeda(semente, lances, centesimos_de_cara)
+pub extern "C" fn estocologia_moeda(seed: u64, tosses: u32, heads_hundredths: u64) -> u64 {
+    api::coin(seed, tosses, heads_hundredths)
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_erlang_c(agentes: u32, carga_centesimos: u64) -> u64 {
-    api::erlang_c_decimilessimos(agentes, carga_centesimos)
+pub extern "C" fn estocologia_erlang_c(agents: u32, load_hundredths: u64) -> u64 {
+    api::erlang_c_ten_thousandths(agents, load_hundredths)
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn estocologia_dispersao_do_nulo(
-    semente: u64,
-    passos: u32,
-    media_centesimos: u64,
+    seed: u64,
+    steps: u32,
+    mean_hundredths: u64,
 ) -> u64 {
-    api::dispersao_do_nulo(semente, passos, media_centesimos)
+    api::null_dispersion(seed, steps, mean_hundredths)
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_probabilidade_presa(centesimos: u64) -> u64 {
-    api::probabilidade_presa(centesimos)
+pub extern "C" fn estocologia_probabilidade_presa(hundredths: u64) -> u64 {
+    api::trapped_probability(hundredths)
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::api;
 
     #[test]
-    fn a_moeda_bate_a_probabilidade_e_nao_depende_do_relogio() {
-        let caras = api::moeda(2026, 200_000, 50);
-        let fracao = caras as f64 / 200_000.0;
-        assert!((fracao - 0.5).abs() < 0.01, "moeda justa: {fracao}");
-        assert_eq!(caras, api::moeda(2026, 200_000, 50));
-        assert_ne!(caras, api::moeda(2027, 200_000, 50));
-        let viciada = api::moeda(2026, 200_000, 90);
-        assert!(viciada as f64 / 200_000.0 > 0.88);
+    fn coin_matches_the_probability_and_does_not_depend_on_the_clock() {
+        let heads = api::coin(2026, 200_000, 50);
+        let fraction = heads as f64 / 200_000.0;
+        assert!((fraction - 0.5).abs() < 0.01, "fair coin: {fraction}");
+        assert_eq!(heads, api::coin(2026, 200_000, 50));
+        assert_ne!(heads, api::coin(2027, 200_000, 50));
+        let biased = api::coin(2026, 200_000, 90);
+        assert!(biased as f64 / 200_000.0 > 0.88);
     }
 
     #[test]
-    fn a_ponte_entrega_os_mesmos_numeros_da_funcao_pura() {
-        assert_eq!(api::versao(), 1);
-        assert_eq!(api::erlang_c_decimilessimos(10, 500), 361);
-        assert_eq!(api::erlang_c_decimilessimos(3, 200), 4444);
-        let dispersao = api::dispersao_do_nulo(7, 20_000, 400);
+    fn the_bridge_delivers_the_same_numbers_as_the_pure_function() {
+        assert_eq!(api::version(), 1);
+        assert_eq!(api::erlang_c_ten_thousandths(10, 500), 361);
+        assert_eq!(api::erlang_c_ten_thousandths(3, 200), 4444);
+        let dispersion = api::null_dispersion(7, 20_000, 400);
         assert!(
-            (990..=1010).contains(&dispersao),
-            "Poisson fica em 1000: {dispersao}"
+            (990..=1010).contains(&dispersion),
+            "Poisson sits at 1000: {dispersion}"
         );
     }
 
     #[test]
-    fn a_probabilidade_nunca_bate_nos_extremos() {
-        assert_eq!(api::probabilidade_presa(0), 1);
-        assert_eq!(api::probabilidade_presa(100), 99);
-        assert_eq!(api::probabilidade_presa(37), 37);
+    fn probability_never_hits_the_extremes() {
+        assert_eq!(api::trapped_probability(0), 1);
+        assert_eq!(api::trapped_probability(100), 99);
+        assert_eq!(api::trapped_probability(37), 37);
     }
 }

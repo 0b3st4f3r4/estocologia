@@ -1,71 +1,71 @@
-# `book/` — a edição em 21 capítulos
+# `book/` — the edition in 21 chapters
 
-Esta pasta guarda o livro didático sendo desdobrado em **21 capítulos e 5 partes**, com **três degraus
-por capítulo** (intuição de Ensino Médio, formalização acessível, laboratório em Rust). O plano do
-desdobramento é o §9 do `PLAN.md`.
+This folder keeps the textbook being unfolded into **21 chapters and 5 parts**, with **three steps
+per chapter** (high-school intuition, accessible formalization, laboratory in Rust). The plan of the
+unfolding is §9 of `docs/PLAN.md`.
 
-| Arquivo | Conteúdo |
+| File | Content |
 | --- | --- |
-| `00-abertura.md` | prefácio, rampa de três degraus, mapa dos 21 capítulos, trilhas de leitura e convenções |
-| `cap01.md` … `cap21.md` | um arquivo por capítulo |
-| `apendices.md` | apêndices A a D |
-| — | os laboratórios vivem direto no crate: `crates/stochology-book/src/capNN.rs` |
-| `gerar.py` | monta a edição e confere a rampa |
+| `00-opening.md` | preface, three-step ramp, map of the 21 chapters, reading tracks and conventions |
+| `ch01.md` … `ch21.md` | one file per chapter |
+| `appendices.md` | appendices A to D |
+| — | the laboratories live directly in the crate: `crates/stochology-book/src/capNN.rs` |
+| `scripts/book/build.py` | assembles the edition and checks the ramp |
 
-## Comandos
-
-```bash
-python3 book/gerar.py --check      # confere capítulos, três degraus, exercícios, resumo E o arquivo em disco
-python3 book/conferir_labs.py     # confere o bloco de saída de cada capítulo contra o instrumento
-python3 book/gerar_resultados.py  # escreve RESULTADOS_RUST.md com a saída literal dos instrumentos
-python3 book/gerar_resultados.py --check   # confere se o registro está atualizado
-python3 book/gerar.py              # escreve estocologia-livro-didatico.md quando os 21 estiverem prontos
-cargo run --release --bin labs -- --todos    # roda todos os laboratórios com semente fixa
-cargo test --workspace                       # testes dos crates do livro e da arquitetura
-```
-
-## Dados reais nos laboratórios
-
-Os laboratórios dos capítulos 17 e 18 leem as bases guardadas no repositório
-(~dados-reais/djia_1885_2023.csv~, ~nsw_experimental.csv~, ~cps_observational.csv~,
-~danish_fire.csv~). O caminho padrão é relativo à raiz do repositório; para apontar para outro lugar,
-use a variável de ambiente:
+## Commands
 
 ```bash
-ESTOCOLOGIA_DADOS=/caminho/para/dados cargo run --release --bin labs -- --cap 17
+python3 scripts/book/build.py --check      # checks chapters, three steps, exercises, summary AND the file on disk
+python3 scripts/book/check_labs.py     # checks each chapter's output block against the instrument
+python3 scripts/book/generate_results.py  # writes docs/RUST_RESULTS.md with the literal output of the instruments
+python3 scripts/book/generate_results.py --check   # checks whether the registry is up to date
+python3 scripts/book/build.py              # writes book/stochology-textbook.md when the 21 are ready
+cargo run --release --bin labs -- --all    # roda todos os laboratórios com semente fixa
+cargo test --workspace                       # tests of the book crates and of the architecture
 ```
 
-## Regra dos arquivos novos
+## Real data in the laboratories
 
-Arquivo novo de trabalho (cópia intermediária, script de uma vez, rascunho de laboratório) é **apagado depois
-da integração**. Fica no repositório artefato com função contínua (o gerador, os dois conferidores, o crate)
-ou registro (capítulos, declarações, manifestos, relatórios).
-
-## Regra dos números
-
-Todo número do Degrau 3 sai de código que roda:
+The laboratories of chapters 17 and 18 read the bases kept in the repository
+(~data/djia_1885_2023.csv~, ~nsw_experimental.csv~, ~cps_observational.csv~,
+~danish_fire.csv~). The default path is relative to the root of the repository; to point to another place,
+use the environment variable:
 
 ```bash
-cargo run --release --bin labs -- --cap 4
+ESTOCOLOGIA_DADOS=/caminho/para/dados cargo run --release --bin labs -- --chapter 17
 ```
 
-Quando um número desta edição divergir do número registrado no livro anterior ou num README da
-pesquisa, o capítulo traz um parágrafo **Declaração de divergência** com os dois valores e o motivo
-provável. Nenhum valor antigo é apagado.
+## Rule of new files
 
-## Estado
+A new working file (intermediate copy, one-off script, laboratory draft) is **deleted after
+integration**. What stays in the repository is an artifact with an ongoing function (the generator, the two checkers, the crate)
+or a record (chapters, declarations, manifests, reports).
 
-| Parte | Capítulos | Estado |
+## Rule of the numbers
+
+Every number of Step 3 comes out of code that runs:
+
+```bash
+cargo run --release --bin labs -- --chapter 4
+```
+
+When a number of this edition diverges from the number recorded in the previous book or in a README of the
+research, the chapter carries a paragraph **Divergence declaration** with both values and the probable
+reason. No old value is deleted.
+
+## State
+
+| Part | Chapters | State |
 | --- | --- | --- |
-| I. A arte de mirar no escuro | 1 a 4 | escritos; laboratórios no crate e blocos de saída conferidos |
-| II. As armadilhas do mundo e dos dados | 5 a 8 | escritos; laboratórios no crate e blocos de saída conferidos |
-| III. Causa, tempo e sobrevivência | 9 a 11 | escritos; laboratórios no crate e blocos de saída conferidos |
-| IV. Construindo a máquina auditável | 12 a 15 | escritos; laboratórios no crate e blocos de saída conferidos |
-| V. A máquina no mundo real | 16 a 21 | escritos; laboratórios no crate e blocos de saída conferidos |
-| Apêndices A a D | — | escritos; conferidos contra a edição anterior (o antigo Apêndice C, respostas selecionadas, virou material embutido nos Degraus 3) |
+| I. The art of aiming in the dark | 1 to 4 | written; laboratories in the crate and output blocks checked |
+| II. The traps of the world and of data | 5 to 8 | written; laboratories in the crate and output blocks checked |
+| III. Cause, time, and survival | 9 to 11 | written; laboratories in the crate and output blocks checked |
+| IV. Building the auditable machine | 12 to 15 | written; laboratories in the crate and output blocks checked |
+| V. The machine in the real world | 16 to 21 | written; laboratories in the crate and output blocks checked |
+| Appendices A to D | — | written; checked against the previous edition (the old Appendix C, selected answers, became material embedded in Step 3) |
 
-A edição em `estocologia-livro-didatico.md` já é a de 21 capítulos, montada daqui, e `gerar.py --check`
-cobra duas coisas: que os 21 capítulos estejam na rampa e que o arquivo em disco seja, caractere por
-caractere, o texto que `montar()` produz. A montagem do disco ficou 353 linhas atrás de `book/` entre os
-commits `a59803c` e `5393515` sem que nenhum portão notasse — `gerar.py --check` comparava só a rampa. A
-edição de 14 capítulos vive no histórico, no commit `1bfec905`.
+The edition in `book/stochology-textbook.md` is already the 21-chapter one, assembled from here, and `scripts/book/build.py --check`
+demands two things: that the 21 chapters be on the ramp and that the file on disk be, character by
+character, the text that `montar()` produces. The assembly on disk fell 353 lines behind `book/` between the
+commits `a59803c` and `5393515` without any gate noticing — `scripts/book/build.py --check` compared only the ramp. The
+edition of 14 chapters lives in the history, in commit `1bfec905`.

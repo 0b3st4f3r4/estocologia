@@ -1,10 +1,30 @@
-//! Laboratórios do livro didático em 21 capítulos.
+//! Laboratories of the textbook in 21 chapters.
 //!
-//! Regra do livro: todo número citado no texto sai deste crate, com semente
-//! fixa, e pode ser reproduzido pelo comando ~labs --cap N~.
+//! Book rule: every number cited in the text comes out of this crate, with a fixed seed,
+//! and can be reproduced by the command ~labs --chapter N~.
 
 pub mod banco;
-pub mod cap01;
+pub mod ch01;
+pub mod ch02;
+pub mod ch03;
+pub mod ch04;
+pub mod ch05;
+pub mod ch06;
+pub mod ch07;
+pub mod ch08;
+pub mod ch09;
+pub mod ch10;
+pub mod ch11;
+pub mod ch12;
+pub mod ch13;
+pub mod ch14;
+pub mod ch15;
+pub mod ch16;
+pub mod ch17;
+pub mod ch18;
+pub mod ch19;
+pub mod ch20;
+pub mod ch21;
 pub mod ensaio;
 pub mod escuta;
 pub mod fila;
@@ -12,28 +32,8 @@ pub mod genetica;
 pub mod ponte;
 pub mod segunda;
 
-/// A ponte Jev-LLM vive no crate do Sistema 2; aqui fica só a ponte para o laboratório.
-pub use stochology_s2::ponte as jev;
+/// The Jev-LLM bridge lives in the System 2 crate; here stays only the bridge to the laboratory.
+pub use stochology_s2::bridge as jev;
 
-/// A cadeia do H3 vive no crate do H3; aqui fica só a ponte para o laboratório.
-pub use stochology_h3::cadeia;
-pub mod cap02;
-pub mod cap03;
-pub mod cap04;
-pub mod cap05;
-pub mod cap06;
-pub mod cap07;
-pub mod cap08;
-pub mod cap09;
-pub mod cap10;
-pub mod cap11;
-pub mod cap12;
-pub mod cap13;
-pub mod cap14;
-pub mod cap15;
-pub mod cap16;
-pub mod cap17;
-pub mod cap18;
-pub mod cap19;
-pub mod cap20;
-pub mod cap21;
+/// The H3 chain lives in the H3 crate; here stays only the bridge to the laboratory.
+pub use stochology_horizons::h3::chain;

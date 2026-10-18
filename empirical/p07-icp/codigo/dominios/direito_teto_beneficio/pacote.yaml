@@ -1,0 +1,123 @@
+nome: direito_teto_beneficio
+area: Direito (regra de indenização trabalhista)
+titulo: Teto do benefício por acidente de trabalho e duração do afastamento (Kentucky 1980, Michigan 1982)
+pergunta: >-
+  Quanto um benefício semanal maior alonga o afastamento por acidente de trabalho, e a lei da duração dado o
+  benefício e o salário vale no Michigan depois da mudança da regra, um regime que não entrou no ajuste?
+alegacao: '"O afastamento cresce com o benefício pela mesma elasticidade em qualquer estado e regra: o que se aprendeu no Kentucky vale para a reforma do Michigan."'
+glossario:
+  indenizacao_trabalhista: seguro obrigatório que paga parte do salário durante o afastamento por acidente de trabalho
+  beneficio_semanal: valor real pago por semana de afastamento, dois terços do salário até o teto
+  teto_do_beneficio: valor máximo do benefício semanal, fixado em lei estadual
+  mudanca_de_regra: aumento do teto (Kentucky em julho de 1980, Michigan em 1982) que só atinge quem ganha acima dele
+  alta_renda: trabalhador cujo salário anterior passava do teto antigo (o grupo tratado)
+  duracao: semanas de benefício pagas no afastamento
+  elasticidade: variação percentual da duração por 1% a mais de benefício
+  risco_moral: afastamento mais longo quando o custo de ficar fora do trabalho cai
+  diferencas_em_diferencas: comparação de antes e depois entre o grupo atingido e o não atingido pela regra
+  salario_anterior: salário semanal antes do acidente, em dólares de 1982
+fontes:
+  - "Meyer, Viscusi & Durbin (1995), Workers' compensation and injury duration: evidence from a natural experiment, American Economic Review 85:322 — citada de memória, conferir"
+  - "Krueger (1990), Incentive effects of workers' compensation insurance, Journal of Public Economics 41:73 — citada de memória, conferir"
+  - "Wooldridge, Introductory Econometrics, exemplo 13.4 (base injury) — citado de memória, conferir"
+  - data/h2b/wooldridge_injury.csv (Rdatasets wooldridge::injury)
+arquivos: [wooldridge_injury.csv]
+familia: gaussiana
+desfecho: log da duração do benefício em semanas (ldurat)
+chave: beneficio_log
+candidatos:
+  beneficio_log: {tipo: num, descricao: log do benefício semanal real}
+  salario_log: {tipo: num, descricao: log do salário semanal anterior (dólares de 1982)}
+  alta_renda: {tipo: num, descricao: salário acima do teto antigo (highearn)}
+  kentucky: {tipo: num, descricao: 1 se Kentucky, 0 se Michigan}
+  homem: {tipo: num, descricao: sexo masculino}
+  casado: {tipo: num, descricao: casado}
+  idade_log: {tipo: num, descricao: log da idade no acidente}
+  internacao: {tipo: num, descricao: o acidente exigiu internação}
+  tipo_lesao: {tipo: cat, descricao: tipo de lesão (8 classes)}
+  industria: {tipo: cat, descricao: indústria (3 classes)}
+icp_candidatos: [beneficio_log, salario_log, alta_renda, kentucky, homem, casado, idade_log, internacao, tipo_lesao, industria]
+ajuste: [salario_log, alta_renda, kentucky, homem, casado, idade_log, internacao, tipo_lesao, industria]
+dag:
+  - [periodo, teto]
+  - [kentucky, teto]
+  - [teto, beneficio_log]
+  - [teto, alta_renda]
+  - [salario_log, alta_renda]
+  - [salario_log, beneficio_log]
+  - [beneficio_log, y]
+  - [salario_log, y]
+  - [kentucky, y]
+  - [homem, salario_log]
+  - [idade_log, salario_log]
+  - [industria, salario_log]
+  - [industria, tipo_lesao]
+  - [tipo_lesao, internacao]
+  - [tipo_lesao, y]
+  - [internacao, y]
+  - [homem, y]
+  - [casado, y]
+  - [idade_log, y]
+  - [industria, y]
+ambientes:
+  descricao: >-
+    Regime legal = estado × período em relação à mudança do teto: ky_antes, ky_depois, mi_antes (treino) e
+    mi_depois (cofre, nunca visto). A mudança de regra intervém no benefício (X) de quem ganha acima do teto antigo,
+    mantido o salário; quem ganha abaixo é controle natural. O estado age em Y por outras regras e pelo mercado de
+    trabalho, por isso "kentucky" é candidato. Violações plausíveis declaradas: tendência secular da duração entre
+    antes e depois (o período agiria em Y sem passar pelo benefício); composição dos acidentes que mudou com a
+    recessão de 1980–82; a regra também pode mudar o registro de pedidos pequenos.
+  cofre: [mi_depois]
+unidade: >-
+  o trabalhador acidentado (uma linha por pedido); não há agrupamento declarado no arquivo (empresa, médico), então
+  o EP pode ser otimista
+cabecalho:
+  processo_gerador: Trabalhador se acidenta, recebe benefício de dois terços do salário até o teto estadual e decide (com o médico e o empregador) quando voltar; a lei muda o teto num dia conhecido.
+  nao_linearidade: Linear em log-log (elasticidade constante); duração tem massa em poucas semanas e cauda longa, a elasticidade pode diferir por gravidade.
+  unidade_e_margem: O pedido de indenização é a unidade (≈ 7 mil); erro padrão robusto por linha.
+  fisica_do_ruido: Log da duração aproximadamente gaussiano com cauda; variância grande (R² baixo é típico nesta base).
+  escada_causal: "Degrau 2 (experimento natural de regra). Premissas não testáveis: sem tendência própria do grupo de alta renda; o benefício só muda pela regra e pelo salário."
+shelf:
+  quantidade: elasticidade da duração do afastamento em relação ao benefício semanal (coeficiente log-log)
+  fonte: >-
+    Meyer, Viscusi & Durbin (1995): no Kentucky o teto subiu ~50% e a duração dos tratados subiu ~20%, elasticidade
+    perto de 0,3–0,4; Krueger (1990) e revisões dão 0,2 a 0,7. Citados de memória, conferir; nenhum especialista
+    humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  quartis: {q05: 0.0, q25: 0.2, q50: 0.35, q75: 0.5, q95: 0.75}
+decisao:
+  acao: cortar o benefício semanal em 10% para encurtar os afastamentos
+  beneficio_por_unidade: 1.0
+  custo: 0.35
+  custo_pesquisa: 0.01
+  nota: >-
+    utilidade em décimos de log-semanas evitadas por 10% de corte; o custo de 0,35 é a perda de proteção do
+    trabalhador acidentado na mesma escala (suposição, não medida). Compensa se a elasticidade passar de 0,35
+termo_escopo:
+  vale_para: indenização por acidente de trabalho em estados dos EUA no início dos anos 1980, mudanças moderadas do teto
+  nao_vale_para: doenças ocupacionais de longa latência, cortes grandes, outros países, duração total sem benefício
+tentativas_de_especificacao: 3
+historico_especificacoes:
+  - K: 1
+    quando: H2b (2026-10-14)
+    o_que: especificação original; ICP com o teste linear gaussiano (F aninhado + Levene, Bonferroni)
+  - K: 2
+    quando: H2c (2026-10-14, declarado antes de rodar em ../h2b/DECLARACAO_K2.md)
+    o_que: >-
+      só o teste de invariância do ICP muda, igual nos 5 domínios: um ajuste agrupado (X discreto como fator,
+      contínuo linear + spline restrita de 4 nós), resíduo padronizado por escala agrupada, Kruskal–Wallis +
+      Brown–Forsythe entre ambientes, Bonferroni; Y, X, ambientes, cofre, DAG, ajuste, priori e decisão iguais
+    por_que: >-
+      o teste K = 1 rejeita com n grande qualquer desvio do modelo linear gaussiano (X discreto com resposta
+      não linear, cauda pesada, variância que depende de X), mesmo com a lei de Y dado X invariante
+  - K: 3
+    quando: H2d (2026-10-14, declarado antes de rodar em ../DECLARACAO_K3.md)
+    o_que: >-
+      regra de saturação no ICP, igual nos 5 domínios: um S cujo ambiente é função determinística das colunas de S
+      (acerto 1-NN deixando a linha de fora ≥ 0,99) sai da família (nem aceito nem rejeitado); Ŝ é a interseção dos
+      aceitos não saturados. Teste K = 2 e todo o resto iguais
+    por_que: >-
+      com X_S que determina o ambiente, Y ⊥ E | X_S vale por construção e o teste tem poder zero; um teste sem
+      poder não certifica invariância (o Ŝ do RAND no K = 2 vinha só disso)
+tem_titulares: true
+quase_ids: [homem, casado, kentucky]

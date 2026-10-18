@@ -6,16 +6,14 @@ rust-version.workspace = true
 license.workspace = true
 
 [[bin]]
-name = "portoes"
+name = "gates"
 path = "src/main.rs"
 
 [dependencies]
 stochology-core = { path = "../stochology-core" }
 stochology-hypergraph = { path = "../stochology-hypergraph" }
-stochology-audit = { path = "../stochology-audit" }
-stochology-drift = { path = "../stochology-drift" }
-stochology-fairness = { path = "../stochology-fairness" }
-stochology-h1 = { path = "../stochology-h1" }
+stochology-methods = { path = "../stochology-methods" }
+stochology-horizons = { path = "../stochology-horizons" }
 
 [lints]
 workspace = true

@@ -6,8 +6,8 @@ rust-version.workspace = true
 license.workspace = true
 
 [[bin]]
-name = "onda"
-path = "src/bin/onda.rs"
+name = "wave"
+path = "src/bin/wave.rs"
 
 [dependencies]
 stochology-hypergraph = { path = "../stochology-hypergraph" }

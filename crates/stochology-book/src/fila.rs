@@ -1,231 +1,231 @@
-//! H0 real em Rust: a fila com desistencia e as quatro regras de escala (R0 a R3).
+//! Real H0 in Rust: the queue with abandonment and the four scaling rules (R0 to R3).
 //!
-//! Le `dados-reais/bank_calls.csv` (ou a base apontada por `ESTOCOLOGIA_DADOS`), monta a
-//! escala no treino (marco a junho) e a aplica ao cofre (julho a outubro) com **fila com
-//! desistencia**: atendimento exponencial de 4 min e paciencia exponencial de 3 min — os dois
-//! valores do registro —, chegadas reais espalhadas dentro de cada intervalo de 5 min da base,
-//! FCFS e abandonos. Sem relogio, sem rede, sem dependencia externa: SplitMix64 de `banco.rs`,
-//! semente fixa (`SEMENTE = 2003`, a do registro).
+//! It reads `data/bank_calls.csv` (or the base pointed to by `ESTOCOLOGIA_DADOS`), builds the
+//! roster on the training window (March to June) and applies it to the vault (July to October) with **queue with
+//! abandonment**: exponential service of 4 min and exponential patience of 3 min — the two
+//! values of the registry —, real arrivals spread inside each 5-min interval of the base,
+//! FCFS and abandonments. No clock, no network, no external dependency: SplitMix64 from `banco.rs`,
+//! fixed seed (`SEED = 2003`, the one in the registry).
 //!
-//! A grade e a do instrumento aposentado (`h0-real/estocologia/central.py`, ainda no historico
-//! do git no commit `4bb7181`): 169 intervalos de 5 min por dia (07:00 as 21:00), escala
-//! constante em cada grupo de 6 intervalos (meia hora, 29 grupos com a cauda de um intervalo),
-//! e o mesmo motor FCFS exato — quem sofreria espera maior que a propria paciencia desiste, e
-//! quem nao desiste ocupa o atendente de menor tempo livre; atendente que sai de turno termina
-//! a chamada em curso.
+//! The grid is that of the retired instrument (`h0-real/estocologia/central.py`, still in the git
+//! history at commit `4bb7181`): 169 5-min intervals per day (07:00 to 21:00), constant
+//! roster inside each group of 6 intervals (half an hour, 29 groups with the tail of one interval),
+//! and the same exact FCFS engine — whoever would suffer a wait longer than their own patience gives up, and
+//! whoever does not give up takes the agent with the smallest free time; an agent who leaves the shift finishes
+//! the call in progress.
 //!
-//! As quatro regras, como o registro as define:
+//! The four rules, as the registry defines them:
 //!
-//! | regra | o que e |
+//! | rule | what it is |
 //! | --- | --- |
-//! | R0 | a alegacao: Erlang C fatia a fatia sobre o perfil medio do treino |
-//! | R1 | perfil do dia da semana (custo zero) |
-//! | R2 | R1 com a demanda multiplicada por `1 + Z_MARGEM * cv`, `Z_MARGEM = 1.2816` |
-//! | R3 | R0 mais `extra` atendentes por igual, com `extra` tal que o custo iguale o de R2 |
+//! | R0 | the claim: Erlang C slice by slice over the mean training profile |
+//! | R1 | weekday profile (zero cost) |
+//! | R2 | R1 with the demand multiplied by `1 + Z_MARGIN * cv`, `Z_MARGIN = 1.2816` |
+//! | R3 | R0 plus `extra` agents across the board, with `extra` such that the cost equals that of R2 |
 //!
-//! onde `cv` e o desvio padrao do residuo do total do dia (total do dia dividido pela media do
-//! total do seu dia da semana, no treino) — o 6% do capitulo 16 — e `Z_MARGEM` e o quantil 90%
-//! da normal: e o "p90" que o registro poe no nome de R2.
+//! where `cv` is the standard deviation of the residual of the day total (day total divided by the mean of the
+//! total of its weekday, in the training window) — the 6% of chapter 16 — and `Z_MARGIN` is the 90%
+//! quantile of the normal: it is the "p90" the registry puts in the name of R2.
 //!
-//! Toda medida sai na unidade do dia: agente-horas por dia, nivel de servico ponderado por
-//! chamada, dias abaixo da meta de 80% e a cauda da espera (mediana e p90). Ha dois motores de
-//! fila: o `Motor::Exato` (a reconstrucao do instrumento aposentado) e o `Motor::Eventos`
-//! (M/M/c+M evento a evento, chegadas de Poisson fatia a fatia), declarado como verificacao
-//! independente de que a decisao nao e artefato do motor.
+//! Every measure comes out in the unit of the day: agent-hours per day, service level weighted by
+//! call, days below the 80% goal and the wait tail (median and p90). There are two queue
+//! engines: `Engine::Exact` (the reconstruction of the retired instrument) and `Engine::Events`
+//! (M/M/c+M event by event, Poisson arrivals slice by slice), declared as an independent
+//! verification that the decision is not an artifact of the engine.
 //!
-//! # Declaracao de divergencia (registro antigo x este instrumento)
+//! # Divergence declaration (old registry x this instrument)
 //!
-//! O registro (`h0-real/README.md`, capitulo 16) publica para o cofre de 81 dias: R0 com 2 264
-//! agente-horas por dia, 86% e 26% de dias falhos; R1 com 2 261, 90% e 12%; R3 com 2 433, 94% e
-//! 7,4%; R2 com 2 428, 96% e 3,7%. Este modulo e uma **reconstrucao em Rust** daquele
-//! experimento, com o gerador de numeros trocado (SplitMix64 contra PCG64) e sem o numpy: os
-//! sorteios de atendimento e paciencia nao caem nos mesmos lugares, de modo que a fila nao e
-//! identica chamada por chamada. O que este modulo afirma e o **desenho** (as quatro regras, a
-//! grade, o motor) e a **ordem** (R2 melhor que R1, R1 melhor que R0, R3 entre as duas, R2 e R3
-//! com o mesmo custo), com os numeros medidos impressos por `rodar()` e conferidos por faixas
-//! generosas em `faixas_do_registro_e_divergencia_declarada`. Medido aqui (semente 2003, uma
-//! replica por dia, motor Exato), com o publicado ao lado:
+//! The registry (`h0-real/README.md`, chapter 16) publishes for the 81-day vault: R0 with 2 264
+//! agent-hours per day, 86% and 26% of failed days; R1 with 2 261, 90% and 12%; R3 with 2 433, 94% and
+//! 7.4%; R2 with 2 428, 96% and 3.7%. This module is a **Rust reconstruction** of that
+//! experiment, with the number generator swapped (SplitMix64 against PCG64) and without numpy: the
+//! draws of service and patience do not fall in the same places, so that the queue is not
+//! identical call by call. What this module asserts is the **design** (the four rules, the
+//! grid, the engine) and the **order** (R2 better than R1, R1 better than R0, R3 between the two, R2 and R3
+//! at the same cost), with the measured numbers printed by `run()` and checked by generous
+//! bands in `registry_bands_and_declared_divergence`. Measured here (seed 2003, one
+//! replica per day, Exact engine), with the published value alongside:
 //!
-//! | regra | agente-horas/dia | nivel de servico | dias abaixo da meta |
+//! | rule | agent-hours/day | service level | days below the goal |
 //! | --- | --- | --- | --- |
-//! | R0 | 2 264 (2 264) | 83,9% (86%) | 30,9% (26%) |
-//! | R1 | 2 261 (2 261) | 84,3% (90%) | 17,3% (12%) |
-//! | R2 | 2 428 (2 428) | 91,5% (96%) | 4,9% (3,7%) |
-//! | R3 | 2 433 (2 433) | 90,2% (94%) | 11,1% (7,4%) |
+//! | R0 | 2 264 (2 264) | 83.9% (86%) | 30.9% (26%) |
+//! | R1 | 2 261 (2 261) | 84.3% (90%) | 17.3% (12%) |
+//! | R2 | 2 428 (2 428) | 91.5% (96%) | 4.9% (3.7%) |
+//! | R3 | 2 433 (2 433) | 90.2% (94%) | 11.1% (7.4%) |
 //!
-//! O que **reproduz**: o custo das quatro regras casa por casa (2 264, 2 261, 2 428, 2 433), o
-//! pico de 234 atendentes de R0, os 12 atendentes por igual que R3 acrescenta, o CV residual de
-//! 5,98% contra os 6% do capitulo, a queda de dias falhos de R0 para R2 (31% para 5%) e a ordem
-//! R2 < R3 <= R1 <= R0. Reproduzem tambem dois numeros do registro que nao sao das quatro regras
-//! e que por isso valem como prova do motor: a espera media por chamada de R0 sem desistencia,
-//! 1 040 s contra os 956 s publicados, e o mundo da alegacao, 96,3% de nivel de servico e nenhum
-//! dia falho em 81, contra os 97% e 0% publicados.
+//! What **reproduces**: the cost of the four rules case by case (2 264, 2 261, 2 428, 2 433), the
+//! peak of 234 agents in R0, the 12 agents across the board that R3 adds, the residual CV of
+//! 5.98% against the 6% of the chapter, the drop in failed days from R0 to R2 (31% to 5%) and the order
+//! R2 < R3 <= R1 <= R0. Two registry numbers that are not from the four rules
+//! also reproduce, and therefore count as proof of the engine: the mean wait per call of R0 without abandonment,
+//! 1 040 s against the published 956 s, and the world of the claim, 96.3% service level and no
+//! failed day in 81, against the published 97% and 0%.
 //!
-//! O que **diverge**: o nivel de servico sai de 2 a 6 pontos abaixo do publicado, e a fracao de
-//! dias falhos de R1 e de R3 sai acima. O caso mais afastado e R1: o registro publica 90% e 12%,
-//! e aqui os dois motores medem 84,3% (Exato) e 87,7% (Eventos), com a queda de dias falhos de
-//! R0 para R1 reproduzida (31% para 17%, contra 26% para 12%). O ganho de R1 sobre R0 na media,
-//! que o registro poe em 4 pontos, sai em menos de 1 ponto: no motor Exato o perfil do dia da
-//! semana troca folga entre os dias e corta os dias ruins, sem mover a media — o que sobra de
-//! espera e do que ja nao vira desistencia. Com tres replicas por dia o numero de R0 fica em
-//! 84,7% (erro padrao de 0,6 ponto sobre os 81 dias), o que nao fecha a distancia. A divergencia
-//! fica declarada, com os dois valores, sem arredondar um para o outro: o gerador de numeros e
-//! outro (SplitMix64 contra PCG64) e a fila nao e identica chamada por chamada.
+//! What **diverges**: the service level comes out 2 to 6 points below the published one, and the fraction of
+//! failed days of R1 and of R3 comes out above. The most distant case is R1: the registry publishes 90% and 12%,
+//! and here the two engines measure 84.3% (Exact) and 87.7% (Events), with the drop in failed days from
+//! R0 to R1 reproduced (31% to 17%, against 26% to 12%). The gain of R1 over R0 on the mean,
+//! which the registry puts at 4 points, comes out at less than 1 point: in the Exact engine the weekday
+//! profile trades slack between days and cuts the bad days, without moving the mean — what remains of
+//! wait is what no longer turns into abandonment. With three replicas per day the number of R0 stays at
+//! 84.7% (standard error of 0.6 point over the 81 days), which does not close the distance. The divergence
+//! stays declared, with both values, without rounding one into the other: the number generator is
+//! another one (SplitMix64 against PCG64) and the queue is not identical call by call.
 //!
-//! O instrumento aposentado contava como "atendida em ate 20 s" tambem quem desistiu com
-//! paciencia sorteada abaixo de 20 s (a espera do desistente e a propria paciencia). A
-//! reconstrucao faz o mesmo, para nao trocar o alvo no meio do caminho; `desistencias_por_100`
-//! sai ao lado, para quem quiser ler a conta sem esse vies.
+//! The retired instrument counted as "served within 20 s" also whoever gave up with patience
+//! drawn below 20 s (the wait of the abandoner is their own patience). The
+//! reconstruction does the same, so as not to change the target midway; `abandonments_per_100`
+//! comes out alongside, for whoever wants to read the account without that bias.
 
-use crate::banco::{self, META};
+use crate::banco::{self, GOAL};
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
 
-/// Semente fixa do instrumento: a do registro (Phi1 — simulabilidade).
-pub const SEMENTE: u64 = 2003;
-/// Atendimento exponencial com media de 4 minutos, como o registro.
-pub const AHT_FILA_S: f64 = 240.0;
-/// Paciencia exponencial com media de 3 minutos, como o registro.
-pub const PACIENCIA_S: f64 = 180.0;
-/// Alvo de espera, em segundos.
-pub const ALVO_FILA_S: f64 = 20.0;
-/// Intervalo da base, em segundos.
+/// Fixed seed of the instrument: the one in the registry (Phi1 — simulability).
+pub const SEED: u64 = 2003;
+/// Exponential service with a mean of 4 minutes, as in the registry.
+pub const AHT_QUEUE_S: f64 = 240.0;
+/// Exponential patience with a mean of 3 minutes, as in the registry.
+pub const PATIENCE_S: f64 = 180.0;
+/// Wait target, in seconds.
+pub const TARGET_QUEUE_S: f64 = 20.0;
+/// Interval of the base, in seconds.
 pub const BIN_S: f64 = 300.0;
-/// Intervalos de 5 min por dia: 07:00 as 21:00, o mesmo recorte do instrumento aposentado.
+/// 5-min intervals per day: 07:00 to 21:00, the same cut as the retired instrument.
 pub const BINS: usize = 169;
-/// Intervalos por grupo de escala (meia hora).
-pub const POR_GRUPO: usize = 6;
-/// Grupos de escala por dia: 28 meias horas mais a cauda de um intervalo.
-pub const GRUPOS: usize = BINS.div_ceil(POR_GRUPO);
-/// Duracao de um grupo de escala cheio, em segundos.
-pub const GRUPO_S: f64 = BIN_S * POR_GRUPO as f64;
-/// Quantil 90% da normal: a margem de R2 e `1 + Z_MARGEM * cv`.
-pub const Z_MARGEM: f64 = 1.2816;
-/// Teto do gerador uniforme: 2^53, para caber exato em f64.
-const DOIS53: f64 = 9_007_199_254_740_992.0;
+/// Intervals per roster group (half an hour).
+pub const PER_GROUP: usize = 6;
+/// Roster groups per day: 28 half hours plus the tail of one interval.
+pub const GROUPS: usize = BINS.div_ceil(PER_GROUP);
+/// Duration of a full roster group, in seconds.
+pub const GROUP_S: f64 = BIN_S * PER_GROUP as f64;
+/// 90% quantile of the normal: the margin of R2 is `1 + Z_MARGIN * cv`.
+pub const Z_MARGIN: f64 = 1.2816;
+/// Ceiling of the uniform generator: 2^53, so that it fits exactly in f64.
+const TWO53: f64 = 9_007_199_254_740_992.0;
 
-/// As quatro regras de escala.
+/// The four scaling rules.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Regra {
+pub enum Rule {
     R0,
     R1,
     R2,
     R3,
 }
 
-impl Regra {
-    /// As quatro, na ordem do registro.
-    pub const TODAS: [Regra; 4] = [Regra::R0, Regra::R1, Regra::R2, Regra::R3];
+impl Rule {
+    /// The four, in the order of the registry.
+    pub const ALL: [Rule; 4] = [Rule::R0, Rule::R1, Rule::R2, Rule::R3];
 
-    pub fn nome(self) -> &'static str {
+    pub fn name(self) -> &'static str {
         match self {
-            Regra::R0 => "R0",
-            Regra::R1 => "R1",
-            Regra::R2 => "R2",
-            Regra::R3 => "R3",
+            Rule::R0 => "R0",
+            Rule::R1 => "R1",
+            Rule::R2 => "R2",
+            Rule::R3 => "R3",
         }
     }
 }
 
-/// Motor da fila.
+/// Queue engine.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Motor {
-    /// Reconstrucao do instrumento aposentado: FCFS exato com as chegadas observadas.
-    Exato,
-    /// Verificacao independente: M/M/c+M evento a evento, chegadas de Poisson.
-    Eventos,
+pub enum Engine {
+    /// Reconstruction of the retired instrument: exact FCFS with the observed arrivals.
+    Exact,
+    /// Independent verification: M/M/c+M event by event, Poisson arrivals.
+    Events,
 }
 
-/// Parametros declarados da fila.
+/// Declared parameters of the queue.
 #[derive(Debug, Clone, Copy)]
-pub struct Parametros {
+pub struct Parameters {
     pub aht_s: f64,
-    pub paciencia_s: f64,
-    pub alvo_s: f64,
-    pub meta: f64,
+    pub patience_s: f64,
+    pub target_s: f64,
+    pub goal: f64,
 }
 
-impl Default for Parametros {
+impl Default for Parameters {
     fn default() -> Self {
-        Parametros {
-            aht_s: AHT_FILA_S,
-            paciencia_s: PACIENCIA_S,
-            alvo_s: ALVO_FILA_S,
-            meta: META,
+        Parameters {
+            aht_s: AHT_QUEUE_S,
+            patience_s: PATIENCE_S,
+            target_s: TARGET_QUEUE_S,
+            goal: GOAL,
         }
     }
 }
 
-/// Resolve o caminho do dado: base opcional em ESTOCOLOGIA_DADOS, senao o repositorio.
-pub fn caminho_de_dados(padrao: &str) -> String {
+/// Resolves the data path: optional base in ESTOCOLOGIA_DADOS, otherwise the repository.
+pub fn data_path(default: &str) -> String {
     if let Ok(base) = std::env::var("ESTOCOLOGIA_DADOS") {
-        return format!("{}/{}", base.trim_end_matches('/'), padrao);
+        return format!("{}/{}", base.trim_end_matches('/'), default);
     }
-    for prefixo in ["", "../", "../../"] {
-        let caminho = format!("{prefixo}{padrao}");
-        if std::path::Path::new(&caminho).exists() {
-            return caminho;
+    for prefix in ["", "../", "../../"] {
+        let path = format!("{prefix}{default}");
+        if std::path::Path::new(&path).exists() {
+            return path;
         }
     }
-    padrao.to_string()
+    default.to_string()
 }
 
-/// Mes de uma data ISO (YYYY-MM-DD).
-pub fn mes_da(data: &str) -> u32 {
-    data.get(5..7).and_then(|m| m.parse().ok()).unwrap_or(0)
+/// Month of an ISO date (YYYY-MM-DD).
+pub fn month_of(date: &str) -> u32 {
+    date.get(5..7).and_then(|m| m.parse().ok()).unwrap_or(0)
 }
 
-/// Dia da semana de uma data ISO: 0 = segunda, 6 = domingo (algoritmo de Sakamoto).
-pub fn dia_da_semana(data: &str) -> usize {
-    let ano: i32 = data.get(0..4).and_then(|x| x.parse().ok()).unwrap_or(0);
-    let m: i32 = data.get(5..7).and_then(|x| x.parse().ok()).unwrap_or(1);
-    let d: i32 = data.get(8..10).and_then(|x| x.parse().ok()).unwrap_or(1);
+/// Weekday of an ISO date: 0 = Monday, 6 = Sunday (Sakamoto's algorithm).
+pub fn weekday(date: &str) -> usize {
+    let year: i32 = date.get(0..4).and_then(|x| x.parse().ok()).unwrap_or(0);
+    let m: i32 = date.get(5..7).and_then(|x| x.parse().ok()).unwrap_or(1);
+    let d: i32 = date.get(8..10).and_then(|x| x.parse().ok()).unwrap_or(1);
     const T: [i32; 12] = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
-    let y = if m < 3 { ano - 1 } else { ano };
+    let y = if m < 3 { year - 1 } else { year };
     let w = (y + y / 4 - y / 100 + y / 400 + T[(m - 1).clamp(0, 11) as usize] + d).rem_euclid(7);
-    // Sakamoto devolve 0 = domingo; aqui 0 = segunda.
+    // Sakamoto returns 0 = Sunday; here 0 = Monday.
     ((w + 6).rem_euclid(7)) as usize
 }
 
-/// Um dia da base na grade de 5 min.
+/// One day of the base on the 5-min grid.
 #[derive(Debug, Clone)]
-pub struct DiaBins {
-    pub data: String,
+pub struct BinnedDay {
+    pub date: String,
     pub bins: [f64; BINS],
     pub total: f64,
 }
 
-/// Le a base (rownames,DateTime,Calls) na grade de 5 min de 07:00 a 21:00.
-pub fn carregar_bins(caminho: &str) -> Vec<DiaBins> {
-    let texto = std::fs::read_to_string(caminho).expect("nao li o CSV do banco");
-    let mut por_dia: std::collections::BTreeMap<String, [f64; BINS]> =
+/// Reads the base (rownames,DateTime,Calls) onto the 5-min grid from 07:00 to 21:00.
+pub fn load_bins(path: &str) -> Vec<BinnedDay> {
+    let text = std::fs::read_to_string(path).expect("could not read the bank CSV");
+    let mut by_day: std::collections::BTreeMap<String, [f64; BINS]> =
         std::collections::BTreeMap::new();
-    for linha in texto.lines().skip(1) {
-        let campos: Vec<&str> = linha.split(',').collect();
-        if campos.len() < 3 {
+    for line in text.lines().skip(1) {
+        let fields: Vec<&str> = line.split(',').collect();
+        if fields.len() < 3 {
             continue;
         }
-        let carimbo = campos[1];
-        if carimbo.len() < 16 {
+        let stamp = fields[1];
+        if stamp.len() < 16 {
             continue;
         }
-        let data = &carimbo[..10];
-        let hora: usize = carimbo[11..13].parse().unwrap_or(0);
-        let minuto: usize = carimbo[14..16].parse().unwrap_or(0);
-        if !(7..=21).contains(&hora) {
+        let date = &stamp[..10];
+        let hour: usize = stamp[11..13].parse().unwrap_or(0);
+        let minute: usize = stamp[14..16].parse().unwrap_or(0);
+        if !(7..=21).contains(&hour) {
             continue;
         }
-        let i = ((hora - 7) * 60 + minuto) / 5;
+        let i = ((hour - 7) * 60 + minute) / 5;
         if i >= BINS {
             continue;
         }
-        let chamadas: f64 = campos[2].parse().unwrap_or(0.0);
-        por_dia.entry(data.to_string()).or_insert([0.0; BINS])[i] += chamadas;
+        let calls: f64 = fields[2].parse().unwrap_or(0.0);
+        by_day.entry(date.to_string()).or_insert([0.0; BINS])[i] += calls;
     }
-    por_dia
+    by_day
         .into_iter()
-        .map(|(data, bins)| DiaBins {
-            data,
+        .map(|(date, bins)| BinnedDay {
+            date,
             bins,
             total: bins.iter().sum(),
         })
@@ -233,111 +233,111 @@ pub fn carregar_bins(caminho: &str) -> Vec<DiaBins> {
         .collect()
 }
 
-/// Treino (marco a junho) e cofre (julho a outubro), como o registro.
-pub fn separar_treino_cofre(dias: &[DiaBins]) -> (Vec<DiaBins>, Vec<DiaBins>) {
-    let treino = dias
+/// Training (March to June) and vault (July to October), as in the registry.
+pub fn split_training_vault(days: &[BinnedDay]) -> (Vec<BinnedDay>, Vec<BinnedDay>) {
+    let training = days
         .iter()
-        .filter(|d| (3..=6).contains(&mes_da(&d.data)))
+        .filter(|d| (3..=6).contains(&month_of(&d.date)))
         .cloned()
         .collect();
-    let cofre = dias
+    let vault = days
         .iter()
-        .filter(|d| (7..=10).contains(&mes_da(&d.data)))
+        .filter(|d| (7..=10).contains(&month_of(&d.date)))
         .cloned()
         .collect();
-    (treino, cofre)
+    (training, vault)
 }
 
-/// Uniforme em (0, 1).
-fn uniforme01(rng: &mut banco::Rng) -> f64 {
-    (rng.uniforme(1u64 << 53) as f64 + 0.5) / DOIS53
+/// Uniform in (0, 1).
+fn uniform01(rng: &mut banco::Rng) -> f64 {
+    (rng.uniform(1u64 << 53) as f64 + 0.5) / TWO53
 }
 
-/// Exponencial com a media pedida (infinito quando a media e infinita: ninguem desiste).
-fn exponencial(rng: &mut banco::Rng, media: f64) -> f64 {
-    if !media.is_finite() || media <= 0.0 {
+/// Exponential with the requested mean (infinity when the mean is infinite: nobody gives up).
+fn exponential(rng: &mut banco::Rng, mean: f64) -> f64 {
+    if !mean.is_finite() || mean <= 0.0 {
         return f64::INFINITY;
     }
-    -media * uniforme01(rng).ln()
+    -mean * uniform01(rng).ln()
 }
 
-/// Semente de um dia e uma replica, pela finalizacao do SplitMix64.
-fn semente_do_dia(base: u64, dia: usize, replica: usize) -> u64 {
+/// Seed of a day and a replica, by the SplitMix64 finalisation.
+fn day_seed(base: u64, day: usize, replica: usize) -> u64 {
     let mut z = (base
-        ^ (dia as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
+        ^ (day as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
         ^ (replica as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F))
     .wrapping_sub(0x9E37_79B9_7F4A_7C15);
-    stochology_core::rng::passo_splitmix64(&mut z)
+    stochology_core::rng::splitmix64_step(&mut z)
 }
 
-/// Primeiro e ultimo intervalo de cada grupo de escala.
-fn faixa_do_grupo(j: usize) -> (usize, usize) {
-    (j * POR_GRUPO, ((j + 1) * POR_GRUPO).min(BINS))
+/// First and last interval of each roster group.
+fn group_range(j: usize) -> (usize, usize) {
+    (j * PER_GROUP, ((j + 1) * PER_GROUP).min(BINS))
 }
 
-/// Agente-horas de um dia: cada grupo vale a sua duracao em horas.
-pub fn agente_horas(c: &[u32; GRUPOS]) -> f64 {
-    (0..GRUPOS)
+/// Agent-hours of a day: each group is worth its duration in hours.
+pub fn agent_hours(c: &[u32; GROUPS]) -> f64 {
+    (0..GROUPS)
         .map(|j| {
-            let (a, b) = faixa_do_grupo(j);
+            let (a, b) = group_range(j);
             c[j] as f64 * ((b - a) as f64 * BIN_S / 3600.0)
         })
         .sum()
 }
 
-/// Menor escala que cumpre a meta em cada grupo, pela formula da alegacao (Erlang C) sobre o
-/// perfil de chegadas por intervalo de 5 min, com a demanda multiplicada por `fator`.
-pub fn escala_do_perfil(perfil: &[f64; BINS], fator: f64, p: &Parametros) -> [u32; GRUPOS] {
-    let mut c = [1_u32; GRUPOS];
-    for j in 0..GRUPOS {
-        let (a, b) = faixa_do_grupo(j);
+/// Smallest roster that meets the goal in each group, by the formula of the claim (Erlang C) over the
+/// arrival profile per 5-min interval, with the demand multiplied by `factor`.
+pub fn profile_scale(profile: &[f64; BINS], factor: f64, p: &Parameters) -> [u32; GROUPS] {
+    let mut c = [1_u32; GROUPS];
+    for j in 0..GROUPS {
+        let (a, b) = group_range(j);
         let n = (b - a) as f64;
-        let por_segundo = perfil[a..b].iter().sum::<f64>() / (n * BIN_S);
-        c[j] = banco::agentes_para_meta(fator * por_segundo * 3600.0, p.aht_s, p.alvo_s, p.meta);
+        let per_second = profile[a..b].iter().sum::<f64>() / (n * BIN_S);
+        c[j] = banco::agents_for_goal(factor * per_second * 3600.0, p.aht_s, p.target_s, p.goal);
     }
     c
 }
 
-/// Perfil medio do treino, em chamadas por intervalo de 5 min.
-pub fn perfil_medio(treino: &[DiaBins]) -> [f64; BINS] {
-    assert!(!treino.is_empty(), "treino vazio");
-    let mut media = [0.0_f64; BINS];
-    for d in treino {
+/// Mean profile of the training window, in calls per 5-min interval.
+pub fn mean_profile(training: &[BinnedDay]) -> [f64; BINS] {
+    assert!(!training.is_empty(), "empty training window");
+    let mut mean = [0.0_f64; BINS];
+    for d in training {
         for i in 0..BINS {
-            media[i] += d.bins[i];
+            mean[i] += d.bins[i];
         }
     }
-    media.map(|x| x / treino.len() as f64)
+    mean.map(|x| x / training.len() as f64)
 }
 
-/// Perfil de cada dia da semana (0 = segunda) e quantos dias o sustentam. Dia da semana sem
-/// dia no treino cai no perfil medio (declarado: a base nao tem sabado nem domingo).
-pub fn perfis_por_dia_da_semana(treino: &[DiaBins]) -> ([[f64; BINS]; 7], [usize; 7]) {
-    let mut soma = [[0.0_f64; BINS]; 7];
-    let mut contagem = [0usize; 7];
-    for d in treino {
-        let w = dia_da_semana(&d.data);
-        contagem[w] += 1;
+/// Profile of each weekday (0 = Monday) and how many days support it. A weekday without
+/// a day in the training window falls back to the mean profile (declared: the base has neither Saturday nor Sunday).
+pub fn profiles_by_weekday(training: &[BinnedDay]) -> ([[f64; BINS]; 7], [usize; 7]) {
+    let mut sum = [[0.0_f64; BINS]; 7];
+    let mut count = [0usize; 7];
+    for d in training {
+        let w = weekday(&d.date);
+        count[w] += 1;
         for i in 0..BINS {
-            soma[w][i] += d.bins[i];
+            sum[w][i] += d.bins[i];
         }
     }
-    let media = perfil_medio(treino);
-    let mut perfis = [[0.0_f64; BINS]; 7];
+    let mean = mean_profile(training);
+    let mut profiles = [[0.0_f64; BINS]; 7];
     for w in 0..7 {
         for i in 0..BINS {
-            perfis[w][i] = if contagem[w] == 0 {
-                media[i]
+            profiles[w][i] = if count[w] == 0 {
+                mean[i]
             } else {
-                soma[w][i] / contagem[w] as f64
+                sum[w][i] / count[w] as f64
             };
         }
     }
-    (perfis, contagem)
+    (profiles, count)
 }
 
-/// Desvio padrao amostral.
-fn dp(xs: &[f64]) -> f64 {
+/// Sample standard deviation.
+fn sd(xs: &[f64]) -> f64 {
     if xs.len() < 2 {
         return 0.0;
     }
@@ -345,196 +345,196 @@ fn dp(xs: &[f64]) -> f64 {
     (xs.iter().map(|x| (x - m) * (x - m)).sum::<f64>() / (xs.len() as f64 - 1.0)).sqrt()
 }
 
-/// O CV residual do registro: desvio padrao da razao entre o total do dia e a media do total
-/// do seu dia da semana, no treino (o "6%" do capitulo 16). E o que a margem de R2 escala.
-pub fn cv_residual_diario(treino: &[DiaBins]) -> f64 {
-    let (perfis, contagem) = perfis_por_dia_da_semana(treino);
-    let mut razoes = Vec::new();
-    for d in treino {
-        let w = dia_da_semana(&d.data);
-        if contagem[w] == 0 {
+/// The residual CV of the registry: standard deviation of the ratio between the day total and the mean of the total
+/// of its weekday, in the training window (the "6%" of chapter 16). It is what the margin of R2 scales.
+pub fn daily_residual_cv(training: &[BinnedDay]) -> f64 {
+    let (profiles, count) = profiles_by_weekday(training);
+    let mut ratios = Vec::new();
+    for d in training {
+        let w = weekday(&d.date);
+        if count[w] == 0 {
             continue;
         }
-        let base: f64 = perfis[w].iter().sum();
+        let base: f64 = profiles[w].iter().sum();
         if base > 0.0 {
-            razoes.push(d.total / base);
+            ratios.push(d.total / base);
         }
     }
-    dp(&razoes)
+    sd(&ratios)
 }
 
-/// Fila minima de tempos de conclusao de atendimento (motor de eventos).
+/// Min-heap of service completion times (event engine).
 #[derive(Debug, Clone, Copy, PartialEq)]
-struct Tempo(f64);
+struct Time(f64);
 
-impl Eq for Tempo {}
+impl Eq for Time {}
 
-impl PartialOrd for Tempo {
-    fn partial_cmp(&self, outro: &Self) -> Option<Ordering> {
-        Some(self.cmp(outro))
+impl PartialOrd for Time {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
-impl Ord for Tempo {
-    fn cmp(&self, outro: &Self) -> Ordering {
-        // invertido: o BinaryHeap da std e max-heap
-        outro.0.total_cmp(&self.0)
+impl Ord for Time {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // inverted: the std BinaryHeap is a max-heap
+        other.0.total_cmp(&self.0)
     }
 }
 
-/// Fila minima de prazos de paciencia, com o identificador da chamada (motor de eventos).
+/// Min-heap of patience deadlines, with the call identifier (event engine).
 #[derive(Debug, Clone, Copy)]
-struct Prazo {
+struct Deadline {
     t: f64,
     id: u32,
 }
 
-impl PartialEq for Prazo {
-    fn eq(&self, outro: &Self) -> bool {
-        self.t.to_bits() == outro.t.to_bits() && self.id == outro.id
+impl PartialEq for Deadline {
+    fn eq(&self, other: &Self) -> bool {
+        self.t.to_bits() == other.t.to_bits() && self.id == other.id
     }
 }
 
-impl Eq for Prazo {}
+impl Eq for Deadline {}
 
-impl PartialOrd for Prazo {
-    fn partial_cmp(&self, outro: &Self) -> Option<Ordering> {
-        Some(self.cmp(outro))
+impl PartialOrd for Deadline {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
-impl Ord for Prazo {
-    fn cmp(&self, outro: &Self) -> Ordering {
-        outro.t.total_cmp(&self.t).then(outro.id.cmp(&self.id))
+impl Ord for Deadline {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.t.total_cmp(&self.t).then(other.id.cmp(&self.id))
     }
 }
 
-/// O que um dia de cofre rendeu. As esperas sao as de todas as chamadas oferecidas: quem
-/// desiste entra com a propria paciencia, como no instrumento aposentado.
+/// What one vault day yielded. The waits are those of every offered call: whoever
+/// gives up enters with their own patience, as in the retired instrument.
 #[derive(Debug, Clone, Copy, Default)]
-pub struct MedidaDia {
-    pub chegadas: u64,
-    pub dentro_do_alvo: u64,
-    pub desistencias: u64,
-    pub em_espera_no_fim: u64,
-    pub espera_media_s: f64,
-    pub espera_mediana_s: f64,
-    pub espera_p90_s: f64,
-    pub espera_media_de_quem_desiste_s: f64,
+pub struct DayMeasure {
+    pub arrivals: u64,
+    pub within_target: u64,
+    pub abandonments: u64,
+    pub waiting_at_end: u64,
+    pub mean_wait_s: f64,
+    pub median_wait_s: f64,
+    pub p90_wait_s: f64,
+    pub mean_wait_of_abandoners_s: f64,
 }
 
-impl MedidaDia {
-    /// Nivel de servico: fracao das chamadas oferecidas atendidas em ate o alvo.
-    pub fn nivel_de_servico(&self) -> f64 {
-        if self.chegadas == 0 {
+impl DayMeasure {
+    /// Service level: fraction of the offered calls served within the target.
+    pub fn service_level(&self) -> f64 {
+        if self.arrivals == 0 {
             1.0
         } else {
-            self.dentro_do_alvo as f64 / self.chegadas as f64
+            self.within_target as f64 / self.arrivals as f64
         }
     }
 
-    /// Desistencias em cada 100 chamadas oferecidas.
-    pub fn desistencias_por_100(&self) -> f64 {
-        if self.chegadas == 0 {
+    /// Abandonments in every 100 offered calls.
+    pub fn abandonments_per_100(&self) -> f64 {
+        if self.arrivals == 0 {
             0.0
         } else {
-            100.0 * self.desistencias as f64 / self.chegadas as f64
+            100.0 * self.abandonments as f64 / self.arrivals as f64
         }
     }
 }
 
-/// Quantil por posto mais proximo, sobre um vetor ja ordenado.
-fn quantil(ordenada: &[f64], q: f64) -> f64 {
-    if ordenada.is_empty() {
+/// Nearest-rank quantile, over an already sorted vector.
+fn quantile(sorted: &[f64], q: f64) -> f64 {
+    if sorted.is_empty() {
         return 0.0;
     }
-    let posto = ((q * ordenada.len() as f64).ceil() as usize).max(1) - 1;
-    ordenada[posto.min(ordenada.len() - 1)]
+    let rank = ((q * sorted.len() as f64).ceil() as usize).max(1) - 1;
+    sorted[rank.min(sorted.len() - 1)]
 }
 
-/// Fecha as estatisticas de um dia a partir das esperas de todas as chamadas oferecidas e da
-/// marca de quem desistiu.
-fn resumir(
-    esperas: &mut [f64],
-    desistentes: &[f64],
-    em_espera_no_fim: u64,
-    p: &Parametros,
-) -> MedidaDia {
-    let chegadas = esperas.len() as u64;
-    let dentro = esperas.iter().filter(|e| **e <= p.alvo_s).count() as u64;
-    let media = if esperas.is_empty() {
+/// Closes the statistics of a day from the waits of every offered call and from the
+/// mark of whoever gave up.
+fn summarize(
+    waits: &mut [f64],
+    abandoners: &[f64],
+    waiting_at_end: u64,
+    p: &Parameters,
+) -> DayMeasure {
+    let arrivals = waits.len() as u64;
+    let inside = waits.iter().filter(|e| **e <= p.target_s).count() as u64;
+    let mean = if waits.is_empty() {
         0.0
     } else {
-        esperas.iter().sum::<f64>() / esperas.len() as f64
+        waits.iter().sum::<f64>() / waits.len() as f64
     };
-    esperas.sort_by(f64::total_cmp);
-    MedidaDia {
-        chegadas,
-        dentro_do_alvo: dentro,
-        desistencias: desistentes.len() as u64,
-        em_espera_no_fim,
-        espera_media_s: media,
-        espera_mediana_s: quantil(esperas, 0.5),
-        espera_p90_s: quantil(esperas, 0.9),
-        espera_media_de_quem_desiste_s: if desistentes.is_empty() {
+    waits.sort_by(f64::total_cmp);
+    DayMeasure {
+        arrivals,
+        within_target: inside,
+        abandonments: abandoners.len() as u64,
+        waiting_at_end,
+        mean_wait_s: mean,
+        median_wait_s: quantile(waits, 0.5),
+        p90_wait_s: quantile(waits, 0.9),
+        mean_wait_of_abandoners_s: if abandoners.is_empty() {
             0.0
         } else {
-            desistentes.iter().sum::<f64>() / desistentes.len() as f64
+            abandoners.iter().sum::<f64>() / abandoners.len() as f64
         },
     }
 }
 
-/// Motor exato do instrumento aposentado: as chegadas observadas do dia, espalhadas dentro de
-/// cada intervalo de 5 min, atendimento exponencial, paciencia exponencial e FCFS sem
-/// preempcao. Quem sofreria espera maior que a propria paciencia desiste e nao ocupa ninguem;
-/// quem nao desiste ocupa o atendente de menor tempo livre (o de menor indice nos empates).
-pub fn fila_exata(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64) -> MedidaDia {
-    let mut rng = banco::Rng::novo(semente);
-    let n: usize = dia.bins.iter().map(|x| x.round()).sum::<f64>() as usize;
+/// Exact engine of the retired instrument: the observed arrivals of the day, spread inside
+/// each 5-min interval, exponential service, exponential patience and FCFS without
+/// preemption. Whoever would suffer a wait longer than their own patience gives up and takes no one;
+/// whoever does not give up takes the agent with the smallest free time (the lowest index on ties).
+pub fn exact_queue(day: &BinnedDay, c: &[u32; GROUPS], p: &Parameters, seed: u64) -> DayMeasure {
+    let mut rng = banco::Rng::new(seed);
+    let n: usize = day.bins.iter().map(|x| x.round()).sum::<f64>() as usize;
 
-    let mut chegadas = Vec::with_capacity(n);
+    let mut arrivals = Vec::with_capacity(n);
     for i in 0..BINS {
-        let k = dia.bins[i].round() as usize;
+        let k = day.bins[i].round() as usize;
         for _ in 0..k {
-            chegadas.push(i as f64 * BIN_S + uniforme01(&mut rng) * BIN_S);
+            arrivals.push(i as f64 * BIN_S + uniform01(&mut rng) * BIN_S);
         }
     }
-    let servico: Vec<f64> = (0..n).map(|_| exponencial(&mut rng, p.aht_s)).collect();
-    let paciencia: Vec<f64> = (0..n)
+    let service: Vec<f64> = (0..n).map(|_| exponential(&mut rng, p.aht_s)).collect();
+    let patience: Vec<f64> = (0..n)
         .map(|_| {
-            if p.paciencia_s.is_finite() {
-                exponencial(&mut rng, p.paciencia_s)
+            if p.patience_s.is_finite() {
+                exponential(&mut rng, p.patience_s)
             } else {
                 f64::INFINITY
             }
         })
         .collect();
 
-    // em que grupo de escala o atendente k esta de turno, a partir de cada grupo
+    // in which roster group agent k is on shift, starting from each group
     let k_max = c.iter().copied().max().unwrap_or(0) as usize;
-    let mut nxt = vec![-1_i32; k_max * GRUPOS];
+    let mut nxt = vec![-1_i32; k_max * GROUPS];
     for k in 0..k_max {
-        let mut prox = -1_i32;
-        for j in (0..GRUPOS).rev() {
+        let mut next = -1_i32;
+        for j in (0..GROUPS).rev() {
             if (k as u32) < c[j] {
-                prox = j as i32;
+                next = j as i32;
             }
-            nxt[k * GRUPOS + j] = prox;
+            nxt[k * GROUPS + j] = next;
         }
     }
-    let mut livre = vec![0.0_f64; k_max];
+    let mut free = vec![0.0_f64; k_max];
 
-    let mut esperas = Vec::with_capacity(n);
-    let mut desistentes = Vec::new();
+    let mut waits = Vec::with_capacity(n);
+    let mut abandoners = Vec::new();
     for i in 0..n {
-        let a = chegadas[i];
-        let mut melhor = f64::INFINITY;
-        let mut escolhido = usize::MAX;
+        let a = arrivals[i];
+        let mut best = f64::INFINITY;
+        let mut chosen = usize::MAX;
         for k in 0..k_max {
-            let t0 = if livre[k] > a { livre[k] } else { a };
-            let j = (t0 / GRUPO_S) as usize;
-            let v = if j >= GRUPOS {
-                if (k as u32) < c[GRUPOS - 1] {
+            let t0 = if free[k] > a { free[k] } else { a };
+            let j = (t0 / GROUP_S) as usize;
+            let v = if j >= GROUPS {
+                if (k as u32) < c[GROUPS - 1] {
                     t0
                 } else {
                     f64::INFINITY
@@ -542,423 +542,420 @@ pub fn fila_exata(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64
             } else if (k as u32) < c[j] {
                 t0
             } else {
-                let x = nxt[k * GRUPOS + j];
+                let x = nxt[k * GROUPS + j];
                 if x >= 0 {
-                    x as f64 * GRUPO_S
+                    x as f64 * GROUP_S
                 } else {
                     f64::INFINITY
                 }
             };
-            if v < melhor {
-                melhor = v;
-                escolhido = k;
+            if v < best {
+                best = v;
+                chosen = k;
             }
             if v == a {
-                // atendente ja livre no instante da chegada: e ele, e ninguem mais barato
+                // agent already free at the instant of arrival: it is them, and nobody cheaper
                 break;
             }
         }
-        if !melhor.is_finite() || melhor - a > paciencia[i] {
-            // quem desiste espera a propria paciencia; sem atendente disponivel no dia, a
-            // espera fica infinita (o instrumento aposentado gravava o mesmo, via -1 do numpy)
-            let e = if melhor.is_finite() {
-                paciencia[i]
+        if !best.is_finite() || best - a > patience[i] {
+            // whoever gives up waits their own patience; with no agent available in the day, the
+            // wait stays infinite (the retired instrument recorded the same, via numpy's -1)
+            let e = if best.is_finite() {
+                patience[i]
             } else {
                 f64::INFINITY
             };
-            esperas.push(e);
-            desistentes.push(e);
+            waits.push(e);
+            abandoners.push(e);
         } else {
-            esperas.push(melhor - a);
-            livre[escolhido] = melhor + servico[i];
+            waits.push(best - a);
+            free[chosen] = best + service[i];
         }
     }
-    resumir(&mut esperas, &desistentes, 0, p)
+    summarize(&mut waits, &abandoners, 0, p)
 }
 
-/// Le a frente da fila a proxima chamada que ainda espera (as que desistiram ficam para tras e
-/// sao descartadas na leitura).
-fn proximo_da_fila(fila: &mut VecDeque<u32>, estado: &[u8]) -> Option<u32> {
-    while let Some(id) = fila.pop_front() {
-        if estado[id as usize] == 0 {
+/// Reads from the front of the queue the next call that still waits (those that gave up stay behind and
+/// are discarded on reading).
+fn next_in_queue(queue: &mut VecDeque<u32>, state: &[u8]) -> Option<u32> {
+    while let Some(id) = queue.pop_front() {
+        if state[id as usize] == 0 {
             return Some(id);
         }
     }
     None
 }
 
-/// Motor de verificacao: M/M/c+M evento a evento sobre a mesma grade. Chegadas de Poisson com
-/// a taxa observada de cada intervalo de 5 min, escala constante no grupo, atendimento e
-/// paciencia exponenciais. A fila atravessa os intervalos; quem ainda espera as 21:00 fica
-/// declarado em `em_espera_no_fim`.
-pub fn fila_eventos(dia: &DiaBins, c: &[u32; GRUPOS], p: &Parametros, semente: u64) -> MedidaDia {
-    let mut rng = banco::Rng::novo(semente);
-    let mut estado: Vec<u8> = Vec::new(); // 0 espera, 1 em atendimento, 2 desistiu
-    let mut chegada: Vec<f64> = Vec::new();
-    let mut esperas: Vec<f64> = Vec::new();
-    let mut desistentes: Vec<f64> = Vec::new();
-    let mut fila: VecDeque<u32> = VecDeque::new();
-    let mut servicos: BinaryHeap<Tempo> = BinaryHeap::new();
-    let mut prazos: BinaryHeap<Prazo> = BinaryHeap::new();
+/// Verification engine: M/M/c+M event by event on the same grid. Poisson arrivals with
+/// the observed rate of each 5-min interval, constant roster inside the group, exponential service and
+/// patience. The queue crosses the intervals; whoever is still waiting at 21:00 stays
+/// declared in `waiting_at_end`.
+pub fn event_queue(day: &BinnedDay, c: &[u32; GROUPS], p: &Parameters, seed: u64) -> DayMeasure {
+    let mut rng = banco::Rng::new(seed);
+    let mut state: Vec<u8> = Vec::new(); // 0 waiting, 1 in service, 2 gave up
+    let mut arrival: Vec<f64> = Vec::new();
+    let mut waits: Vec<f64> = Vec::new();
+    let mut abandoners: Vec<f64> = Vec::new();
+    let mut queue: VecDeque<u32> = VecDeque::new();
+    let mut services: BinaryHeap<Time> = BinaryHeap::new();
+    let mut deadlines: BinaryHeap<Deadline> = BinaryHeap::new();
     let mut t = 0.0_f64;
-    let mut proxima_chegada: f64;
+    let mut next_arrival: f64;
 
     for i in 0..BINS {
-        let capacidade = c[i / POR_GRUPO] as usize;
-        let lam = dia.bins[i] / BIN_S;
-        proxima_chegada =
-            t + exponencial(&mut rng, if lam > 0.0 { 1.0 / lam } else { f64::INFINITY });
-        let fim = (i + 1) as f64 * BIN_S;
+        let capacity = c[i / PER_GROUP] as usize;
+        let lam = day.bins[i] / BIN_S;
+        next_arrival = t + exponential(&mut rng, if lam > 0.0 { 1.0 / lam } else { f64::INFINITY });
+        let end = (i + 1) as f64 * BIN_S;
         loop {
-            while servicos.len() < capacidade {
-                match proximo_da_fila(&mut fila, &estado) {
+            while services.len() < capacity {
+                match next_in_queue(&mut queue, &state) {
                     Some(id) => {
-                        servicos.push(Tempo(t + exponencial(&mut rng, p.aht_s)));
-                        estado[id as usize] = 1;
-                        esperas.push(t - chegada[id as usize]);
+                        services.push(Time(t + exponential(&mut rng, p.aht_s)));
+                        state[id as usize] = 1;
+                        waits.push(t - arrival[id as usize]);
                     }
                     None => break,
                 }
             }
-            // proximo evento: 0 atendimento, 1 desistencia, 2 chegada, 3 fim do intervalo
-            let mut evento = 3u8;
-            let mut quando = fim;
-            if let Some(s) = servicos.peek()
-                && s.0 < quando
+            // next event: 0 service completion, 1 abandonment, 2 arrival, 3 end of interval
+            let mut event = 3u8;
+            let mut when = end;
+            if let Some(s) = services.peek()
+                && s.0 < when
             {
-                quando = s.0;
-                evento = 0;
+                when = s.0;
+                event = 0;
             }
-            if let Some(d) = prazos.peek()
-                && d.t < quando
+            if let Some(d) = deadlines.peek()
+                && d.t < when
             {
-                quando = d.t;
-                evento = 1;
+                when = d.t;
+                event = 1;
             }
-            if proxima_chegada < quando {
-                quando = proxima_chegada;
-                evento = 2;
+            if next_arrival < when {
+                when = next_arrival;
+                event = 2;
             }
-            match evento {
+            match event {
                 0 => {
-                    servicos.pop();
+                    services.pop();
                 }
                 1 => {
-                    let d = prazos.pop().expect("prazo na fila");
-                    if estado[d.id as usize] == 0 {
-                        estado[d.id as usize] = 2;
-                        let e = quando - chegada[d.id as usize];
-                        esperas.push(e);
-                        desistentes.push(e);
+                    let d = deadlines.pop().expect("deadline in the queue");
+                    if state[d.id as usize] == 0 {
+                        state[d.id as usize] = 2;
+                        let e = when - arrival[d.id as usize];
+                        waits.push(e);
+                        abandoners.push(e);
                     }
                 }
                 2 => {
-                    t = quando;
-                    let id = estado.len() as u32;
-                    estado.push(0);
-                    chegada.push(t);
-                    fila.push_back(id);
-                    prazos.push(Prazo {
-                        t: t + exponencial(&mut rng, p.paciencia_s),
+                    t = when;
+                    let id = state.len() as u32;
+                    state.push(0);
+                    arrival.push(t);
+                    queue.push_back(id);
+                    deadlines.push(Deadline {
+                        t: t + exponential(&mut rng, p.patience_s),
                         id,
                     });
-                    proxima_chegada = t + exponencial(
+                    next_arrival = t + exponential(
                         &mut rng,
                         if lam > 0.0 { 1.0 / lam } else { f64::INFINITY },
                     );
                 }
                 _ => break,
             }
-            if evento != 2 {
-                t = quando;
+            if event != 2 {
+                t = when;
             }
         }
     }
-    let em_espera_no_fim = estado.iter().filter(|e| **e == 0).count() as u64;
-    resumir(&mut esperas, &desistentes, em_espera_no_fim, p)
+    let waiting_at_end = state.iter().filter(|e| **e == 0).count() as u64;
+    summarize(&mut waits, &abandoners, waiting_at_end, p)
 }
 
-/// As quatro escalas, grupo a grupo, e a margem residual que R2 usa.
+/// The four rosters, group by group, and the residual margin that R2 uses.
 #[derive(Debug, Clone)]
-pub struct Escalas {
-    pub r0: [u32; GRUPOS],
-    pub r1: [[u32; GRUPOS]; 7],
-    pub r2: [[u32; GRUPOS]; 7],
-    pub r3: [u32; GRUPOS],
+pub struct Scales {
+    pub r0: [u32; GROUPS],
+    pub r1: [[u32; GROUPS]; 7],
+    pub r2: [[u32; GROUPS]; 7],
+    pub r3: [u32; GROUPS],
     pub extra_r3: u32,
     pub cv_residual: f64,
-    pub fator_r2: f64,
-    pub dias_por_dia_da_semana: [usize; 7],
+    pub factor_r2: f64,
+    pub days_per_weekday: [usize; 7],
 }
 
-impl Escalas {
-    /// A escala que a regra aplica naquele dia.
-    pub fn escala(&self, regra: Regra, dia: &DiaBins) -> &[u32; GRUPOS] {
-        let w = dia_da_semana(&dia.data);
-        match regra {
-            Regra::R0 => &self.r0,
-            Regra::R1 => &self.r1[w],
-            Regra::R2 => &self.r2[w],
-            Regra::R3 => &self.r3,
+impl Scales {
+    /// The roster that the rule applies on that day.
+    pub fn scale(&self, rule: Rule, day: &BinnedDay) -> &[u32; GROUPS] {
+        let w = weekday(&day.date);
+        match rule {
+            Rule::R0 => &self.r0,
+            Rule::R1 => &self.r1[w],
+            Rule::R2 => &self.r2[w],
+            Rule::R3 => &self.r3,
         }
     }
 }
 
-/// Monta as quatro escalas: R0 no perfil medio do treino, R1 no perfil do dia da semana, R2
-/// com a demanda multiplicada por `1 + Z_MARGEM * cv` e R3 com R0 mais o menor numero de
-/// atendentes por igual que iguala o custo de R2 no cofre.
-pub fn montar_escalas(treino: &[DiaBins], cofre: &[DiaBins], p: &Parametros) -> Escalas {
-    let cv = cv_residual_diario(treino);
-    let fator = 1.0 + Z_MARGEM * cv;
-    let r0 = escala_do_perfil(&perfil_medio(treino), 1.0, p);
-    let (perfis, contagem) = perfis_por_dia_da_semana(treino);
-    let mut r1 = [[1_u32; GRUPOS]; 7];
-    let mut r2 = [[1_u32; GRUPOS]; 7];
+/// Builds the four rosters: R0 on the mean training profile, R1 on the weekday profile, R2
+/// with the demand multiplied by `1 + Z_MARGIN * cv` and R3 with R0 plus the smallest number of
+/// agents across the board that matches the cost of R2 in the vault.
+pub fn build_scales(training: &[BinnedDay], vault: &[BinnedDay], p: &Parameters) -> Scales {
+    let cv = daily_residual_cv(training);
+    let factor = 1.0 + Z_MARGIN * cv;
+    let r0 = profile_scale(&mean_profile(training), 1.0, p);
+    let (profiles, count) = profiles_by_weekday(training);
+    let mut r1 = [[1_u32; GROUPS]; 7];
+    let mut r2 = [[1_u32; GROUPS]; 7];
     for w in 0..7 {
-        r1[w] = escala_do_perfil(&perfis[w], 1.0, p);
-        r2[w] = escala_do_perfil(&perfis[w], fator, p);
+        r1[w] = profile_scale(&profiles[w], 1.0, p);
+        r2[w] = profile_scale(&profiles[w], factor, p);
     }
-    let custo_r2 = if cofre.is_empty() {
+    let cost_r2 = if vault.is_empty() {
         0.0
     } else {
-        cofre
+        vault
             .iter()
-            .map(|d| agente_horas(&r2[dia_da_semana(&d.data)]))
+            .map(|d| agent_hours(&r2[weekday(&d.date)]))
             .sum::<f64>()
-            / cofre.len() as f64
+            / vault.len() as f64
     };
     let mut extra = 0_u32;
-    while extra < 1_000 && agente_horas(&r0.map(|x| x + extra)) < custo_r2 {
+    while extra < 1_000 && agent_hours(&r0.map(|x| x + extra)) < cost_r2 {
         extra += 1;
     }
-    Escalas {
+    Scales {
         r0,
         r1,
         r2,
         r3: r0.map(|x| x + extra),
         extra_r3: extra,
         cv_residual: cv,
-        fator_r2: fator,
-        dias_por_dia_da_semana: contagem,
+        factor_r2: factor,
+        days_per_weekday: count,
     }
 }
 
-/// O que uma regra rendeu no cofre.
+/// What one rule yielded in the vault.
 #[derive(Debug, Clone, Copy)]
-pub struct MedidaRegra {
-    pub regra: Regra,
-    pub motor: Motor,
-    pub agente_horas_dia: f64,
-    pub pico: u32,
-    pub nivel_de_servico: f64,
-    pub nivel_medio_dos_dias: f64,
-    pub dias_abaixo_da_meta: f64,
-    pub desistencias_por_100: f64,
-    pub espera_media_s: f64,
-    pub espera_mediana_s: f64,
-    pub espera_p90_s: f64,
-    pub em_espera_no_fim: f64,
+pub struct RuleMeasure {
+    pub rule: Rule,
+    pub engine: Engine,
+    pub agent_hours_per_day: f64,
+    pub peak: u32,
+    pub service_level: f64,
+    pub mean_level_of_days: f64,
+    pub days_below_goal: f64,
+    pub abandonments_per_100: f64,
+    pub mean_wait_s: f64,
+    pub median_wait_s: f64,
+    pub p90_wait_s: f64,
+    pub waiting_at_end: f64,
 }
 
-/// Mede uma regra no cofre: uma fila por dia e por replica, com semente fixa.
-pub fn medir_regra(
-    cofre: &[DiaBins],
-    esc: &Escalas,
-    regra: Regra,
-    semente: u64,
+/// Measures one rule in the vault: one queue per day and per replica, with a fixed seed.
+pub fn measure_rule(
+    vault: &[BinnedDay],
+    scales: &Scales,
+    rule: Rule,
+    seed: u64,
     replicas: usize,
-    motor: Motor,
-    p: &Parametros,
-) -> MedidaRegra {
+    engine: Engine,
+    p: &Parameters,
+) -> RuleMeasure {
     let replicas = replicas.max(1);
-    let mut soma_chamadas = 0.0;
-    let mut soma_dentro = 0.0;
-    let mut soma_desistencias = 0.0;
-    let mut soma_espera = 0.0;
-    let mut esperas_medias: Vec<f64> = Vec::new();
-    let mut esperas_medianas: Vec<f64> = Vec::new();
-    let mut esperas_p90: Vec<f64> = Vec::new();
-    let mut em_espera = 0.0;
-    let mut soma_nivel_dias = 0.0;
-    let mut dias_abaixo = 0.0;
-    let mut horas = 0.0;
-    let mut pico = 0_u32;
+    let mut sum_calls = 0.0;
+    let mut sum_inside = 0.0;
+    let mut sum_abandonments = 0.0;
+    let mut sum_wait = 0.0;
+    let mut mean_waits: Vec<f64> = Vec::new();
+    let mut median_waits: Vec<f64> = Vec::new();
+    let mut waits_p90: Vec<f64> = Vec::new();
+    let mut waiting = 0.0;
+    let mut sum_day_levels = 0.0;
+    let mut days_below = 0.0;
+    let mut hours = 0.0;
+    let mut peak = 0_u32;
 
-    for (d, dia) in cofre.iter().enumerate() {
-        let escala = esc.escala(regra, dia);
-        horas += agente_horas(escala);
-        pico = pico.max(escala.iter().copied().max().unwrap_or(0));
-        let mut nivel_do_dia = 0.0;
+    for (d, day) in vault.iter().enumerate() {
+        let scale = scales.scale(rule, day);
+        hours += agent_hours(scale);
+        peak = peak.max(scale.iter().copied().max().unwrap_or(0));
+        let mut day_level = 0.0;
         for r in 0..replicas {
-            let semente_dia = semente_do_dia(semente, d, r);
-            let m = match motor {
-                Motor::Exato => fila_exata(dia, escala, p, semente_dia),
-                Motor::Eventos => fila_eventos(dia, escala, p, semente_dia),
+            let seed_day = day_seed(seed, d, r);
+            let m = match engine {
+                Engine::Exact => exact_queue(day, scale, p, seed_day),
+                Engine::Events => event_queue(day, scale, p, seed_day),
             };
-            soma_chamadas += m.chegadas as f64;
-            soma_dentro += m.dentro_do_alvo as f64;
-            soma_desistencias += m.desistencias as f64;
-            soma_espera += m.espera_media_s;
-            em_espera += m.em_espera_no_fim as f64;
-            esperas_medias.push(m.espera_media_s);
-            esperas_medianas.push(m.espera_mediana_s);
-            esperas_p90.push(m.espera_p90_s);
-            nivel_do_dia += m.nivel_de_servico();
+            sum_calls += m.arrivals as f64;
+            sum_inside += m.within_target as f64;
+            sum_abandonments += m.abandonments as f64;
+            sum_wait += m.mean_wait_s;
+            waiting += m.waiting_at_end as f64;
+            mean_waits.push(m.mean_wait_s);
+            median_waits.push(m.median_wait_s);
+            waits_p90.push(m.p90_wait_s);
+            day_level += m.service_level();
         }
-        nivel_do_dia /= replicas as f64;
-        soma_nivel_dias += nivel_do_dia;
-        if nivel_do_dia < p.meta {
-            dias_abaixo += 1.0;
+        day_level /= replicas as f64;
+        sum_day_levels += day_level;
+        if day_level < p.goal {
+            days_below += 1.0;
         }
     }
-    let n = cofre.len() as f64;
-    MedidaRegra {
-        regra,
-        motor,
-        agente_horas_dia: horas / n,
-        pico,
-        nivel_de_servico: soma_dentro / soma_chamadas,
-        nivel_medio_dos_dias: soma_nivel_dias / n,
-        dias_abaixo_da_meta: dias_abaixo / n,
-        desistencias_por_100: 100.0 * soma_desistencias / soma_chamadas,
-        espera_media_s: soma_espera / (n * replicas as f64),
-        espera_mediana_s: quantil(&esperas_medianas, 0.5),
-        espera_p90_s: quantil(&esperas_p90, 0.5),
-        em_espera_no_fim: em_espera / (n * replicas as f64),
+    let n = vault.len() as f64;
+    RuleMeasure {
+        rule,
+        engine,
+        agent_hours_per_day: hours / n,
+        peak,
+        service_level: sum_inside / sum_calls,
+        mean_level_of_days: sum_day_levels / n,
+        days_below_goal: days_below / n,
+        abandonments_per_100: 100.0 * sum_abandonments / sum_calls,
+        mean_wait_s: sum_wait / (n * replicas as f64),
+        median_wait_s: quantile(&median_waits, 0.5),
+        p90_wait_s: quantile(&waits_p90, 0.5),
+        waiting_at_end: waiting / (n * replicas as f64),
     }
 }
 
-/// O relatorio completo do H0 real.
+/// The complete report of the real H0.
 #[derive(Debug, Clone)]
-pub struct Relatorio {
-    pub treino: usize,
-    pub cofre: usize,
-    pub chamadas_cofre: f64,
+pub struct Report {
+    pub training: usize,
+    pub vault: usize,
+    pub vault_calls: f64,
     pub replicas: usize,
-    pub semente: u64,
+    pub seed: u64,
     pub cv_residual: f64,
-    pub fator_r2: f64,
+    pub factor_r2: f64,
     pub extra_r3: u32,
-    pub dias_por_dia_da_semana: [usize; 7],
-    pub motor: Motor,
-    pub medidas: Vec<MedidaRegra>,
+    pub days_per_weekday: [usize; 7],
+    pub engine: Engine,
+    pub measures: Vec<RuleMeasure>,
 }
 
-/// Carrega a base, separa treino e cofre e mede as quatro regras num motor de fila.
-pub fn medir_regras(
-    caminho: &str,
-    semente: u64,
+/// Loads the base, splits training and vault and measures the four rules on one queue engine.
+pub fn measure_rules(
+    path: &str,
+    seed: u64,
     replicas: usize,
-    motor: Motor,
-    p: &Parametros,
-) -> Relatorio {
-    let dias = carregar_bins(caminho);
-    let (treino, cofre) = separar_treino_cofre(&dias);
+    engine: Engine,
+    p: &Parameters,
+) -> Report {
+    let days = load_bins(path);
+    let (training, vault) = split_training_vault(&days);
     assert!(
-        !treino.is_empty() && !cofre.is_empty(),
-        "treino ou cofre vazio na base"
+        !training.is_empty() && !vault.is_empty(),
+        "training window or vault empty in the base"
     );
-    let escalas = montar_escalas(&treino, &cofre, p);
-    let medidas = Regra::TODAS
+    let scales = build_scales(&training, &vault, p);
+    let measures = Rule::ALL
         .iter()
-        .map(|r| medir_regra(&cofre, &escalas, *r, semente, replicas, motor, p))
+        .map(|r| measure_rule(&vault, &scales, *r, seed, replicas, engine, p))
         .collect();
-    Relatorio {
-        treino: treino.len(),
-        cofre: cofre.len(),
-        chamadas_cofre: cofre.iter().map(|d| d.total).sum(),
+    Report {
+        training: training.len(),
+        vault: vault.len(),
+        vault_calls: vault.iter().map(|d| d.total).sum(),
         replicas,
-        semente,
-        cv_residual: escalas.cv_residual,
-        fator_r2: escalas.fator_r2,
-        extra_r3: escalas.extra_r3,
-        dias_por_dia_da_semana: escalas.dias_por_dia_da_semana,
-        motor,
-        medidas,
+        seed,
+        cv_residual: scales.cv_residual,
+        factor_r2: scales.factor_r2,
+        extra_r3: scales.extra_r3,
+        days_per_weekday: scales.days_per_weekday,
+        engine,
+        measures,
     }
 }
 
-/// Imprime a cabeca do relatorio, comum aos dois motores.
-fn imprimir_cabeca(rel: &Relatorio, p: &Parametros) {
-    println!("== H0 real :: a fila com desistencia e as quatro regras de escala (R0 a R3) ==");
+/// Prints the head of the report, common to the two engines.
+fn print_header(rel: &Report, p: &Parameters) {
+    println!("== Real H0 :: the queue with abandonment and the four scaling rules (R0 to R3) ==");
     println!(
-        "treino {} dias (mar-jun) | cofre {} dias (jul-out) | {:.0} chamadas no cofre",
-        rel.treino, rel.cofre, rel.chamadas_cofre
+        "training {} days (Mar-Jun) | vault {} days (Jul-Oct) | {:.0} calls in the vault",
+        rel.training, rel.vault, rel.vault_calls
     );
     println!(
-        "atendimento exponencial {:.0} s | paciencia exponencial {:.0} s | alvo {:.0} s | meta {:.0}% | semente {} | {} replicas por dia",
+        "exponential service {:.0} s | exponential patience {:.0} s | target {:.0} s | goal {:.0}% | seed {} | {} replicas per day",
         p.aht_s,
-        p.paciencia_s,
-        p.alvo_s,
-        p.meta * 100.0,
-        rel.semente,
+        p.patience_s,
+        p.target_s,
+        p.goal * 100.0,
+        rel.seed,
         rel.replicas
     );
     println!(
-        "CV residual do dia {:.4} | margem de R2 = 1 + {:.4} x CV = {:.4} | R3 = R0 + {} atendentes por igual",
-        rel.cv_residual, Z_MARGEM, rel.fator_r2, rel.extra_r3
+        "residual CV of the day {:.4} | margin of R2 = 1 + {:.4} x CV = {:.4} | R3 = R0 + {} agents across the board",
+        rel.cv_residual, Z_MARGIN, rel.factor_r2, rel.extra_r3
     );
     println!(
-        "dias no treino por dia da semana {:?}",
-        rel.dias_por_dia_da_semana
+        "days in the training window per weekday {:?}",
+        rel.days_per_weekday
     );
 }
 
-/// Imprime a tabela de um motor.
-fn imprimir_tabela(medidas: &[MedidaRegra]) {
+/// Prints the table of one engine.
+fn print_table(measures: &[RuleMeasure]) {
     println!(
         "{:<5} {:>17} {:>6} {:>17} {:>22} {:>19} {:>15} {:>12} {:>11}",
-        "regra",
-        "agente-horas/dia",
-        "pico",
-        "nivel de servico",
-        "dias abaixo da meta",
-        "desistencia/100",
-        "espera media s",
-        "espera med. s",
-        "espera p90 s"
+        "rule",
+        "agent-hours/day",
+        "peak",
+        "service level",
+        "days below the goal",
+        "abandon/100",
+        "mean wait s",
+        "median wait s",
+        "p90 wait s"
     );
-    for m in medidas {
+    for m in measures {
         println!(
             "{:<5} {:>17.0} {:>6} {:>16.1}% {:>21.1}% {:>19.1} {:>15.0} {:>12.0} {:>11.0}",
-            m.regra.nome(),
-            m.agente_horas_dia,
-            m.pico,
-            m.nivel_de_servico * 100.0,
-            m.dias_abaixo_da_meta * 100.0,
-            m.desistencias_por_100,
-            m.espera_media_s,
-            m.espera_mediana_s,
-            m.espera_p90_s
+            m.rule.name(),
+            m.agent_hours_per_day,
+            m.peak,
+            m.service_level * 100.0,
+            m.days_below_goal * 100.0,
+            m.abandonments_per_100,
+            m.mean_wait_s,
+            m.median_wait_s,
+            m.p90_wait_s
         );
     }
 }
 
-/// Imprime o H0 real inteiro: as quatro regras nos dois motores de fila.
-pub fn rodar() {
-    let caminho = caminho_de_dados("dados-reais/bank_calls.csv");
-    let p = Parametros::default();
-    let exato = medir_regras(&caminho, SEMENTE, 3, Motor::Exato, &p);
-    imprimir_cabeca(&exato, &p);
+/// Prints the whole real H0: the four rules on the two queue engines.
+pub fn run() {
+    let path = data_path("data/bank_calls.csv");
+    let p = Parameters::default();
+    let exact = measure_rules(&path, SEED, 3, Engine::Exact, &p);
+    print_header(&exact, &p);
     println!();
-    println!("motor Exato (chegadas observadas, FCFS com desistencia) — a reconstrucao");
-    imprimir_tabela(&exato.medidas);
+    println!("Exact engine (observed arrivals, FCFS with abandonment) — the reconstruction");
+    print_table(&exact.measures);
     println!();
-    println!(
-        "motor Eventos (M/M/c+M evento a evento, chegadas de Poisson) — verificacao independente"
-    );
-    let eventos = medir_regras(&caminho, SEMENTE, 3, Motor::Eventos, &p);
-    imprimir_tabela(&eventos.medidas);
+    println!("Events engine (M/M/c+M event by event, Poisson arrivals) — independent verification");
+    let events = measure_rules(&path, SEED, 3, Engine::Events, &p);
+    print_table(&events.measures);
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
     use std::sync::OnceLock;
 
-    /// A base do repositorio; sem ela os testes de medida ficam sem dado e se declaram pulados.
-    fn caminho() -> Option<String> {
-        let c = caminho_de_dados("dados-reais/bank_calls.csv");
+    /// The repository base; without it the measurement tests have no data and declare themselves skipped.
+    fn path() -> Option<String> {
+        let c = data_path("data/bank_calls.csv");
         if std::path::Path::new(&c).exists() {
             Some(c)
         } else {
@@ -966,338 +963,338 @@ mod testes {
         }
     }
 
-    /// Uma medida so, reaproveitada pelos testes: semente fixa, uma replica por dia, como o
-    /// instrumento aposentado.
-    fn relatorio() -> Option<&'static Relatorio> {
-        static REL: OnceLock<Option<Relatorio>> = OnceLock::new();
+    /// A single measurement, reused by the tests: fixed seed, one replica per day, as the
+    /// retired instrument.
+    fn report() -> Option<&'static Report> {
+        static REL: OnceLock<Option<Report>> = OnceLock::new();
         REL.get_or_init(|| {
-            let c = caminho()?;
-            Some(medir_regras(
+            let c = path()?;
+            Some(measure_rules(
                 &c,
-                SEMENTE,
+                SEED,
                 1,
-                Motor::Exato,
-                &Parametros::default(),
+                Engine::Exact,
+                &Parameters::default(),
             ))
         })
         .as_ref()
     }
 
-    /// Dia sintetico com a mesma contagem em todos os intervalos, para forcar sobrecarga.
-    fn dia_sobrecarregado(por_intervalo: f64) -> DiaBins {
-        let bins = [por_intervalo; BINS];
-        DiaBins {
-            data: "2003-07-01".to_string(),
+    /// Synthetic day with the same count in every interval, to force overload.
+    fn overloaded_day(per_interval: f64) -> BinnedDay {
+        let bins = [per_interval; BINS];
+        BinnedDay {
+            date: "2003-07-01".to_string(),
             bins,
             total: bins.iter().sum(),
         }
     }
 
     #[test]
-    fn dia_da_semana_de_datas_conhecidas() {
-        assert_eq!(dia_da_semana("2000-01-01"), 5, "sabado");
-        assert_eq!(dia_da_semana("2024-01-01"), 0, "segunda");
+    fn weekday_of_known_dates() {
+        assert_eq!(weekday("2000-01-01"), 5, "Saturday");
+        assert_eq!(weekday("2024-01-01"), 0, "Monday");
         assert_eq!(
-            dia_da_semana("2003-03-03"),
+            weekday("2003-03-03"),
             0,
-            "a primeira segunda do treino"
+            "the first Monday of the training window"
         );
-        assert_eq!(dia_da_semana("2003-08-31"), 6, "domingo");
+        assert_eq!(weekday("2003-08-31"), 6, "Sunday");
     }
 
     #[test]
-    fn grade_e_o_recorte_do_instrumento() {
-        // 169 intervalos de 5 min de 07:00 a 21:00, 28 meias horas mais a cauda de um intervalo
+    fn grid_is_the_cut_of_the_instrument() {
+        // 169 5-min intervals from 07:00 to 21:00, 28 half hours plus the tail of one interval
         assert_eq!(BINS, 169);
-        assert_eq!(POR_GRUPO, 6);
-        assert_eq!(GRUPOS, 29);
-        assert_eq!(faixa_do_grupo(27), (162, 168));
-        assert_eq!(faixa_do_grupo(28), (168, 169));
-        // agente-horas de uma escala constante: 14,0833 h de turno por atendente
-        let uniforme = [10_u32; GRUPOS];
-        let esperado = 10.0 * BINS as f64 * BIN_S / 3600.0;
+        assert_eq!(PER_GROUP, 6);
+        assert_eq!(GROUPS, 29);
+        assert_eq!(group_range(27), (162, 168));
+        assert_eq!(group_range(28), (168, 169));
+        // agent-hours of a constant roster: 14.0833 h of shift per agent
+        let uniform = [10_u32; GROUPS];
+        let expected = 10.0 * BINS as f64 * BIN_S / 3600.0;
         assert!(
-            (agente_horas(&uniforme) - esperado).abs() < 1e-9,
+            (agent_hours(&uniform) - expected).abs() < 1e-9,
             "{}",
-            agente_horas(&uniforme)
+            agent_hours(&uniform)
         );
     }
 
     #[test]
-    fn fila_com_desistencia_estabiliza() {
-        let p = Parametros::default();
-        // 1000 chegadas por intervalo de 5 min contra 40 atendentes, que atendem 15/hora cada:
-        // a carga oferecida e o dobro da capacidade, o pior caso para uma fila sem desistencia
-        let dia = dia_sobrecarregado(1000.0);
-        let escala = [40_u32; GRUPOS];
+    fn queue_with_abandonment_stabilises() {
+        let p = Parameters::default();
+        // 1000 arrivals per 5-min interval against 40 agents, who serve 15/hour each:
+        // the offered load is twice the capacity, the worst case for a queue without abandonment
+        let day = overloaded_day(1000.0);
+        let scale = [40_u32; GROUPS];
 
-        // 1. o motor exato: com paciencia, a espera para no teto da paciencia
-        let com = fila_exata(&dia, &escala, &p, 7);
+        // 1. the exact engine: with patience, the wait stops at the patience ceiling
+        let with = exact_queue(&day, &scale, &p, 7);
         assert!(
-            com.desistencias_por_100() > 50.0,
-            "desistencia {}",
-            com.desistencias_por_100()
+            with.abandonments_per_100() > 50.0,
+            "abandonment {}",
+            with.abandonments_per_100()
         );
         assert!(
-            com.espera_p90_s <= 3.0 * p.paciencia_s,
-            "p90 da espera {} contra paciencia {}",
-            com.espera_p90_s,
-            p.paciencia_s
+            with.p90_wait_s <= 3.0 * p.patience_s,
+            "p90 of the wait {} against patience {}",
+            with.p90_wait_s,
+            p.patience_s
         );
-        let sem = Parametros {
-            paciencia_s: f64::INFINITY,
+        let without = Parameters {
+            patience_s: f64::INFINITY,
             ..p
         };
-        let sem_desistir = fila_exata(&dia, &escala, &sem, 7);
-        assert_eq!(sem_desistir.desistencias, 0);
+        let no_abandonment = exact_queue(&day, &scale, &without, 7);
+        assert_eq!(no_abandonment.abandonments, 0);
         assert!(
-            sem_desistir.espera_media_s > 10.0 * com.espera_media_s,
-            "sem desistencia {:.0} s contra {:.0} s",
-            sem_desistir.espera_media_s,
-            com.espera_media_s
+            no_abandonment.mean_wait_s > 10.0 * with.mean_wait_s,
+            "without abandonment {:.0} s against {:.0} s",
+            no_abandonment.mean_wait_s,
+            with.mean_wait_s
         );
 
-        // 2. o motor de eventos: a fila estabiliza com paciencia e cresce sem ela
-        let ev_com = fila_eventos(&dia, &escala, &p, 7);
-        let ev_sem = fila_eventos(&dia, &escala, &sem, 7);
-        // o excedente e de 3 chamadas por segundo contra 0,167 atendida por segundo, e a fila
-        // que estabiliza assenta em (excedente) x (paciencia) = cerca de 570 esperando
+        // 2. the event engine: the queue stabilises with patience and grows without it
+        let ev_with = event_queue(&day, &scale, &p, 7);
+        let ev_without = event_queue(&day, &scale, &without, 7);
+        // the surplus is 3 calls per second against 0.167 served per second, and the queue
+        // that stabilises settles at (surplus) x (patience) = about 570 waiting
         assert!(
-            (200..=2000).contains(&ev_com.em_espera_no_fim),
-            "fila assentada em {}",
-            ev_com.em_espera_no_fim
+            (200..=2000).contains(&ev_with.waiting_at_end),
+            "queue settled at {}",
+            ev_with.waiting_at_end
         );
-        assert!(ev_com.desistencias_por_100() > 50.0);
+        assert!(ev_with.abandonments_per_100() > 50.0);
         assert!(
-            ev_sem.em_espera_no_fim > 10_000,
-            "sem desistencia a fila devia acumular, sobrou {}",
-            ev_sem.em_espera_no_fim
+            ev_without.waiting_at_end > 10_000,
+            "without abandonment the queue should accumulate, what was left is {}",
+            ev_without.waiting_at_end
         );
-        // a fila assentada e proporcional a paciencia: com 90 s de paciencia a espera de
-        // equilibrio cai para cerca da metade, que e a assinatura de uma fila com saida
-        let curta = Parametros {
-            paciencia_s: 90.0,
+        // the settled queue is proportional to the patience: with 90 s of patience the equilibrium
+        // wait falls to about half, which is the signature of a queue with an exit
+        let short = Parameters {
+            patience_s: 90.0,
             ..p
         };
-        let ev_curta = fila_eventos(&dia, &escala, &curta, 7);
-        let razao = ev_curta.em_espera_no_fim as f64 / ev_com.em_espera_no_fim as f64;
+        let ev_short = event_queue(&day, &scale, &short, 7);
+        let ratio = ev_short.waiting_at_end as f64 / ev_with.waiting_at_end as f64;
         assert!(
-            (0.3..=0.7).contains(&razao),
-            "razao das filas assentadas {razao}"
+            (0.3..=0.7).contains(&ratio),
+            "ratio of the settled queues {ratio}"
         );
-        assert!(ev_sem.em_espera_no_fim > 5 * ev_com.em_espera_no_fim);
+        assert!(ev_without.waiting_at_end > 5 * ev_with.waiting_at_end);
     }
 
     #[test]
-    fn monotonicidade_r2_melhor_que_r0() {
-        let Some(rel) = relatorio() else {
-            eprintln!("sem a base");
+    fn monotonicity_r2_better_than_r0() {
+        let Some(rel) = report() else {
+            eprintln!("no base");
             return;
         };
         let (r0, r1, r2, r3) = (
-            &rel.medidas[0],
-            &rel.medidas[1],
-            &rel.medidas[2],
-            &rel.medidas[3],
+            &rel.measures[0],
+            &rel.measures[1],
+            &rel.measures[2],
+            &rel.measures[3],
         );
         assert!(
-            r2.dias_abaixo_da_meta < r0.dias_abaixo_da_meta,
-            "R2 {:.3} dias falhos contra R0 {:.3}",
-            r2.dias_abaixo_da_meta,
-            r0.dias_abaixo_da_meta
+            r2.days_below_goal < r0.days_below_goal,
+            "R2 {:.3} failed days against R0 {:.3}",
+            r2.days_below_goal,
+            r0.days_below_goal
         );
-        assert!(r2.nivel_de_servico > r0.nivel_de_servico);
-        assert!(r2.agente_horas_dia > r0.agente_horas_dia);
+        assert!(r2.service_level > r0.service_level);
+        assert!(r2.agent_hours_per_day > r0.agent_hours_per_day);
         assert!(
-            r1.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta,
-            "R1 pior que a alegacao"
-        );
-        assert!(
-            r3.dias_abaixo_da_meta <= r0.dias_abaixo_da_meta,
-            "R3 pior que a alegacao"
+            r1.days_below_goal <= r0.days_below_goal,
+            "R1 worse than the claim"
         );
         assert!(
-            r2.dias_abaixo_da_meta <= r3.dias_abaixo_da_meta,
-            "R2 nao venceu R3"
+            r3.days_below_goal <= r0.days_below_goal,
+            "R3 worse than the claim"
         );
-        // R2 e R3 custam quase o mesmo, e por isso a comparacao e de alocacao, nao de gasto
-        let razao = r3.agente_horas_dia / r2.agente_horas_dia;
-        assert!((0.98..=1.02).contains(&razao), "R3/R2 = {razao}");
+        assert!(
+            r2.days_below_goal <= r3.days_below_goal,
+            "R2 did not beat R3"
+        );
+        // R2 and R3 cost almost the same, and that is why the comparison is of allocation, not of spending
+        let ratio = r3.agent_hours_per_day / r2.agent_hours_per_day;
+        assert!((0.98..=1.02).contains(&ratio), "R3/R2 = {ratio}");
     }
 
     #[test]
-    fn a_margem_de_r2_e_o_p90_do_cv_residual() {
-        let Some(c) = caminho() else {
+    fn the_r2_margin_is_the_p90_of_the_residual_cv() {
+        let Some(c) = path() else {
             return;
         };
-        let p = Parametros::default();
-        let dias = carregar_bins(&c);
-        let (treino, cofre) = separar_treino_cofre(&dias);
-        let esc = montar_escalas(&treino, &cofre, &p);
-        // o CV residual do capitulo 16 e de 6%; o instrumento mede perto disso
+        let p = Parameters::default();
+        let days = load_bins(&c);
+        let (training, vault) = split_training_vault(&days);
+        let esc = build_scales(&training, &vault, &p);
+        // the residual CV of chapter 16 is 6%; the instrument measures close to it
         assert!(
             esc.cv_residual > 0.04 && esc.cv_residual < 0.08,
             "cv {}",
             esc.cv_residual
         );
-        let esperado = 1.0 + Z_MARGEM * esc.cv_residual;
-        assert!((esc.fator_r2 - esperado).abs() < 1e-12);
+        let expected = 1.0 + Z_MARGIN * esc.cv_residual;
+        assert!((esc.factor_r2 - expected).abs() < 1e-12);
         assert!(
-            (1.05..=1.10).contains(&esc.fator_r2),
-            "fator {}",
-            esc.fator_r2
+            (1.05..=1.10).contains(&esc.factor_r2),
+            "factor {}",
+            esc.factor_r2
         );
-        // R3 e "R0 mais atendentes por igual": a diferenca e constante, e e o extra medido
+        // R3 is "R0 plus agents across the board": the difference is constant, and it is the measured extra
         assert!(
             esc.extra_r3 >= 8 && esc.extra_r3 <= 16,
             "extra {}",
             esc.extra_r3
         );
-        for j in 0..GRUPOS {
+        for j in 0..GROUPS {
             assert_eq!(esc.r3[j] - esc.r0[j], esc.extra_r3);
         }
-        // a margem e alocada onde esta o risco: o pico de R2 passa o de R1, que passa o de R0
-        let pico = |c: &[u32; GRUPOS]| c.iter().copied().max().unwrap_or(0);
+        // the margin is allocated where the risk is: the peak of R2 exceeds that of R1, which exceeds that of R0
+        let peak = |c: &[u32; GROUPS]| c.iter().copied().max().unwrap_or(0);
         for w in 0..5 {
             assert!(
-                pico(&esc.r2[w]) > pico(&esc.r1[w]),
-                "R2 sem folga no pico do dia {w}"
+                peak(&esc.r2[w]) > peak(&esc.r1[w]),
+                "R2 without slack at the peak of day {w}"
             );
         }
-        assert!(pico(&esc.r1[0]) > pico(&esc.r0));
-        // R1 e "custo zero": a media dos cinco dias uteis fica dentro de 1% do custo de R0
-        let media_r1: f64 = (0..5).map(|w| agente_horas(&esc.r1[w])).sum::<f64>() / 5.0;
-        let zero = (media_r1 - agente_horas(&esc.r0)).abs() / agente_horas(&esc.r0);
+        assert!(peak(&esc.r1[0]) > peak(&esc.r0));
+        // R1 is "zero cost": the mean of the five weekdays stays within 1% of the cost of R0
+        let mean_r1: f64 = (0..5).map(|w| agent_hours(&esc.r1[w])).sum::<f64>() / 5.0;
+        let zero = (mean_r1 - agent_hours(&esc.r0)).abs() / agent_hours(&esc.r0);
         assert!(
             zero < 0.01,
-            "R1 custa {media_r1:.0} contra {:.0}",
-            agente_horas(&esc.r0)
+            "R1 costs {mean_r1:.0} against {:.0}",
+            agent_hours(&esc.r0)
         );
-        // e o perfil por dia da semana nao e o perfil medio repetido
+        // and the weekday profile is not the mean profile repeated
         assert_ne!(esc.r1[0], esc.r1[3]);
     }
 
     #[test]
-    fn instrumento_roda_com_semente_fixa() {
-        let Some(c) = caminho() else {
+    fn instrument_runs_with_a_fixed_seed() {
+        let Some(c) = path() else {
             return;
         };
-        let p = Parametros::default();
-        let dias = carregar_bins(&c);
-        let (treino, cofre) = separar_treino_cofre(&dias);
-        let esc = montar_escalas(&treino, &cofre, &p);
-        let dia = &cofre[0];
-        let escala = esc.escala(Regra::R0, dia);
-        let a = fila_exata(dia, escala, &p, 42);
-        let b = fila_exata(dia, escala, &p, 42);
-        assert_eq!(a.chegadas, b.chegadas);
-        assert_eq!(a.dentro_do_alvo, b.dentro_do_alvo);
-        assert_eq!(a.desistencias, b.desistencias);
-        assert_eq!(a.espera_media_s.to_bits(), b.espera_media_s.to_bits());
-        assert_eq!(a.espera_p90_s.to_bits(), b.espera_p90_s.to_bits());
-        // e o mesmo motor de eventos, tambem
-        let c1 = fila_eventos(dia, escala, &p, 42);
-        let c2 = fila_eventos(dia, escala, &p, 42);
-        assert_eq!(c1.chegadas, c2.chegadas);
-        assert_eq!(c1.dentro_do_alvo, c2.dentro_do_alvo);
-        assert_eq!(c1.espera_media_s.to_bits(), c2.espera_media_s.to_bits());
-        // semente vizinha nao muda a medida do dia alem do ruido do proprio instrumento
-        let d1 = fila_exata(dia, escala, &p, 43);
-        assert!((d1.nivel_de_servico() - a.nivel_de_servico()).abs() < 0.15);
-        // duas rodadas do relatorio inteiro com a mesma semente dao o mesmo numero
-        let r1 = medir_regras(&c, SEMENTE, 1, Motor::Exato, &p);
-        let r2 = medir_regras(&c, SEMENTE, 1, Motor::Exato, &p);
+        let p = Parameters::default();
+        let days = load_bins(&c);
+        let (training, vault) = split_training_vault(&days);
+        let esc = build_scales(&training, &vault, &p);
+        let day = &vault[0];
+        let scale = esc.scale(Rule::R0, day);
+        let a = exact_queue(day, scale, &p, 42);
+        let b = exact_queue(day, scale, &p, 42);
+        assert_eq!(a.arrivals, b.arrivals);
+        assert_eq!(a.within_target, b.within_target);
+        assert_eq!(a.abandonments, b.abandonments);
+        assert_eq!(a.mean_wait_s.to_bits(), b.mean_wait_s.to_bits());
+        assert_eq!(a.p90_wait_s.to_bits(), b.p90_wait_s.to_bits());
+        // and the same event engine, too
+        let c1 = event_queue(day, scale, &p, 42);
+        let c2 = event_queue(day, scale, &p, 42);
+        assert_eq!(c1.arrivals, c2.arrivals);
+        assert_eq!(c1.within_target, c2.within_target);
+        assert_eq!(c1.mean_wait_s.to_bits(), c2.mean_wait_s.to_bits());
+        // a neighbouring seed does not change the measure of the day beyond the noise of the instrument itself
+        let d1 = exact_queue(day, scale, &p, 43);
+        assert!((d1.service_level() - a.service_level()).abs() < 0.15);
+        // two runs of the whole report with the same seed give the same number
+        let r1 = measure_rules(&c, SEED, 1, Engine::Exact, &p);
+        let r2 = measure_rules(&c, SEED, 1, Engine::Exact, &p);
         assert_eq!(
-            r1.medidas[0].nivel_de_servico.to_bits(),
-            r2.medidas[0].nivel_de_servico.to_bits()
+            r1.measures[0].service_level.to_bits(),
+            r2.measures[0].service_level.to_bits()
         );
     }
 
     #[test]
-    fn faixas_do_registro_e_divergencia_declarada() {
-        let Some(rel) = relatorio() else {
-            eprintln!("sem a base");
+    fn registry_bands_and_declared_divergence() {
+        let Some(rel) = report() else {
+            eprintln!("no base");
             return;
         };
-        // o cofre: 81 dias uteis de julho a outubro, 2,65 milhoes de chamadas oferecidas
-        assert_eq!(rel.treino, 83);
-        assert_eq!(rel.cofre, 81);
-        assert!((2_600_000.0..=2_700_000.0).contains(&rel.chamadas_cofre));
-        // a grade do instrumento inclui o intervalo das 21:00; a leitura de meias horas do
-        // banco.rs o descarta, e por isso a contagem daqui e 5 596 chamadas maior
-        assert!(rel.chamadas_cofre > 2_649_354.0);
+        // the vault: 81 working days from July to October, 2.65 million offered calls
+        assert_eq!(rel.training, 83);
+        assert_eq!(rel.vault, 81);
+        assert!((2_600_000.0..=2_700_000.0).contains(&rel.vault_calls));
+        // the grid of the instrument includes the 21:00 interval; the half-hour reading of
+        // banco.rs discards it, and that is why the count here is 5 596 calls larger
+        assert!(rel.vault_calls > 2_649_354.0);
 
-        for m in &rel.medidas {
-            assert!((2100.0..=2600.0).contains(&m.agente_horas_dia), "{m:?}");
-            assert!((0.0..=1.0).contains(&m.nivel_de_servico));
-            assert!((0.0..=1.0).contains(&m.dias_abaixo_da_meta));
+        for m in &rel.measures {
+            assert!((2100.0..=2600.0).contains(&m.agent_hours_per_day), "{m:?}");
+            assert!((0.0..=1.0).contains(&m.service_level));
+            assert!((0.0..=1.0).contains(&m.days_below_goal));
         }
-        let r0 = rel.medidas[0];
-        let r1 = rel.medidas[1];
-        let r2 = rel.medidas[2];
-        let r3 = rel.medidas[3];
+        let r0 = rel.measures[0];
+        let r1 = rel.measures[1];
+        let r2 = rel.measures[2];
+        let r3 = rel.measures[3];
 
-        // Agente-horas: o custo do registro e reproduzido regra a regra (2 264, 2 261, 2 428,
-        // 2 433), dentro de 1%.
-        for (m, publicado) in [(r0, 2264.0), (r1, 2261.0), (r2, 2428.0), (r3, 2433.0)] {
-            let erro = (m.agente_horas_dia - publicado).abs() / publicado;
+        // Agent-hours: the cost of the registry is reproduced rule by rule (2 264, 2 261, 2 428,
+        // 2 433), within 1%.
+        for (m, published) in [(r0, 2264.0), (r1, 2261.0), (r2, 2428.0), (r3, 2433.0)] {
+            let error = (m.agent_hours_per_day - published).abs() / published;
             assert!(
-                erro < 0.01,
-                "{} custa {:.0} contra {:.0}",
-                m.regra.nome(),
-                m.agente_horas_dia,
-                publicado
+                error < 0.01,
+                "{} costs {:.0} against {:.0}",
+                m.rule.name(),
+                m.agent_hours_per_day,
+                published
             );
         }
         assert_eq!(
             rel.extra_r3, 12,
-            "R3 e R0 + 12 atendentes por igual no registro"
+            "R3 is R0 + 12 agents across the board in the registry"
         );
 
-        // Nivel de servico e dias falhos: aqui a divergencia esta declarada. O registo publica
-        // 86/26 (R0), 90/12 (R1), 96/3,7 (R2) e 94/7,4 (R3); a faixa abaixo e generosa de
-        // proposito, porque o gerador de numeros e outro e os sorteios caem em outro lugar.
-        let ns = |m: &MedidaRegra| m.nivel_de_servico * 100.0;
-        assert!((80.0..=90.0).contains(&ns(&r0)), "NS de R0 {:.1}", ns(&r0));
+        // Service level and failed days: here the divergence is declared. The registry publishes
+        // 86/26 (R0), 90/12 (R1), 96/3.7 (R2) and 94/7.4 (R3); the band below is generous on
+        // purpose, because the number generator is another one and the draws fall elsewhere.
+        let ns = |m: &RuleMeasure| m.service_level * 100.0;
+        assert!((80.0..=90.0).contains(&ns(&r0)), "SL of R0 {:.1}", ns(&r0));
         assert!(
             ns(&r1) >= ns(&r0) - 1.0,
-            "R1 {:.1} contra R0 {:.1}",
+            "R1 {:.1} against R0 {:.1}",
             ns(&r1),
             ns(&r0)
         );
-        assert!(ns(&r2) >= 89.0, "NS de R2 {:.1}", ns(&r2));
-        assert!(ns(&r3) >= 88.0, "NS de R3 {:.1}", ns(&r3));
+        assert!(ns(&r2) >= 89.0, "SL of R2 {:.1}", ns(&r2));
+        assert!(ns(&r3) >= 88.0, "SL of R3 {:.1}", ns(&r3));
         assert!(
-            (0.20..=0.42).contains(&r0.dias_abaixo_da_meta),
-            "R0 falha {:.3}",
-            r0.dias_abaixo_da_meta
+            (0.20..=0.42).contains(&r0.days_below_goal),
+            "R0 fails {:.3}",
+            r0.days_below_goal
         );
         assert!(
-            (0.08..=0.28).contains(&r1.dias_abaixo_da_meta),
-            "R1 falha {:.3}",
-            r1.dias_abaixo_da_meta
+            (0.08..=0.28).contains(&r1.days_below_goal),
+            "R1 fails {:.3}",
+            r1.days_below_goal
         );
         assert!(
-            (0.00..=0.10).contains(&r2.dias_abaixo_da_meta),
-            "R2 falha {:.3}",
-            r2.dias_abaixo_da_meta
+            (0.00..=0.10).contains(&r2.days_below_goal),
+            "R2 fails {:.3}",
+            r2.days_below_goal
         );
         assert!(
-            (0.03..=0.18).contains(&r3.dias_abaixo_da_meta),
-            "R3 falha {:.3}",
-            r3.dias_abaixo_da_meta
+            (0.03..=0.18).contains(&r3.days_below_goal),
+            "R3 fails {:.3}",
+            r3.days_below_goal
         );
     }
 
     #[test]
-    fn impressao_de_trabalho() {
-        let Some(rel) = relatorio() else {
-            eprintln!("sem a base");
+    fn working_print() {
+        let Some(rel) = report() else {
+            eprintln!("no base");
             return;
         };
-        let p = Parametros::default();
-        imprimir_cabeca(rel, &p);
-        println!("motor Exato (chegadas observadas, FCFS com desistencia)");
-        imprimir_tabela(&rel.medidas);
+        let p = Parameters::default();
+        print_header(rel, &p);
+        println!("Exact engine (observed arrivals, FCFS with abandonment)");
+        print_table(&rel.measures);
     }
 }

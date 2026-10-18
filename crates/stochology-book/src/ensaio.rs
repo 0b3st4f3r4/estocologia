@@ -1,227 +1,227 @@
-//! Os ensaios sinteticos dos tres protocolos humanos: o modelo nulo de cada um.
+//! The synthetic rehearsals of the three human protocols: the null model of each one.
 //!
-//! Os itens 3, 5 e 9 de PROPOSTAS_DECLARADAS.md dependem de gente, e sessao de agente nao ocupa o lugar de
-//! ninguem. O que ela pode fazer e responder outra pergunta: **quanto tira um respondente fluente e sem
-//! calibracao no mesmo instrumento?** Sem esse piso, especialista real nao tem contra o que ser comparado, e o
-//! protocolo pode estar medindo fluencia em vez de conhecimento.
+//! Items 3, 5 and 9 of docs/DECLARED_PROPOSALS.md depend on people, and an agent session does not take anyone's
+//! place. What it can do is answer another question: **how much does a fluent and uncalibrated respondent
+//! score on the same instrument?** Without that floor, a real specialist has nothing to be compared against, and the
+//! protocol may be measuring fluency instead of knowledge.
 //!
-//! Tres ensaios, todos com entrada sintetica e com o rotulo na propria saida:
+//! Three rehearsals, all with synthetic input and with the label in the output itself:
 //!
-//! - shelf: quatro respondentes declarados, pontuados nos itens reais do pre-teste, com Brier, habilidade e
-//!   ECE pelo mesmo avaliador que o painel usa;
-//! - escuta: a aritmetica da cobertura, e o limite do portao, que confere campo e **nao** proveniencia;
-//! - ponte: tres registros sinteticos, e o portao so abre com papeis designados, casos no minimo e status
-//!   compativel com o teste justo por fazer.
+//! - shelf: four declared respondents, scored on the real pre-test items, with Brier, skill and
+//!   ECE by the same evaluator the panel uses;
+//! - listening: the arithmetic of coverage, and the limit of the gate, which checks fields and **not** provenance;
+//! - bridge: three synthetic registries, and the gate only opens with designated roles, cases at the minimum and a status
+//!   compatible with the fair test still to be done.
 //!
-//! Regra dura: nenhuma saida daqui conta cobertura. Os ensaios nao escrevem em fundo/ e nao selam nada.
+//! Hard rule: no output from here counts coverage. The rehearsals do not write to empirical/ and do not seal anything.
 
 use std::path::{Path, PathBuf};
 
-use stochology_h3::preteste::{PreTeste, avaliar};
+use stochology_horizons::h3::pretest::{Pretest, evaluate};
 
 use crate::escuta;
 use crate::ponte;
 
-/// Os cinco conjuntos de itens do pre-teste, com as resolucoes que o mundo ja deu.
-pub const ITENS: [(&str, &str); 5] = [
+/// The five item pools of the pre-test, with the resolutions the world has already given.
+pub const ITEMS: [(&str, &str); 5] = [
     (
         "desenvolvimento_preston",
-        "fundo/p12-shelf/preteste/desenvolvimento_preston.yaml",
+        "empirical/p12-shelf/preteste/desenvolvimento_preston.yaml",
     ),
     (
         "direito_prisoes",
-        "fundo/p12-shelf/preteste/direito_prisoes.yaml",
+        "empirical/p12-shelf/preteste/direito_prisoes.yaml",
     ),
     (
         "direito_teto_beneficio",
-        "fundo/p12-shelf/preteste/direito_teto_beneficio.yaml",
+        "empirical/p12-shelf/preteste/direito_teto_beneficio.yaml",
     ),
     (
         "educacao_star",
-        "fundo/p12-shelf/preteste/educacao_star.yaml",
+        "empirical/p12-shelf/preteste/educacao_star.yaml",
     ),
-    ("h1_real_c", "fundo/p12-shelf/preteste/h1_real_c.yaml"),
+    ("h1_real_c", "empirical/p12-shelf/preteste/h1_real_c.yaml"),
 ];
 
-/// Raiz do repositorio, a mesma convencao dos instrumentos que leem dados-reais/.
-pub fn raiz() -> PathBuf {
+/// Repository root, the same convention as the instruments that read data/.
+pub fn root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .and_then(Path::parent)
-        .expect("raiz do repositorio")
+        .expect("repository root")
         .to_path_buf()
 }
 
-/// Um respondente sintetico, com a regra de resposta declarada.
+/// A synthetic respondent, with the declared answering rule.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Respondente {
-    /// p = 0,50 para todo item: o nulo declarado do protocolo.
-    Moeda,
-    /// p = 0,75 constante: fala com confianca e nao tem informacao.
-    Fluente,
-    /// p = 0,90 constante: o vies de sim, que parece bom quando o pool e desequilibrado.
-    ViesDeSim,
-    /// Sabe 80% dos itens (p = 0,85, acerta) e chuta os outros 20% (p = 0,50): o especialista plausivel.
-    Especialista,
-    /// Acerta sempre com p = 0,99: o teto, que o avaliador le como habilidade 0 por 0/0.
-    Oraculo,
+pub enum Respondent {
+    /// p = 0.50 for every item: the declared null of the protocol.
+    Coin,
+    /// constant p = 0.75: speaks with confidence and has no information.
+    Fluent,
+    /// constant p = 0.90: the yes bias, which looks good when the pool is unbalanced.
+    YesBias,
+    /// Knows 80% of the items (p = 0.85, correct) and guesses the other 20% (p = 0.50): the plausible specialist.
+    Expert,
+    /// Always correct with p = 0.99: the ceiling, which the evaluator reads as skill 0 by 0/0.
+    Oracle,
 }
 
-impl Respondente {
-    pub const TODOS: [Respondente; 5] = [
-        Respondente::Moeda,
-        Respondente::Fluente,
-        Respondente::ViesDeSim,
-        Respondente::Especialista,
-        Respondente::Oraculo,
+impl Respondent {
+    pub const ALL: [Respondent; 5] = [
+        Respondent::Coin,
+        Respondent::Fluent,
+        Respondent::YesBias,
+        Respondent::Expert,
+        Respondent::Oracle,
     ];
 
-    pub fn nome(self) -> &'static str {
+    pub fn name(self) -> &'static str {
         match self {
-            Respondente::Moeda => "moeda p=0.50",
-            Respondente::Fluente => "fluente p=0.75",
-            Respondente::ViesDeSim => "vies-de-sim p=0.90",
-            Respondente::Especialista => "especialista p=0.85/0.50",
-            Respondente::Oraculo => "oraculo p=0.99",
+            Respondent::Coin => "coin p=0.50",
+            Respondent::Fluent => "fluent p=0.75",
+            Respondent::YesBias => "yes-bias p=0.90",
+            Respondent::Expert => "expert p=0.85/0.50",
+            Respondent::Oracle => "oracle p=0.99",
         }
     }
 
-    /// A resposta que o respondente da ao item, com a confianca que declara nela.
+    /// The answer the respondent gives to the item, with the confidence it declares in it.
     ///
-    /// Moeda e Fluente chutam sim ou nao sem olhar a resolucao, e por isso acertam cerca de metade das vezes;
-    /// o que os separa e a confianca declarada. ViesDeSim responde sim sempre. Oraculo responde a resolucao.
-    pub fn responde_item(self, resolucao: bool, rng: &mut stochology_core::Rng) -> (f64, bool) {
+    /// Coin and Fluent guess yes or no without looking at the resolution, and therefore hit about half the time;
+    /// what separates them is the declared confidence. YesBias always answers yes. Oracle answers the resolution.
+    pub fn answers_item(self, resolution: bool, rng: &mut stochology_core::Rng) -> (f64, bool) {
         match self {
-            Respondente::Moeda => {
-                let resposta = rng.uniforme(2) == 1;
-                (0.50, resposta == resolucao)
+            Respondent::Coin => {
+                let answer = rng.uniform(2) == 1;
+                (0.50, answer == resolution)
             }
-            Respondente::Fluente => {
-                let resposta = rng.uniforme(2) == 1;
-                (0.75, resposta == resolucao)
+            Respondent::Fluent => {
+                let answer = rng.uniform(2) == 1;
+                (0.75, answer == resolution)
             }
-            Respondente::ViesDeSim => (0.90, resolucao),
-            Respondente::Especialista => {
-                if rng.uniforme(100) < 80 {
+            Respondent::YesBias => (0.90, resolution),
+            Respondent::Expert => {
+                if rng.uniform(100) < 80 {
                     (0.85, true)
                 } else {
-                    let resposta = rng.uniforme(2) == 1;
-                    (0.50, resposta == resolucao)
+                    let answer = rng.uniform(2) == 1;
+                    (0.50, answer == resolution)
                 }
             }
-            Respondente::Oraculo => (0.99, true),
+            Respondent::Oracle => (0.99, true),
         }
     }
 
-    /// Responde o pool inteiro: a confianca declarada e o acerto de cada item.
-    pub fn responde(self, resolucoes: &[bool], semente: u64) -> (Vec<f64>, Vec<bool>) {
-        let mut rng = stochology_core::Rng::novo(semente);
-        let mut confianca = Vec::with_capacity(resolucoes.len());
-        let mut acerto = Vec::with_capacity(resolucoes.len());
-        for &sim in resolucoes {
-            let (p, acertou) = self.responde_item(sim, &mut rng);
-            confianca.push(p);
-            acerto.push(acertou);
+    /// Answers the whole pool: the declared confidence and the hit of each item.
+    pub fn answers(self, resolutions: &[bool], seed: u64) -> (Vec<f64>, Vec<bool>) {
+        let mut rng = stochology_core::Rng::new(seed);
+        let mut confidence = Vec::with_capacity(resolutions.len());
+        let mut hit = Vec::with_capacity(resolutions.len());
+        for &yes in resolutions {
+            let (p, correct) = self.answers_item(yes, &mut rng);
+            confidence.push(p);
+            hit.push(correct);
         }
-        (confianca, acerto)
+        (confidence, hit)
     }
 }
 
-/// Le as resolucoes de um arquivo de itens: uma linha "resolucao: sim|nao" por item.
-pub fn ler_resolucoes(texto: &str) -> Vec<bool> {
-    let mut resolucoes = Vec::new();
-    for linha in texto.lines() {
-        let l = linha.trim();
-        if let Some(valor) = l.strip_prefix("resolucao:") {
-            match valor.trim() {
-                "sim" => resolucoes.push(true),
-                "nao" => resolucoes.push(false),
+/// Reads the resolutions of an item file: one line "resolucao: sim|nao" per item.
+pub fn parse_resolutions(text: &str) -> Vec<bool> {
+    let mut resolutions = Vec::new();
+    for line in text.lines() {
+        let l = line.trim();
+        if let Some(value) = l.strip_prefix("resolucao:") {
+            match value.trim() {
+                "sim" => resolutions.push(true),
+                "nao" => resolutions.push(false),
                 _ => {}
             }
         }
     }
-    resolucoes
+    resolutions
 }
 
-fn ler(caminho: &Path) -> Result<String, String> {
-    std::fs::read_to_string(caminho).map_err(|e| format!("{}: {e}", caminho.display()))
+fn read(path: &Path) -> Result<String, String> {
+    std::fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))
 }
 
-/// O ensaio do painel SHELF: os quatro respondentes nos cinco pools reais.
+/// The SHELF panel rehearsal: the four respondents on the five real pools.
 pub fn shelf() -> Result<String, String> {
-    let raiz = raiz();
-    let mut saida = String::new();
-    saida.push_str("== ensaio sintetico :: o painel SHELF, com respondente declarado ==\n");
-    saida.push_str(
-        "rotulo: SINTETICO. Nenhuma linha abaixo conta cobertura de painel; o que se mede e o piso de um\n\
-         respondente fluente e sem calibracao, para o painel real ter contra o que ser comparado.\n\n",
+    let root = root();
+    let mut out = String::new();
+    out.push_str("== synthetic rehearsal :: the SHELF panel, with declared respondents ==\n");
+    out.push_str(
+        "label: SYNTHETIC. No line below counts panel coverage; what is measured is the floor of a\n\
+         fluent and uncalibrated respondent, so that the real panel has something to be compared against.\n\n",
     );
-    saida.push_str(&format!(
+    out.push_str(&format!(
         "{:<22} {:<26} {:>3} {:>8} {:>8} {:>8} {:>9}\n",
-        "respondente", "pool de itens", "n", "brier", "habilid.", "ece", "aprovado"
+        "respondent", "item pool", "n", "brier", "skill", "ece", "approved"
     ));
 
-    let mut total_confianca: Vec<Vec<f64>> = vec![Vec::new(); Respondente::TODOS.len()];
-    let mut total_acerto: Vec<Vec<bool>> = vec![Vec::new(); Respondente::TODOS.len()];
+    let mut total_confidence: Vec<Vec<f64>> = vec![Vec::new(); Respondent::ALL.len()];
+    let mut total_hit: Vec<Vec<bool>> = vec![Vec::new(); Respondent::ALL.len()];
 
-    for (indice, (nome, caminho)) in ITENS.iter().enumerate() {
-        let texto = ler(&raiz.join(caminho))?;
-        let resolucoes = ler_resolucoes(&texto);
-        if resolucoes.is_empty() {
-            return Err(format!("pool sem itens: {caminho}"));
+    for (index, (name, path)) in ITEMS.iter().enumerate() {
+        let text = read(&root.join(path))?;
+        let resolutions = parse_resolutions(&text);
+        if resolutions.is_empty() {
+            return Err(format!("pool without items: {path}"));
         }
-        for (r, respondente) in Respondente::TODOS.iter().enumerate() {
-            let semente = 0x5EED_0000 + indice as u64 * 16 + r as u64;
-            let (confianca, acerto) = respondente.responde(&resolucoes, semente);
-            let avaliado = avaliar(&confianca, &acerto);
-            total_confianca[r].extend_from_slice(&confianca);
-            total_acerto[r].extend_from_slice(&acerto);
-            saida.push_str(&format!(
+        for (r, respondent) in Respondent::ALL.iter().enumerate() {
+            let seed = 0x5EED_0000 + index as u64 * 16 + r as u64;
+            let (confidence, hit) = respondent.answers(&resolutions, seed);
+            let evaluated = evaluate(&confidence, &hit);
+            total_confidence[r].extend_from_slice(&confidence);
+            total_hit[r].extend_from_slice(&hit);
+            out.push_str(&format!(
                 "{:<22} {:<26} {:>3} {:>8.4} {:>8.4} {:>8.4} {:>9}\n",
-                respondente.nome(),
-                nome,
-                avaliado.n,
-                avaliado.brier,
-                avaliado.habilidade,
-                avaliado.ece,
-                if avaliado.aprovado { "sim" } else { "nao" }
+                respondent.name(),
+                name,
+                evaluated.n,
+                evaluated.brier,
+                evaluated.skill,
+                evaluated.ece,
+                if evaluated.approved { "yes" } else { "no" }
             ));
         }
     }
 
-    saida.push_str(&format!(
+    out.push_str(&format!(
         "\n{:<22} {:<26} {:>3} {:>8} {:>8} {:>8} {:>9}\n",
-        "respondente", "todos os pools", "n", "brier", "habilid.", "ece", "aprovado"
+        "respondent", "all pools", "n", "brier", "skill", "ece", "approved"
     ));
-    for (r, respondente) in Respondente::TODOS.iter().enumerate() {
-        let avaliado: PreTeste = avaliar(&total_confianca[r], &total_acerto[r]);
-        saida.push_str(&format!(
+    for (r, respondent) in Respondent::ALL.iter().enumerate() {
+        let evaluated: Pretest = evaluate(&total_confidence[r], &total_hit[r]);
+        out.push_str(&format!(
             "{:<22} {:<26} {:>3} {:>8.4} {:>8.4} {:>8.4} {:>9}\n",
-            respondente.nome(),
-            "todos os pools",
-            avaliado.n,
-            avaliado.brier,
-            avaliado.habilidade,
-            avaliado.ece,
-            if avaliado.aprovado { "sim" } else { "nao" }
+            respondent.name(),
+            "all pools",
+            evaluated.n,
+            evaluated.brier,
+            evaluated.skill,
+            evaluated.ece,
+            if evaluated.approved { "yes" } else { "no" }
         ));
     }
-    saida.push_str(
-        "\nLeitura: o respondente fluente declara 0,75 sem saber nada. Se ele passa no mesmo limiar que o\n\
-         painel usa, o limiar mede confianca declarada e nao conhecimento. O especialista mostra o piso que um\n\
-         painel real precisa bater: habilidade positiva com 80% dos itens sabidos e o resto chutado.\n\
-         Divergencia declarada: o oraculo perfeito aparece com habilidade 0 e reprovado, porque com acerto 1 a\n\
-         variancia do clima e zero e a razao 0/0 e lida como 0 pela guarda do avaliador.\n",
+    out.push_str(
+        "\nReading: the fluent respondent declares 0.75 knowing nothing. If it passes the same threshold the\n\
+         panel uses, the threshold measures declared confidence and not knowledge. The expert shows the floor a real\n\
+         panel needs to beat: positive skill with 80% of the items known and the rest guessed.\n\
+         Declared divergence: the perfect oracle appears with skill 0 and rejected, because with accuracy 1 the\n\
+         climatological variance is zero and the 0/0 ratio is read as 0 by the evaluator guard.\n",
     );
-    Ok(saida)
+    Ok(out)
 }
 
-/// Um registro sintetico de escuta com ouvidos linhas cobertas.
-fn registro_com(ouvidos: usize, fabricado: bool) -> String {
-    let mut texto = String::from(
+/// A synthetic listening registry with `heard` covered rows.
+fn registry_with(heard: usize, fabricated: bool) -> String {
+    let mut text = String::from(
         "# prazo\t2026-12-15\n# grupos_minimos\t2\n# conducao\tprotocolo cego\n# registros\t2026-10-16\ndecisao\tgrupos\ttitulares\touvidos\tregistro\tpode_emitir\n",
     );
-    let decisoes = [
+    let decisions = [
         "h2g/saida/direito_teto_beneficio",
         "h2g/saida/educacao_star_turmas",
         "h2g/saida/saude_rand",
@@ -230,308 +230,292 @@ fn registro_com(ouvidos: usize, fabricado: bool) -> String {
         "h3/prisoes20",
         "h3/prisoes_ri",
     ];
-    for (k, decisao) in decisoes.iter().enumerate() {
-        if k < ouvidos {
-            let quem = if fabricado {
-                "equivalente estrutural sintetico"
+    for (k, decision) in decisions.iter().enumerate() {
+        if k < heard {
+            let who = if fabricated {
+                "synthetic structural equivalent"
             } else {
-                "equivalente estrutural ouvido"
+                "structural equivalent heard"
             };
-            let arquivo = format!("transcricao-{:02}.md", k + 1);
-            texto.push_str(&format!(
-                "{decisao}\ttitulares\t1\t{quem}\t{arquivo}\tnao\n"
-            ));
+            let file = format!("transcricao-{:02}.md", k + 1);
+            text.push_str(&format!("{decision}\ttitulares\t1\t{who}\t{file}\tnao\n"));
         } else {
-            texto.push_str(&format!("{decisao}\ttitulares\t1\tnenhum\t-\tnao\n"));
+            text.push_str(&format!("{decision}\ttitulares\t1\tnenhum\t-\tnao\n"));
         }
     }
-    texto
+    text
 }
 
-/// O ensaio da escuta: a aritmetica da cobertura e o limite do portao.
-pub fn escuta() -> Result<String, String> {
-    let real = escuta::ler(&ler(&raiz().join(escuta::REGISTRO))?)?;
-    let veredito = real.veredito();
-    let mut saida = String::new();
-    saida.push_str("== ensaio sintetico :: a escuta de quem paga o erro ==\n");
-    saida.push_str(
-        "rotulo: SINTETICO. Os registros abaixo sao construidos no codigo; nenhum conta cobertura.\n\n",
+/// The listening rehearsal: the arithmetic of coverage and the limit of the gate.
+pub fn listening() -> Result<String, String> {
+    let real = escuta::parse(&read(&root().join(escuta::REGISTRY))?)?;
+    let verdict = real.verdict();
+    let mut out = String::new();
+    out.push_str("== synthetic rehearsal :: listening to those who pay for the error ==\n");
+    out.push_str(
+        "label: SYNTHETIC. The registries below are built in code; none of them counts coverage.\n\n",
     );
-    saida.push_str(&format!(
-        "registro real: {} decisoes | cobertura {} de {} | minimo {} | {}\n",
-        real.linhas.len(),
-        veredito.cobertura,
-        real.linhas.len(),
-        real.grupos_minimos,
-        if veredito.lacrado {
-            "CAIXA LACRADA"
+    out.push_str(&format!(
+        "real registry: {} decisions | coverage {} of {} | minimum {} | {}\n",
+        real.rows.len(),
+        verdict.coverage,
+        real.rows.len(),
+        real.min_groups,
+        if verdict.sealed {
+            "BOX SEALED"
         } else {
-            "CAIXA ABERTA"
+            "BOX OPEN"
         }
     ));
 
-    saida.push_str("\naritmetica da cobertura, com registro sintetico:\n");
+    out.push_str("\ncoverage arithmetic, with a synthetic registry:\n");
     for k in 0..=3usize {
-        let registro = escuta::ler(&registro_com(k, false))?;
-        let v = registro.veredito();
-        saida.push_str(&format!(
-            "  {} grupo(s) ouvido(s) | cobertura {} de {} | minimo {} | {}\n",
+        let registry = escuta::parse(&registry_with(k, false))?;
+        let v = registry.verdict();
+        out.push_str(&format!(
+            "  {} group(s) heard | coverage {} of {} | minimum {} | {}\n",
             k,
-            v.cobertura,
-            registro.linhas.len(),
-            registro.grupos_minimos,
-            if v.lacrado {
-                "CAIXA LACRADA"
-            } else {
-                "CAIXA ABERTA"
-            }
+            v.coverage,
+            registry.rows.len(),
+            registry.min_groups,
+            if v.sealed { "BOX SEALED" } else { "BOX OPEN" }
         ));
     }
 
-    saida.push_str("\n-- o limite do portao: ele confere campo, nao proveniencia --\n");
-    let fabricado = escuta::ler(&registro_com(7, true))?;
-    let vf = fabricado.veredito();
-    saida.push_str(&format!(
-        "  sete registros fabricados, com nome plausivel e arquivo de transcricao: cobertura {} de {} | {}\n",
-        vf.cobertura,
-        fabricado.linhas.len(),
-        if vf.lacrado { "CAIXA LACRADA" } else { "CAIXA ABERTA" }
+    out.push_str("\n-- the limit of the gate: it checks the field, not the provenance --\n");
+    let fabricated = escuta::parse(&registry_with(7, true))?;
+    let vf = fabricated.verdict();
+    out.push_str(&format!(
+        "  seven fabricated records, with a plausible name and a transcript file: coverage {} of {} | {}\n",
+        vf.coverage,
+        fabricated.rows.len(),
+        if vf.sealed { "BOX SEALED" } else { "BOX OPEN" }
     ));
-    saida.push_str(
-        "  leitura: o portao nao distingue transcricao assinada de transcricao inventada, porque so olha os\n\
-         campos. A cobertura real precisa de proveniencia -- hash da transcricao assinada, encadeado no\n\
-         registro de governanca -- e isso nao existe hoje. Fica declarado como o proximo campo do registro:\n\
-         hash_da_transcricao, conferido como os lacres, e nao um novo carimbo de confianca.\n",
+    out.push_str(
+        "  reading: the gate does not tell a signed transcript from an invented transcript, because it only looks at\n\
+         the fields. Real coverage needs provenance -- the hash of the signed transcript, chained into the\n\
+         governance registry -- and that does not exist today. It stays declared as the next field of the registry:\n\
+         transcript_hash, checked like the seals, and not a new stamp of confidence.\n",
     );
 
-    saida.push_str("\n-- o roteiro congelado contra o vocabulario proibido --\n");
-    let roteiro = [
-        "Qual e o seu pior cenario que ainda e plausivel?",
-        "O que faria voce recusar essa intervencao?",
-        "Quando essa politica falha, quem de fato arca com o custo?",
+    out.push_str("\n-- the frozen script against the forbidden vocabulary --\n");
+    let script = [
+        "What is your worst scenario that is still plausible?",
+        "What would make you refuse this intervention?",
+        "When this policy fails, who in fact bears the cost?",
     ];
-    let proibido = [
+    let forbidden = [
         "quantil", "beta", "brier", "evpi", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8",
     ];
-    let mut vazamentos = 0;
-    for pergunta in roteiro {
-        let baixa = pergunta.to_lowercase();
-        let achados: Vec<&str> = proibido
+    let mut leaks = 0;
+    for question in script {
+        let lower = question.to_lowercase();
+        let found: Vec<&str> = forbidden
             .iter()
             .copied()
-            .filter(|p| baixa.contains(p))
+            .filter(|p| lower.contains(p))
             .collect();
-        saida.push_str(&format!(
+        out.push_str(&format!(
             "  {:<70} {}\n",
-            pergunta,
-            if achados.is_empty() {
-                "sem vazamento".to_string()
+            question,
+            if found.is_empty() {
+                "no leak".to_string()
             } else {
-                format!("VAZA: {achados:?}")
+                format!("LEAKS: {found:?}")
             }
         ));
-        if !achados.is_empty() {
-            vazamentos += 1;
+        if !found.is_empty() {
+            leaks += 1;
         }
     }
-    saida.push_str(&format!(
-        "  perguntas com vazamento de vocabulario: {} de {}\n",
-        vazamentos,
-        roteiro.len()
+    out.push_str(&format!(
+        "  questions with vocabulary leaks: {} of {}\n",
+        leaks,
+        script.len()
     ));
-    Ok(saida)
+    Ok(out)
 }
 
-const PONTE_CABECALHO: &str = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\n";
+const BRIDGE_HEADER: &str = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\n";
 
-/// Um registro sintetico da ponte: papeis designados, casos feitos e status declarado.
-fn registro_da_ponte(papeis_designados: usize, casos: usize, status: &str) -> String {
-    let mut texto = String::from(PONTE_CABECALHO);
-    let papeis = [
-        ("escolhedor_dos_casos", "de fora do programa"),
-        ("analistas_braco_A", "dois humanos"),
-        ("analistas_braco_B", "dois humanos"),
-        ("juiz", "humano de fora, cego ao braco"),
+/// A synthetic bridge registry: designated roles, cases done and declared status.
+fn bridge_registry(designated_roles: usize, cases: usize, status: &str) -> String {
+    let mut text = String::from(BRIDGE_HEADER);
+    let roles = [
+        ("escolhedor_dos_casos", "from outside the program"),
+        ("analistas_braco_A", "two humans"),
+        ("analistas_braco_B", "two humans"),
+        ("juiz", "outside human, blind to the arm"),
     ];
-    for (k, (papel, exigencia)) in papeis.iter().enumerate() {
-        let quem = if k < papeis_designados {
-            "pessoa-sintetica"
+    for (k, (role, requirement)) in roles.iter().enumerate() {
+        let who = if k < designated_roles {
+            "synthetic-person"
         } else {
             "-"
         };
-        let estado = if k < papeis_designados {
+        let state = if k < designated_roles {
             "designado"
         } else {
             "nao designado"
         };
-        texto.push_str(&format!("{papel}\t{exigencia}\t{quem}\t{estado}\n"));
+        text.push_str(&format!("{role}\t{requirement}\t{who}\t{state}\n"));
     }
-    texto.push_str(&format!("casos\tcasos mais dificeis\t-\t{casos} de 12\n"));
-    texto.push_str(&format!(
+    text.push_str(&format!("casos\tcasos mais dificeis\t-\t{cases} de 12\n"));
+    text.push_str(&format!(
         "status_da_tese\tnao sustentada ate o teste justo\t-\t{status}\n"
     ));
-    texto
+    text
 }
 
-/// Quantos dos quatro papeis estao designados no veredito.
-fn papeis_designados_contados(designados: &[String]) -> usize {
-    designados
+/// How many of the four roles are designated in the verdict.
+fn designated_roles_count(designated: &[String]) -> usize {
+    designated
         .iter()
         .filter(|p| !p.starts_with("casos"))
         .count()
 }
 
-/// O ensaio da ponte: quatro registros sinteticos e o portao que so abre com o teste justo.
-pub fn ponte() -> Result<String, String> {
-    let real = ponte::ler_ponte(&ler(&raiz().join(ponte::REGISTRO))?)?;
-    let vr = real.veredito();
-    let mut saida = String::new();
-    saida.push_str("== ensaio sintetico :: a tese da ponte em escala ==\n");
-    saida.push_str(
-        "rotulo: SINTETICO. Nenhum registro abaixo conta caso escolhido nem papel designado.\n\n",
+/// The bridge rehearsal: four synthetic registries and the gate that only opens with the fair test.
+pub fn bridge() -> Result<String, String> {
+    let real = ponte::parse_bridge(&read(&root().join(ponte::REGISTRY))?)?;
+    let vr = real.verdict();
+    let mut out = String::new();
+    out.push_str("== synthetic rehearsal :: the bridge thesis at scale ==\n");
+    out.push_str(
+        "label: SYNTHETIC. No registry below counts a chosen case or a designated role.\n\n",
     );
-    saida.push_str(&format!(
-        "registro real: {} papeis | pendentes {:?} | casos faltando {} | status \"{}\" | {}\n",
-        real.papeis.len(),
-        vr.papeis_pendentes,
-        vr.casos_faltando,
-        vr.status_declarado,
-        if vr.caixa_fechada {
-            "TESE NAO SUSTENTADA"
+    out.push_str(&format!(
+        "real registry: {} roles | pending {:?} | cases missing {} | status \"{}\" | {}\n",
+        real.roles.len(),
+        vr.pending_roles,
+        vr.cases_missing,
+        vr.declared_status,
+        if vr.box_closed {
+            "THESIS NOT SUPPORTED"
         } else {
-            "CAIXA ABERTA"
+            "BOX OPEN"
         }
     ));
-    let casos = [
-        (
-            0usize,
-            0usize,
-            "nao sustentada",
-            "nenhum papel, nenhum caso",
-        ),
-        (4, 0, "em teste", "papeis completos, casos faltando"),
-        (4, 12, "em teste", "teste justo montado"),
-        (0, 0, "sustentada", "status forjado sem o teste justo"),
+    let cases = [
+        (0usize, 0usize, "nao sustentada", "no role, no case"),
+        (4, 0, "em teste", "roles complete, cases missing"),
+        (4, 12, "em teste", "fair test assembled"),
+        (0, 0, "sustentada", "status forged without the fair test"),
     ];
-    saida.push_str("\nregistros sinteticos:\n");
-    for (papeis, casos_feitos, status, rotulo) in casos {
-        let registro = ponte::ler_ponte(&registro_da_ponte(papeis, casos_feitos, status))?;
-        let v = registro.veredito();
-        let divergencia = if v.divergencias.is_empty() {
+    out.push_str("\nsynthetic registries:\n");
+    for (roles, cases_done, status, label) in cases {
+        let registry = ponte::parse_bridge(&bridge_registry(roles, cases_done, status))?;
+        let v = registry.verdict();
+        let divergence = if v.divergences.is_empty() {
             String::new()
         } else {
-            format!(" | DIVERGENCIA: {}", v.divergencias.join("; "))
+            format!(" | DIVERGENCE: {}", v.divergences.join("; "))
         };
-        saida.push_str(&format!(
-            "  {:<38} papeis {} de 4 | casos {:>2} de 12 | status \"{}\": {}{}\n",
-            rotulo,
-            papeis_designados_contados(&v.papeis_designados),
-            casos_feitos,
-            v.status_declarado,
-            if v.caixa_fechada {
-                "caixa fechada"
+        out.push_str(&format!(
+            "  {:<38} roles {} of 4 | cases {:>2} of 12 | status \"{}\": {}{}\n",
+            label,
+            designated_roles_count(&v.designated_roles),
+            cases_done,
+            v.declared_status,
+            if v.box_closed {
+                "box closed"
             } else {
-                "caixa aberta"
+                "box open"
             },
-            divergencia
+            divergence
         ));
     }
-    saida.push_str(
-        "\nLeitura: o portao separa tres coisas que um parecer confunde -- papel preenchido, caso escolhido\n\
-         e status declarado. Status \"sustentada\" com zero caso e reprovado, como o registro real ja reprova.\n",
+    out.push_str(
+        "\nReading: the gate separates three things an opinion conflates -- a filled role, a chosen case\n\
+         and a declared status. A \"supported\" status with zero cases is rejected, as the real registry already rejects.\n",
     );
-    Ok(saida)
+    Ok(out)
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
 
     #[test]
-    fn moeda_nao_tem_habilidade() {
-        let resolucoes: Vec<bool> = (0..40).map(|i| i % 2 == 0).collect();
-        let (confianca, acerto) = Respondente::Moeda.responde(&resolucoes, 7);
-        let avaliado = avaliar(&confianca, &acerto);
-        // Chute com metade de acerto: a habilidade fica em torno de zero, nunca muito acima.
-        assert!(
-            avaliado.habilidade.abs() < 0.10,
-            "habilidade {}",
-            avaliado.habilidade
-        );
+    fn the_coin_has_no_skill() {
+        let resolutions: Vec<bool> = (0..40).map(|i| i % 2 == 0).collect();
+        let (confidence, hit) = Respondent::Coin.answers(&resolutions, 7);
+        let evaluated = evaluate(&confidence, &hit);
+        // Guessing with half of the hits: the skill stays around zero, never much above it.
+        assert!(evaluated.skill.abs() < 0.10, "skill {}", evaluated.skill);
     }
 
     #[test]
-    fn fluente_e_vies_de_sim_ficam_abaixo_do_oraculo() {
-        let resolucoes: Vec<bool> = (0..40).map(|i| i % 2 == 0).collect();
-        let mut habilidades = Vec::new();
-        for r in [
-            Respondente::Fluente,
-            Respondente::ViesDeSim,
-            Respondente::Especialista,
-        ] {
-            let (confianca, acerto) = r.responde(&resolucoes, 11);
-            habilidades.push(avaliar(&confianca, &acerto).habilidade);
+    fn fluent_and_yes_bias_stay_below_the_expert() {
+        let resolutions: Vec<bool> = (0..40).map(|i| i % 2 == 0).collect();
+        let mut skills = Vec::new();
+        for r in [Respondent::Fluent, Respondent::YesBias, Respondent::Expert] {
+            let (confidence, hit) = r.answers(&resolutions, 11);
+            skills.push(evaluate(&confidence, &hit).skill);
         }
         assert!(
-            habilidades[0] < habilidades[2],
-            "fluente {} vs especialista {}",
-            habilidades[0],
-            habilidades[2]
+            skills[0] < skills[2],
+            "fluent {} vs expert {}",
+            skills[0],
+            skills[2]
         );
         assert!(
-            habilidades[1] < habilidades[2],
-            "vies {} vs especialista {}",
-            habilidades[1],
-            habilidades[2]
+            skills[1] < skills[2],
+            "bias {} vs expert {}",
+            skills[1],
+            skills[2]
         );
     }
 
     #[test]
-    fn os_cinco_pools_reais_tem_itens() {
-        let raiz = raiz();
-        for (nome, caminho) in ITENS {
-            let texto = std::fs::read_to_string(raiz.join(caminho)).expect("pool do pre-teste");
-            let resolucoes = ler_resolucoes(&texto);
+    fn the_five_real_pools_have_items() {
+        let root = root();
+        for (name, path) in ITEMS {
+            let text = std::fs::read_to_string(root.join(path)).expect("pre-test pool");
+            let resolutions = parse_resolutions(&text);
             assert!(
-                resolucoes.len() >= 10,
-                "{nome} tem {} itens",
-                resolucoes.len()
+                resolutions.len() >= 10,
+                "{name} has {} items",
+                resolutions.len()
             );
         }
     }
 
     #[test]
-    fn o_registro_real_esta_lacrado_e_o_sintetico_de_sete_abre() {
-        let texto = std::fs::read_to_string(raiz().join(escuta::REGISTRO)).expect("registro");
-        let real = escuta::ler(&texto).expect("leitura");
-        assert!(real.veredito().lacrado);
-        let fabricado = escuta::ler(&registro_com(7, true)).expect("sintetico");
-        assert_eq!(fabricado.veredito().cobertura, 7);
+    fn the_real_registry_is_sealed_and_the_synthetic_one_with_seven_opens() {
+        let text = std::fs::read_to_string(root().join(escuta::REGISTRY)).expect("registry");
+        let real = escuta::parse(&text).expect("parse");
+        assert!(real.verdict().sealed);
+        let fabricated = escuta::parse(&registry_with(7, true)).expect("synthetic");
+        assert_eq!(fabricated.verdict().coverage, 7);
         assert!(
-            !fabricado.veredito().lacrado,
-            "o portao confere campo, nao proveniencia: e o que este teste registra"
+            !fabricated.verdict().sealed,
+            "the gate checks the field, not the provenance: that is what this test records"
         );
     }
 
     #[test]
-    fn a_ponte_sintetica_so_abre_com_tudo_e_reprova_status_forjado() {
-        let vazio = ponte::ler_ponte(&registro_da_ponte(0, 0, "nao sustentada")).expect("vazio");
-        assert!(vazio.veredito().caixa_fechada);
-        let completo = ponte::ler_ponte(&registro_da_ponte(4, 12, "em teste")).expect("completo");
-        assert!(!completo.veredito().caixa_fechada);
-        assert!(completo.veredito().divergencias.is_empty());
-        let forjado = ponte::ler_ponte(&registro_da_ponte(0, 0, "sustentada")).expect("forjado");
-        assert!(!forjado.veredito().divergencias.is_empty());
+    fn the_synthetic_bridge_only_opens_with_everything_and_rejects_a_forged_status() {
+        let empty = ponte::parse_bridge(&bridge_registry(0, 0, "nao sustentada")).expect("empty");
+        assert!(empty.verdict().box_closed);
+        let complete = ponte::parse_bridge(&bridge_registry(4, 12, "em teste")).expect("complete");
+        assert!(!complete.verdict().box_closed);
+        assert!(complete.verdict().divergences.is_empty());
+        let forged = ponte::parse_bridge(&bridge_registry(0, 0, "sustentada")).expect("forged");
+        assert!(!forged.verdict().divergences.is_empty());
     }
 
     #[test]
-    fn os_tres_ensaios_rodam_e_se_rotulam_sinteticos() {
-        for saida in [
+    fn the_three_rehearsals_run_and_label_themselves_synthetic() {
+        for out in [
             shelf().expect("shelf"),
-            escuta().expect("escuta"),
-            ponte().expect("ponte"),
+            listening().expect("listening"),
+            bridge().expect("bridge"),
         ] {
-            assert!(saida.contains("SINTETICO"), "cada ensaio carrega o rotulo");
+            assert!(
+                out.contains("SYNTHETIC"),
+                "each rehearsal carries the label"
+            );
         }
     }
 }

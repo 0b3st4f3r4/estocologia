@@ -1,140 +1,145 @@
-//! Capítulo 19 — a resolução fina da genética de levedura: o que a **segunda linha** muda.
+//! Chapter 19 — the fine resolution of yeast genetics: what the **second line** changes.
 //!
-//! O registro diz, na letra, que a réplica achou *um gene num mutante*, e não um efeito medido com
-//! resolução: cada mutante é um ambiente de uma linha só e o menor p-valor possível ali é 1/1 000.
-//! Este laboratório mede o que a segunda linha muda no desenho da validação por intervenção, com
-//! dois casos plantados pelo instrumento — o **mover verdadeiro** (o efeito aparece nas duas linhas
-//! dele) e o **artefato de linha** (o efeito aparece numa linha só). A pergunta é qual dos dois a
-//! validação consegue distinguir.
+//! The registry says, in plain words, that the replicate found *a gene in a mutant*, not an effect measured at
+//! resolution: each mutant is a single-line environment and the smallest possible p-value there is 1/1 000.
+//! This laboratory measures what the second line changes in the design of validation by intervention, with
+//! two cases planted by the instrument — the **true mover** (the effect shows up in both of its lines)
+//! and the **line artifact** (the effect shows up in a single line). The question is which of the two
+//! validation can tell apart.
 //!
-//! Rodar: ~labs --genetica~
+//! Run: ~labs --genetics~
 
-use stochology_h2::genetica::{Desenho, Veredito, comparar};
+use stochology_horizons::h2::genetics::{Comparison, Design, Verdict, compare};
 
-/// A semente do capítulo, a mesma do laboratório do ICP.
-const SEMENTE: u64 = 2019;
+/// The seed of the chapter, the same as the ICP laboratory.
+const SEED: u64 = 2019;
 
-fn marca(comparacao: &stochology_h2::genetica::Comparacao, m: usize) -> &'static str {
-    if m == comparacao.mover_verdadeiro {
-        " <- mover verdadeiro (efeito nas duas linhas)"
-    } else if m == comparacao.artefato_de_linha {
-        " <- artefato de linha (efeito numa linha so)"
+fn marker(comparison: &Comparison, m: usize) -> &'static str {
+    if m == comparison.true_mover {
+        " <- true mover (effect on both lines)"
+    } else if m == comparison.line_artifact {
+        " <- line artifact (effect on a single line)"
     } else {
         ""
     }
 }
 
-fn uma_linha(c: &stochology_h2::genetica::Comparacao, desenho: &Desenho) -> Vec<String> {
-    c.sem_segunda_linha
+fn single_line(c: &Comparison, design: &Design) -> Vec<String> {
+    c.without_second_line
         .iter()
         .enumerate()
-        .filter(|(_, v)| v.passa)
+        .filter(|(_, v)| v.passes)
         .map(|(m, v)| {
             format!(
-                "  mutante {:>2} | efeito {:>+7.3} | p {:>9.6} | {}{}",
+                "  mutant {:>2} | effect {:>+7.3} | p {:>9.6} | {}{}",
                 m,
-                v.efeito_por_linha[0],
+                v.effect_per_line[0],
                 v.p,
-                if v.p <= (1.0 / (desenho.permutacoes as f64 + 1.0)) + 1e-12 {
-                    "passa no piso"
+                if v.p <= (1.0 / (design.permutations as f64 + 1.0)) + 1e-12 {
+                    "passes at the floor"
                 } else {
-                    "passa"
+                    "passes"
                 },
-                marca(c, m)
+                marker(c, m)
             )
         })
         .collect()
 }
 
-fn duas_linhas(c: &stochology_h2::genetica::Comparacao, quem: &[usize], alfa: f64) -> Vec<String> {
-    quem.iter()
+fn two_lines(c: &Comparison, which: &[usize], alpha: f64) -> Vec<String> {
+    which
+        .iter()
         .map(|&m| {
-            let v: &Veredito = &c.com_segunda_linha[m];
+            let v: &Verdict = &c.with_second_line[m];
             format!(
-                "  mutante {:>2} | efeito l1 {:>+7.3} | efeito l2 {:>+7.3} | faixa {:>6.3} | p {:>9.6} | {}{}",
+                "  mutant {:>2} | effect l1 {:>+7.3} | effect l2 {:>+7.3} | span {:>6.3} | p {:>9.6} | {}{}",
                 m,
-                v.efeito_por_linha[0],
-                v.efeito_por_linha[1],
-                v.largura_do_intervalo,
+                v.effect_per_line[0],
+                v.effect_per_line[1],
+                v.interval_width,
                 v.p,
-                if v.passa { "passa" } else { "rejeitado" },
-                if v.passa && v.p >= alfa { " (mas no piso)" } else { "" }
-            ) + marca(c, v.mutante)
+                if v.passes { "passes" } else { "rejected" },
+                if v.passes && v.p >= alpha {
+                    " (but at the floor)"
+                } else {
+                    ""
+                }
+            ) + marker(c, v.mutant)
         })
         .collect()
 }
 
-pub fn rodar() {
-    println!("== Capítulo 19 :: a resolução fina da validação por intervenção ==");
-    let uma = Desenho::default();
-    let duas = Desenho {
-        linhas_por_mutante: 2,
-        ..Desenho::default()
+pub fn run() {
+    println!("== Chapter 19 :: the fine resolution of validation by intervention ==");
+    let one = Design::default();
+    let two = Design {
+        lines_per_mutant: 2,
+        ..Design::default()
     };
-    let c_uma = comparar(uma, SEMENTE);
-    let c_duas = comparar(duas, SEMENTE);
+    let c_one = compare(one, SEED);
+    let c_two = compare(two, SEED);
     println!(
-        "desenho: {} mutantes | {} individuos por linha | {} sorteios por teste | alfa = {:.2} | Bonferroni alfa/{} = {:.6}",
-        uma.mutantes,
-        uma.individuos_por_linha,
-        uma.permutacoes,
-        uma.alfa,
-        uma.mutantes,
-        c_uma.alfa_corrigido
+        "design: {} mutants | {} individuals per line | {} draws per test | alpha = {:.2} | Bonferroni alpha/{} = {:.6}",
+        one.mutants,
+        one.individuals_per_line,
+        one.permutations,
+        one.alpha,
+        one.mutants,
+        c_one.corrected_alpha
     );
     println!(
-        "plantados pelo instrumento: mover verdadeiro = mutante {} | artefato de linha = mutante {}",
-        c_uma.mover_verdadeiro, c_uma.artefato_de_linha
+        "planted by the instrument: true mover = mutant {} | line artifact = mutant {}",
+        c_one.true_mover, c_one.line_artifact
     );
 
-    println!("\n-- a validacao de hoje: cada mutante e um ambiente de uma linha so --");
+    println!("\n-- today's validation: every mutant is a single-line environment --");
     println!(
-        "  {} mutantes x {} individuos | piso do desenho = {:.6} | limiar = {:.6}",
-        uma.mutantes, uma.individuos_por_linha, c_uma.piso_sem, c_uma.alfa_corrigido
+        "  {} mutants x {} individuals | design floor = {:.6} | threshold = {:.6}",
+        one.mutants, one.individuals_per_line, c_one.floor_without, c_one.corrected_alpha
     );
-    for linha in uma_linha(&c_uma, &uma) {
-        println!("{linha}");
+    for line in single_line(&c_one, &one) {
+        println!("{line}");
     }
     println!(
-        "  passam: {} de {}",
-        c_uma.quantos_passam_sem(),
-        uma.mutantes
+        "  passing: {} of {}",
+        c_one.how_many_pass_without(),
+        one.mutants
     );
 
-    println!("\n-- o mesmo mundo, com a segunda linha: o efeito tem de estar nas duas --");
+    println!("\n-- the same world, with the second line: the effect must be on both --");
     println!(
-        "  {} mutantes x 2 linhas x {} individuos | piso do desenho = {:.6} | limiar = {:.6}",
-        duas.mutantes, duas.individuos_por_linha, c_duas.piso_com, c_duas.alfa_corrigido
+        "  {} mutants x 2 lines x {} individuals | design floor = {:.6} | threshold = {:.6}",
+        two.mutants, two.individuals_per_line, c_two.floor_with, c_two.corrected_alpha
     );
-    let mut olhar = vec![c_duas.mover_verdadeiro, c_duas.artefato_de_linha];
-    for (m, v) in c_duas.com_segunda_linha.iter().enumerate() {
-        if v.passa && !olhar.contains(&m) {
-            olhar.push(m);
+    let mut look = vec![c_two.true_mover, c_two.line_artifact];
+    for (m, v) in c_two.with_second_line.iter().enumerate() {
+        if v.passes && !look.contains(&m) {
+            look.push(m);
         }
     }
-    olhar.sort_unstable();
-    for linha in duas_linhas(&c_duas, &olhar, c_duas.alfa_corrigido) {
-        println!("{linha}");
+    look.sort_unstable();
+    for line in two_lines(&c_two, &look, c_two.corrected_alpha) {
+        println!("{line}");
     }
     println!(
-        "  passam: {} de {}",
-        c_duas.quantos_passam_com(),
-        duas.mutantes
+        "  passing: {} of {}",
+        c_two.how_many_pass_with(),
+        two.mutants
     );
     println!(
-        "  efeito na segunda linha: artefato {:>+7.3} (nao se reproduz) | mover {:>+7.3} (se reproduz) | na validacao de uma linha a estimativa e um ponto e a faixa e zero",
-        c_duas.com_segunda_linha[c_duas.artefato_de_linha].efeito_por_linha[1],
-        c_duas.com_segunda_linha[c_duas.mover_verdadeiro].efeito_por_linha[1]
+        "  effect on the second line: artifact {:>+7.3} (does not reproduce) | mover {:>+7.3} (does reproduce) | in single-line validation the estimate is a point and the span is zero",
+        c_two.with_second_line[c_two.line_artifact].effect_per_line[1],
+        c_two.with_second_line[c_two.true_mover].effect_per_line[1]
     );
 
     println!(
-        "\nleitura: com uma linha o piso de {:.6} e o limiar de {:.6} deixam passar {} dos {} mutantes — o mover verdadeiro, o artefato de linha e dois mutantes que sao so ruido. Todos encostam no chao do desenho, e o p nao distingue nenhum dos tres do que se procura. Com a segunda linha o artefato sai da lista, porque o efeito dele na segunda linha e zero, e o piso cai para {:.9}: passa {} dos {} mutantes. O p nunca foi o problema: o problema era a linha ser uma so.",
-        c_uma.piso_sem,
-        c_uma.alfa_corrigido,
-        c_uma.quantos_passam_sem(),
-        uma.mutantes,
-        c_duas.piso_com,
-        c_duas.quantos_passam_com(),
-        duas.mutantes
+        "\nreading: with one line the floor of {:.6} and the threshold of {:.6} let {} of the {} mutants through — the true mover, the line artifact and two mutants that are just noise. All of them sit on the design floor, and the p-value distinguishes none of the three from what we are looking for. With the second line the artifact leaves the list, because its effect on the second line is zero, and the floor drops to {:.9}: {} of the {} mutants pass. The p was never the problem: the problem was there being a single line.",
+        c_one.floor_without,
+        c_one.corrected_alpha,
+        c_one.how_many_pass_without(),
+        one.mutants,
+        c_two.floor_with,
+        c_two.how_many_pass_with(),
+        two.mutants
     );
 }

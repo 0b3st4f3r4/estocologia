@@ -1,579 +1,585 @@
-//! Sistema 1: triagem determinística de fichas (declarado no PLAN.md §4 e no Capítulo 13,
-//! implementado aqui).
+//! System 1: deterministic triage of cards (declared in docs/PLAN.md §4 and in Chapter 13,
+//! implemented here).
 //!
-//! # O que este módulo faz
+//! # What this module does
 //!
-//! Recebe a **definição em uma linha** de uma ficha e devolve uma **categoria de um conjunto
-//! fechado** mais uma **probabilidade**. Nada é gerado: a resposta é uma escolha entre seis
-//! rótulos declarados, com evidência lexical explícita e conferível.
+//! It receives the **one-line definition** of a card and returns a **category of a closed set**
+//! plus a **probability**. Nothing is generated: the answer is a choice among six declared labels,
+//! with explicit and checkable lexical evidence.
 //!
-//! # Por que isto é "LLM-as-Jev"
+//! # Why this is "LLM-as-Jev"
 //!
-//! A expressão declarada no `PLAN.md` §4 pede um modo em O(1) de triagem categórica **fechada**.
-//! Um LLM livre gera texto novo a cada chamada: duas execuções divergem, e o portão G1
-//! (determinismo) não fecha. Aqui o lugar do LLM é ocupado por um **Jev** — um juiz mudo:
+//! The expression declared in `docs/PLAN.md` §4 asks for an O(1) mode of **closed** categorical
+//! triage. A free LLM generates new text on every call: two runs diverge, and gate G1
+//! (determinism) does not close. Here the place of the LLM is taken by a **Jev** — a mute judge:
 //!
-//! 1. **sem geração livre** — a saída é um rótulo de `Categoria::TODAS`, nunca uma frase nova;
-//! 2. **mesma entrada, mesma saída** — a árvore de sufixos é materializada num mapa ordenado por
-//!    chave, e o desempate é pela ordem declarada das categorias;
-//! 3. **nenhum 0% nem 100%** — a pontuação já nasce na escala [0,01; 0,99] (ver abaixo), a massa
-//!    acima do teto é transferida para quem ainda tem folga e a soma é conferida a cada rodada;
-//! 4. **o juiz não inventa vocabulário** — se nenhum tema declarado casa, a resposta é
-//!    `outros`, com probabilidade baixa-mas-não-zero; o juiz diz "não sei", não improvisa.
+//! 1. **no free generation** — the output is a label of `Category::ALL`, never a new sentence;
+//! 2. **same input, same output** — the suffix tree is materialised in a map ordered by key, and
+//!    the tie-break is by the declared order of the categories;
+//! 3. **neither 0% nor 100%** — the score is born on the scale [0.01; 0.99] (see below), the mass
+//!    above the ceiling is transferred to whoever still has room and the sum is checked at every
+//!    round;
+//! 4. **the judge does not invent vocabulary** — if no declared theme matches, the answer is
+//!    `outros`, with a low-but-not-zero probability; the judge says "I do not know", it does not
+//!    improvise.
 //!
-//! # A árvore de sufixos determinística
+//! # The deterministic suffix tree
 //!
-//! Cada categoria declara temas (palavras-chave). No caminho de indexação a árvore de sufixos
-//! é materializada como o conjunto **de todos os sufixos** de todos os temas, cada sufixo
-//! apontando para o **tema mais curto** que o tem como sufixo. No caminho de consulta, para cada
-//! posição do texto normalizado procura-se o **sufixo indexado mais longo** que ali começa — é a
-//! travessia clássica da árvore, e é o que permite achar `ativas` dentro de `retroativas` e
-//! `espera` dentro de `esperava` sem nenhuma regra morfológica.
+//! Each category declares themes (keywords). On the indexing path the suffix tree is materialised as
+//! the set **of all suffixes** of all themes, each suffix pointing to the **shortest theme** that has
+//! it as a suffix. On the query path, for each position of the normalised text the **longest indexed
+//! suffix** that starts there is looked up — it is the classic tree traversal, and it is what makes
+//! it possible to match a word that ends in an indexed suffix with no
+//! morphological rule at all.
 //!
-//! A pontuação de uma categoria é o **comprimento do tema casado** dividido pelo comprimento do
-//! tema mais longo **do vocabulário** (treze, `contrafactual`). Denominador global, e não por
-//! categoria: é o que torna dois casamentos de mesmo comprimento diretamente comparáveis e o que
-//! faz o desempate ser uma operação sobre números iguais. A transferência para probabilidade é
-//! afim, `p = 0,01 + 0,94 x escore`: a diferença de um caractere casado vale sempre o mesmo, e o
-//! intervalo epistemológico deixa de ser um corte aplicado no fim para virar a escala da própria
-//! pontuação. Um casamento de quatro caracteres devolve 0,9866 antes da normalização; o de dez,
-//! 0,9966 — nunca 1.
+//! The score of a category is the **length of the matched theme** divided by the length of the
+//! longest theme **of the vocabulary** (thirteen, `randomization`). A global denominator, and not
+//! one per category: it is what makes two matches of the same length directly comparable and what
+//! makes the tie-break an operation over equal numbers. The transfer to probability is affine,
+//! `p = 0.01 + 0.94 x score`: the difference of one matched character is always worth the same,
+//! and the epistemological interval stops being a cut applied at the end and becomes the scale of
+//! the score itself. A match of four characters returns 0.9866 before normalisation; one of ten,
+//! 0.9966 — never 1.
 //!
-//! # Limite declarado
+//! # Declared limit
 //!
-//! O Sistema 1 é triagem, não julgamento: localiza a família de erro de uma ficha e devolve uma
-//! distribuição sobre rótulos fechados. A pergunta que exige deliberação — eixo R, síntese de
-//! código, estresse adversarial — fica com o Sistema 2, que vive em `crates/stochology-s2`: LATS,
-//! motor de estado de crença, inferência de Metropolis e estresse deliberativo da banca.
+//! System 1 is triage, not judgement: it locates the error family of a card and returns a
+//! distribution over closed labels. The question that demands deliberation — the R axis, code
+//! synthesis, adversarial stress — stays with System 2, which lives in `crates/stochology-s2`:
+//! LATS, belief-state engine, Metropolis inference and deliberative stress of the panel.
 
 use std::collections::BTreeMap;
 
-/// Piso epistemológico: nenhuma probabilidade desce a 0%.
-pub const PISO: f64 = 0.01;
+/// Epistemological floor: no probability goes down to 0%.
+pub const FLOOR: f64 = 0.01;
 
-/// Teto epistemológico: nenhuma probabilidade sobe a 100%.
-pub const TETO: f64 = 0.99;
+/// Epistemological ceiling: no probability goes up to 100%.
+pub const CEILING: f64 = 0.99;
 
-/// Comprimento mínimo de um tema casado para valer como evidência.
+/// Minimum length of a matched theme for it to count as evidence.
 ///
-/// Abaixo disso o que casou é ruído (`de`, `a`, `em`) e o casamento é descartado.
-pub const TEMA_MINIMO: usize = 4;
+/// Below that the match is noise (`de`, `a`, `em`) and the match is discarded.
+pub const MIN_THEME: usize = 4;
 
-// O portao de tema so faz sentido se o minimo for maior que zero: com 1 ou 2, qualquer
-// preposicao sustentaria categoria. A prova e de compilacao, nao de teste.
-const _: () = assert!(TEMA_MINIMO >= 4);
+// The theme gate only makes sense if the minimum is greater than zero: with 1 or 2, any preposition
+// would sustain a category. The proof is of compilation, not of test.
+const _: () = assert!(MIN_THEME >= 4);
 
-/// Nome do rótulo de ausência de evidência.
-const ROTULO_OUTROS: &str = "outros";
+/// Name of the label for absence of evidence.
+const OTHER_LABEL: &str = "other";
 
-/// Peso declarado do rótulo `outros` quando nenhum tema declarado casa na definição.
+/// Declared weight of the `outros` label when no declared theme matches the definition.
 ///
-/// Baixa-mas-não-zero: o "não sei" tem massa, e não é dogma. Depois de normalizar sobre a
-/// priori declarada (`outros` = 0,34 e cada tema = 0,01) a probabilidade efetiva fica em
-/// 34/39 = 0,8718, com as cinco categorias temáticas em 0,0256 cada — nenhuma em zero, e
-/// nenhuma no teto. Quando a definição casa algum tema, esta priori não entra: a massa sai do
-/// casamento lexical.
-const MASSA_SEM_EVIDENCIA: f64 = 0.34;
+/// Low-but-not-zero: "I do not know" has mass, and it is not dogma. After normalising over the
+/// declared prior (`outros` = 0.34 and each theme = 0.01) the effective probability stays at
+/// 34/39 = 0.8718, with the five thematic categories at 0.0256 each — none at zero, and none at the
+/// ceiling. When the definition matches some theme, this prior does not enter: the mass comes from
+/// the lexical match.
+const MASS_WITHOUT_EVIDENCE: f64 = 0.34;
 
-/// Peso declarado de cada categoria temática quando nenhum tema casa.
-const PESO_SEM_CASAMENTO: f64 = 0.01;
+/// Declared weight of each thematic category when no theme matches.
+const WEIGHT_WITHOUT_MATCH: f64 = 0.01;
 
-/// Transferência do escore para massa: p = PISO + (1 - 6 x PISO) x escore.
+/// Transfer from score to mass: p = FLOOR + (1 - 6 x FLOOR) x score.
 ///
-/// O escore é o comprimento do tema casado dividido pelo tema mais longo do vocabulário, então
-/// p = 0,01 exige casamento nenhum e p = 0,99 exige o tema mais longo inteiro. A reta é
-/// monótona e afim: a diferença de um caractere casado vale sempre o mesmo em probabilidade, e
-/// o intervalo epistemológico deixa de ser um corte aplicado no fim para virar a escala da
-/// própria pontuação. Um casamento de quatro caracteres devolve 0,9866; o de dez, 0,9966.
-fn transferir(escore: f64) -> f64 {
-    let n = Categoria::TODAS.len() as f64;
-    PISO + (1.0 - n * PISO) * escore
+/// The score is the length of the matched theme divided by the longest theme of the vocabulary, so
+/// p = 0.01 requires no match and p = 0.99 requires the whole longest theme. The line is monotone
+/// and affine: the difference of one matched character is always worth the same in probability, and
+/// the epistemological interval stops being a cut applied at the end and becomes the scale of the
+/// score itself. A match of four characters returns 0.9866; of ten, 0.9966.
+fn transfer(score: f64) -> f64 {
+    let n = Category::ALL.len() as f64;
+    FLOOR + (1.0 - n * FLOOR) * score
 }
 
-/// Viés declarado de ordinal: quanto o escore de uma categoria ganha por ser declarada antes.
+/// Declared ordinal bias: how much the score of a category gains for being declared earlier.
 ///
-/// É da ordem de `1e-9` — invisível para qualquer força que difira em um caractere, e decisivo
-/// quando duas categorias casam tema de **mesmo comprimento**. Sem ele, um empate exato ficaria
-/// à mercê do arredondamento do ponto flutuante; com ele, o desempate é uma regra declarada:
-/// o menor ordinal vence.
-const VIES_DE_ORDINAL: f64 = 1e-9;
+/// It is of the order of `1e-9` — invisible to any strength that differs by one character, and
+/// decisive when two categories match a theme of the **same length**. Without it, an exact tie
+/// would be at the mercy of floating-point rounding; with it, the tie-break is a declared rule: the
+/// smallest ordinal wins.
+const ORDINAL_BIAS: f64 = 1e-9;
 
-/// Comprimento do tema mais longo do vocabulário (`contrafactual`, treze caracteres), usado
-/// como denominador **global** do escore e conferido no `debug_assert` de `S1::novo`.
+/// Length of the longest theme of the vocabulary (`randomization`, thirteen characters), used as
+/// the **global** denominator of the score and checked in the `debug_assert` of `S1::new`.
 ///
-/// Denominador global, e não por categoria: é o que torna dois casamentos de mesmo comprimento
-/// diretamente comparáveis, e portanto o que faz o desempate ser uma operação sobre números
-/// iguais, e não um artefato de qual categoria tem o tema mais longo.
-const TEMA_MAIS_LONGO: f64 = 13.0;
+/// A global denominator, and not one per category: it is what makes two matches of the same length
+/// directly comparable, and therefore what makes the tie-break an operation over equal numbers, and
+/// not an artefact of which category has the longest theme.
+const LONGEST_THEME: f64 = 13.0;
 
-/// Conjunto **fechado** de categorias de triagem.
+/// **Closed** set of triage categories.
 ///
-/// A ordem da enumeração é normativa: ela é o desempate canônico quando o casamento lexical é
-/// exatamente empatado. Categoria nova só entra com declaração nova — não há categoria aberta.
+/// The order of the enumeration is normative: it is the canonical tie-break when the lexical match
+/// is exactly tied. A new category only enters with a new declaration — there is no open category.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum Categoria {
-    /// Espera, fila, serviço, saturação de atendimento (Fluxonomia).
-    Fila,
-    /// Causalidade, intervenção, identificação (faixa causal).
+pub enum Category {
+    /// Waiting, queue, service, service saturation (Fluxonomy).
+    Queue,
+    /// Causality, intervention, identification (causal band).
     Causal,
-    /// Cauda pesada, evento raro, variância, não linearidade (Crisonomia).
-    Cauda,
-    /// Calibração, cobertura, posto, escore (faixa 4).
-    Calibracao,
-    /// Justiça, grupo afetado, quem paga pelo erro (faixa 6).
-    Justica,
-    /// Ausência de evidência no vocabulário declarado.
-    Outros,
+    /// Heavy tail, rare event, variance, non-linearity (Crisonomy).
+    Tail,
+    /// Calibration, coverage, rank, score (band 4).
+    Calibration,
+    /// Fairness, affected group, who pays for the error (band 6).
+    Fairness,
+    /// Absence of evidence in the declared vocabulary.
+    Others,
 }
 
-impl Categoria {
-    /// As seis categorias, na ordem normativa de desempate.
-    pub const TODAS: [Categoria; 6] = [
-        Categoria::Fila,
-        Categoria::Causal,
-        Categoria::Cauda,
-        Categoria::Calibracao,
-        Categoria::Justica,
-        Categoria::Outros,
+impl Category {
+    /// The six categories, in the normative tie-break order.
+    pub const ALL: [Category; 6] = [
+        Category::Queue,
+        Category::Causal,
+        Category::Tail,
+        Category::Calibration,
+        Category::Fairness,
+        Category::Others,
     ];
 
-    /// O rótulo estável que acompanha a categoria em ficha, log e registro.
-    pub fn nome(self) -> &'static str {
+    /// The stable label that accompanies the category in a card, log and record.
+    pub fn name(self) -> &'static str {
         match self {
-            Categoria::Fila => "fila",
-            Categoria::Causal => "causal",
-            Categoria::Cauda => "cauda",
-            Categoria::Calibracao => "calibracao",
-            Categoria::Justica => "justica",
-            Categoria::Outros => ROTULO_OUTROS,
+            Category::Queue => "queue",
+            Category::Causal => "causal",
+            Category::Tail => "tail",
+            Category::Calibration => "calibration",
+            Category::Fairness => "fairness",
+            Category::Others => OTHER_LABEL,
         }
     }
 
-    /// Índice da categoria na ordem declarada.
-    pub fn indice(self) -> usize {
+    /// Index of the category in the declared order.
+    pub fn index(self) -> usize {
         match self {
-            Categoria::Fila => 0,
-            Categoria::Causal => 1,
-            Categoria::Cauda => 2,
-            Categoria::Calibracao => 3,
-            Categoria::Justica => 4,
-            Categoria::Outros => 5,
+            Category::Queue => 0,
+            Category::Causal => 1,
+            Category::Tail => 2,
+            Category::Calibration => 3,
+            Category::Fairness => 4,
+            Category::Others => 5,
         }
     }
 
-    /// Recupera a categoria pelo índice declarado.
-    pub fn por_indice(i: usize) -> Option<Categoria> {
-        Categoria::TODAS.get(i).copied()
+    /// Recovers the category by its declared index.
+    pub fn from_index(i: usize) -> Option<Category> {
+        Category::ALL.get(i).copied()
     }
 }
 
-/// Resultado de uma triagem: a categoria vencedora e a distribuição inteira sobre o conjunto
-/// fechado, já presa em [0,01; 0,99] e somando 1.
+/// Result of a triage: the winning category and the whole distribution over the closed set, already
+/// clamped to [0.01; 0.99] and adding up to 1.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Triagem {
-    /// Categoria vencedora (maior probabilidade; desempate pela ordem declarada).
-    pub categoria: Categoria,
-    /// Probabilidade da categoria vencedora, em [0,01; 0,99].
-    pub probabilidade: f64,
-    /// Probabilidade de cada categoria, na ordem de `Categoria::TODAS`.
-    pub distribuicao: [f64; 6],
+pub struct Triage {
+    /// Winning category (highest probability; tie-break by the declared order).
+    pub category: Category,
+    /// Probability of the winning category, in [0.01; 0.99].
+    pub probability: f64,
+    /// Probability of each category, in the order of `Category::ALL`.
+    pub distribution: [f64; 6],
 }
 
-impl Triagem {
-    /// Probabilidade de uma categoria específica.
-    pub fn probabilidade_de(&self, c: Categoria) -> f64 {
-        self.distribuicao[c.indice()]
+impl Triage {
+    /// Probability of a specific category.
+    pub fn probability_of(&self, c: Category) -> f64 {
+        self.distribution[c.index()]
     }
 
-    /// Soma da distribuição. Deve ser 1 dentro de `1e-12`.
-    pub fn soma(&self) -> f64 {
-        self.distribuicao.iter().sum()
+    /// Sum of the distribution. It has to be 1 within `1e-12`.
+    pub fn sum(&self) -> f64 {
+        self.distribution.iter().sum()
     }
 
-    /// Quantas categorias estão fora de [0,01; 0,99]. Deve ser sempre zero.
-    pub fn fora_do_intervalo(&self) -> usize {
-        self.distribuicao
+    /// How many categories are outside [0.01; 0.99]. It has to be always zero.
+    pub fn out_of_range(&self) -> usize {
+        self.distribution
             .iter()
-            .filter(|p| **p < PISO || **p > TETO)
+            .filter(|p| **p < FLOOR || **p > CEILING)
             .count()
     }
 
-    /// Linha estável para registro.
-    pub fn linha(&self) -> String {
-        let produtos: Vec<String> = self
-            .distribuicao
+    /// Stable line for the record.
+    pub fn line(&self) -> String {
+        let products: Vec<String> = self
+            .distribution
             .iter()
             .map(|p| format!("{:.4}", p))
             .collect();
         format!(
-            "categoria={} probabilidade={:.4} produtos=[{}] soma={:.4} fora_de[0.01;0.99]={}",
-            self.categoria.nome(),
-            self.probabilidade,
-            produtos.join(", "),
-            self.soma(),
-            self.fora_do_intervalo()
+            "category={} probability={:.4} products=[{}] sum={:.4} out_of[0.01;0.99]={}",
+            self.category.name(),
+            self.probability,
+            products.join(", "),
+            self.sum(),
+            self.out_of_range()
         )
     }
 }
 
-/// Um tema indexado: o texto normalizado e a categoria que o declarou.
+/// An indexed theme: the normalised text and the category that declared it.
 #[derive(Debug, Clone, Copy)]
-struct Tema {
-    texto: &'static str,
-    categoria: Categoria,
+struct Theme {
+    text: &'static str,
+    category: Category,
 }
 
-/// Vocabulário declarado das seis categorias.
+/// Declared vocabulary of the six categories.
 ///
-/// Só entra aqui o que é verificável à mão: tema curto, em minúsculas, sem acento, sem espaço.
-const VOCABULARIO: [Tema; 35] = [
-    // fila — espera e saturação de serviço
-    Tema {
-        texto: "fila",
-        categoria: Categoria::Fila,
+/// Only what is verifiable by hand enters here: a short theme, in lowercase, without accent, without
+/// space.
+const VOCABULARY: [Theme; 35] = [
+    // queue — waiting and service saturation
+    Theme {
+        text: "queue",
+        category: Category::Queue,
     },
-    Tema {
-        texto: "espera",
-        categoria: Categoria::Fila,
+    Theme {
+        text: "waiting",
+        category: Category::Queue,
     },
-    Tema {
-        texto: "atraso",
-        categoria: Categoria::Fila,
+    Theme {
+        text: "delay",
+        category: Category::Queue,
     },
-    Tema {
-        texto: "servico",
-        categoria: Categoria::Fila,
+    Theme {
+        text: "service",
+        category: Category::Queue,
     },
-    Tema {
-        texto: "posto",
-        categoria: Categoria::Fila,
+    Theme {
+        text: "station",
+        category: Category::Queue,
     },
-    Tema {
-        texto: "demanda",
-        categoria: Categoria::Fila,
+    Theme {
+        text: "demand",
+        category: Category::Queue,
     },
-    // causal — intervenção e identificação
-    Tema {
-        texto: "causal",
-        categoria: Categoria::Causal,
+    // causal — intervention and identification
+    Theme {
+        text: "causal",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "causa",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "cause",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "efeito",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "effect",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "tratamento",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "treatment",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "intervencao",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "intervention",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "contrafactual",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "randomization",
+        category: Category::Causal,
     },
-    Tema {
-        texto: "identificacao",
-        categoria: Categoria::Causal,
+    Theme {
+        text: "confounder",
+        category: Category::Causal,
     },
-    // cauda — evento raro, variância, cauda pesada
-    Tema {
-        texto: "cauda",
-        categoria: Categoria::Cauda,
+    // tail — rare event, variance, heavy tail
+    Theme {
+        text: "tail",
+        category: Category::Tail,
     },
-    Tema {
-        texto: "raro",
-        categoria: Categoria::Cauda,
+    Theme {
+        text: "rare",
+        category: Category::Tail,
     },
-    Tema {
-        texto: "extremo",
-        categoria: Categoria::Cauda,
+    Theme {
+        text: "extreme",
+        category: Category::Tail,
     },
-    Tema {
-        texto: "variancia",
-        categoria: Categoria::Cauda,
+    Theme {
+        text: "variance",
+        category: Category::Tail,
     },
-    Tema {
-        texto: "volatilidade",
-        categoria: Categoria::Cauda,
+    Theme {
+        text: "volatility",
+        category: Category::Tail,
     },
-    Tema {
-        texto: "media",
-        categoria: Categoria::Cauda,
+    Theme {
+        text: "mean",
+        category: Category::Tail,
     },
-    // calibracao — verificação do tamanho da incerteza
-    Tema {
-        texto: "calibracao",
-        categoria: Categoria::Calibracao,
+    // calibration — checking the size of the uncertainty
+    Theme {
+        text: "calibration",
+        category: Category::Calibration,
     },
-    Tema {
-        texto: "cobertura",
-        categoria: Categoria::Calibracao,
+    Theme {
+        text: "coverage",
+        category: Category::Calibration,
     },
-    Tema {
-        texto: "posto",
-        categoria: Categoria::Calibracao,
+    Theme {
+        text: "score",
+        category: Category::Calibration,
     },
-    Tema {
-        texto: "probabilidade",
-        categoria: Categoria::Calibracao,
+    Theme {
+        text: "probability",
+        category: Category::Calibration,
     },
-    Tema {
-        texto: "brier",
-        categoria: Categoria::Calibracao,
+    Theme {
+        text: "brier",
+        category: Category::Calibration,
     },
-    Tema {
-        texto: "platt",
-        categoria: Categoria::Calibracao,
+    Theme {
+        text: "platt",
+        category: Category::Calibration,
     },
-    // justica — quem paga pelo erro
-    Tema {
-        texto: "justica",
-        categoria: Categoria::Justica,
+    // fairness — who pays for the error
+    Theme {
+        text: "fairness",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "equidade",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "equity",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "subgrupo",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "subgroup",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "grupo",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "group",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "paga",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "pays",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "erro",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "error",
+        category: Category::Fairness,
     },
-    Tema {
-        texto: "etica",
-        categoria: Categoria::Justica,
+    Theme {
+        text: "ethics",
+        category: Category::Fairness,
     },
-    // outros — o próprio vocabulário da ausência declarada
-    Tema {
-        texto: "outros",
-        categoria: Categoria::Outros,
+    // others — the vocabulary of the declared absence itself
+    Theme {
+        text: "other",
+        category: Category::Others,
     },
-    Tema {
-        texto: "indefinida",
-        categoria: Categoria::Outros,
+    Theme {
+        text: "undefined",
+        category: Category::Others,
     },
-    Tema {
-        texto: "generica",
-        categoria: Categoria::Outros,
+    Theme {
+        text: "generic",
+        category: Category::Others,
     },
 ];
 
-/// Palavras vazias: normalizadas, mas sem valor de tema. Nunca entram na árvore.
-const VAZIAS: [&str; 27] = [
-    "a", "o", "as", "os", "um", "uma", "de", "do", "da", "dos", "das", "e", "em", "no", "na",
-    "nos", "nas", "que", "para", "por", "com", "sem", "ao", "se", "sobre", "como", "entre",
+/// Empty words: normalised, but without theme value. They never enter the tree.
+const STOPWORDS: [&str; 27] = [
+    "a", "an", "the", "of", "in", "on", "at", "to", "for", "by", "with", "without", "as", "is",
+    "are", "was", "and", "or", "that", "this", "these", "those", "from", "into", "over", "under",
+    "between",
 ];
 
-/// Triador do Sistema 1: uma árvore de sufixos construída uma vez e consultada em O(1).
+/// Triage engine of System 1: a suffix tree built once and queried in O(1).
 #[derive(Debug, Clone)]
 pub struct S1 {
-    /// Sufixo indexado -> comprimento do **tema mais curto** que termina nesse sufixo.
-    sufixos: BTreeMap<String, usize>,
+    /// Indexed suffix -> length of the **shortest theme** that ends at that suffix.
+    suffixes: BTreeMap<String, usize>,
 }
 
 impl Default for S1 {
     fn default() -> Self {
-        Self::novo()
+        Self::new()
     }
 }
 
 impl S1 {
-    /// Constrói o triador a partir do vocabulário declarado.
+    /// Builds the triage engine from the declared vocabulary.
     ///
-    /// A construção é canônica: percorre `VOCABULARIO` na ordem declarada e, ao inserir um
-    /// sufixo repetido, conserva o **menor** comprimento — o mapa final não depende da ordem de
-    /// inserção e é idêntico em toda execução.
-    pub fn novo() -> S1 {
-        let mut sufixos: BTreeMap<String, usize> = BTreeMap::new();
+    /// The construction is canonical: it walks `VOCABULARIO` in the declared order and, when
+    /// inserting a repeated suffix, keeps the **smallest** length — the final map does not depend on
+    /// the insertion order and is identical in every run.
+    pub fn new() -> S1 {
+        let mut suffixes: BTreeMap<String, usize> = BTreeMap::new();
 
-        for tema in VOCABULARIO.iter() {
-            let tam = tema.texto.chars().count();
-            for inicio in 0..tam {
-                let sufixo: String = tema.texto.chars().skip(inicio).collect();
-                if sufixo.chars().count() < TEMA_MINIMO {
+        for theme in VOCABULARY.iter() {
+            let len = theme.text.chars().count();
+            for start in 0..len {
+                let suffix: String = theme.text.chars().skip(start).collect();
+                if suffix.chars().count() < MIN_THEME {
                     continue;
                 }
-                match sufixos.get(&sufixo) {
-                    Some(atual) if *atual <= tam => {}
+                match suffixes.get(&suffix) {
+                    Some(current) if *current <= len => {}
                     _ => {
-                        sufixos.insert(sufixo, tam);
+                        suffixes.insert(suffix, len);
                     }
                 }
             }
         }
 
         debug_assert_eq!(
-            VOCABULARIO
+            VOCABULARY
                 .iter()
-                .map(|t| t.texto.chars().count())
+                .map(|t| t.text.chars().count())
                 .max()
                 .unwrap_or(0) as f64,
-            TEMA_MAIS_LONGO,
-            "TEMA_MAIS_LONGO tem de ser o tema mais longo do vocabulario"
+            LONGEST_THEME,
+            "LONGEST_THEME has to be the longest theme of the vocabulary"
         );
 
-        S1 { sufixos }
+        S1 { suffixes }
     }
 
-    /// Quantos sufixos a árvore tem. Instrumento de auditoria do tamanho do índice.
-    pub fn sufixos_indexados(&self) -> usize {
-        self.sufixos.len()
+    /// How many suffixes the tree has. Audit instrument for the size of the index.
+    pub fn indexed_suffixes(&self) -> usize {
+        self.suffixes.len()
     }
 
-    /// Força de casamento de cada categoria para uma definição, normalizada pelo
-    /// `DENOMINADOR` global. É o que o desempate lê antes da distribuição de probabilidade, e é
-    /// exposto para que o empate possa ser testado diretamente.
-    pub fn forcas(&self, definicao: &str) -> [f64; 6] {
-        let mut forca = [0usize; 6];
-        for (categoria, tema) in self.casamentos(definicao) {
-            let escore = tema.chars().count();
-            if escore > forca[categoria.indice()] {
-                forca[categoria.indice()] = escore;
+    /// Matching strength of each category for a definition, normalised by the global
+    /// `LONGEST_THEME`. It is what the tie-break reads before the probability distribution, and it is
+    /// exposed so that the tie can be tested directly.
+    pub fn strengths(&self, definition: &str) -> [f64; 6] {
+        let mut strength = [0usize; 6];
+        for (category, theme) in self.matches(definition) {
+            let score = theme.chars().count();
+            if score > strength[category.index()] {
+                strength[category.index()] = score;
             }
         }
-        let mut saida = [0.0f64; 6];
-        for c in Categoria::TODAS.iter() {
-            saida[c.indice()] = (forca[c.indice()] as f64) / TEMA_MAIS_LONGO;
+        let mut output = [0.0f64; 6];
+        for c in Category::ALL.iter() {
+            output[c.index()] = (strength[c.index()] as f64) / LONGEST_THEME;
         }
-        saida
+        output
     }
 
-    /// Todos os casamentos encontrados: (categoria, tema declarado que casou), na ordem em que
-    /// aparecem no texto.
+    /// All the matches found: (category, declared theme that matched), in the order in which they
+    /// appear in the text.
     ///
-    /// Cada posição de início contribui com **no máximo um** casamento, o mais longo — é a
-    /// definição de caminhada em árvore de sufixos, e é o que impede que um tema e o seu
-    /// próprio sufixo contem duas vezes. O mesmo tema pode casar em posições diferentes.
-    fn casamentos(&self, definicao: &str) -> Vec<(Categoria, &'static str)> {
-        let unidades = normalizar(definicao);
-        let mut saida: Vec<(Categoria, &'static str)> = Vec::new();
+    /// Each start position contributes **at most one** match, the longest — it is the definition of
+    /// walking a suffix tree, and it is what keeps a theme and its own suffix from counting twice.
+    /// The same theme may match at different positions.
+    fn matches(&self, definition: &str) -> Vec<(Category, &'static str)> {
+        let units = normalize(definition);
+        let mut output: Vec<(Category, &'static str)> = Vec::new();
 
-        for inicio in 0..unidades.len() {
-            let mut vencedor_local: Option<&'static str> = None;
-            for fim in (inicio + 1)..=unidades.len() {
-                let trecho = unidades[inicio..fim].join(" ");
-                match self.tema_do_sufixo(&trecho) {
-                    Some(tema) => vencedor_local = Some(tema),
+        for start in 0..units.len() {
+            let mut local_winner: Option<&'static str> = None;
+            for end in (start + 1)..=units.len() {
+                let chunk = units[start..end].join(" ");
+                match self.theme_at_suffix(&chunk) {
+                    Some(theme) => local_winner = Some(theme),
                     None => break,
                 }
             }
-            if let Some(tema) = vencedor_local {
-                saida.push((self.categoria_do_tema(tema).expect("tema declarado"), tema));
+            if let Some(theme) = local_winner {
+                output.push((self.theme_category(theme).expect("declared theme"), theme));
             }
         }
-        saida
+        output
     }
 
-    /// O menor tema declarado que termina nesse sufixo.
-    fn tema_do_sufixo(&self, sufixo: &str) -> Option<&'static str> {
-        VOCABULARIO
+    /// The smallest declared theme that ends at that suffix.
+    fn theme_at_suffix(&self, suffix: &str) -> Option<&'static str> {
+        VOCABULARY
             .iter()
-            .filter(|t| t.texto.ends_with(sufixo))
-            .min_by_key(|t| t.texto.chars().count())
-            .map(|t| t.texto)
+            .filter(|t| t.text.ends_with(suffix))
+            .min_by_key(|t| t.text.chars().count())
+            .map(|t| t.text)
     }
 
-    /// Triei uma definição em uma linha.
+    /// Triage a one-line definition.
     ///
-    /// Devolve a categoria vencedora, a sua probabilidade e a distribuição inteira sobre o
-    /// conjunto fechado. Entrada vazia ou fora do vocabulário cai em `outros`, com probabilidade
-    /// baixa-mas-não-zero.
-    pub fn triar(&self, definicao: &str) -> Triagem {
-        let forcas = self.forcas(definicao);
+    /// Returns the winning category, its probability and the whole distribution over the closed set.
+    /// An empty input or one outside the vocabulary falls into `outros`, with a low-but-not-zero
+    /// probability.
+    pub fn triage(&self, definition: &str) -> Triage {
+        let strengths = self.strengths(definition);
 
-        let n = Categoria::TODAS.len() as f64;
-        let sem_evidencia = forcas.iter().all(|f| *f <= 0.0);
+        let n = Category::ALL.len() as f64;
+        let without_evidence = strengths.iter().all(|f| *f <= 0.0);
 
-        let mut bruto = [0.0f64; 6];
-        for c in Categoria::TODAS.iter() {
-            // O vies de ordinal carrega o desempate e entra no escore, antes da transferencia.
-            let ordem = (n - c.indice() as f64) * VIES_DE_ORDINAL;
-            bruto[c.indice()] = if forcas[c.indice()] > 0.0 {
-                transferir(forcas[c.indice()] + ordem)
-            } else if sem_evidencia {
-                // Nenhum tema casou: vale a priori declarada, que ja respeita o piso.
-                if *c == Categoria::Outros {
-                    MASSA_SEM_EVIDENCIA
+        let mut raw = [0.0f64; 6];
+        for c in Category::ALL.iter() {
+            // The ordinal bias carries the tie-break and enters the score, before the transfer.
+            let order = (n - c.index() as f64) * ORDINAL_BIAS;
+            raw[c.index()] = if strengths[c.index()] > 0.0 {
+                transfer(strengths[c.index()] + order)
+            } else if without_evidence {
+                // No theme matched: the declared prior holds, and it already respects the floor.
+                if *c == Category::Others {
+                    MASS_WITHOUT_EVIDENCE
                 } else {
-                    PESO_SEM_CASAMENTO
+                    WEIGHT_WITHOUT_MATCH
                 }
             } else {
-                // Esta categoria nao casou, mas outra casou: fica no piso.
-                PISO
+                // This category did not match, but another one did: it stays at the floor.
+                FLOOR
             };
         }
 
-        // Sem evidencia nenhuma, a priori declarada e a resposta: a distribuicao e ela
-        // normalizada, e nao passa pelo ajuste de teto. Com evidencia, vale o ajuste.
-        let distribuicao = if sem_evidencia {
-            distribuir_priori(bruto)
+        // With no evidence at all, the declared prior is the answer: the distribution is that prior
+        // normalised, and it does not go through the ceiling adjustment. With evidence, the
+        // adjustment holds.
+        let distribution = if without_evidence {
+            distribute_prior(raw)
         } else {
-            distribuir(bruto)
+            distribute(raw)
         };
 
-        let (indice, probabilidade) = vencedora(&distribuicao);
+        let (index, probability) = winner(&distribution);
 
-        Triagem {
-            categoria: Categoria::TODAS[indice],
-            probabilidade,
-            distribuicao,
+        Triage {
+            category: Category::ALL[index],
+            probability,
+            distribution,
         }
     }
 
-    /// Qual categoria declarou o tema que termina nesse texto.
-    fn categoria_do_tema(&self, tema: &str) -> Option<Categoria> {
-        VOCABULARIO
+    /// Which category declared the theme that ends at that text.
+    fn theme_category(&self, theme: &str) -> Option<Category> {
+        VOCABULARY
             .iter()
-            .find(|t| t.texto == tema)
-            .map(|t| t.categoria)
+            .find(|t| t.text == theme)
+            .map(|t| t.category)
     }
 }
 
-/// Normaliza a definição: minúsculas, sem acento, sem pontuação, sem palavras vazias.
+/// Normalises the definition: lowercase, without accent, without punctuation, without empty words.
 ///
-/// Determinístico e sem tabela externa: cada caractere não ASCII é transliterado por uma regra
-/// fixa do português, e o que sobra fora de `[a-z0-9]` vira separador.
-pub fn normalizar(definicao: &str) -> Vec<String> {
-    let mut atual = String::new();
-    let mut saida: Vec<String> = Vec::new();
+/// Deterministic and without an external table: every non-ASCII character is transliterated by a
+/// fixed rule for accented Latin letters, and whatever is left outside `[a-z0-9]` becomes a
+/// separator.
+pub fn normalize(definition: &str) -> Vec<String> {
+    let mut current = String::new();
+    let mut output: Vec<String> = Vec::new();
 
-    for ch in definicao.chars() {
-        for simples in transliterar(ch).chars() {
-            if simples.is_ascii_alphanumeric() {
-                atual.push(simples.to_ascii_lowercase());
-            } else if !atual.is_empty() {
-                if !VAZIAS.contains(&atual.as_str()) {
-                    saida.push(atual.clone());
+    for ch in definition.chars() {
+        for simplified in transliterate(ch).chars() {
+            if simplified.is_ascii_alphanumeric() {
+                current.push(simplified.to_ascii_lowercase());
+            } else if !current.is_empty() {
+                if !STOPWORDS.contains(&current.as_str()) {
+                    output.push(current.clone());
                 }
-                atual.clear();
+                current.clear();
             }
         }
     }
-    if !atual.is_empty() && !VAZIAS.contains(&atual.as_str()) {
-        saida.push(atual);
+    if !current.is_empty() && !STOPWORDS.contains(&current.as_str()) {
+        output.push(current);
     }
-    saida
+    output
 }
 
-/// Transfere um caractere para a forma simples sem acento. Devolve sempre no máximo um caractere.
-fn transliterar(ch: char) -> &'static str {
+/// Transfers a character to the accented-free simple form. It always returns at most one character.
+fn transliterate(ch: char) -> &'static str {
     match ch {
         'á' | 'à' | 'â' | 'ã' | 'ä' | 'Á' | 'À' | 'Â' | 'Ã' | 'Ä' => "a",
         'é' | 'è' | 'ê' | 'ë' | 'É' | 'È' | 'Ê' | 'Ë' => "e",
@@ -582,121 +588,122 @@ fn transliterar(ch: char) -> &'static str {
         'ú' | 'ù' | 'û' | 'ü' | 'Ú' | 'Ù' | 'Û' | 'Ü' => "u",
         'ç' | 'Ç' => "c",
         'ñ' | 'Ñ' => "n",
-        c if c.is_ascii() => tabela_ascii(c),
+        c if c.is_ascii() => ascii_table(c),
         _ => " ",
     }
 }
 
-/// Tabela de um caractere para cada código ASCII: letra ou dígito fica como está, o resto é
-/// separador. Sem dependência externa e sem ramo dependente de estado.
-fn tabela_ascii(c: char) -> &'static str {
-    const TABELA: [&str; 128] = construir_tabela_ascii();
-    TABELA[c as usize]
+/// One-character table for each ASCII code: a letter or digit stays as it is, the rest is a
+/// separator. No external dependency and no state-dependent branch.
+fn ascii_table(c: char) -> &'static str {
+    const TABLE: [&str; 128] = build_ascii_table();
+    TABLE[c as usize]
 }
 
-/// Constrói a tabela ASCII em tempo de compilação.
-const fn construir_tabela_ascii() -> [&'static str; 128] {
-    const DIGITOS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-    const MAIUSCULAS: [&str; 26] = [
+/// Builds the ASCII table at compile time.
+const fn build_ascii_table() -> [&'static str; 128] {
+    const DIGITS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const UPPERCASE: [&str; 26] = [
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
         "S", "T", "U", "V", "W", "X", "Y", "Z",
     ];
-    const MINUSCULAS: [&str; 26] = [
+    const LOWERCASE: [&str; 26] = [
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
         "s", "t", "u", "v", "w", "x", "y", "z",
     ];
     let mut t = [" "; 128];
     let mut i = 0usize;
     while i < 10 {
-        t[48 + i] = DIGITOS[i];
+        t[48 + i] = DIGITS[i];
         i += 1;
     }
     let mut j = 0usize;
     while j < 26 {
-        t[65 + j] = MAIUSCULAS[j];
-        t[97 + j] = MINUSCULAS[j];
+        t[65 + j] = UPPERCASE[j];
+        t[97 + j] = LOWERCASE[j];
         j += 1;
     }
     t
 }
 
-/// Clampa em [0,01; 0,99] e reprojeta a massa cortada, preservando soma 1.
+/// Clamps to [0.01; 0.99] and reprojects the cut mass, preserving sum 1.
 ///
-/// O laço é determinístico e a soma é o alvo: cada rodada tira a massa excedente de quem está no
-/// teto, entrega proporcionalmente a quem não está, e levanta quem ficou abaixo do piso. No
-/// conjunto de seis categorias o intervalo é viável (6 x 0,01 <= 1 <= 6 x 0,99), então a
-/// convergência é imediata — e o laço para por contagem, nunca por relógio.
-pub fn distribuir(bruto: [f64; 6]) -> [f64; 6] {
-    let n = Categoria::TODAS.len();
+/// The loop is deterministic and the sum is the target: each round takes the surplus mass from
+/// whoever is at the ceiling, delivers it proportionally to whoever is not, and lifts whoever fell
+/// below the floor. On the set of six categories the interval is feasible
+/// (6 x 0.01 <= 1 <= 6 x 0.99), so convergence is immediate — and the loop stops by count, never by
+/// clock.
+pub fn distribute(raw: [f64; 6]) -> [f64; 6] {
+    let n = Category::ALL.len();
     assert!(
-        (n as f64) * PISO <= 1.0 && (n as f64) * TETO >= 1.0,
-        "intervalo inviavel para {} categorias",
+        (n as f64) * FLOOR <= 1.0 && (n as f64) * CEILING >= 1.0,
+        "infeasible interval for {} categories",
         n
     );
 
-    let soma: f64 = bruto.iter().sum();
+    let sum: f64 = raw.iter().sum();
     let mut p = [0.0f64; 6];
-    for (i, valor) in p.iter_mut().enumerate() {
-        *valor = if soma > 0.0 {
-            bruto[i] / soma
+    for (i, value) in p.iter_mut().enumerate() {
+        *value = if sum > 0.0 {
+            raw[i] / sum
         } else {
             1.0 / n as f64
         };
     }
 
-    // Ajuste por transferencia exata: o que passa do teto vira sobra, a sobra e dividida
-    // igualmente entre quem ainda tem folga, quem cai abaixo do piso e levantado ate o piso e o
-    // que isso custa sai de quem tem mais massa. Cada rodada fecha a conta e nenhuma rodada
-    // consegue empurrar uma categoria para fora do intervalo, entao a iteracao e estavel — ao
-    // contrario da redistribuicao proporcional, que oscilava entre o teto e o piso.
+    // Exact-transfer adjustment: what passes the ceiling becomes surplus, the surplus is split
+    // equally among whoever still has room, whoever falls below the floor is lifted up to the floor
+    // and what that costs comes out of whoever has the most mass. Every round closes the account and
+    // no round manages to push a category outside the interval, so the iteration is stable — unlike
+    // the proportional redistribution, which oscillated between the ceiling and the floor.
     for _ in 0..64 {
-        let mut sobra = 0.0f64;
-        let mut com_folga: Vec<usize> = Vec::new();
-        for (i, valor) in p.iter_mut().enumerate() {
-            if *valor < PISO {
-                sobra -= PISO - *valor;
-                *valor = PISO;
-            } else if *valor > TETO {
-                sobra += *valor - TETO;
-                *valor = TETO;
+        let mut surplus = 0.0f64;
+        let mut with_room: Vec<usize> = Vec::new();
+        for (i, value) in p.iter_mut().enumerate() {
+            if *value < FLOOR {
+                surplus -= FLOOR - *value;
+                *value = FLOOR;
+            } else if *value > CEILING {
+                surplus += *value - CEILING;
+                *value = CEILING;
             }
-            if *valor < TETO {
-                com_folga.push(i);
+            if *value < CEILING {
+                with_room.push(i);
             }
         }
-        if sobra.abs() <= 1e-15 {
+        if surplus.abs() <= 1e-15 {
             break;
         }
-        if sobra > 0.0 {
-            if com_folga.is_empty() {
+        if surplus > 0.0 {
+            if with_room.is_empty() {
                 break;
             }
-            let cota = sobra / com_folga.len() as f64;
-            for i in com_folga.iter() {
-                p[*i] = (p[*i] + cota).min(TETO);
+            let quota = surplus / with_room.len() as f64;
+            for i in with_room.iter() {
+                p[*i] = (p[*i] + quota).min(CEILING);
             }
         } else {
-            let disponivel: f64 = p.iter().map(|v| (v - PISO).max(0.0)).sum();
-            if disponivel > 0.0 {
-                let cota = (-sobra) / disponivel;
-                for valor in p.iter_mut() {
-                    if *valor > PISO {
-                        *valor -= (*valor - PISO) * cota;
+            let available: f64 = p.iter().map(|v| (v - FLOOR).max(0.0)).sum();
+            if available > 0.0 {
+                let quota = (-surplus) / available;
+                for value in p.iter_mut() {
+                    if *value > FLOOR {
+                        *value -= (*value - FLOOR) * quota;
                     }
                 }
             }
         }
     }
 
-    // Correção final de ponto flutuante: a massa residual vai para a categoria de **menor
-    // ordinal declarado** que ainda tenha folga nos dois lados — o mesmo desempate que
-    // `vencedora` usa. Determinística por construção, e é ela que faz um empate exato de peso
-    // resolver a favor do menor ordinal em vez de virar moeda.
-    let resto = 1.0 - p.iter().sum::<f64>();
-    if resto.abs() > 1e-12 {
-        for valor in p.iter_mut() {
-            if *valor + resto >= PISO && *valor + resto <= TETO {
-                *valor += resto;
+    // Final floating-point correction: the residual mass goes to the category of **smallest declared
+    // ordinal** that still has room on both sides — the same tie-break that `winner` uses.
+    // Deterministic by construction, and it is what makes an exact tie of weight resolve in favour
+    // of the smallest ordinal instead of becoming a coin flip.
+    let rest = 1.0 - p.iter().sum::<f64>();
+    if rest.abs() > 1e-12 {
+        for value in p.iter_mut() {
+            if *value + rest >= FLOOR && *value + rest <= CEILING {
+                *value += rest;
                 break;
             }
         }
@@ -705,296 +712,300 @@ pub fn distribuir(bruto: [f64; 6]) -> [f64; 6] {
     p
 }
 
-/// Distribuição de uma **priori declarada**, sem evidência lexical nenhuma.
+/// Distribution of a **declared prior**, with no lexical evidence at all.
 ///
-/// Normaliza o vetor, respeita o piso e corta no teto sem reprojetar: quando não há evidência, a
-/// massa residual existe para não deixar nenhuma categoria em 0%, e devolvê-la ao teto seria
-/// reintroduzir o dogma que o intervalo proíbe.
-pub fn distribuir_priori(bruto: [f64; 6]) -> [f64; 6] {
-    let n = Categoria::TODAS.len();
-    let total: f64 = bruto.iter().sum();
+/// It normalises the vector, respects the floor and cuts at the ceiling without reprojecting: when
+/// there is no evidence, the residual mass exists so that no category is left at 0%, and returning
+/// it to the ceiling would reintroduce the dogma that the interval forbids.
+pub fn distribute_prior(raw: [f64; 6]) -> [f64; 6] {
+    let n = Category::ALL.len();
+    let total: f64 = raw.iter().sum();
     let mut p = [0.0f64; 6];
-    for (i, valor) in p.iter_mut().enumerate() {
-        let fracao = if total > 0.0 {
-            bruto[i] / total
+    for (i, value) in p.iter_mut().enumerate() {
+        let fraction = if total > 0.0 {
+            raw[i] / total
         } else {
             1.0 / n as f64
         };
-        *valor = fracao.clamp(PISO, TETO);
+        *value = fraction.clamp(FLOOR, CEILING);
     }
     p
 }
 
-/// Vencedora: maior probabilidade; empate resolvido pela ordem declarada de `Categoria::TODAS`.
-fn vencedora(p: &[f64; 6]) -> (usize, f64) {
-    let mut indice = 0usize;
-    let mut valor = p[0];
+/// Winner: highest probability; a tie resolved by the declared order of `Category::ALL`.
+fn winner(p: &[f64; 6]) -> (usize, f64) {
+    let mut index = 0usize;
+    let mut value = p[0];
     for (i, v) in p.iter().enumerate().skip(1) {
-        if *v > valor {
-            valor = *v;
-            indice = i;
+        if *v > value {
+            value = *v;
+            index = i;
         }
     }
-    (indice, valor)
+    (index, value)
 }
 
-/// Atalho: constrói o triador e tria uma definição.
-pub fn triar(definicao: &str) -> Triagem {
-    S1::novo().triar(definicao)
+/// Shortcut: builds the triage engine and triages a definition.
+pub fn triage(definition: &str) -> Triage {
+    S1::new().triage(definition)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    /// Definição canônica da ficha em ordem, usada em vários testes.
-    const EM_ORDEM: &str = "tempo de espera na fila do posto de saude";
-    /// Definição sem nenhum tema declarado.
-    const DESCONHECIDA: &str = "xyzzy plugh abracadabra";
+    /// Canonical definition of the card in order, used in several tests.
+    const IN_ORDER: &str = "waiting time in the queue at the health station";
+    /// Definition without any declared theme.
+    const UNKNOWN: &str = "xyzzy plugh abracadabra";
 
     #[test]
-    fn caminho_felizes_cada_tema_acha_a_sua_categoria() {
-        let s1 = S1::novo();
-        let casos = [
-            ("tempo de espera na fila do posto de saude", Categoria::Fila),
+    fn happy_paths_every_theme_finds_its_category() {
+        let s1 = S1::new();
+        let cases = [
             (
-                "efeito causal do tratamento sobre a renda",
-                Categoria::Causal,
+                "waiting time in the queue at the health station",
+                Category::Queue,
             ),
-            ("cauda pesada de evento raro e extremo", Categoria::Cauda),
+            ("causal effect of the treatment on income", Category::Causal),
+            ("heavy tail of a rare extreme event", Category::Tail),
             (
-                "calibracao do escore por platt com brier",
-                Categoria::Calibracao,
+                "calibration of the platt score with brier",
+                Category::Calibration,
             ),
             (
-                "justica entre subgrupos e quem paga o erro",
-                Categoria::Justica,
+                "fairness across subgroups and who pays for the error",
+                Category::Fairness,
             ),
-            ("ficha generica indefinida", Categoria::Outros),
+            ("generic undefined card", Category::Others),
         ];
-        for (definicao, esperada) in casos {
-            let t = s1.triar(definicao);
+        for (definition, expected) in cases {
+            let t = s1.triage(definition);
             assert_eq!(
-                t.categoria,
-                esperada,
-                "definicao '{}' triada como {}",
-                definicao,
-                t.categoria.nome()
+                t.category,
+                expected,
+                "definition '{}' triaged as {}",
+                definition,
+                t.category.name()
             );
         }
     }
 
     #[test]
-    fn leitura_do_registro() {
-        let s1 = S1::novo();
-        for definicao in [
-            EM_ORDEM,
-            "efeito causal do tratamento sobre a renda",
-            "cauda pesada de evento raro e extremo",
-            "calibracao do escore por platt com brier",
-            "justica entre subgrupos e quem paga o erro",
-            DESCONHECIDA,
+    fn reading_of_the_record() {
+        let s1 = S1::new();
+        for definition in [
+            IN_ORDER,
+            "causal effect of the treatment on income",
+            "heavy tail of a rare extreme event",
+            "calibration of the platt score with brier",
+            "fairness across subgroups and who pays for the error",
+            UNKNOWN,
         ] {
-            println!("{:>44} -> {}", definicao, s1.triar(definicao).linha());
+            println!("{:>44} -> {}", definition, s1.triage(definition).line());
         }
-        println!("sufixos indexados na arvore: {}", s1.sufixos_indexados());
+        println!("suffixes indexed in the tree: {}", s1.indexed_suffixes());
     }
 
     #[test]
-    fn determinismo_mesma_entrada_mesma_saida() {
-        let a = triar(EM_ORDEM);
-        let b = triar(EM_ORDEM);
+    fn determinism_same_input_same_output() {
+        let a = triage(IN_ORDER);
+        let b = triage(IN_ORDER);
         assert_eq!(a, b);
 
-        let s1 = S1::novo();
-        let c = s1.triar(EM_ORDEM);
+        let s1 = S1::new();
+        let c = s1.triage(IN_ORDER);
         assert_eq!(a, c);
-        assert_eq!(a.linha(), c.linha());
-        // E o índice também é reprodutível: duas construções, mesmo tamanho.
-        assert_eq!(s1.sufixos_indexados(), S1::novo().sufixos_indexados());
+        assert_eq!(a.line(), c.line());
+        // And the index is reproducible too: two constructions, same size.
+        assert_eq!(s1.indexed_suffixes(), S1::new().indexed_suffixes());
     }
 
     #[test]
-    fn nenhuma_probabilidade_em_zero_ou_um() {
-        let s1 = S1::novo();
-        for definicao in [
-            EM_ORDEM,
-            DESCONHECIDA,
-            "cauda pesada",
-            "justica",
+    fn no_probability_at_zero_or_one() {
+        let s1 = S1::new();
+        for definition in [
+            IN_ORDER,
+            UNKNOWN,
+            "heavy tail",
+            "fairness",
             "",
-            "a o de e",
+            "a an the of",
             "causal causal causal causal",
         ] {
-            let t = s1.triar(definicao);
-            assert_eq!(t.fora_do_intervalo(), 0, "definicao '{}'", definicao);
-            for p in t.distribuicao.iter() {
-                assert!(*p > 0.0 && *p < 1.0, "probabilidade dogmatica {}", p);
-                assert!(*p >= PISO && *p <= TETO);
+            let t = s1.triage(definition);
+            assert_eq!(t.out_of_range(), 0, "definition '{}'", definition);
+            for p in t.distribution.iter() {
+                assert!(*p > 0.0 && *p < 1.0, "dogmatic probability {}", p);
+                assert!(*p >= FLOOR && *p <= CEILING);
             }
-            // A vencedora também é estritamente menor que o teto.
-            assert!(t.probabilidade < 1.0);
+            // The winner is also strictly below the ceiling.
+            assert!(t.probability < 1.0);
         }
     }
 
     #[test]
-    fn soma_um_depois_do_ajuste() {
-        let s1 = S1::novo();
-        for definicao in [
-            EM_ORDEM,
-            DESCONHECIDA,
-            "efeito causal",
-            "posto",
+    fn sum_one_after_the_adjustment() {
+        let s1 = S1::new();
+        for definition in [
+            IN_ORDER,
+            UNKNOWN,
+            "causal effect",
+            "station",
             "",
-            "grupo subgrupo paga erro etica justica",
+            "group subgroup pays error ethics fairness",
         ] {
-            let t = s1.triar(definicao);
+            let t = s1.triage(definition);
             assert!(
-                (t.soma() - 1.0).abs() < 1e-12,
-                "soma {} para '{}'",
-                t.soma(),
-                definicao
+                (t.sum() - 1.0).abs() < 1e-12,
+                "sum {} for '{}'",
+                t.sum(),
+                definition
             );
         }
     }
 
     #[test]
-    fn entrada_desconhecida_cai_em_outros() {
-        let s1 = S1::novo();
-        let t = s1.triar(DESCONHECIDA);
-        assert_eq!(t.categoria, Categoria::Outros);
-        // A massa efetiva e o peso declarado dividido pela massa total da priori: as cinco
-        // categorias tematicas ficam em 0,0256 e "outros" leva 0,8718. Valor analitico conferido.
-        let esperado = MASSA_SEM_EVIDENCIA / (MASSA_SEM_EVIDENCIA + 5.0 * PESO_SEM_CASAMENTO);
+    fn unknown_input_falls_into_others() {
+        let s1 = S1::new();
+        let t = s1.triage(UNKNOWN);
+        assert_eq!(t.category, Category::Others);
+        // The effective mass is the declared weight divided by the total mass of the prior: the five
+        // thematic categories stay at 0.0256 and "other" takes 0.8718. Analytical value checked.
+        let expected = MASS_WITHOUT_EVIDENCE / (MASS_WITHOUT_EVIDENCE + 5.0 * WEIGHT_WITHOUT_MATCH);
         assert!(
-            esperado > 0.5 && esperado < TETO,
-            "priori declarada = {}",
-            esperado
+            expected > 0.5 && expected < CEILING,
+            "declared prior = {}",
+            expected
         );
         assert!(
-            (t.probabilidade - esperado).abs() < 1e-12,
-            "massa de outros {} != {}",
-            t.probabilidade,
-            esperado
+            (t.probability - expected).abs() < 1e-12,
+            "mass of other {} != {}",
+            t.probability,
+            expected
         );
         assert!(
-            t.probabilidade > PISO && t.probabilidade < TETO,
-            "baixa-mas-nao-zero, e nunca dogma"
+            t.probability > FLOOR && t.probability < CEILING,
+            "low-but-not-zero, and never dogma"
         );
-        // Ela e a maior da distribuicao, e ainda assim nao e dogma.
-        for c in Categoria::TODAS.iter().filter(|c| **c != Categoria::Outros) {
-            assert!(t.probabilidade > t.probabilidade_de(*c));
+        // It is the largest of the distribution, and still it is not dogma.
+        for c in Category::ALL.iter().filter(|c| **c != Category::Others) {
+            assert!(t.probability > t.probability_of(*c));
         }
-        // As cinco categorias tematicas continuam com massa positiva: o "outros" nao apaga as
-        // alternativas, apenas as rebaixa.
-        for c in Categoria::TODAS.iter().filter(|c| **c != Categoria::Outros) {
-            assert!(t.probabilidade_de(*c) >= PISO);
+        // The five thematic categories keep a positive mass: "other" does not erase the
+        // alternatives, it only demotes them.
+        for c in Category::ALL.iter().filter(|c| **c != Category::Others) {
+            assert!(t.probability_of(*c) >= FLOOR);
         }
-        // Entrada vazia segue o mesmo caminho.
-        assert_eq!(s1.triar("").categoria, Categoria::Outros);
-        assert_eq!(s1.triar("   ").categoria, Categoria::Outros);
+        // An empty input follows the same path.
+        assert_eq!(s1.triage("").category, Category::Others);
+        assert_eq!(s1.triage("   ").category, Category::Others);
     }
 
     #[test]
-    fn caso_que_tem_de_falhar_casamento_curto_nao_vira_evidencia() {
-        let s1 = S1::novo();
-        let curto = s1.triar("os aa bb cc dd");
+    fn case_that_must_fail_a_short_match_is_not_evidence() {
+        let s1 = S1::new();
+        let short = s1.triage("the aa bb cc dd");
         assert_eq!(
-            curto.categoria,
-            Categoria::Outros,
-            "trecho curto nao pode sustentar triagem tematica"
+            short.category,
+            Category::Others,
+            "a short excerpt cannot sustain thematic triage"
         );
-        // Prova negativa do mesmo portao: sem o comprimento minimo, "os" nao casa; se casasse,
-        // a energia lexical de qualquer preposicao viraria categoria.
-        assert_ne!(curto.categoria, Categoria::Justica);
+        // Negative proof of the same gate: without the minimum length, "the" does not match; if it
+        // did, the lexical energy of any preposition would become a category.
+        assert_ne!(short.category, Category::Fairness);
     }
 
     #[test]
-    fn caso_que_tem_de_falhar_a_ficha_com_evidencia_tematica_nao_cai_em_outros() {
-        let s1 = S1::novo();
-        let t = s1.triar(EM_ORDEM);
-        assert_eq!(t.categoria, Categoria::Fila);
-        // O mesmo portao que aceita a ficha em ordem tem de reprovar a leitura oposta.
-        assert_ne!(t.categoria, Categoria::Outros);
+    fn case_that_must_fail_a_card_with_thematic_evidence_does_not_fall_into_others() {
+        let s1 = S1::new();
+        let t = s1.triage(IN_ORDER);
+        assert_eq!(t.category, Category::Queue);
+        // The same gate that accepts the card in order has to reject the opposite reading.
+        assert_ne!(t.category, Category::Others);
         assert!(
-            t.probabilidade >= 0.8 && t.probabilidade <= TETO,
-            "a ficha em ordem tem evidencia forte e continua abaixo do teto: {}",
-            t.probabilidade
-        );
-        assert!(
-            t.probabilidade > MASSA_SEM_EVIDENCIA,
-            "evidencia tematica nao pode devolver a massa do 'nao sei'"
-        );
-    }
-
-    #[test]
-    fn desempate_e_pela_ordem_declarada() {
-        let s1 = S1::novo();
-        // "posto" (5, em Fila) e "causa" (5, em Causal): com denominador global as duas forcas
-        // sao 5/13, exatamente iguais.
-        let definicao = "posto causa";
-        let forcas = s1.forcas(definicao);
-        let dif = (forcas[Categoria::Fila.indice()] - forcas[Categoria::Causal.indice()]).abs();
-        assert!(dif < 1e-12, "forcas desiguais no empate, diferenca {}", dif);
-        assert!((forcas[Categoria::Fila.indice()] - 5.0 / TEMA_MAIS_LONGO).abs() < 1e-12);
-        assert!((forcas[Categoria::Causal.indice()] - 5.0 / TEMA_MAIS_LONGO).abs() < 1e-12);
-        // O empate nao vira empate de probabilidade: o resto da massa vai para a categoria de
-        // menor ordinal declarado, e a escolha e estavel em toda execucao.
-        let t = s1.triar(definicao);
-        assert_eq!(
-            t.categoria,
-            Categoria::Fila,
-            "empate resolvido pelo menor ordinal declarado (Fila antes de Causal)"
+            t.probability >= 0.8 && t.probability <= CEILING,
+            "the card in order has strong evidence and stays below the ceiling: {}",
+            t.probability
         );
         assert!(
-            t.probabilidade_de(Categoria::Fila) > t.probabilidade_de(Categoria::Causal),
-            "a massa residual tambem vai para o menor ordinal"
+            t.probability > MASS_WITHOUT_EVIDENCE,
+            "thematic evidence cannot return the mass of 'I do not know'"
         );
-        assert_eq!(t, s1.triar(definicao));
     }
 
     #[test]
-    fn sufixo_longo_vence_tema_curto() {
-        let s1 = S1::novo();
-        // "retroativas" termina em "ativas", que e sufixo de "contrafactual"? Nao: o casamento
-        // valido e "tratamento" (10) na categoria causal.
-        let t = s1.triar("efeitos retroativas do tratamento");
-        assert_eq!(t.categoria, Categoria::Causal);
-        assert!(s1.sufixos_indexados() > 0);
-        // O divisor e global, entao o escore nunca passa de 1 e a ficha fica longe do teto.
-        let forcas = s1.forcas("efeitos retroativas do tratamento");
-        assert!((forcas[Categoria::Causal.indice()] - 10.0 / TEMA_MAIS_LONGO).abs() < 1e-12);
-        assert!(t.probabilidade_de(Categoria::Causal) <= TETO);
-        assert!(forcas[Categoria::Causal.indice()] < 1.0);
-    }
-
-    #[test]
-    fn normalizacao_e_estavel() {
-        assert_eq!(normalizar("Causal!"), vec!["causal".to_string()]);
-        assert_eq!(normalizar("calibração"), vec!["calibracao".to_string()]);
+    fn the_tie_break_is_the_declared_order() {
+        let s1 = S1::new();
+        // "queue" (5, in Queue) and "cause" (5, in Causal): with a global denominator the two
+        // strengths are 5/13, exactly equal.
+        let definition = "queue cause";
+        let strengths = s1.strengths(definition);
+        let diff = (strengths[Category::Queue.index()] - strengths[Category::Causal.index()]).abs();
+        assert!(
+            diff < 1e-12,
+            "unequal strengths in the tie, difference {}",
+            diff
+        );
+        assert!((strengths[Category::Queue.index()] - 5.0 / LONGEST_THEME).abs() < 1e-12);
+        assert!((strengths[Category::Causal.index()] - 5.0 / LONGEST_THEME).abs() < 1e-12);
+        // The tie does not become a tie of probability: the rest of the mass goes to the category of
+        // smallest declared ordinal, and the choice is stable in every run.
+        let t = s1.triage(definition);
         assert_eq!(
-            normalizar("A FILA do Posto"),
-            vec!["fila".to_string(), "posto".to_string()]
+            t.category,
+            Category::Queue,
+            "tie resolved by the smallest declared ordinal (Queue before Causal)"
         );
-        // Palavras vazias somem, nao importa quantas vezes apareçam.
-        assert_eq!(normalizar("de de de"), Vec::<String>::new());
+        assert!(
+            t.probability_of(Category::Queue) > t.probability_of(Category::Causal),
+            "the residual mass also goes to the smallest ordinal"
+        );
+        assert_eq!(t, s1.triage(definition));
     }
 
     #[test]
-    fn reprojecao_do_teto_preserva_a_soma() {
-        // Um bruto degenerado: uma categoria com massa enorme, as outras quase nulas.
-        let p = distribuir([1000.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
+    fn long_suffix_beats_short_theme() {
+        let s1 = S1::new();
+        // "retroactive" ends in "active", which is a suffix of some theme? No: the valid match is
+        // "treatment" (9) in the causal category.
+        let t = s1.triage("retroactive effects of the treatment");
+        assert_eq!(t.category, Category::Causal);
+        assert!(s1.indexed_suffixes() > 0);
+        // The divisor is global, so the score never passes 1 and the card stays far from the ceiling.
+        let strengths = s1.strengths("retroactive effects of the treatment");
+        assert!((strengths[Category::Causal.index()] - 9.0 / LONGEST_THEME).abs() < 1e-12);
+        assert!(t.probability_of(Category::Causal) <= CEILING);
+        assert!(strengths[Category::Causal.index()] < 1.0);
+    }
+
+    #[test]
+    fn normalization_is_stable() {
+        assert_eq!(normalize("Causal!"), vec!["causal".to_string()]);
+        assert_eq!(normalize("calibração"), vec!["calibracao".to_string()]);
+        assert_eq!(
+            normalize("THE queue AT THE station"),
+            vec!["queue".to_string(), "station".to_string()]
+        );
+        // Empty words vanish, no matter how many times they appear.
+        assert_eq!(normalize("the the the"), Vec::<String>::new());
+    }
+
+    #[test]
+    fn ceiling_reprojection_preserves_the_sum() {
+        // A degenerate raw vector: one category with enormous mass, the others almost null.
+        let p = distribute([1000.0, 0.0, 0.0, 0.0, 0.0, 0.0]);
         assert!((p.iter().sum::<f64>() - 1.0).abs() < 1e-12);
-        assert!(p[0] <= TETO && p[0] >= PISO);
-        for valor in p.iter() {
-            assert!(*valor >= PISO && *valor <= TETO);
+        assert!(p[0] <= CEILING && p[0] >= FLOOR);
+        for value in p.iter() {
+            assert!(*value >= FLOOR && *value <= CEILING);
         }
-        // O intervalo e ponto fixo: distribuir de novo nao muda nada.
-        let q = distribuir(p);
+        // The interval is a fixed point: distributing again changes nothing.
+        let q = distribute(p);
         for i in 0..6 {
             assert!(
                 (p[i] - q[i]).abs() < 1e-12,
-                "ponto fixo quebrado no indice {}",
+                "fixed point broken at index {}",
                 i
             );
         }

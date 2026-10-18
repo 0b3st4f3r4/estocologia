@@ -1,7 +1,4 @@
-name: Verificacao Obrigatoria (AGENTS.md §V)
-
-# A lista de comandos nao mora aqui: mora em scripts/verificar.sh, e este workflow so a chama.
-# Enquanto a lista existiu nos dois lugares, o contrato cobrava 29 comandos e o CI rodava 11.
+name: Mandatory Verification (AGENTS.md §V)
 
 on:
   push:
@@ -16,18 +13,15 @@ permissions:
   contents: read
 
 jobs:
-  verificacao:
-    # Imagem fixada: `ubuntu-latest` migra para o Ubuntu 26 em 2026-10-19 e trocaria o ambiente
-    # debaixo do portao sem ninguem pedir. Trocar de imagem e decisao, nao efeito colateral.
+  verification:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
-          # A passada de prosa compara com o commit de base; sem historico nao ha base.
           fetch-depth: 0
 
-      - name: Toolchain fixada em rust-toolchain.toml
+      - name: Toolchain pinned in rust-toolchain.toml
         run: rustup show
 
       - uses: Swatinem/rust-cache@v2.9.2
@@ -39,21 +33,21 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Base da passada de prosa (pull request contra main)
+      - name: Base for prose pass (pull request against main)
         if: github.event_name == 'pull_request'
         run: git fetch --no-tags origin main:refs/remotes/origin/main
 
-      - name: Verificacao obrigatoria de AGENTS.md §V
+      - name: Mandatory verification of AGENTS.md §V
         env:
           ESTOCOLOGIA_BASE: ${{ github.event_name == 'pull_request' && 'origin/main' || 'HEAD' }}
-        run: scripts/verificar.sh
+        run: scripts/verify.sh
 
-      - name: Guardar o relatorio dos instrumentos
+      - name: Upload instrument report artifacts
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: verificacao
+          name: verification
           path: |
-            RESULTADOS_RUST.md
-            estocologia-livro-didatico.md
+            docs/RUST_RESULTS.md
+            book/stochology-textbook.md
           if-no-files-found: warn

@@ -1,832 +1,837 @@
-//! Instrumento dos laboratórios do livro.
+//! Instrument of the book laboratories.
 //!
-//! Uso: ~cargo run --release --bin labs -- --cap 4~
-//!      ~cargo run --release --bin labs -- --todos~
+//! Usage: ~cargo run --release --bin labs -- --chapter 4~
+//!        ~cargo run --release --bin labs -- --all~
 
-use stochology_book::{banco, cadeia, ensaio, escuta, fila, genetica, jev, ponte, segunda};
+use stochology_book::{banco, chain, ensaio, escuta, fila, genetica, jev, ponte, segunda};
 use stochology_book::{
-    cap01, cap02, cap03, cap04, cap05, cap06, cap07, cap08, cap09, cap10, cap11, cap12, cap13,
-    cap14, cap15, cap16, cap17, cap18, cap19, cap20, cap21,
+    ch01, ch02, ch03, ch04, ch05, ch06, ch07, ch08, ch09, ch10, ch11, ch12, ch13, ch14, ch15, ch16,
+    ch17, ch18, ch19, ch20, ch21,
 };
-use stochology_core::resolucao::{Resolucao, medir as medir_perda};
-use stochology_core::s1::{Categoria, S1};
+use stochology_core::resolution::{Resolution, measure as measure_loss};
+use stochology_core::s1::{Category, S1};
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
-    let mut cap = 0usize;
-    let mut todos = false;
-    let mut resolucao = false;
-    let mut banco = false;
-    let mut sistema1 = false;
-    let mut sistema2 = false;
-    let mut pre_teste_flag = false;
-    let mut respostas: Option<String> = None;
-    let mut elicitacao: Option<String> = None;
-    let mut limiar: Option<f64> = None;
-    let mut escala: Option<String> = None;
-    let mut gabarito: Option<String> = None;
-    let mut fila_flag = false;
-    let mut genetica_flag = false;
-    let mut escuta_flag = false;
-    let mut cadeia_flag = false;
-    let mut ponte_flag = false;
+    let mut chapter = 0usize;
+    let mut all = false;
+    let mut resolution = false;
+    let mut bank = false;
+    let mut system1 = false;
+    let mut system2 = false;
+    let mut pretest_flag = false;
+    let mut answers: Option<String> = None;
+    let mut elicitation: Option<String> = None;
+    let mut threshold: Option<f64> = None;
+    let mut scale: Option<String> = None;
+    let mut answer_key: Option<String> = None;
+    let mut queue_flag = false;
+    let mut genetics_flag = false;
+    let mut listening_flag = false;
+    let mut chain_flag = false;
+    let mut bridge_flag = false;
     let mut schema_flag = false;
-    let mut segunda_flag = false;
+    let mut second_opinion_flag = false;
     let mut jev_flag = false;
-    let mut medida_flag = false;
-    let mut ensaio_shelf = false;
-    let mut ensaio_escuta = false;
-    let mut ensaio_ponte = false;
+    let mut measure_flag = false;
+    let mut rehearsal_shelf = false;
+    let mut rehearsal_listening = false;
+    let mut rehearsal_bridge = false;
+    let mut help = false;
     let mut i = 0;
     while i < args.len() {
         match args[i].as_str() {
-            "--cap" => {
+            "--chapter" => {
                 if i + 1 < args.len() {
-                    cap = args[i + 1].parse().unwrap_or(0);
+                    chapter = args[i + 1].parse().unwrap_or(0);
                     i += 1;
                 }
             }
-            "--todos" => todos = true,
-            "--resolucao" => resolucao = true,
-            "--banco" => banco = true,
-            "--s1" => sistema1 = true,
-            "--s2" => sistema2 = true,
-            "--preteste" => pre_teste_flag = true,
-            "--respostas" => {
+            "--all" => all = true,
+            "--resolution" => resolution = true,
+            "--bank" => bank = true,
+            "--s1" => system1 = true,
+            "--s2" => system2 = true,
+            "--pretest" => pretest_flag = true,
+            "--answers" => {
                 if i + 1 < args.len() {
-                    respostas = Some(args[i + 1].clone());
+                    answers = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
-            "--escala" => {
+            "--scale" => {
                 if i + 1 < args.len() {
-                    escala = Some(args[i + 1].clone());
+                    scale = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
-            "--limiar" => {
+            "--threshold" => {
                 if i + 1 < args.len() {
-                    limiar = args[i + 1].replace(',', ".").parse::<f64>().ok();
+                    threshold = args[i + 1].replace(',', ".").parse::<f64>().ok();
                     i += 1;
                 }
             }
-            "--elicitacao" => {
+            "--elicitation" => {
                 if i + 1 < args.len() {
-                    elicitacao = Some(args[i + 1].clone());
+                    elicitation = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
-            "--gabarito" => {
+            "--answer-key" => {
                 if i + 1 < args.len() {
-                    gabarito = Some(args[i + 1].clone());
+                    answer_key = Some(args[i + 1].clone());
                     i += 1;
                 }
             }
-            "--fila" => fila_flag = true,
-            "--genetica" => genetica_flag = true,
-            "--escuta" => escuta_flag = true,
-            "--h3" => cadeia_flag = true,
-            "--ponte" => ponte_flag = true,
+            "--queue" => queue_flag = true,
+            "--genetics" => genetics_flag = true,
+            "--listening" => listening_flag = true,
+            "--h3" => chain_flag = true,
+            "--bridge" => bridge_flag = true,
             "--schema" => schema_flag = true,
-            "--segunda" => segunda_flag = true,
+            "--second-opinion" => second_opinion_flag = true,
             "--jev" => jev_flag = true,
-            "--medida" => medida_flag = true,
-            "--ensaio-shelf" => ensaio_shelf = true,
-            "--ensaio-escuta" => ensaio_escuta = true,
-            "--ensaio-ponte" => ensaio_ponte = true,
-            outra => {
-                eprintln!("flag desconhecida: {outra} (uso: labs --cap N (1..21) ou --todos)");
+            "--measure" => measure_flag = true,
+            "--rehearsal-shelf" => rehearsal_shelf = true,
+            "--rehearsal-listening" => rehearsal_listening = true,
+            "--rehearsal-bridge" => rehearsal_bridge = true,
+            "--help" => help = true,
+            other => {
+                eprintln!("unknown flag: {other} (usage: labs --chapter N (1..21) or --all)");
                 std::process::exit(1);
             }
         }
         i += 1;
     }
-    if resolucao {
-        horizonte_r();
+    if help {
+        println!("usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics");
+        println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
+        println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
+        println!("            | --rehearsal-shelf | --rehearsal-listening | --rehearsal-bridge]");
         return;
     }
-    if banco {
-        h0_real();
+    if resolution {
+        r_horizon();
         return;
     }
-    if sistema1 {
-        sistema_1();
+    if bank {
+        real_h0();
         return;
     }
-    if sistema2 {
-        sistema_2();
+    if system1 {
+        run_system1();
         return;
     }
-    if pre_teste_flag {
-        pre_teste_do_painel(respostas.as_deref(), gabarito.as_deref());
+    if system2 {
+        run_system2();
         return;
     }
-    if let Some(entrada) = elicitacao.as_deref() {
-        elicitar(entrada, limiar, escala.as_deref());
+    if pretest_flag {
+        panel_pretest(answers.as_deref(), answer_key.as_deref());
         return;
     }
-    if fila_flag {
-        fila::rodar();
+    if let Some(input) = elicitation.as_deref() {
+        elicit(input, threshold, scale.as_deref());
         return;
     }
-    if genetica_flag {
-        genetica::rodar();
+    if queue_flag {
+        fila::run();
         return;
     }
-    if escuta_flag {
-        escuta::rodar(escuta::REGISTRO);
+    if genetics_flag {
+        genetica::run();
         return;
     }
-    if cadeia_flag {
-        cadeia::rodar(
-            cadeia::REGISTRO,
-            cadeia::RESULTADOS_DO_LACO,
-            cadeia::POSTHOC_DO_LACO,
-        );
+    if listening_flag {
+        escuta::run(escuta::REGISTRY);
         return;
     }
-    if ponte_flag {
-        ponte::rodar(ponte::REGISTRO, ponte::NOTAS);
+    if chain_flag {
+        chain::run(chain::REGISTRY, chain::LOOP_RESULTS, chain::LOOP_POSTHOC);
+        return;
+    }
+    if bridge_flag {
+        ponte::run(ponte::REGISTRY, ponte::JUDGE_NOTES);
         return;
     }
     if schema_flag {
-        contrato();
+        contract();
         return;
     }
-    if segunda_flag {
-        segunda::rodar();
+    if second_opinion_flag {
+        segunda::run();
         return;
     }
-    if jev_flag && medida_flag {
-        // A medida em ficha: e o que o registro recebe, sem digitacao a mao.
-        print!("{}", jev::ficha_da_medida(&jev::medir()));
+    if jev_flag && measure_flag {
+        // The measure as a card: it is what the registry receives, without hand typing.
+        print!("{}", jev::measure_card(&jev::measure()));
         return;
     } else if jev_flag {
-        jev::rodar();
+        jev::run();
         return;
     }
-    if ensaio_shelf {
+    if rehearsal_shelf {
         match ensaio::shelf() {
-            Ok(texto) => print!("{texto}"),
+            Ok(text) => print!("{text}"),
             Err(e) => {
-                eprintln!("ensaio do painel nao rodou: {e}");
+                eprintln!("panel rehearsal did not run: {e}");
                 std::process::exit(1);
             }
         }
         return;
     }
-    if ensaio_escuta {
-        match ensaio::escuta() {
-            Ok(texto) => print!("{texto}"),
+    if rehearsal_listening {
+        match ensaio::listening() {
+            Ok(text) => print!("{text}"),
             Err(e) => {
-                eprintln!("ensaio da escuta nao rodou: {e}");
+                eprintln!("listening rehearsal did not run: {e}");
                 std::process::exit(1);
             }
         }
         return;
     }
-    if ensaio_ponte {
-        match ensaio::ponte() {
-            Ok(texto) => print!("{texto}"),
+    if rehearsal_bridge {
+        match ensaio::bridge() {
+            Ok(text) => print!("{text}"),
             Err(e) => {
-                eprintln!("ensaio da ponte nao rodou: {e}");
+                eprintln!("bridge rehearsal did not run: {e}");
                 std::process::exit(1);
             }
         }
         return;
     }
-    if todos {
+    if all {
         for n in 1usize..=21 {
-            rodar(n);
+            run(n);
         }
         return;
     }
-    rodar(cap);
+    run(chapter);
 }
 
-/// Sistema 1: triagem determinística de fichas, com o vocabulário fechado.
-fn sistema_1() {
-    println!("== Sistema 1 :: triagem determinística de fichas ==");
-    let s1 = S1::novo();
+/// System 1: deterministic triage of cards, with the closed vocabulary.
+fn run_system1() {
+    println!("== System 1 :: deterministic triage of cards ==");
+    let s1 = S1::new();
     println!(
-        "arvore de sufixos: {} sufixos indexados em {} temas declarados",
-        s1.sufixos_indexados(),
-        Categoria::TODAS.len()
+        "suffix tree: {} suffixes indexed over {} declared themes",
+        s1.indexed_suffixes(),
+        Category::ALL.len()
     );
-    let amostras = [
-        "tempo de espera na fila do posto de saude",
-        "efeito causal do tratamento sobre a renda",
-        "cauda pesada de evento raro e extremo",
-        "calibracao do escore por platt com brier",
-        "justica entre subgrupos e quem paga o erro",
+    let samples = [
+        "waiting time in the queue at the health station",
+        "causal effect of the treatment on income",
+        "heavy tail of a rare extreme event",
+        "calibration of the platt score with brier",
+        "fairness across subgroups and who pays for the error",
         "xyzzy plugh abracadabra",
     ];
-    for texto in amostras {
-        let t = s1.triar(texto);
+    for text in samples {
+        let t = s1.triage(text);
         println!(
-            "{} | probabilidade {:.4} | soma {:.4} | fora de [0.01;0.99] {}",
-            t.linha(),
-            t.probabilidade,
-            t.soma(),
-            t.fora_do_intervalo()
+            "{} | probability {:.4} | sum {:.4} | outside [0.01;0.99] {}",
+            t.line(),
+            t.probability,
+            t.sum(),
+            t.out_of_range()
         );
     }
 }
 
-/// Elicitação SHELF: o ajuste da priori pelos quartis e os controles do protocolo.
+/// SHELF elicitation: the fit of the prior by the quartiles and the controls of the protocol.
 ///
-/// Uso: `labs --elicitacao q05,q25,q50,q75,q95`
-fn elicitar(entrada: &str, limiar: Option<f64>, escala: Option<&str>) {
-    use stochology_h3::shelf::{
-        ANCORA_ESPERADA, ANCORA_TOLERANCIA, RAZAO_LARGURA_MINIMA, ajustar_normal,
-        excesso_de_confianca_ok, largura_90_elicitada, largura_90_implicada, p_acima_de,
-        razao_largura_90,
+/// Usage: `labs --elicitation q05,q25,q50,q75,q95`
+fn elicit(input: &str, threshold: Option<f64>, scale: Option<&str>) {
+    use stochology_horizons::h3::shelf::{
+        ANCHOR_TOLERANCE, EXPECTED_ANCHOR, MIN_WIDTH_RATIO, elicited_width_90, fit_normal,
+        implied_width_90, overconfidence_ok, p_above, width_ratio_90,
     };
 
-    let valores: Vec<f64> = entrada
+    let values: Vec<f64> = input
         .split(',')
         .filter_map(|t| t.trim().replace(',', ".").parse::<f64>().ok())
         .collect();
-    if valores.len() != 5 {
+    if values.len() != 5 {
         println!(
-            "preciso de cinco quantis na ordem q05,q25,q50,q75,q95; vieram {}",
-            valores.len()
+            "five quantiles are needed in the order q05,q25,q50,q75,q95; {} came",
+            values.len()
         );
         return;
     }
-    let [q05, q25, q50, q75, q95] = [valores[0], valores[1], valores[2], valores[3], valores[4]];
-    println!("== Elicitação SHELF :: ajuste pelos quartis e controles ==");
-    if escala == Some("beta") {
-        // domínio de frequência em (0, 1): o ajuste é Beta, e o protocolo declara isso
-        use stochology_h3::beta::{ajustar_beta, beta_quantil};
+    let [q05, q25, q50, q75, q95] = [values[0], values[1], values[2], values[3], values[4]];
+    println!("== SHELF elicitation :: fit by the quartiles and controls ==");
+    if scale == Some("beta") {
+        // frequency domain in (0, 1): the fit is Beta, and the protocol declares it
+        use stochology_horizons::h3::beta::{beta_quantile, fit_beta};
         println!(
-            "escala declarada: Beta (frequência em (0, 1)) | quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
+            "declared scale: Beta (frequency in (0, 1)) | elicited quantiles: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
         );
-        let p_beta = ajustar_beta(q25, q50, q75);
+        let p_beta = fit_beta(q25, q50, q75);
         println!(
-            "Beta ajustada aos três quartis centrais: a = {:.6} | b = {:.6} | erro máximo nos quartis {:.3e}",
-            p_beta.a, p_beta.b, p_beta.erro_max_quartis
+            "Beta fitted to the three central quartiles: a = {:.6} | b = {:.6} | maximum error in the quartiles {:.3e}",
+            p_beta.a, p_beta.b, p_beta.max_quartile_error
         );
         println!(
-            "quantis que ela implica: q05 {:.4} | q25 {:.4} | q50 {:.4} | q75 {:.4} | q95 {:.4}",
-            beta_quantil(0.05, p_beta.a, p_beta.b),
-            beta_quantil(0.25, p_beta.a, p_beta.b),
-            beta_quantil(0.50, p_beta.a, p_beta.b),
-            beta_quantil(0.75, p_beta.a, p_beta.b),
-            beta_quantil(0.95, p_beta.a, p_beta.b)
+            "quantiles it implies: q05 {:.4} | q25 {:.4} | q50 {:.4} | q75 {:.4} | q95 {:.4}",
+            beta_quantile(0.05, p_beta.a, p_beta.b),
+            beta_quantile(0.25, p_beta.a, p_beta.b),
+            beta_quantile(0.50, p_beta.a, p_beta.b),
+            beta_quantile(0.75, p_beta.a, p_beta.b),
+            beta_quantile(0.95, p_beta.a, p_beta.b)
         );
-        let elicitada = q95 - q05;
-        let implicada =
-            beta_quantil(0.95, p_beta.a, p_beta.b) - beta_quantil(0.05, p_beta.a, p_beta.b);
-        let razao = if implicada > 0.0 {
-            elicitada / implicada
+        let elicited = q95 - q05;
+        let implied =
+            beta_quantile(0.95, p_beta.a, p_beta.b) - beta_quantile(0.05, p_beta.a, p_beta.b);
+        let ratio = if implied > 0.0 {
+            elicited / implied
         } else {
             f64::NAN
         };
         println!(
-            "largura 90%: elicitada {:.4} | implicada pela própria Beta {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
-            elicitada,
-            implicada,
-            razao,
-            RAZAO_LARGURA_MINIMA,
-            if excesso_de_confianca_ok(razao) {
+            "90% width: elicited {:.4} | implied by the Beta itself {:.4} | ratio {:.4} (declared minimum {:.2}) -> {}",
+            elicited,
+            implied,
+            ratio,
+            MIN_WIDTH_RATIO,
+            if overconfidence_ok(ratio) {
                 "ok"
             } else {
-                "EXCESSO DE CONFIANÇA"
+                "OVERCONFIDENCE"
             }
         );
-        let na_mediana = 1.0 - stochology_h3::beta::beta_incompleta(p_beta.a, p_beta.b, q50);
+        let at_median =
+            1.0 - stochology_horizons::h3::beta::incomplete_beta(p_beta.a, p_beta.b, q50);
         println!(
-            "âncora: P(theta > mediana) pela própria Beta = {:.4} | esperado {:.2} +- {:.2}",
-            na_mediana, ANCORA_ESPERADA, ANCORA_TOLERANCIA
+            "anchor: P(theta > median) by the Beta itself = {:.4} | expected {:.2} +- {:.2}",
+            at_median, EXPECTED_ANCHOR, ANCHOR_TOLERANCE
         );
-        if let Some(s) = limiar {
+        if let Some(s) = threshold {
             println!(
-                "limiar da decisão em {s}: P(theta > {s}) pela Beta = {:.4}",
-                1.0 - stochology_h3::beta::beta_incompleta(p_beta.a, p_beta.b, s)
+                "decision threshold at {s}: P(theta > {s}) by the Beta = {:.4}",
+                1.0 - stochology_horizons::h3::beta::incomplete_beta(p_beta.a, p_beta.b, s)
             );
         }
         return;
     }
-    if escala == Some("log") {
-        // domínio binomial em razão de chances: os quantis viram log antes do ajuste
-        let logs: Vec<f64> = valores.iter().map(|v| v.ln()).collect();
+    if scale == Some("log") {
+        // binomial domain in odds ratio: the quantiles become logs before the fit
+        let logs: Vec<f64> = values.iter().map(|v| v.ln()).collect();
         println!(
-            "escala declarada: log natural (razão de chances) | quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
+            "declared scale: natural log (odds ratio) | elicited quantiles: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}"
         );
         println!(
-            "no log: q05 {:.6} | q25 {:.6} | q50 {:.6} | q75 {:.6} | q95 {:.6}",
+            "in the log: q05 {:.6} | q25 {:.6} | q50 {:.6} | q75 {:.6} | q95 {:.6}",
             logs[0], logs[1], logs[2], logs[3], logs[4]
         );
-        let p_log = ajustar_normal(logs[1], logs[2], logs[3]);
+        let p_log = fit_normal(logs[1], logs[2], logs[3]);
         println!(
-            "Normal ajustada no log: média {:.6} | dp {:.6} | erro máximo nos quartis {:.3e}",
-            p_log.media, p_log.dp, p_log.erro_max_quartis
+            "Normal fitted in the log: mean {:.6} | sd {:.6} | maximum error in the quartiles {:.3e}",
+            p_log.mean, p_log.sd, p_log.max_quartile_error
         );
-        let elicitada = largura_90_elicitada(logs[0], logs[4]);
-        let implicada = largura_90_implicada(p_log.dp);
-        let razao = razao_largura_90(elicitada, p_log.dp);
+        let elicited = elicited_width_90(logs[0], logs[4]);
+        let implied = implied_width_90(p_log.sd);
+        let ratio = width_ratio_90(elicited, p_log.sd);
         println!(
-            "largura 90% no log: elicitada {:.4} | implicada pela própria Normal {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
-            elicitada,
-            implicada,
-            razao,
-            RAZAO_LARGURA_MINIMA,
-            if excesso_de_confianca_ok(razao) {
+            "90% width in the log: elicited {:.4} | implied by the Normal itself {:.4} | ratio {:.4} (declared minimum {:.2}) -> {}",
+            elicited,
+            implied,
+            ratio,
+            MIN_WIDTH_RATIO,
+            if overconfidence_ok(ratio) {
                 "ok"
             } else {
-                "EXCESSO DE CONFIANÇA"
+                "OVERCONFIDENCE"
             }
         );
         println!(
-            "no log 0 é razão de chances 1 (tratamento igual): P(RC > 1) na própria priori = {:.4}",
-            p_acima_de(0.0, p_log.media, p_log.dp)
+            "in the log 0 is odds ratio 1 (equal treatment): P(OR > 1) in the prior itself = {:.4}",
+            p_above(0.0, p_log.mean, p_log.sd)
         );
-        if let Some(s) = limiar {
+        if let Some(s) = threshold {
             println!(
-                "limiar da decisão em {s} (razão de chances): P(RC > {s}) na própria priori = {:.4}",
-                p_acima_de(s.ln(), p_log.media, p_log.dp)
+                "decision threshold at {s} (odds ratio): P(OR > {s}) in the prior itself = {:.4}",
+                p_above(s.ln(), p_log.mean, p_log.sd)
             );
         }
-        let mediana = p_acima_de(logs[2], p_log.media, p_log.dp);
+        let median = p_above(logs[2], p_log.mean, p_log.sd);
         println!(
-            "âncora com S igual à mediana do próprio especialista: P(RC > {q50}) = {:.4} (esperado {:.2} +- {:.2})",
-            mediana, ANCORA_ESPERADA, ANCORA_TOLERANCIA
+            "anchor with S equal to the specialist's own median: P(OR > {q50}) = {:.4} (expected {:.2} +- {:.2})",
+            median, EXPECTED_ANCHOR, ANCHOR_TOLERANCE
         );
         return;
     }
-    println!("quantis elicitados: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}");
-    let priori = ajustar_normal(q25, q50, q75);
+    println!("elicited quantiles: q05 {q05} | q25 {q25} | q50 {q50} | q75 {q75} | q95 {q95}");
+    let prior = fit_normal(q25, q50, q75);
     println!(
-        "Normal ajustada por mínimos quadrados em q25/q50/q75: média {:.6} | dp {:.6} | erro máximo nos quartis {:.3e}",
-        priori.media, priori.dp, priori.erro_max_quartis
+        "Normal fitted by least squares on q25/q50/q75: mean {:.6} | sd {:.6} | maximum error in the quartiles {:.3e}",
+        prior.mean, prior.sd, prior.max_quartile_error
     );
-    let elicitada = largura_90_elicitada(q05, q95);
-    let implicada = largura_90_implicada(priori.dp);
-    let razao = razao_largura_90(elicitada, priori.dp);
+    let elicited = elicited_width_90(q05, q95);
+    let implied = implied_width_90(prior.sd);
+    let ratio = width_ratio_90(elicited, prior.sd);
     println!(
-        "largura 90%: elicitada {:.4} | implicada pela própria Normal {:.4} | razão {:.4} (mínimo declarado {:.2}) -> {}",
-        elicitada,
-        implicada,
-        razao,
-        RAZAO_LARGURA_MINIMA,
-        if excesso_de_confianca_ok(razao) {
+        "90% width: elicited {:.4} | implied by the Normal itself {:.4} | ratio {:.4} (declared minimum {:.2}) -> {}",
+        elicited,
+        implied,
+        ratio,
+        MIN_WIDTH_RATIO,
+        if overconfidence_ok(ratio) {
             "ok"
         } else {
-            "EXCESSO DE CONFIANÇA"
+            "OVERCONFIDENCE"
         }
     );
     println!(
-        "âncora com S igual à mediana do próprio especialista: esperado {:.2} +- {:.2} em P(theta > S)",
-        ANCORA_ESPERADA, ANCORA_TOLERANCIA
+        "anchor with S equal to the specialist's own median: expected {:.2} +- {:.2} in P(theta > S)",
+        EXPECTED_ANCHOR, ANCHOR_TOLERANCE
     );
-    if let Some(s) = limiar {
+    if let Some(s) = threshold {
         println!(
-            "limiar da decisão em {s}: P(theta > {s}) na própria priori = {:.4} | P(theta > S) com S na mediana = {:.4}",
-            p_acima_de(s, priori.media, priori.dp),
-            p_acima_de(priori.media, priori.media, priori.dp)
+            "decision threshold at {s}: P(theta > {s}) in the prior itself = {:.4} | P(theta > S) with S at the median = {:.4}",
+            p_above(s, prior.mean, prior.sd),
+            p_above(prior.mean, prior.mean, prior.sd)
         );
     }
 }
 
-/// Pré-teste de calibração do painel SHELF: o nulo declarado do desenho do protocolo.
-fn pre_teste_do_painel(respostas: Option<&str>, gabarito: Option<&str>) {
-    use stochology_h3::preteste::{
-        BALDES_AJUSTADOS, BALDES_DO_PROTOCOLO, ECE_MAXIMO_AJUSTADO, ECE_MAXIMO_DO_PROTOCOLO,
-        avaliar_ajustado, avaliar_com, nulo_com_gate, probabilidades_invalidas,
+/// Calibration pre-test of the SHELF panel: the declared null of the protocol design.
+fn panel_pretest(answers: Option<&str>, answer_key: Option<&str>) {
+    use stochology_horizons::h3::pretest::{
+        ADJUSTED_BUCKETS, ADJUSTED_MAX_ECE, PROTOCOL_BUCKETS, PROTOCOL_MAX_ECE, evaluate_adjusted,
+        evaluate_with, invalid_probabilities, null_with_gate,
     };
 
-    if let (Some(respostas), Some(gabarito)) = (respostas, gabarito) {
-        let confianca: Vec<f64> = respostas
+    if let (Some(answers), Some(answer_key)) = (answers, answer_key) {
+        let confidence: Vec<f64> = answers
             .split(',')
             .filter_map(|t| t.trim().parse::<f64>().ok())
             .collect();
-        let acerto: Vec<bool> = gabarito
+        let hit: Vec<bool> = answer_key
             .split(',')
-            .map(|t| t.trim().eq_ignore_ascii_case("sim"))
+            .map(|t| {
+                let t = t.trim();
+                t.eq_ignore_ascii_case("yes") || t.eq_ignore_ascii_case("sim")
+            })
             .collect();
-        if confianca.len() != acerto.len() || confianca.is_empty() {
+        if confidence.len() != hit.len() || confidence.is_empty() {
             println!(
-                "respostas com {} valores e gabarito com {}: não pontuo",
-                confianca.len(),
-                acerto.len()
+                "answers with {} values and answer key with {}: I do not score",
+                confidence.len(),
+                hit.len()
             );
             return;
         }
-        let invalidas = probabilidades_invalidas(&confianca);
-        if !invalidas.is_empty() {
+        let invalid = invalid_probabilities(&confidence);
+        if !invalid.is_empty() {
             println!(
-                "p fora de (0, 1) nos itens {:?}: o protocolo recusa 0 e 1 exatos",
-                invalidas
+                "p outside (0, 1) in items {:?}: the protocol refuses exact 0 and 1",
+                invalid
             );
         }
-        println!("== Pré-teste SHELF :: pontuação de um especialista ==");
-        println!("itens: {} | p distintos: {}", confianca.len(), {
-            let mut v = confianca.clone();
+        println!("== SHELF pre-test :: scoring one specialist ==");
+        println!("items: {} | distinct p: {}", confidence.len(), {
+            let mut v = confidence.clone();
             v.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
             v.dedup();
             v.len()
         });
-        // declaração 3 do ponto 12: o critério 3 vale pelo teste binomial, e o portão em vigor é o ajustado
-        let ajustado = avaliar_ajustado(&confianca, &acerto);
+        // declaration 3 of point 12: criterion 3 holds by the binomial test, and the gate in force is the adjusted one
+        let adjusted = evaluate_adjusted(&confidence, &hit);
         println!(
-            "Brier {:.6} | climatologia do pool {:.6} | habilidade {:.6} | REL {:.6} RES {:.6} UNC {:.6}",
-            ajustado.brier,
-            ajustado.brier_clima,
-            ajustado.habilidade,
-            ajustado.murphy.rel,
-            ajustado.murphy.res,
-            ajustado.murphy.unc
+            "Brier {:.6} | pool climatology {:.6} | skill {:.6} | REL {:.6} RES {:.6} UNC {:.6}",
+            adjusted.brier,
+            adjusted.brier_climate,
+            adjusted.skill,
+            adjusted.murphy.rel,
+            adjusted.murphy.res,
+            adjusted.murphy.unc
         );
-        for caixa in &ajustado.caixas {
+        for bucket in &adjusted.buckets {
             println!(
-                "  caixa {} | n {} | media prevista {:.4} | taxa observada {:.4} | desvio {:+.4}",
-                caixa.indice,
-                caixa.n,
-                caixa.media_prevista,
-                caixa.taxa_observada,
-                caixa.desvio()
+                "  bucket {} | n {} | mean forecast {:.4} | observed rate {:.4} | deviation {:+.4}",
+                bucket.index,
+                bucket.n,
+                bucket.forecast_mean,
+                bucket.observed_rate,
+                bucket.deviation()
             );
         }
-        let caixas_testadas = stochology_h3::preteste::caixas_por_teste_binomial(&ajustado.caixas);
-        for t in &caixas_testadas {
+        let tested_buckets =
+            stochology_horizons::h3::pretest::buckets_by_binomial_test(&adjusted.buckets);
+        for t in &tested_buckets {
             println!(
-                "  caixa {} pelo teste binomial: {} acertos de {} com previsao {:.4} | p bilateral {:.4} | p com Bonferroni {:.4} -> {}",
-                t.indice,
-                t.acertos,
+                "  bucket {} by the binomial test: {} hits of {} with forecast {:.4} | two-sided p {:.4} | Bonferroni p {:.4} -> {}",
+                t.index,
+                t.hits,
                 t.n,
-                t.media_prevista,
-                t.p_bilateral,
-                t.p_com_bonferroni,
-                if t.sistematica(0.05) {
-                    "SISTEMATICA"
+                t.forecast_mean,
+                t.two_sided_p,
+                t.p_with_bonferroni,
+                if t.is_systematic(0.05) {
+                    "SYSTEMATIC"
                 } else {
                     "ok"
                 }
             );
         }
-        let escrito_limiar =
-            avaliar_com(&confianca, &acerto, BALDES_AJUSTADOS, ECE_MAXIMO_AJUSTADO);
-        let por_limiar_fixo = escrito_limiar
-            .reprovacoes
+        let by_written_threshold =
+            evaluate_with(&confidence, &hit, ADJUSTED_BUCKETS, ADJUSTED_MAX_ECE);
+        let by_fixed_threshold = by_written_threshold
+            .rejections
             .iter()
             .filter(|x| {
                 matches!(
                     x,
-                    stochology_h3::preteste::Reprovacao::CaixaSistemáticaPorLimiarFixo { .. }
+                    stochology_horizons::h3::pretest::Rejection::SystematicBucketByFixedThreshold { .. }
                 )
             })
             .count();
         println!(
-            "criterio 3, as duas reguas: pelo teste binomial (em vigor, declaracao 3) {} | pelo limiar fixo de 0,25 (como escrito) {}",
-            if caixas_testadas.iter().any(|t| t.sistematica(0.05)) {
-                "reprovado"
+            "criterion 3, the two rulers: by the binomial test (in force, declaration 3) {} | by the fixed threshold of 0.25 (as written) {}",
+            if tested_buckets.iter().any(|t| t.is_systematic(0.05)) {
+                "rejected"
             } else {
                 "ok"
             },
-            if por_limiar_fixo > 0 {
-                "reprovado"
+            if by_fixed_threshold > 0 {
+                "rejected"
             } else {
                 "ok"
             }
         );
         println!(
-            "curva observada (diagnostico que morde): {}",
-            if stochology_h3::preteste::curva_observada_e_fracamente_monotona(&ajustado.caixas) {
-                "fracamente monotona"
+            "observed curve (the diagnostic that bites): {}",
+            if stochology_horizons::h3::pretest::observed_curve_is_weakly_monotone(
+                &adjusted.buckets
+            ) {
+                "weakly monotone"
             } else {
-                "NAO monotonona"
+                "NOT monotone"
             }
         );
-        for caixa in &ajustado.caixas {
+        for bucket in &adjusted.buckets {
             println!(
-                "  item a item da caixa {}: ver o formulario do especialista",
-                caixa.indice
+                "  item by item of bucket {}: see the specialist form",
+                bucket.index
             );
         }
         println!(
-            "portao ajustado, em vigor ({} caixas, ECE <= {}, criterio 3 pelo teste binomial): ECE {:.4} -> {}",
-            BALDES_AJUSTADOS,
-            ECE_MAXIMO_AJUSTADO,
-            ajustado.ece,
-            if ajustado.aprovado {
-                "APROVADO"
+            "adjusted gate, in force ({} buckets, ECE <= {}, criterion 3 by the binomial test): ECE {:.4} -> {}",
+            ADJUSTED_BUCKETS,
+            ADJUSTED_MAX_ECE,
+            adjusted.ece,
+            if adjusted.approved {
+                "APPROVED"
             } else {
-                "REPROVADO"
+                "REJECTED"
             }
         );
-        for r in &ajustado.reprovacoes {
-            println!("  reprovacao: {r:?}");
+        for r in &adjusted.rejections {
+            println!("  rejection: {r:?}");
         }
-        let escrito = avaliar_com(
-            &confianca,
-            &acerto,
-            BALDES_DO_PROTOCOLO,
-            ECE_MAXIMO_DO_PROTOCOLO,
-        );
+        let written = evaluate_with(&confidence, &hit, PROTOCOL_BUCKETS, PROTOCOL_MAX_ECE);
         println!(
-            "portao do protocolo como escrito ({} caixas, ECE <= {}): ECE {:.4} -> {}",
-            BALDES_DO_PROTOCOLO,
-            ECE_MAXIMO_DO_PROTOCOLO,
-            escrito.ece,
-            if escrito.aprovado {
-                "aprovado"
+            "protocol gate as written ({} buckets, ECE <= {}): ECE {:.4} -> {}",
+            PROTOCOL_BUCKETS,
+            PROTOCOL_MAX_ECE,
+            written.ece,
+            if written.approved {
+                "approved"
             } else {
-                "reprovado"
+                "rejected"
             }
         );
         return;
     }
 
-    println!("== Pré-teste SHELF :: calibração do painel ==");
+    println!("== SHELF pre-test :: panel calibration ==");
     println!(
-        "desenho do protocolo: 20 itens, 10 caixas de massa igual; limiar do ECE {}",
-        ECE_MAXIMO_DO_PROTOCOLO
+        "protocol design: 20 items, 10 buckets of equal mass; ECE threshold {}",
+        PROTOCOL_MAX_ECE
     );
     println!(
-        "limites medidos do desenho: o critério 3 (caixa com n >= 4) fica vacuoso, porque 20 itens em 10 caixas dão 2 por caixa; o critério 4, na letra do protocolo, é inerte: as caixas são cortadas por p ordenado e a média prevista da de cima supera a da de baixo por construção"
+        "measured limits of the design: criterion 3 (bucket with n >= 4) becomes vacuous, because 20 items in 10 buckets give 2 per bucket; criterion 4, as the protocol writes it, is inert: the buckets are cut by ordered p and the mean forecast of the upper one exceeds that of the lower one by construction"
     );
-    for (itens, baldes, limiar) in [
-        (20usize, 5usize, ECE_MAXIMO_AJUSTADO),
-        (20, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO),
-        (200, BALDES_DO_PROTOCOLO, ECE_MAXIMO_DO_PROTOCOLO),
+    for (items, buckets, threshold) in [
+        (20usize, 5usize, ADJUSTED_MAX_ECE),
+        (20, PROTOCOL_BUCKETS, PROTOCOL_MAX_ECE),
+        (200, PROTOCOL_BUCKETS, PROTOCOL_MAX_ECE),
     ] {
-        let nulo = nulo_com_gate(2026, 20_000, itens, baldes, limiar);
+        let null = null_with_gate(2026, 20_000, items, buckets, threshold);
         println!(
-            "nulo calibrado, {itens} itens em {baldes} caixas, limiar de ECE {limiar}: ECE p50 {:.4} | p90 {:.4} | p95 {:.4} | maximo {:.4} | habilidade p50 {:.4} | p10 {:.4} | Brier p50 {:.4}",
-            nulo.ece_p50,
-            nulo.ece_p90,
-            nulo.ece_p95,
-            nulo.ece_maximo,
-            nulo.habilidade_p50,
-            nulo.habilidade_p10,
-            nulo.brier_p50
+            "calibrated null, {items} items in {buckets} buckets, ECE threshold {threshold}: ECE p50 {:.4} | p90 {:.4} | p95 {:.4} | maximum {:.4} | skill p50 {:.4} | p10 {:.4} | Brier p50 {:.4}",
+            null.ece_p50,
+            null.ece_p90,
+            null.ece_p95,
+            null.max_ece,
+            null.skill_p50,
+            null.skill_p10,
+            null.brier_p50
         );
         println!(
-            "    veredito do portao no mundo calibrado: aprovados {:.4} | reprovados pelo criterio 3 {:.4} | pelo criterio 3 corrigido (binomial) {:.4} | pelo criterio 2 {:.4} | por algum criterio {:.4}",
-            nulo.quantos_passam,
-            nulo.reprovados_criterio_3,
-            nulo.reprovados_criterio_3_binomial,
-            nulo.reprovados_criterio_2,
-            nulo.reprovados_por_algum
+            "    verdict of the gate in the calibrated world: approved {:.4} | rejected by criterion 3 {:.4} | by corrected criterion 3 (binomial) {:.4} | by criterion 2 {:.4} | by some criterion {:.4}",
+            null.fraction_passing,
+            null.rejected_criterion_3,
+            null.rejected_criterion_3_binomial,
+            null.rejected_criterion_2,
+            null.rejected_by_any
         );
     }
 }
 
-/// Sistema 2: deliberação sobre o hipergrafo, crença da banca, inferência e eixo R.
-fn sistema_2() {
-    use stochology_core::medir_perda_de_resolucao;
-    use stochology_core::{Camada, Ficha, TipoIncerteza};
+/// System 2: deliberation over the hypergraph, board belief, inference and the R axis.
+fn run_system2() {
+    use stochology_core::measure_resolution_loss;
+    use stochology_core::{Card, Layer, UncertaintyType};
     use stochology_s2::{
-        CrencaDaBanca, Lats, Metropolis, MundoHipergrafo, ORDEM_DECLARADA, aprender,
-        avaliar_resolucoes, decidir, destino_da_acao, estressar_deliberativo, estressar_em_ordem,
-        ganancioso, grafo_de_amostra, log_beta,
+        DECLARED_ORDER, HypergraphWorld, Lats, Metropolis, PanelBelief, action_destination, decide,
+        evaluate_resolutions, greedy, learn, log_beta, sample_graph, stress_deliberative,
+        stress_in_order,
     };
 
-    println!("== Sistema 2 :: deliberação sobre o hipergrafo ==");
-    let grafo = grafo_de_amostra();
-    let problemas = grafo.validar();
+    println!("== System 2 :: deliberation over the hypergraph ==");
+    let graph = sample_graph();
+    let problems = graph.validate();
     println!(
-        "grafo declarado: {} nos, {} arestas de arvore, {} de grafo, {} hiperarestas | validacao {}",
-        grafo.nos.len(),
-        grafo.arestas_tree.len(),
-        grafo.arestas_graph.len(),
-        grafo.hiperarestas.len(),
-        if problemas.is_empty() {
+        "declared graph: {} nodes, {} tree edges, {} graph edges, {} hyperedges | validation {}",
+        graph.nodes.len(),
+        graph.tree_edges.len(),
+        graph.graph_edges.len(),
+        graph.hyperedges.len(),
+        if problems.is_empty() {
             "ok".to_string()
         } else {
-            format!("{problemas:?}")
+            format!("{problems:?}")
         }
     );
-    let mundo = MundoHipergrafo::novo(&grafo);
-    println!("nos que nenhuma lente cobre: {:?}", mundo.nos_descobertos());
+    let world = HypergraphWorld::new(&graph);
+    println!("nodes that no lens covers: {:?}", world.uncovered_nodes());
     let lats = Lats {
-        profundidade: 2,
-        orcamento: 40,
-        exploracao: 1.0,
-        semente: 2026,
+        depth: 2,
+        budget: 40,
+        exploration: 1.0,
+        seed: 2026,
     };
-    let guloso = ganancioso(&mundo, "raiz.estocologia").expect("o grafo tem saidas");
-    let busca = mundo
-        .busca("raiz.estocologia", &lats, 3)
-        .expect("a busca chega");
+    let greedy_decision = greedy(&world, "root.stochology").expect("the graph has exits");
+    let search = world
+        .search("root.stochology", &lats, 3)
+        .expect("the search arrives");
     println!(
-        "ganancioso: para em {} (valor {:.3}) | LATS: {} (valor {:.3}, no sem lente {})",
-        destino_da_acao(&guloso.acao),
-        guloso.valor,
-        busca.caminho.join(" -> "),
-        busca.valor,
-        busca.sem_lente
+        "greedy: stops at {} (value {:.3}) | LATS: {} (value {:.3}, node without lens {})",
+        action_destination(&greedy_decision.action),
+        greedy_decision.value,
+        search.path.join(" -> "),
+        search.value,
+        search.lens_free
     );
 
-    let ficha_completa = |id: &str| {
-        Ficha::nova(id, Camada::Agente, TipoIncerteza::Epistemica)
-            .com_cuidados()
-            .completa()
+    let complete_card = |id: &str| {
+        Card::new(id, Layer::Agent, UncertaintyType::Epistemic)
+            .with_safeguards()
+            .complete()
     };
-    let mut banca = CrencaDaBanca::nova();
-    let treino: Vec<Ficha> = (0..4)
+    let mut panel = PanelBelief::new();
+    let training: Vec<Card> = (0..4)
         .map(|i| {
-            let mut f = ficha_completa(&format!("s2.treino.{i}"));
-            f.trilha_integra = false;
+            let mut f = complete_card(&format!("s2.treino.{i}"));
+            f.trail_intact = false;
             f
         })
         .collect();
-    aprender(&mut banca, &treino, 2026, 3.0);
-    let topo = banca.ordem()[0];
+    learn(&mut panel, &training, 2026, 3.0);
+    let top = panel.order()[0];
     println!(
-        "crenca da banca: faixa mais provavel {} com probabilidade {:.4} | entropia {:.4}",
-        topo.nome(),
-        banca.probabilidade(topo),
-        banca.entropia()
+        "board belief: most likely band {} with probability {:.4} | entropy {:.4}",
+        top.name(),
+        panel.probability(top),
+        panel.entropy()
     );
-    let mut alvo = ficha_completa("s2.alvo");
-    alvo.trilha_integra = false;
-    let deliberado = estressar_deliberativo(&alvo, 2026, &banca);
-    let declarado = estressar_em_ordem(&alvo, 2026, &ORDEM_DECLARADA);
+    let mut target = complete_card("s2.alvo");
+    target.trail_intact = false;
+    let deliberated = stress_deliberative(&target, 2026, &panel);
+    let declared = stress_in_order(&target, 2026, &DECLARED_ORDER);
     println!(
-        "estresse: deliberado parou em {} com {} ataque(s) | ordem declarada parou em {} com {} ataques | mesma reprovacao {}",
-        deliberado.agente.nome(),
-        deliberado.ataques,
-        declarado.agente.nome(),
-        declarado.ataques,
-        deliberado.reprovou == declarado.reprovou
+        "stress: deliberated stopped at {} with {} attack(s) | declared order stopped at {} with {} attacks | same rejection {}",
+        deliberated.agent.name(),
+        deliberated.attacks,
+        declared.agent.name(),
+        declared.attacks,
+        deliberated.failed == declared.failed
     );
 
-    let cadeia = Metropolis {
-        passo: 0.15,
-        semente: 7,
+    let chain = Metropolis {
+        step: 0.15,
+        seed: 7,
     }
-    .amostrar(log_beta(4.0, 8.0), 0.5, 200_000);
+    .sample(log_beta(4.0, 8.0), 0.5, 200_000);
     println!(
-        "inferencia: Beta(4, 8) media da cadeia {:.4} contra a forma fechada {:.4} | aceitacao {:.3}",
-        cadeia.media(20_000),
+        "inference: Beta(4, 8) chain mean {:.4} against the closed form {:.4} | acceptance {:.3}",
+        chain.mean(20_000),
         1.0 / 3.0,
-        cadeia.aceitacao()
+        chain.acceptance_rate()
     );
 
-    let perda = medir_perda_de_resolucao(1909, 200, 10, 5.0, 11.0);
-    let decisao = decidir(&perda, 12.0);
-    let fora: Vec<String> = avaliar_resolucoes(&perda, 12.0)
+    let loss = measure_resolution_loss(1909, 200, 10, 5.0, 11.0);
+    let decision = decide(&loss, 12.0);
+    let out: Vec<String> = evaluate_resolutions(&loss, 12.0)
         .iter()
-        .filter(|a| a.fora_do_alcance.is_some())
-        .map(|a| a.resolucao.codigo().to_string())
+        .filter(|a| a.out_of_reach.is_some())
+        .map(|a| a.resolution.code().to_string())
         .collect();
     println!(
-        "eixo R: perda do agregado {:.2} min contra margem de 12,00 min -> {} ({}) | fora do alcance medido: {}",
-        perda.perda,
-        decisao.escolhida.codigo(),
-        decisao.motivo,
-        fora.join(", ")
+        "R axis: loss of the aggregate {:.2} min against a margin of 12.00 min -> {} ({}) | out of measured reach: {}",
+        loss.loss,
+        decision.chosen.code(),
+        decision.reason,
+        out.join(", ")
     );
-    let sem_oscilacao = medir_perda_de_resolucao(1909, 200, 10, 8.0, 8.0);
+    let without_oscillation = measure_resolution_loss(1909, 200, 10, 8.0, 8.0);
     println!(
-        "eixo R sem oscilacao: perda {:.2} min -> {}",
-        sem_oscilacao.perda,
-        decidir(&sem_oscilacao, 12.0).escolhida.codigo()
+        "R axis without oscillation: loss {:.2} min -> {}",
+        without_oscillation.loss,
+        decide(&without_oscillation, 12.0).chosen.code()
     );
 }
 
-/// H0 real em Rust: a central de chamadas do banco.
-fn h0_real() {
-    println!("== H0 real :: a central de chamadas do banco, em Rust ==");
-    let caminho = match std::env::var("ESTOCOLOGIA_DADOS") {
-        Ok(base) => format!("{}/dados-reais/bank_calls.csv", base.trim_end_matches('/')),
-        Err(_) => "dados-reais/bank_calls.csv".to_string(),
+/// Real H0 in Rust: the bank call centre.
+fn real_h0() {
+    println!("== Real H0 :: the bank call centre, in Rust ==");
+    let path = match std::env::var("ESTOCOLOGIA_DADOS") {
+        Ok(base) => format!("{}/data/bank_calls.csv", base.trim_end_matches('/')),
+        Err(_) => "data/bank_calls.csv".to_string(),
     };
-    let m = banco::medir(&caminho, 1909, 400);
+    let m = banco::measure(&path, 1909, 400);
     println!(
-        "treino {} dias (mar-jun) | cofre {} dias (jul-out) | {:.0} chamadas no cofre",
-        m.dias_treino, m.dias_cofre, m.chamadas_cofre
+        "training {} days (Mar-Jun) | vault {} days (Jul-Oct) | {:.0} calls in the vault",
+        m.train_days, m.vault_days, m.vault_calls
     );
     println!(
-        "escala do perfil medio: {} agentes no pico, {:.0} agente-horas por dia",
-        m.agentes_no_pico, m.agentes_por_dia
+        "roster of the mean profile: {} agents at the peak, {:.0} agent-hours per day",
+        m.agents_at_peak, m.agents_per_day
     );
     println!(
-        "nivel de servico no perfil medio = {:.4} | media dos dias do cofre = {:.4} | dias abaixo da meta de {:.0}% = {:.4}",
-        m.nivel_no_perfil_medio,
-        m.nivel_medio_dos_dias,
-        banco::META * 100.0,
-        m.fracao_dias_abaixo_da_meta
+        "service level on the mean profile = {:.4} | mean of the vault days = {:.4} | days below the goal of {:.0}% = {:.4}",
+        m.level_on_mean_profile,
+        m.mean_level_of_days,
+        banco::GOAL * 100.0,
+        m.fraction_days_below_goal
     );
     println!(
-        "dispersao entre dias: Var/media = {:.1} no cofre, {:.1} no treino, {:.1} em todos | desvio entre dias = {:.0} | Poisson preveria {:.0}",
-        m.var_sobre_media,
-        m.var_sobre_media_treino,
-        m.var_sobre_media_todos,
-        m.sd_entre_dias,
+        "dispersion between days: Var/mean = {:.1} in the vault, {:.1} in the training window, {:.1} over all | deviation between days = {:.0} | Poisson would predict {:.0}",
+        m.var_over_mean,
+        m.var_over_mean_train,
+        m.var_over_mean_all,
+        m.sd_between_days,
         m.poisson_sd
     );
     println!(
-        "nulo de metades: por dia = {:.4} | por chamada = {:.4}",
-        m.nulo_metades_dia, m.nulo_metades_chamada
+        "halves null: per day = {:.4} | per call = {:.4}",
+        m.halves_null_day, m.halves_null_call
     );
 }
 
-/// Horizonte R: quanto custa perguntar grosso, com o mesmo recurso total.
-fn horizonte_r() {
-    println!("== Horizonte R :: resolucao da pergunta ==");
-    println!(
-        "bracos pareados: mesmas chegadas e mesmas bases de servico; muda so a taxa de atendimento"
-    );
-    for (rotulo, baixa, alta) in [
+/// R horizon: what it costs to ask coarsely, with the same total resource.
+fn r_horizon() {
+    println!("== R horizon :: resolution of the question ==");
+    println!("paired arms: same arrivals and same service bases; only the service rate changes");
+    for (label, low, high) in [
         (
-            "demanda 5 ou 11 (o posto do Capitulo 16)",
+            "demand 5 or 11 (the station of Chapter 16)",
             5.0_f64,
             11.0_f64,
         ),
-        ("demanda 7 ou 9 (oscilacao leve)", 7.0, 9.0),
-        ("demanda 8 ou 8 (sem oscilacao)", 8.0, 8.0),
+        ("demand 7 or 9 (light oscillation)", 7.0, 9.0),
+        ("demand 8 or 8 (no oscillation)", 8.0, 8.0),
     ] {
-        let p = medir_perda(1909, 200, 10, baixa, alta);
+        let p = measure_loss(1909, 200, 10, low, high);
         println!(
-            "{}: capacidade media {:.1} | espera agregada {:.2} min, espera fina {:.2} min, perda {:.2} min",
-            rotulo, p.capacidade_agregada, p.espera_agregada, p.espera_fina, p.perda
+            "{}: mean capacity {:.1} | aggregate wait {:.2} min, fine wait {:.2} min, loss {:.2} min",
+            label, p.aggregated_capacity, p.aggregated_wait, p.fine_wait, p.loss
         );
         println!(
-            "   acima de 30 min: agregada {:.4}, fina {:.4}",
-            p.acima30_agregada, p.acima30_fina
+            "   above 30 min: aggregated {:.4}, fine {:.4}",
+            p.above30_aggregated, p.above30_fine
         );
     }
-    let finuras: Vec<&str> = Resolucao::TODAS.iter().map(|r| r.codigo()).collect();
-    println!("escada de resolucao: {}", finuras.join(" -> "));
+    let fineness: Vec<&str> = Resolution::ALL.iter().map(|r| r.code()).collect();
+    println!("resolution ladder: {}", fineness.join(" -> "));
 
-    // ---- previsao 3: o limiar de oscilacao
+    // ---- prediction 3: the oscillation threshold
     println!(
-        "\n-- previsao 3: o limiar de oscilacao (dia falho: mais de 10% acima de 30 min; limiar: mais de 1/4 dos dias) --"
+        "\n-- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --"
     );
     let amplitudes = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
-    let calibrada = stochology_core::resolucao::escala_calibrada(1909, 200, 10, 8.0, 0.10);
-    let erlang = stochology_core::resolucao::limiar_de_oscilacao(1909, 200, 10, 8.0, &amplitudes);
+    let calibrated = stochology_core::resolution::calibrated_scale(1909, 200, 10, 8.0, 0.10);
+    let erlang =
+        stochology_core::resolution::oscillation_threshold(1909, 200, 10, 8.0, &amplitudes);
     println!(
-        "  {} dias por amplitude | 10 h por dia | especificacao 1: o plano de Erlang do dia medio, {} agentes",
-        erlang.pontos[0].dias, erlang.pontos[0].agentes_r0
+        "  {} days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, {} agents",
+        erlang.points[0].days, erlang.points[0].agents_r0
     );
     println!(
         "  {:>10} {:>12} {:>14} {:>12} {:>10}",
-        "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0"
+        "amplitude", "failed days", "fraction", "loss (min)", "above30 R0"
     );
-    for p in &erlang.pontos {
+    for p in &erlang.points {
         println!(
             "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
-            p.amplitude, p.dias_falhos, p.fracao_de_dias_falhos, p.perda, p.acima30_r0
+            p.amplitude, p.failed_days, p.failed_day_fraction, p.loss, p.above30_r0
         );
     }
-    match erlang.limiar {
+    match erlang.threshold {
         Some(a) => println!(
-            "  limiar: amplitude {:.1} | perda de resolucao no limiar {:.2} min | monotona: {}",
+            "  threshold: amplitude {:.1} | resolution loss at the threshold {:.2} min | monotone: {}",
             a,
-            erlang.perda_no_limiar.unwrap_or(f64::NAN),
-            erlang.monotona
+            erlang.loss_at_threshold.unwrap_or(f64::NAN),
+            erlang.monotone
         ),
         None => println!(
-            "  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}",
-            erlang.monotona
+            "  threshold: NOT FOUND on the grid (prediction 3 does not hold here) | monotone: {}",
+            erlang.monotone
         ),
     }
 
-    println!("\n-- previsao 3, especificacao 2: a escala de R0 calibrada na demanda plana --");
-    let l = stochology_core::resolucao::limiar_de_oscilacao_com_plano(
+    println!("\n-- prediction 3, specification 2: the R0 scale calibrated on flat demand --");
+    let l = stochology_core::resolution::oscillation_threshold_with_plan(
         1909,
         200,
         10,
         8.0,
         &amplitudes,
-        calibrada,
+        calibrated,
     );
     println!(
-        "  a escala calibrada tem {} agentes (a plana falha no maximo 10% dos dias)",
-        calibrada
+        "  the calibrated scale has {} agents (the flat one fails on at most 10% of the days)",
+        calibrated
     );
     println!(
         "  {:>10} {:>12} {:>14} {:>12} {:>10}",
-        "amplitude", "dias falhos", "fracao", "perda (min)", "acima30 R0"
+        "amplitude", "failed days", "fraction", "loss (min)", "above30 R0"
     );
-    for p in &l.pontos {
+    for p in &l.points {
         println!(
             "  {:>10.1} {:>12} {:>14.3} {:>12.2} {:>10.4}",
-            p.amplitude, p.dias_falhos, p.fracao_de_dias_falhos, p.perda, p.acima30_r0
+            p.amplitude, p.failed_days, p.failed_day_fraction, p.loss, p.above30_r0
         );
     }
-    match l.limiar {
+    match l.threshold {
         Some(a) => println!(
-            "  limiar: amplitude {:.1} | perda de resolucao no limiar {:.2} min | monotona: {}",
+            "  threshold: amplitude {:.1} | resolution loss at the threshold {:.2} min | monotone: {}",
             a,
-            l.perda_no_limiar.unwrap_or(f64::NAN),
-            l.monotona
+            l.loss_at_threshold.unwrap_or(f64::NAN),
+            l.monotone
         ),
         None => println!(
-            "  limiar: NAO ENCONTRADO no grid (a previsao 3 nao se sustenta aqui) | monotona: {}",
-            l.monotona
+            "  threshold: NOT FOUND on the grid (prediction 3 does not hold here) | monotone: {}",
+            l.monotone
         ),
     }
 
-    // ---- previsao 5: a transferencia
+    // ---- prediction 5: the transfer
     println!(
-        "\n-- previsao 5: a transferencia (sobrevive a R1 implica sobrevive a R0; o contrario nao) --"
+        "\n-- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --"
     );
-    let perfis = [
+    let profiles = [
         (8.0, 0.5),
         (8.0, 1.0),
         (8.0, 1.5),
@@ -834,235 +839,241 @@ fn horizonte_r() {
         (8.0, 2.5),
         (8.0, 3.0),
     ];
-    let t = stochology_core::resolucao::transferencia(1909, 200, 10, &perfis);
+    let t = stochology_core::resolution::transfer(1909, 200, 10, &profiles);
     println!(
-        "  {} perfis x 200 dias | limiar do dia {:.2} | violacoes da implicacao: {} | contraexemplos: {} | conservacao do agregado conferida: {}",
-        t.perfis, t.limiar, t.violacoes, t.contraexemplos, t.conservacao_conferida
+        "  {} profiles x 200 days | day threshold {:.2} | violations of the implication: {} | counterexamples: {} | aggregate conservation checked: {}",
+        t.profiles, t.threshold, t.violations, t.counterexamples, t.conservation_checked
     );
     println!(
-        "  leitura: nenhum perfil sobrevive a R1 e falha em R0; {} perfis passam em R0 e falham em algum dia",
-        t.contraexemplos
+        "  reading: no profile survives R1 and fails at R0; {} profiles pass at R0 and fail on some day",
+        t.counterexamples
     );
-    let l_limiar = l.limiar;
+    let l_threshold = l.threshold;
 
-    // ---- o eixo R, capítulo por capítulo
+    // ---- the R axis, chapter by chapter
     println!(
-        "\n-- o eixo R, capitulo por capitulo (a tabela esta em book/eixo-r.tsv; a leitura e calculada aqui) --"
+        "\n-- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --"
     );
-    let perfis: [(&str, f64, f64, &str); 3] = [
-        ("posto", 5.0, 11.0, "demanda de 5 a 11"),
-        ("posto-leve", 7.0, 9.0, "demanda de 7 a 9"),
-        ("plano", 8.0, 8.0, "demanda plana"),
+    let profiles: [(&str, f64, f64, &str); 3] = [
+        ("posto", 5.0, 11.0, "demand from 5 to 11"),
+        ("posto-leve", 7.0, 9.0, "demand from 7 to 9"),
+        ("plano", 8.0, 8.0, "flat demand"),
     ];
-    let tabela = std::fs::read_to_string("book/eixo-r.tsv").unwrap_or_default();
-    for linha in tabela.lines() {
-        let l = linha.trim_end();
+    let table = std::fs::read_to_string("book/r-axis.tsv").unwrap_or_default();
+    for line in table.lines() {
+        let l = line.trim_end();
         if l.is_empty() || l.starts_with('#') {
             continue;
         }
-        let campos: Vec<&str> = l.split('\t').collect();
-        if campos.len() < 3 || campos[0] == "cap" {
+        let fields: Vec<&str> = l.split('\t').collect();
+        if fields.len() < 3 || fields[0] == "cap" {
             continue;
         }
-        let (cap, caso, frase) = (campos[0], campos[1], campos[2]);
-        let leitura = match perfis.iter().find(|(nome, _, _, _)| *nome == caso) {
-            Some((_, baixa, alta, rotulo)) => {
-                let p = medir_perda(1909, 200, 10, *baixa, *alta);
-                format!("perda de resolucao {:.2} min ({})", p.perda, rotulo)
+        let (cap, case, sentence) = (fields[0], fields[1], fields[2]);
+        let reading = match profiles.iter().find(|(name, _, _, _)| *name == case) {
+            Some((_, low, high, label)) => {
+                let p = measure_loss(1909, 200, 10, *low, *high);
+                format!("resolution loss {:.2} min ({})", p.loss, label)
             }
-            None => match caso {
-                "previsoes" => match l_limiar {
+            None => match case {
+                "previsoes" => match l_threshold {
                     Some(amplitude) => {
-                        format!("limiar de oscilacao na amplitude {amplitude:.1} (plano calibrado)")
+                        format!(
+                            "oscillation threshold at amplitude {amplitude:.1} (calibrated plan)"
+                        )
                     }
-                    None => "limiar de oscilacao nao encontrado".to_string(),
+                    None => "oscillation threshold not found".to_string(),
                 },
-                _ => "sem perda medida neste capitulo".to_string(),
+                _ => "no loss measured in this chapter".to_string(),
             },
         };
-        println!("capítulo {cap:>2} | {leitura} | {frase}");
+        println!("chapter {cap:>2} | {reading} | {sentence}");
     }
 }
 
-fn contrato() {
-    println!("== O contrato :: a ficha em arquivo, a versao e a cadeia de migracoes ==");
+fn contract() {
+    println!("== The contract :: the card on file, the version and the migration chain ==");
     println!(
-        "versao da ficha: {} | cadeia declarada em crates/stochology-schema/migracoes.tsv",
-        stochology_schema::VERSAO_DA_FICHA.texto()
+        "card version: {} | chain declared in crates/stochology-core/migracoes.tsv",
+        stochology_core::schema::SCHEMA_VERSION.text()
     );
-    for (i, etapa) in stochology_schema::PADRAO.descricao().iter().enumerate() {
-        println!("  etapa {}: {}", i + 1, etapa);
+    for (i, step) in stochology_core::schema::DECLARED_CHAIN
+        .description()
+        .iter()
+        .enumerate()
+    {
+        println!("  step {}: {}", i + 1, step);
     }
     println!(
-        "  versoes da cadeia: {}",
-        stochology_schema::PADRAO
-            .versoes()
+        "  versions of the chain: {}",
+        stochology_core::schema::DECLARED_CHAIN
+            .versions()
             .iter()
-            .map(|v| v.texto())
+            .map(|v| v.text())
             .collect::<Vec<_>>()
             .join(" -> ")
     );
 
-    println!("\n-- demonstracao: um documento da versao 1.0 migra ate a versao da ficha --");
-    let mut ficha = stochology_core::Ficha::nova(
+    println!("\n-- demonstration: a version 1.0 document migrates up to the card version --");
+    let mut card = stochology_core::Card::new(
         "lab.schema.1",
-        stochology_core::Camada::Modelo,
-        stochology_core::TipoIncerteza::Epistemica,
+        stochology_core::Layer::Model,
+        stochology_core::UncertaintyType::Epistemic,
     )
-    .com_resolucao(stochology_core::Resolucao::R3Subpergunta)
-    .completa()
-    .com_cuidados();
-    ficha.definicao = "ficha de demonstracao do contrato".into();
-    ficha.pergunta_do_decisor = "cada dia, o servico da conta?".into();
-    ficha.acao_do_pacote = "dimensionar a escala do dia".into();
+    .with_resolution(stochology_core::Resolution::R3Subquestion)
+    .complete()
+    .with_safeguards();
+    card.definition = "contract demonstration card".into();
+    card.decision_maker_question = "each day, does the service hold?".into();
+    card.package_action = "size the roster of the day".into();
 
-    let atual = stochology_schema::texto(&ficha);
-    let mut antigo = String::from("versao = 1.0\n");
-    for linha in atual.lines().skip(1) {
-        if linha.starts_with("resolucao ") || linha.starts_with("priori_elicitada ") {
+    let current = stochology_core::schema::text(&card);
+    let mut old = String::from("versao = 1.0\n");
+    for line in current.lines().skip(1) {
+        if line.starts_with("resolucao ") || line.starts_with("priori_elicitada ") {
             continue;
         }
-        antigo.push_str(linha);
-        antigo.push('\n');
+        old.push_str(line);
+        old.push('\n');
     }
-    println!("  o documento da 1.0 nao declara os dois campos que a cadeia acrescenta");
-    match stochology_schema::de_texto(&antigo) {
-        Ok(migrada) => {
+    println!("  the 1.0 document does not declare the two fields the chain adds");
+    match stochology_core::schema::from_text(&old) {
+        Ok(migrated) => {
             println!(
-                "  migrou: resolucao = {} (o valor de acrescimo declarado) | priori_elicitada = {} | definicao intacta = {}",
-                migrada.resolucao.codigo(),
-                migrada.priori_elicitada,
-                migrada.definicao == ficha.definicao
+                "  migrated: resolution = {} (the declared addition value) | elicited_prior = {} | definition intact = {}",
+                migrated.resolution.code(),
+                migrated.elicited_prior,
+                migrated.definition == card.definition
             );
             println!(
-                "  a ficha migrada validou: id {} | camada {} | acao \"{}\"",
-                migrada.id,
-                migrada.camada.codigo(),
-                migrada.acao_do_pacote
+                "  the migrated card validated: id {} | layer {} | action \"{}\"",
+                migrated.id,
+                migrated.layer.code(),
+                migrated.package_action
             );
         }
-        Err(erro) => println!("  REPROVADO: {erro:?}"),
+        Err(error) => println!("  REJECTED: {error:?}"),
     }
     println!(
-        "  a ficha na versao atual nao passa pela cadeia: {}",
-        stochology_schema::de_texto(&atual).is_ok()
+        "  the card at the current version does not go through the chain: {}",
+        stochology_core::schema::from_text(&current).is_ok()
     );
 }
 
-fn rodar(cap: usize) {
+fn run(cap: usize) {
     match cap {
-        1 => cap01(),
-        2 => cap02(),
-        3 => cap03(),
-        4 => cap04(),
-        5 => cap05::rodar(),
-        6 => cap06::rodar(),
-        7 => cap07::rodar(),
-        8 => cap08::rodar(),
-        9 => cap09::rodar(),
-        10 => cap10::rodar(),
-        11 => cap11::rodar(),
-        12 => cap12::rodar(),
-        13 => cap13::rodar(),
-        14 => cap14::rodar(),
-        15 => cap15::rodar(),
-        16 => cap16::rodar(),
-        17 => cap17::rodar(),
-        18 => cap18::rodar(),
-        19 => cap19::rodar(),
-        20 => cap20::rodar(),
-        21 => cap21::rodar(),
+        1 => ch01(),
+        2 => ch02(),
+        3 => ch03(),
+        4 => ch04(),
+        5 => ch05::run(),
+        6 => ch06::run(),
+        7 => ch07::run(),
+        8 => ch08::run(),
+        9 => ch09::run(),
+        10 => ch10::run(),
+        11 => ch11::run(),
+        12 => ch12::run(),
+        13 => ch13::run(),
+        14 => ch14::run(),
+        15 => ch15::run(),
+        16 => ch16::run(),
+        17 => ch17::run(),
+        18 => ch18::run(),
+        19 => ch19::run(),
+        20 => ch20::run(),
+        21 => ch21::run(),
         _ => {
-            eprintln!("uso: labs --cap N (1..21) ou --todos");
+            eprintln!("usage: labs --chapter N (1..21) or --all");
             std::process::exit(1);
         }
     }
 }
 
-fn cap01() {
-    println!("== Capítulo 1 :: o alvo invisível ==");
+fn ch01() {
+    println!("== Chapter 1 :: the invisible target ==");
     let n = 10_000;
     println!(
-        "duas maquinas com a semente 1713 concordam em {} de {} sorteios: {}",
+        "two machines with the seed 1713 agree in {} of {} draws: {}",
         n,
         n,
-        cap01::duas_maquinas_concordam(1713, n)
+        ch01::two_machines_agree(1713, n)
     );
     println!(
-        "sorteios coincidentes com a semente seguinte: {}",
-        cap01::coincidencias_com_outra_semente(1713, n)
+        "draws coinciding with the next seed: {}",
+        ch01::matches_with_another_seed(1713, n)
     );
-    for semente in [1713u64, 1909, 2026] {
+    for seed in [1713u64, 1909, 2026] {
         println!(
-            "semente {}: frequencia de caras em 100 mil jogadas = {:.4}",
-            semente,
-            cap01::frequencia_de_caras(semente, 100_000)
+            "seed {}: frequency of heads in 100 thousand tosses = {:.4}",
+            seed,
+            ch01::frequency_of_heads(seed, 100_000)
         );
     }
 }
 
-fn cap02() {
-    println!("== Capítulo 2 :: a falácia mora na ponte ==");
-    let falso_positivo = 1.0 / 1_000_000.0;
-    for prevalencia in [0.01_f64, 1.0 / 1_000.0, 1.0 / 1_000_000.0] {
-        let p = cap02::falacia_do_promotor(prevalencia, 1.0, falso_positivo);
+fn ch02() {
+    println!("== Chapter 2 :: the fallacy lives on the bridge ==");
+    let false_positive = 1.0 / 1_000_000.0;
+    for prevalence in [0.01_f64, 1.0 / 1_000.0, 1.0 / 1_000_000.0] {
+        let p = ch02::prosecutor_fallacy(prevalence, 1.0, false_positive);
         println!(
-            "prevalencia {:.0e}: P(evidencia|inocente)={:.8}  P(inocente|evidencia)={:.4}  fator da troca={:.1}",
-            prevalencia,
-            p.verossimilhanca,
-            p.posterior_de_inocencia,
-            cap02::fator_da_troca(prevalencia, 1.0, falso_positivo)
+            "prevalence {:.0e}: P(evidence|innocent)={:.8}  P(innocent|evidence)={:.4}  swap factor={:.1}",
+            prevalence,
+            p.likelihood,
+            p.posterior_of_innocence,
+            ch02::swap_factor(prevalence, 1.0, false_positive)
         );
     }
 }
 
-fn cap03() {
-    println!("== Capítulo 3 :: árvores, chances e decibans ==");
-    let a = cap03::arvore(10_000, 0.01, 0.90, 0.09);
+fn ch03() {
+    println!("== Chapter 3 :: trees, odds and decibans ==");
+    let a = ch03::tree(10_000, 0.01, 0.90, 0.09);
     println!(
-        "mamografia: {} doentes, {} positivos doentes, {} saudaveis, {} falsos positivos, {} positivas",
-        a.doentes, a.positivos_doentes, a.saudaveis, a.falsos_positivos, a.positivos
+        "mammography: {} sick, {} sick positives, {} healthy, {} false positives, {} positives",
+        a.sick, a.true_positives, a.healthy, a.false_positives, a.positives
     );
     println!(
-        "P(doente|positivo) = {:.4}  (uma em cada {:.1} positivas)",
-        a.fracao_doentes_entre_positivos(),
-        a.uma_em_cada()
+        "P(sick|positive) = {:.4}  (one in every {:.1} positives)",
+        a.fraction_sick_among_positives(),
+        a.one_in_every()
     );
     println!(
-        "segundo exame: independente = {:.1} dB, correlacionado (razao efetiva 4,2) = {:.2} dB",
-        cap03::decibans(10.0),
-        cap03::decibans(4.2)
+        "second test: independent = {:.1} dB, correlated (effective ratio 4.2) = {:.2} dB",
+        ch03::decibans(10.0),
+        ch03::decibans(4.2)
     );
     println!(
-        "posterior com dois positivos: independentes = {:.4}, correlacionados = {:.4}",
-        cap03::posterior_por_chances(0.01, &[10.0, 10.0]),
-        cap03::posterior_por_chances(0.01, &[10.0, 4.2])
+        "posterior with two positives: independent = {:.4}, correlated = {:.4}",
+        ch03::posterior_by_odds(0.01, &[10.0, 10.0]),
+        ch03::posterior_by_odds(0.01, &[10.0, 4.2])
     );
 }
 
-fn cap04() {
-    println!("== Capítulo 4 :: a moeda cujo vício muda ==");
-    let c = cap04::moeda_movel(2026, 6_400, 200, 0.99);
+fn ch04() {
+    println!("== Chapter 4 :: the coin whose bias changes ==");
+    let c = ch04::moving_coin(2026, 6_400, 200, 0.99);
     println!(
-        "vies sobe de {:.1} a {:.1} em {} passos, {} repeticoes, desconto {}",
-        cap04::vies_em(0, c.passos),
-        cap04::vies_em(c.passos, c.passos),
-        c.passos,
-        c.repeticoes,
-        c.desconto
+        "bias climbs from {:.1} to {:.1} in {} steps, {} repetitions, discount {}",
+        ch04::bias_at(0, c.steps),
+        ch04::bias_at(c.steps, c.steps),
+        c.steps,
+        c.repetitions,
+        c.discount
     );
     println!(
-        "cobertura do intervalo de 95%: modelo fixo = {:.4}, modelo com esquecimento = {:.4}",
-        c.cobertura_estatica, c.cobertura_descontada
+        "coverage of the 95% interval: fixed model = {:.4}, model with forgetting = {:.4}",
+        c.static_coverage, c.discounted_coverage
     );
     println!(
-        "largura do intervalo fixo no passo 100 = {:.4}, no passo {} = {:.4}",
-        c.largura_estatica_100, c.passos, c.largura_estatica_final
+        "width of the fixed interval at step 100 = {:.4}, at step {} = {:.4}",
+        c.static_width_100, c.steps, c.static_width_final
     );
     println!(
-        "largura do intervalo com esquecimento no passo {} = {:.4} (razao {:.1}x o fixo final)",
-        c.passos,
-        c.largura_descontada_final,
-        c.largura_descontada_final / c.largura_estatica_final
+        "width of the interval with forgetting at step {} = {:.4} (ratio {:.1}x the final fixed one)",
+        c.steps,
+        c.discounted_width_final,
+        c.discounted_width_final / c.static_width_final
     );
 }

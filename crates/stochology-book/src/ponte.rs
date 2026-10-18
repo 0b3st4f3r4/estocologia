@@ -1,76 +1,75 @@
-//! O ponto 16: a tese da ponte em escala, com o teste justo por fazer.
+//! Point 16: the bridge thesis at scale, with the fair test still to be done.
 //!
-//! O piloto P01 (`fundo/p01-tese/`) deu **empate no teto**: os dois braços apontaram os 8 defeitos plantados e
-//! não deram nenhum alarme falso nos 4 casos limpos, e a declaração do piloto fixou que empate no teto conta como
-//! **tese não sustentada**. O README do piloto diz o que falta para um teste justo: casos mais difíceis escolhidos
-//! por alguém **de fora do programa**, analistas **humanos** e um juiz **humano**.
+//! Pilot P01 (`empirical/p01-tese/`) gave a **tie at the ceiling**: both arms flagged all 8 planted defects and
+//! raised no false alarm on the 4 clean cases, and the pilot declaration fixed that a tie at the ceiling counts as
+//! **thesis not supported**. The pilot README says what a fair test is missing: harder cases chosen
+//! by someone **from outside the program**, **human** analysts and a **human** judge.
 //!
-//! Este módulo faz duas coisas. Primeiro, **re-deriva** o veredito do piloto das notas do juiz cego
-//! (`fundo/p01-tese/juiz/notas.yaml`), em vez de repetir o número do README. Segundo, **trava a tese**: enquanto o
-//! teste justo não tiver escolhedor, analistas e juiz designados, nenhuma linha do registro pode dizer que a tese
-//! está sustentada — o portão reprova.
+//! This module does two things. First, it **re-derives** the pilot's verdict from the blind judge's notes
+//! (`empirical/p01-tese/juiz/notas.yaml`) instead of repeating the README number. Second, it **locks the thesis**: while the
+//! fair test has no selector, analysts and judge designated, no line of the registry may say the thesis
+//! is supported — the gate rejects.
 //!
-//! Rodar: ~labs --ponte~
+//! Run: ~labs --bridge~
 
-/// O registro da frente do teste justo.
-pub const REGISTRO: &str = "fundo/p16-ponte/registro.tsv";
-/// As notas do juiz cego do piloto.
-pub const NOTAS: &str = "fundo/p01-tese/juiz/notas.yaml";
+/// The registry of the fair test front.
+pub const REGISTRY: &str = "empirical/p16-ponte/registro.tsv";
+/// The notes of the pilot's blind judge.
+pub const JUDGE_NOTES: &str = "empirical/p01-tese/juiz/notas.yaml";
 
-/// Uma nota do juiz: um caso, um braço, o significado da nota.
+/// A judge note: one case, one arm, the meaning of the note.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Nota {
-    pub caso: String,
-    /// X ou Y — o rótulo cego; o mapa está em `juiz/mapa_XY.json`.
-    pub braco: char,
-    pub tipo: String,
-    /// A nota do juiz: em caso com defeito, 1 = apontou o defeito; em caso limpo, 1 = alarme falso.
-    pub nota: i64,
+pub struct Note {
+    pub case: String,
+    /// X or Y — the blind label; the map is in `juiz/mapa_XY.json`.
+    pub arm: char,
+    pub kind: String,
+    /// The judge's mark: in a defective case, 1 = flagged the defect; in a clean case, 1 = false alarm.
+    pub mark: i64,
 }
 
-/// A pontuação do piloto, re-derivada das notas.
+/// The pilot score, re-derived from the notes.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Pontuacao {
-    pub casos: usize,
-    pub com_defeito: usize,
-    pub limpos: usize,
-    pub apontou_x: usize,
-    pub apontou_y: usize,
-    pub alarmes_x: usize,
-    pub alarmes_y: usize,
-    /// Casos em que os dois braços divergiram no significado da nota.
-    pub pares_discordantes: usize,
+pub struct Score {
+    pub cases: usize,
+    pub defective: usize,
+    pub clean: usize,
+    pub flagged_x: usize,
+    pub flagged_y: usize,
+    pub false_alarms_x: usize,
+    pub false_alarms_y: usize,
+    /// Cases where the two arms disagreed on the meaning of the mark.
+    pub discordant_pairs: usize,
 }
 
-/// Lê as notas do juiz do arquivo do piloto: `caso_XX:` e as duas linhas `X:` e `Y:` com campos em fluxo.
-pub fn ler_notas(texto: &str) -> Vec<Nota> {
-    let mut notas = Vec::new();
-    let mut caso = String::new();
-    for linha in texto.lines() {
-        let l = linha.trim_end();
+/// Reads the judge notes from the pilot file: `caso_XX:` and the two lines `X:` and `Y:` with flow fields.
+pub fn parse_notes(text: &str) -> Vec<Note> {
+    let mut notes = Vec::new();
+    let mut case = String::new();
+    for line in text.lines() {
+        let l = line.trim_end();
         if l.trim().is_empty() || l.trim_start().starts_with('#') {
             continue;
         }
         if !l.starts_with(' ') && l.ends_with(':') {
-            caso = l.trim_end_matches(':').trim().to_string();
+            case = l.trim_end_matches(':').trim().to_string();
             continue;
         }
         let t = l.trim_start();
-        let braco = if t.starts_with("X:") {
+        let arm = if t.starts_with("X:") {
             Some('X')
         } else if t.starts_with("Y:") {
             Some('Y')
         } else {
             None
         };
-        let Some(braco) = braco else { continue };
-        let campo_nota = |chave: &str| -> i64 {
-            let alvo = format!("{chave}:");
-            match t.find(&alvo) {
+        let Some(arm) = arm else { continue };
+        let mark_field = |key: &str| -> i64 {
+            let target = format!("{key}:");
+            match t.find(&target) {
                 Some(i) => {
-                    let resto = &t[i + alvo.len()..];
-                    resto
-                        .trim_start()
+                    let rest = &t[i + target.len()..];
+                    rest.trim_start()
                         .split([',', '}'])
                         .next()
                         .unwrap_or("")
@@ -81,13 +80,12 @@ pub fn ler_notas(texto: &str) -> Vec<Nota> {
                 None => 0,
             }
         };
-        let campo = |chave: &str| -> String {
-            let alvo = format!("{chave}:");
-            match t.find(&alvo) {
+        let field = |key: &str| -> String {
+            let target = format!("{key}:");
+            match t.find(&target) {
                 Some(i) => {
-                    let resto = &t[i + alvo.len()..];
-                    resto
-                        .trim_start()
+                    let rest = &t[i + target.len()..];
+                    rest.trim_start()
                         .split([',', '}'])
                         .next()
                         .unwrap_or("")
@@ -97,540 +95,554 @@ pub fn ler_notas(texto: &str) -> Vec<Nota> {
                 None => String::new(),
             }
         };
-        let tipo = campo("tipo");
-        let _ = tipo.clone();
-        notas.push(Nota {
-            caso: caso.clone(),
-            braco,
-            tipo,
-            nota: campo_nota("nota"),
+        let kind = field("tipo");
+        let _ = kind.clone();
+        notes.push(Note {
+            case: case.clone(),
+            arm,
+            kind,
+            mark: mark_field("nota"),
         });
     }
-    notas
+    notes
 }
 
-/// Pontua o piloto: quantos defeitos cada braço apontou e quantos alarmes falsos deu, mais os pares discordantes.
-pub fn pontuar(notas: &[Nota]) -> Pontuacao {
-    let mut por_caso: Vec<(String, i64, i64)> = Vec::new();
-    for n in notas {
-        match por_caso.iter_mut().find(|(c, _, _)| *c == n.caso) {
-            Some(entrada) => {
-                if n.braco == 'X' {
-                    entrada.1 = n.nota;
+/// Scores the pilot: how many defects each arm flagged and how many false alarms it raised, plus the discordant pairs.
+pub fn score(notes: &[Note]) -> Score {
+    let mut by_case: Vec<(String, i64, i64)> = Vec::new();
+    for n in notes {
+        match by_case.iter_mut().find(|(c, _, _)| *c == n.case) {
+            Some(entry) => {
+                if n.arm == 'X' {
+                    entry.1 = n.mark;
                 } else {
-                    entrada.2 = n.nota;
+                    entry.2 = n.mark;
                 }
             }
             None => {
-                let (x, y) = if n.braco == 'X' {
-                    (n.nota, 0)
+                let (x, y) = if n.arm == 'X' {
+                    (n.mark, 0)
                 } else {
-                    (0, n.nota)
+                    (0, n.mark)
                 };
-                por_caso.push((n.caso.clone(), x, y));
+                by_case.push((n.case.clone(), x, y));
             }
         }
     }
-    let tipo_do_caso = |caso: &str| -> String {
-        notas
+    let kind_of_case = |case: &str| -> String {
+        notes
             .iter()
-            .find(|n| n.caso == caso)
-            .map(|n| n.tipo.clone())
+            .find(|n| n.case == case)
+            .map(|n| n.kind.clone())
             .unwrap_or_default()
     };
-    let mut apontou_x = 0;
-    let mut apontou_y = 0;
-    let mut alarmes_x = 0;
-    let mut alarmes_y = 0;
-    let mut com_defeito = 0;
-    let mut limpos = 0;
-    let mut discordantes = 0;
-    for (caso, x, y) in &por_caso {
-        if tipo_do_caso(caso) == "defeito" {
-            com_defeito += 1;
+    let mut flagged_x = 0;
+    let mut flagged_y = 0;
+    let mut false_alarms_x = 0;
+    let mut false_alarms_y = 0;
+    let mut defective = 0;
+    let mut clean = 0;
+    let mut discordant = 0;
+    for (case, x, y) in &by_case {
+        if kind_of_case(case) == "defeito" {
+            defective += 1;
             if *x == 1 {
-                apontou_x += 1;
+                flagged_x += 1;
             }
             if *y == 1 {
-                apontou_y += 1;
+                flagged_y += 1;
             }
         } else {
-            limpos += 1;
+            clean += 1;
             if *x == 1 {
-                alarmes_x += 1;
+                false_alarms_x += 1;
             }
             if *y == 1 {
-                alarmes_y += 1;
+                false_alarms_y += 1;
             }
         }
         if x != y {
-            discordantes += 1;
+            discordant += 1;
         }
     }
-    Pontuacao {
-        casos: por_caso.len(),
-        com_defeito,
-        limpos,
-        apontou_x,
-        apontou_y,
-        alarmes_x,
-        alarmes_y,
-        pares_discordantes: discordantes,
+    Score {
+        cases: by_case.len(),
+        defective,
+        clean,
+        flagged_x,
+        flagged_y,
+        false_alarms_x,
+        false_alarms_y,
+        discordant_pairs: discordant,
     }
 }
 
-/// O veredito do piloto pela regra declarada antes: o empate no teto conta como tese não sustentada.
-pub fn veredito_do_piloto(p: &Pontuacao) -> String {
-    let teto = p.apontou_x == p.com_defeito
-        && p.apontou_y == p.com_defeito
-        && p.alarmes_x == 0
-        && p.alarmes_y == 0;
-    if teto && p.pares_discordantes == 0 {
+/// The pilot verdict by the rule declared beforehand: a tie at the ceiling counts as thesis not supported.
+pub fn pilot_verdict(p: &Score) -> String {
+    let ceiling = p.flagged_x == p.defective
+        && p.flagged_y == p.defective
+        && p.false_alarms_x == 0
+        && p.false_alarms_y == 0;
+    if ceiling && p.discordant_pairs == 0 {
         format!(
-            "empate no teto: os dois bracos apontaram {} de {} defeitos e deram {} alarmes falsos em {} casos limpos; pela regra declarada, a tese NAO e sustentada",
-            p.apontou_x, p.com_defeito, p.alarmes_x, p.limpos
+            "tie at the ceiling: both arms flagged {} of {} defects and raised {} false alarms on {} clean cases; by the declared rule, the thesis is NOT supported",
+            p.flagged_x, p.defective, p.false_alarms_x, p.clean
         )
-    } else if p.pares_discordantes > 0 {
+    } else if p.discordant_pairs > 0 {
         format!(
-            "ha {} par(es) discordante(s): sensibilidade {} e {} de {}, alarmes {} e {} — o piloto discrimina e o veredito sai das notas do juiz",
-            p.pares_discordantes, p.apontou_x, p.apontou_y, p.com_defeito, p.alarmes_x, p.alarmes_y
+            "there are {} discordant pair(s): sensitivity {} and {} of {}, alarms {} and {} — the pilot discriminates and the verdict comes from the judge notes",
+            p.discordant_pairs,
+            p.flagged_x,
+            p.flagged_y,
+            p.defective,
+            p.false_alarms_x,
+            p.false_alarms_y
         )
     } else {
-        "as duas linhagens empatam fora do teto: falta poder, e o veredito nao se sustenta"
+        "the two lineages tie below the ceiling: power is missing, and the verdict does not hold"
             .to_string()
     }
 }
 
-/// Uma exigência do teste justo: o papel, o que se exige e quem já foi designado.
+/// A requirement of the fair test: the role, what is required and who has already been designated.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Exigencia {
-    pub papel: String,
-    pub exigencia: String,
-    pub quem: String,
-    pub estado: String,
+pub struct Requirement {
+    pub role: String,
+    pub requirement: String,
+    pub who: String,
+    pub state: String,
 }
 
-/// O registro da frente: prazo, mínimo de casos e os papéis.
+/// The registry of the front: deadline, minimum cases and the roles.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Ponte {
-    pub carimbo: String,
-    pub prazo: String,
-    pub casos_minimos: usize,
-    /// O veredito declarado pelo dono se a janela vencer sem os papeis: não sustentada em definitivo.
-    pub veredito_se_o_prazo_vencer: String,
-    pub papeis: Vec<Exigencia>,
+pub struct Bridge {
+    pub stamp: String,
+    pub deadline: String,
+    pub min_cases: usize,
+    /// The verdict declared by the owner if the window lapses without the roles: not supported, definitively.
+    pub verdict_if_window_lapses: String,
+    pub roles: Vec<Requirement>,
 }
 
-/// O que o portão decide sobre a tese.
+/// What the gate decides about the thesis.
 #[derive(Debug, Clone, PartialEq)]
-pub struct VereditoDaPonte {
-    pub papeis_designados: Vec<String>,
-    pub papeis_pendentes: Vec<String>,
-    pub casos_faltando: usize,
-    pub status_declarado: String,
-    /// Nenhuma linha pode dizer que a tese está sustentada antes do teste justo.
-    pub divergencias: Vec<String>,
-    pub caixa_fechada: bool,
+pub struct BridgeVerdict {
+    pub designated_roles: Vec<String>,
+    pub pending_roles: Vec<String>,
+    pub cases_missing: usize,
+    pub declared_status: String,
+    /// No line may say the thesis is supported before the fair test.
+    pub divergences: Vec<String>,
+    pub box_closed: bool,
 }
 
-/// Lê o registro da frente: comentários `# chave<TAB>valor` e a tabela por tabulação.
-pub fn ler_ponte(texto: &str) -> Result<Ponte, String> {
-    let mut carimbo = String::new();
-    let mut prazo = String::new();
-    let mut casos_minimos = 0usize;
-    let mut veredito_se_o_prazo_vencer = String::new();
-    let mut papeis = Vec::new();
-    for linha in texto.lines() {
-        let l = linha.trim_end();
+/// Reads the registry of the front: comments `# key<TAB>value` and the tab-separated table.
+pub fn parse_bridge(text: &str) -> Result<Bridge, String> {
+    let mut stamp = String::new();
+    let mut deadline = String::new();
+    let mut min_cases = 0usize;
+    let mut verdict_if_window_lapses = String::new();
+    let mut roles = Vec::new();
+    for line in text.lines() {
+        let l = line.trim_end();
         if l.trim().is_empty() {
             continue;
         }
-        if let Some(resto) = l.strip_prefix('#') {
-            let campos: Vec<&str> = resto.trim().split('\t').collect();
-            if campos.len() >= 2 {
-                match campos[0] {
-                    "registros" => carimbo = campos[1].trim().to_string(),
-                    "prazo" => prazo = campos[1].trim().to_string(),
+        if let Some(rest) = l.strip_prefix('#') {
+            let fields: Vec<&str> = rest.trim().split('\t').collect();
+            if fields.len() >= 2 {
+                match fields[0] {
+                    "registros" => stamp = fields[1].trim().to_string(),
+                    "prazo" => deadline = fields[1].trim().to_string(),
                     "casos_minimos" => {
-                        casos_minimos = campos[1]
+                        min_cases = fields[1]
                             .trim()
                             .parse()
-                            .map_err(|_| "casos_minimos nao e numero")?
+                            .map_err(|_| "casos_minimos is not a number")?
                     }
                     "veredito_se_o_prazo_vencer" => {
-                        veredito_se_o_prazo_vencer = campos[1].trim().to_string()
+                        verdict_if_window_lapses = fields[1].trim().to_string()
                     }
                     _ => {}
                 }
             }
             continue;
         }
-        let campos: Vec<&str> = l.split('\t').collect();
-        if campos.len() < 4 || campos[0] == "papel" {
+        let fields: Vec<&str> = l.split('\t').collect();
+        if fields.len() < 4 || fields[0] == "papel" {
             continue;
         }
-        papeis.push(Exigencia {
-            papel: campos[0].to_string(),
-            exigencia: campos[1].to_string(),
-            quem: campos[2].to_string(),
-            estado: campos[3].to_string(),
+        roles.push(Requirement {
+            role: fields[0].to_string(),
+            requirement: fields[1].to_string(),
+            who: fields[2].to_string(),
+            state: fields[3].to_string(),
         });
     }
-    if prazo.is_empty() || papeis.is_empty() || veredito_se_o_prazo_vencer.is_empty() {
+    if deadline.is_empty() || roles.is_empty() || verdict_if_window_lapses.is_empty() {
         return Err(
-            "registro da ponte sem prazo, sem papeis ou sem o veredito da janela".to_string(),
+            "bridge registry without deadline, without roles or without the window verdict"
+                .to_string(),
         );
     }
-    Ok(Ponte {
-        carimbo,
-        prazo,
-        casos_minimos,
-        veredito_se_o_prazo_vencer,
-        papeis,
+    Ok(Bridge {
+        stamp,
+        deadline,
+        min_cases,
+        verdict_if_window_lapses,
+        roles,
     })
 }
 
-impl Ponte {
-    /// O portão: os papéis designados, os pendentes, e as divergências (quem afirma o que não pode).
-    pub fn veredito(&self) -> VereditoDaPonte {
-        let mut designados = Vec::new();
-        let mut pendentes = Vec::new();
-        let mut casos_faltando = 0usize;
-        let mut divergencias = Vec::new();
+impl Bridge {
+    /// The gate: the designated roles, the pending ones, and the divergences (whoever claims what it cannot).
+    pub fn verdict(&self) -> BridgeVerdict {
+        let mut designated = Vec::new();
+        let mut pending = Vec::new();
+        let mut cases_missing = 0usize;
+        let mut divergences = Vec::new();
         let mut status = "nao sustentada".to_string();
-        let mut tudo_designado = true;
-        for p in &self.papeis {
-            if p.papel == "status_da_tese" {
-                status = p.estado.clone();
+        let mut everything_designated = true;
+        for p in &self.roles {
+            if p.role == "status_da_tese" {
+                status = p.state.clone();
                 continue;
             }
-            if p.papel == "casos" {
-                let feitos: usize = p
-                    .estado
+            if p.role == "casos" {
+                let done: usize = p
+                    .state
                     .split_whitespace()
                     .next()
                     .and_then(|v| v.parse().ok())
                     .unwrap_or(0);
-                casos_faltando = self.casos_minimos.saturating_sub(feitos);
-                if casos_faltando > 0 {
-                    tudo_designado = false;
-                    pendentes.push(format!("casos ({} de {})", feitos, self.casos_minimos));
+                cases_missing = self.min_cases.saturating_sub(done);
+                if cases_missing > 0 {
+                    everything_designated = false;
+                    pending.push(format!("casos ({} de {})", done, self.min_cases));
                 } else {
-                    designados.push(format!("casos ({} de {})", feitos, self.casos_minimos));
+                    designated.push(format!("casos ({} de {})", done, self.min_cases));
                 }
                 continue;
             }
-            if p.estado == "designado" {
-                designados.push(p.papel.clone());
+            if p.state == "designado" {
+                designated.push(p.role.clone());
             } else {
-                tudo_designado = false;
-                pendentes.push(p.papel.clone());
+                everything_designated = false;
+                pending.push(p.role.clone());
             }
         }
         if status != "nao sustentada" && status != "em teste" {
-            divergencias.push(format!("status declarado \"{status}\" com o teste justo por fazer: a tese so muda de estado depois do resultado do juiz"));
+            divergences.push(format!("declared status \"{status}\" with the fair test still to be done: the thesis only changes state after the judge's result"));
         }
-        if !tudo_designado && status == "em teste" {
-            divergencias
-                .push("status em teste sem os papeis designados e os casos no minimo".to_string());
+        if !everything_designated && status == "em teste" {
+            divergences.push(
+                "status em teste without the designated roles and the minimum cases".to_string(),
+            );
         }
-        VereditoDaPonte {
-            papeis_designados: designados,
-            papeis_pendentes: pendentes,
-            casos_faltando,
-            status_declarado: status,
-            divergencias,
-            caixa_fechada: !tudo_designado,
+        BridgeVerdict {
+            designated_roles: designated,
+            pending_roles: pending,
+            cases_missing,
+            declared_status: status,
+            divergences,
+            box_closed: !everything_designated,
         }
     }
 }
 
-/// Um caso elegível da lista externa: o identificador e a classificação do catálogo de fora.
+/// An eligible case from the external list: the identifier and the classification of the outside catalogue.
 #[derive(Debug, Clone, PartialEq)]
-pub struct CasoElegivel {
+pub struct EligibleCase {
     pub id: String,
-    /// "defeito" ou "limpo", pela classificação do catálogo externo.
-    pub grupo: String,
+    /// "defeito" or "limpo", by the classification of the external catalogue.
+    pub group: String,
 }
 
-/// A escolha mecânica dos casos: a permutação da lista pela semente declarada, na proporção declarada.
-/// Se a lista externa não sustenta a proporção pedida, a escolha é **reprovada** em vez de completada
-/// com o que houver — é o portão da regra de escolha.
-pub fn escolher_casos(
-    lista: &[CasoElegivel],
-    com_defeito: usize,
-    limpos: usize,
-    semente: u64,
+/// The mechanical choice of cases: the permutation of the list by the declared seed, in the declared proportion.
+/// If the external list does not support the requested proportion, the choice is **rejected** instead of completed
+/// with whatever there is — that is the gate of the choice rule.
+pub fn choose_cases(
+    list: &[EligibleCase],
+    defective: usize,
+    clean: usize,
+    seed: u64,
 ) -> Result<Vec<String>, String> {
-    let mut rng = stochology_core::Rng::novo(semente);
-    let mut escolhidos = Vec::new();
-    for (grupo, quantos) in [("defeito", com_defeito), ("limpo", limpos)] {
-        let mut candidatos: Vec<&CasoElegivel> =
-            lista.iter().filter(|c| c.grupo == grupo).collect();
-        if candidatos.len() < quantos {
+    let mut rng = stochology_core::Rng::new(seed);
+    let mut chosen = Vec::new();
+    for (group, how_many) in [("defeito", defective), ("limpo", clean)] {
+        let mut candidates: Vec<&EligibleCase> = list.iter().filter(|c| c.group == group).collect();
+        if candidates.len() < how_many {
             return Err(format!(
-                "a lista externa nao sustenta a escolha: {quantos} casos do grupo {grupo} pedidos, {} elegiveis",
-                candidatos.len()
+                "the external list does not support the choice: {how_many} cases of group {group} requested, {} eligible",
+                candidates.len()
             ));
         }
-        for i in (1..candidatos.len()).rev() {
-            let j = rng.uniforme(i as u64 + 1) as usize;
-            candidatos.swap(i, j);
+        for i in (1..candidates.len()).rev() {
+            let j = rng.uniform(i as u64 + 1) as usize;
+            candidates.swap(i, j);
         }
-        for c in candidatos.into_iter().take(quantos) {
-            escolhidos.push(c.id.clone());
+        for c in candidates.into_iter().take(how_many) {
+            chosen.push(c.id.clone());
         }
     }
-    Ok(escolhidos)
+    Ok(chosen)
 }
 
-/// Relatório: o piloto re-derivado e o estado do teste justo.
-pub fn relatar(pontuacao: Option<&Pontuacao>, ponte: Option<&Ponte>) -> String {
+/// Report: the pilot re-derived and the state of the fair test.
+pub fn report(score: Option<&Score>, bridge: Option<&Bridge>) -> String {
     let mut s = String::new();
-    s.push_str("-- o piloto P01, re-derivado das notas do juiz cego --\n");
-    match pontuacao {
+    s.push_str("-- pilot P01, re-derived from the blind judge notes --\n");
+    match score {
         Some(p) => {
             s.push_str(&format!(
-                "casos {} | com defeito {} | limpos {} | pares discordantes {}\n",
-                p.casos, p.com_defeito, p.limpos, p.pares_discordantes
+                "cases {} | defective {} | clean {} | discordant pairs {}\n",
+                p.cases, p.defective, p.clean, p.discordant_pairs
             ));
             s.push_str(&format!(
-                "apontou o defeito: braco X {} de {} | braco Y {} de {}\n",
-                p.apontou_x, p.com_defeito, p.apontou_y, p.com_defeito
+                "flagged the defect: arm X {} of {} | arm Y {} of {}\n",
+                p.flagged_x, p.defective, p.flagged_y, p.defective
             ));
             s.push_str(&format!(
-                "alarme falso nos limpos: braco X {} de {} | braco Y {} de {}\n",
-                p.alarmes_x, p.limpos, p.alarmes_y, p.limpos
+                "false alarm on the clean ones: arm X {} of {} | arm Y {} of {}\n",
+                p.false_alarms_x, p.clean, p.false_alarms_y, p.clean
             ));
-            s.push_str(&format!("veredito: {}\n", veredito_do_piloto(p)));
+            s.push_str(&format!("verdict: {}\n", pilot_verdict(p)));
         }
-        None => s.push_str("as notas do juiz nao foram lidas\n"),
+        None => s.push_str("the judge notes were not read\n"),
     }
-    s.push_str("\n-- o teste justo --\n");
-    match ponte {
+    s.push_str("\n-- the fair test --\n");
+    match bridge {
         Some(p) => {
-            let v = p.veredito();
+            let v = p.verdict();
             s.push_str(&format!(
-                "prazo da janela: {} | casos minimos: {}\n",
-                p.prazo, p.casos_minimos
+                "window deadline: {} | minimum cases: {}\n",
+                p.deadline, p.min_cases
             ));
             s.push_str(&format!(
-                "se a janela vencer sem os papeis: {}\n",
-                p.veredito_se_o_prazo_vencer
+                "if the window lapses without the roles: {}\n",
+                p.verdict_if_window_lapses
             ));
-            for papel in &p.papeis {
+            for role in &p.roles {
                 s.push_str(&format!(
                     "  {:<22} {:<10} {}\n",
-                    papel.papel, papel.estado, papel.exigencia
+                    role.role, role.state, role.requirement
                 ));
             }
             s.push_str(&format!(
-                "designados: {:?} | pendentes: {:?} | casos faltando: {}\n",
-                v.papeis_designados, v.papeis_pendentes, v.casos_faltando
+                "designated: {:?} | pending: {:?} | cases missing: {}\n",
+                v.designated_roles, v.pending_roles, v.cases_missing
             ));
-            if v.divergencias.is_empty() {
-                s.push_str("divergencias: nenhuma — nenhuma linha afirma o que o teste justo ainda nao sustenta\n");
+            if v.divergences.is_empty() {
+                s.push_str(
+                    "divergences: none — no line claims what the fair test does not yet support\n",
+                );
             } else {
-                s.push_str(&format!(
-                    "divergencias: REPROVADO em {:?}\n",
-                    v.divergencias
-                ));
+                s.push_str(&format!("divergences: REJECTED on {:?}\n", v.divergences));
             }
-            if v.caixa_fechada {
+            if v.box_closed {
                 s.push_str(&format!(
-                    "veredito: TESE NAO SUSTENTADA e caixa fechada — com {} pendente(s), a tese nao vira \"sustentada\" por nenhum caminho que nao o teste justo, e que seja ate {}\n",
-                    v.papeis_pendentes.len(),
-                    p.prazo
+                    "verdict: THESIS NOT SUPPORTED and box closed — with {} pending, the thesis does not become \"supported\" by any path other than the fair test, and only by {}\n",
+                    v.pending_roles.len(),
+                    p.deadline
                 ));
             } else {
-                s.push_str("veredito: TESTE JUSTO PODE RODAR — os papeis estao designados e os casos no minimo; o status so muda com o resultado do juiz\n");
+                s.push_str("verdict: THE FAIR TEST MAY RUN — the roles are designated and the cases at the minimum; the status only changes with the judge's result\n");
             }
         }
-        None => s.push_str("o registro da frente nao foi lido\n"),
+        None => s.push_str("the registry of the front was not read\n"),
     }
     s
 }
 
-/// O laboratório: o piloto re-derivado, o estado do teste justo e as duas provas.
-pub fn rodar(caminho_registro: &str, caminho_notas: &str) {
-    println!("== Ponto 16 :: a tese da ponte em escala ==");
-    let pontuacao = std::fs::read_to_string(caminho_notas)
+/// The laboratory: the pilot re-derived, the state of the fair test and the two proofs.
+pub fn run(registry_path: &str, notes_path: &str) {
+    println!("== Point 16 :: the bridge thesis at scale ==");
+    let score = std::fs::read_to_string(notes_path)
         .ok()
-        .map(|t| pontuar(&ler_notas(&t)));
-    let ponte = std::fs::read_to_string(caminho_registro)
+        .map(|t| score(&parse_notes(&t)));
+    let bridge = std::fs::read_to_string(registry_path)
         .ok()
-        .and_then(|t| ler_ponte(&t).ok());
-    print!("{}", relatar(pontuacao.as_ref(), ponte.as_ref()));
+        .and_then(|t| parse_bridge(&t).ok());
+    print!("{}", report(score.as_ref(), bridge.as_ref()));
 
-    println!("\n-- prova negativa: um registro que diz a tese sustentada sem o teste justo --");
-    let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\t-\tnao designado\nanalistas_braco_A\tdois humanos\t-\tnao designado\nanalistas_braco_B\tdois humanos\t-\tnao designado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
-    match ler_ponte(mentiroso) {
+    println!(
+        "\n-- negative proof: a registry that says the thesis is supported without the fair test --"
+    );
+    let liar = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\t-\tnao designado\nanalistas_braco_A\tdois humanos\t-\tnao designado\nanalistas_braco_B\tdois humanos\t-\tnao designado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
+    match parse_bridge(liar) {
         Ok(p) => {
-            let v = p.veredito();
-            println!("  divergencias: {:?}", v.divergencias);
-            println!("  caixa fechada: {}", v.caixa_fechada);
+            let v = p.verdict();
+            println!("  divergences: {:?}", v.divergences);
+            println!("  box closed: {}", v.box_closed);
         }
-        Err(e) => println!("  caso sintetico nao lido: {e}"),
+        Err(e) => println!("  synthetic case not read: {e}"),
     }
 
-    println!("-- prova positiva: papeis designados e casos no minimo --");
-    let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano (de fora)\tdesignado\nanalistas_braco_A\tdois humanos\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois humanos, cegos\tsicrano e beltrano\tdesignado\njuiz\tum humano de fora\tjuiz de fora\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
-    match ler_ponte(honesto) {
+    println!("-- positive proof: designated roles and cases at the minimum --");
+    let honest = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano (de fora)\tdesignado\nanalistas_braco_A\tdois humanos\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois humanos, cegos\tsicrano e beltrano\tdesignado\njuiz\tum humano de fora\tjuiz de fora\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+    match parse_bridge(honest) {
         Ok(p) => {
-            let v = p.veredito();
+            let v = p.verdict();
             println!(
-                "  divergencias: {:?} | caixa fechada: {}",
-                v.divergencias, v.caixa_fechada
+                "  divergences: {:?} | box closed: {}",
+                v.divergences, v.box_closed
             );
         }
-        Err(e) => println!("  caso sintetico nao lido: {e}"),
+        Err(e) => println!("  synthetic case not read: {e}"),
     }
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use super::*;
     use std::path::Path;
 
-    fn ler_arquivo(rel: &str) -> String {
-        let raiz = Path::new(env!("CARGO_MANIFEST_DIR"))
+    fn read_file(relative: &str) -> String {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .and_then(Path::parent)
-            .expect("raiz")
+            .expect("root")
             .to_path_buf();
-        std::fs::read_to_string(raiz.join(rel)).expect("arquivo do registro")
+        std::fs::read_to_string(root.join(relative)).expect("registry file")
     }
 
     #[test]
-    fn o_piloto_re_deriva_o_empate_no_teto() {
-        let p = pontuar(&ler_notas(&ler_arquivo(NOTAS)));
-        assert_eq!(p.casos, 12, "os doze casos do piloto");
-        assert_eq!(p.com_defeito, 8);
-        assert_eq!(p.limpos, 4);
+    fn the_pilot_re_derives_the_tie_at_the_ceiling() {
+        let p = score(&parse_notes(&read_file(JUDGE_NOTES)));
+        assert_eq!(p.cases, 12, "the twelve cases of the pilot");
+        assert_eq!(p.defective, 8);
+        assert_eq!(p.clean, 4);
         assert_eq!(
-            (p.apontou_x, p.apontou_y),
+            (p.flagged_x, p.flagged_y),
             (8, 8),
-            "os dois bracos apontaram todos os defeitos"
+            "both arms flagged every defect"
         );
-        assert_eq!((p.alarmes_x, p.alarmes_y), (0, 0), "nenhum alarme falso");
         assert_eq!(
-            p.pares_discordantes, 0,
-            "sem par discordante, o McNemar nao tem o que testar"
+            (p.false_alarms_x, p.false_alarms_y),
+            (0, 0),
+            "no false alarm"
         );
-        let v = veredito_do_piloto(&p);
-        assert!(v.starts_with("empate no teto"), "veredito: {v}");
-        assert!(v.contains("NAO e sustentada"));
+        assert_eq!(
+            p.discordant_pairs, 0,
+            "with no discordant pair, McNemar has nothing to test"
+        );
+        let v = pilot_verdict(&p);
+        assert!(v.starts_with("tie at the ceiling"), "verdict: {v}");
+        assert!(v.contains("NOT supported"));
     }
 
     #[test]
-    fn o_registro_do_teste_justo_declara_o_que_falta() {
-        let ponte = ler_ponte(&ler_arquivo(REGISTRO)).expect("registro da ponte");
-        let v = ponte.veredito();
+    fn the_fair_test_registry_declares_what_is_missing() {
+        let bridge = parse_bridge(&read_file(REGISTRY)).expect("bridge registry");
+        let v = bridge.verdict();
         assert!(
-            v.caixa_fechada,
-            "sem escolhedor, analistas e juiz, a caixa fica fechada"
+            v.box_closed,
+            "without selector, analysts and judge, the box stays closed"
         );
-        assert_eq!(v.casos_faltando, ponte.casos_minimos);
-        assert_eq!(v.status_declarado, "nao sustentada");
+        assert_eq!(v.cases_missing, bridge.min_cases);
+        assert_eq!(v.declared_status, "nao sustentada");
         assert!(
-            v.divergencias.is_empty(),
-            "o registro nao mente: {:?}",
-            v.divergencias
+            v.divergences.is_empty(),
+            "the registry does not lie: {:?}",
+            v.divergences
         );
-        assert_eq!(v.papeis_pendentes.len(), 5);
+        assert_eq!(v.pending_roles.len(), 5);
     }
 
     #[test]
-    fn uma_tese_sustentada_sem_teste_justo_e_reprovada() {
-        let mentiroso = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
-        let v = ler_ponte(mentiroso).expect("caso sintetico").veredito();
-        assert_eq!(v.divergencias.len(), 1, "{:?}", v.divergencias);
-        assert!(v.caixa_fechada);
+    fn a_supported_thesis_without_a_fair_test_is_rejected() {
+        let liar = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum humano de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o teste justo\t-\tsustentada\n";
+        let v = parse_bridge(liar).expect("synthetic case").verdict();
+        assert_eq!(v.divergences.len(), 1, "{:?}", v.divergences);
+        assert!(v.box_closed);
     }
 
     #[test]
-    fn com_os_papeis_designados_o_teste_pode_rodar() {
-        let honesto = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano\tdesignado\nanalistas_braco_A\tdois\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois\tsicrano\tdesignado\njuiz\tum de fora\tjuiz\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
-        let v = ler_ponte(honesto).expect("caso sintetico").veredito();
-        assert!(!v.caixa_fechada);
-        assert!(v.divergencias.is_empty(), "{:?}", v.divergencias);
-        assert_eq!(v.status_declarado, "em teste");
+    fn with_the_roles_designated_the_test_may_run() {
+        let honest = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\nescolhedor_dos_casos\tde fora\tfulano\tdesignado\nanalistas_braco_A\tdois\tfulano e beltrano\tdesignado\nanalistas_braco_B\tdois\tsicrano\tdesignado\njuiz\tum de fora\tjuiz\tdesignado\ncasos\tmais dificeis\tfulano\t12 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+        let v = parse_bridge(honest).expect("synthetic case").verdict();
+        assert!(!v.box_closed);
+        assert!(v.divergences.is_empty(), "{:?}", v.divergences);
+        assert_eq!(v.declared_status, "em teste");
     }
 
     #[test]
-    fn o_status_em_teste_sem_os_papeis_reprova() {
-        let apressado = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
-        let v = ler_ponte(apressado).expect("caso sintetico").veredito();
-        assert_eq!(v.divergencias.len(), 1, "{:?}", v.divergencias);
+    fn the_status_em_teste_without_the_roles_is_rejected() {
+        let hasty = "# registros\t2026-10-16\n# prazo\t2027-01-14\n# casos_minimos\t12\n# veredito_se_o_prazo_vencer\tnao sustentada em definitivo\npapel\texigencia\tquem\testado\njuiz\tum de fora\t-\tnao designado\ncasos\tmais dificeis\t-\t0 de 12\nstatus_da_tese\tnao sustentada ate o resultado\t-\tem teste\n";
+        let v = parse_bridge(hasty).expect("synthetic case").verdict();
+        assert_eq!(v.divergences.len(), 1, "{:?}", v.divergences);
     }
 
-    // ---------------------------------------------------------------- a regra de escolha mecânica
+    // ---------------------------------------------------------------- the mechanical choice rule
 
-    fn lista_de_teste(com_defeito: usize, limpos: usize) -> Vec<CasoElegivel> {
-        let mut lista = Vec::new();
-        for i in 0..com_defeito {
-            lista.push(CasoElegivel {
+    fn test_list(defective: usize, clean: usize) -> Vec<EligibleCase> {
+        let mut list = Vec::new();
+        for i in 0..defective {
+            list.push(EligibleCase {
                 id: format!("defeito_{i:02}"),
-                grupo: "defeito".to_string(),
+                group: "defeito".to_string(),
             });
         }
-        for i in 0..limpos {
-            lista.push(CasoElegivel {
+        for i in 0..clean {
+            list.push(EligibleCase {
                 id: format!("limpo_{i:02}"),
-                grupo: "limpo".to_string(),
+                group: "limpo".to_string(),
             });
         }
-        lista
+        list
     }
 
     #[test]
-    fn a_escolha_e_mecanica_deterministica_e_na_proporcao() {
-        let lista = lista_de_teste(40, 20);
-        let a = escolher_casos(&lista, 8, 4, 20270114).expect("escolha");
-        let b = escolher_casos(&lista, 8, 4, 20270114).expect("escolha");
-        assert_eq!(a, b, "a mesma lista e a mesma semente dao a mesma escolha");
+    fn the_choice_is_mechanical_deterministic_and_in_proportion() {
+        let list = test_list(40, 20);
+        let a = choose_cases(&list, 8, 4, 20270114).expect("choice");
+        let b = choose_cases(&list, 8, 4, 20270114).expect("choice");
+        assert_eq!(a, b, "the same list and the same seed give the same choice");
         assert_eq!(a.len(), 12);
-        let com_defeito = a.iter().filter(|id| id.starts_with("defeito")).count();
-        let limpos = a.iter().filter(|id| id.starts_with("limpo")).count();
-        assert_eq!((com_defeito, limpos), (8, 4), "a proporção declarada");
-        let mut distintos = a.clone();
-        distintos.sort();
-        distintos.dedup();
-        assert_eq!(distintos.len(), 12, "sem repetição");
-        let c = escolher_casos(&lista, 8, 4, 20270115).expect("escolha");
-        assert_ne!(a, c, "outra semente da outra escolha");
-        let mut ordenada = lista.iter().map(|c| c.id.clone()).collect::<Vec<_>>();
-        ordenada.sort();
-        let mut escolhidos = a.clone();
-        escolhidos.sort();
+        let defective = a.iter().filter(|id| id.starts_with("defeito")).count();
+        let clean = a.iter().filter(|id| id.starts_with("limpo")).count();
+        assert_eq!((defective, clean), (8, 4), "the declared proportion");
+        let mut distinct = a.clone();
+        distinct.sort();
+        distinct.dedup();
+        assert_eq!(distinct.len(), 12, "without repetition");
+        let c = choose_cases(&list, 8, 4, 20270115).expect("choice");
+        assert_ne!(a, c, "another seed gives another choice");
+        let mut ordered = list.iter().map(|c| c.id.clone()).collect::<Vec<_>>();
+        ordered.sort();
+        let mut chosen = a.clone();
+        chosen.sort();
         assert_eq!(
-            escolhidos.len(),
+            chosen.len(),
             12,
-            "a escolha sai da lista, e nao de fora dela"
+            "the choice comes from the list, and not from outside it"
         );
-        assert!(escolhidos.iter().all(|id| ordenada.contains(id)));
+        assert!(chosen.iter().all(|id| ordered.contains(id)));
     }
 
     #[test]
-    fn a_lista_que_nao_sustenta_a_proporcao_reprova() {
-        let curta = lista_de_teste(5, 20);
-        let erro = escolher_casos(&curta, 8, 4, 20270114).expect_err("deveria reprovar");
-        assert!(erro.contains("nao sustenta a escolha"), "erro: {erro}");
-        let sem_limpos = lista_de_teste(40, 2);
-        assert!(escolher_casos(&sem_limpos, 8, 4, 20270114).is_err());
-        let vazia: Vec<CasoElegivel> = Vec::new();
-        assert!(escolher_casos(&vazia, 8, 4, 20270114).is_err());
-    }
-
-    #[test]
-    fn o_registro_declara_o_veredito_se_o_prazo_vencer() {
-        let ponte = ler_ponte(&ler_arquivo(REGISTRO)).expect("registro da ponte");
+    fn the_list_that_does_not_support_the_proportion_is_rejected() {
+        let short = test_list(5, 20);
+        let error = choose_cases(&short, 8, 4, 20270114).expect_err("should reject");
         assert!(
-            ponte
-                .veredito_se_o_prazo_vencer
+            error.contains("does not support the choice"),
+            "error: {error}"
+        );
+        let without_clean = test_list(40, 2);
+        assert!(choose_cases(&without_clean, 8, 4, 20270114).is_err());
+        let empty: Vec<EligibleCase> = Vec::new();
+        assert!(choose_cases(&empty, 8, 4, 20270114).is_err());
+    }
+
+    #[test]
+    fn the_registry_declares_the_verdict_if_the_window_lapses() {
+        let bridge = parse_bridge(&read_file(REGISTRY)).expect("bridge registry");
+        assert!(
+            bridge
+                .verdict_if_window_lapses
                 .contains("nao sustentada em definitivo"),
-            "o registro carrega a decisao do dono: {}",
-            ponte.veredito_se_o_prazo_vencer
+            "the registry carries the owner's decision: {}",
+            bridge.verdict_if_window_lapses
         );
     }
 }

@@ -1,0 +1,260 @@
+# Formulário SHELF do domínio h1-real/c — em branco.
+# Regras, critérios e limiares estão em empirical/p12-shelf/protocolo.md; não se repete nada aqui.
+# Quem preenche é gente. Nenhum campo abaixo foi preenchido por quem escreveu o protocolo.
+# Nenhum número do domínio (priori do pacote, quartis de literatura do p05, saída do funil) entra na mesa
+# antes de o especialista escrever os cinco quantis: os quartis de partida ficam em prioris_elicitadas.yaml.
+# Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
+
+protocolo: empirical/p12-shelf/protocolo.md
+protocolo_sha256: "175004ac45caa0fc8e231ea0bd85466b913ef7da104f3d0c4d394cb7e6e95058"
+declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
+
+dominio: h1-real/c
+horizonte: h1-real
+area: "Seguros (cauda de incêndios dinamarqueses)"
+pacote: h1-real/projetos/c_real.py
+familia: "frequencia (Beta; o H1 real não usa GLM)"
+escala: frequencia
+chave: frequencia_mensal_da_camada
+quantidade: "frequência mensal de um mês atingir a camada '100 xs 50' (de 50 a 150 M DKK, por risco)"
+unidade_independente: "o mês (bloco de tempo): sinistros do mesmo mês partilham capital, exposição e conjuntura"
+desfecho: "um mês em que a camada é atingida (1) ou não (0)"
+decisao_em_jogo: "exposição escrita (limite vendido / capital) pelo ressegurador"
+acao_na_rodada_a: "0,4 (exposição f)"
+status_na_rodada_a: "reprovado: modelo_vence_climatologia"
+K_de_hoje: "—"
+K_de_hoje_fonte: h1-real/saida/c/resultados.json (não tem campo K)
+
+facilitador: "agente executor do repositorio (conduz, guarda o gabarito e nao elicita)"
+
+pre_teste:
+  itens: 20
+  semente_do_sorteio: "2026 (sorteio estratificado: 10 sim + 10 nao)"
+  pool: ""                        # de onde vieram os 20 itens já resolvidos
+  fora_do_cofre_do_dominio: "sim: fatos publicos de seguros e catastrofes de outros mercados e anos; nada da base dinamarquesa de incendios, nada do esquema 100 xs 50, nada da camada de resseguro do dominio"
+  gabarito_com: "Swiss Re sigma (1/2025, 1/2024, 3/2024), Munich Re (2023 e 2024), NOAA/NCEI (2023 e 2024), III/Aon, EIOPA e OCDE; os 30 itens tiveram o gabarito localizado pelo facilitador nas proprias copias das dez fontes, 24 de primeira e 6 depois de corrigir a leitura do separador decimal"
+
+especialistas:
+  E1:
+    nome: "sil"
+    codigo: "E1"
+    qualificacao: "autor do livro e do programa"
+    de_fora_do_programa: "nao"
+    de_fora_da_area_do_dominio: "nao"
+    conflitos_declarados: "escreveu o projeto c_real, viu a saida do h1-real e assinou os 21 pareceres; e o autor do programa"
+    pre_teste:
+      respostas:
+        # ordem congelada na declaracao de itens (semente 2026, estratificada 10 sim + 10 nao)
+        - {item: C23, p: 0.10, y: nao}
+        - {item: C27, p: 0.20, y: nao}
+        - {item: C01, p: 0.90, y: sim}
+        - {item: C28, p: 0.35, y: nao}
+        - {item: C15, p: 0.40, y: nao}
+        - {item: C29, p: 0.15, y: sim}
+        - {item: C19, p: 0.80, y: sim}
+        - {item: C14, p: 0.85, y: nao}
+        - {item: C20, p: 0.10, y: nao}
+        - {item: C08, p: 0.35, y: nao}
+        - {item: C22, p: 0.85, y: sim}
+        - {item: C21, p: 0.80, y: sim}
+        - {item: C13, p: 0.60, y: sim}
+        - {item: C12, p: 0.55, y: nao}
+        - {item: C04, p: 0.95, y: sim}
+        - {item: C26, p: 0.90, y: sim}
+        - {item: C16, p: 0.95, y: sim}
+        - {item: C06, p: 0.90, y: sim}
+        - {item: C03, p: 0.60, y: nao}
+        - {item: C30, p: 0.10, y: nao}
+      itens_na_direcao_certa: "16 de 20"
+      brier: 0.144000
+      brier_climatologia: 0.250000
+      habilidade: 0.424000        # o menor dos cinco pre-testes, e ainda positivo
+      portao: "em vigor (declaracao 3): 5 caixas de massa igual, ECE <= 0,25, criterio 3 pelo teste binomial"
+      ece: 0.1550
+      caixas:
+        - {indice: 0, n: 4, media_prevista: 0.1125, taxa_observada: 0.2500, desvio: 0.1375}
+        - {indice: 1, n: 4, media_prevista: 0.3250, taxa_observada: 0.0000, desvio: -0.3250}
+        - {indice: 2, n: 4, media_prevista: 0.6375, taxa_observada: 0.5000, desvio: -0.1375}
+        - {indice: 3, n: 4, media_prevista: 0.8500, taxa_observada: 0.7500, desvio: -0.1000}
+        - {indice: 4, n: 4, media_prevista: 0.9250, taxa_observada: 1.0000, desvio: 0.0750}
+      caixas_pelo_teste_binomial:
+        - {indice: 0, acertos: 1, n: 4, p_bilateral: 0.7592, p_com_bonferroni: 1.0000}
+        - {indice: 1, acertos: 0, n: 4, p_bilateral: 0.4152, p_com_bonferroni: 1.0000}
+        - {indice: 2, acertos: 2, n: 4, p_bilateral: 0.9183, p_com_bonferroni: 1.0000}
+        - {indice: 3, acertos: 3, n: 4, p_bilateral: 0.9560, p_com_bonferroni: 1.0000}
+        - {indice: 4, acertos: 4, n: 4, p_bilateral: 1.0000, p_com_bonferroni: 1.0000}
+      murphy_rel: 0.094000
+      murphy_res: 0.200000
+      murphy_unc: 0.250000
+      criterio_1_habilidade_positiva: "sim (0,4240)"
+      criterio_2_ece_ate_0_10: "sim no portao em vigor (0,1550 <= 0,25)"
+      criterio_3_sem_caixa_com_n4_e_0_25: "sim pelo teste binomial (o menor p com Bonferroni e 1,0000); a caixa 1 tem desvio -0,3250 e seria reprovada pelo limiar fixo, mas 0 de 4 com previsao 0,3250 tem p bilateral 0,4152 — e o que se espera de quem previu 0,325"
+      criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito"
+      resultado: "APROVADO pela regua em vigor"
+      os_quatro_erros: "item 6 (C29): previu 0,15 e os Paises Baixos tinham 7,2% do PIB em nao-vida; item 8 (C14): previu 0,85 e o custo NOAA foi 182,7 contra o limiar de 200; item 14 (C12): previu 0,55 e os perigos secundarios de 2024 (67) ficaram abaixo dos de 2023 (82); item 19 (C03): previu 0,60 e a lacuna foi 57% contra o limiar de 70%. Tres dos quatro sao estimativa de grandeza por cima do limiar (ou de comparacao entre anos), e um e estimativa por baixo de um numero incomum (a Holanda)"
+    elicitacao:
+      q50: 0.08   # elicitado em 2026-10-16, mediana primeiro, frequencia mensal da camada
+      q25: 0.04   # elicitado em 2026-10-16, passo dos quartis
+      q75: 0.15   # elicitado em 2026-10-16, passo dos quartis
+      q05: 0.01   # elicitado em 2026-10-16, passo dos extremos
+      q95: 0.30   # elicitado em 2026-10-16, passo dos extremos
+      justificativa: "a mediana de 0,08 apoia-se na intuicao de mercado e na frequencia historica de ativacao de camadas de excesso de perda para eventos de media e alta severidade em portfolios de catastrofe; a cauda longa e assimetrica, com q95 em 0,30, captura a vulnerabilidade sistemica a meses atipicos de alta concentracao e agregacao de multiplos sinistros"
+      fonte: "intuicao de mercado e frequencia historica de ativacao de camadas de excesso de perda; nenhuma referencia especifica nomeada pelo especialista"
+    controles:
+      ordem_recebida: "mediana_primeiro"
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: 0.50   # declarado; previsto pela Beta ajustada 0,5115; desvio 0,0115, dentro da tolerancia
+      ancora_deslocamento_dp: null
+      razao_largura_90_elicitada_sobre_implicada: 1.0591
+      excesso_de_confianca_ok: "sim"
+    devolucao:
+      rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
+      rodada_1_confirmacao: "confirma"
+      rodada_1_ajuste_q05_q95: []
+      rodada_1_motivo: "a Beta ajustada com parametros assimetricos traduz a logica de camadas de resseguro nao-proporcional; a uniforme anterior representava ausencia de informacao e implicava frequencia implausivel de ativacao em metade dos meses; os numeros elicitados corrigem esse vazio com estrutura coerente de eventos raros, massa perto de zero e cauda controlada ate 0,30"
+      rodada_1_mostrado:
+        numeros_do_especialista: "q05 0,01 | q25 0,04 | q50 0,08 | q75 0,15 | q95 0,30, frequencia mensal da camada"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 0,08"
+        priori_de_literatura_p05: "SEM FONTE CONFERIDA: o p05 registra para este dominio a Beta(1; 1) fraca, com q25 0,25 | q50 0,50 | q75 0,75 e q05 0,05 e q95 0,95 DERIVADOS por ele da propria uniforme"
+        ajuste_da_fraca_pelo_mesmo_instrumento: "a = 1,000000 | b = 1,000000 | erro 8,9e-16 | razao da largura 90% 1,0000"
+        comparacao: "a mediana elicitada (0,08) e SEIS VEZES menor que a da fraca (0,50); o q95 vai a 0,30 contra 0,95; e o ajuste sai em a = 1,171038 e b = 9,919921 contra a = b = 1 da uniforme. Aqui a devolucao compara o especialista com a ausencia de literatura, e nao com literatura"
+      rodada_2_em: ""
+      rodada_2_confirmacao: "nao houve"
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: 0.01   # confirmado na rodada 1
+      q25: 0.04   # confirmado na rodada 1
+      q50: 0.08   # confirmado na rodada 1
+      q75: 0.15   # confirmado na rodada 1
+      q95: 0.30   # confirmado na rodada 1
+    ajuste:                       # familia: frequencia em (0,1), ajustada por Beta
+      familia: "beta"
+      a: 1.171038
+      b: 9.919921
+      erro_max_quartis: 0.002344
+      largura_90_elicitada: 0.29
+      largura_90_implicada: 0.2738
+      razao: 1.0591
+      comando: "cargo run --release --bin labs -- --elicitacao 0.01,0.04,0.08,0.15,0.30 --escala beta"
+  E2:
+    nome: ""
+    codigo: "E2"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: 1.0591  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+  E3:
+    nome: ""
+    codigo: "E3"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: 1.0591  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+
+consenso:
+  regra: "mediana ponto a ponto dos quartis dos especialistas aprovados no pré-teste"
+  aprovados_no_pre_teste: []      # códigos, ex.: [E1, E3]
+  quartis:
+    q05: null
+    q25: null
+    q50: null
+    q75: null
+    q95: null
+  ajuste:
+    metodo: ""                    # normal_minimos_quadrados_nos_quantis / beta_nos_quartis
+    media: null
+    dp: null
+    a: null
+    b: null
+    erro_max_quartis: null
+    razao_largura_90_elicitada_sobre_implicada: 1.0591
+  devolucao_do_grupo_em: ""
+  observacoes: ""

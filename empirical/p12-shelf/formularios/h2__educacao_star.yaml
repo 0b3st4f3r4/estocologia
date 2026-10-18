@@ -1,0 +1,256 @@
+# Formulário SHELF do domínio h2/educacao_star — em branco.
+# Regras, critérios e limiares estão em empirical/p12-shelf/protocolo.md; não se repete nada aqui.
+# Quem preenche é gente. Nenhum campo abaixo foi preenchido por quem escreveu o protocolo.
+# Nenhum número do domínio (priori do pacote, quartis de literatura do p05, saída do funil) entra na mesa
+# antes de o especialista escrever os cinco quantis: os quartis de partida ficam em prioris_elicitadas.yaml.
+# Não reescrever linha já preenchida: ajuste posterior entra como linha nova, datada, dentro do bloco.
+
+protocolo: empirical/p12-shelf/protocolo.md
+protocolo_sha256: "175004ac45caa0fc8e231ea0bd85466b913ef7da104f3d0c4d394cb7e6e95058"
+declaracao_do_painel_sha256: ""   # hash da declaração congelada antes do primeiro pré-teste
+
+dominio: h2/educacao_star
+horizonte: h2
+area: "Educação"
+pacote: h2/dominios/educacao_star/pacote.yaml
+familia: "gaussiana"
+escala: natural
+chave: turma_pequena
+quantidade: "efeito da turma pequena na soma de leitura + matemática (pontos SAT)"
+unidade_independente: "a escola (79 escolas); o sorteio é dentro da escola e os alunos de uma escola dividem professor, prédio e bairro"
+desfecho: "soma das notas SAT de leitura e matemática no fim do jardim de infância (pontos)"
+decisao_em_jogo: "reduzir as turmas de jardim de infância para ~15 alunos"
+acao_na_rodada_a: "adotar"
+status_na_rodada_a: "aprovado"
+K_de_hoje: "1"
+K_de_hoje_fonte: h2/saida/educacao_star/resultados.json
+
+facilitador: "agente executor do repositorio (conduz, guarda o gabarito e nao elicita)"
+
+pre_teste:
+  itens: 20
+  semente_do_sorteio: "2026 (sorteio estratificado: 10 sim + 10 nao)"
+  pool: ""                        # de onde vieram os 20 itens já resolvidos
+  fora_do_cofre_do_dominio: "sim: fatos publicos de educacao de outros paises e anos; nada de tamanho de turma nos EUA, nada da base STAR/AER_STAR do dominio, nada de Toronto, Rhode Island ou LaLonde/NSW"
+  gabarito_com: "Banco Mundial (13 itens, valor da API lido por maquina e comparado), Eurostat (7, JSON-stat, batendo exatamente), NCES (6), IBGE Censo 2022 (2, PDF baixado e lido com pdftotext) e o digest do PISA 2018 (2); 20 itens com igualdade exata e 10 com presenca na pagina citada"
+
+especialistas:
+  E1:
+    nome: "sil"
+    codigo: "E1"
+    qualificacao: "autor do livro e do programa"
+    de_fora_do_programa: "nao"
+    de_fora_da_area_do_dominio: "nao"
+    conflitos_declarados: "escreveu o pacote do dominio, viu as saidas do h2 e do h2g, assinou os 21 pareceres; e o autor do programa"
+    pre_teste:
+      respostas:
+        # ordem congelada na declaracao de itens (semente 2026, sorteio estratificado 10 sim + 10 nao)
+        - {item: E20, p: 0.35, y: nao}
+        - {item: E26, p: 0.15, y: nao}
+        - {item: E01, p: 0.95, y: sim}
+        - {item: E28, p: 0.20, y: nao}
+        - {item: E15, p: 0.40, y: nao}
+        - {item: E29, p: 0.75, y: sim}
+        - {item: E21, p: 0.85, y: sim}
+        - {item: E13, p: 0.25, y: nao}
+        - {item: E18, p: 0.25, y: nao}
+        - {item: E07, p: 0.25, y: nao}
+        - {item: E25, p: 0.60, y: sim}
+        - {item: E23, p: 0.75, y: sim}
+        - {item: E14, p: 0.60, y: sim}
+        - {item: E12, p: 0.10, y: nao}
+        - {item: E04, p: 0.85, y: sim}
+        - {item: E27, p: 0.95, y: sim}
+        - {item: E16, p: 0.80, y: sim}
+        - {item: E06, p: 0.60, y: sim}
+        - {item: E02, p: 0.20, y: nao}
+        - {item: E30, p: 0.10, y: nao}
+      itens_na_direcao_certa: "20 de 20"
+      brier: 0.064375
+      brier_climatologia: 0.250000
+      habilidade: 0.742500
+      portao: "ajustado (declaracao 1): 5 caixas de massa igual; a divergencia entre as duas reguas do criterio 3 esta na declaracao 3"
+      ece: 0.1525
+      ece_no_portao_como_escrito: 0.2275
+      caixas:
+        - {indice: 0, n: 4, media_prevista: 0.1375, taxa_observada: 0.0000, desvio: -0.1375}
+        - {indice: 1, n: 4, media_prevista: 0.2375, taxa_observada: 0.0000, desvio: -0.2375}
+        - {indice: 2, n: 4, media_prevista: 0.4875, taxa_observada: 0.5000, desvio: 0.0125}
+        - {indice: 3, n: 4, media_prevista: 0.7250, taxa_observada: 1.0000, desvio: 0.2750}
+        - {indice: 4, n: 4, media_prevista: 0.9000, taxa_observada: 1.0000, desvio: 0.1000}
+      murphy_rel: 0.064375
+      murphy_res: 0.250000
+      murphy_unc: 0.250000   # identidade exata: 0,064375 - 0,250000 + 0,250000 = 0,064375
+      criterio_1_habilidade_positiva: "sim (0,7425)"
+      criterio_2_ece_ate_0_10: "sim no portao ajustado (0,1525 <= 0,25); no como escrito dao 0,2275, acima de 0,10"
+      criterio_3_sem_caixa_com_n4_e_0_25: "REPROVADO como escrito: a caixa 3 tem n = 4 e |desvio| = 0,2750 > 0,25. Aprovado pela regua corrigida (teste binomial com Bonferroni): p bilateral 0,55, p corrigido 1,00"
+      criterio_4_curva_fracamente_monotona: "sim, e inerte como escrito; a curva observada tambem e fracamente monotonona"
+      resultado: "APROVADO pela regua em vigor (declaracao 3: criterio 3 pelo teste binomial com Bonferroni). Pelo limiar fixo de 0,25 o pre-teste seria reprovado, e essa leitura fica registrada ao lado"
+      medida_do_vicio_do_portao: "no nulo calibrado do desenho (20 itens, 5 caixas, limiar de ECE 0,25): aprovados 0,2935 | reprovados pelo criterio 3 como escrito 0,7052 | pelo criterio 3 corrigido 0,0031 | pelo criterio 2 0,0592. Ou seja: o criterio 3 como escrito reprova 7 calibrados em 10, e a reprovacao do E1 neste dominio diz mais sobre a regua do que sobre ele"
+    elicitacao:
+      q50: 12.0   # elicitado em 2026-10-16, mediana primeiro, em pontos SAT
+      q25: 6.0   # elicitado em 2026-10-16, passo dos quartis
+      q75: 18.0   # elicitado em 2026-10-16, passo dos quartis
+      q05: -2.5   # elicitado em 2026-10-16, passo dos extremos
+      q95: 26.5   # elicitado em 2026-10-16, passo dos extremos
+      justificativa: "a mediana de 12 pontos apoia-se nos resultados classicos do experimento STAR do Tennessee (Word et al., 1990), que documentam ganhos substanciais nas notas combinadas de leitura e matematica para turmas reduzidas; a dispersao abrangente (-2,5 a 26,5) acomoda tanto a robustez dos achados originais quanto as criticas metodologicas sobre atrito amostral, efeitos de substituicao e a dificuldade de replicar esses ganhos fora daquele contexto experimental"
+      fonte: "Word et al. (1990), o experimento STAR do Tennessee, citado pelo especialista; a critica metodologica (atrito, substituicao, replicabilidade) entra na justificativa do alargamento"
+    controles:
+      ordem_recebida: "mediana_primeiro"
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: 0.50   # declarado; previsto pela priori 0,5000; desvio 0,0000
+      ancora_deslocamento_dp: null
+      razao_largura_90_elicitada_sobre_implicada: 0.9910
+      excesso_de_confianca_ok: "sim"
+    devolucao:
+      rodada_1_em: "2026-10-16, na mesma sessao da elicitacao"
+      rodada_1_confirmacao: "confirma"     # rodada 1: confirmado, com motivo escrito
+      rodada_1_ajuste_q05_q95: []
+      rodada_1_motivo: "a divergencia em relacao a releitura de Krueger (1999) e intencional: a literatura estrita da mesma base foca a estimativa central do experimento controlado, e a distribuicao mais ampla e com mediana superior absorve o peso de que os ganhos do STAR foram significativos mas que projeta-los fora daquele ambiente carrega incerteza muito maior, incluindo atrito e efeitos de substituicao que podem atenuar ou, nas caudas, anular o efeito"
+      rodada_1_mostrado:
+        numeros_do_especialista: "q05 -2,5 | q25 6,0 | q50 12,0 | q75 18,0 | q95 26,5, em pontos SAT"
+        faixa_anonima_do_grupo: "degenerada: o painel tem 1 especialista, entao minimo = mediana = maximo = 12,0"
+        priori_de_literatura_p05: "q05 1,3021781198967624 | q25 4,860110016547187 | q50 7,333191149998485 | q75 9,806272283449783 | q95 13,364204180100208 (Krueger 1999, NBER w6051, regra R3: 4 pontos de percentil convertidos por 0,0251 dp x 73,138 pontos)"
+        marca_do_p05: "MESMA BASE DE DADOS do dominio (AER_STAR): a priori de literatura deste dominio nao e evidencia independente, e o p05 a marca assim"
+        ajuste_da_literatura_pelo_mesmo_instrumento: "media 7,333191 | dp 3,666596 | erro maximo nos quartis 4,4e-16 | razao da largura 90% 1,0000"
+        comparacao: "mediana do especialista 12,0 contra 7,333191 da literatura, 63% acima; dp 8,895613 contra 3,666734, ou seja, 2,4 vezes mais largo; e o q05 negativo (-2,5) contra 1,302 da literatura, que nao admite efeito negativo em nenhuma das duas pontas"
+      rodada_2_em: ""
+      rodada_2_confirmacao: "nao houve"     # nada ficou em divergencia
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: -2.5   # confirmado na rodada 1
+      q25: 6.0   # confirmado na rodada 1
+      q50: 12.0   # confirmado na rodada 1
+      q75: 18.0   # confirmado na rodada 1
+      q95: 26.5   # confirmado na rodada 1
+    ajuste:
+      familia: "gaussiana"
+      media: 12.000000
+      dp: 8.895613   # o valor do instrumento (labs --elicitacao)
+      erro_max_quartis: 0.0
+      largura_90_elicitada: 29.0000
+      largura_90_implicada: 29.2640
+      razao: 0.9910
+      comando: "cargo run --release --bin labs -- --elicitacao -2.5,6,12,18,26.5"
+  E2:
+    nome: ""
+    codigo: "E2"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: 0.9910  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+  E3:
+    nome: ""
+    codigo: "E3"
+    qualificacao: ""
+    de_fora_do_programa: ""        # sim / nao
+    de_fora_da_area_do_dominio: "" # sim / nao (o E de fora responde as duas coisas)
+    conflitos_declarados: ""       # quem viu a saida do dominio, quem escreveu o pacote, quem ja previu no diario; ou "nenhum"
+    pre_teste:
+      respostas: []                # 20 pares (p, y), p em (0,1)
+      brier: null
+      brier_climatologia: null
+      habilidade: null             # 1 - brier / brier_climatologia
+      ece: null
+      caixas: []                   # 10 caixas de massa igual: {n, media_prevista, taxa_observada}
+      murphy_rel: null
+      murphy_res: null
+      murphy_unc: null
+      criterio_1_habilidade_positiva: ""     # sim / nao
+      criterio_2_ece_ate_0_10: ""            # sim / nao
+      criterio_3_sem_caixa_com_n4_e_0_25: "" # sim / nao
+      criterio_4_curva_fracamente_monotona: "" # sim / nao
+      resultado: ""                # aprovado / reprovado (quem nao passa nao entra como fonte)
+    elicitacao:                    # ordem fixa: mediana -> quartis -> extremos
+      q50: null
+      q25: null
+      q75: null
+      q05: null
+      q95: null
+      justificativa: ""
+      fonte: ""
+    controles:
+      ordem_recebida: ""           # mediana_primeiro / extremo_primeiro (metade do painel em cada)
+      ancora_S: null
+      ancora_p_com_S_mediana_propria: null   # esperado 0,50 +- 0,10
+      ancora_deslocamento_dp: null           # esperado <= 0,20 dp
+      razao_largura_90_elicitada_sobre_implicada: 0.9910  # esperado >= 0,75
+      excesso_de_confianca_ok: "sim"  # sim / nao
+    devolucao:
+      rodada_1_em: ""
+      rodada_1_confirmacao: ""     # confirma / ajusta
+      rodada_1_ajuste_q05_q95: []  # [q05, q95] se ajustou
+      rodada_1_motivo: ""
+      rodada_2_em: ""
+      rodada_2_confirmacao: ""     # confirma / ajusta / nao houve
+      rodada_2_motivo: ""
+    quartis_confirmados:
+      q05: null
+      q25: null
+      q50: null
+      q75: null
+      q95: null
+
+consenso:
+  regra: "mediana ponto a ponto dos quartis dos especialistas aprovados no pré-teste"
+  aprovados_no_pre_teste: []      # códigos, ex.: [E1, E3]
+  quartis:
+    q05: null
+    q25: null
+    q50: null
+    q75: null
+    q95: null
+  ajuste:
+    metodo: ""                    # normal_minimos_quadrados_nos_quantis / beta_nos_quartis
+    media: null
+    dp: null
+    a: null
+    b: null
+    erro_max_quartis: null
+    razao_largura_90_elicitada_sobre_implicada: null
+  devolucao_do_grupo_em: ""
+  observacoes: ""

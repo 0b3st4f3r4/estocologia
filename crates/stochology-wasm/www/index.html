@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Estocologia — playground</title>
+<title>Stochology — playground</title>
 <style>
   body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 46rem; line-height: 1.5; }
   h1 { font-size: 1.3rem; }
@@ -11,63 +11,64 @@
   label { display: inline-block; min-width: 11rem; }
   output { font-family: ui-monospace, monospace; font-weight: 600; }
   code { background: #f2f2f2; padding: .1rem .3rem; }
-  p.nota { color: #444; font-size: .9rem; }
+  p.note { color: #444; font-size: .9rem; }
 </style>
 </head>
 <body>
-<h1>Estocologia — playground WebAssembly</h1>
-<p class="nota">Os instrumentos do projeto rodando no navegador, sem servidor e sem dependencia externa.
-Toda saida e deterministica: a mesma semente da o mesmo numero.</p>
+<h1>Stochology — WebAssembly playground</h1>
+<p class="note">The project's instruments running in the browser, with no server and no external dependency.
+Every output is deterministic: the same seed gives the same number.</p>
 
-<fieldset id="moeda">
-  <legend>Moeda</legend>
-  <label for="lances">lances</label><input id="lances" type="number" value="10000" min="1"><br>
-  <label for="semente">semente</label><input id="semente" type="number" value="2026"><br>
-  <label for="cara">probabilidade de cara (centesimos)</label><input id="cara" type="number" value="50" min="0" max="100"><br>
-  <p>caras: <output id="saida-moeda">—</output></p>
+<fieldset id="coin">
+  <legend>Coin</legend>
+  <label for="tosses">tosses</label><input id="tosses" type="number" value="10000" min="1"><br>
+  <label for="seed">seed</label><input id="seed" type="number" value="2026"><br>
+  <label for="heads">probability of heads (hundredths)</label><input id="heads" type="number" value="50" min="0" max="100"><br>
+  <p>heads: <output id="out-coin">—</output></p>
 </fieldset>
 
 <fieldset>
   <legend>Erlang C</legend>
-  <label for="agentes">agentes</label><input id="agentes" type="number" value="10" min="1"><br>
-  <label for="carga">carga (centesimos)</label><input id="carga" type="number" value="500" min="1"><br>
-  <p>probabilidade de esperar: <output id="saida-erlang">—</output></p>
+  <label for="agents">agents</label><input id="agents" type="number" value="10" min="1"><br>
+  <label for="load">load (hundredths)</label><input id="load" type="number" value="500" min="1"><br>
+  <p>probability of waiting: <output id="out-erlang">—</output></p>
 </fieldset>
 
 <fieldset>
-  <legend>Nulo de Poisson</legend>
-  <label for="passos">passos</label><input id="passos" type="number" value="20000" min="2"><br>
-  <label for="media">media (centesimos)</label><input id="media" type="number" value="400" min="1"><br>
-  <p>indice de dispersao (milesimos): <output id="saida-dispersao">—</output></p>
-  <p class="nota">Poisson fica perto de 1000. O mundo de dois regimes do Capitulo 16 passa de 3000.</p>
+  <legend>Poisson null</legend>
+  <label for="steps">steps</label><input id="steps" type="number" value="20000" min="2"><br>
+  <label for="mean">mean (hundredths)</label><input id="mean" type="number" value="400" min="1"><br>
+  <p>dispersion index (thousandths): <output id="out-dispersion">—</output></p>
+  <p class="note">Poisson stays close to 1000. The two-regime world of Chapter 16 goes past 3000.</p>
 </fieldset>
 
-<p class="nota">Compile com <code>cargo build --release --target wasm32-unknown-unknown -p stochology-wasm</code>,
-sirva a raiz do repositorio com <code>python3 -m http.server</code> e abra esta pagina.</p>
+<p class="note">Build with <code>cargo build --release --target wasm32-unknown-unknown -p stochology-wasm</code>,
+serve the repository root with <code>python3 -m http.server</code>, and open this page.</p>
 
 <script>
-const modulo = fetch("../../../target/wasm32-unknown-unknown/release/stochology_wasm.wasm")
-  .then(r => { if (!r.ok) throw new Error("wasm ausente: compile primeiro"); return r.arrayBuffer(); })
+// The export names in `ex.` are the historical ABI symbols; they are deliberately unchanged.
+const wasmModule = fetch("../../../target/wasm32-unknown-unknown/release/stochology_wasm.wasm")
+  .then(r => { if (!r.ok) throw new Error("missing wasm: build it first"); return r.arrayBuffer(); })
   .then(b => WebAssembly.instantiate(b, {}))
   .then(r => r.instance.exports);
 
-const valor = id => Number(document.getElementById(id).value);
+const value = id => Number(document.getElementById(id).value);
 
-modulo.then(ex => {
-  const atualizar = () => {
-    document.getElementById("saida-moeda").textContent =
-      ex.estocologia_moeda(valor("semente"), valor("lances"), valor("cara"));
-    const decimilessimos = ex.estocologia_erlang_c(valor("agentes"), valor("carga"));
-    document.getElementById("saida-erlang").textContent =
-      (decimilessimos / 10000).toFixed(4);
-    document.getElementById("saida-dispersao").textContent =
-      ex.estocologia_dispersao_do_nulo(valor("semente"), valor("passos"), valor("media"));
+wasmModule.then(ex => {
+  const refresh = () => {
+    document.getElementById("out-coin").textContent =
+      ex.estocologia_moeda(value("seed"), value("tosses"), value("heads"));
+    const tenThousandths = ex.estocologia_erlang_c(value("agents"), value("load"));
+    document.getElementById("out-erlang").textContent =
+      (tenThousandths / 10000).toFixed(4);
+    document.getElementById("out-dispersion").textContent =
+      ex.estocologia_dispersao_do_nulo(value("seed"), value("steps"), value("mean"));
   };
-  document.querySelectorAll("input").forEach(i => i.addEventListener("input", atualizar));
-  atualizar();
-  document.title = "Estocologia — playground (contrato v" + ex.estocologia_versao() + ")";
-}).catch(erro => {
-  document.body.insertAdjacentHTML("beforeend", "<p>sem wasm: " + erro.message + "</p>");
+  document.querySelectorAll("input").forEach(i => i.addEventListener("input", refresh));
+  refresh();
+  document.title = "Stochology — playground (contract v" + ex.estocologia_versao() + ")";
+}).catch(error => {
+  document.body.insertAdjacentHTML("beforeend", "<p>no wasm: " + error.message + "</p>");
 });
 </script>
 </body>

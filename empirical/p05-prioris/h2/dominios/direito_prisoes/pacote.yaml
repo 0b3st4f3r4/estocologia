@@ -1,0 +1,95 @@
+nome: direito_prisoes
+area: Direito
+titulo: Cor da pele e liberação com notificação em prisões por maconha (Toronto, 1997–2002)
+pergunta: Entre os presos por porte de pequena quantidade de maconha, ser negro reduz a chance de ser liberado com notificação em vez de detido, e a diferença vale num ano que o modelo não viu?
+alegacao: '"A polícia de Toronto libera com notificação os presos brancos com mais frequência que os negros, mesmo em delitos idênticos e leves."'
+glossario:
+  notificacao_de_comparecimento: liberação no local com intimação para comparecer ao tribunal (form 9)
+  deteccao_para_audiencia: preso levado à delegacia e mantido até a audiência de fiança
+  porte_simples: posse de pequena quantidade de maconha, sem acusação de tráfico
+  checagem_de_registros: consulta do nome do preso nas bases policiais (antecedentes, mandados, liberdade condicional)
+  antecedentes: registros anteriores do preso nas bases consultadas
+  discricionariedade_policial: margem de escolha do policial entre liberar e deter
+  vies_de_selecao_da_prisao: a amostra só contém quem já foi preso, decisão também sujeita a viés
+  efeito_total: diferença na liberação por cor, incluindo os caminhos por emprego, cidadania e registros
+  mediador: variável no caminho entre a cor da pele e a decisão (registros, emprego)
+  perfilamento_racial: uso da raça como indício de risco na abordagem ou na decisão
+fontes:
+  - Rankin, J. et al. (2002). Singled out (série Race and Crime). Toronto Star, outubro de 2002 (citado de memória, por conferir)
+  - Fox, J. & Weisberg, S. (2019). An R Companion to Applied Regression, 3ª ed., pacote carData, base Arrests
+  - Kochel, T. R., Wilson, D. B. & Mastrofski, S. D. (2011). Effect of suspect race on officers' arrest decisions. Criminology 49(2), 473–512 (citado de memória, por conferir)
+  - data/h2/carData_Arrests.csv (Rdatasets carData::Arrests)
+arquivos: [carData_Arrests.csv]
+familia: binomial
+desfecho: liberado com notificação para comparecer (1) ou detido para audiência (0)
+chave: negro
+candidatos:
+  negro: {tipo: num, descricao: cor da pele registrada negra (1) ou branca (0)}
+  idade: {tipo: num, descricao: idade em anos}
+  idade_quad: {tipo: num, descricao: (idade − 25)²/100}
+  masculino: {tipo: num, descricao: sexo masculino}
+  empregado: {tipo: num, descricao: declarou emprego}
+  cidadao: {tipo: num, descricao: cidadão canadense}
+  registros: {tipo: num, descricao: nº de bases policiais com o nome (0 a 6)}
+icp_candidatos: [negro, idade, idade_quad, masculino, empregado, cidadao, registros]
+ajuste: [idade, idade_quad, masculino]
+dag:
+  - [negro, y]
+  - [negro, empregado]
+  - [negro, cidadao]
+  - [negro, registros]
+  - [idade, idade_quad]
+  - [idade, y]
+  - [idade_quad, y]
+  - [idade, empregado]
+  - [idade, registros]
+  - [masculino, registros]
+  - [masculino, y]
+  - [cidadao, empregado]
+  - [empregado, y]
+  - [cidadao, y]
+  - [registros, y]
+ambientes:
+  descricao: >-
+    ano da prisão (1997 a 2002); 2002 fica no cofre, nunca visto (previsão para o ano seguinte, com o ano incompleto da
+    série). Escolha feita antes de qualquer resultado. O ano muda a composição dos presos (idade, emprego, registros:
+    X); se a regra de liberação dos policiais for estável, Y|X é invariante. Fraqueza declarada: diretrizes, chefias e
+    a própria publicidade da série do Toronto Star (2002) podem ter mudado a regra no tempo, agindo direto em Y
+  cofre: ["2002"]
+unidade: >-
+  a prisão (linha). A base não identifica a pessoa, o policial nem a divisão; reincidentes e prisões do mesmo policial
+  não podem ser agrupados, então o erro padrão por linha pode ser otimista
+cabecalho:
+  processo_gerador: A polícia prende por porte simples, consulta os registros do preso e decide entre liberar com notificação ou deter para audiência.
+  nao_linearidade: Escala logística; idade com termo quadrático; registros como contagem linear no logit.
+  unidade_e_margem: A prisão é a unidade (sem identificador de pessoa ou policial); margem com erro padrão por linha.
+  fisica_do_ruido: Bernoulli por prisão, com heterogeneidade não observada de policial e divisão.
+  escada_causal: Degrau 1 (observacional). Estima-se o efeito total da cor sobre a liberação entre presos (emprego, cidadania e registros são mediadores e ficam fora do ajuste); a amostra é condicionada à prisão, que pode ela mesma depender da cor (viés de colisor não corrigido).
+shelf:
+  quantidade: razão de chances de liberação com notificação, presos negros contra brancos
+  escala: razao_de_chances
+  fonte: >-
+    literatura sobre raça e decisões policiais (meta-análise de Kochel, Wilson & Mastrofski 2011, chances de prisão
+    ~30% maiores para suspeitos negros; reportagens do Toronto Star de 2002), transposta para a decisão de liberação;
+    citada de memória, por conferir. A reportagem do Toronto Star usou esta mesma base, o que contamina levemente a
+    priori. Nenhum especialista humano consultado
+  painel: literatura publicada; nenhum especialista humano consultado
+  taxa_base: 0.80
+  quartis: {q05: 0.42, q25: 0.58, q50: 0.70, q75: 0.85, q95: 1.05}
+decisao:
+  acao: adotar diretriz de liberação com notificação como padrão para porte simples, com justificativa escrita para deter
+  beneficio_por_unidade: -100.0
+  custo: 2.0
+  custo_pesquisa: 0.1
+  nota: >-
+    utilidade em liberações-equivalentes por 100 presos negros; θ (efeito marginal da cor na probabilidade de liberação)
+    é negativo e a diretriz recupera −100·θ liberações, daí o benefício por unidade negativo. O custo (2 liberações-
+    equivalentes por 100 presos: papelada, liberações indevidas) e o custo da pesquisa são suposições, a elicitar com a
+    corregedoria
+termo_escopo:
+  vale_para: prisões por porte simples de maconha em Toronto, 1997–2002, decisão de liberar ou deter após a prisão
+  nao_vale_para: a decisão de abordar ou prender, outros delitos, outras cidades, período após a legalização (2018), pessoas de outras cores (a base só tem negros e brancos)
+tentativas_de_especificacao: 1
+tem_titulares: true
+quase_ids: [negro, masculino, idade, cidadao, empregado]
+grupo_justica: negro

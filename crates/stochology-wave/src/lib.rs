@@ -1,31 +1,31 @@
-//! Motor ondulatorio da Estocologia: hipergrafo magnetico, plasticidade de fase e espiculas.
+//! Wave engine of Stochology: magnetic hypergraph, phase plasticity, and spikes.
 //!
-//! Tres camadas, na ordem em que o Sistema 1 e o Sistema 2 se revezam:
+//! Three layers, in the order in which System 1 and System 2 take turns:
 //!
-//! 1. **Superposicao local** (`fasor`): o Phi de uma hiperaresta avaliado como fasor. A energia
-//!    tem um termo incoerente e um termo cruzado de interferencia; a coerencia C(h) decide entre
-//!    propagacao direta (Sistema 1), batimento (Crononomia) e conflito (Sistema 2).
-//! 2. **Propagacao multi-salto** (`magnetico`): Laplaciano magnetico Hermiteano L^(q) com a carga
-//!    direcional em alfa e o propagador unitario de Cayley. Norma preservada, cadeia de selos
-//!    auditavel, deteccao de chegadas que se anulam.
-//! 3. **Aprendizado** (`plasticidade` e `espicula`): Kuramoto-Oja consolida o veredito do Sistema 2
-//!    com portao de ganho e reversao; o barramento de espiculas de 40 bytes aprende a seta causal
-//!    entre as cinco lentes por STDP fasorial e reconhece palavras polifronicas.
+//! 1. **Local superposition** (`phasor`): the Phi of a hyperedge evaluated as a phasor. The
+//!    energy has an incoherent term and a cross interference term; the coherence C(h) decides
+//!    between direct propagation (System 1), beating (Chrononomy), and conflict (System 2).
+//! 2. **Multi-step propagation** (`magnetic`): Hermitian magnetic Laplacian L^(q) with the
+//!    directional charge in alpha and the unitary Cayley propagator. Norm preserved, auditable
+//!    seal chain, detection of arrivals that cancel each other.
+//! 3. **Learning** (`plasticity` and `spike`): Kuramoto-Oja consolidates the System 2 verdict
+//!    with a gain gate and rollback; the 40-byte spike bus learns the causal arrow between the
+//!    five lenses through phasor STDP and recognizes polyphonic words.
 //!
-//! Divergencias declaradas em relacao ao rascunho que originou este crate:
+//! Divergences declared with respect to the draft that originated this crate:
 //!
-//! - a frustracao <Psi, L Psi> nao serve de gatilho unico: na antifase simetrica ela vale zero
-//!   exatamente quando o conflito existe. O gatilho e a coerencia das chegadas por vertice, e a
-//!   frustracao fica como diagnostico;
-//! - o portao da plasticidade cobra ganho de ressonancia no alvo, nao queda monotona de frustracao.
+//! - the frustration <Psi, L Psi> does not serve as a single trigger: in symmetric antiphase it
+//!   equals zero precisely when the conflict exists. The trigger is the coherence of arrivals
+//!   per vertex, and frustration stays as a diagnostic;
+//! - the plasticity gate charges target resonance gain, not a monotone drop of frustration.
 //!
-//! Nada aqui usa dependencia externa; o estado e deterministico e o `onda --check` derruba o
-//! relatorio quando qualquer um dos seis portoes falha.
+//! Nothing here uses an external dependency; the state is deterministic and `wave --check`
+//! takes the report down when any one of the six gates fails.
 
-pub mod complexo;
-pub mod espicula;
-pub mod fasor;
-pub mod magnetico;
-pub mod plasticidade;
-pub mod portao;
-pub mod selo;
+pub mod complex;
+pub mod gate;
+pub mod magnetic;
+pub mod phasor;
+pub mod plasticity;
+pub mod seal;
+pub mod spike;
