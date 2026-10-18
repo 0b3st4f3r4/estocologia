@@ -130,9 +130,14 @@ perfect accuracy the climatological variance is zero and the 0/0 ratio evaluates
 it checks fields rather than provenance, so seven fabricated records open the box — true coverage requires a
 signed transcript hash, which does not exist today.
 
-No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, the
-chapter includes a **divergence declaration** stating both values and the cause — as Chapters 4, 5, 8,
-16, 17, 18, 20, and 21 do.
+No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, a
+**divergence declaration** states both values and the cause in Appendix E (provenance of the numbers), chapter by chapter.
+The chapters themselves carry content only: no path, no reference to the book, the repository or the program, and the R-axis
+block only in the chapters that measure a resolution loss (5, 8, 10, 16, 18, 20, and 21). This is the owner's rule of 2026-10-18,
+which moved the declarations out of the chapters and rewrites the book part by part; during that rewrite,
+`scripts/style/check_pass.py` checks each rewritten file for the ramp markers, the word floor, and number provenance (every number
+in running prose must exist in a source or in an output block of the same file), and `check_labs.py` keeps every block equal to
+its instrument.
 
 ## VI. Rule on New Files
 

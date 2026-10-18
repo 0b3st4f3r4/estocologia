@@ -142,96 +142,113 @@ translates every symbol of the book into English and into code.
 
 ## Chapter 1. The Invisible Target: What Is Stochology?
 
-**Objectives.** By the end of this chapter you should be able to say what Stochology is dedicated to, where the
-name comes from, which three traditions it stitches together, and why checking a result depends on the draw
-being repeatable.
+**Objectives.** By the end of this chapter you should be able to say what Stochology studies, where the name
+comes from, which three traditions it joins, how a theory can be repaired without becoming dishonest, and why
+checking a result requires a draw that can be repeated.
 
 ---
 
 ### Step 1 — The real world and the paradox
 
-**The decision before the answer.** On a Tuesday morning, a doctor sees a 54-year-old man with chest pain,
-and does not know how that case will end. She has in her hands an electrocardiogram, his age, his history,
-and fifteen minutes. The decision is between admitting him and sending him home. If she admits him, the
-hospital spends a bed that another patient will lack; if she sends him home, and the worst happens, nobody
-will forget her name.
+**The decision before the answer.** On a Tuesday morning, a doctor sees a 54-year-old man with chest pain. She
+has an electrocardiogram, his age, his history, and fifteen minutes. She must choose between admitting him and
+sending him home. If she admits him, the hospital spends a bed that another patient will lack; if she sends him
+home and the worst happens, the cost falls on him.
 
-Notice what has just happened. **The decision was taken before the answer existed.** This is not negligence
-of the health system. It is the condition of practically every decision that matters. The judge decides
-without having seen the crime. The manager hires staff for a demand that has not arrived yet. You choose a
-course before knowing whether you will like it.
+Notice what has just happened. **The decision was taken before the answer existed.** This is not a flaw of the
+health system. It is the condition of almost every decision that matters. The judge decides without having seen
+the crime. The manager hires staff for a demand that has not arrived yet. You choose a course before knowing
+whether you will like it.
 
-We call **Stochology** the science (and the art) that studies this kind of judgement: **judgement and
-decision under uncertainty**.
+**Stochology** is the science (and the art) that studies this kind of judgement: **judgement and decision under
+uncertainty**.
 
-**In each 100 decisions.** To make the conversation concrete, the whole book uses natural frequencies.
-Instead of "the probability of error is 9%", say: *in each 100 patients like this, about 9 receive the wrong
-diagnosis*. Instead of "the prevalence is 1%", say: *in each 1,000 people who join the queue, 10 are sick*.
-And instead of "the confidence interval covers the truth in 95% of cases", say: *in each 100 repeated
-experiments, 95 give an interval that contains the real value*. The numbers do not change, but the second way
-of saying it already shows who pays the bill.
+**Counting instead of percentages.** A percentage hides who is counted. A natural frequency shows it. "A
+probability of 9%" becomes *in each 100 cases like this one, 9*. "A prevalence of 1%" becomes *in each 1,000
+people, 10*. "A 95% confidence interval" becomes *in each 100 repetitions of the experiment, 95 intervals
+contain the real value*. The number is the same; the second form already shows how many people stand on each
+side of the decision.
 
-**Where the name comes from.** *Stókhos* is the Greek word for the target one aims at, and also for the
-well-oriented conjecture, the guess of someone who aims at what they do not see. In 1713, three years after
-his death, *Ars Conjectandi* by Jacob Bernoulli was published: the art of conjecturing, which he called
-*stochastice*. Over time, "stochastic" came to mean only "random", and lost precisely the interesting part,
-**aiming well when you do not see the target**. This book wants to recover that meaning.
+**Where the name comes from.** *Stókhos* is the Greek word for the target an archer aims at, and also for a
+well-aimed guess. In 1713, eight years after his death, Jacob Bernoulli's *Ars Conjectandi* was published: the art
+of conjecturing, which he called *stochastice*. Over time "stochastic" came to mean only "random", and it lost the
+interesting part: **aiming well at a target you cannot see**.
 
-**The "art" part.** The definition says "science (or art)" on purpose. There is a part of judgement under
-uncertainty that is formalized, and the whole book shows how: the coherence of beliefs (Chapter 3), updating
-by evidence (Chapter 3), the margin of error on the right unit (Chapter 6), calibration (Chapter 8), the cost
-of the error (Chapter 11). And there is a part that is not fully formalized: which model is worth taking
-seriously, when to stop collecting data, who pays if the error happens. An honest discipline about
-uncertainty has to be honest about the limits of its own formalism. That is why every chapter of this book,
-at the end, declares where it can fail.
+**Science and art.** Part of judgement under uncertainty is formal: keeping beliefs coherent, updating them with
+evidence, measuring a margin of error on the right unit, checking calibration, pricing the error. Part of it is
+not: deciding which model deserves to be taken seriously, when to stop collecting data, and who pays if the
+decision goes wrong. A discipline about uncertainty must say where its own formalism ends.
 
-**Why two computers have to draw the same numbers.** A scientific experiment has to be **repeatable**, and
-another person, on another machine, next year, has to obtain an identical result. If the program draws
-numbers at random on every run, nothing can be checked, and every round gives a different answer; the
-discussion becomes "on my computer it gave another value".
+**Why two computers must draw the same numbers.** An experiment is scientific only if someone else, on another
+machine, can repeat it and obtain the same result. A program that draws different random numbers on every run
+cannot be checked: each run answers differently, and every disagreement ends in "on my computer it gave another
+value".
 
-The solution is simple, and **the seed** is the basis of every laboratory in this book. A pseudo-random
-number generator is a deterministic recipe. Given the same starting seed, the recipe produces the same
-sequence of numbers, always, on any machine. The "chance" of the experiment is a *reproducible* chance,
-random for whoever looks at the result and auditable for whoever knows the seed.
+The way out is the **seed**. A pseudo-random number generator is a deterministic recipe. Given the same starting
+value, it produces the same sequence, always, on any machine. A tiny example shows the idea. Take the rule
+"multiply by 5, add 3, keep the remainder of the division by 16", and start from 7:
+
+| Step | Calculation | Result |
+| --- | --- | --- |
+| 1 | 5 × 7 + 3 = 38, remainder by 16 | 6 |
+| 2 | 5 × 6 + 3 = 33, remainder by 16 | 1 |
+| 3 | 5 × 1 + 3 = 8, remainder by 16 | 8 |
+| 4 | 5 × 8 + 3 = 43, remainder by 16 | 11 |
+
+The sequence 6, 1, 8, 11 looks irregular, yet anyone who starts from 7 gets exactly the same numbers. Real
+generators use the same idea with much larger numbers. The chance in the experiment is **reproducible chance**:
+random to whoever looks at the result, auditable to whoever knows the seed.
 
 ---
 
 ### Step 2 — The rule of the game
 
-**Definition.** Stochology is the science (or art) that studies judgement and decision under uncertainty.
-Formally, it studies how an agent turns incomplete information into an action and answers for the
-consequences.
+**Definition.** Stochology studies how an agent turns incomplete information into an action, and how that agent
+answers for the consequences.
 
-**The stitching of three traditions.** The discipline stitches three traditions that grew up separately and
-rarely cite each other; it is not a new branch of statistics.
+**Three traditions.** The discipline joins three traditions that grew up separately and rarely cite each other.
 
-- **The philosophy of induction.** Hume showed that every defence of induction presupposes that the future
-  will resemble the past. Popper replaced confirmation with refutation. Lakatos showed how theories react
-  when refutation arrives.
-- **Statistical inference.** Pascal and Fermat, Bernoulli, Bayes, Laplace and Kolmogorov built probability;
-  Fisher, Neyman and the Bayesian school built inference.
-- **The mechanics of stochastic processes.** Markov and Langevin studied how chance accumulates over time.
+- **The philosophy of induction.** David Hume showed that every defence of induction already assumes that the
+  future will resemble the past: the sun rising every morning so far does not prove, by logic alone, that it will
+  rise tomorrow. Karl Popper answered that science does not prove theories, it tries to refute them. A thousand
+  white swans do not prove "all swans are white"; one black swan refutes it.
+- **Statistical inference.** Pascal and Fermat, Bernoulli, Bayes, Laplace and Kolmogorov built probability, the
+  language of degrees of belief and of frequencies. Fisher, Neyman and the Bayesian school built inference, the
+  rules for learning from data with a declared margin of error.
+- **Stochastic processes.** Markov and Langevin studied how chance accumulates over time. A single coin toss is
+  unpredictable; the fraction of heads in a long run is not. Many decisions are sequences, and what matters is the
+  path, not one step.
 
-**Lakatos's adjustments.** Duhem and Quine recalled that a frustrated prediction refutes the theory together
-with its auxiliary hypotheses, never alone. Lakatos separated two ways of saving the theory. The
-**progressive** adjustment predicts something new that is later confirmed; in 1846, the anomaly in the orbit
-of Uranus did not bring Newton down, because Le Verrier postulated a hidden planet and Neptune was found.
-The **degenerative** adjustment only protects the theory, and the equivalent manoeuvre, with the planet
-Vulcan, failed to explain Mercury. Every change of specification after a failure (and this book reports
-several) has to answer one question. Did the repair predict something new, or did it only hide the error?
+**Repairing a theory honestly.** Pierre Duhem and Willard Quine pointed out that a failed prediction never
+refutes a theory alone: it refutes the theory together with the auxiliary hypotheses used to derive the
+prediction. So there is always some way to save the theory. Imre Lakatos separated two kinds of rescue.
 
-**The question that changes.** Instead of asking "what is the probability?", Stochology formulates three
-others. **In which layer can this claim fail? What kind of uncertainty threatens it? What test would it have
-to face to deserve trust?** The rest of the book answers those three questions.
+- A **progressive** repair predicts something new that is later confirmed. In 1846 the orbit of Uranus disagreed
+  with Newton's laws. Urbain Le Verrier did not abandon Newton; he postulated an unseen planet, computed where it
+  should be, and Neptune was found there.
+- A **degenerative** repair only protects the theory. The same move was tried for the anomaly in the orbit of
+  Mercury: a hidden planet, Vulcan, was postulated and never found. The anomaly was explained only by general
+  relativity.
+
+The test is one question: **did the repair predict something new, or did it only hide the error?** Every change
+of method after a failure must answer it.
+
+**The three questions.** Instead of asking only "what is the probability?", Stochology asks three questions of
+any claim:
+
+1. **In which layer can this claim fail?** In the world, in the model, or in the person who decides.
+2. **What kind of uncertainty threatens it?** Chance, ignorance that more data can reduce, or a possibility no
+   one has listed.
+3. **What test would it have to face to deserve trust?** A test it could have failed.
+
+Chapters 2 to 4 develop each question in turn.
 
 ---
 
 ### Step 3 — Hands on
 
-The laboratory of this chapter computes nothing interesting, but it shows *why* everything that comes later
-is checkable. The code is in `crates/stochology-book/src/ch01.rs`, and the output below was measured with
-`cargo run --release --bin labs -- --chapter 1`.
+The laboratory checks the two properties of a seed: the same seed gives the same sequence, and a different seed
+gives an unrelated one. Run it with `cargo run --release --bin labs -- --chapter 1`.
 
 ```text
 == Chapter 1 :: the invisible target ==
@@ -242,139 +259,79 @@ seed 1909: frequency of heads in 100 thousand tosses = 0.4992
 seed 2026: frequency of heads in 100 thousand tosses = 0.4987
 ```
 
-Read line by line. **10000 of 10000**. Two independent "machines", with the starting seed in common, produce
-identical sequences, and that is what makes the experiment auditable. **0**. When the seed changes, the
-sequences have nothing in common (zero matches in ten thousand draws). The seed was not chosen to force a
-result; it is only the starting point. **0.5000, 0.4992 and 0.4987**. Three different seeds, three honest
-coins, head frequencies less than 0.0013 away from one half in 100 thousand tosses. Chance, when it
-accumulates, behaves.
+Read it line by line.
 
-**The grain of this question.** Every chapter has a decision with a grain, and the R axis measures what it
-costs to ask coarsely. The line of this chapter, from the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
+- **10000 of 10000.** Two independent generators started from the same seed produce identical sequences. Anyone
+  can repeat the experiment and check it.
+- **0.** With the next seed, the sequences share nothing: zero matches in ten thousand draws. The seed is a
+  starting point, not a way of choosing the result.
+- **0.5000, 0.4992 and 0.4987.** Three seeds, three fair coins, and head frequencies within 0.0013 of one half
+  after 100 thousand tosses. Each toss is unpredictable; their average is not. That is the law of large numbers,
+  and it is why a long run of chance can be trusted when a single draw cannot.
 
 **Exercises.**
 
-1. *(Concept)* Explain, in your own words, why the definition says "science (or art)". Give an example of a
-   decision in which the "art" part is unavoidable.
-2. *(Concept)* A newspaper writes: "the draw was audited and nobody knows the result beforehand". If the
-   program that performs the draw has a fixed seed, does whoever knows the seed know the result? Why does
-   that not invalidate the draw?
-3. *(Count)* You repeat the experiment and get 0.53 heads in 100 tosses. In 100 thousand tosses, would you
-   expect a similar deviation? Justify with one sentence about how chance behaves when it accumulates.
-4. *(Laboratory)* Run `labs --chapter 1` and then change the seed from 1909 to 1909 in the file. Does the result
-   change? Change it to 1910 and measure how many matches appear in 100 thousand draws.
-5. *(Concept)* Name a decision of your own life in which the answer is only known months later, and say
-   which information you would have liked to have had and did not.
+1. *(Concept)* Why does the definition say "science (or art)"? Give an example of a decision in which the "art"
+   part cannot be avoided.
+2. *(Concept)* A newspaper says: "the draw was audited and nobody knew the result beforehand". If the program uses
+   a fixed seed, does whoever knows the seed know the result? Why does that not make the draw dishonest, as long as
+   the seed is published before the draw and cannot be changed after it?
+3. *(Calculation)* Continue the table of Step 1 for four more steps. After how many steps does the sequence return
+   to 7? What does that say about using a small remainder in a real generator?
+4. *(Calculation)* You toss a coin 100 times and get 53 heads. In 100 thousand tosses, would you expect the
+   fraction to stay 0.03 away from one half? Justify in one sentence.
+5. *(Laboratory)* Change the seed 1909 to 1910 in the laboratory and run it again. How many draws coincide with
+   the original sequence?
+6. *(Concept)* Classify each repair as progressive or degenerative, and justify: (a) a diet fails, and its author
+   says the participants did not follow it, without measuring whether they did; (b) a vaccine trial fails in older
+   adults, and the researchers predict, before a new trial, that a higher dose will work in that group, and it
+   does.
 
 **Summary.**
 
-- Stochology is the science (or art) that studies judgement and decision under uncertainty.
-- The name comes from Bernoulli's *stókhos* (1713). Aiming well when the target cannot be seen.
-- It stitches the philosophy of induction, statistical inference and stochastic processes.
-- Checking a result depends on the chance of the experiment being reproducible. That requires a fixed seed.
+- Stochology is the science (or art) of judgement and decision under uncertainty.
+- The name comes from *stókhos*, the target, and from Bernoulli's *Ars Conjectandi* (1713): aiming well at what
+  cannot be seen.
+- It joins the philosophy of induction, statistical inference and the study of stochastic processes.
+- A repair of a theory is honest when it predicts something new (Neptune) and dishonest when it only hides the
+  error (Vulcan).
+- A result can be checked only if its chance can be repeated, which requires a fixed seed.
 
 ## Chapter 2. World, Model and Agent: where do errors live?
 
 **Objectives.** By the end of this chapter you should be able to separate the three layers of reality, state the
-bridge thesis, apply the three forms of Peirce's inference, distinguish the three senses of the word "bias"
-and recognize the prosecutor's fallacy.
+bridge thesis and what would refute it, apply Peirce's three forms of inference, distinguish the three senses of
+the word "bias" and recognise the prosecutor's fallacy.
 
 ---
 
 ### Step 1 — The real world and the paradox
 
-**The territory, the map and the driver.** You are in a car in an unknown city. There is the real city:
-streets, potholes, roadworks, the truck stopped at the corner. There is the map, a sheet of paper that
-represents the city, always incomplete and always out of date somewhere. And there is the driver, you,
-hungry, in a hurry, with divided attention, deciding at every crossing.
+**The territory, the map and the driver.** You are driving in an unknown city. There is the real city: streets,
+potholes, roadworks, the truck stopped at the corner. There is the map, a sheet of paper that represents the city,
+always incomplete and always out of date somewhere. And there is the driver, hungry, in a hurry, with divided
+attention, deciding at every crossing.
 
-The three are different things, and the map is never the territory. But the driver only acts through the
-map. Almost every error this book studies is born there. **Not in the map, but in the passage from the world
-to the map, and from the map to the driver's hand.**
+The three are different things, and the map is never the territory. Yet the driver acts only through the map. Most
+errors are born in the passage: **from the world to the map, and from the map to the driver's hand.**
 
-**The queue at the health centre.** In each 100 days, the centre receives patients in two ways. On half the
-days 5 people per hour arrive; on the other half, 11 arrive. On average, 8 people per hour. The centre
-serves 12 per hour.
+**The queue at the health centre.** A health centre serves 12 patients per hour. On half the days 5 patients per
+hour arrive; on the other half, 11. On average, 8 per hour.
 
-The manager's claim is this: *"average demand is 8, the centre serves 12, so the wait is about 10 minutes and
-there is no reason to hire"*. The arithmetic is right for a world in which exactly 8 people per hour arrive,
-every hour.
+The manager reasons: *"average demand is 8, we serve 12, so the wait is short and there is no reason to hire"*.
+The arithmetic is right for a world in which exactly 8 patients arrive every hour.
 
-Except that the world is the other one. Simulated with the same seed, the two worlds give:
+But the world is the other one. Simulated with the same seed, the two worlds give:
 
 | World | Mean wait per patient | In each 100 patients, how many wait more than 30 min |
 | --- | --- | --- |
 | Always 8 per hour | 9.3 minutes | 8 |
 | Half the days with 5, half with 11 | 20.7 minutes | 25 |
 
-No arithmetic was wrong. Mean demand is 8 in both cases. The **world** changed. When demand oscillates, the
-queue on the busy day grows far more than the queue on the empty day shrinks, because the wait grows **on a
-curve**. Whoever looked only at the mean, with the phrase "the average patient waits 10 minutes", decided
-for a world that does not exist. Chapter 5 explains the curve; Chapter 16 redoes the whole case with the
-repository numbers.
+No arithmetic was wrong, and the mean demand is 8 in both worlds. What changed is the **world**. When demand
+oscillates, the queue of a busy day grows much more than the queue of a quiet day shrinks, because waiting time
+grows **on a curve**. The manager decided for a world that does not exist. Chapter 5 explains the curve, and
+Chapter 16 follows the same queue in real data.
 
 ---
 
@@ -382,23 +339,41 @@ repository numbers.
 
 **The three layers.**
 
-| Layer | Code | What it is | What is audited in it |
+| Layer | Code | What it is | What can go wrong in it |
 | --- | --- | --- | --- |
-| World | $L_1$ | The reality that generates the data and that we never see whole | Physics of the noise, causal mechanisms, path dependence, heavy tails |
-| Model | $L_2$ | The formal, simplified and simulable representation | Hidden assumptions, hypothesis space, likelihood, overfitting |
-| Agent | $L_3$ | Who decides: a person, an institution or an algorithm, with limited time and attention | Heuristic shortcuts, calibration, utility, loops in which the action changes the World |
+| World | $L_1$ | The reality that generates the data, never seen whole | The physics of the noise, causal mechanisms, path dependence, heavy tails |
+| Model | $L_2$ | The formal, simplified, simulable representation | Hidden assumptions, a hypothesis space that is too small, the wrong likelihood, overfitting |
+| Agent | $L_3$ | Who decides: a person, an institution or an algorithm, with limited time and attention | Mental shortcuts, miscalibration, utility, actions that change the World |
 
-The three form a loop. The World generates data, the Model interprets it, the Agent acts, and the action
-changes the World again. Each arrow is a **bridge** where the error enters. The data arrive filtered between
-World and Model, the prediction is misread between Model and Agent, and the action deforms the World one
-wanted to measure.
+The three form a loop. The World generates data, the Model interprets them, the Agent acts, and the action changes
+the World again. Each arrow is a **bridge**, and each bridge has its typical error:
 
-**The bridge thesis.** *A fallacy is almost always not an arithmetic error, but a misalignment between
-layers.* It is worth saying what this thesis does **not** claim. It does not say that wrong arithmetic does
-not exist, nor that whoever uses the architecture does not err. It says where to look first.
+- **World to Model:** the data arrive filtered. Only the patients who did not give up are counted; only the
+  companies that survived appear in the database.
+- **Model to Agent:** the prediction is misread. A likelihood is taken for an answer; a mean is taken for a
+  typical case.
+- **Agent to World:** the action deforms what it wanted to measure. A forecast of a bank run causes the run; a
+  target turns into a goal to be gamed.
 
-**The three forms of inference (Peirce).** Peirce obtained deduction, induction and abduction by permuting
-the same three propositions: rule, case and result.
+**The bridge thesis.** *A fallacy is almost always not an arithmetic error but a misalignment between layers.* The
+thesis does **not** claim that wrong arithmetic never happens, nor that anyone who follows it stops erring. It says
+where to look first.
+
+**What would refute the thesis.** A claim deserves trust only if a test could have failed it. Here is a fair test.
+Take a set of analyses, some with a planted error and some clean. Give them, blind, to two groups: one that checks
+every bridge systematically, and one told only to "analyse rigorously". An external judge, who does not know which
+group wrote what, scores how many planted errors each group finds and how many false alarms it raises. If the
+bridge-checking group finds no more errors than the other, the thesis gains nothing.
+
+The design has a trap. If the planted errors come from a list of well-known mistakes, both groups find all of them,
+and the result is a **tie at the ceiling**: every defect found, no false alarm, in both groups. A tie at the
+ceiling does not support the thesis, and it does not refute it either. It says the test was too easy to tell the
+groups apart. A fair test needs errors harder than the textbook ones, chosen by someone outside the group being
+tested, and human analysts and judges.
+
+**The three forms of inference (Peirce).** Charles Sanders Peirce obtained deduction, induction and abduction by
+permuting three propositions: a rule ("all beans in this bag are white"), a case ("these beans come from this bag")
+and a result ("these beans are white").
 
 | Form | Goes from | To | Preserves the truth? |
 | --- | --- | --- | --- |
@@ -406,68 +381,61 @@ the same three propositions: rule, case and result.
 | Induction | Case and result | Rule | No: it amplifies and can fail |
 | Abduction | Rule and result | Case (the best explanation) | No: it amplifies and can fail |
 
-Abduction chooses the hypothesis that makes the data least surprising, but only among the hypotheses
-considered. It is the precursor of maximum likelihood and inherits its limit, which Chapter 4 will call
-Knightian uncertainty.
+Abduction chooses the hypothesis that makes the data least surprising, but only among the hypotheses considered.
+It is the ancestor of maximum likelihood and inherits its limit: the true explanation may not be on the list.
+Chapter 4 calls that limit Knightian uncertainty.
 
-**The three senses of "bias".** The word is used for three things that the discipline separates in order to
-reunite later. They are the statistical bias of an estimator (Model), the bias of the process that produced
-the data (World) and the cognitive bias of whoever reasons (Agent). In the three cases the error is not noise
-that cancels with more data, but a distortion that accumulates.
+**The three senses of "bias".** The word names three different things, one per layer.
 
-**The thesis has an operational version.** Most of the biases in the classical catalogue correspond to a
-model of chance that was ignored.
+- In the **World**, the bias of the process that produced the data: a survey answered only by those who wanted to
+  answer.
+- In the **Model**, the statistical bias of an estimator: a formula whose average result misses the true value.
+- In the **Agent**, the cognitive bias of whoever reasons: seeing a pattern where there is only chance.
 
-| Bias | Ignored model of chance |
+In all three, the error is not noise that cancels out with more data. It is a distortion that accumulates.
+
+**Biases as forgotten models of chance.** Many biases in the classical catalogue are a model of chance that was
+ignored.
+
+| Bias | The model of chance that was ignored |
 | --- | --- |
 | Base-rate neglect | The likelihood taken for the posterior |
-| Availability, survival | A filtered sample taken for the population |
-| Pattern illusion | The null hypothesis of chance forgotten |
+| Availability, survivorship | A filtered sample taken for the population |
+| Pattern illusion | The null hypothesis of pure chance |
 | Gambler's fallacy | Memory attributed to a process without memory |
-| Neglect of rare events | A heavy tail modelled as Gaussian |
+| Neglect of rare events | A heavy tail modelled as a normal curve |
 | Overconfidence | Miscalibration |
-| Motivated reasoning | The model chosen by the desired result |
+| Motivated reasoning | The model chosen for the desired result |
 
-**The prosecutor's fallacy.** The Agent reads the Model's likelihood, $P(\text{evidence} \mid
-\text{innocent})$, as if it were the answer about the World, $P(\text{innocent} \mid \text{evidence})$.
-The two numbers are different, and the difference depends entirely on layer $L_1$, that is, on how many
-innocent people one is talking about.
+**The prosecutor's fallacy.** In court, an expert says: "the chance of this DNA match occurring by coincidence is
+one in a million". The jury hears: "the chance that the defendant is innocent is one in a million". These are two
+different numbers. The first is $P(\text{evidence} \mid \text{innocent})$, a property of the Model. The second is
+$P(\text{innocent} \mid \text{evidence})$, the answer about the World. Going from one to the other requires a
+third number: how many people could have left that trace. The fallacy crosses the Model-to-Agent bridge without
+paying the toll.
 
-**The inspection paradox.** The Agent imposes a stable Model on a World that oscillates, like the manager of
-the centre, who projected the queue of the average day onto every day.
-
-**The thesis was tested once.** Twelve cases were built from an external list of ten common statistical
-errors (Makin and Orban de Xivry, 2019). Eight cases had a planted defect and four were clean; two
-independent arms analysed them blind, one with this book's architecture, the other with the instruction to
-analyse rigorously, without agents or gates. Both pointed to the 8 defects and raised zero false alarms in the
-4 clean cases. The rule fixed in advance said that **a tie at the ceiling does not support the thesis**, and
-that is what the result said. The tie does not refute it either. It shows that, for the ten errors on that
-list, a competent analyst finds everything the other one finds. If the thesis holds, it holds for errors the
-list does not cover, and a fair test of that needs harder cases, chosen outside the program, human analysts
-and a human judge. Chapter 21 returns to this point.
+**The inspection paradox.** The manager of the health centre made the opposite crossing: imposing a stable Model on
+a World that oscillates, and projecting the queue of the average day onto every day.
 
 ---
 
 ### Step 3 — Hands on
 
-Two tasks: represent the layers as data types, so that the program cannot confuse them, and measure the
-prosecutor's fallacy in three different worlds.
-
-**The layers as types.** In Rust, the separation ceases to be a stylistic recommendation and becomes a
-compiler rule (`crates/stochology-core/src/camada.rs`):
+**The layers as types.** A program can be made unable to confuse the layers. In Rust, each layer and each kind of
+uncertainty is a type:
 
 ```rust
-pub enum Camada { Mundo, Modelo, Agente }
+pub enum Layer { World, Model, Agent }
 
-pub enum TipoIncerteza { Aleatoria, Epistemica, Knightiana }
+pub enum UncertaintyType { Aleatory, Epistemic, Knightian }
 ```
 
-Whoever writes a function that takes `Camada::Modelo` cannot pass a `Camada::Agente` without writing that
-conversion by hand, and the manual conversion is the place where the reader of the code stops to think.
+A function that expects `Layer::Model` cannot receive `Layer::Agent` by accident. Any conversion has to be written
+by hand, and that line is where the reader of the code stops to think.
 
-**The bridge measured.** The chapter's laboratory asks the following. A DNA coincidence happens by chance in
-1 person in each 1 million. In three different worlds, in which the prior chance that the defendant is guilty
-is 1%, 0.1% and 0.0001%, what is the correct answer about the defendant?
+**The fallacy measured.** A DNA match happens by coincidence in 1 person in each 1 million. In three worlds, the
+prior chance that the defendant is guilty is 1%, 0.1% and 0.0001%. What is the chance of innocence given the match?
+Run `cargo run --release --bin labs -- --chapter 2`.
 
 ```text
 == Chapter 2 :: the fallacy lives on the bridge ==
@@ -476,102 +444,37 @@ prevalence 1e-3: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.0010  s
 prevalence 1e-6: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.5000  swap factor=499999.7
 ```
 
-The first column does not change across the three worlds, **0.000001**. It is the likelihood, and it is the
-number the prosecutor quotes. The second column is the answer. With identical evidence and likelihood, the
-chance of innocence goes from **0.0001** (0.01%) to **0.5** (50%). The third column shows how much the swap
-lies: 99 times in the first world, 499,999.7 times in the last. The error is not in the arithmetic; it is in
-answering about the World with a number from the Model.
+- **The first column does not move: 0.000001.** It is the likelihood, the number the prosecutor quotes.
+- **The second column is the answer.** With the same evidence, the chance of innocence goes from **0.0001** (one in
+  ten thousand) to **0.5** (one in two).
+- **The third column measures the lie.** Swapping the two numbers misleads 99 times in the first world and
+  499,999.7 times in the last.
 
-**The grain of this question.** Every chapter has a decision with a grain, and the R axis measures what it
-costs to ask coarsely. The line of this chapter, from the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
+The arithmetic is never wrong. The error is answering a question about the World with a number from the Model.
 
 **Exercises.**
 
-1. *(Concept)* Classify each item as World, Model or Agent: the real arrival rate of patients; the queue
-   formula used by the manager; the decision to hire two nurses; the patients giving up when they see the
-   queue.
-2. *(Concept)* A news item says: "the chance of the DNA coinciding by chance is minuscule, therefore the
-   chance of the defendant being innocent is equally minuscule". On which bridge is the error? Which
-   quantity is missing to get to $P(\text{innocent} \mid \text{evidence})$?
-3. *(Count)* In the laboratory, with prevalence 0.0001% ($10^{-6}$), the result is 0.5. Compute by hand which
-   prevalence would give 0.09 and explain in one sentence why the answer depends so much on layer $L_1$.
-4. *(Laboratory)* Modify the laboratory to use a coincidence of 1 in 1,000 instead of 1 in 1,000,000 and redo
-   the table of the three worlds.
-5. *(Concept)* Choose three biases from the table of the previous section and describe, for each one, an
-   environment in which the shortcut would cease to be an error (Chapter 7 returns to this idea with
-   Kahneman and Gigerenzer).
+1. *(Concept)* Classify each item as World, Model or Agent: the real arrival rate of patients; the queue formula
+   used by the manager; the decision to hire two nurses; the patients who leave when they see the queue.
+2. *(Concept)* A news item says: "the chance of the DNA matching by coincidence is tiny, so the chance of the
+   defendant being innocent is equally tiny". On which bridge is the error? Which quantity is missing?
+3. *(Calculation)* With a coincidence of 1 in a million, which prior chance of guilt makes the chance of innocence
+   given the match equal to 0.09? Explain in one sentence why the answer depends so much on layer $L_1$.
+4. *(Laboratory)* Change the coincidence from 1 in 1,000,000 to 1 in 1,000 and redo the table of the three worlds.
+5. *(Concept)* Choose three biases from the table and describe, for each, an environment in which the shortcut
+   stops being an error.
+6. *(Concept)* In the fair test of the bridge thesis, why must the person who chooses the cases be outside the group
+   being tested? What would go wrong if the same person planted the errors and analysed them?
 
 **Summary.**
 
-- World ($L_1$), Model ($L_2$) and Agent ($L_3$) are distinct layers, and most errors live on the bridges
-  between them.
-- Peirce: deduction preserves the truth; induction and abduction amplify and can fail.
-- "Bias" has three senses, from the data, from the estimator and from the mind, and all of them accumulate.
-- The prosecutor's fallacy swaps $P(E \mid I)$ for $P(I \mid E)$; the swap lies by a factor that depends on
-  the prevalence in the World.
+- World ($L_1$), Model ($L_2$) and Agent ($L_3$) are distinct layers, and most errors live on the bridges between
+  them.
+- The bridge thesis says where to look first; a fair test of it needs hard cases, outside selection and a blind
+  judge, and a tie at the ceiling decides nothing.
+- Peirce: deduction preserves the truth; induction and abduction amplify it and can fail.
+- "Bias" has three senses, in the data, in the estimator and in the mind, and all of them accumulate.
+- The prosecutor's fallacy swaps $P(E \mid I)$ for $P(I \mid E)$; the size of the lie depends on the World.
 
 ## Chapter 3. Probability without mystery: bets, trees and Bayes' theorem
 
@@ -643,7 +546,8 @@ by the price of a bet. A set of prices admits a Dutch book if and only if it vio
 | Subjective (Ramsey, de Finetti) | The degree of belief of an agent, measured by the price of a bet | Agent |
 
 Stochology does not choose one. **It types every number by the layer it came from**. Many errors of Chapter
-2 are swaps of reading.
+2 are swaps of reading: a frequency of the World read as a degree of belief of the Agent, or a count of equally
+possible cases in the Model read as a property of the World.
 
 **Coherence is cheap.** An agent who commits the conjunction fallacy loses 0.05 per round to the Dutch
 bookmaker and 0.60 to whoever knows the world. Making the agent coherent reduces the loss only to 0.55. The
@@ -658,13 +562,17 @@ $$\frac{P(H\mid E)}{P(\neg H\mid E)}=\frac{P(E\mid H)}{P(E\mid \neg H)}\times\fr
 value of $P(E \mid H)$ does not measure that strength.
 
 **Maximum entropy.** When information is incomplete, Jaynes (1957) tells us to choose, among the
-distributions compatible with the available information, the one of greatest entropy. A six-sided die with
-mean 4.5 then receives about 5% on face 1 and 35% on face 6; any other choice assumes something that was not
-declared.
+distributions compatible with the available information, the one of greatest entropy. Entropy measures how
+spread out a distribution is, how little it commits to any outcome. With no information at all about a die, the
+answer is the uniform distribution, one sixth per face. If the only information is that the mean is 4.5, the
+answer leans towards the high faces without excluding the low ones: about 5% on face 1 and 35% on face 6. Any
+other choice assumes something that was not declared.
 
 **Decibans.** Turing and Good measured the strength of evidence in decibans, ten times the decimal logarithm
-of the likelihood ratio. On that scale, independent items of evidence **add up**. Independence is the
-condition most often forgotten. Two positive tests with a common cause of error are not worth double.
+of the likelihood ratio. A ratio of 10 is worth 10 decibans; a ratio of 100, 20 decibans. On that scale,
+independent items of evidence **add up**, because the logarithm turns the product of ratios into a sum. Belief
+becomes a balance on which each item of evidence places its weight. Independence is the condition most often
+forgotten. Two positive tests with a common cause of error are not worth double.
 
 **Royall in three questions.** Royall separated three questions that are usually answered with a single
 number: *what do these data say about H against H′?* (likelihood ratio); *what should I believe now?* (it
@@ -690,8 +598,7 @@ of 1%.
 ### Step 3 — Hands on
 
 The laboratory builds the tree, measures the strength of the second test and shows how much the dependence
-between tests costs. Code in `crates/stochology-book/src/ch03.rs`; output measured with
-`cargo run --release --bin labs -- --chapter 3`:
+between tests costs. Run it with `cargo run --release --bin labs -- --chapter 3`.
 
 ```text
 == Chapter 3 :: trees, odds and decibans ==
@@ -706,74 +613,12 @@ Three lessons in three lines. **(1)** The tree gives 981 positives, of which 90 
 and 6.23 decibans if there is a common cause of false positives (dense tissue, for instance), with the
 effective ratio falling from 10 to 4.2. **(3)** With two positives, the belief goes from 1% to 50.25% in the
 independent case and to 29.79% in the correlated case. Independence was not a detail. It is almost half of the
-conclusion. The repository number for the correlated case is 30%, the rounded value that appears in the
-course outline.
+conclusion.
 
-**The grain of this question.** Every chapter has a decision with a grain, and the R axis measures what it
-costs to ask coarsely. The line of this chapter, from the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
+The second line deserves a closer look. Two tests on the same breast share the tissue that fooled the first one.
+When the first test is a false positive because the tissue is dense, the second is more likely to be a false
+positive for the same reason. The second result then carries less news than its nominal ratio promises, and the
+decibans must be computed with the ratio that remains after the shared cause is taken into account.
 
 **Exercises.**
 
@@ -835,7 +680,7 @@ turkey's.
 
 **The law of total variance.** The total dispersion of a result decomposes into two parcels:
 
-$$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{aleatória (Mundo)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistêmica (Modelo)}}$$
+$$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{aleatory (World)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}$$
 
 The first parcel is born from the draw and persists when the parameter is known. The second is born from
 ignorance about the parameter and disappears when you identify it and have data.
@@ -847,8 +692,8 @@ ignorance about the parameter and disappears when you identify it and have data.
 | Knightian | Model and Agent | Nothing — or worse: false confidence | Scenarios, robustness, stress on assumptions, widening the hypothesis space |
 
 Frank Knight (1921) separated **risk**, with known probabilities, from **uncertainty**, with probabilities
-that cannot be measured. In the extreme case, which this book calls Knightian uncertainty or specification
-error, the real process is **outside** the hypothesis space. That uncertainty is the most dangerous of the
+that cannot be measured. In the extreme case, called here Knightian uncertainty or specification error, the
+real process is **outside** the hypothesis space. That uncertainty is the most dangerous of the
 three, because it does not appear in the equation. The interval narrows around the wrong answer.
 
 **The Stirling matrix.** Two questions organize the diagnosis. Do we know which outcomes are possible? Do we
@@ -864,8 +709,9 @@ Russell's turkey is in the bottom right corner, and no calculation from the top 
 **The typology of Walker and colleagues (2003).** Every uncertainty is classified along three dimensions.
 *Location* says where it enters: context, model structure, parameters, inputs or results. *Level* goes from
 deterministic certainty to total ignorance. *Nature* separates variability (aleatory) from lack of knowledge
-(epistemic). In this book's architecture, location corresponds to the layer and to the field of the card
-(Chapter 14), and the level says whether a margin is enough or whether a stress test is needed.
+(epistemic). Location corresponds to the layer in which the uncertainty lives, and the level says whether a
+safety margin is enough or whether the assumptions themselves must be stressed. A parameter that is merely
+unknown calls for more data; a model structure that may be wrong calls for rival models.
 
 **Laplace's rule of succession.** On the eve of day 101, the turkey uses:
 
@@ -873,17 +719,24 @@ $$P(\text{success tomorrow}\mid s,n)=\frac{s+1}{n+2}$$
 
 The rule is not neutral either, because it derives from a uniform prior. With seven successes in ten, the
 uniform prior gives 0.667, a uniform prior over $\theta^2$ gives 0.692 and one over $\sqrt{\theta}$ gives
-0.652. **Even ignorance has a shape**, and that is why the choice of prior has to be declared (Chapter 13,
-band F7).
+0.652. **Even ignorance has a shape**, and that is why the choice of prior has to be declared and its effect on
+the conclusion measured.
 
 ---
+
+**The forgetting factor.** A model that assumes a fixed world gives the same weight to the first observation
+and to the last one. When the world drifts, that is a mistake: old data describe a world that no longer
+exists. The remedy is to weigh each observation by a factor that decays with its age. With factor $\lambda$, an
+observation of $k$ steps ago weighs $\lambda^k$, and the model remembers, in effect, about $1/(1-\lambda)$
+recent observations. With $\lambda = 0.99$, that is about 100. The model gives up the precision of a long
+memory in exchange for following a moving target. The choice of $\lambda$ is itself a bet on how fast the world
+changes, and it must be declared like any prior.
 
 ### Step 3 — Hands on
 
 The laboratory places a world that changes underneath a model that does not change. A coin whose bias
 **climbs from 0.2 to 0.6** over 6,400 tosses, 200 repetitions, with model 1 assuming a fixed coin and model 2
-discounting the past with factor 0.99. Code in `crates/stochology-book/src/ch04.rs`; output measured with
-`cargo run --release --bin labs -- --chapter 4`:
+discounting the past with factor 0.99. Run it with `cargo run --release --bin labs -- --chapter 4`.
 
 ```text
 == Chapter 4 :: the coin whose bias changes ==
@@ -897,81 +750,6 @@ The fixed model declares "95% confidence" and **covers the truth in 12% of the s
 from 0.1564 to 0.0240 while the bias walks out of it. The model that forgets the past, with an interval
 **5.7 times wider**, covers 93.98%, close to the nominal value. The price of honesty is the width of the
 interval; the price of stubbornness is false confidence.
-
-**Divergence declaration.** The earlier text of this book (and the course outline) records 11% coverage
-for the fixed model and 99% for the model with forgetting, with widths from 0.140 to 0.035. This instrument,
-with 6,400 steps and discount 0.99, measures **12%** and **93.98%**, with widths from 0.1564 to 0.0240 and a
-ratio of 5.7×. The coverage of the fixed model agrees within one percentage point; the coverage of the model
-with forgetting is lower because the width of the interval used here is that of the standard error of the
-EWMA, and a wider interval (or a smaller discount) raises coverage above 97% — the parameter grid in
-`crates/stochology-book/examples/grade_ch04.rs` shows the effect. Both values remain recorded; neither was
-erased.
-
-**The grain of this question.** Every chapter has a decision with a grain, and the R axis measures what it
-costs to ask coarsely. The line of this chapter, from the axis instrument (`labs --resolution`):
-
-```text
-== R horizon :: resolution of the question ==
-paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 8.0 | aggregate wait 86.48 min, fine wait 40.24 min, loss 46.24 min
-   above 30 min: aggregated 0.6042, fine 0.4840
-demand 7 or 9 (light oscillation): mean capacity 8.0 | aggregate wait 47.70 min, fine wait 41.73 min, loss 5.97 min
-   above 30 min: aggregated 0.5168, fine 0.5063
-demand 8 or 8 (no oscillation): mean capacity 8.0 | aggregate wait 41.56 min, fine wait 41.56 min, loss 0.00 min
-   above 30 min: aggregated 0.5013, fine 0.5013
-resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
-
--- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
-  200 days per amplitude | 10 h per day | specification 1: the Erlang plan of the average day, 12 agents
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           41          0.205        -0.26     0.0612
-         0.5           52          0.260        -1.89     0.0776
-         1.0           51          0.255         1.97     0.0954
-         1.5           64          0.320         2.60     0.1267
-         2.0           66          0.330         2.27     0.1365
-         2.5           73          0.365         7.04     0.1634
-         3.0           80          0.400         8.93     0.2314
-  threshold: amplitude 0.5 | resolution loss at the threshold -1.89 min | monotone: false
-
--- prediction 3, specification 2: the R0 scale calibrated on flat demand --
-  the calibrated scale has 13 agents (the flat one fails on at most 10% of the days)
-   amplitude  failed days       fraction   loss (min) above30 R0
-         0.0           19          0.095        -2.24     0.0339
-         0.5           30          0.150        -4.08     0.0467
-         1.0           33          0.165        -0.66     0.0554
-         1.5           39          0.195        -0.65     0.0739
-         2.0           42          0.210        -1.12     0.0854
-         2.5           53          0.265         2.87     0.1027
-         3.0           66          0.330         3.36     0.1458
-  threshold: amplitude 2.5 | resolution loss at the threshold 2.87 min | monotone: true
-
--- prediction 5: the transfer (surviving R1 implies surviving R0; the converse does not) --
-  6 profiles x 200 days | day threshold 0.10 | violations of the implication: 0 | counterexamples: 3 | aggregate conservation checked: true
-  reading: no profile survives R1 and fails at R0; 3 profiles pass at R0 and fail on some day
-
--- the R axis, chapter by chapter (the table is in book/r-axis.tsv; the reading is computed here) --
-chapter  1 | no loss measured in this chapter | the chapter presents the target and the thesis; there is no scale decision
-chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
-chapter  3 | no loss measured in this chapter | probability without a scale decision
-chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 46.24 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
-chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
-chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 5.97 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
-chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
-chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
-chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 46.24 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
-chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 46.24 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
-chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
-```
 
 **Exercises.**
 
@@ -7176,3 +6954,20 @@ did not come out in the sources consulted, and the year of Sweeney (2000) comes 
 Rule 1 of this appendix still holds, and now with the exact sense: the check is of the metadata, and what the
 book keeps of each one is the citation, the DOI and the number that it uses. What does not enter the repository are the third-party
 files, for copyright, and none of them is claimed to be present on disk.
+
+## Appendix E. Provenance of the numbers
+
+The chapters teach with numbers measured by a fixed-seed instrument. Where a measured number differs from the
+value an earlier text or the course outline recorded, both values and the cause are kept here, chapter by
+chapter, so that the chapters can teach without carrying the comparison.
+
+### Chapter 4
+
+The earlier text (and the course outline) records 11% coverage
+for the fixed model and 99% for the model with forgetting, with widths from 0.140 to 0.035. The instrument,
+with 6,400 steps and discount 0.99, measures **12%** and **93.98%**, with widths from 0.1564 to 0.0240 and a
+ratio of 5.7×. The coverage of the fixed model agrees within one percentage point; the coverage of the model
+with forgetting is lower because the width of the interval used here is that of the standard error of the
+EWMA, and a wider interval (or a smaller discount) raises coverage above 97% — the parameter grid in
+`crates/stochology-book/examples/grade_ch04.rs` shows the effect. Both values remain recorded; neither was
+erased.

@@ -1704,4 +1704,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **7178 lines** and **96017 words**, sha256 `7a6926047ada6d6652cc3f6dabb74567c89d73b2f48add1c83882c8e8ea8ca1c`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6973 lines** and **92923 words**, sha256 `18b115767fce65407eaf6eb3b6519e7f89a8ede66eeecd0f34640c7dafa15157`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
