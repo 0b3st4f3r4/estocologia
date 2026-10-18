@@ -650,7 +650,7 @@ Hill estimator with alpha = 1.1 and n = 200 000:
   k =   1000  alpha_hat = 1.100  95% CI approx [1.032; 1.168]
   k =   5000  alpha_hat = 1.101  95% CI approx [1.070; 1.131]
   k =  20000  alpha_hat = 1.095  95% CI approx [1.080; 1.111]
-gregarine: a Gaussian model fitted to this tail underestimates the loss in every repetition
+reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
 == Chapter 10 :: volatility drag at 1x, 2x and 3x ==
 L = 1x: arithmetic mean = +0.000317/session, measured growth = +0.000249/session, drag = +0.000068/session (+0.0172/year), wealth in 100000 sessions = 6.363e10
@@ -1704,4 +1704,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 20, of which 4 are declaration 2 or later (declared rectification with both values) | empirical points: 16 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6973 lines** and **92923 words**, sha256 `18b115767fce65407eaf6eb3b6519e7f89a8ede66eeecd0f34640c7dafa15157`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6314 lines** and **82593 words**, sha256 `2cc8ce516a227f414b0d23667e08aba7e33a92f450bd618f092fa9153d5f07c4`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

@@ -63,6 +63,7 @@ def source_numbers() -> set[str]:
     known: set[str] = set()
     for text in texts:
         # "1 800" is one number written with a thin thousands space; read it whole as well as in parts.
+        text = text.replace("{,}", ",")  # LaTeX decimal comma: 1{,}96
         for joined in (text, re.sub(r"(\d) (\d{3})(?!\d)", r"\1\2", text)):
             for n in NUMBER_RE.findall(joined):
                 # A source may write 0,294 or 1.800 (Portuguese decimal comma and thousands point): keep every
@@ -90,7 +91,7 @@ def check_rewrite(name: str, text: str, known: set[str]) -> list[str]:
         problems.append(f"word floor: {words}")
     own = {n for _, block in FENCE_RE.findall(body) for n in NUMBER_RE.findall(block)}
     running = FENCE_RE.sub("", body)
-    running = "\n".join(l for l in running.splitlines() if not l.startswith("|"))
+    running = "\n".join(l for l in running.splitlines() if not l.startswith("|")).replace("{,}", ",")
     unknown = sorted(
         {n for n in NUMBER_RE.findall(running) if n not in known and canonical(n) not in known and n not in own}
     )
