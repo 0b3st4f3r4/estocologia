@@ -43,7 +43,7 @@ when `book/` does not exist in that commit —, and the record of each is in `re
 | SHELF elicitation (3) | the other two participants per domain and the external specialist | people | no date; the first specialist's track is closed across five domains |
 | Voice of those who pay (5) | listening sessions with the seven affected groups, with signed records | people | **2026-12-15** |
 | Bridge thesis at scale (9) | external case selector, human analysts, and human judge | people | **2027-01-14**; without them, the thesis becomes definitively unsupported |
-| Jev-LLM bridge (13) | **the weights**, with their `sha256` declared prior to execution, and **the labeled outcome set** in `empirical/p20-jev/calibracao/desfechos.tsv`. The runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) as has the Brier reader (`calibracao.rs`, minimum sample of 30, abstentions excluded from the denominator); the operator manual is `empirical/p20-jev/RUNNER.md`, the `ingest-jev` binary prepares both files with a dry run before persisting, and closure has a pre-data protocol declared in `empirical/p20-jev/FECHAMENTO.md` | the operator, with two files | no date |
+| Jev-LLM bridge (13) | **the weights**, with their `sha256` declared prior to execution, and **the labeled outcome set** in `empirical/p20-jev/calibracao/desfechos.tsv`. The runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) as has the Brier reader (`calibration.rs`, minimum sample of 30, abstentions excluded from the denominator); the operator manual is `empirical/p20-jev/RUNNER.md`, the `ingest-jev` binary prepares both files with a dry run before persisting, and closure has a pre-data protocol declared in `empirical/p20-jev/FECHAMENTO.md` | the operator, with two files | no date |
 
 **What the four do not have in common.** Three depend on **people outside the program** and cannot be resolved with code:
 what is missing is consent, listening, and blind judgment, which is why the instruments lock the box rather than
@@ -65,6 +65,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 | the seal path convention | **unified**: all 28 files now use paths relative to the repository root (including `data/SHA256SUMS` and `governance/DECLARACAO.sha256`), the 9 lines pointing to removed Python code, to the case folder that left the tree, or to `crsp_day_1989_1998.csv` became declared comments, and `sha256sum -c` no longer depends on the working directory from which it is invoked | `python3 scripts/check_seals.py` |
 | tree hygiene | **measured and corrected**: `cargo fmt --check` and `clippy -D warnings` pass across all nine crates (down from 615 formatting diffs and 35 warnings), the toolchain is pinned in `rust-toolchain.toml`, `scripts/verify.sh` is now the single list of §V — CI previously ran 11 of the 29 commands —, and dead root files moved to `history/`. No published number changed: **373 tests** and `docs/RUST_RESULTS.md` identical byte for byte | `scripts/verify.sh` |
 | the per-instrument registry | **was machine-bound**: each block cited the absolute binary path (`/home/silvano-neto/…/target/release/labs`), so `scripts/book/generate_results.py --check` could only pass on this machine and failed in CI from 2026-10-17T16:23Z onward. The command is now recorded relative to the root (`./target/release/labs`), and `--check` now prints the diff divergence instead of merely failing | `python3 scripts/book/generate_results.py --check` |
+| the English migration of 2026-10-18 | **broke CI and left stale pointers**: renaming `verificar.sh` to `scripts/verify.sh` dropped the executable bit (mode `100644`), so CI run 8 on `85d3ade` failed with `Permission denied` before any check ran; the registry also captured cargo's `has been running for over 60 seconds` notice on a slow machine, making `--check` depend on the clock. The bit is restored, `normalize` drops that notice, and `docs/DECLARED_PROPOSALS.md` and this file now point to the nine crates and the English file and test names (`bridge.rs`, `calibration.rs`, `vault.rs`, `layer.rs`, `invariants.rs`). No published number changed | `scripts/verify.sh` |
 
 ## 4. What Would Change Each Verdict
 
@@ -118,7 +119,7 @@ Python).
 
 In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 are second-or-later declarations (corrections
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
-**16 crates**. Each row of the manifest carries the `sha256` of the declaration file.
+**9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
 The assembled textbook enters the same manifest with its identifying metrics: **7 178 lines**, **96 018 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier

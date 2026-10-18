@@ -23,6 +23,9 @@ GATES_BIN = ROOT / "target" / "release" / "gates"
 WAVE_BIN = ROOT / "target" / "release" / "wave"
 
 
+SLOW_TEST = re.compile(r"^test .* has been running for over \d+ seconds$")
+
+
 def normalize(text: str) -> str:
     """Strip run-specific timing and cargo status lines so the record is deterministically verifiable."""
     text = re.sub(r"finished in [0-9.]+s", "finished in Xs", text)
@@ -32,6 +35,8 @@ def normalize(text: str) -> str:
     out: list[str] = []
     block: list[str] = []
     for line in lines:
+        if SLOW_TEST.match(line):
+            continue
         if line.startswith("test "):
             block.append(line)
             continue
