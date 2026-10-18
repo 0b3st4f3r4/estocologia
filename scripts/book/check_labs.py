@@ -38,6 +38,7 @@ def main() -> int:
         ("labs --bank", run_output([str(BIN), "--bank"])),
         ("labs --resolution", run_output([str(BIN), "--resolution"])),
         ("labs --s1", run_output([str(BIN), "--s1"])),
+        ("labs --s2", run_output([str(BIN), "--s2"])),
         ("labs --queue", run_output([str(BIN), "--queue"])),
         ("labs --genetics", run_output([str(BIN), "--genetics"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
