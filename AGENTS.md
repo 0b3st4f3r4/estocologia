@@ -16,8 +16,9 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
    (`Ficha`, in `crates/stochology-core/src/layer.rs`), carrying an identifier, layer, uncertainty type,
    one-line definition, simulable artifact, seed, independent unit, null model, scope, who pays
    for the error, and an exit clause; since contract 1.3 (2026-10-19) it may also declare the uncertainty budget and
-   the dominant event of the expected cost, and since contract 1.4 (the same day) the multiverse of the answer and the
-   reliability of an agent, all validated when present and not demanded.
+   the dominant event of the expected cost, since contract 1.4 (the same day) the multiverse of the answer and the
+   reliability of an agent, and since contract 1.5 the authorship of each field, the findings used and not used, and
+   the decision rule recomputed from the card, all validated when present and not demanded.
 2. **No solitary mean.** Wherever the function is nonlinear, the dynamics are multiplicative, or the tail is
    heavy, reporting only the mean is prohibited: report the evaluation at the mean $f(E[X])$, the simulated expectation $E[f(X)]$, the
    median, the quantiles, and the cumulative distribution curve. Chapter 5 of the book measures the Jensen toll; the instrument
@@ -157,7 +158,7 @@ version tags or releases, no "v2" of a document, and no second copy of a file ke
 changes is recorded as history only — the git log and the dated records in `history/` — and a correction is a
 dated rectification in the file it corrects, with both values. `scripts/verify.sh` fails if the repository
 carries any tag. Three things keep a number because they are not versions of the project: the Rust language
-edition and the crate `version` fields that Cargo requires; the card schema version (1.0 to 1.4), which is a data
+edition and the crate `version` fields that Cargo requires; the card schema version (1.0 to 1.5), which is a data
 contract whose migration chain is itself its history; and the labels v1 to v4 in `empirical/p03-multiplicidade/`,
 which name the specifications that were tried and are the record that the counter $K$ counts.
 

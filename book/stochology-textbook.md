@@ -2191,7 +2191,9 @@ $\{Z\}$ and $\{W\}$ are rejected in **100%** of the rounds, and $\{X\}$ only in 
 The intersection returns exactly $\{X\}$ in **96%** of the rounds (0.960). It contains the child $Z$ in 1.5% and the
 noise $W$ in 1.0%, which together stay below the 5% that the guarantee of ICP allows, and it comes out empty in
 2.5%. **Abstaining is a result, not a defect of the instrument**: when the true cause is rejected by chance, the
-method says nothing rather than something false.
+method says nothing rather than something false. The single run of (3) is one of those rounds: rerun under twenty
+other seeds, it rejects $\{X, W\}$ once, at a $p$ just below 0.05, and its intersection stays $\{X\}$ every time. A
+verdict on one set can move with the draw; the intersection, which is what the method reports, does not.
 
 **(5) When the mechanism is unstable, the cause falls too.** In the second battery, the coefficient of
 $X$ in $Y$ changes from site to site (0.5, 2 and 3.5). The pooled slope of $X$ stays near 2 (2.0001), the average
@@ -3939,7 +3941,9 @@ exponent estimated for the Danish fire losses) and the cutoff at $k = 500$, the 
 **1.7901**. The tail is wild
 ($\hat\alpha < 2$), and for that reason the theoretical variance does not exist. At the edges of the cutoff the number moves, with
 1.8444 at $k = 250$ and 1.8032 at $k = 2,000$, and the sensitivity is the lesson. The tail exponent is an
-estimate, and not a constant of nature.
+estimate, and not a constant of nature. The seed says the same thing from the other side: rerun under twenty other
+seeds, the estimate at $k = 250$ passes 2 in two of them (2.0961 in one), and the line then reads the tail as not wild.
+A verdict at the edge of the cutoff is a verdict about the draw.
 
 **The decision lens depends on which actions exist.** The perfect sensor says whether the year will be good or bad, with
 probability 0.70 of good. Acting yields 10 in a good year and costs 4 in a bad one; not acting yields 0. Without the
@@ -3959,7 +3963,10 @@ effect within each regime is positive. It is the classic misalignment that Chapt
 confounding. The slopes by regime, those, stay at 9.96 / 10.09 / 10.15 and 10.34 / 9.92 / 10.15. The
 two rules pass the invariance test with tolerance 0.5. When the middle regime really responds
 40 instead of 10, the invariance **fails** (9.96 against 40.09, step of 30.13). The marginal slope is a
-number; the slope by regime is a structure.
+number; the slope by regime is a structure. One caveat, which twenty other seeds found: with the same effect of 10 in
+every regime, the first rule fails the tolerance of 0.5 in two of them (slopes 9.58, 10.34 and 9.95 in one), because
+the noise of a slope by regime is not far below 0.5. A tolerance is part of the specification, and it is set from the
+noise of the estimate, not from the one draw that passed.
 
 **Exercises.**
 
@@ -4149,10 +4156,12 @@ reasoning), and the verification (it stops early, checks too little, or checks w
 design of the system, not from the model inside it. Held against the fourteen, the panel and the cycle of this
 chapter catch four, the ones that are **declared before**: repeated attempts, which the counter of attempts counts; the
 lost history, which the trail keeps; and the stopping, which a rule written in advance fixes twice over. They catch
-seven only in part, because they check that something was declared, not that it was done. Three they do not see at
+seven only in part, because they check that something was declared, not that it was done. Three they did not see at
 all: a specialist that leaves its role, one that withholds a finding, and an action that departs from the reasoning
-written beside it. All three happen **between** the specialists, and a checklist of cards cannot see what passes
-between them; it takes a record of the exchanges, and a reader of that record who is not one of them.
+written beside it. All three happen **between** the specialists. The card now has a place for each (Chapter 17): who
+wrote each field, the findings used and not used, and the inequality the action rests on, recomputed. That moves the
+three to "in part", not to "caught": a card can only declare what passed between the specialists, and what was never
+logged stays invisible to a checklist; it takes a record of the exchanges, and a reader of it who is not one of them.
 
 **The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
 replicates of the fitted model; comparison with at least one rival model; separation between parameters
@@ -4526,6 +4535,18 @@ number of runs $k$, the average success and the chance that all $k$ runs succeed
 because $k$ runs cannot all succeed more often than one does. Both fields are optional and enter absent in the
 migration from 1.3, for the reason of the earlier two.
 
+**Three fields for what passes between the specialists.** Version 1.5 adds three, for the failures of teams that a
+card could not see. The **authorship** says who wrote each field, as in `modelo_nulo:inference, regra_de_decisao:decision`;
+each field belongs to one specialist, and a card whose field was written by another is refused, because a specialist
+outside its role is how a team stops checking itself. The **findings** say how many findings were logged, how many
+were used, and why each of the others was not, as in
+`logged=2; used=1; unused=a second break in the series: outside the window of the question`; a count that does not close
+is a finding withheld, and is refused. The **decision rule** writes the inequality the action rests on, as in
+`p=0.05; C=1800; L=34000; act=do not protect`, and the contract recomputes it: here $C/L = 0.0529$ is above
+$p = 0.05$, so the act must be not to insure, as Chapter 11 found, and a card that writes "protect" beside those numbers
+is refused, because its action departs from its own reasoning. The three are optional, and they check what the card
+declares about the exchanges, not the exchanges: a finding that was never logged is still invisible.
+
 **The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
 
 | Question | Options | Why it matters |
@@ -4718,6 +4739,8 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
   counterexample.
 - Version 1.4 adds the multiverse of the answer and the reliability of an agent; a share for the specification needs
   the multiverse that measured it, and no $\text{pass}^k$ may exceed its $\text{pass}^1$.
+- Version 1.5 adds the authorship of each field, the findings used and not used, and the decision rule, recomputed from
+  the card's own numbers.
 
 ## Chapter 18. The vault, the cryptographic seal and the audit against itself
 
@@ -6190,9 +6213,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
 | `cargo run --release --bin labs -- --multiverse` | The same question under eighteen reasonable specifications, and how much of its spread each choice carries (Chapter 5) |
 | `cargo run --release --bin labs -- --stacking` | Combining models when none is true: model averaging against stacking, with a duplicated model (Chapter 8) |
+| `cargo run --release --bin labs -- --seed-spread` | Thirteen laboratories rerun under twenty other seeds, line by line: which numbers move, and whether a verdict moves with them (C.3; minutes long) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 426 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 433 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -6230,13 +6254,19 @@ is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and
 Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
 simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
-The audit does not cover every draw. Of the 27 modules of the laboratories that draw random numbers, 4 print their own
-spread (the propagation, the multiverse, the reliability and the stacking laboratories), 6 are audited by `--mc-error`,
-3 are of another kind (Chapter 1, which is about seeds; the discrepancy, which averages over a thousand datasets; the
-choice of cases of the bridge, a selection and not an estimate), and **14 are not audited**: their numbers are
-reproducible, and how far they would move under another seed has not been measured. A register of the 27 is kept in
-the code, and a test refuses a new module that draws random numbers without saying where its spread is measured, or
-that it is not.
+The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 27 modules of the
+laboratories that draw random numbers, 4 print their own spread (the propagation, the multiverse, the reliability and
+the stacking laboratories), 6 are audited number by number by `--mc-error`, 4 are of another kind (Chapter 1, which
+is about seeds; the discrepancy, which averages over a thousand datasets; the choice of cases of the bridge, a
+selection and not an estimate; the triage of Chapter 16, a hash and not a draw), and the other 13 are rerun whole by
+`labs --seed-spread` under twenty other seeds, line by line against the published run. Numbers move, as they should;
+a word that moves is a verdict that depends on the draw. Of 312 lines, three have words that move, and their
+chapters now say so: one set of Chapter 9 accepted under one seed and rejected under another (the intersection the
+method reports does not move), the tail of Chapter 15 read as not wild at the edge of the cutoff under 2 of 20
+seeds, and an invariance test of Chapter 15 that fails its tolerance under 2 of 20 seeds although the effect does not
+change. A register of the 27 is kept in the code, and a test refuses a new module that draws random numbers without
+saying where its spread is measured. The run of `--seed-spread` takes minutes, so it is recorded with its commit and
+not repeated by the verification suite.
 
 ---
 
@@ -6658,10 +6688,26 @@ No number changed.
 | 5 | The health post | three answers under one specification | a fourth: eighteen specifications with common draws, of which eight ask for the second nurse; the service cv carries 0.93 of the spread (`labs --multiverse`, sealed in point 26 before its run) | the uncertainty of an answer includes the choice of the model |
 | 8 | Proper scores | rules that judge a forecast | also a rule that combines models: stacking against model averaging, with the laboratory of two confident experts (`labs --stacking`, sealed in point 27 before its run) | the research on models of modelling and the M-open setting |
 | 14 | Failing one's own model | the tail model failed on purpose | also a parameter failed by its own model: calibrated without discrepancy it is learnt wrong with a narrow interval; with a discrepancy that is zero and flat at the origin it comes back (`labs --discrepancy`, sealed in point 28 before its run; a second declaration added the rms error at twice the range, after a drafted reading took a small mean error for a good prediction, never published) | the research on models of modelling and on emulators |
-| 16 | The machine | System 2 woken by margin; agents judged by average success; the panel without a map of how teams fail | the value of computation; the fourteen failure modes of teams of agents held against the panel (four caught, seven in part, three not seen; `docs/MAST_AUDIT.md`); reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
+| 16 | The machine | System 2 woken by margin; agents judged by average success; the panel without a map of how teams fail | the value of computation; the fourteen failure modes of teams of agents held against the panel (four caught, seven in part, three not seen, until contract 1.5 moved the three to in part; `docs/MAST_AUDIT.md`); reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
 | 17 | The card | contract 1.3 | contract 1.4: the multiverse and the reliability, optional, validated when present | the two laboratories measured what the card had no place for |
 | 19 | Invariance | causes across environments | also models of other minds, tested by alterations their mechanism declares irrelevant or decisive | the research on theory of mind in language models |
 | E | Chapter 8 | "the instrument measures 0.1712 → 0.1559, 0.1560 and 0.2119 → 0.1755" | measured until 2026-10-18 in sample; out of the fit it measures 0.1708 → 0.1555, 0.1547 and 0.2147 → 0.1741 | the provenance check that closed item 16 found the paragraph speaking of the old reading in the present |
+
+### The card contract 1.5, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 16 | The failures of teams of agents | four caught, seven in part, three not seen | four caught, ten in part, none unseen, with the three that passed between the specialists now declared in the card | the audit of the panel found three failures nothing saw |
+| 17 | The fields of the card | contract 1.4 | contract 1.5: authorship by role, the findings used and not used, and the decision rule recomputed from the card | the same |
+
+### The seed over whole laboratories, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 9 | The single run of the ICP | the verdicts of one seed | the same, and under twenty other seeds the set {X, W} is rejected once while the intersection stays {X} | `labs --seed-spread` |
+| 15 | The tail lens | "the tail is wild" at every cutoff | the same at the published seed; at k = 250 the estimate passes 2 under 2 of 20 other seeds | the same |
+| 15 | The invariance lens | "the two rules pass the invariance test with tolerance 0.5" | the same at the published seed; the first rule fails the tolerance under 2 of 20 other seeds, and a tolerance is set from the noise of the estimate | the same |
+| C.3 | The audit of the seed | 14 modules not audited | none: 13 rerun whole by `--seed-spread`, and the triage of Chapter 16 reclassified as a hash | the same |
 
 ### The seed of the simulations, 2026-10-19
 
