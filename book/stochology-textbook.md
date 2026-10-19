@@ -1726,6 +1726,16 @@ belief always makes the grade worse**. The accuracy rate is not proper.
 **Passing on average is not passing.** The predictive check of Box, Gelman and Shalizi compares the real data with replicas of the fitted model. A Poisson fitted to the demand of the call centre passes on the mean and fails on the variance. The observed
 variance/mean ratio is **273**, and the model underestimates by tens of times the chance of a peak day (**180 against 2,900** calls). A model that gets the mean value right and the dispersion wrong gets the day that matters wrong.
 
+**A proper score also combines.** A proper rule judges one forecaster. It can also choose how much to trust each of
+several. Bayesian model averaging weights each model by its posterior probability, which answers the question
+"which of these models is true?". When one of them is, the weight goes to it, as it should. When none is, the case
+that Chapter 4 calls misspecification, the question has no right answer, and the average still picks one model,
+because the evidence for one always ends up overwhelming the other. It also counts what should not count: list the
+same model twice and its prior mass doubles. **Stacking** (Yao, Vehtari, Simpson and Gelman, 2018) asks a different
+question, "which mixture of these predictions predicts best?", and answers it with a proper score: the weights that
+maximise the logarithmic score of each point predicted by the models fitted without it. A copy of a model adds no
+prediction, so it changes nothing.
+
 **Murphy's decomposition.** Murphy (1973) split the Brier score into three parts:
 
 $$\text{BS} = \underbrace{\text{REL}}_{\text{calibration error}} -
@@ -1870,6 +1880,33 @@ from 0.2198 to 0.2518, about three points. A difference of that size is of the o
 small vault. Whether a coarse question can be caught costing something depends, like the calibration
 tolerance, on how many cases there are to see it.
 
+**Combining, measured.** Two confident experts each model one side of a quantity: the left one is nearly sure its
+centre is at −2, the right one at +2, both with spread 1. In one world half the points come from each side, so neither
+expert is right; in the other every point comes from the left. The laboratory fits both on 40 points, combines them
+by model averaging and by stacking, scores the mixture on 2,000 fresh points, and repeats on 1,000 datasets
+(`cargo run --release --bin labs -- --stacking`):
+
+```text
+-- M-open: half the points from each side, neither candidate is true --
+  log score: BMA -4.8251 | stacking -2.0811 | best single model -4.9817 | stacking - BMA +2.7441 [+2.7007; +2.7874]
+  weight on the left model: BMA mean 0.485 (above 0.99 or below 0.01 in 926 of 1000) | stacking mean 0.499
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.499 (was 0.499) | BMA score moves by 0.03748, its left family weighs 0.491 (was 0.485)
+
+-- M-closed: every point from the left, the left candidate is true --
+  log score: BMA -1.4189 | stacking -1.4202 | best single model -1.4189 | stacking - BMA -0.0013 [-0.0016; -0.0010]
+  weight on the left model: BMA mean 1.000 (above 0.99 or below 0.01 in 1000 of 1000) | stacking mean 0.998
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.998 (was 0.998) | BMA score moves by 0.00000, its left family weighs 1.000 (was 1.000)
+```
+
+**When no model is true, averaging bets on one.** In 926 of the 1,000 datasets the average puts more than 0.99 on one
+expert, and which one depends on the luck of the draw; its score, −4.8251 per point, is barely better than the best
+single expert's. Stacking keeps both near one half and scores −2.0811, a gain of 2.7 units of log score per point,
+with an interval far from zero. **A copy changes the average and not the stack.** Listed twice, the left expert moves
+the average's score by 0.03748 per point and the stack's by nothing. **When one model is true, the two agree.** In the
+second world both put everything on the left expert, and the stack pays a small price for not knowing that in advance,
+0.0013 per point. Model averaging is the right tool for the question it asks; the question of the decision is
+usually the other one.
+
 **Exercises.**
 
 1. *(Concept)* Why is the accuracy rate not a proper rule? Give an example of two forecasters
@@ -1887,6 +1924,8 @@ tolerance, on how many cases there are to see it.
    forecasters in a world of 4 thousand days?
 6. *(Concept)* Write, in four lines, the memorandum that explains to the board why the ECE of 0.0354
    in Toronto 1997–2002 cannot be read with the ruler of the ECE of 0.0177 of the 2023 flights.
+7. *(Concept)* A committee weighs three forecasting models by how probable each is given the data, and two of the
+   three are the same model fitted by two teams. What happens to the weights? What would stacking do, and why?
 
 **Summary.**
 
@@ -1897,6 +1936,8 @@ tolerance, on how many cases there are to see it.
 - Calibration is repaired afterwards (Platt); resolution is not: lost information does not come back.
 - The calibration tolerance is computed from the sample size: 0.03 is too hard in a thousand five hundred
   cases and too loose in a hundred thousand.
+- A proper score also combines: stacking weights the predictions by their out-of-sample log score; model averaging
+  asks which model is true, bets on one when none is, and counts a listed copy twice.
 
 # Part III. Cause, time and survival
 
@@ -3538,6 +3579,16 @@ seeing it, and that is why the vault **is not blind** for the analyst. An honest
 retentions from 20 to 50 million, and the design stays on the record as the analysis of a case chosen with the outcome in view, useful to
 learn about the method and not to estimate the risk of the insurance.
 
+**Calibrating is not understanding.** Every model is wrong by some structure it does not contain. Kennedy and O'Hagan
+(2001) wrote the honest equation: what is observed is the simulator at the right parameter, **plus a discrepancy**,
+plus noise. Leave the discrepancy out and the parameter does its work: it bends to absorb the structure the model
+lacks, the fit stays good, and the parameter, the quantity with a physical meaning, is learnt wrong, with an
+interval narrow enough to exclude the truth. Put the discrepancy in with no restriction and the opposite happens: the
+data cannot tell the parameter from the part of the discrepancy that looks like it, and the parameter is not learnt at
+all. Brynjarsdóttir and O'Hagan (2014) showed the way between: say what the discrepancy **may not** do, which is
+knowledge about the model and not about the data. A simulator that is right at the origin has a discrepancy that is
+zero there and flat there, and that sentence is enough to give the parameter back.
+
 **Lakatos, again.** An adjustment after a failure can be **progressive** (it predicts something new that is confirmed) or
 **degenerative** (it only protects the theory). This analysis had every reason to choose the degenerative path. It was enough to change the retention, to touch
 the prior or to change the period of the vault. None of that was done. The numbers stayed as they were, the
@@ -3591,6 +3642,34 @@ and the reading does not move, since the interval contains 2 under every seed. *
 evidence, and almost six clean years for a severe test. **4.48 bits**: against the rate of the vault, that window
 would be worth double.
 
+**Failing a parameter, measured.** A simulator says $y = \theta x$; the world bends away from it, as
+$y = 0.65\,x / (1 + x/20)$, with the same slope at the origin. Thirty measurements in the range from 0 to 4 learn
+$\theta$ three ways: without discrepancy, with a discrepancy that is zero and flat at the origin, and with a
+discrepancy free to do anything (`cargo run --release --bin labs -- --discrepancy`):
+
+```text
+== Calibrating is not understanding: a parameter learnt with and without the discrepancy ==
+world y = 0.65 x / (1 + x / 20) | simulator y = theta x | 30 points on (0, 4], noise sd 0.05 | priors N(0, 1) | 1000 datasets, seed 2026
+  model                               | theta mean | theta sd | 95% interval covers 0.65 | fit rmse in range | at x = 8: mean error, rms error
+  without discrepancy                 |     0.5647 |   0.0039 |                     0.000 |            0.0677 |       +0.803, 0.804
+  discrepancy with d(0) = d'(0) = 0   |     0.6444 |   0.0767 |                     0.953 |            0.0461 |       +0.236, 6.988
+  discrepancy free at the origin      |     0.3232 |   0.7081 |                     1.000 |            0.0461 |       +0.101, 6.998
+  the world at x = 8: 3.714; the noise sd: 0.05
+```
+
+**Without discrepancy, the fit hides the error.** The fit misses the data by 0.0677, little more than the noise of
+0.05, and $\theta$ comes out at 0.5647 with a standard deviation of 0.0039: its interval never contains 0.65 in a
+thousand datasets, and its prediction at twice the range is off by 0.803, every time by about the same amount (the
+root mean square error, 0.804, is the bias). **With what the discrepancy may not do, the parameter comes back.** The
+mean is 0.6444, the interval covers the truth in 0.953 of the datasets, and it is twenty times wider, the price of
+admitting that the model is wrong. **With a discrepancy free to do anything, the parameter is lost.** Its interval
+always covers 0.65, because it is almost as wide as the prior; and its mean, 0.3232, is the slope shared half and half
+with the linear term of the discrepancy. **Outside the range, nobody knows.** The two fits with a discrepancy have a
+small mean error at $x = 8$ and a root mean square error near 7: a fourth power learnt between 0 and 4 says almost
+anything at 8, and only on average does it say the truth. The fit without discrepancy is wrong with confidence; the
+fits with one are honest about not knowing. Neither extrapolates, and a small mean error is no evidence of a good
+prediction until its spread is printed beside it.
+
 **Exercises.**
 
 1. *(Count)* With the Laplace rule, compute the monthly chance after 12, 36 and 69 clean months. How many clean months
@@ -3606,6 +3685,9 @@ would be worth double.
 6. *(Laboratory)* Simulate 100 years of i.i.d. months with $p = 1/1200$ and count how many windows of 36 months come out
    clean. Compare with the real history of the Danish series and say what that does to the argument "negligible
    risk".
+7. *(Concept)* An engineer calibrates the friction coefficient of a model of a braking car on tests at low speed,
+   and the fit is excellent. Why may the coefficient still be wrong? What would you have to know about the model's
+   error to learn the coefficient, and why would a fully flexible correction not help?
 
 **Summary.**
 
@@ -3619,6 +3701,8 @@ would be worth double.
 - In the vault, no forecaster beat the simple historical frequency: model −0.015, POT −0.003, Laplace −0.024,
   claim −0.052, and the claim loses without the model winning the right to decide.
 - Failing the model that one wrote, without touching the tests so that it passes, is a result.
+- A parameter calibrated without the discrepancy absorbs the model's error and is learnt wrong with a narrow interval; a
+  discrepancy free to do anything loses it; what the discrepancy may not do is the knowledge that gives it back.
 
 # Part V. The auditable machine, built and put to work
 
@@ -6090,6 +6174,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
 | `cargo run --release --bin labs -- --multiverse` | The same question under eighteen reasonable specifications, and how much of its spread each choice carries (Chapter 5) |
+| `cargo run --release --bin labs -- --stacking` | Combining models when none is true: model averaging against stacking, with a duplicated model (Chapter 8) |
+| `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
@@ -6252,7 +6338,7 @@ weaker than the others and is declared as such.
 
 ### D.6 The neighbours of the discipline
 
-Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19. The last seven entered the same day with the theory that the research on models of the world, of agents and of modelling brought to Chapters 2, 4, 16 and 19; their metadata were checked against Crossref (the two DOIs of journals) and the arXiv pages.
+Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19. The last ten entered the same day with the theory that the research on models of the world, of agents and of modelling brought to Chapters 2, 4, 8, 14, 16 and 19; their metadata were checked against Crossref (the five DOIs of journals; Crossref gives no pages for Yao and colleagues) and the arXiv pages.
 
 | Reference | Where it enters |
 | --- | --- |
@@ -6274,6 +6360,9 @@ Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata chec
 | **[checked]** Li, D.; Li, L.; Qiu, H. S. "ChatGPT is not A Man but Das Man: Representativeness and Structural Consistency of Silicon Samples Generated by Large Language Models", arXiv:2507.02919, 2025 | Simulated samples that lose the variance inside their groups (Chapter 4) |
 | **[checked]** Lieder, F.; Griffiths, T. L. "Resource-rational analysis: Understanding human cognition as the optimal use of limited computational resources", *Behavioral and Brain Sciences* 43:e1, 2020. DOI: 10.1017/S0140525X1900061X | The value of computation, and when to wake System 2 (Chapter 16) |
 | **[checked]** Ullman, T. "Large Language Models Fail on Trivial Alterations to Theory-of-Mind Tasks", arXiv:2302.08399, 2023 | Invariance as a test of understanding (Chapter 19) |
+| **[checked]** Yao, Y.; Vehtari, A.; Simpson, D.; Gelman, A. "Using Stacking to Average Bayesian Predictive Distributions (with Discussion)", *Bayesian Analysis* 13(3), 2018. DOI: 10.1214/17-BA1091 | Stacking against model averaging when no candidate is true (Chapter 8) |
+| **[checked]** Kennedy, M. C.; O'Hagan, A. "Bayesian Calibration of Computer Models", *JRSS B* 63(3):425–464, 2001. DOI: 10.1111/1467-9868.00294 | Simulator, discrepancy and noise (Chapter 14) |
+| **[checked]** Brynjarsdóttir, J.; O'Hagan, A. "Learning about physical parameters: the importance of model discrepancy", *Inverse Problems* 30(11):114007, 2014. DOI: 10.1088/0266-5611/30/11/114007 | What the discrepancy may not do, and why the parameter needs it (Chapter 14) |
 
 ### D.7 How to use this list
 
@@ -6543,6 +6632,8 @@ No number changed.
 | 2 | The layers | the Model judged by its errors everywhere; the modeller outside the loop | a Model good enough for the decision (value equivalence), an Agent that exploits its Model's errors, and the modeller as an Agent whose World is the space of Models | the research on world models and on many analysts with the same data |
 | 4 | The law of total variance | the two parcels of a parameter | also the ceiling a person sets (a model of a person scored against the person's own consistency) and the simulated sample that loses its within-group parcel | the research on agent models that simulate people |
 | 5 | The health post | three answers under one specification | a fourth: eighteen specifications with common draws, of which eight ask for the second nurse; the service cv carries 0.93 of the spread (`labs --multiverse`, sealed in point 26 before its run) | the uncertainty of an answer includes the choice of the model |
+| 8 | Proper scores | rules that judge a forecast | also a rule that combines models: stacking against model averaging, with the laboratory of two confident experts (`labs --stacking`, sealed in point 27 before its run) | the research on models of modelling and the M-open setting |
+| 14 | Failing one's own model | the tail model failed on purpose | also a parameter failed by its own model: calibrated without discrepancy it is learnt wrong with a narrow interval; with a discrepancy that is zero and flat at the origin it comes back (`labs --discrepancy`, sealed in point 28 before its run; a second declaration added the rms error at twice the range, after a drafted reading took a small mean error for a good prediction, never published) | the research on models of modelling and on emulators |
 | 16 | The machine | System 2 woken by margin; agents judged by average success | the value of computation; reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
 | 17 | The card | contract 1.3 | contract 1.4: the multiverse and the reliability, optional, validated when present | the two laboratories measured what the card had no place for |
 | 19 | Invariance | causes across environments | also models of other minds, tested by alterations their mechanism declares irrelevant or decisive | the research on theory of mind in language models |

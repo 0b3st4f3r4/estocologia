@@ -212,6 +212,19 @@ K = 1.
 | A duplicated model moves model averaging's score by 0.03748 per point and stacking's by 0.00000 | `labs --stacking` |
 | M-closed: model averaging −1.4189, stacking −1.4202; difference −0.0013 [−0.0016; −0.0010] | `labs --stacking` |
 
+## Calibrating is not understanding (2026-10-19)
+
+Declared and sealed before the first run in `empirical/p28-discrepancia/` (item 18 (d) of `docs/DECLARED_PROPOSALS.md`);
+declaration 2 added the rms error at x = 8 before the second run. 30 points, noise sd 0.05, 1,000 datasets. Verdict:
+the three rules hold. K = 2.
+
+| Result | Instrument |
+| --- | --- |
+| Without discrepancy: θ 0.5647, sd 0.0039, coverage 0.000, fit rmse 0.0677; at x = 8 mean error +0.803, rms 0.804 | `labs --discrepancy` |
+| Discrepancy with d(0) = d′(0) = 0: θ 0.6444, sd 0.0767, coverage 0.953; at x = 8 mean error +0.236, rms 6.988 | `labs --discrepancy` |
+| Discrepancy free at the origin: θ 0.3232, sd 0.7081, coverage 1.000; at x = 8 mean error +0.101, rms 6.998 | `labs --discrepancy` |
+| The noiseless fits agree with exact rational arithmetic (θ 0.64588 and 0.32389; error at x = 8 +0.27843 and +0.14369) | unit test of `discrepancy.rs` |
+
 ## The card contract 1.4 (2026-10-19)
 
 Two more optional fields: the multiverse of the answer and the reliability of an agent. The chain goes on to 1.4; the

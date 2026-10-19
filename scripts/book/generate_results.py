@@ -140,6 +140,7 @@ def main() -> int:
         "| BTlabs --propagateBT | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |\n"
         "| BTlabs --multiverseBT | The multiverse of the health post: eighteen reasonable specifications, declared before the run |\n"
         "| BTlabs --stackingBT | Combining models when none is true: Bayesian model averaging against stacking, declared before the run |\n"
+        "| BTlabs --discrepancyBT | Calibrating is not understanding: a parameter learnt with and without the discrepancy, declared before the run |\n"
         "| BTlabs --passkBT | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
@@ -225,6 +226,12 @@ def main() -> int:
         [str(BIN), "--stacking"],
         "Two confident candidates in an M-open and an M-closed world, combined by model averaging and by stacking, with "
         "a duplicated model, sealed in empirical/p27-stacking/ before the first run (Chapter 8).",
+    ))
+    parts.append(section_block(
+        "Calibrating is not understanding",
+        [str(BIN), "--discrepancy"],
+        "A simulator without the bend of the world, calibrated without discrepancy, with a discrepancy that is zero and "
+        "flat at the origin, and with a free one, sealed in empirical/p28-discrepancia/ before the first run (Chapter 14).",
     ))
     parts.append(section_block(
         "Reliability is not average success",
