@@ -142,7 +142,7 @@ def main() -> int:
         "| BTlabs --second-opinionBT | Second opinion on results marked P |\n"
         "| BTlabs --jevBT | Jev-LLM bridge: bridge gates and what requires frozen weights |\n"
         "| BTlabs --queueBT | Queue with abandonment and the four staffing rules (R0 to R3) |\n"
-        "| BTgatesBT | Seven deterministic gates (G1-G7) and adversarial board A1-A8 |\n"
+        "| BTgatesBT | Seven deterministic gates (G1-G7) and safeguard panel A1-A8 |\n"
         "| BTwave --checkBT | Six gates of the wave engine: Hermitian L^(q), Cayley unitarity, seal chain, determinism, and causal arrow |\n"
         "| BTwave --defect mutationBT | Negative proof of the seal chain: exits with 1 |\n"
         "| BTwave --defect inversionBT | Negative proof of the causal arrow: exits with 1 |\n"
@@ -226,7 +226,7 @@ def main() -> int:
     parts.append(section_block("All laboratories", [str(BIN), "--all"], "Single run, fixed seed, offline."))
     parts.append("## 3. Deterministic Gates\n")
     parts.append(section_block(
-        "Seven gates and the adversarial board",
+        "Seven gates and the safeguard panel",
         [str(GATES_BIN), "--horizon", "all", "--reproduction"],
         "Seven gates (G1 to G7), identical reproduction, and Merkle root of the audit trail.",
     ))

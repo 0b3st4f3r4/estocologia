@@ -101,7 +101,7 @@ impl Card {
         self
     }
 
-    /// Marks the eight safeguards that the adversarial panel A1-A8 demands.
+    /// Marks the eight safeguards that the safeguard panel A1-A8 demands.
     pub fn with_safeguards(mut self) -> Self {
         self.property_test = true;
         self.handles_missing = true;

@@ -93,9 +93,9 @@ seen, together with the counter $K$.
 
 ### The panel, the orchestrator and the two systems
 
-Instead of a lone analyst, eight specialists form an adversarial panel: **code, data, lifecycle, inference,
-governance, fairness, domain and decision** (A1 to A8). A claim is approved only if every one of them scores it at
-least 6. An orchestrator drives the six-stage cycle: translation and scope, ingestion and grain, simulation and null
+Instead of a lone analyst, eight specialists form a safeguard panel: **code, data, lifecycle, inference,
+governance, fairness, domain and decision** (A1 to A8). A claim is approved only if every one of them finds its
+safeguard declared and anchored on the card; the panel is a checklist, and the attacks that run live in the gates. An orchestrator drives the six-stage cycle: translation and scope, ingestion and grain, simulation and null
 model, projection onto the five lenses, panel and gate, decision and closure.
 
 Knowledge lives in a typed hypergraph, and five **lenses** cross every problem as questions: Fluxonomy (is

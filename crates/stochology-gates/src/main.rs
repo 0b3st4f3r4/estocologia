@@ -11,9 +11,7 @@
 //! stochology-core, so translating them would move the root and break the Phi5 grain check.
 
 use stochology_core::audit::{Ledger, sha256_hex};
-use stochology_core::{
-    AgentA, Card, Layer, MINIMUM_SEVERITY, OrchestratorM, Rng, UncertaintyType, evaluate,
-};
+use stochology_core::{AgentA, Card, Layer, OrchestratorM, Rng, UncertaintyType, evaluate};
 use stochology_horizons::h1::hill;
 use stochology_hypergraph::lenses;
 use stochology_methods::drift::{Options as DriftOptions, cusum, stationary_null};
@@ -291,26 +289,24 @@ fn run(cfg: &Config) -> Execution {
     let orchestrator = OrchestratorM::new(&session_id, "");
     let mut ledger = Ledger::new(&session_id);
     let mut panel_ok = true;
-    let mut worst = 10u8;
+    let mut checks_passed = 0usize;
+    let mut checks_total = 0usize;
 
     for c in &list {
         let verdict = orchestrator.panel(c);
-        let mut lowest = 10u8;
-        for agent in AgentA::ALL {
-            let s = verdict.severity(agent).0;
-            if s < lowest {
-                lowest = s;
-            }
-        }
-        if lowest < worst {
-            worst = lowest;
-        }
+        checks_passed += verdict.passed();
+        checks_total += verdict.items.len();
         if !verdict.approved {
             panel_ok = false;
         }
+        let failing: Vec<&str> = verdict.failing().iter().map(|a| a.name()).collect();
         report.push(format!(
-            "  card {} severity_min={} approved={}",
-            c.id, lowest, verdict.approved
+            "  card {} checks_passed={}/{} failing={:?} approved={}",
+            c.id,
+            verdict.passed(),
+            verdict.items.len(),
+            failing,
+            verdict.approved
         ));
         ledger.record(&c.id, &format!("{}|{}", c.definition, verdict.approved));
     }
@@ -364,7 +360,7 @@ fn run(cfg: &Config) -> Execution {
     }
     let trail_ok = ledger.verify() && !tampered.verify();
 
-    // G6 adversarial panel A1-A8, with drift surveillance (A3), subgroup parity (A6), the
+    // G6 safeguard panel A1-A8, with drift surveillance (A3), subgroup parity (A6), the
     // H1 Hill (A4) and the mandatory rejection of the three intermediate cards whose
     // safeguards and anchors are missing.
     let alpha_h1 = hill(&series, 500);
@@ -383,14 +379,14 @@ fn run(cfg: &Config) -> Execution {
         && null_surveillance.alarm.is_none()
         && null_parity.abs() < 1e-12
         && history_rejected_ok;
-    let panel_gate_ok = panel_ok && worst >= MINIMUM_SEVERITY.0 && panel_modules_ok;
+    let panel_gate_ok = panel_ok && checks_passed == checks_total && panel_modules_ok;
 
-    // G7 declared exit clause and A8 above the floor.
+    // G7 declared exit clause and A8 declared and anchored.
     let exit_ok = list.iter().all(|c| c.exit_clause.is_some())
         && list.iter().all(|c| {
             orchestrator
                 .conduct_attack(AgentA::A8Decision, c)
-                .map(|s| s >= MINIMUM_SEVERITY)
+                .map(|c| c.passed())
                 .unwrap_or(false)
         });
 
@@ -424,14 +420,14 @@ fn run(cfg: &Config) -> Execution {
         "G6".to_string(),
         panel_gate_ok,
         format!(
-            "panel A1-A8 with floor {} and worst {}",
-            MINIMUM_SEVERITY.0, worst
+            "panel A1-A8: {} of {} checks declared and anchored",
+            checks_passed, checks_total
         ),
     ));
     gates.push((
         "G7".to_string(),
         exit_ok,
-        "declared exit clause and A8 above the floor".to_string(),
+        "declared exit clause and A8 declared and anchored".to_string(),
     ));
 
     let failures = gates.iter().filter(|(_, ok, _)| !ok).count();

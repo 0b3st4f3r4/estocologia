@@ -1,24 +1,17 @@
-//! Adversarial panel A1-A8: each agent carries the severity of its test.
+//! Safeguard panel A1-A8: each agent returns two declared bits, not a score.
 //!
-//! What this module is, said plainly (review of 2026-10-18): the severity is NOT measured by
-//! executing an attack. It is a number drawn, with a declared seed, inside a band that the
-//! card's declared safeguard and structural anchor select. The panel is therefore a checklist
-//! of safeguards with a reproducible score, not a severe test in Mayo's sense: it verifies that
-//! a safeguard was declared and anchored, not that it works. The attacks that do run (the hash
-//! trail tampered on purpose, the planted defects) live in the gates, not here. Approval is a
-//! function of the flags only: no band crosses the floor, so the seed never decides a verdict.
+//! What this module is, said plainly: the panel does NOT execute an attack. For each agent it reads
+//! two bits from the card, whether the safeguard that agent demands was declared and whether the
+//! structural field that anchors it is present, and the agent passes only when both are set.
+//! Until 2026-10-19 the two bits were dressed as a "severity" from 0 to 10, drawn by a seed inside a
+//! band that the bits selected; the decimal carried no information beyond the bits, so it was
+//! removed (Appendix E, rectifications of 2026-10-19). The panel verifies that a safeguard was
+//! declared and anchored, not that it works. The attacks that do run (the hash trail tampered on
+//! purpose, the planted defects) live in the gates, not here. No seed enters the verdict.
 
 use crate::layer::Card;
-use crate::rng::Rng;
 
-/// Severity scale from 0 to 10.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Severity(pub u8);
-
-/// Approval floor: every A_i has to reach this value.
-pub const MINIMUM_SEVERITY: Severity = Severity(6);
-
-/// The eight agents of the adversarial panel.
+/// The eight agents of the safeguard panel.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AgentA {
     A1Code,
@@ -83,7 +76,7 @@ impl AgentA {
         }
     }
 
-    /// The structural anchor of the card in this agent's band: a declared safeguard without a structural field falls in the 4..=5 band, below the floor.
+    /// The structural anchor of the card for this agent: a declared safeguard without the field that anchors it does not pass.
     pub fn structural_anchor(self, f: &Card) -> bool {
         match self {
             AgentA::A1Code => {
@@ -114,61 +107,95 @@ impl AgentA {
             }
         }
     }
+}
 
-    fn seed(self, base_seed: u64) -> u64 {
-        let ordinal = self as u64 + 1;
-        base_seed ^ ordinal.wrapping_mul(0x9E37_79B9_7F4A_7C15)
+/// What the panel returns for one agent: the two declared bits.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Check {
+    /// The safeguard this agent demands was declared on the card.
+    pub safeguard: bool,
+    /// The structural field that anchors the safeguard is present.
+    pub anchor: bool,
+}
+
+impl Check {
+    /// The agent passes only when the safeguard is declared and anchored.
+    pub fn passed(self) -> bool {
+        self.safeguard && self.anchor
+    }
+
+    /// The two bits as printed in the reports: safeguard first, anchor second.
+    pub fn bits(self) -> &'static str {
+        match (self.safeguard, self.anchor) {
+            (true, true) => "11",
+            (true, false) => "10",
+            (false, true) => "01",
+            (false, false) => "00",
+        }
     }
 }
 
-/// Severity of attack A_i on the card: deterministic for the given seed.
-///
-/// Four regimes cover the scale 1..=10 without leaving the floor 6 unreachable:
-/// - safeguard + structural anchor: 8..=10 (approved with room to spare);
-/// - declared safeguard without structural anchor: 4..=5 (below floor 6: a declaration
-///   without its anchor does not pass; until 2026-10-18 this band was 5..=6, and the seed
-///   alone decided whether such a card passed);
-/// - structural anchor without safeguard: 3..=5 (fails at the lower edge of the floor);
-/// - no safeguard and no anchor: 1..=3 (fails).
-pub fn stress(agent: AgentA, card: &Card, seed: u64) -> Severity {
-    let mut rng = Rng::new(agent.seed(seed));
-    match (agent.safeguard_met(card), agent.structural_anchor(card)) {
-        (true, true) => Severity((8 + rng.uniform(3)) as u8),
-        (true, false) => Severity((4 + rng.uniform(2)) as u8),
-        (false, true) => Severity((3 + rng.uniform(3)) as u8),
-        (false, false) => Severity((1 + rng.uniform(3)) as u8),
+/// The check of agent A_i on the card. Deterministic and free of any seed.
+pub fn check(agent: AgentA, card: &Card) -> Check {
+    Check {
+        safeguard: agent.safeguard_met(card),
+        anchor: agent.structural_anchor(card),
     }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Approval {
-    pub items: Vec<(AgentA, Severity)>,
+    pub items: Vec<(AgentA, Check)>,
     pub approved: bool,
 }
 
 impl Approval {
-    pub fn severity(&self, agent: AgentA) -> Severity {
+    /// The check of one agent; an agent absent from the list counts as two unset bits.
+    pub fn check(&self, agent: AgentA) -> Check {
         self.items
             .iter()
             .find(|(a, _)| *a == agent)
-            .map(|(_, s)| *s)
-            .unwrap_or(Severity(0))
+            .map(|(_, c)| *c)
+            .unwrap_or(Check {
+                safeguard: false,
+                anchor: false,
+            })
+    }
+
+    /// How many of the agents passed.
+    pub fn passed(&self) -> usize {
+        self.items.iter().filter(|(_, c)| c.passed()).count()
+    }
+
+    /// The agents that did not pass, in panel order.
+    pub fn failing(&self) -> Vec<AgentA> {
+        self.items
+            .iter()
+            .filter(|(_, c)| !c.passed())
+            .map(|(a, _)| *a)
+            .collect()
+    }
+
+    /// The panel as eight bit pairs, one per agent, for the reports.
+    pub fn bits(&self) -> String {
+        self.items
+            .iter()
+            .map(|(a, c)| format!("{}={}", a.name(), c.bits()))
+            .collect::<Vec<_>>()
+            .join(" ")
     }
 }
 
-/// Condition of docs/PLAN.md: Approved(X) = AND_{i=1..8} A_i(X) >= Severity_min.
-pub fn approve(card: &Card, seed: u64) -> Approval {
-    let items: Vec<(AgentA, Severity)> = AgentA::ALL
-        .iter()
-        .map(|a| (*a, stress(*a, card, seed)))
-        .collect();
-    let approved = items.iter().all(|(_, s)| *s >= MINIMUM_SEVERITY);
+/// Approved(X) = AND_{i=1..8} (safeguard_i(X) AND anchor_i(X)).
+pub fn approve(card: &Card) -> Approval {
+    let items: Vec<(AgentA, Check)> = AgentA::ALL.iter().map(|a| (*a, check(*a, card))).collect();
+    let approved = items.iter().all(|(_, c)| c.passed());
     Approval { items, approved }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{AgentA, MINIMUM_SEVERITY, approve, stress};
+    use super::{AgentA, approve, check};
     use crate::layer::{Card, Layer, UncertaintyType};
 
     fn good_card() -> Card {
@@ -180,11 +207,12 @@ mod tests {
 
     #[test]
     fn eight_agents_approve_a_card_with_safeguards() {
-        let r = approve(&good_card(), 2026);
+        let r = approve(&good_card());
         assert_eq!(r.items.len(), 8);
         assert!(r.approved, "a card with the eight safeguards should pass");
-        for (a, s) in &r.items {
-            assert!(*s >= MINIMUM_SEVERITY, "{} failed", a.name());
+        assert_eq!(r.passed(), 8);
+        for (a, c) in &r.items {
+            assert_eq!(c.bits(), "11", "{} failed", a.name());
         }
     }
 
@@ -192,69 +220,43 @@ mod tests {
     fn a_missing_safeguard_fails_the_agent_of_that_band() {
         let mut f = good_card();
         f.trail_intact = false;
-        let r = approve(&f, 2026);
+        let r = approve(&f);
         assert!(!r.approved);
-        assert!(r.severity(AgentA::A5Governance) < MINIMUM_SEVERITY);
-        assert!(r.severity(AgentA::A1Code) >= MINIMUM_SEVERITY);
+        assert_eq!(r.failing(), vec![AgentA::A5Governance]);
+        assert_eq!(r.check(AgentA::A5Governance).bits(), "01");
+        assert!(r.check(AgentA::A1Code).passed());
     }
 
     #[test]
-    fn severity_reproduces_with_the_same_seed() {
-        let f = good_card();
-        for a in AgentA::ALL {
-            assert_eq!(stress(a, &f, 7), stress(a, &f, 7));
-        }
-    }
-
-    #[test]
-    fn safeguard_without_structural_anchor_stays_below_the_floor_under_every_seed() {
+    fn safeguard_without_structural_anchor_does_not_pass() {
         let mut without_anchor =
             Card::new("empty.stamp", Layer::Model, UncertaintyType::Epistemic).with_safeguards();
         without_anchor.exit_clause = Some("stop".into());
         // Without .complete(), the artifact, the seed, the unit, the null model and who pays for
-        // the error are missing: the agents fall in the (true, false) regime -> 4 or 5, below
-        // floor 6 under every seed.
-        for seed in 1..=500 {
-            for a in [
-                AgentA::A1Code,
-                AgentA::A2Data,
-                AgentA::A4Inference,
-                AgentA::A6Fairness,
-            ] {
-                let s = stress(a, &without_anchor, seed);
-                assert!(s.0 == 4 || s.0 == 5, "expected the band 4..=5, got {}", s.0);
-                assert!(s < MINIMUM_SEVERITY);
-            }
-            assert!(
-                !approve(&without_anchor, seed).approved,
-                "a card with booleans set but no structural anchor cannot pass"
-            );
+        // the error are missing: the declaration stands without its anchor.
+        for a in [
+            AgentA::A1Code,
+            AgentA::A2Data,
+            AgentA::A4Inference,
+            AgentA::A6Fairness,
+        ] {
+            assert_eq!(check(a, &without_anchor).bits(), "10");
         }
+        assert!(
+            !approve(&without_anchor).approved,
+            "a card with booleans set but no structural anchor cannot pass"
+        );
     }
 
-    /// No band crosses the floor: for every combination of safeguard and anchor, the verdict
-    /// is the same under every seed. A gate that a seed can open is not a gate.
+    /// The report carries exactly the bits: two cards with the same bits give the same report,
+    /// whatever else differs between them.
     #[test]
-    fn approval_never_depends_on_the_seed() {
-        for safeguards in [true, false] {
-            let mut base = good_card();
-            if !safeguards {
-                base.trail_intact = false;
-            }
-            for strip_anchor in [false, true] {
-                let mut card = base.clone();
-                if strip_anchor {
-                    card.simulable_artifact = None;
-                }
-                let verdicts: std::collections::HashSet<bool> = (0..500u64)
-                    .map(|seed| approve(&card, seed).approved)
-                    .collect();
-                assert_eq!(
-                    verdicts.len(),
-                    1,
-                    "seed-dependent verdict: {safeguards} {strip_anchor}"
-                );
-            }
-        }
+    fn the_report_is_a_function_of_the_bits_only() {
+        let a = good_card();
+        let mut b = good_card();
+        b.id = "another.id".into();
+        b.seed = Some(999_983);
+        assert_eq!(approve(&a), approve(&b));
+        assert_eq!(approve(&a).bits(), approve(&b).bits());
     }
 }

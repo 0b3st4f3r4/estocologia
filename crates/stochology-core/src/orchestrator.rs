@@ -1,6 +1,6 @@
 //! Master orchestrator M: drives the cycle and submits the card to the panel A1-A8.
 
-use crate::agents::{AgentA, Approval, Severity, approve, stress};
+use crate::agents::{AgentA, Approval, Check, approve, check};
 use crate::layer::Card;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -17,8 +17,8 @@ impl OrchestratorM {
         }
     }
 
-    /// Drives the adversarial stress using the indicated agent A_i.
-    pub fn conduct_attack(&self, agent: AgentA, card: &Card) -> Result<Severity, String> {
+    /// Reads the two bits of the indicated agent A_i on the card (no attack is executed here).
+    pub fn conduct_attack(&self, agent: AgentA, card: &Card) -> Result<Check, String> {
         if card.id.trim().is_empty() {
             return Err("card without identifier".to_string());
         }
@@ -28,13 +28,12 @@ impl OrchestratorM {
         {
             return Err("trail_hash outside the SHA-256 format (64 hex)".to_string());
         }
-        let seed = card.seed.unwrap_or(2026);
-        Ok(stress(agent, card, seed))
+        Ok(check(agent, card))
     }
 
-    /// Runs the whole panel and returns the verdict with the eight severities.
+    /// Runs the whole panel and returns the verdict with the eight bit pairs.
     pub fn panel(&self, card: &Card) -> Approval {
-        approve(card, card.seed.unwrap_or(2026))
+        approve(card)
     }
 }
 

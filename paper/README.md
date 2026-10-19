@@ -215,7 +215,7 @@ Each lens is more than a question: it has a quantity that it measures and a crit
 | F6 Fairness | Asks who pays for the error | Audit of error rates between groups |
 | F7 Domain | Translates problems from other areas | Expert elicitation and scope term |
 | F8 Decision | Converts the result into action | Natural frequencies and exit clause |
-| M15 Orchestrator | Coordinates and runs the adversarial panel | Attack on the model before approval |
+| M15 Orchestrator | Coordinates and runs the safeguard panel | Checklist of declared and anchored safeguards before approval |
 
 Each row of the table hides a craft. The data agent (F2) begins with a decision that nobody sees: what a row is. A row per person, per day, or per event changes the mean, the variance, and the margin, and that is why the grain is declared and proved with a count. It is the independent unit seen from the side of the table: when 225 thousand flights are worth the same as 364 days (section 6), what failed was the grain. The same agent hunts the sentinel value, the missing one recorded as 0, −1, or 9999 that enters the sum as if it were data, and demands that ingestion be idempotent, because every datum arrives more than once and running the load twice has to give the same number.
 
@@ -235,9 +235,9 @@ $$
 
 and ε is the budget, spent on each query. The cheapest measure remains not collecting.
 
-**The cycle.** A question goes through six stages: translation and elicitation (F7); audit of the data, of causality, and of ethics (F2, F5, F6); simulation against a null model (F1, F4, F3); passage through the five lenses; adversarial panel, which sends the work back to the stage that failed; and, only then, the communicated decision (F8).
+**The cycle.** A question goes through six stages: translation and elicitation (F7); audit of the data, of causality, and of ethics (F2, F5, F6); simulation against a null model (F1, F4, F3); passage through the five lenses; safeguard panel, which sends the work back to the stage that failed; and, only then, the communicated decision (F8).
 
-The adversarial panel does not read reports: it attacks the artifact live. Three failures eliminate the work before any discussion of merit: temporal leakage, a data contract violated without treatment, and the absence of a named human responsible. Then each track receives its attack. The data one receives a batch with corrupted records and must isolate them. The model in operation receives, live, a batch with strong drift. The inference instrument receives a pathological data set, to see whether its uncertainty denounces the inadequacy. The fairness audit has to invert the chosen metric and show who would start paying. The decision document faces a crisis that violates its own exit clause. A complete work with one declared weak track is worth more than a uniform work without an admitted gap.
+The safeguard panel does not read reports: it reads the card, and for each track it checks that the safeguard against a named attack is declared and anchored. It runs no attack itself; the attacks that run (a tampered trail, a planted defect) live in the gates. Three failures eliminate the work before any discussion of merit: temporal leakage, a data contract violated without treatment, and the absence of a named human responsible. Each track names its attack. The data one should receive a batch with corrupted records and must isolate them. The model in operation receives, live, a batch with strong drift. The inference instrument receives a pathological data set, to see whether its uncertainty denounces the inadequacy. The fairness audit has to invert the chosen metric and show who would start paying. The decision document faces a crisis that violates its own exit clause. A complete work with one declared weak track is worth more than a uniform work without an admitted gap.
 
 **The five invariants.** Nothing enters the graph without passing five gates, which work as database locks:
 
@@ -306,7 +306,7 @@ After Lab 0, the program went through the four horizons of the plan with real pu
 | Horizon | Real data | Exit gate | Result |
 | --- | --- | --- | --- |
 | H0 Seed | 2.65 million calls from a bank call center (2003) | Φ1 to Φ4 and clean reproduction | Passed |
-| H1 Complete cycle | Dow Jones 1885–2023; LaLonde (NSW and CPS); Danish fires 1980–1990 | A project approved in the adversarial panel | Passed: 2 of 3 projects approved; the heavy-tailed one failed |
+| H1 Complete cycle | Dow Jones 1885–2023; LaLonde (NSW and CPS); Danish fires 1980–1990 | A project approved in the safeguard panel | Passed: 2 of 3 projects approved; the heavy-tailed one failed |
 | H2 Transfer | 12 convenience domains; then databases with known interventions, physical chambers, gene deletions in yeast, and an FDA cardiology trial | Non-empty causal invariant set (ICP) in 3 areas | Passed on the seventh round: 4 areas; the background audit (section 8) exchanges Education for replicated Genetics, and the gate stands with three areas |
 | H3 Continuous mesh | 6 flows in replay under a clock, 453,973 forecasts; then 2023 flights, 2020–2021 arrests, and traffic stops in Rhode Island | Calibration out of time, zero leakage, Goodhart control | Passed on the third attempt of the arrests flow; low skill (+0.019) |
 

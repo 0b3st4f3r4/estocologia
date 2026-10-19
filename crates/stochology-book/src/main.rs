@@ -638,7 +638,7 @@ fn run_system2() {
             f
         })
         .collect();
-    learn(&mut panel, &training, 2026, 3.0);
+    learn(&mut panel, &training, 3.0);
     let top = panel.order()[0];
     println!(
         "board belief: most likely band {} with probability {:.4} | entropy {:.4}",
@@ -648,8 +648,8 @@ fn run_system2() {
     );
     let mut target = complete_card("s2.alvo");
     target.trail_intact = false;
-    let deliberated = stress_deliberative(&target, 2026, &panel);
-    let declared = stress_in_order(&target, 2026, &DECLARED_ORDER);
+    let deliberated = stress_deliberative(&target, &panel);
+    let declared = stress_in_order(&target, &DECLARED_ORDER);
     println!(
         "stress: deliberated stopped at {} with {} attack(s) | declared order stopped at {} with {} attacks | same rejection {}",
         deliberated.agent.name(),

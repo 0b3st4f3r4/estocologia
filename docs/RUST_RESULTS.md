@@ -19,7 +19,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --second-opinion` | Second opinion on results marked P |
 | `labs --jev` | Jev-LLM bridge: bridge gates and what requires frozen weights |
 | `labs --queue` | Queue with abandonment and the four staffing rules (R0 to R3) |
-| `gates` | Seven deterministic gates (G1-G7) and adversarial board A1-A8 |
+| `gates` | Seven deterministic gates (G1-G7) and safeguard panel A1-A8 |
 | `wave --check` | Six gates of the wave engine: Hermitian L^(q), Cayley unitarity, seal chain, determinism, and causal arrow |
 | `wave --defect mutation` | Negative proof of the seal chain: exits with 1 |
 | `wave --defect inversion` | Negative proof of the causal arrow: exits with 1 |
@@ -547,8 +547,8 @@ Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-
 Ioannidis with R = 1/1000, power 0.80: PPV = 0.016 with alpha 0.05 and 0.002 with the garden alpha
 Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.146 with the garden alpha
 Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.362 with the garden alpha
-board A1-A8 with seed 2026, card with the eight safeguards: severities [9, 8, 10, 9, 8, 9, 8, 10], floor 6, approved = true
-the same card without one band's safeguard: the lowest severity drops to 2 (rejected)
+safeguard panel A1-A8, card with the eight safeguards: bits [1, 1, 1, 1, 1, 1, 1, 1], approved = true
+the same card without one band's safeguard: 7 of 8 bits set, approved = false
 == Chapter 8 :: the forecaster's thermometer ==
 4000 days, observed base rate = 0.243, mean chance declared by the expert = 0.252
 Platt fitted on days 1-2000 and scored out of the fit on days 2001-4000 (intercept a, slope b):
@@ -625,7 +625,7 @@ time growth per round: f* = +0.006211 | 2f* = +0.000000 | f = 0.70 -0.014200 | f
 
 all-in (f = 1.00)          above the start: 10 rounds 0.374  100 rounds 0.128  1000 rounds 0.00000
                            ruin (< 1e-6 of the capital) = 0.9971  final median = 1.322e-23  final mean = 2.725e-6
-twice Kelly (f = 0.50)     above the start: 10 rounds 0.485  100 rounds 0.527  1000 rounds 0.51960
+twice Kelly (f = 0.50)     above the start: 10 rounds 0.374  100 rounds 0.450  1000 rounds 0.49110
                            ruin (< 1e-6 of the capital) = 0.0244  final median = 1.000e0  final mean = 7.375e6
 full Kelly (f = 0.25)      above the start: 10 rounds 0.618  100 rounds 0.684  1000 rounds 0.96120
                            ruin (< 1e-6 of the capital) = 0.0000  final median = 4.983e2  final mean = 1.127e5
@@ -649,7 +649,7 @@ true mean (alpha/(alpha-1)) = 11.0
 n =      1000: mean of the sample means =     7.76  median =    6.22  below 11 in 0.94  95% CI covers in 0.24
 n =   1000000: mean of the sample means =     9.53  median =    8.39  below 11 in 0.95  95% CI covers in 0.26
 share of each sample's sum that comes from its single largest value (n = 1 000 000): 0.088
-in the median, 25.12% of the true mean comes from values above the maximum of a sample of one million
+in the median, 27.55% of the true mean comes from values above the maximum of a sample of one million (median maximum 397420)
 
 Hill estimator with alpha = 1.1 and n = 200 000:
   k =    100  alpha_hat = 1.083  95% CI approx [0.870; 1.295]
@@ -755,21 +755,19 @@ Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
 Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
 Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
 Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
-== Chapter 13 :: the A1-A8 adversarial panel ==
-complete card (card h3.voos): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=8 A6-fairness=9 A7-domain=8 A8-decision=10 | lowest=8 floor=6 approved=true
-card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=2 A6-fairness=3 A7-domain=8 A8-decision=10 | lowest=2 floor=6 approved=false
-without A1-code: rejecting=["A1-code"] count_rejecting=1 lowest=3
-without A2-data: rejecting=["A2-data"] count_rejecting=1 lowest=2
-without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1 lowest=4
-without A4-inference: rejecting=["A4-inference"] count_rejecting=1 lowest=3
-without A5-governance: rejecting=["A5-governance"] count_rejecting=1 lowest=2
-without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1 lowest=3
-without A7-domain: rejecting=["A7-domain"] count_rejecting=1 lowest=2
-without A8-decision: rejecting=["A8-decision"] count_rejecting=1 lowest=4
-sweep: cards rejected=8 of 8 | lowest global severity=2 | severities < floor per agent=[1, 1, 1, 1, 1, 1, 1, 1]
-complete card with seed 7: lowest=8 approved=true
-complete card with seed 2026: lowest=8 approved=true
-complete card with seed 999983: lowest=8 approved=true
+== Chapter 13 :: the A1-A8 safeguard panel ==
+complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
+card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
+without A1-code: rejecting=["A1-code"] count_rejecting=1
+without A2-data: rejecting=["A2-data"] count_rejecting=1
+without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
+without A4-inference: rejecting=["A4-inference"] count_rejecting=1
+without A5-governance: rejecting=["A5-governance"] count_rejecting=1
+without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
+without A7-domain: rejecting=["A7-domain"] count_rejecting=1
+without A8-decision: rejecting=["A8-decision"] count_rejecting=1
+sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
+seed read by the panel: none (the verdict is a function of the eight bits)
 system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
 == Chapter 14 :: the iron contract ==
 card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
@@ -975,7 +973,7 @@ rules that rejected at least one card: 7 of 7 | rejections per rule: [1, 1, 1, 4
 
 ## 3. Deterministic Gates
 
-### Seven gates and the adversarial board
+### Seven gates and the safeguard panel
 
 Seven gates (G1 to G7), identical reproduction, and Merkle root of the audit trail.
 
@@ -986,18 +984,18 @@ Seven gates (G1 to G7), identical reproduction, and Merkle root of the audit tra
 ~~~text
 == Stochology :: deterministic gates ==
 horizon=all cards=12 defect=none
-  card h0.posto-saude severity_min=8 approved=true
-  card h0.banco-2003 severity_min=8 approved=true
-  card h1.a-multiplicativo severity_min=8 approved=true
-  card h1.b-lalonde severity_min=8 approved=true
-  card h1.c-incendios severity_min=8 approved=true
-  card h2.icp-tunel-de-luz severity_min=8 approved=true
-  card h2.icp-fda-herg severity_min=8 approved=true
-  card h2.icp-estrela-levedura severity_min=8 approved=true
-  card h3.voos23 severity_min=8 approved=true
-  card h3.bolsa severity_min=8 approved=true
-  card h3.energia severity_min=8 approved=true
-  card h3.prisoes severity_min=8 approved=true
+  card h0.posto-saude checks_passed=8/8 failing=[] approved=true
+  card h0.banco-2003 checks_passed=8/8 failing=[] approved=true
+  card h1.a-multiplicativo checks_passed=8/8 failing=[] approved=true
+  card h1.b-lalonde checks_passed=8/8 failing=[] approved=true
+  card h1.c-incendios checks_passed=8/8 failing=[] approved=true
+  card h2.icp-tunel-de-luz checks_passed=8/8 failing=[] approved=true
+  card h2.icp-fda-herg checks_passed=8/8 failing=[] approved=true
+  card h2.icp-estrela-levedura checks_passed=8/8 failing=[] approved=true
+  card h3.voos23 checks_passed=8/8 failing=[] approved=true
+  card h3.bolsa checks_passed=8/8 failing=[] approved=true
+  card h3.energia checks_passed=8/8 failing=[] approved=true
+  card h3.prisoes checks_passed=8/8 failing=[] approved=true
   lenses: hill_alpha=1.7901 wild_tail=true median_log_wealth=-10.5361 ruined=0.892 murphy_rel=0.0375 res=0.1719 unc=0.2344
 merkle_root=9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81
 reproduction: second run identical = true (root 9716e28a87bec9cf)
@@ -1006,9 +1004,9 @@ G2 ok       fixed seed in 12 cards
 G3 ok       declared scope: simulated artifact only
 G4 ok       Phi1-Phi5 and type III (failures=0)
 G5 ok       SHA-256 chain intact and tampering detected
-G6 ok       panel A1-A8 with floor 6 and worst 8
-G7 ok       declared exit clause and A8 above the floor
-report_hash=8279ae1cba53b3ae7eed854e98b170c50ac54fa0f52d6b0cb271a6f343521a11
+G6 ok       panel A1-A8: 96 of 96 checks declared and anchored
+G7 ok       declared exit clause and A8 declared and anchored
+report_hash=bb7edf1318bf68edb01b585c544c72f7975fabbb46824b4870ab2924363ae5d9
 verdict: 7 gates ok
 ~~~
 
@@ -1023,10 +1021,10 @@ With a planted defect, G6 rejects and exits with code 1.
 ~~~text
 == Stochology :: deterministic gates ==
 horizon=h3 cards=4 defect=h3.voos23
-  card h3.voos23 severity_min=3 approved=false
-  card h3.bolsa severity_min=8 approved=true
-  card h3.energia severity_min=8 approved=true
-  card h3.prisoes severity_min=8 approved=true
+  card h3.voos23 checks_passed=6/8 failing=["A5-governance", "A6-fairness"] approved=false
+  card h3.bolsa checks_passed=8/8 failing=[] approved=true
+  card h3.energia checks_passed=8/8 failing=[] approved=true
+  card h3.prisoes checks_passed=8/8 failing=[] approved=true
   lenses: hill_alpha=1.7901 wild_tail=true median_log_wealth=-10.5361 ruined=0.892 murphy_rel=0.0375 res=0.1719 unc=0.2344
 merkle_root=802e84b64e432c259582d4d1322d602ea9634b8a05f8421e8205f3f9672252d2
 G1 ok       root determinism 802e84b64e432c25
@@ -1034,9 +1032,9 @@ G2 ok       fixed seed in 4 cards
 G3 ok       declared scope: simulated artifact only
 G4 ok       Phi1-Phi5 and type III (failures=0)
 G5 ok       SHA-256 chain intact and tampering detected
-G6 failed   panel A1-A8 with floor 6 and worst 3
-G7 ok       declared exit clause and A8 above the floor
-report_hash=88b7214b10ce775718ad3167f40f4e00ac7cf73c3690c10f4987c30f07778bfe
+G6 failed   panel A1-A8: 30 of 32 checks declared and anchored
+G7 ok       declared exit clause and A8 declared and anchored
+report_hash=93565e652be85d38a1283f19bcaa2af7352a6057af866cc46e47c75360afeccd
 verdict: 1 gates failed
 ~~~
 
@@ -1220,7 +1218,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 85 tests
+running 87 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1247,6 +1245,8 @@ test ch09::tests::pearl_steps_and_icp_intersection_work ... ok
 test ch10::tests::drag_grows_with_the_square_of_leverage ... ok
 test ch10::tests::kelly_fraction_is_the_argmax_of_growth ... ok
 test ch10::tests::peters_coin_grows_in_the_ensemble_and_decays_in_time ... ok
+test ch10::tests::the_share_above_the_maximum_uses_the_median_maximum_not_n ... ok
+test ch10::tests::twice_kelly_ties_do_not_count_as_above_the_start ... ok
 test ch11::tests::chouldechova_identity_closes_on_any_matrix ... ok
 test ch11::tests::dike_gev_underestimates_with_gumbel_and_chouldechova_closes ... ok
 test ch11::tests::evsi_matches_the_hand_count_and_never_exceeds_evpi ... ok
@@ -1307,18 +1307,17 @@ test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_div
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
 
-test result: ok. 85 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 87 tests
+running 86 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
-test agents::tests::approval_never_depends_on_the_seed ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
-test agents::tests::safeguard_without_structural_anchor_stays_below_the_floor_under_every_seed ... ok
-test agents::tests::severity_reproduces_with_the_same_seed ... ok
+test agents::tests::safeguard_without_structural_anchor_does_not_pass ... ok
+test agents::tests::the_report_is_a_function_of_the_bits_only ... ok
 test audit::tests::sha256_matches_the_known_vectors ... ok
 test audit::tests::the_chain_detects_tampering ... ok
 test audit::tests::the_merkle_root_is_reproducible ... ok
@@ -1402,7 +1401,7 @@ test schema::tests::the_chain_applies_rename_drop_and_addition ... ok
 test schema::tests::the_chain_does_not_touch_a_document_already_at_the_card_version ... ok
 test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_version ... ok
 
-test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 86 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -1749,4 +1748,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **5925 lines** and **78717 words**, sha256 `af8e81d760f78fb378a5a186e7e870ba4f4780b1fa69ab7efbbe7687c98b3697`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **5944 lines** and **79179 words**, sha256 `7551ed3271bb922cebb1e56cb3271a0c552be64d6ed45d9a79f12c430d25dd00`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

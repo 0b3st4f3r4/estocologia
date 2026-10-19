@@ -34,10 +34,10 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
 | Phi1 — simulability | fixed seed and executable artifact | `crates/stochology-core/src/invariants.rs` and `rng.rs` |
 | Phi2 — independent unit | margin on the true independent unit, never pseudoreplication | validated in the sheet; measured in `labs --chapter 16` and `labs --bank` |
 | Phi3 — severe test | null model simulated before reading any pattern | validated in the sheet; `labs --chapter 7` and `labs --chapter 14` |
-| Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; review board agent A8 |
+| Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; safeguard panel agent A8 |
 | Phi5 — question resolution | enforced when the unit is a day or coarser: aggregate resolution (R0) fails; finer units remain exempt, as declared | `crates/stochology-core/src/invariants.rs` and `src/resolution.rs` |
 
-The `gates` binary enforces the invariants and the review board across seven gates (G1 to G7, distinct from the six gates G1 to G6 of the wave engine `wave`) and exits with code 0 or 1.
+The `gates` binary enforces the invariants and the safeguard panel across seven gates (G1 to G7, distinct from the six gates G1 to G6 of the wave engine `wave`) and exits with code 0 or 1.
 
 ## III. Ontology and the Five Lenses
 
@@ -46,16 +46,19 @@ L3 Agent), an uncertainty type (aleatory, epistemic, Knightian), a definition, a
 Pathology edges mark misalignments across layers. The five lenses — **Fluxonomy, Chrononomy,
 Scalonomy, Morphonomy, Crisonomy** — live in `crates/stochology-hypergraph/src/lenses.rs`, with tests.
 
-## IV. Adversarial Review Board, Orchestrator, and Cycle
+## IV. Safeguard Panel, Orchestrator, and Cycle
 
-The eight agents of the adversarial review board are A1 to A8 (code, data, lifecycle, inference, governance, fairness, domain,
-decision), in `crates/stochology-core/src/agents.rs`, governed by the condition
+The eight agents of the safeguard panel (called the adversarial review board until 2026-10-19) are A1 to A8 (code,
+data, lifecycle, inference, governance, fairness, domain, decision), in `crates/stochology-core/src/agents.rs`,
+governed by the condition
 
-    Approved(X) = AND_{i=1..8} ( A_i(X) >= Severity_min ), Severity_min = 6.
+    Approved(X) = AND_{i=1..8} C_i(X),  C_i(X) = safeguard_i(X) AND anchor_i(X).
+
+The panel reads two bits per agent and no seed; it runs no attack (the attacks that run live in the gates).
 
 Legacy records use the labels MB1–MB8: it is the same list. The orchestrator M
 (`crates/stochology-core/src/orchestrator.rs`) drives the six-stage cycle: translation and scope, ingestion
-and grain, simulation and null model, projection onto the five lenses, review board and gate, decision and closure. Of the two
+and grain, simulation and null model, projection onto the five lenses, safeguard panel and gate, decision and closure. Of the two
 modes, **System 1** lives in `crates/stochology-core/src/s1.rs`, with the filter funnel alongside it, and
 **System 2** lives in `crates/stochology-s2`: LATS, belief-state engine, Metropolis inference, and
 deliberative board stress-testing, with code synthesis (F1) declared and not implemented. See

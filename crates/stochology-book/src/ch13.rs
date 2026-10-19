@@ -1,8 +1,10 @@
-//! Chapter 13 laboratory — the A1-A8 adversarial panel.
+//! Chapter 13 laboratory — the A1-A8 safeguard panel.
 //!
-//! The approval condition is the logical AND of the eight severities against the floor 6:
-//!   Approved(X) = AND_{i=1..8} ( A_i(X) >= Minimum_severity ).
-//! Fixed seed. No external dependencies. SplitMix64 built in.
+//! The approval condition is the logical AND of eight bits, one per concern:
+//!   Approved(X) = AND_{i=1..8} C_i(X),  C_i(X) = "concern i declared on the card".
+//! Until 2026-10-19 each bit was printed as a severity drawn by a seed (8..=10 or 2..=4); the
+//! decimal carried nothing beyond the bit and was removed. The panel reads no seed. System 1 below
+//! keeps its own deterministic hash. SplitMix64 built in.
 
 fn splitmix64(state: &mut u64) -> u64 {
     stochology_core::rng::splitmix64_step(state)
@@ -49,28 +51,7 @@ impl Concern {
             Concern::ExitClause => "A8-decision",
         }
     }
-
-    /// Ordinal that enters the mixing of the seed, as in the repository module.
-    fn ordinal(self) -> u64 {
-        match self {
-            Concern::PropertyTest => 1,
-            Concern::HandlesMissing => 2,
-            Concern::DeclaredDrift => 3,
-            Concern::PathologiesCovered => 4,
-            Concern::IntactTrail => 5,
-            Concern::AuditedSubgroups => 6,
-            Concern::ElicitedPrior => 7,
-            Concern::ExitClause => 8,
-        }
-    }
-
-    fn seed(self, base: u64) -> u64 {
-        base ^ self.ordinal().wrapping_mul(0x9E37_79B9_7F4A_7C15)
-    }
 }
-
-/// Scale 0 to 10. Approval floor: 6.
-const FLOOR: u8 = 6;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 struct Concerns {
@@ -135,37 +116,32 @@ struct Card {
     concerns: Concerns,
 }
 
-/// Deterministic severity of the attack on the card, for the given seed.
-fn stress(agent: Concern, card: &Card, seed: u64) -> u8 {
-    let mut rng = agent.seed(seed);
-    if card.concerns.meets(agent) {
-        (8 + uniform(&mut rng, 3)) as u8
-    } else {
-        (2 + uniform(&mut rng, 3)) as u8
-    }
+/// The bit of the concern on the card: declared or not. No seed, no scale.
+fn check(agent: Concern, card: &Card) -> bool {
+    card.concerns.meets(agent)
 }
 
 #[derive(Debug, Clone)]
 struct Approval {
-    items: Vec<(Concern, u8)>,
+    items: Vec<(Concern, bool)>,
     approved: bool,
 }
 
-fn panel(card: &Card, seed: u64) -> Approval {
-    let items: Vec<(Concern, u8)> = ALL.iter().map(|c| (*c, stress(*c, card, seed))).collect();
-    let approved = items.iter().all(|(_, s)| *s >= FLOOR);
+fn panel(card: &Card) -> Approval {
+    let items: Vec<(Concern, bool)> = ALL.iter().map(|c| (*c, check(*c, card))).collect();
+    let approved = items.iter().all(|(_, ok)| *ok);
     Approval { items, approved }
 }
 
 impl Approval {
-    fn lowest(&self) -> u8 {
-        self.items.iter().map(|(_, s)| *s).min().unwrap_or(0)
+    fn passed(&self) -> usize {
+        self.items.iter().filter(|(_, ok)| *ok).count()
     }
 
     fn line(&self) -> String {
         self.items
             .iter()
-            .map(|(c, s)| format!("{}={}", c.name(), s))
+            .map(|(c, ok)| format!("{}={}", c.name(), u8::from(*ok)))
             .collect::<Vec<String>>()
             .join(" ")
     }
@@ -191,7 +167,7 @@ fn s1(file: &str) -> AssessmentS1 {
     }
 }
 pub fn run() {
-    println!("== Chapter 13 :: the A1-A8 adversarial panel ==");
+    println!("== Chapter 13 :: the A1-A8 safeguard panel ==");
 
     let complete = Card {
         id: "h3.voos".to_string(),
@@ -210,21 +186,19 @@ pub fn run() {
         ("complete card", &complete),
         ("card with A5 and A6 removed", &with_defect),
     ] {
-        let r = panel(card, 2026);
+        let r = panel(card);
         println!(
-            "{} (card {}): {} | lowest={} floor={} approved={}",
+            "{} (card {}): {} | passed={} of 8 approved={}",
             label,
             card.id,
             r.line(),
-            r.lowest(),
-            FLOOR,
+            r.passed(),
             r.approved
         );
     }
 
     // One concern removed at a time: how many agents reject and who rejects.
     let mut rejections_per_agent = [0usize; 8];
-    let mut lowest_global = 10u8;
     let mut rejected_cards = 0usize;
     for c in ALL {
         let mut concerns = Concerns::all();
@@ -233,48 +207,34 @@ pub fn run() {
             id: format!("card-without-{}", c.name()),
             concerns,
         };
-        let r = panel(&f, 2026);
+        let r = panel(&f);
         let rejects: Vec<&'static str> = r
             .items
             .iter()
-            .filter(|(_, s)| *s < FLOOR)
+            .filter(|(_, ok)| !*ok)
             .map(|(a, _)| a.name())
             .collect();
         if !r.approved {
             rejected_cards += 1;
         }
-        if r.lowest() < lowest_global {
-            lowest_global = r.lowest();
-        }
-        for (i, (_, s)) in r.items.iter().enumerate() {
-            if *s < FLOOR {
+        for (i, (_, ok)) in r.items.iter().enumerate() {
+            if !*ok {
                 rejections_per_agent[i] += 1;
             }
         }
         let missing = f.concerns.missing();
         println!(
-            "without {}: rejecting={:?} count_rejecting={} lowest={}",
+            "without {}: rejecting={:?} count_rejecting={}",
             missing[0].name(),
             rejects,
-            rejects.len(),
-            r.lowest()
+            rejects.len()
         );
     }
     println!(
-        "sweep: cards rejected={} of 8 | lowest global severity={} | severities < floor per agent={:?}",
-        rejected_cards, lowest_global, rejections_per_agent
+        "sweep: cards rejected={} of 8 | rejections per agent={:?}",
+        rejected_cards, rejections_per_agent
     );
-
-    // Reseeding the panel does not change the verdict.
-    for seed in [7u64, 2026, 999_983] {
-        let r = panel(&complete, seed);
-        println!(
-            "complete card with seed {}: lowest={} approved={}",
-            seed,
-            r.lowest(),
-            r.approved
-        );
-    }
+    println!("seed read by the panel: none (the verdict is a function of the eight bits)");
 
     // System 1: probabilities restricted to the epistemological interval.
     let s = s1("h3.voos");
@@ -305,8 +265,11 @@ mod tests {
             id: "h3.test".into(),
             concerns: Concerns::all(),
         };
-        assert!(panel(&f, 2026).approved);
+        assert!(panel(&f).approved);
+        assert_eq!(panel(&f).passed(), 8);
         f.concerns.remove(Concern::IntactTrail);
-        assert!(!panel(&f, 2026).approved);
+        let r = panel(&f);
+        assert!(!r.approved);
+        assert_eq!(r.passed(), 7);
     }
 }

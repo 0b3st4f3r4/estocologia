@@ -420,17 +420,12 @@ fn ppv(power: f64, odds: f64, alpha: f64) -> f64 {
     (power * odds) / (odds - (1.0 - power) * odds + alpha)
 }
 
-/// The severity of the adversarial board A1-A8, in the same design as
-/// crates/stochology-core/src/agentes.rs.
-fn agent_severity(ordinal: u64, care_met: bool, seed: u64) -> u8 {
-    let s = seed ^ ordinal.wrapping_mul(0x9E37_79B9_7F4A_7C15);
-    let mut rng = SplitMix64::new(s);
-    let draw = rng.next_u64() % 3;
-    if care_met {
-        (8 + draw) as u8
-    } else {
-        (2 + draw) as u8
-    }
+/// The bit of one band of the safeguard panel A1-A8, in the same design as
+/// crates/stochology-core/src/agents.rs: the safeguard is declared or it is not. Until 2026-10-19
+/// the bit was printed as a severity drawn by a seed; that number is not Mayo's severity and was
+/// removed.
+fn band_passes(care_met: bool) -> bool {
+    care_met
 }
 
 pub fn run() {
@@ -483,19 +478,18 @@ pub fn run() {
         );
     }
 
-    let good: Vec<u8> = (1..=8).map(|i| agent_severity(i, true, 2026)).collect();
-    let worst: u8 = (1..=8)
-        .map(|i| agent_severity(i, false, 2026))
-        .min()
-        .unwrap();
+    let good: Vec<u8> = (1..=8).map(|_| u8::from(band_passes(true))).collect();
+    let mut one_missing = good.clone();
+    one_missing[4] = u8::from(band_passes(false));
     println!(
-        "board A1-A8 with seed 2026, card with the eight safeguards: severities {:?}, floor 6, approved = {}",
+        "safeguard panel A1-A8, card with the eight safeguards: bits {:?}, approved = {}",
         good,
-        good.iter().all(|s| *s >= 6)
+        good.iter().all(|b| *b == 1)
     );
     println!(
-        "the same card without one band's safeguard: the lowest severity drops to {} (rejected)",
-        worst
+        "the same card without one band's safeguard: {} of 8 bits set, approved = {}",
+        one_missing.iter().filter(|b| **b == 1).count(),
+        one_missing.iter().all(|b| *b == 1)
     );
 }
 

@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 406 tests passed, none failed
+cargo test --workspace                                  # 409 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **5 925 lines**, **78 717 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **5 944 lines**, **79 179 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 925 lines and 78 717 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 944 lines and 79 179 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -233,3 +233,27 @@ and do not close item 17. The dated record is `history/estado-2026-10-19T0052Z.m
 | `scripts/book/check_book.py` | refuses 20 retired values | refuses 27 |
 | assembled book, line count | 5 831 (with 76 919 words) | 5 925 (with 78 717 words) |
 | Appendix E | one rectification table | two; a reading note; the declared limit of the outside readings |
+
+## The panel as bits and the first reimplementation (2026-10-19)
+
+The safeguard panel A1–A8 (called the adversarial panel or review board until this day) stopped printing a severity
+from 0 to 10 drawn by a seed. It prints the two bits it always decided on, the safeguard and its anchor, and their
+AND; no seed enters the verdict. The `gates` merkle roots do not move (`9716e28a...` and `802e84b6...`), because the
+ledger records the verdict, which did not change; the report hashes move with the text of G6 and G7
+(`8279ae1c...` → `bb7edf13...` for `--horizon all`, `88b7214b...` → `93565e65...` for the negative proof).
+
+A reimplementation of the decision laboratories of Chapters 10 and 11 from the text alone, in Python, by an AI
+assistant (`scripts/reimplementation/decision_labs.py`, now in `scripts/verify.sh`), recomputed 61 quantities and
+found two wrong values in Chapter 10, both corrected with tests: the twice-Kelly share above the start, decided by
+the rounding of exact ties, and the share of a Pareto mean above the median maximum, computed with the maximum at
+$n$. The numpy citation of Appendix C is checked (NumPy 2.5.0 release notes, gh-31238). The dated record is
+`history/estado-2026-10-19T0340Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| `cargo test --workspace` | 408 (406 declared, stale) | **409**: one panel test retired with the seed it tested, two tests of Chapter 10 added |
+| panel A1–A8 | a severity per agent, drawn by a seed; floor 6 | two bits per agent and their AND; G6 "96 of 96 checks declared and anchored" |
+| laboratories | Chapters 7, 10 and 13 | bits in 7 and 13; ties and the median maximum in 10; every cited block equals its instrument |
+| `scripts/verify.sh` | no reimplementation | runs `decision_labs.py`: 61 of 61 agree |
+| `scripts/book/check_book.py` | refuses 27 retired values | refuses 32 |
+| assembled book, line count | 5 925 (with 78 717 words) | 5 944 (with 79 179 words) |
