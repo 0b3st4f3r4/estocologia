@@ -99,7 +99,7 @@ python3 scripts/book/build.py --check               # the ramp AND the disk: the
 python3 scripts/book/check_labs.py                  # every cited block checked against its instrument
 python3 scripts/book/check_book.py                  # parts, chapters, fences, and ordering
 python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
-python3 scripts/check_seals.py                      # the 30 SHA-256 seals, paths relative to root
+python3 scripts/check_seals.py                      # the 31 SHA-256 seals, paths relative to root
 python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
 git tag --list                                      # must be empty: history only, no versions (§VI)
 ~~~
@@ -111,6 +111,7 @@ verification suite, because every row in that table cites one of them:
 cargo run --release --bin labs -- --genetics    # fine resolution in genetics
 cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
 cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
+cargo run --release --bin labs -- --wave        # the wave engine against data (point 23): T1 the arrow, T2 the conflict
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
@@ -120,8 +121,10 @@ cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
 cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 and 5
 ~~~
 
-The wave engine enters the first block because it is an instrument, not a chapter: it produces no
-published number and replaces no laboratory. Its two divergences from the draft that
+The wave engine enters the first block because it is an instrument, not a chapter. Its first published numbers
+come from `labs --wave` (point 23, declared and sealed before the first run on 2026-10-19), which tests two of its
+three layers on catalogued data: the STDP arrow was not supported, and the phasor conflict never fired on real
+flights, so it was not testable under its encoding. Its two divergences from the draft that
 originated it are declared in `crates/stochology-wave/src/lib.rs` — the frustration `<Psi, L Psi>` cannot serve as a
 conflict trigger because in symmetric antiphase it equals zero precisely when conflict exists, and the
 plasticity gate enforces target resonance gain rather than monotonic frustration decay.

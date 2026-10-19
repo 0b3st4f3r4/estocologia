@@ -113,6 +113,21 @@ The 38 recorded tests of the H2 gate re-read with the stopping rule of point 22,
 | Areas that cross 1/α = 20, as recorded: 3 (education 4414.6, pharmacology and physics at the clamp of p = 10⁻¹²); genetics 7.0, law 2.4, transport 3.0 | `labs --eprocess` |
 | With the clustered rows admitted by the declaration: education 3678.9, still crossing; the same three areas | `labs --eprocess` |
 
+## The wave engine against data (2026-10-19)
+
+Point 23: two layers of the wave engine tested on catalogued data under `empirical/p23-onda/DECLARACAO.md`, sealed
+and committed before the first run. Instrument: `labs --wave`. Verdicts: the arrow not supported; the conflict not
+testable under its encoding.
+
+| Number | Instrument |
+| --- | --- |
+| T1, Victoria 2012–2014, 155 weeks (six dates of daylight-saving change dropped by the sealed code): engine temperature → demand 53, demand → temperature 39, none 63; binomial p 0.087 | `labs --wave` |
+| T1 null pairing (+13 weeks): engine 26 correct; rival (lagged cross-correlation) 92 correct, its null 85 | `labs --wave` |
+| T1 rules: P1 false, P2 false (gap 0.174 < 0.20), P3 false (rival ahead by 0.252 > 0.10) | `labs --wave` |
+| T2, New York 2013 vault: 77,184 flights, all in resonance; 2023 vault: 98,509 flights, 98,146 in resonance and 363 in beating; no conflict in either | `labs --wave` |
+| T2, gain of System 2 over System 1 in Brier: +0.00048 (2013), +0.00038 (2023) | `labs --wave` |
+| Synthetic controls: planted arrow 141 of 156 (rival 155); independent 80 against 64; planted interaction Δ +0.00083 [+0.00003; +0.00166]; none Δ −0.00052 [−0.00107; +0.00004] | `labs --wave` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument
