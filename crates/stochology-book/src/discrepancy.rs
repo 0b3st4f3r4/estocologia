@@ -12,7 +12,8 @@
 //! - **with a discrepancy that may do anything**: d(x) = b1 x + b2 x^2 + b3 x^3 + b4 x^4. Now theta and b1 enter the
 //!   data only through their sum, and the data cannot tell them apart.
 //!
-//! Declared before its first run in `empirical/p28-discrepancia/DECLARACAO.md`. Deterministic: SplitMix64, seed 2026.
+//! Declared before its first run in `empirical/p28-discrepancia/DECLARACAO.md`; the rms error of the prediction at x = 8
+//! entered with declaration 2, after the first run, because the mean error alone hid a spread of about 7 per dataset. Deterministic: SplitMix64, seed 2026.
 
 use stochology_core::Rng;
 
@@ -119,6 +120,7 @@ pub struct Summary {
     pub coverage: f64,
     pub rmse_in_range: f64,
     pub extrapolation_error: f64,
+    pub extrapolation_rmse: f64,
 }
 
 pub fn summaries(datasets: usize, seed: u64) -> Vec<Summary> {
@@ -146,7 +148,9 @@ pub fn summaries(datasets: usize, seed: u64) -> Vec<Summary> {
                 .sum::<f64>()
                 / xs.len() as f64)
                 .sqrt();
-            a.extrapolation_error += fit(EXTRAPOLATE_AT) - world(EXTRAPOLATE_AT);
+            let e = fit(EXTRAPOLATE_AT) - world(EXTRAPOLATE_AT);
+            a.extrapolation_error += e;
+            a.extrapolation_rmse += e * e;
         }
     }
     for a in &mut acc {
@@ -156,6 +160,7 @@ pub fn summaries(datasets: usize, seed: u64) -> Vec<Summary> {
         a.coverage /= n;
         a.rmse_in_range /= n;
         a.extrapolation_error /= n;
+        a.extrapolation_rmse = (a.extrapolation_rmse / n).sqrt();
     }
     acc
 }
@@ -169,12 +174,18 @@ pub fn run() {
     );
     let s = summaries(DATASETS, SEED);
     println!(
-        "  model                               | theta mean | theta sd | 95% interval covers {THETA} | fit rmse in range | error at x = {EXTRAPOLATE_AT}"
+        "  model                               | theta mean | theta sd | 95% interval covers {THETA} | fit rmse in range | at x = {EXTRAPOLATE_AT}: mean error, rms error"
     );
     for (name, m) in MODELS.iter().zip(&s) {
         println!(
-            "  {:<35} |     {:.4} |   {:.4} |                     {:.3} |            {:.4} |       {:+.3}",
-            name, m.theta_mean, m.theta_sd, m.coverage, m.rmse_in_range, m.extrapolation_error
+            "  {:<35} |     {:.4} |   {:.4} |                     {:.3} |            {:.4} |       {:+.3}, {:.3}",
+            name,
+            m.theta_mean,
+            m.theta_sd,
+            m.coverage,
+            m.rmse_in_range,
+            m.extrapolation_error,
+            m.extrapolation_rmse
         );
     }
     println!(
@@ -200,6 +211,30 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_noiseless_fit_matches_exact_rational_arithmetic() {
+        // computed with exact fractions on the noiseless world: theta and the error of the prediction at x = 8
+        let xs = design_points();
+        let ys: Vec<f64> = xs.iter().map(|&x| world(x)).collect();
+        for (model, theta, error) in [
+            (1, 0.645_878_540_225_041_3, 0.278_428_476_480_720_7),
+            (2, 0.323_891_596_115_709_95, 0.143_693_723_019_282_96),
+        ] {
+            let (mean, _) = posterior(model, &xs, &ys);
+            let fit: f64 = columns(model, EXTRAPOLATE_AT)
+                .iter()
+                .zip(&mean)
+                .map(|(c, b)| c * b)
+                .sum();
+            assert!((mean[0] - theta).abs() < 1e-6, "{model}: theta {}", mean[0]);
+            assert!(
+                (fit - world(EXTRAPOLATE_AT) - error).abs() < 1e-6,
+                "{model}: error {}",
+                fit - world(EXTRAPOLATE_AT)
+            );
+        }
+    }
 
     #[test]
     fn the_inverse_returns_the_identity() {
