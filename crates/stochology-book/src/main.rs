@@ -32,6 +32,7 @@ fn main() {
     let mut mc_error_flag = false;
     let mut propagate_flag = false;
     let mut passk_flag = false;
+    let mut multiverse_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -95,6 +96,7 @@ fn main() {
             "--mc-error" => mc_error_flag = true,
             "--propagate" => propagate_flag = true,
             "--passk" => passk_flag = true,
+            "--multiverse" => multiverse_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -115,7 +117,7 @@ fn main() {
     }
     if help {
         println!(
-            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk"
+            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk | --multiverse"
         );
         println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
@@ -156,6 +158,10 @@ fn main() {
     }
     if streams_flag {
         stochology_book::streams::run();
+        return;
+    }
+    if multiverse_flag {
+        stochology_book::multiverse::run();
         return;
     }
     if passk_flag {

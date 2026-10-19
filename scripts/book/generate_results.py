@@ -138,6 +138,7 @@ def main() -> int:
         "| BTlabs --eprocessBT | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |\n"
         "| BTlabs --mc-errorBT | The Monte Carlo error of every simulated number a reading of the book depends on |\n"
         "| BTlabs --propagateBT | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |\n"
+        "| BTlabs --passkBT | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
@@ -210,6 +211,12 @@ def main() -> int:
         "The wait of a day at the health post with uncertain, correlated rates: plug-in, delta method with its "
         "second-order mean, Monte Carlo, the uncertainty budget, and the rule on when the linear answer may decide "
         "(Chapter 5).",
+    ))
+    parts.append(section_block(
+        "Reliability is not average success",
+        [str(BIN), "--passk"],
+        "pass^k over 200 tasks and 8 runs in four declared worlds, with the band of 2,000 repetitions and the three "
+        "rules sealed in empirical/p25-passk/ before the first run (Chapter 16).",
     ))
     parts.append(section_block(
         "H3 chain re-executed from the repository tree",

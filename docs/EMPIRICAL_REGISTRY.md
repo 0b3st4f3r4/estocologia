@@ -172,6 +172,20 @@ absent. Instrument: `labs --schema`.
 | A budget declared for the health post of Chapter 5, `arrivals=0.42; pace=0.58; covariance=0.00`, is read back; one that does not close (0.420) is refused | `labs --schema` |
 | A dominant event declared for the ship of Chapter 11, `the ship is lost; p=0.05; share=1.0`, is read back | `labs --schema` |
 
+## Reliability is not average success (2026-10-19)
+
+Declared and sealed before the first run in `empirical/p25-passk/` (item 18 (a) of `docs/DECLARED_PROPOSALS.md`).
+Synthetic: 200 tasks, 8 runs of each, chances from four declared laws, 2,000 repetitions of the whole experiment, seed
+2026. Verdict: the three rules hold. K = 1.
+
+| Result | Instrument |
+| --- | --- |
+| World A (every task at 0.5): pass^8 0.0050 in the first run, independent reading 0.0041; the band of the gap contains 0 at every k | `labs --passk` |
+| World B, Beta(2, 2): pass^8 0.0700, independent 0.0063, ratio 11.0; band of pass^8 [0.0250; 0.0850]; exact 0.0545 | `labs --passk` |
+| World C, Beta(0.3, 0.3): pass^8 0.3100, independent 0.0049, ratio 62.6; band of pass^8 [0.2050; 0.3300]; exact 0.2672 | `labs --passk` |
+| World D, Beta(1.4, 0.6): pass^1 0.7306, pass^8 0.3200, independent 0.0812, ratio 3.9; exact 0.2976 | `labs --passk` |
+| The exact moment lies inside the band of the estimator at every k in every world | `labs --passk` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

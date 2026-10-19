@@ -4066,6 +4066,19 @@ of deliberating. It is zero when no result of the deliberation could change the 
 far from its threshold. So System 2 is woken where a small revision flips the decision, near the threshold, and where
 the dominant event of a wrong act is severe; everywhere else, the fast answer is the rational one.
 
+**Reliability is not average success.** A machine that acts is judged, almost always, by the share of tasks it
+completes, its average success. Whoever delegates asks something else: if I hand it this task every week, will it
+succeed every week? Run each task $n$ times and call $p_i$ the chance of success on task $i$. The average success is
+$\text{pass}^1 = \mathbb{E}[p]$; the chance that $k$ runs of the same task all succeed is
+$\text{pass}^k = \mathbb{E}[p^k]$. If every task had the same chance, $\text{pass}^k$ would be $(\text{pass}^1)^k$.
+They do not, and by Jensen's inequality $\mathbb{E}[p^k] \ge (\mathbb{E}p)^k$, with equality only when the chances
+do not vary. The distance between the two is the variance of the chances across tasks at work, the same term that
+the variance of a sum carries in Chapter 6. It has two faces. The good one: an agent that solves some tasks always
+and others never is more reliable, on the tasks it solves, than its average suggests. The bad one: its average says
+nothing about which tasks those are, and a single run with a fixed seed cannot say how far its own number would move.
+The card of an agent therefore declares $k$ with $\text{pass}^k$, not only the average, and reads the delegation by
+the tail: the dominant event of a failure, not the task length it completes half the time.
+
 ---
 
 ### Step 3 — Hands on
@@ -4155,6 +4168,48 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
 - **The grain:** with oscillating demand, the coarse question loses 25.54 minutes, more than the 12.00 minutes of
   margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
 
+**Reliability, measured.** The laboratory of reliability draws the chances of 200 tasks from four worlds, runs each
+task 8 times, estimates $\text{pass}^k$ per task as $\binom{c}{k}/\binom{8}{k}$ from its $c$ successes (the
+unbiased estimator of $p_i^k$), and repeats the whole experiment 2,000 times to see how far one run of the laboratory
+moves. Every world but one has average success near one half. Run it with
+`cargo run --release --bin labs -- --passk`; the world where most tasks sit near 0 or near 1:
+
+```text
+-- world C, Beta(0.3, 0.3) --
+   k | first run: pass^k  (pass^1)^k | 95% band of pass^k  | exact E[p^k] | 95% band of the gap
+   1 |          0.5150      0.5150  | [0.4419; 0.5587]  |     0.5000   | [+0.0000; +0.0000]
+   2 |          0.4325      0.2652  | [0.3471; 0.4659]  |     0.4062   | [+0.1406; +0.1708]
+   3 |          0.3920      0.1366  | [0.2996; 0.4192]  |     0.3594   | [+0.2075; +0.2590]
+   4 |          0.3661      0.0703  | [0.2716; 0.3899]  |     0.3294   | [+0.2292; +0.3027]
+   5 |          0.3471      0.0362  | [0.2494; 0.3687]  |     0.3079   | [+0.2305; +0.3218]
+   6 |          0.3321      0.0187  | [0.2334; 0.3518]  |     0.2914   | [+0.2238; +0.3275]
+   7 |          0.3200      0.0096  | [0.2188; 0.3400]  |     0.2782   | [+0.2138; +0.3261]
+   8 |          0.3100      0.0049  | [0.2050; 0.3300]  |     0.2672   | [+0.2037; +0.3213]
+  agent card: reliability k = 8; pass^1 0.5150; pass^8 0.3100; read as independent 0.004948; ratio 62.6
+  exact moment inside the band for every k: true | gap band contains 0 for every k >= 2: false | gap band above 0 for every k >= 2: true
+```
+
+Three readings.
+
+- **Same average, a factor of sixty.** With $\text{pass}^1$ near one half, the independent reading promises that
+  8 runs in a row succeed on 0.0049 of the tasks; the laboratory finds 0.3100. The tasks the agent solves, it solves
+  almost always, and the tasks it fails, it fails almost always. In the world where every task sits at one half the
+  two readings agree (0.0050 against 0.0041), and the band of their gap contains zero at every $k$.
+- **One run of the laboratory is a draw.** The band of $\text{pass}^8$ over the 2,000 repetitions goes from 0.2050
+  to 0.3300: a benchmark of this size, published once, fixes the reliability within a factor of about one and a half,
+  not to the fourth decimal it prints.
+- **The estimator is honest.** The exact $\mathbb{E}[p^k]$ of the Beta law lies inside the band at every $k$, in all
+  four worlds.
+
+The three rules were written down before the first run, and all three hold:
+
+```text
+-- the rules declared before the run --
+  R1, world A: the gap band contains 0 for every k >= 2: holds
+  R2, worlds B, C and D: the gap band lies above 0 for every k >= 2: holds
+  R3, every world: the exact E[p^k] lies inside the band of the estimator for every k: holds
+```
+
 **Exercises.**
 
 1. *(Concept)* A database has one row per medical appointment, and the question is about patients. Which
@@ -4177,6 +4232,9 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
 8. *(Count)* A triage sends a case to "protect" when its probability passes 0.30. Deliberating costs 2, and the
    loss of a wrong act is 100. For a case at 0.05 and for a case at 0.29, say whether deliberation could change the
    act, and whether its value can exceed its cost. Where is System 2 worth waking?
+9. *(Count)* Two agents have average success 0.5 on the same 200 tasks. The first succeeds on every task with chance
+   one half; the second solves half of the tasks always and the other half never. What is $\text{pass}^8$ for each?
+   Which one would you trust with a weekly task, and which question would you ask before choosing?
 
 **Summary.**
 
@@ -4189,6 +4247,8 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
   known by construction.
 - System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
   bounded belief state, directed stress and Metropolis, each tested against a null.
+- Reliability is $\text{pass}^k = \mathbb{E}[p^k] \ge (\text{pass}^1)^k$; the gap is the spread of the chances
+  across tasks, and the card of an agent declares $k$ with it.
 - Thinking more is an act with a value: System 2 is woken where its result could change the decision by more than it
   costs, near the threshold and where a wrong act is severe.
 
@@ -5956,6 +6016,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
+| `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |

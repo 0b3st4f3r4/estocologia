@@ -45,6 +45,7 @@ def main() -> int:
         ("labs --eprocess", run_output([str(BIN), "--eprocess"])),
         ("labs --mc-error", run_output([str(BIN), "--mc-error"])),
         ("labs --propagate", run_output([str(BIN), "--propagate"])),
+        ("labs --passk", run_output([str(BIN), "--passk"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
         ("labs --h3", run_output([str(BIN), "--h3"])),
         ("labs --bridge", run_output([str(BIN), "--bridge"])),
