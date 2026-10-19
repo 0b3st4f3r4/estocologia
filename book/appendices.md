@@ -148,7 +148,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 16) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
+| `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 421 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -497,6 +498,18 @@ registry; no instrument changed.
 | A | Order of the dictionary | the order of the Portuguese original | alphabetical in English | the table says it is alphabetical |
 | D | The last references to check | Cover and Thomas, Platt 1999, and the D.2 line on scoring rules | all checked; Platt against a secondary source | 77 of 77 lines checked |
 
+### The real streams, 2026-10-19
+
+Not a rectification of the text but a new instrument: six streams of Chapter 20 rebuilt on public data, with the
+record and the rebuild side by side in the section of Chapter 20 below. The text of Chapter 20 gained the recipe, the
+output block and its reading; the Preface's list of what the reader cannot run lost them. Two sentences changed:
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 20 | The 2023 correction | "was not put to the test" | the same, and in the rebuild the correction is decisive; both readings stay | the rebuild disagrees with the record |
+| C | Test count | 415 | 421 | the six tests of the rebuilt streams |
+| Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
+
 ### Numbers cited without an instrument in this book
 
 The preface promises that every number comes from an instrument the reader can run or from a cited source. These do
@@ -524,7 +537,7 @@ numbers of the six that could not be reconstructed, keeping the argument.
 | 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
 | 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
-| 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
+| 20 | Every stream, vault and fairness audit | research record | six streams rebuilt on public data by `labs --streams` (Chapter 20, Step 3), with the divergences in the section of Chapter 20 below; the arrests of 2020–2021 and the traffic stops stay cited |
 | 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
 
 ### Chapter 4
@@ -767,6 +780,24 @@ and the row artefact planted by the instrument — what the instrument measures 
 the 40 real genes, which continue without an instrument.
 
 ### Chapter 20
+
+**The streams rebuilt on 2026-10-19.** `labs --streams` redoes six streams of the record on public data under a
+specification written in the chapter before the run. Side by side, record and rebuild:
+
+| Stream | Record | Rebuild | Reading |
+| --- | --- | --- | --- |
+| Energy, 2014 | coverage 0.887, passes | coverage 0.886 (17 424 half hours), passes | the same |
+| Bank, Sep–Oct 2003 | coverage 0.900 (6 084), passes | coverage 0.884 (6 422 five-minute slots), passes | the same verdict; the vault counts 38 days here |
+| Market, 2000–2023 | violations 0.98%, Kupiec p = 0.89, Christoffersen p = 0.02 | violations 1.53%, Kupiec p = 0.00, Christoffersen p = 0.02 | **diverges**: the record does not state its method; historical simulation over 250 sessions fails |
+| Flights, Q4 2013 | bias +2.7 points, ECE 0.027, fails | raw: CITL −0.0171, ECE 0.0260, passes; corrected: ECE 0.0322, fails | the sign of the bias agrees (observed above forecast); the verdict depends on the model |
+| Flights, Q4 2023 | corrected ECE 0.008, raw ECE 0.014, both pass | raw: CITL +0.0633, ECE 0.0646, fails; corrected: ECE 0.0177, passes | **diverges**: in the rebuild the correction is decisive |
+| Cyclones, 2015–2022 | bias 0.001, ECE 0.012 (5 766), passes | CITL +0.0002, ECE 0.0121 (3 813), passes | the same; the rebuild keeps only observations with another one 24 hours later |
+| Toronto, 2001–2002 | bias 0.016, ECE 0.036 (1 488), fails | CITL +0.0165, ECE 0.0354 (1 488), fails | the same |
+| Toronto, marker by colour | FPR 0.16–0.23 Black against 0.06–0.11 White | 0.155 and 0.164 against 0.070 and 0.077 | the same pattern |
+| Canary | 0.000 honest; +0.55 to +0.97 switched off | 0 emissions, +0.0000 honest; +0.91 to +0.97 switched off | the same |
+
+The reimplementation from the text (`scripts/reimplementation/ch20_streams.py`) redoes Toronto, the market and the
+energy interval from the recipe alone and agrees with every number of the rebuild.
 
 **The Platt balance.** The record of the live replay says that, in the flights stream of 2023, the
 intercept of the correction varied from $-0.52$ to $+0.43$ along the year. The diary of 2023 shows that this is the

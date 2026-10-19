@@ -84,6 +84,23 @@ measurement remains without an instrument — declaration 2 of `empirical/p14-h3
 | Human elicitation (SHELF), second domain: `h2/direito_prisoes` — pre-test approved **at both gates** (skill 0.973 and ECE 0.0450), confirmed quintiles (mean −0.4639 and SD 0.4715 on the log odds-ratio scale, versus −0.3546/0.2833 for the package and −0.3482/0.1046 for the literature) | **R** / **P** | pre-test, fitting, and control checks in Rust (`labs --preteste` and `labs --elicitacao --escala log`); running the funnel with the elicited prior uses the retired p05 copy (**P**): the domain is **rejected at F4** under all three priors — elicitation does not change the action — and what it moves is EVPI, from 0.541955 (package) and 0.009989 (literature) to 1.054148 (elicited), with the posterior mean shifting from −0.729791 to −0.752532 and the posterior/prior SD ratio from 0.275878 to 0.169906. Incomplete panel: 1 of 3, and the expert is the program author | `empirical/p12-shelf/`, `governance/RELEITURA.md` |
 | Human elicitation (SHELF): one expert interviewed in domain `h2/desenvolvimento_preston`; pre-test approved at the adjusted gate (skill 0.65 and ECE 0.2250) and five quantiles confirmed (mean 3.25 and SD 2.2239, versus 6.5 and 2.2239 for the package and 1.536 and 2.6034 for the literature) | **R** / **P** | pre-test, fitting, and control checks in Rust (`labs --preteste` and `labs --elicitacao`); passing through the funnel with the elicited prior runs the retired p05 copy, tagged **P** — `P(adotar compensa)` 0.418875 and F8 action `manter`, versus 0.565375 (`adotar`) for the package and 0.366375 (`manter`) for the literature, both reproduced by the same command. Incomplete panel: 1 of 3, and the expert is the program author | `empirical/p12-shelf/`, `governance/RELEITURA.md` |
 
+## H3 rebuilt — the real streams on public data (2026-10-19)
+
+Six streams of H3 rebuilt in Rust by `labs --streams` (`crates/stochology-book/src/streams.rs`) from public data added
+to `data/` on 2026-10-19 (`data/SOURCES.md`), under a specification written in Chapter 20 before the run. These numbers
+sit beside the H3 numbers above, not in their place; where they differ, Appendix E keeps both.
+
+| Stream | Number | Instrument |
+| --- | --- | --- |
+| Energy, Victoria 2014 | coverage of the 90% interval 0.886, 17 424 half hours | `labs --streams` |
+| Bank, Sep–Oct 2003 | coverage 0.884, 6 422 slots | `labs --streams` |
+| Market, Dow Jones 2000–2023 | violations of the 99% VaR 1.53%, Kupiec p = 0.00, Christoffersen p = 0.02 | `labs --streams` |
+| Flights, Q4 2013 | raw CITL −0.0171, ECE 0.0260, skill +0.0898; corrected CITL −0.0015, ECE 0.0322 | `labs --streams` |
+| Flights, Q4 2023 | raw CITL +0.0633, ECE 0.0646; corrected CITL +0.0025, ECE 0.0177, skill +0.0747 | `labs --streams` |
+| Cyclones, 2015–2022 | CITL +0.0002, ECE 0.0121, skill +0.1000, 3 813 observations | `labs --streams` |
+| Toronto, 2001–2002 | CITL +0.0165, ECE 0.0354, 1 488 cases; FPR of the marker 0.155 and 0.164 (Black) against 0.070 and 0.077 (White) | `labs --streams` |
+| Canary | honest clock 0 emissions, gain +0.0000; clock switched off, gain +0.9102, +0.9718, +0.9188 | `labs --streams` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

@@ -37,10 +37,12 @@ architecture check form, presence and reproducibility, not correctness. Appendix
 of code that passed every test and every gate of this book until an outside reading found them. Read each number as
 an invitation to check it, not as a certificate.
 
-**What the reader cannot run.** The rule above holds for the simulations and for five real datasets: the bank calls,
-the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
-book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
-yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
+**What the reader cannot run.** The rule above holds for the simulations and for ten real datasets: the bank calls,
+the Dow Jones, the two files of the job-training experiment, the Danish fires, and the five public sources on which
+Chapter 20 rebuilds its streams (the flights of 2013 and 2023, the electricity of Victoria, the Atlantic cyclones and
+the Toronto arrests of 1997 to 2002). It does not hold for everything the book cites. The real cases of Chapter 19 (the
+physical chambers, the cardiac trial, the small classes and the yeast), the arrests of 2020 and 2021 and the traffic
+stops of Chapter 20, the propensity fit and the Kelly interval of
 Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 
@@ -4956,7 +4958,8 @@ different things.
 before and tested in a new vault. The vault was the quarter from October to December repeated, now in 2023, with
 104,489 forecasts. The flights passed, with a bias of 0.0015 and an ECE of 0.008. But the quarter of 2023 did not
 repeat the deviation of 2013. The raw model, without any correction, would also have passed, with ECE 0.014. The correction
-improved the calibration and **was not put to the test**.
+improved the calibration and **was not put to the test**. Step 3 rebuilds this stream from the public data with a
+specification declared beforehand, and there the correction is decisive; the two readings disagree, and both stay.
 
 In the prisons, the new Toronto data, from 2020 and 2021, with 65,276 arrests and a vault in the second half of 2021
 over 16,933 cases, changed the question. It became registering at the police station instead of releasing. The model
@@ -5150,6 +5153,69 @@ the resolution is not. **The canary** closes the laboratory. With the honest clo
 **0** of the 24,466 emissions, its coefficient stays at zero and the skill gain is 0.0000; with the clock
 switched off, it is available in the 24,466 emissions and the gain is $+0.6521$.
 
+**The real streams, rebuilt.** The numbers of Step 1 come from the research record. Six of its streams have public
+data that can sit beside the book, so they were rebuilt with a specification declared before the run, and the
+instrument prints its own numbers rather than copying the record's. Run it with
+`cargo run --release --bin labs -- --streams`.
+
+**The recipe of the rebuild.** Nothing is drawn at random. *Energy* and *bank*: the point forecast of a slot is the
+mean of the same slot over the last four days of the same type (working days, and the rest), and the 90% interval
+multiplies it by the 5% and 95% quantiles of the relative errors of that rule over the previous 56 days (energy) or 20
+working days (bank). *Market*: the 99% value at risk of a session is the 1% quantile of the last 250 daily returns.
+*Flights*: a logistic regression, with a small ridge, on the carrier, the airport, five bands of departure hour, the
+weekday, the log distance and the share of delayed arrivals from the same airport known in the three hours before
+the emission, fitted on the 60 days before 1 October and issued two hours before each departure of October to
+December; a flight that was cancelled or diverted has no arrival and leaves the count; the corrected forecast moves its
+intercept after each known arrival by $\delta \leftarrow \delta + 0.002(y - p')$. *Cyclones*: a logistic regression on
+the wind, its change over the last 12 and 24 hours, the pressure, the position and the season, at every observation
+with another one 24 hours later. *Toronto*: a logistic regression blind to colour (employment, citizenship, prior
+checks, age and sex), fitted on 1997 to 2000; the marker flags a forecast of release below 0.70. The climatology is
+always the rate of the labels knowable at the emission.
+
+```text
+== Chapter 20 :: the real streams, rebuilt beside the book ==
+no step draws a random number | gates: |CITL| <= 0.02, ECE <= 0.03, skill > 0 | coverage 0.86 to 0.94 | VaR 0.5% to 1.5% and Kupiec p > 0.05
+energy (Victoria 2014, day ahead, 90% interval):  n =  17424 | coverage 0.886 | gate PASSES
+bank (Sep-Oct 2003, next working day, 90%):       n =   6422 | coverage 0.884 | gate PASSES
+market (Dow Jones 2000-2023, 99% VaR, 250 days):  n =   6011 | violations 1.53% | Kupiec p = 0.00 | Christoffersen p = 0.02 | gate FAILS
+flights 2013 (Oct-Dec), trained on 54835 flights of the 60 days before:
+   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 | skill +0.0898 | gate PASSES
+   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 | skill +0.0908 | gate FAILS
+   canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9102
+flights 2023 (Oct-Dec), trained on 68257 flights of the 60 days before:
+   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 | skill +0.0282 | gate FAILS
+   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 | skill +0.0747 | gate PASSES
+   canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9718
+cyclones (2015-2022, +30 kt in 24 h), trained on 12585 observations of 1975-2014:
+   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 | skill +0.1000 | gate PASSES
+Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 cases of 1997-2000:
+   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 | skill +0.0812 | gate FAILS
+   canary: clock switched off, skill gain +0.9188
+   marker (chance of release below 0.70): false positive and false negative rates by perceived colour
+   2001 Black  FPR 0.155  FNR 0.667  (311 cases)
+   2001 White  FPR 0.070  FNR 0.772  (900 cases)
+   2002 Black  FPR 0.164  FNR 0.500  (85 cases)
+   2002 White  FPR 0.077  FNR 0.838  (192 cases)
+```
+
+Read it against Step 1. **Where the specification is the same, the rebuild lands on the record.** The energy
+interval covers 0.886 of the half hours; the cyclones end with ECE 0.0121 and a bias of $+0.0002$; Toronto 1997–2002
+fails again, with ECE 0.0354 and a bias of $+0.0165$; and the marker blind to colour flags Black detainees who were
+released about twice as often as White ones, 0.155 and 0.164 against 0.070 and 0.077. **The canary behaves as the record
+says**: 0 emissions and no gain with the honest clock, a gain of $+0.91$ or more with the clock switched off.
+
+**Where the rebuild disagrees, both stay.** The value at risk by historical simulation over 250 sessions has 1.53% of
+violations and fails Kupiec, where the record passed with 0.98%; the record does not state its method, and this one
+was declared before the run, so the disagreement is reported, not tuned away. In the flights of 2013 the raw model
+passes and the intercept correction, which fixes the bias, pushes the ECE to 0.0322 and fails. And in 2023 the raw
+model, trained on August and September, overestimates a quarter with fewer delays (bias $+0.0633$) and fails; the
+correction brings it to $+0.0025$ and passes. Step 1 reports, from the record, that the correction was not decisive in
+2023; in the rebuild it is. Which of the two holds depends on choices that the record does not fix, and that is
+exactly why a correction has to be tested in a vault that nobody saw, under a specification written before.
+
+**What could not be rebuilt.** The arrests of 2020 and 2021 in Toronto and the traffic stops of Rhode Island have no
+copy that can sit beside the book, and their numbers in Step 1 stay cited.
+
 **Exercises.**
 
 1. *(Concept)* Why does a canary that gives no gain with the honest clock prove little if nobody tests it with the
@@ -5179,6 +5245,9 @@ switched off, it is available in the 24,466 emissions and the gain is $+0.6521$.
   binary vaults show detectable miscalibration, one only borderline; detectable is not yet relevant.
 - Changing the metric of fairness changes who pays for the error; and none of the affected groups was heard in the seven
   decisions that involve people.
+- Rebuilt from public data under a declared specification, six streams land on the record where the specification is
+  the same (coverage 0.886, ECE 0.0121 and 0.0354) and disagree where it is not (the value at risk fails, and the 2023
+  correction becomes decisive). Both readings stay.
 
 ## Chapter 21. The seven lessons and the final project
 
@@ -5607,7 +5676,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 16) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
+| `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 421 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -5956,6 +6026,18 @@ registry; no instrument changed.
 | A | Order of the dictionary | the order of the Portuguese original | alphabetical in English | the table says it is alphabetical |
 | D | The last references to check | Cover and Thomas, Platt 1999, and the D.2 line on scoring rules | all checked; Platt against a secondary source | 77 of 77 lines checked |
 
+### The real streams, 2026-10-19
+
+Not a rectification of the text but a new instrument: six streams of Chapter 20 rebuilt on public data, with the
+record and the rebuild side by side in the section of Chapter 20 below. The text of Chapter 20 gained the recipe, the
+output block and its reading; the Preface's list of what the reader cannot run lost them. Two sentences changed:
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 20 | The 2023 correction | "was not put to the test" | the same, and in the rebuild the correction is decisive; both readings stay | the rebuild disagrees with the record |
+| C | Test count | 415 | 421 | the six tests of the rebuilt streams |
+| Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
+
 ### Numbers cited without an instrument in this book
 
 The preface promises that every number comes from an instrument the reader can run or from a cited source. These do
@@ -5983,7 +6065,7 @@ numbers of the six that could not be reconstructed, keeping the argument.
 | 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
 | 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
-| 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
+| 20 | Every stream, vault and fairness audit | research record | six streams rebuilt on public data by `labs --streams` (Chapter 20, Step 3), with the divergences in the section of Chapter 20 below; the arrests of 2020–2021 and the traffic stops stay cited |
 | 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
 
 ### Chapter 4
@@ -6226,6 +6308,24 @@ and the row artefact planted by the instrument — what the instrument measures 
 the 40 real genes, which continue without an instrument.
 
 ### Chapter 20
+
+**The streams rebuilt on 2026-10-19.** `labs --streams` redoes six streams of the record on public data under a
+specification written in the chapter before the run. Side by side, record and rebuild:
+
+| Stream | Record | Rebuild | Reading |
+| --- | --- | --- | --- |
+| Energy, 2014 | coverage 0.887, passes | coverage 0.886 (17 424 half hours), passes | the same |
+| Bank, Sep–Oct 2003 | coverage 0.900 (6 084), passes | coverage 0.884 (6 422 five-minute slots), passes | the same verdict; the vault counts 38 days here |
+| Market, 2000–2023 | violations 0.98%, Kupiec p = 0.89, Christoffersen p = 0.02 | violations 1.53%, Kupiec p = 0.00, Christoffersen p = 0.02 | **diverges**: the record does not state its method; historical simulation over 250 sessions fails |
+| Flights, Q4 2013 | bias +2.7 points, ECE 0.027, fails | raw: CITL −0.0171, ECE 0.0260, passes; corrected: ECE 0.0322, fails | the sign of the bias agrees (observed above forecast); the verdict depends on the model |
+| Flights, Q4 2023 | corrected ECE 0.008, raw ECE 0.014, both pass | raw: CITL +0.0633, ECE 0.0646, fails; corrected: ECE 0.0177, passes | **diverges**: in the rebuild the correction is decisive |
+| Cyclones, 2015–2022 | bias 0.001, ECE 0.012 (5 766), passes | CITL +0.0002, ECE 0.0121 (3 813), passes | the same; the rebuild keeps only observations with another one 24 hours later |
+| Toronto, 2001–2002 | bias 0.016, ECE 0.036 (1 488), fails | CITL +0.0165, ECE 0.0354 (1 488), fails | the same |
+| Toronto, marker by colour | FPR 0.16–0.23 Black against 0.06–0.11 White | 0.155 and 0.164 against 0.070 and 0.077 | the same pattern |
+| Canary | 0.000 honest; +0.55 to +0.97 switched off | 0 emissions, +0.0000 honest; +0.91 to +0.97 switched off | the same |
+
+The reimplementation from the text (`scripts/reimplementation/ch20_streams.py`) redoes Toronto, the market and the
+energy interval from the recipe alone and agrees with every number of the rebuild.
 
 **The Platt balance.** The record of the live replay says that, in the flights stream of 2023, the
 intercept of the correction varied from $-0.52$ to $+0.43$ along the year. The diary of 2023 shows that this is the

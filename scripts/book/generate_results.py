@@ -135,6 +135,7 @@ def main() -> int:
         "| BTlabs --s2BT | System 2: hypergraph search, board belief state, Metropolis inference, and R-axis |\n"
         "| BTlabs --pretestBT | Calibration pretest null for the SHELF panel |\n"
         "| BTlabs --geneticsBT | Interventional validation resolution: what the second cell line changes |\n"
+        "| BTlabs --streamsBT | The real streams of Chapter 20, rebuilt on public data with a declared specification |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
@@ -185,6 +186,12 @@ def main() -> int:
         "Interventional validation resolution (yeast genetics)",
         [str(BIN), "--genetics"],
         "Replicate design: 40 mutants, comparing single-line versus two-line validation.",
+    ))
+    parts.append(section_block(
+        "The real streams of Chapter 20, rebuilt",
+        [str(BIN), "--streams"],
+        "Energy, bank, market, flights of 2013 and 2023, cyclones and Toronto 1997-2002, from public data with a "
+        "specification declared before the run; the canary under both clocks; the fairness audit by colour.",
     ))
     parts.append(section_block(
         "H3 chain re-executed from the repository tree",
