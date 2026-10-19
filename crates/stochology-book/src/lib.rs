@@ -32,6 +32,7 @@ pub mod escuta;
 pub mod fila;
 pub mod genetica;
 pub mod mc_error;
+pub mod passk;
 pub mod ponte;
 pub mod propagate;
 pub mod segunda;
