@@ -167,7 +167,7 @@ pass into nine without dropping a test: `-audit` and `-schema` became modules of
 | `crates/stochology-horizons` | live | the four horizons as modules: `h0` (Erlang B and C, minimum staffing, Poisson null, mandatory summary), `h1` (leverage drag, selection bias, Hill tail estimator), `h2` (causal invariance rounds, counter $K$ and Bonferroni, permutation null, fine-grained genetics resolution), and `h3` (strict clock with canary, ECE, Brier skill score, performative loop) |
 | `crates/stochology-methods` | live | the three field methods as modules: `icp` (invariant causal prediction: environments, ordinary least squares, Kolmogorov-Smirnov, surviving intersection), `drift` (two-sided CUSUM with measured stationary null and Kullback-Leibler divergence), and `fairness` (demographic parity, equal opportunity, subgroup calibration) |
 | `crates/stochology-wasm` | live | WebAssembly playground: minimal C ABI bridge |
-| `crates/stochology-wave` | live | wave engine (binary `wave`): local phasor superposition, magnetic Laplacian with Cayley propagator, Kuramoto-Oja plasticity, and spike bus with STDP, with six dedicated gates; since 2026-10-19 also `channel` (the STDP rule over N channels on the data's clock) and `cycle` (phase as the hour of a profile's peak), tested on data by `labs --wave` (point 23): the arrow not supported, the conflict not testable under its encoding |
+| `crates/stochology-wave` | live | wave engine (binary `wave`): local phasor superposition, magnetic Laplacian with Cayley propagator, Kuramoto-Oja plasticity, and spike bus with STDP, with six dedicated gates; since 2026-10-19 also `channel` (the STDP rule over N channels on the data's clock) and `cycle` (phase as the hour of a profile's peak), tested on data by `labs --wave` (point 23): the arrow not supported, the conflict not testable under its encoding; and by `labs --wave2` (declaration 2, K = 2): the arrow still not supported, the conflict refuted in the opposite direction |
 
 **Disambiguation of gates `G1`–`G7` (`gates`) and `G1`–`G6` (`wave`).** The two binaries use the `G` prefix in
 distinct scopes:
@@ -527,7 +527,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 494 lines, 89 541 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 495 lines, 89 580 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |

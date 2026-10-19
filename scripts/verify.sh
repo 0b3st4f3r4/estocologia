@@ -48,8 +48,8 @@ if ./target/release/labs --unknown-flag; then
 fi
 
 if [ "$fast" -eq 0 ]; then
-  step "all nineteen labs instruments required by §V"
-  for front in all bank resolution s1 s2 queue genetics streams eprocess wave h3 second-opinion bridge listening schema jev \
+  step "all twenty labs instruments required by §V"
+  for front in all bank resolution s1 s2 queue genetics streams eprocess wave wave2 h3 second-opinion bridge listening schema jev \
                rehearsal-shelf rehearsal-listening rehearsal-bridge; do
     printf -- "-- labs --%s\n" "$front"
     ./target/release/labs "--$front" > /dev/null

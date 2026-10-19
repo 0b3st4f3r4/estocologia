@@ -138,6 +138,7 @@ def main() -> int:
         "| BTlabs --streamsBT | The real streams of Chapter 20, rebuilt on public data with a declared specification |\n"
         "| BTlabs --eprocessBT | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |\n"
         "| BTlabs --waveBT | The wave engine against data: the STDP arrow in Victoria and the phasor conflict in the New York flights |\n"
+        "| BTlabs --wave2BT | The same two tests under declaration 2 (K = 2): a day of horizon, and the phase of the deviation from the common daily profile |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
@@ -207,6 +208,12 @@ def main() -> int:
         "Synthetic controls, then T1 (the STDP arrow temperature -> demand over the weeks of Victoria) and T2 (the "
         "phasor conflict, phase as the hour of peak risk, in the New York flights of 2013 and 2023), with the "
         "verdicts by the rules sealed in empirical/p23-onda/DECLARACAO.md before the first run.",
+    ))
+    parts.append(section_block(
+        "The wave engine against data, declaration 2 (K = 2)",
+        [str(BIN), "--wave2"],
+        "T1 with a day of horizon and spikes at 1.0; T2 with the phase of each level's deviation from the common "
+        "daily profile; controls first, then the verdicts by the rules sealed in empirical/p23-onda/DECLARACAO_2.md.",
     ))
     parts.append(section_block(
         "H3 chain re-executed from the repository tree",

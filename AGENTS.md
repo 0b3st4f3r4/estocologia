@@ -112,6 +112,7 @@ cargo run --release --bin labs -- --genetics    # fine resolution in genetics
 cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
 cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
 cargo run --release --bin labs -- --wave        # the wave engine against data (point 23): T1 the arrow, T2 the conflict
+cargo run --release --bin labs -- --wave2       # the same two tests under declaration 2 of point 23 (K = 2)
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
@@ -124,7 +125,8 @@ cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 
 The wave engine enters the first block because it is an instrument, not a chapter. Its first published numbers
 come from `labs --wave` (point 23, declared and sealed before the first run on 2026-10-19), which tests two of its
 three layers on catalogued data: the STDP arrow was not supported, and the phasor conflict never fired on real
-flights, so it was not testable under its encoding. Its two divergences from the draft that
+flights, so it was not testable under its encoding. Under declaration 2 (`labs --wave2`, K = 2) the arrow is still not
+supported, and the conflict, once it fires, points away from where deliberation pays: refuted. Its two divergences from the draft that
 originated it are declared in `crates/stochology-wave/src/lib.rs` — the frustration `<Psi, L Psi>` cannot serve as a
 conflict trigger because in symmetric antiphase it equals zero precisely when conflict exists, and the
 plasticity gate enforces target resonance gain rather than monotonic frustration decay.
