@@ -54,6 +54,11 @@ Three activities, in increasing order of cost. None of them is run by the progra
 
 ## What is not claimed
 
+None of the three activities has been run by people outside the program. Every entry below was made with an AI
+assistant and stands as an entry in the errata, not as the audit. Agreement between a reimplementation and the
+instrument is weak evidence wherever the reimplementer could have absorbed the author's choices from the text;
+only a divergence found from the text alone is strong evidence.
+
 ## The first reimplementation (2026-10-19)
 
 Activity 2 was run once, on the laboratories that carry decisions in Chapters 10 and 11, and its limits are declared
@@ -73,7 +78,7 @@ enough to find them.
 ## The reimplementation of the chapters (2026-10-19)
 
 The same day the reimplementation was extended to twenty chapters, in the priority of activity 2: the chapters that
-carry decisions (16 and 17), then the methods (8, 9 and 19), then the rest. 421 quantities; 402 agree, 19 are open,
+carry decisions (12 and 13), then the methods (8, 9 and 19), then the rest. 421 quantities; 402 agree, 19 are open,
 none diverges after the corrections. The Rust of a chapter was read only after a divergence, to locate it. The run
 found six wrong values in the instruments (the R horizon's day, the mean of W over a uniform demand, the EVPI of
 Chapter 15, the reinforcement of the health post, the bank's halves null, and a rounding) and one gap in the text

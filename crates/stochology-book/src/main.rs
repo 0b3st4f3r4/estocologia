@@ -28,6 +28,7 @@ fn main() {
     let mut queue_flag = false;
     let mut genetics_flag = false;
     let mut streams_flag = false;
+    let mut eprocess_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -87,6 +88,7 @@ fn main() {
             "--queue" => queue_flag = true,
             "--genetics" => genetics_flag = true,
             "--streams" => streams_flag = true,
+            "--eprocess" => eprocess_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -148,6 +150,10 @@ fn main() {
     }
     if streams_flag {
         stochology_book::streams::run();
+        return;
+    }
+    if eprocess_flag {
+        stochology_book::eprocess::run();
         return;
     }
     if listening_flag {

@@ -46,6 +46,13 @@ stops of Chapter 20, the propensity fit and the Kelly interval of
 Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 
+**Who wrote what.** The theory, the architecture, the research and the first text are the author's. From 2026-10-18
+on, an AI assistant read the book critically, reimplemented its laboratories from the text, rebuilt the real streams
+of Chapter 20 and wrote the corrections those readings found; Appendix E lists each change with both values, and the
+dated records of the repository say which pass made it. Those readings are outside the author's own audit and inside
+the author's tools, and no person outside the programme has checked them yet. Chapter 21 says what an audit from
+outside would need; until it exists, read every correction here as one more claim to check.
+
 **The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
 world, the model and the agent, not an error of arithmetic) has had one direct test, and it tied at the ceiling
 (Chapter 21). Until a fair test, with cases chosen and judged by people outside the work, is run, the thesis is a

@@ -385,11 +385,13 @@ prediction. *Laboratory:* true cause and false alarm across 3 environments, with
 is which.
 
 **Chapter 10. Time and ruin: Peters's coin, Kelly, and wild tails.** $+50\%$ versus $-40\%$: $+5\%$
-average per round, certain ruin over 100 rounds ($1.5 \times 0.6 = 0.90$). Ensemble average versus time
+average per round, and a typical trajectory that decays ($1.5 \times 0.6 = 0.90$; by 1,000 rounds none of 10,000
+all-in bettors is above the start). Ensemble average versus time
 average (non-ergodicity), volatility drag $\mu - \tfrac{1}{2}\sigma^2$ without advanced calculus, the
 Kelly criterion with Laplace smoothing, and the insurance seller who goes 5 years without an accident.
-*Laboratory:* 10,000 catastrophe insurers — 35.8% go bankrupt using the simple historical average, 0%
-using Laplace + Kelly.
+*Laboratory:* 10,000 insurance sellers — with the raw frequency and full Kelly, 1.9% are ruined within 1,000
+weeks; with Laplace, none (the earlier 35.8% of ruin belonged to a version with a different leverage ceiling; both
+values are in Appendix E).
 
 **Chapter 11. The price of error, Goodhart, and who pays the bill.** When to pay for insurance or a
 dike; the cost/loss rule ($p > C/L$) and EVPI; van Dantzig's Dutch dikes (Wald, Savage, precaution);
@@ -427,11 +429,11 @@ past invalidates the report — exactly what `LivroRazao::verificar()` performs.
 ### 9.7 Part V — The machine in the real world ($H_0$ to $H_3$ and stocktaking)
 
 **Chapter 12. $H_0$: the health clinic and the 2.65 million bank calls.** Clinic with 12 consultations/hour
-and average arrival of 8: a constant day yields a 9.3-minute wait; a day alternating between 5 and 11
-yields 20.7 minutes and triples the share waiting over half an hour (from 8 to 25 in 100). The split-half
+and average arrival of 8: a constant day yields a 9.1-minute wait; a day alternating between 5 and 11
+yields 19.3 minutes and triples the share waiting over half an hour (from 8 to 24 in 100). The split-half
 test shows that the independent unit is the **day** ($\pm 0.51$ min), not the patient ($\pm 0.07$ min).
 In the real case, 2.65 million calls amount to **81 vault days**: the Erlang C formula promises 82% fast
-service, delivers 57%, and fails on 26 out of every 100 days; adding $+7\%$ agents only during peak hours
+service, delivers 57%, and fails on about 31 out of every 100 days; adding $+7\%$ agents only during peak hours
 cuts failures to fewer than 4 in 100 days. *Laboratory:* Lindley recursion with seed `1909`.
 
 **Chapter 13. $H_1$, part 1: the illusion of $3\times$ stock leverage and the job training program.**
@@ -525,7 +527,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 371 lines, 87 807 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 493 lines, 89 505 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |

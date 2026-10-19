@@ -10,6 +10,11 @@ quantitative evidence authorises one to conclude, and what it forbids.
 
 [Read the book](00-opening.md)
 
+The book is a working text, not yet a textbook: its central thesis has had one direct test, which tied, and its audit
+by people outside the programme is still open. It reads as two books in one. Parts I to IV are the method and three
+real cases; Part V is a particular machine built to audit that method, with its record on real data, failures
+included. The first can be read without the second.
+
 ## 1. The roots
 
 Stochology does not oppose the tradition. It joins traditions that grew up separately and uses the tools of each.
@@ -41,9 +46,10 @@ the World.
 The **bridge thesis** says that a fallacy is almost never an arithmetic error but a misalignment between layers. The
 prosecutor's fallacy is the classic case: the chance of the evidence given innocence, a property of the Model, is
 swapped for the chance of innocence given the evidence, the answer about the World. The thesis says where to look
-first, and it is a thesis, not a theorem. Today it stands **unsupported**: the pilot tied at the ceiling (both groups
-found every planted defect), and a tie at the ceiling decides nothing. The fair test needs harder cases chosen by
-someone outside, human analysts and a blind judge.
+first, and it is a working hypothesis, not a theorem. Its one direct test, a blind pilot, tied at the ceiling (both
+groups found every planted defect), and a tie at the ceiling decides nothing. The fair test needs harder cases
+chosen by someone outside, human analysts and a blind judge; until it is run, the thesis organises the book without
+having earned it.
 
 ### Three kinds of uncertainty, independent of the layer
 
@@ -98,12 +104,15 @@ governance, fairness, domain and decision** (A1 to A8). A claim is approved only
 safeguard declared and anchored on the card; the panel is a checklist, and the attacks that run live in the gates. An orchestrator drives the six-stage cycle: translation and scope, ingestion and grain, simulation and null
 model, projection onto the five lenses, panel and gate, decision and closure.
 
-Knowledge lives in a typed hypergraph, and five **lenses** cross every problem as questions: Fluxonomy (is
-information conserved?), Chrononomy (does the mean across many coincide with the mean over time of a single one?),
-Scalonomy (is the tail so heavy that the mean does not exist?), Morphonomy (does the structure survive when the
-environment changes?) and Crisonomy (is the information worth its cost, and are the forecasts calibrated?).
-Non-ergodicity is the answer "no" to the question of Chrononomy; in most additive processes the answer is "yes", and
-the mean across many is legitimate.
+Knowledge lives in a typed hypergraph, and five **lenses** cross every problem as questions, each the question of a
+field with its own name: information (is it conserved? information theory), time (does the mean across many coincide
+with the mean over time of a single one? ergodicity and growth-optimal betting), tail (is it so heavy that the mean
+does not exist? extreme-value theory), invariance (does the structure survive when the environment changes? causal
+identification) and decision (is the information worth its cost, and are the forecasts calibrated? decision theory
+and proper scoring rules). The code labels them Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy; the
+labels add a habit of asking the five questions in order, and no mathematics of their own. Non-ergodicity is the
+answer "no" to the question of time; in most additive processes the answer is "yes", and the mean across many is
+legitimate.
 
 **System 1** does fast triage, with a funnel of filters. **System 2** deliberates: tree search, a belief state,
 Metropolis inference and deliberative stress of the panel.
@@ -112,27 +121,38 @@ When a claim fails a gate, the verdict is **"unsupported under this test"**, nev
 
 ### The apparatus
 
-All of this runs in Rust: nine crates, 395 tests, seven gates able to fail a claim and 21 laboratories with a fixed
-seed, one per chapter of the book. Every output block quoted in the book is checked against the instrument that
-produces it.
+All of this runs in Rust: nine crates, 427 tests, seven gates able to fail a claim, 21 laboratories with a fixed seed,
+one per chapter of the book, and instruments that read ten public datasets. Every output block quoted in the book is
+checked against the instrument that produces it, and a reimplementation in Python redoes 487 of the book's
+quantities from the text alone. What the gates check is form, presence and reproducibility, not correctness: in
+October 2026 readings from outside the authors' audit found errors of formula and code that every gate had passed,
+and the book keeps each of them, with both values, in its Appendix E.
 
 ## 3. What the real data taught
 
-- **The health post and the bank.** The same mean demand gives 9.3 or 20.7 minutes of wait, because waiting is
-  convex in demand. In 2.65 million real calls, the industry's standard schedule fails on 26 of every 100 days, and
-  the right margin is computed on the day, not on the call.
-- **The leveraged market.** Leverage of 3 times promises 0.20 a year and delivers 0.06: time charges the drag.
+- **The health post and the bank.** The same mean demand gives 9.1 or 19.3 minutes of wait, because waiting is
+  convex in demand. In 2.65 million real calls, the industry's standard schedule fails on about 31 of every 100
+  days, and the right margin is computed on the day, not on the call.
+- **The leveraged market.** Leverage of 3 times promises 0.20 a year and delivers 0.06: time charges the drag. The
+  claim "always wins" falls; "leveraging never pays" does not.
 - **The Danish fires.** With a heavy tail, a single month decides the fate of the insurer, and in the vault no model
   beat the simple historical frequency. Failing one's own model is a result.
 - **The invariant causes.** The gate asked for invariant causes in three areas and passed only in the sixth round,
-  with the five failures counted in $K$. With dependent rows corrected, education left and the gate stood on physics,
-  pharmacology and genetics. The effect transports better than the list of causes.
-- **The live clock.** The 2023 flights and the Rhode Island traffic stops passed in new vaults; the 2020–2021 arrests
-  failed. The performative loop declared at 0.6 is four times the measured one, 0.145.
+  with the five failures counted in $K$. With dependent rows corrected, education left, and the gate stands on three
+  areas only by counting a marginal replica in genetics; two of the three recovered causes that were known before the
+  test. Under the first declared version of each choice, the gate does not pass. The effect transports better than
+  the list of causes.
+- **The live clock.** Six streams rebuilt on public data beside the book: the energy and bank intervals pass, the
+  market fails its value at risk, the 2013 flights pass raw and fail with the level correction, the 2023 flights fail
+  raw and pass with it, the cyclones pass and the Toronto prisons of 1997–2002 fail calibration while beating the
+  climatology, with a marker blind to colour that flags released Black detainees twice as often as White ones. From
+  the research record, not rebuilt: the 2020–2021 arrests failed by slope and the Rhode Island stops passed with
+  Platt. The performative loop declared at 0.6 was not supported by the one real measurement, 0.145, of a related
+  quantity.
 
 ## 4. The open frontiers
 
-The discipline declares what code alone cannot settle. Four fronts remain open, and they are not of the same nature:
+The discipline declares what code alone cannot settle. The open fronts are not of the same nature:
 
 - **Expert elicitation (SHELF)** with a full human panel.
 - **The voice of those who pay for the error.** In the seven decisions that involve people, no affected group has
@@ -141,12 +161,16 @@ The discipline declares what code alone cannot settle. Four fronts remain open, 
   rule, not a theorem.
 - **The bridge thesis at scale**, with 12 cases chosen from outside, human analysts and a blind judge (0 of 12,
   window until 2027-01-14). If the window closes without the fair test, the thesis stays permanently unsupported.
+- **Can the layers fail?** Whether an error is a misalignment between layers is a typing only if coders from outside
+  the programme agree on it; none has coded yet.
+- **An audit from outside.** Every reading from outside the authors' own audit so far was made with an AI assistant;
+  the public errata, the blind reimplementation and the red team wait for people who are not the authors.
 - **The bridge to language models.** The local runner exists; what is missing is a frozen file of open weights
   with its hash declared before execution. Saying that the language model plays the role of System 1 would be a
   hypothesis not yet tested.
 
-The first three depend on people outside the programme: consent, listening and blind judgement, which no line of
-code replaces. The fourth depends on a file and an operator.
+All but the last depend on people outside the programme: consent, listening, blind judgement and independent
+coding, which no line of code replaces. The last depends on a file and an operator.
 
 ## 5. Where the discipline applies
 
