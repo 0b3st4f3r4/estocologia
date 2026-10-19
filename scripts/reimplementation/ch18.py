@@ -20,7 +20,7 @@ import random
 import statistics as st
 from pathlib import Path
 
-from common import check, open_choice
+from common import check
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 with open(ROOT / "data" / "danish_fire.csv", newline="") as fh:
@@ -103,6 +103,41 @@ check("18", "vault rate 1/12: bits of the clean window", 4.48, bits_vault, 0.01)
 check("18", "vault rate 1/12: likelihood ratio", 22.3, ratio_vault, 0.05)
 check("18", "insurance seller: weeks of severe test, in years", 14, math.log(0.05) / math.log(1 - 0.004) / 52, 0.5)
 
-open_choice("18", "trend of the claim frequency per year (%)", 4.6, "the text does not give the model of the trend")
-open_choice("18", "Brier skill of the model in the vault", -0.015, "the text does not give the forecasters' recipe")
-open_choice("18", "insurance seller: bits of 'I never lost'", 1.3, "the text does not give the negligible weekly rate")
+# ------------------------------------------------------------------ the recipes of Step 2 (since 2026-10-19)
+from common import beta_from_quantiles  # noqa: E402
+
+# the forecasters of the vault: one monthly chance each, 24 months, 2 hit; climatology 5/108
+vault_hits = [1, 1] + [0] * 22
+brier = lambda p: st.mean((p - y) ** 2 for y in vault_hits)  # noqa: E731
+clim = brier(5 / 108)
+a_prior, b_prior = beta_from_quantiles({0.25: 0.011, 0.5: (0.006 + 0.020 + 0.030) / 3, 0.75: (0.010 + 0.030 + 0.045) / 3})
+model = (a_prior + 5) / (a_prior + b_prior + 108)
+# the research code took the posterior mean from Metropolis draws; 0.002 covers its sampling error
+for name, p, book, tol in [("model (Beta posterior mean)", model, -0.015, 0.002), ("POT", p_pot, -0.003, 0.001),
+                           ("Laplace", 1 / 38, -0.024, 0.001), ("claim, held at 1%", 0.01, -0.052, 0.001)]:
+    check("18", f"skill in the vault: {name}", book, 1 - brier(p) / clim, tol)
+
+# the trend: Poisson regression of the monthly count of all claims in the training set on time in years
+months_train = [f"{y}-{m:02d}" for y in range(1980, 1989) for m in range(1, 13)]
+count = collections.Counter(d[:7] for d, _ in claims if d < "1989")
+ys = [count.get(m, 0) for m in months_train]
+ts = [i / 12 for i in range(len(ys))]
+b0, b1 = math.log(st.mean(ys)), 0.0
+for _ in range(100):
+    mu = [math.exp(b0 + b1 * t_) for t_ in ts]
+    g0, g1 = sum(y - m for y, m in zip(ys, mu)), sum((y - m) * t_ for y, m, t_ in zip(ys, mu, ts))
+    h00, h01, h11 = sum(mu), sum(m * t_ for m, t_ in zip(mu, ts)), sum(m * t_ * t_ for m, t_ in zip(mu, ts))
+    det = h00 * h11 - h01 * h01
+    d0, d1 = (h11 * g0 - h01 * g1) / det, (h00 * g1 - h01 * g0) / det
+    b0, b1 = b0 + d0, b1 + d1
+    if abs(d0) + abs(d1) < 1e-12:
+        break
+loglik = lambda mus: sum(y * math.log(m) - m for y, m in zip(ys, mus))  # noqa: E731
+lr = 2 * (loglik([math.exp(b0 + b1 * t_) for t_ in ts]) - loglik([st.mean(ys)] * len(ys)))
+check("18", "trend of the claim frequency per year (%)", 4.6, 100 * (math.exp(b1) - 1), 0.05)
+check("18", "trend: p-value of the likelihood ratio (x 1e-6)", 2, math.erfc(math.sqrt(lr / 2)) * 1e6, 0.6)
+
+# "I never lost": 250 clean weeks, negligible world 0.0004 per week against 0.004
+ratio = (1 - 0.0004) ** 250 / (1 - 0.004) ** 250
+check("18", "insurance seller: likelihood ratio of 'I never lost'", 2.46, ratio, 0.01)
+check("18", "insurance seller: bits of 'I never lost'", 1.3, math.log2(ratio), 0.05)

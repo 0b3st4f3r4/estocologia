@@ -196,6 +196,11 @@ impl Ledger {
 }
 
 /// Merkle root over a list of hex hashes.
+///
+/// Declared limit: a level with an odd count repeats its last hash, so a list and the same list with
+/// its last element repeated share a root. The root proves the content of a known list, not its length;
+/// the gates record the count of cards beside the root. Changing the rule would change every root
+/// already published, so it is declared rather than changed.
 pub fn merkle_root(hashes: &[String]) -> String {
     if hashes.is_empty() {
         return sha256_hex(b"");
@@ -261,5 +266,20 @@ mod tests {
         let mut others = hashes.clone();
         others[4] = sha256_hex(b"swapped");
         assert_ne!(merkle_root(&hashes), merkle_root(&others));
+    }
+
+    #[test]
+    fn repeating_the_last_hash_keeps_the_root_a_declared_limit() {
+        let three: Vec<String> = ["a", "b", "c"]
+            .iter()
+            .map(|s| sha256_hex(s.as_bytes()))
+            .collect();
+        let mut four = three.clone();
+        four.push(three[2].clone());
+        assert_eq!(merkle_root(&three), merkle_root(&four));
+        // Changing any element still changes the root.
+        let mut changed = three.clone();
+        changed[1] = sha256_hex(b"b!");
+        assert_ne!(merkle_root(&three), merkle_root(&changed));
     }
 }

@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 413 tests passed, none failed
+cargo test --workspace                                  # 415 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **5 969 lines**, **79 884 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 075 lines**, **81 961 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 969 lines and 79 884 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 6 075 lines and 81 961 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -278,3 +278,20 @@ dated record is `history/estado-2026-10-19T0752Z.md`.
 | R horizon | 5 or 11: loss 22.99 min; 7 or 9: 2.50; 200 days | 25.54 and 2.77; 4,000 days; the decision of System 2 (refine to the day) unchanged |
 | `scripts/book/check_book.py` | refuses 32 retired values | refuses 37 |
 | assembled book, line count | 5 944 (with 79 179 words) | 5 969 (with 79 884 words) |
+
+## The recipes of the open quantities (2026-10-19, later the same day)
+
+The recipes of 16 of the 19 open quantities were written into the chapters, beside the run of each laboratory, and the
+reimplementation redoes them from those paragraphs: 462 quantities, 459 agree, none diverges, 3 open (Chapter 17's
+Kelly interval, skill in the vault and false negative rate of Hispanics, cited from the research record). The writing
+found one wrong value (the exclusion freedom of the garden of paths compared mixed groups: 21.5% and 47.0% became
+20.3% and 42.3%, the Mayo severity of the garden 0.53 became 0.58), one wrong statement (Chapter 17 read the observed
++9.0 as the result of the inert treatment), and a known weakness of the Merkle root, declared with a test. The dated
+record is `history/estado-2026-10-19T0845Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| reimplementation | 421 quantities: 402 agree, 19 open | 462 quantities: 459 agree, 3 open |
+| `cargo test --workspace` | 413 | **415**: the bounds of the garden of paths, the declared limit of the Merkle root |
+| `scripts/book/check_book.py` | refuses 37 retired values | refuses 41 |
+| assembled book, line count | 5 969 (with 79 884 words) | 6 075 (with 81 961 words) |

@@ -15,8 +15,9 @@ Choices the text leaves implicit, recovered by trying the readings it allows and
   fractions differ in the third decimal between the two conventions, which is the tolerance used.
 - The 95% intervals of Step 2 are Wald intervals for a difference of proportions.
 
-Quantities whose recipe the text does not give (the propensity fit, the posterior interval of Kelly, the skill in the
-vault, the fairness rates and k-anonymity) are recorded as open.
+The propensity fit follows the recipe that Step 2 now states (since 2026-10-19). The posterior interval of Kelly,
+the skill in the vault and the fairness rates stay open: the chapter cites them from the research record, with the
+commit where their code lives.
 """
 
 from __future__ import annotations
@@ -181,10 +182,81 @@ for what, (est, lo, hi), book in [
     check("17", f"{what}: 95% interval, lower (points)", book[1], 100 * lo, 0.1)
     check("17", f"{what}: 95% interval, upper (points)", book[2], 100 * hi, 0.1)
 
-missing = "the text names the method but not its specification (covariates, model, prior or split)"
-open_choice("17", "propensity fit, 1978 employment effect (points)", 9.6, missing)
-open_choice("17", "propensity fit, 1975 placebo (points)", -12.3, missing)
-open_choice("17", "propensity fit, effective controls", 103, missing)
+# ------------------------------------------------------------------ the propensity fit, from the recipe of Step 2
+from common import beta_from_quantiles, logistic_irls, normal_cdf, sigmoid  # noqa: E402
+
+
+def covariates(r: dict, placebo: bool = False) -> list[float]:
+    a, e = float(r["age"]), float(r["educ"])
+    r74, r75 = float(r["re74"]) / 1000, float(r["re75"]) / 1000
+    x = [1.0, (a - 30) / 10, ((a - 30) / 10) ** 2, (e - 11) / 3, ((e - 11) / 3) ** 2, float(r["black"]), float(r["hisp"]),
+         float(r["marr"]), float(r["nodegree"]), r74 / 10, 1.0 if r74 == 0 else 0.0, (r74 / 10) ** 2]
+    if not placebo:
+        x += [r75 / 10, 1.0 if r75 == 0 else 0.0, (r75 / 10) ** 2]
+    return x
+
+
+sample = treated + cps
+t_obs = [float(r["treat"]) for r in sample]
+X = [covariates(r) for r in sample]
+beta = logistic_irls(X, t_obs, ridge=1e-3)
+score = [sigmoid(sum(b * x for b, x in zip(beta, row))) for row in X]
+w = [e / (1 - e) for e in score]
+ctrl = [i for i, ti in enumerate(t_obs) if ti == 0]
+trt = [i for i, ti in enumerate(t_obs) if ti == 1]
+ess = sum(w[i] for i in ctrl) ** 2 / sum(w[i] ** 2 for i in ctrl)
+check("17", "propensity fit: effective controls (Kish)", 103, ess, 0.6)
+check("17", "propensity fit: CPS below the smallest treated score (%)", 72,
+      100 * sum(score[i] < min(score[j] for j in trt) for i in ctrl) / len(ctrl), 0.6)
+y78 = [1.0 if float(r["re78"]) > 0 else 0.0 for r in sample]
+weighted = lambda y, idx: sum(w[i] * y[i] for i in idx) / sum(w[i] for i in idx)  # noqa: E731
+att_ipw = st.mean(y78[i] for i in trt) - weighted(y78, ctrl)
+check("17", "propensity fit: weighted point estimate (points)", 9.0, 100 * att_ipw, 0.06)
+
+# the four-cell posterior, standardised to the treated's racial composition (156 of 185 black)
+prior_a, prior_b = beta_from_quantiles({0.25: 0.43333, 0.5: 0.53333, 0.75: 0.63333})
+cells = {}
+for arm in (0, 1):
+    for black in (1, 0):
+        idx = [i for i in range(len(sample)) if t_obs[i] == arm and float(sample[i]["black"]) == black]
+        if arm == 1:
+            k, n = sum(y78[i] for i in idx), len(idx)
+        else:
+            n = sum(w[i] for i in idx) ** 2 / sum(w[i] ** 2 for i in idx)
+            k = n * weighted(y78, idx)
+        a0, b0 = (prior_a, prior_b) if (arm, black) == (0, 1) else (1.0, 1.0)
+        cells[(arm, black)] = (k + a0, n - k + b0)
+rng_post = random.Random(1986)
+w_black = 156 / 185
+draws = sorted(w_black * (rng_post.betavariate(*cells[(1, 1)]) - rng_post.betavariate(*cells[(0, 1)]))
+               + (1 - w_black) * (rng_post.betavariate(*cells[(1, 0)]) - rng_post.betavariate(*cells[(0, 0)]))
+               for _ in range(40000))
+check("17", "propensity fit: posterior mean of the effect (points)", 9.6, 100 * st.mean(draws), 0.25, "simulated")
+check("17", "propensity fit: 95% interval, lower (points)", -0.6, 100 * draws[1000], 0.4, "simulated")
+check("17", "propensity fit: 95% interval, upper (points)", 20.8, 100 * draws[39000], 0.9, "simulated")
+
+# a treatment with no effect, run through the same weighting (normal approximation of its replicas)
+outcome_beta = logistic_irls([X[i] for i in ctrl], [y78[i] for i in ctrl], ridge=1e-3)
+p_null = [sigmoid(sum(b * x for b, x in zip(outcome_beta, row))) for row in X]
+null_mean = st.mean(p_null[i] for i in trt) - weighted(p_null, ctrl)
+w_ctrl = sum(w[i] for i in ctrl)
+null_sd = math.sqrt(sum(p_null[i] * (1 - p_null[i]) for i in trt) / len(trt) ** 2
+                    + sum(w[i] ** 2 * p_null[i] * (1 - p_null[i]) for i in ctrl) / w_ctrl ** 2)
+check("17", "inert treatment: centre of the band (points)", 0.9, 100 * null_mean, 0.1)
+check("17", "inert treatment: band, lower (points)", -10.3, 100 * (null_mean - 1.96 * null_sd), 0.5)
+check("17", "inert treatment: band, upper (points)", 11.9, 100 * (null_mean + 1.96 * null_sd), 0.5)
+check("17", "inert treatment: one-sided p of the observed", 0.08, 1 - normal_cdf((att_ipw - null_mean) / null_sd), 0.015)
+
+# the 1975 placebo: the score without the 1975 terms, employment in 1975 as the outcome
+Xp = [covariates(r, placebo=True) for r in sample]
+beta_p = logistic_irls(Xp, t_obs, ridge=1e-3)
+score_p = [sigmoid(sum(b * x for b, x in zip(beta_p, row))) for row in Xp]
+wp = [e / (1 - e) for e in score_p]
+y75 = [1.0 if float(r["re75"]) > 0 else 0.0 for r in sample]
+placebo = st.mean(y75[i] for i in trt) - sum(wp[i] * y75[i] for i in ctrl) / sum(wp[i] for i in ctrl)
+check("17", "propensity placebo, 1975 employment (points)", -12.3, 100 * placebo, 0.06)
+
+missing = "recipe longer than a paragraph; cited from the research record (commit 1bfec905)"
 open_choice("17", "posterior 90% interval of Kelly, upper end", 3.44, missing)
 open_choice("17", "skill of the model in the vault", 0.18, missing)
 open_choice("17", "false negative rate, Hispanics", 0.72, missing)

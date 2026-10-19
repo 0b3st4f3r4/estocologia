@@ -12,7 +12,7 @@ Chapter 5: one attendant at 12 per hour, 10-hour days that start empty, 4,000 da
 R horizon staffs each plan for a utilisation of 0.8, the coarse plan at the mean demand (capacity 10) and the fine
 plan at each day's own demand.
 
-Choice the text does not give: the distribution of the class of 100,000 grades (open).
+The class of 100,000 grades follows the mixture that Step 2 states since 2026-10-19.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ import math
 import random
 import statistics as st
 
-from common import check, open_choice
+from common import check
 
 # ------------------------------------------------------------------ Chapter 2
 for prior, b_post, b_swap in [(1e-2, 0.0001, 99.0), (1e-3, 0.0010, 998.0), (1e-6, 0.5000, 499999.7)]:
@@ -162,4 +162,8 @@ for low, high, b_agg, b_fine, b_loss, b_o_agg, b_o_fine in [(5.0, 11.0, 43.73, 1
     check("5", f"{label}: share above 30 min, aggregate", b_o_agg, o_agg, 0.02, "simulated")
     check("5", f"{label}: share above 30 min, fine", b_o_fine, o_fine, 0.02, "simulated")
 
-open_choice("5", "class of 100,000 students: share failing (%)", 45.1, "the text does not give the distribution of grades")
+# the class: 45% from N(4, 1) and 55% from N(8, 1) (Step 2, since 2026-10-19)
+from common import normal_cdf  # noqa: E402
+
+check("5", "class: mean grade", 6.21, 0.45 * 4 + 0.55 * 8, 0.02)
+check("5", "class: exact share below 6.0 (%)", 45.1, 100 * (0.45 * normal_cdf(2) + 0.55 * normal_cdf(-2)), 0.3)

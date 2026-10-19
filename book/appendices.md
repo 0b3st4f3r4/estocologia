@@ -148,8 +148,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 413 tests pass |
-| `python3 -I scripts/reimplementation/run.py` | That 421 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (402), or are marked open where the text does not give the recipe (19) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -378,6 +378,24 @@ instruments, and two statements in the text; each is corrected, with a test wher
 | 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
 | 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
+### Rectifications of the recipes, 2026-10-19
+
+Of the 19 quantities that the reimplementation left open, the text now states the recipe of 16, in a paragraph beside
+the run of each laboratory (Chapters 5, 7, 8, 12, 13, 14, 15, 17, 18 and 20), and the reimplementation redoes them from
+that paragraph: 462 quantities, 459 in agreement, none divergent and 3 open (the upper end of the Kelly interval, the
+skill of the model in the vault and the false negative rate of Hispanics in Chapter 17, whose recipes are longer than a
+paragraph and stay cited from the research record at commit `1bfec905`). Writing the recipes found one more value
+wrong in an instrument and one statement wrong in the text.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 7 | Garden of paths: Simmons' four freedoms, the large family, the Mayo severity of the garden | 21.5%, 47.0% and 0.53; PPV with the garden alpha 0.146 ($R = 1/10$) and 0.362 ($R = 1/3$) | 20.3%, 42.3% and 0.58; PPV 0.159 and 0.387 | the "exclusion of the extreme case" took the first $2m$ rows of the file, all of one group and part of the other, and split them at $m - 1$; it compared mixed groups. Now the first $m$ of each group, without the largest value of the treated. The direction (the garden multiplies the false positive) does not change |
+| 17 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
+| 17 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
+| 15 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
+| C | Test count | 413 | 415 | the bounds of the garden of paths and the declared limit of the Merkle root |
+| 8 | Brier of the overconfident forecaster | — | declared, not changed | the instrument's own seed spread (seeds 2022 to 2027) is 0.1706 to 0.1914; the printed 0.1712 is the low end, and the reimplementation compares within that spread |
+
 ### Chapter 4
 
 The earlier text (and the course outline) records 11% coverage
@@ -416,13 +434,13 @@ value was deleted.
 
 The earlier text records 73% of winners that "look
 better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
-$p = 0.04$ of the garden. The instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
-with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
+$p = 0.04$ of the garden. The instrument measures **79.5%**, **20.3%** with the four freedoms (and **42.3%**
+with the large family) and **0.58**. The numbers differ because the full protocol was not published: the
 old garden swept more combinations — two outcomes, two sexes, more covariates, more optional stopping
 points —, and every extra combination pushes the false positive up; in the garden of models, the
 size of the validation and the range of predictors per candidate change the result, and here the winner still
 fails on fresh data (error 1.191 against 1.000). What does not change is the direction: the pre-registered
-test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by nine. The
+test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by eight. The
 two values are recorded; none was deleted.
 
 ### Chapter 8

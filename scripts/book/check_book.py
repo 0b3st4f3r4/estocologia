@@ -156,6 +156,11 @@ RETIRED = [
     ("EVPI rises to 3.7000", "the EVPI is E[max] - max E"),
     ("halves null: per day = 0.0441", "the sd of the signed differences"),
     ("reinforcement in the surge   163683     2.5", "two nurses, not one at twice the pace"),
+    # Recipes of 2026-10-19 (Appendix E): the exclusion freedom and the inert treatment.
+    ("in 21.5% of them", "the exclusion freedom compared mixed groups"),
+    ("1 - false-positive rate = 0.53", "the exclusion freedom compared mixed groups"),
+    ("inert** treatment would have given +9.0", "+9.0 is the observed estimate; the inert one is centred near +0.9"),
+    ("10.292 dollars", "a thousands separator, as in Chapter 9"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")

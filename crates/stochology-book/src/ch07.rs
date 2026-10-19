@@ -356,10 +356,13 @@ fn garden_of_paths(seed: u64, replicas: usize) -> Paths {
                     max_i = n + i;
                 }
             }
-            let idx: Vec<usize> = (0..2 * m).filter(|i| *i != max_i).collect();
-            let yy: Vec<f64> = idx.iter().map(|i| y[*i]).collect();
-            let half = m - 1;
-            t_test(&yy[0..half], &yy[half..])
+            // The first m of each group, without the most extreme case of the treated group. Until
+            // 2026-10-19 this took the first 2m rows of the file (all of the first group and part of
+            // the second) and split them at m - 1, so the "exclusion" compared mixed groups and often
+            // excluded nobody; a reimplementation from the text found it.
+            let control: Vec<f64> = (0..m).map(|i| y[i]).collect();
+            let treated: Vec<f64> = (n..n + m).filter(|i| *i != max_i).map(|i| y[i]).collect();
+            t_test(&control, &treated)
         };
         if t_test(&dv1[0..30], &dv1[n..n + 30]) < 0.05 {
             pre += 1;
@@ -505,5 +508,17 @@ mod tests {
         let c = garden_of_paths(2026, 200);
         assert!(c.pre_registered < 10.0);
         assert!(c.large > c.small && c.small > c.pre_registered);
+    }
+
+    #[test]
+    fn the_garden_of_paths_without_any_effect_stays_inside_its_bounds() {
+        // Without effect, every freedom is a fair test on its own (about 5%); the garden can only add.
+        let c = garden_of_paths(7, 2_000);
+        assert!(
+            (3.5..7.5).contains(&c.pre_registered),
+            "pre-registered {}",
+            c.pre_registered
+        );
+        assert!(c.small > c.pre_registered && c.large > c.small);
     }
 }
