@@ -11,7 +11,9 @@ struct SplitMix64 {
 
 impl SplitMix64 {
     fn new(seed: u64) -> Self {
-        Self { state: seed }
+        Self {
+            state: stochology_core::rng::offset_seed(seed),
+        }
     }
     fn next(&mut self) -> u64 {
         stochology_core::rng::splitmix64_step(&mut self.state)

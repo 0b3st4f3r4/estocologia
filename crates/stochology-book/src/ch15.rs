@@ -330,7 +330,7 @@ struct Measure {
 /// residual in [-2, 2]. The marginal comparison mixes the regimes; the comparison
 /// within the regime isolates the effect.
 fn measure(seed: u64, regimes: &[Regime]) -> Measure {
-    let mut rng = seed;
+    let mut rng = stochology_core::rng::offset_seed(seed);
     let mut x: Vec<f64> = Vec::new();
     let mut y: Vec<f64> = Vec::new();
     let mut by_regime: Vec<f64> = Vec::new();
@@ -435,7 +435,7 @@ pub fn run() {
     );
 
     // Lens 1 — Scalonomy.
-    let mut rng = 1909u64;
+    let mut rng = stochology_core::rng::offset_seed(1909);
     let series: Vec<f64> = (0..20_000)
         .map(|_| {
             let u = (splitmix64(&mut rng) as f64) / (u64::MAX as f64);

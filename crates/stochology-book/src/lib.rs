@@ -37,6 +37,7 @@ pub mod multiverse;
 pub mod passk;
 pub mod ponte;
 pub mod propagate;
+pub mod seed_spread;
 pub mod segunda;
 pub mod stacking;
 pub mod streams;

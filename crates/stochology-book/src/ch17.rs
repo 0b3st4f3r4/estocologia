@@ -406,7 +406,7 @@ pub fn run() {
 
     // Property test over the function of the Phi2 gate: the simulated margin
     // can never be negative and can never shrink when the sample grows.
-    let mut rng = 2026u64;
+    let mut rng = stochology_core::rng::offset_seed(2026);
     let mut violations = 0usize;
     let mut smallest = f64::MAX;
     let mut largest = f64::MIN;

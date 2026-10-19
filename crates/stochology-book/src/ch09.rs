@@ -10,7 +10,7 @@ pub struct SplitMix64(pub u64);
 
 impl SplitMix64 {
     pub fn new(seed: u64) -> Self {
-        SplitMix64(seed)
+        SplitMix64(stochology_core::rng::offset_seed(seed))
     }
     pub fn next_u64(&mut self) -> u64 {
         stochology_core::rng::splitmix64_step(&mut self.0)

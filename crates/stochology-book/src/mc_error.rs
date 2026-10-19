@@ -231,30 +231,27 @@ pub fn run() {
         );
     }
 
-    let own = SEED_REGISTER
+    let count =
+        |test: &dyn Fn(&str) -> bool| SEED_REGISTER.iter().filter(|(_, how)| test(how)).count();
+    let own = count(&|h| h.starts_with("its own"));
+    let audited = count(&|h| h.contains("--mc-error"));
+    let spread = count(&|h| h.contains("--seed-spread"));
+    let not_audited = count(&|h| h.starts_with("not audited"));
+    let other: Vec<&str> = SEED_REGISTER
         .iter()
-        .filter(|(_, how)| how.starts_with("its own"))
-        .count();
-    let audited = SEED_REGISTER
-        .iter()
-        .filter(|(_, how)| how.contains("--mc-error"))
-        .count();
-    let not_audited = SEED_REGISTER
-        .iter()
-        .filter(|(_, how)| how.starts_with("not audited"))
-        .count();
+        .filter(|(_, h)| {
+            !h.starts_with("its own")
+                && !h.contains("--mc-error")
+                && !h.contains("--seed-spread")
+                && !h.starts_with("not audited")
+        })
+        .map(|(file, _)| *file)
+        .collect();
     println!(
-        "\n-- the register of seeds: {} modules draw random numbers | {own} print their own spread | {audited} are audited here | {not_audited} are not audited | {} other ({}) --",
+        "\n-- the register of seeds: {} modules draw random numbers | {own} print their own spread | {audited} are audited here | {spread} are rerun whole by --seed-spread | {not_audited} are not audited | {} of another kind ({}) --",
         SEED_REGISTER.len(),
-        SEED_REGISTER.len() - own - audited - not_audited,
-        SEED_REGISTER
-            .iter()
-            .filter(|(_, how)| !how.starts_with("its own")
-                && !how.contains("--mc-error")
-                && !how.starts_with("not audited"))
-            .map(|(file, _)| *file)
-            .collect::<Vec<_>>()
-            .join(", ")
+        other.len(),
+        other.join(", ")
     );
 }
 
@@ -264,15 +261,24 @@ pub fn run() {
 pub const SEED_REGISTER: [(&str, &str); 27] = [
     (
         "banco.rs",
-        "not audited: the halves null of the bank is drawn under one seed",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
     ),
     (
         "ch01.rs",
         "the chapter is about seeds: it prints three, and a test checks that two seeds almost never match",
     ),
-    ("ch04.rs", "not audited: the moving coin under one seed"),
-    ("ch05.rs", "not audited"),
-    ("ch06.rs", "not audited"),
+    (
+        "ch04.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch05.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch06.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
     (
         "ch07.rs",
         "shares of the gardens of paths: exact interval in --mc-error",
@@ -281,13 +287,22 @@ pub const SEED_REGISTER: [(&str, &str); 27] = [
         "ch08.rs",
         "the null q95 at Toronto's size: twenty seeds in --mc-error",
     ),
-    ("ch09.rs", "not audited"),
+    (
+        "ch09.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
     (
         "ch10.rs",
         "shares of the investors: exact interval in --mc-error",
     ),
-    ("ch11.rs", "not audited"),
-    ("ch12.rs", "not audited"),
+    (
+        "ch11.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch12.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
     (
         "ch13.rs",
         "the p of the claim world: exact interval in --mc-error",
@@ -296,22 +311,37 @@ pub const SEED_REGISTER: [(&str, &str); 27] = [
         "ch14.rs",
         "the bootstrap interval of the tail index: twenty seeds in --mc-error",
     ),
-    ("ch15.rs", "not audited"),
-    ("ch16.rs", "not audited"),
-    ("ch17.rs", "not audited"),
-    ("ch19.rs", "not audited"),
-    ("ch20.rs", "not audited"),
+    (
+        "ch15.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch16.rs",
+        "a hash of the card's identifier, not a draw: the triage is a deterministic stand-in",
+    ),
+    (
+        "ch17.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch19.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
+    (
+        "ch20.rs",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
+    ),
     (
         "discrepancy.rs",
         "averages over 1,000 datasets; the rms error at x = 8 carries the spread of one dataset",
     ),
     (
         "ensaio.rs",
-        "not audited: the synthetic respondents of the rehearsals",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
     ),
     (
         "fila.rs",
-        "not audited: the queue with abandonment under one seed",
+        "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
     ),
     (
         "multiverse.rs",
