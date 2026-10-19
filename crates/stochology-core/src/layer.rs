@@ -65,6 +65,10 @@ pub struct Card {
     pub trail_intact: bool,
     pub subgroups_audited: bool,
     pub elicited_prior: bool,
+    /// Contract 1.3: where the variance of the output comes from, `name=share; ...`, shares closing to one.
+    pub uncertainty_budget: Option<String>,
+    /// Contract 1.3: the event that carries the expected cost, `name; p=probability; share=fraction`.
+    pub dominant_event: Option<String>,
 }
 
 impl Card {
@@ -92,7 +96,16 @@ impl Card {
             trail_intact: false,
             subgroups_audited: false,
             elicited_prior: false,
+            uncertainty_budget: None,
+            dominant_event: None,
         }
+    }
+
+    /// Declares the uncertainty budget and the dominant event (contract 1.3).
+    pub fn with_budget(mut self, budget: &str, dominant_event: &str) -> Self {
+        self.uncertainty_budget = Some(budget.to_string());
+        self.dominant_event = Some(dominant_event.to_string());
+        self
     }
 
     /// Replaces the resolution of the question declared by the card (Phi5).

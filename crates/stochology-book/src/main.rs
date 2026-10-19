@@ -1006,6 +1006,32 @@ fn contract() {
         "  the card at the current version does not go through the chain: {}",
         stochology_core::schema::from_text(&current).is_ok()
     );
+
+    println!(
+        "\n-- the two fields of contract 1.3: the uncertainty budget and the dominant event --"
+    );
+    // The budget of the health post of Chapter 5 with no correlation between the rates (labs --propagate): the
+    // arrivals carry 42% of the delta variance and the pace 58%. The dominant event of Bernoulli's ship in
+    // Chapter 11: the loss of the ship, with probability 5%, is the only event that costs, so it carries all of it.
+    let declared = card.clone().with_budget(
+        "arrivals=0.42; pace=0.58; covariance=0.00",
+        "the ship is lost; p=0.05; share=1.0",
+    );
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&declared)) {
+        Ok(read) => println!(
+            "  declared and read back: budget \"{}\" | dominant event \"{}\"",
+            read.uncertainty_budget.unwrap_or_default(),
+            read.dominant_event.unwrap_or_default()
+        ),
+        Err(error) => println!("  REJECTED: {error}"),
+    }
+    let open = card
+        .clone()
+        .with_budget("arrivals=0.42", "the ship is lost; p=0.05; share=1.0");
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&open)) {
+        Ok(_) => println!("  a budget that does not close: ACCEPTED (it should not be)"),
+        Err(error) => println!("  a budget that does not close is refused: {error}"),
+    }
 }
 
 fn run(cap: usize) {

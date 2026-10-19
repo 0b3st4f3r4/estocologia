@@ -48,7 +48,7 @@ licence above covers them.
 
 ---
 
-The research concluded on 2026-10-15 and the apparatus is **Rust** (Edition 2024): **eight crates**, **401 tests**,
+The research concluded on 2026-10-15 and the apparatus is **Rust** (Edition 2024): **eight crates**, **407 tests**,
 **twenty-three instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates`
 binary that are capable of failing a claim. The
 gates check form, presence and reproducibility, not correctness: on 2026-10-18 an outside reading found errors in
@@ -61,7 +61,7 @@ real-world data.
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 6 636 lines and 91 896 words assembled from `book/` |
+| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 6 654 lines and 92 188 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
 | `crates/` | The Rust workspace, **eight crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (book laboratories, binary `labs`), and `-wasm` (WebAssembly playground); the wave engine left on 2026-10-19 (`docs/declarations/REMOVED_WAVE.md`) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
@@ -88,11 +88,11 @@ Measurement of this tree on **2026-10-18**, each row with the command that produ
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **401 passed**, 0 failed, across the eight crates (395 before the three tests of `mc_error.rs` and the three of `propagate.rs`; 442 before the wave engine left with its 38 tests and the 9 of its three instruments; 440 before the two tests of point 24, `resonance.rs`; 438 before the two tests of declaration 2 of point 23, `wave2.rs`; 427 before the refinement and the test of the wave engine, point 23: six tests of `channel.rs` and `cycle.rs`, five of `wave.rs`; 422 before the five tests of the e-process reading of the H2 gate, `eprocess.rs`; 421 before the null of the ECE entered `streams.rs`; 415 before the rebuilt streams of 2026-10-19 added six, the tests of `streams.rs`; 413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
+| Tests | **407 passed**, 0 failed, across the eight crates (401 before the six tests of contract 1.3, `budget.rs` and `schema.rs`; 395 before the three tests of `mc_error.rs` and the three of `propagate.rs`; 442 before the wave engine left with its 38 tests and the 9 of its three instruments; 440 before the two tests of point 24, `resonance.rs`; 438 before the two tests of declaration 2 of point 23, `wave2.rs`; 427 before the refinement and the test of the wave engine, point 23: six tests of `channel.rs` and `cycle.rs`, five of `wave.rs`; 422 before the five tests of the e-process reading of the H2 gate, `eprocess.rs`; 421 before the null of the ECE entered `streams.rs`; 415 before the rebuilt streams of 2026-10-19 added six, the tests of `streams.rs`; 413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
 | Instruments | **23** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--eprocess`, `--mc-error`, `--propagate`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **6 636 lines**, **91 896 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **6 654 lines**, **92 188 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
 | Seals | **30 files**, **90 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 

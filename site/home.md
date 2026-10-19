@@ -67,7 +67,8 @@ purely frequentist: Bayesian belief is charged by frequentist calibration.
 
 1. **No free natural language between agents.** Communication passes through structured cards (YAML) with an
    identifier, layer, kind of uncertainty, definition, simulable artifact, seed, independent unit, null model, scope,
-   who pays for the error and an exit clause.
+   who pays for the error and an exit clause; a card may also declare where the uncertainty of its answer comes from
+   (the uncertainty budget) and which event carries its cost (the dominant event).
 2. **No solitary mean** where the function is nonlinear, the dynamics multiplicative or the tail heavy: report the
    function at the mean, the mean of the function, the median, the quantiles and the cumulative curve.
 3. **No confusing learning with performativity.** A small error does not prove that a model is true; run with and
@@ -121,7 +122,7 @@ When a claim fails a gate, the verdict is **"unsupported under this test"**, nev
 
 ### The apparatus
 
-All of this runs in Rust: eight crates, 401 tests, seven gates able to fail a claim, 21 laboratories with a fixed seed,
+All of this runs in Rust: eight crates, 407 tests, seven gates able to fail a claim, 21 laboratories with a fixed seed,
 one per chapter of the book, and instruments that read ten public datasets. Every output block quoted in the book is
 checked against the instrument that produces it, and a reimplementation in Python redoes 513 of the book's
 quantities from the text alone. What the gates check is form, presence and reproducibility, not correctness: in

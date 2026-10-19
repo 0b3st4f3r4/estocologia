@@ -160,6 +160,18 @@ book changes; two published values sit at the edge of their seed spread.
 | Chapter 14, bootstrap interval of Hill k=50 (300 replicas): published [1.37; 2.61]; twenty seeds: lower bound 1.34 to 1.46, upper bound 2.43 to 2.60 (mean 2.535); it contains 2 under every seed | `labs --mc-error` |
 | Shares, exact 95% intervals: 20.3% of 4,000 [19.06%; 21.58%]; 42.3% [40.76%; 43.85%]; 5.2% [4.53%; 5.93%]; 45.1% of 2,000 [42.90%; 47.31%]; 36.8% of 10,000 [35.85%; 37.75%]; 1.94% of 10,000 [1.68%; 2.23%]; 0.0140 of 2,000 [0.0093; 0.0202] | `labs --mc-error` |
 
+## The card contract 1.3 (2026-10-19)
+
+Two optional fields enter the card: the uncertainty budget and the dominant event. The chain of
+`crates/stochology-core/migracoes.tsv` goes 1.0 -> 1.1 -> 1.2 -> 1.3; the step from 1.2 to 1.3 introduces both fields
+absent. Instrument: `labs --schema`.
+
+| Number | Instrument |
+| --- | --- |
+| Contract versions 1.0, 1.1, 1.2 and 1.3; the step 1.2 -> 1.3 introduces the two fields without a value | `labs --schema` |
+| A budget declared for the health post of Chapter 5, `arrivals=0.42; pace=0.58; covariance=0.00`, is read back; one that does not close (0.420) is refused | `labs --schema` |
+| A dominant event declared for the ship of Chapter 11, `the ship is lost; p=0.05; share=1.0`, is read back | `labs --schema` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

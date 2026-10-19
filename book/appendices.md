@@ -152,7 +152,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 401 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -583,6 +583,12 @@ No number changed.
 | 11 | The expected cost | the threshold and the value of information | written term by term, with the conditional value at risk | frequency and severity are different axes |
 | 14 | The higher moments | the tail read through Hill and quantiles | why: the higher the moment, the louder one point; why an extreme is never removed for being extreme | the instability of the higher moments |
 | D | References | — | GUM, the NIST/SEMATECH e-Handbook, Rockafellar and Uryasev | checked against the publishers |
+
+### The card contract 1.3, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 17 | The fields of the card | the header and the fields of contract 1.2 | two optional fields, the uncertainty budget and the dominant event, validated when present; the migration from 1.2 introduces them absent | the uncertainty that reaches the decision has a source and a carrier, and the card did not ask for either |
 
 ### The seed of the simulations, 2026-10-19
 

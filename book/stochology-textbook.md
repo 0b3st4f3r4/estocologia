@@ -4220,6 +4220,18 @@ two likelihoods and the posterior computed in two ways, in odds and in a tree of
 have to coincide. The card of the causal graph begins with the step. The card of the model critique closes the series and says in which
 item each previous card enters.
 
+**Two fields for the uncertainty that reaches the decision.** Since version 1.3 of the contract, a card can declare
+where the uncertainty of its answer comes from and which event carries its cost. The **uncertainty budget** splits
+the variance of the output among the inputs and their covariances, as shares that must add up to one, so that nothing
+is left unaccounted for; for the health post of Chapter 5 with independent rates it reads
+`arrivals=0.42; pace=0.58; covariance=0.00`, and it says that a better measure of the nurse's pace buys more than a
+better count of arrivals. The **dominant event** names the event that carries the expected cost, with its probability
+and its share; for the shipowner of Chapter 11 it reads `the ship is lost; p=0.05; share=1.0`. The budget says where
+to measure; the value of information of Chapter 11 says whether measuring would change the decision; the two are
+different questions, and the card asks both. The fields are optional: a card that leaves them out is valid, and the
+migration from 1.2 brings them in absent rather than inventing a value. A card that declares a budget that does not
+close, or an event with a probability of 0 or 1, is refused when it is read.
+
 **The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
 
 | Question | Options | Why it matters |
@@ -5865,7 +5877,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 401 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -6296,6 +6308,12 @@ No number changed.
 | 11 | The expected cost | the threshold and the value of information | written term by term, with the conditional value at risk | frequency and severity are different axes |
 | 14 | The higher moments | the tail read through Hill and quantiles | why: the higher the moment, the louder one point; why an extreme is never removed for being extreme | the instability of the higher moments |
 | D | References | — | GUM, the NIST/SEMATECH e-Handbook, Rockafellar and Uryasev | checked against the publishers |
+
+### The card contract 1.3, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 17 | The fields of the card | the header and the fields of contract 1.2 | two optional fields, the uncertainty budget and the dominant event, validated when present; the migration from 1.2 introduces them absent | the uncertainty that reaches the decision has a source and a carrier, and the card did not ask for either |
 
 ### The seed of the simulations, 2026-10-19
 

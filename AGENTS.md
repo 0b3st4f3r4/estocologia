@@ -15,7 +15,8 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
 1. **No free-form natural language between agents.** Communication passes through structured specification sheets
    (`Ficha`, in `crates/stochology-core/src/layer.rs`), carrying an identifier, layer, uncertainty type,
    one-line definition, simulable artifact, seed, independent unit, null model, scope, who pays
-   for the error, and an exit clause.
+   for the error, and an exit clause; since contract 1.3 (2026-10-19) it may also declare the uncertainty budget and
+   the dominant event of the expected cost, which are validated when present and not demanded.
 2. **No solitary mean.** Wherever the function is nonlinear, the dynamics are multiplicative, or the tail is
    heavy, reporting only the mean is prohibited: report the evaluation at the mean $f(E[X])$, the simulated expectation $E[f(X)]$, the
    median, the quantiles, and the cumulative distribution curve. Chapter 5 of the book measures the Jensen toll; the instrument
