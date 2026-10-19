@@ -377,7 +377,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
   margin at 100% refused: DogmaticExtreme("margin 1") | abstention Others
 
 -- the determinism proof, in the form of G1 --
-  rehearsal model: run 1 3b08207d796b33d0 | run 2 3b08207d796b33d0 | identical: true
+  rehearsal model: run 1 5b39f6cee7710ff1 | run 2 5b39f6cee7710ff1 | identical: true
   unstable model: run 1 e20d9cbb82f57cff | run 2 7395445653a74393 | identical: false
   reading: gate G1 closes with a frozen model and does NOT close with a model that changes its answer — which is what docs/JEV_INTEGRATION.md declares about the free LLM
 
@@ -392,7 +392,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
 -- the calibration: the Brier of the frozen model --
   without a labeled set: hash not declared in empirical/p20-jev/calibracao/SHA256 | the Brier demands pairs with provenance declared before running
   declared rule: 0.0 and 1.0 refuse, an id out of order refuses, an outcome outside 0 and 1 refuses, below 30 pairs the score is not published, abstention leaves the denominator
-  rehearsal of the runner (these are not the real weights): 84578ee9a9703743 | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
+  rehearsal of the runner (these are not the real weights): d5ecae88ce7e5ecc | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
   reading: the path artifact -> declared hash -> frozen table -> gate runs end to end; what is missing is the model file
 
 -- the declared state --
@@ -451,16 +451,21 @@ Reads `crates/stochology-core/migracoes.tsv` and demonstrates migrating a v1.0 c
 
 ~~~text
 == The contract :: the card on file, the version and the migration chain ==
-card version: 1.2 | chain declared in crates/stochology-core/migracoes.tsv
+card version: 1.3 | chain declared in crates/stochology-core/migracoes.tsv
   step 1: from 1.0 to 1.1: adds resolucao = R0-agregada | a resolucao da pergunta entrou no contrato com o Phi5; a migracao nao inventa pergunta mais fina que a declarada no documento
   step 2: from 1.1 to 1.2: adds priori_elicitada = false | o campo nasceu com a frente SHELF; um documento anterior nao tem priori elicitada de painel
-  versions of the chain: 1.0 -> 1.1 -> 1.2
+  step 3: from 1.2 to 1.3: introduces orcamento_de_incerteza (optional, absent until declared); introduces evento_dominante (optional, absent until declared) | de onde vem a variancia da saida, por entrada e covariancia, fracoes que fecham em um; um documento anterior nao declarou orcamento e a migracao nao inventa um / o evento que carrega o custo esperado, com probabilidade e fracao do custo; frequencia e severidade sao eixos distintos, e a migracao nao inventa o evento
+  versions of the chain: 1.0 -> 1.1 -> 1.2 -> 1.3
 
 -- demonstration: a version 1.0 document migrates up to the card version --
   the 1.0 document does not declare the two fields the chain adds
   migrated: resolution = R0-agregada (the declared addition value) | elicited_prior = false | definition intact = true
   the migrated card validated: id lab.schema.1 | layer L2 | action "size the roster of the day"
   the card at the current version does not go through the chain: true
+
+-- the two fields of contract 1.3: the uncertainty budget and the dominant event --
+  declared and read back: budget "arrivals=0.42; pace=0.58; covariance=0.00" | dominant event "the ship is lost; p=0.05; share=1.0"
+  a budget that does not close is refused: invalid value in orcamento_de_incerteza: arrivals=0.42 (the shares add up to 0.420, not to one within 0.05)
 ~~~
 
 ### Bridge thesis at scale
@@ -1437,7 +1442,7 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 87 tests
+running 93 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
 test agents::tests::safeguard_without_structural_anchor_does_not_pass ... ok
@@ -1452,6 +1457,9 @@ test audit::vault::tests::erring_after_the_opening_requires_a_new_vault_and_not_
 test audit::vault::tests::splitting_by_index_and_by_time_do_not_overlap ... ok
 test audit::vault::tests::tampering_with_the_record_invalidates_the_verification ... ok
 test audit::vault::tests::the_merkle_root_changes_when_the_content_changes ... ok
+test budget::tests::a_budget_that_closes_is_read_with_a_negative_covariance ... ok
+test budget::tests::a_budget_that_does_not_close_is_refused ... ok
+test budget::tests::a_dominant_event_needs_a_probability_inside_the_open_interval ... ok
 test erlang::tests::erlang_b_and_erlang_c_stay_in_range ... ok
 test erlang::tests::minimal_scale_meets_the_target_and_one_less_does_not ... ok
 test funnel::tests::a_channel_without_information_zeroes_the_evsi_and_forces_an_immediate_stop ... ok
@@ -1512,6 +1520,7 @@ test s1::tests::reading_of_the_record ... ok
 test s1::tests::sum_one_after_the_adjustment ... ok
 test s1::tests::the_tie_break_is_the_declared_order ... ok
 test s1::tests::unknown_input_falls_into_others ... ok
+test schema::tests::a_budget_that_does_not_close_is_refused_when_read ... ok
 test schema::tests::a_chain_with_a_hole_fails ... ok
 test schema::tests::a_chain_with_a_hole_or_an_unknown_operation_fails ... ok
 test schema::tests::a_document_of_version_1_0_migrates_with_the_declared_defaults ... ok
@@ -1519,14 +1528,16 @@ test schema::tests::a_document_without_a_version_fails ... ok
 test schema::tests::a_line_break_in_the_definition_survives ... ok
 test schema::tests::a_missing_field_becomes_none ... ok
 test schema::tests::a_missing_step_fails_with_the_version_of_the_hole ... ok
+test schema::tests::a_version_1_2_document_migrates_with_the_new_fields_absent ... ok
 test schema::tests::an_invalid_value_fails ... ok
 test schema::tests::from_text_fails_on_free_text ... ok
 test schema::tests::text_and_from_text_preserve_the_card ... ok
+test schema::tests::the_budget_and_the_dominant_event_survive_the_round_trip ... ok
 test schema::tests::the_chain_applies_rename_drop_and_addition ... ok
 test schema::tests::the_chain_does_not_touch_a_document_already_at_the_card_version ... ok
 test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_version ... ok
 
-test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 93 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -1818,6 +1829,7 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p16-ponte | DECLARACAO_2.md | e011c590d9797c3ddf078c492590f911b084b35b2ca9345dd5d841976b3831b6 |
 | p16-ponte | DECLARACAO_3.md | ebc18d4bdfe42b39b9d150305ad93a998d5e43b97d019b8d2cf30b60f7bfc547 |
 | p17-schema | DECLARACAO.md | 86d583d6db7071f1e5106ada4a8b21b5204f9dd617227f6cbac432b16d5e857a |
+| p17-schema | DECLARACAO_2.md | 84e6e1ce14273d409dba7740a9e8a203d802ca3a3f3842ef630533b47dfc3d22 |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
 | p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
@@ -1828,6 +1840,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 | p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
 
-Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 28, of which 8 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **6636 lines** and **91896 words**, sha256 `be75fcd4213cdf5cf2cc2649c2fc914d81aaf303162f131128669153f4c4e902`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6654 lines** and **92188 words**, sha256 `f57f6f3c2760bc883ff0d4edb9864f1295f1e07378e01658d4ae501a9306ae40`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

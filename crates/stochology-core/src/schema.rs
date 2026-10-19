@@ -46,7 +46,7 @@ impl Version {
 }
 
 /// Version that this crate emits.
-pub const SCHEMA_VERSION: Version = Version::new(1, 2);
+pub const SCHEMA_VERSION: Version = Version::new(1, 3);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SchemaError {
@@ -135,6 +135,8 @@ pub fn document(card: &Card) -> BTreeMap<String, String> {
             optional(&card.who_pays_for_the_error),
         ),
         ("clausula_de_saida", optional(&card.exit_clause)),
+        ("orcamento_de_incerteza", optional(&card.uncertainty_budget)),
+        ("evento_dominante", optional(&card.dominant_event)),
     ] {
         if let Some(v) = value {
             doc.insert(name.into(), v);
@@ -226,7 +228,23 @@ pub fn card_from_document(doc: &BTreeMap<String, String>) -> Result<Card, Schema
         })?),
         None => None,
     };
+    let uncertainty_budget = doc.get("orcamento_de_incerteza").cloned();
+    if let Some(b) = &uncertainty_budget {
+        crate::budget::parse_budget(b).map_err(|e| SchemaError::InvalidValue {
+            field: "orcamento_de_incerteza".into(),
+            value: format!("{b} ({e})"),
+        })?;
+    }
+    let dominant_event = doc.get("evento_dominante").cloned();
+    if let Some(d) = &dominant_event {
+        crate::budget::parse_dominant_event(d).map_err(|e| SchemaError::InvalidValue {
+            field: "evento_dominante".into(),
+            value: format!("{d} ({e})"),
+        })?;
+    }
     let mut card = Card::new(&require(doc, "id")?, layer, uncertainty);
+    card.uncertainty_budget = uncertainty_budget;
+    card.dominant_event = dominant_event;
     card.definition = doc.get("definicao").cloned().unwrap_or_default();
     card.decision_maker_question = doc.get("pergunta_do_decisor").cloned().unwrap_or_default();
     card.package_action = doc.get("acao_do_pacote").cloned().unwrap_or_default();
@@ -294,6 +312,8 @@ pub struct Migration {
     pub renames: Vec<(&'static str, &'static str)>,
     pub drops: Vec<&'static str>,
     pub adds: Vec<(&'static str, &'static str)>,
+    /// Optional fields that the step brings into the contract without a value: absent until a card declares them.
+    pub introduces: Vec<&'static str>,
     pub note: &'static str,
 }
 
@@ -305,6 +325,7 @@ impl Migration {
             renames: Vec::new(),
             drops: Vec::new(),
             adds: Vec::new(),
+            introduces: Vec::new(),
             note,
         }
     }
@@ -402,6 +423,11 @@ impl Chain {
                 for (field, value) in &m.adds {
                     ops.push(format!("adds {field} = {value}"));
                 }
+                for field in &m.introduces {
+                    ops.push(format!(
+                        "introduces {field} (optional, absent until declared)"
+                    ));
+                }
                 format!(
                     "from {} to {}: {} | {}",
                     m.from.text(),
@@ -465,7 +491,13 @@ pub fn chain_from_text(text: &str) -> Result<Chain, SchemaError> {
         let value = fields[4].trim();
         let note: &'static str = Box::leak(fields[5].trim().to_string().into_boxed_str());
         let position = match steps.iter().position(|m| m.from == from && m.to == to) {
-            Some(p) => p,
+            Some(p) => {
+                if !steps[p].note.contains(note) {
+                    let joined = format!("{} / {}", steps[p].note, note);
+                    steps[p].note = Box::leak(joined.into_boxed_str());
+                }
+                p
+            }
             None => {
                 steps.push(Migration::simple(from, to, note));
                 steps.len() - 1
@@ -481,6 +513,10 @@ pub fn chain_from_text(text: &str) -> Result<Chain, SchemaError> {
                 let from_field: &'static str = Box::leak(field.to_string().into_boxed_str());
                 let to_field: &'static str = Box::leak(value.to_string().into_boxed_str());
                 steps[position].renames.push((from_field, to_field));
+            }
+            "introduz" => {
+                let field: &'static str = Box::leak(field.to_string().into_boxed_str());
+                steps[position].introduces.push(field);
             }
             "descarta" => {
                 let field: &'static str = Box::leak(field.to_string().into_boxed_str());
@@ -524,6 +560,42 @@ mod tests {
         let f = full_card();
         let round_trip = from_text(&text(&f)).expect("round trip");
         assert_eq!(f, round_trip);
+    }
+
+    #[test]
+    fn the_budget_and_the_dominant_event_survive_the_round_trip() {
+        let f = full_card().with_budget(
+            "arrivals=0.42; pace=0.58; covariance=0.00",
+            "a day that never clears; p=0.00004; share=0.30",
+        );
+        assert_eq!(from_text(&text(&f)).expect("round trip"), f);
+    }
+
+    #[test]
+    fn a_budget_that_does_not_close_is_refused_when_read() {
+        let f = full_card().with_budget("arrivals=0.42", "rain; p=0.1; share=0.5");
+        match from_text(&text(&f)) {
+            Err(SchemaError::InvalidValue { field, .. }) => {
+                assert_eq!(field, "orcamento_de_incerteza")
+            }
+            other => panic!("expected the budget to be refused, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn a_version_1_2_document_migrates_with_the_new_fields_absent() {
+        let current = text(&full_card());
+        let old = current.replacen("versao = 1.3", "versao = 1.2", 1);
+        let migrated = from_text(&old).expect("migrates");
+        assert_eq!(migrated.uncertainty_budget, None);
+        assert_eq!(migrated.dominant_event, None);
+        assert_eq!(migrated, full_card());
+        assert!(
+            DECLARED_CHAIN
+                .description()
+                .iter()
+                .any(|d| d.contains("introduces orcamento_de_incerteza"))
+        );
     }
 
     #[test]
@@ -638,7 +710,7 @@ mod tests {
         let versions: Vec<String> = DECLARED_CHAIN.versions().iter().map(|v| v.text()).collect();
         assert_eq!(
             versions,
-            vec!["1.0", "1.1", "1.2"],
+            vec!["1.0", "1.1", "1.2", "1.3"],
             "the chain declared in the file"
         );
         assert_eq!(

@@ -3,3 +3,5 @@
 # nota	a cadeia e o contrato: cada etapa e uma declaracao, com o valor de acrescimo declarado e a razao dele
 1.0	1.1	acrescenta	resolucao	R0-agregada	a resolucao da pergunta entrou no contrato com o Phi5; a migracao nao inventa pergunta mais fina que a declarada no documento
 1.1	1.2	acrescenta	priori_elicitada	false	o campo nasceu com a frente SHELF; um documento anterior nao tem priori elicitada de painel
+1.2	1.3	introduz	orcamento_de_incerteza	-	de onde vem a variancia da saida, por entrada e covariancia, fracoes que fecham em um; um documento anterior nao declarou orcamento e a migracao nao inventa um
+1.2	1.3	introduz	evento_dominante	-	o evento que carrega o custo esperado, com probabilidade e fracao do custo; frequencia e severidade sao eixos distintos, e a migracao nao inventa o evento
