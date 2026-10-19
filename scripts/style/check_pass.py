@@ -227,10 +227,11 @@ def check_rewrite(name: str, text: str, known: set[str], values: list[float],
     running = "\n".join(l for l in running.splitlines() if not l.startswith("|")).replace("{,}", ",")
     unknown = set()
     for n in set(NUMBER_RE.findall(running)):
-        if n in own or n in known or canonical(n) in known or rounds_from(n, values):
-            continue
+        # a ledger row is the declared source even when another source happens to carry the same digits
         if (name, n) in ledger:
             used.add((name, n))
+            continue
+        if n in own or n in known or canonical(n) in known or rounds_from(n, values):
             continue
         unknown.add(n)
     if unknown:
@@ -426,7 +427,7 @@ def main() -> int:
     checked = {path.name for path in files}
     stale = sorted(k for k in ledger if k[0] in checked and k not in used)
     for name, number in stale:
-        print(f"   REGRESSION: provenance.tsv names {number} in {name}, which no longer needs it or no longer has it")
+        print(f"   REGRESSION: provenance.tsv names {number} in {name}, which no longer has it in running prose")
     failures += len(stale)
     print(f"provenance ledger: {len(ledger)} rows, {len(used)} used")
     print(f"files verified: {len(files)}, with regression: {failures}")

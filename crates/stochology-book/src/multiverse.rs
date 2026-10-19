@@ -141,7 +141,9 @@ pub fn main_effects(results: &[(Spec, f64)]) -> (f64, f64, f64, f64, f64) {
 }
 
 pub fn run() {
-    println!("== The multiverse of the health post: how much of the answer is the modeller's choice ==");
+    println!(
+        "== The multiverse of the health post: how much of the answer is the modeller's choice =="
+    );
     println!(
         "question: P(W > {LIMIT_MIN} min), promise <= {PROMISE} | lambda mean {LAMBDA} sd {SD_LAMBDA}, mu mean {MU} sd {SD_MU} per hour | 18 specifications, {DRAWS} common draws, seed {SEED}"
     );
@@ -159,13 +161,20 @@ pub fn run() {
             s.rho,
             p,
             sd,
-            if p > PROMISE { "second nurse" } else { "promise kept" }
+            if p > PROMISE {
+                "second nurse"
+            } else {
+                "promise kept"
+            }
         );
         results.push((s, p));
     }
     let nurse = results.iter().filter(|r| r.1 > PROMISE).count();
     let lo = results.iter().map(|r| r.1).fold(f64::INFINITY, f64::min);
-    let hi = results.iter().map(|r| r.1).fold(f64::NEG_INFINITY, f64::max);
+    let hi = results
+        .iter()
+        .map(|r| r.1)
+        .fold(f64::NEG_INFINITY, f64::max);
     let (total, cv, law, rho, inter) = main_effects(&results);
     let between_sd = total.sqrt();
     println!(
@@ -182,19 +191,32 @@ pub fn run() {
     );
     let book = results
         .iter()
-        .find(|r| r.0 == Spec { cv: 1.0, law: RateLaw::Normal, rho: 0.0 })
+        .find(|r| {
+            r.0 == Spec {
+                cv: 1.0,
+                law: RateLaw::Normal,
+                rho: 0.0,
+            }
+        })
         .expect("the book's specification is in the design");
     println!(
         "the book's specification (M/M/1, normal rates, no correlation): P = {:.4}, {}",
         book.1,
-        if book.1 > PROMISE { "second nurse" } else { "promise kept" }
+        if book.1 > PROMISE {
+            "second nurse"
+        } else {
+            "promise kept"
+        }
     );
     println!("\n-- the rules declared before the run --");
     let r1 = nurse > 0 && nurse < 18;
     let r2 = cv > law + rho;
     let r3 = between_sd > 10.0 * largest_mc_sd;
     let say = |b: bool| if b { "holds" } else { "fails" };
-    println!("  R1, the 18 specifications do not agree on the decision: {}", say(r1));
+    println!(
+        "  R1, the 18 specifications do not agree on the decision: {}",
+        say(r1)
+    );
     println!(
         "  R2, the service cv carries more of the between-specification variance than the rate law and the correlation together: {}",
         say(r2)
@@ -220,10 +242,16 @@ mod tests {
     fn the_lognormal_keeps_the_mean_and_the_sd() {
         let n = 200_000;
         let z = draws(n, 11);
-        let v: Vec<f64> = z.iter().map(|(a, _)| rate(RateLaw::Lognormal, 12.0, 0.8, *a)).collect();
+        let v: Vec<f64> = z
+            .iter()
+            .map(|(a, _)| rate(RateLaw::Lognormal, 12.0, 0.8, *a))
+            .collect();
         let m = v.iter().sum::<f64>() / n as f64;
         let sd = (v.iter().map(|x| (x - m).powi(2)).sum::<f64>() / n as f64).sqrt();
-        assert!((m - 12.0).abs() < 0.01 && (sd - 0.8).abs() < 0.01, "{m} {sd}");
+        assert!(
+            (m - 12.0).abs() < 0.01 && (sd - 0.8).abs() < 0.01,
+            "{m} {sd}"
+        );
     }
 
     #[test]
@@ -231,7 +259,12 @@ mod tests {
         // a response that depends only on the service cv: all of its variance is that choice's
         let results: Vec<(Spec, f64)> = specs().into_iter().map(|s| (s, s.cv * s.cv)).collect();
         let (_, cv, law, rho, inter) = main_effects(&results);
-        assert!((cv - 1.0).abs() < 1e-12 && law.abs() < 1e-12 && rho.abs() < 1e-12 && inter.abs() < 1e-12);
+        assert!(
+            (cv - 1.0).abs() < 1e-12
+                && law.abs() < 1e-12
+                && rho.abs() < 1e-12
+                && inter.abs() < 1e-12
+        );
         assert_eq!(specs().len(), 18);
     }
 
@@ -239,7 +272,14 @@ mod tests {
     fn the_books_specification_reproduces_the_propagation_lab_draw_for_draw() {
         // the one specification already published (Chapter 5, labs --propagate); the other seventeen are not run here
         let z = draws(DRAWS, SEED);
-        let (p, _) = share_above(Spec { cv: 1.0, law: RateLaw::Normal, rho: 0.0 }, &z);
+        let (p, _) = share_above(
+            Spec {
+                cv: 1.0,
+                law: RateLaw::Normal,
+                rho: 0.0,
+            },
+            &z,
+        );
         let published = crate::propagate::answers(0.0, DRAWS, SEED).mc_p;
         assert_eq!(p, published);
     }
