@@ -84,12 +84,12 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 407 tests passed, none failed
+cargo test --workspace                                  # 426 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
 python3 scripts/book/build.py --check                   # the 21-chapter ramp AND the file on disk
-python3 scripts/book/check_labs.py                      # 34 cited blocks, 0 divergent
+python3 scripts/book/check_labs.py                      # 39 cited blocks, 0 divergent
 python3 scripts/book/check_book.py
 python3 scripts/book/generate_results.py --check        # the registry and the state manifest
 python3 scripts/check_seals.py                          # the 28 seals: 82 targets, 9 outside the tree, 0 issues
@@ -105,7 +105,7 @@ cargo run --release --bin labs -- --h3          # the H3 chain: one derived row,
 cargo run --release --bin labs -- --second-opinion     # second opinion: five verified, two derived, seven registry
 cargo run --release --bin labs -- --bridge       # bridge thesis: re-derived pilot and fair-test gate
 cargo run --release --bin labs -- --listening      # voice of those who pay: 0 of 7 heard, minimum 2
-cargo run --release --bin labs -- --schema      # contract migration chain: 1.0 -> 1.1 -> 1.2
+cargo run --release --bin labs -- --schema      # contract migration chain: 1.0 -> 1.1 -> 1.2 -> 1.3 -> 1.4
 cargo run --release --bin labs -- --jev         # Jev-LLM bridge: gates close, weights missing
 cargo run --release --bin labs -- --resolution   # R-axis and predictions 3 and 5
 ~~~
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 654 lines**, **92 188 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 004 lines**, **98 402 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 654 lines and 92 188 words, and its 34 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 004 lines and 98 402 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -512,3 +512,25 @@ changes by its declaration 2, with the frozen hash kept as a superseded line of 
 | card contract | 1.2 | 1.3 |
 | `cargo test --workspace` | 401 | **407** |
 | assembled book, line count | 6 636 (with 91 896 words) | 6 654 (with 92 188 words) |
+
+## The research on models, and item 16 (2026-10-19, at the end of the day)
+
+The previous book no longer certifies its own numbers (item 16): instrument outputs, code and records are sources, and
+the 29 numbers no source carries have a checked row in `book/provenance.tsv`; the search found one stale passage in
+Appendix E. Item 18 came from the research on models of the world, of agents and of modelling and closed the same
+day: four laboratories, each declared and sealed before its first run (points 25 to 28; `--passk`, `--multiverse`,
+`--stacking`, `--discrepancy`), with every rule holding; the card contract 1.4 (declaration 3 of point 17); the
+authorship of every check by family; the safeguard panel held against the fourteen failure modes of teams of agents
+(`docs/MAST_AUDIT.md`); and a register of the 27 modules that draw random numbers, with a test. Point 28 needed a
+second declaration after its first run (K = 2). Item 19 holds what the audits left open. The dated record is
+`history/estado-2026-10-19T2150Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| instruments in `labs` | 23 | 27 (`--passk`, `--multiverse`, `--stacking`, `--discrepancy`) |
+| card contract | 1.3 | 1.4 |
+| `cargo test --workspace` | 407 | **426** |
+| cited blocks | 34 | 39 |
+| reimplementation | 513 quantities: 510 agree, 3 open | 573 quantities: 570 agree, 3 open; all 573 checked by the family that wrote the instrument |
+| numbers whose only source was the previous book | about 140 measured on 2026-10-18; 314 measured on 2026-10-19 without the old clause | 0; 29 in the provenance ledger |
+| assembled book, line count | 6 654 (with 92 188 words) | 7 004 (with 98 402 words) |

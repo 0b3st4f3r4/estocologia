@@ -27,9 +27,33 @@ from common import ROWS, verdict  # noqa: E402
 MODULES = ["ch02_ch05", "ch05_propagate", "ch05_multiverse", "ch06_ch08", "ch08_stacking", "ch09", "ch10_ch11", "ch12", "ch13", "ch14", "ch14_discrepancy", "ch15_ch21", "ch16_passk", "ch19", "ch20_streams", "recipes"]
 
 
+FAMILIES = {"anthropic-claude", "human-outside", "human-owner"}
+
+
+def authors() -> dict[str, tuple[str, str]]:
+    out: dict[str, tuple[str, str]] = {}
+    for line in (HERE / "AUTHORS.tsv").read_text(encoding="utf-8").splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        module, checker, instrument, _note = line.split("\t")
+        if checker not in FAMILIES or instrument not in FAMILIES:
+            raise SystemExit(f"AUTHORS.tsv: unknown family in the row of {module}")
+        out[module] = (checker, instrument)
+    return out
+
+
 def main() -> int:
+    families = authors()
+    missing = [m for m in MODULES if m not in families]
+    if missing:
+        print(f"AUTHORS.tsv names no family for: {', '.join(missing)}")
+        return 1
+    owner: dict[int, str] = {}
     for name in MODULES:
+        before = len(ROWS)
         importlib.import_module(name)
+        for i in range(before, len(ROWS)):
+            owner[i] = name
     show_all = "--all" in sys.argv
     counts = {"agrees": 0, "DIVERGES": 0, "open": 0}
     print(f"{'ch':<4} {'quantity':<62} {'book':>11} {'reimpl.':>11}  verdict")
@@ -45,6 +69,11 @@ def main() -> int:
     chapters = ", ".join(f"{k}: {v}" for k, v in sorted(by_chapter.items(), key=lambda kv: int(kv[0])))
     print(f"\n{len(ROWS)} quantities ({chapters})")
     print(f"agree {counts['agrees']} | diverge {counts['DIVERGES']} | open {counts['open']}")
+    same = sum(1 for i in range(len(ROWS)) if families[owner[i]][0] == families[owner[i]][1])
+    print(
+        f"checked by the same family that wrote the instrument: {same} of {len(ROWS)} quantities "
+        "(AUTHORS.tsv); their agreement is weak evidence, and item 17 stays open until that count falls"
+    )
     return 1 if counts["DIVERGES"] else 0
 
 

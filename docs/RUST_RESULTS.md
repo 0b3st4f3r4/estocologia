@@ -16,6 +16,9 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
 | `labs --mc-error` | The Monte Carlo error of every simulated number a reading of the book depends on |
 | `labs --propagate` | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |
+| `labs --multiverse` | The multiverse of the health post: eighteen reasonable specifications, declared before the run |
+| `labs --stacking` | Combining models when none is true: Bayesian model averaging against stacking, declared before the run |
+| `labs --discrepancy` | Calibrating is not understanding: a parameter learnt with and without the discrepancy, declared before the run |
 | `labs --passk` | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
@@ -290,6 +293,8 @@ each simulated quantile rerun under 20 seeds other than the published one; each 
   Chapter 10: investors with no loss in 250 weeks (all-in under the raw frequency): 0.3680 of 10000 (about 3680) | Monte Carlo sd 0.0048 | exact 95% interval [0.3585; 0.3775]
   Chapter 10: investors ruined in 1,000 weeks under the raw frequency: 0.0194 of 10000 (about 194) | Monte Carlo sd 0.0014 | exact 95% interval [0.0168; 0.0223]
   Chapter 13: replicas of the claim world as bad as the real index (p): 0.0140 of 2000 (about 28) | Monte Carlo sd 0.0026 | exact 95% interval [0.0093; 0.0202]
+
+-- the register of seeds: 27 modules draw random numbers | 4 print their own spread | 6 are audited here | 14 are not audited | 3 other (ch01.rs, discrepancy.rs, ponte.rs) --
 ~~~
 
 ### Three answers to the same question
@@ -325,6 +330,99 @@ sensitivities at the mean: dW/dlambda = +3.750 min per arrival/h, dW/dmu = -3.33
   Monte Carlo: mean 10.52 | median 9.99 | sd 2.98 | q95 15.90 | P(W > 20) = 0.0107 (MC sd 0.0002) | days that never clear 0 | decision: promise kept
   budget of the delta variance 6.17 min^2: arrivals 5.06 (82%), pace 7.11 (115%), covariance -6.00 (-97%)
   the linear answer may decide: true (delta and Monte Carlo differ by 0.0107, within half the promise, 0.025)
+~~~
+
+### The multiverse of the health post
+
+The question of Chapter 5 under eighteen specifications with common draws, and the between-specification variance split by choice, sealed in empirical/p26-multiverso/ before the first run (Chapter 5).
+
+~~~bash
+./target/release/labs --multiverse
+~~~
+
+~~~text
+== The multiverse of the health post: how much of the answer is the modeller's choice ==
+question: P(W > 20 min), promise <= 0.05 | lambda mean 8 sd 0.6, mu mean 12 sd 0.8 per hour | 18 specifications, 400000 common draws, seed 2026
+  service cv | rate law  | correlation | P(W > 20) | MC sd  | decision
+        0.5 | normal    |        -0.5 |       0.0241 | 0.0002 | promise kept
+        0.5 | normal    |        +0.0 |       0.0081 | 0.0001 | promise kept
+        0.5 | normal    |        +0.5 |       0.0004 | 0.0000 | promise kept
+        0.5 | lognormal |        -0.5 |       0.0234 | 0.0002 | promise kept
+        0.5 | lognormal |        +0.0 |       0.0075 | 0.0001 | promise kept
+        0.5 | lognormal |        +0.5 |       0.0003 | 0.0000 | promise kept
+        1.0 | normal    |        -0.5 |       0.0884 | 0.0004 | second nurse
+        1.0 | normal    |        +0.0 |       0.0499 | 0.0003 | promise kept
+        1.0 | normal    |        +0.5 |       0.0107 | 0.0002 | promise kept
+        1.0 | lognormal |        -0.5 |       0.0875 | 0.0004 | second nurse
+        1.0 | lognormal |        +0.0 |       0.0487 | 0.0003 | promise kept
+        1.0 | lognormal |        +0.5 |       0.0096 | 0.0002 | promise kept
+        1.5 | normal    |        -0.5 |       0.3210 | 0.0007 | second nurse
+        1.5 | normal    |        +0.0 |       0.2849 | 0.0007 | second nurse
+        1.5 | normal    |        +0.5 |       0.2131 | 0.0006 | second nurse
+        1.5 | lognormal |        -0.5 |       0.3211 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.0 |       0.2855 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.5 |       0.2131 | 0.0006 | second nurse
+
+the 18 specifications: 8 say second nurse, 10 say promise kept | P from 0.0003 to 0.3211 | between-specification sd 0.1201, largest Monte Carlo sd 0.0007 (ratio 163)
+between-specification variance of P, by choice: service cv 0.93 | rate law 0.00 | correlation 0.06 | interaction 0.02
+  as a budget of the specification: service-cv=0.93; rate-law=0.00; correlation=0.06; interaction=0.02
+the book's specification (M/M/1, normal rates, no correlation): P = 0.0499, promise kept
+
+-- the rules declared before the run --
+  R1, the 18 specifications do not agree on the decision: holds
+  R2, the service cv carries more of the between-specification variance than the rate law and the correlation together: holds
+  R3, the between-specification sd is more than ten times the largest Monte Carlo sd: holds
+~~~
+
+### Combining models when none is true
+
+Two confident candidates in an M-open and an M-closed world, combined by model averaging and by stacking, with a duplicated model, sealed in empirical/p27-stacking/ before the first run (Chapter 8).
+
+~~~bash
+./target/release/labs --stacking
+~~~
+
+~~~text
+== Combining models when none is true: Bayesian model averaging against stacking ==
+candidates: N(c, 1) with c ~ N(-2, 0.05^2) (left) and c ~ N(+2, 0.05^2) (right) | 40 training points, 2000 test points, 1000 datasets, seed 2026 | score: mean log predictive density per test point
+
+-- M-open: half the points from each side, neither candidate is true --
+  log score: BMA -4.8251 | stacking -2.0811 | best single model -4.9817 | stacking - BMA +2.7441 [+2.7007; +2.7874]
+  weight on the left model: BMA mean 0.485 (above 0.99 or below 0.01 in 926 of 1000) | stacking mean 0.499
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.499 (was 0.499) | BMA score moves by 0.03748, its left family weighs 0.491 (was 0.485)
+
+-- M-closed: every point from the left, the left candidate is true --
+  log score: BMA -1.4189 | stacking -1.4202 | best single model -1.4189 | stacking - BMA -0.0013 [-0.0016; -0.0010]
+  weight on the left model: BMA mean 1.000 (above 0.99 or below 0.01 in 1000 of 1000) | stacking mean 0.998
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.998 (was 0.998) | BMA score moves by 0.00000, its left family weighs 1.000 (was 1.000)
+
+-- the rules declared before the run --
+  R1, M-open: stacking scores above BMA, with the 95% interval of the difference above zero: holds
+  R2, both worlds: listing the left model twice moves stacking's score by less than 0.001 and its left-family weight by less than 0.01: holds
+  R3, M-closed: the two differ by less than 0.01 in mean log score: holds
+~~~
+
+### Calibrating is not understanding
+
+A simulator without the bend of the world, calibrated without discrepancy, with a discrepancy that is zero and flat at the origin, and with a free one, sealed in empirical/p28-discrepancia/ before the first run (Chapter 14).
+
+~~~bash
+./target/release/labs --discrepancy
+~~~
+
+~~~text
+== Calibrating is not understanding: a parameter learnt with and without the discrepancy ==
+world y = 0.65 x / (1 + x / 20) | simulator y = theta x | 30 points on (0, 4], noise sd 0.05 | priors N(0, 1) | 1000 datasets, seed 2026
+  model                               | theta mean | theta sd | 95% interval covers 0.65 | fit rmse in range | at x = 8: mean error, rms error
+  without discrepancy                 |     0.5647 |   0.0039 |                     0.000 |            0.0677 |       +0.803, 0.804
+  discrepancy with d(0) = d'(0) = 0   |     0.6444 |   0.0767 |                     0.953 |            0.0461 |       +0.236, 6.988
+  discrepancy free at the origin      |     0.3232 |   0.7081 |                     1.000 |            0.0461 |       +0.101, 6.998
+  the world at x = 8: 3.714; the noise sd: 0.05
+
+-- the rules declared before the run --
+  R1, without discrepancy: the interval of theta covers it in fewer than half the datasets while the fit in range is within 1.5 noise sds: holds
+  R2, with the discrepancy that knows d(0) = d'(0) = 0: coverage of at least 0.90: holds
+  R3, with the discrepancy free at the origin: the sd of theta is at least five times the constrained one: holds
 ~~~
 
 ### Reliability is not average success
@@ -448,7 +546,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
   margin at 100% refused: DogmaticExtreme("margin 1") | abstention Others
 
 -- the determinism proof, in the form of G1 --
-  rehearsal model: run 1 5b39f6cee7710ff1 | run 2 5b39f6cee7710ff1 | identical: true
+  rehearsal model: run 1 1e4ecb6836677d93 | run 2 1e4ecb6836677d93 | identical: true
   unstable model: run 1 e20d9cbb82f57cff | run 2 7395445653a74393 | identical: false
   reading: gate G1 closes with a frozen model and does NOT close with a model that changes its answer — which is what docs/JEV_INTEGRATION.md declares about the free LLM
 
@@ -463,7 +561,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
 -- the calibration: the Brier of the frozen model --
   without a labeled set: hash not declared in empirical/p20-jev/calibracao/SHA256 | the Brier demands pairs with provenance declared before running
   declared rule: 0.0 and 1.0 refuse, an id out of order refuses, an outcome outside 0 and 1 refuses, below 30 pairs the score is not published, abstention leaves the denominator
-  rehearsal of the runner (these are not the real weights): d5ecae88ce7e5ecc | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
+  rehearsal of the runner (these are not the real weights): 2182d17d143dc0ff | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
   reading: the path artifact -> declared hash -> frozen table -> gate runs end to end; what is missing is the model file
 
 -- the declared state --
@@ -522,11 +620,12 @@ Reads `crates/stochology-core/migracoes.tsv` and demonstrates migrating a v1.0 c
 
 ~~~text
 == The contract :: the card on file, the version and the migration chain ==
-card version: 1.3 | chain declared in crates/stochology-core/migracoes.tsv
+card version: 1.4 | chain declared in crates/stochology-core/migracoes.tsv
   step 1: from 1.0 to 1.1: adds resolucao = R0-agregada | a resolucao da pergunta entrou no contrato com o Phi5; a migracao nao inventa pergunta mais fina que a declarada no documento
   step 2: from 1.1 to 1.2: adds priori_elicitada = false | o campo nasceu com a frente SHELF; um documento anterior nao tem priori elicitada de painel
   step 3: from 1.2 to 1.3: introduces orcamento_de_incerteza (optional, absent until declared); introduces evento_dominante (optional, absent until declared) | de onde vem a variancia da saida, por entrada e covariancia, fracoes que fecham em um; um documento anterior nao declarou orcamento e a migracao nao inventa um / o evento que carrega o custo esperado, com probabilidade e fracao do custo; frequencia e severidade sao eixos distintos, e a migracao nao inventa o evento
-  versions of the chain: 1.0 -> 1.1 -> 1.2 -> 1.3
+  step 4: from 1.3 to 1.4: introduces multiverso (optional, absent until declared); introduces confiabilidade (optional, absent until declared) | as especificacoes razoaveis sob as quais a resposta foi calculada, quantas chegam a decisao do cartao e como a variancia entre elas se reparte por escolha; um documento anterior nao declarou multiverso e a migracao nao inventa um / o que o sucesso medio esconde num cartao de agente: k execucoes, pass1 e passk; a migracao nao inventa a confiabilidade
+  versions of the chain: 1.0 -> 1.1 -> 1.2 -> 1.3 -> 1.4
 
 -- demonstration: a version 1.0 document migrates up to the card version --
   the 1.0 document does not declare the two fields the chain adds
@@ -537,6 +636,11 @@ card version: 1.3 | chain declared in crates/stochology-core/migracoes.tsv
 -- the two fields of contract 1.3: the uncertainty budget and the dominant event --
   declared and read back: budget "arrivals=0.42; pace=0.58; covariance=0.00" | dominant event "the ship is lost; p=0.05; share=1.0"
   a budget that does not close is refused: invalid value in orcamento_de_incerteza: arrivals=0.42 (the shares add up to 0.420, not to one within 0.05)
+
+-- the two fields of contract 1.4: the multiverse and the reliability --
+  declared and read back: multiverse "specifications=18; agree=10; shares=service-cv:0.93, rate-law:0.00, correlation:0.06, interaction:0.02" | reliability "k=8; pass1=0.5312; passk=0.0700"
+  a share for the specification without a multiverse is refused: invalid value in orcamento_de_incerteza: inputs=0.40; specification=0.60 (a share for the specification is measured by a multiverse, and none is declared)
+  a pass^k above pass^1 is refused: invalid value in confiabilidade: k=8; pass1=0.5312; passk=0.6 (passk = 0.6 above pass1 = 0.5312: k runs cannot all succeed more often than one)
 ~~~
 
 ### Bridge thesis at scale
@@ -1396,7 +1500,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 112 tests
+running 124 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1454,6 +1558,10 @@ test costura::tests::partial_scores_and_unknown_strata_are_not_read ... ok
 test costura::tests::the_located_advantage_is_c_prime ... ok
 test costura::tests::the_record_in_the_tree_keeps_the_box_closed_and_does_not_lie ... ok
 test costura::tests::the_tie_at_the_ceiling_in_s_is_not_c_prime ... ok
+test discrepancy::tests::a_noiseless_line_is_recovered_without_discrepancy ... ok
+test discrepancy::tests::the_free_discrepancy_cannot_separate_theta_from_its_linear_term ... ok
+test discrepancy::tests::the_inverse_returns_the_identity ... ok
+test discrepancy::tests::the_noiseless_fit_matches_exact_rational_arithmetic ... ok
 test ensaio::tests::fluent_and_yes_bias_stay_below_the_expert ... ok
 test ensaio::tests::the_coin_has_no_skill ... ok
 test ensaio::tests::the_five_real_pools_have_items ... ok
@@ -1480,8 +1588,13 @@ test fila::tests::the_r2_margin_is_the_p90_of_the_residual_cv ... ok
 test fila::tests::weekday_of_known_dates ... ok
 test fila::tests::working_print ... ok
 test mc_error::tests::clopper_pearson_matches_known_values ... ok
+test mc_error::tests::every_module_that_draws_random_numbers_says_where_its_spread_is_measured ... ok
 test mc_error::tests::the_order_interval_brackets_the_quantile ... ok
 test mc_error::tests::the_seeds_are_twenty_and_none_is_the_published_one ... ok
+test multiverse::tests::the_books_specification_reproduces_the_propagation_lab_draw_for_draw ... ok
+test multiverse::tests::the_lognormal_keeps_the_mean_and_the_sd ... ok
+test multiverse::tests::the_main_effects_of_a_balanced_design_add_up_to_one_and_find_a_pure_effect ... ok
+test multiverse::tests::the_mg1_wait_is_the_mm1_wait_at_unit_cv ... ok
 test passk::tests::jensen_holds_for_the_beta_moments_and_binds_only_without_spread ... ok
 test passk::tests::the_estimator_is_exact_on_known_counts ... ok
 test passk::tests::the_gamma_sampler_has_the_right_mean_below_and_above_one ... ok
@@ -1502,6 +1615,9 @@ test segunda::tests::the_multiplicity_thresholds_match_alpha_over_m ... ok
 test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_divergence ... ok
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
+test stacking::tests::a_duplicated_model_doubles_its_prior_mass_in_bma ... ok
+test stacking::tests::stacking_finds_the_best_mixture_on_a_grid ... ok
+test stacking::tests::the_sequential_predictives_give_the_closed_form_marginal_likelihood ... ok
 test streams::tests::christoffersen_rejects_clustered_violations ... ok
 test streams::tests::ece_is_zero_for_boxes_that_match_their_rate ... ok
 test streams::tests::kupiec_accepts_the_nominal_rate_and_rejects_ten_times_it ... ok
@@ -1510,13 +1626,13 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 112 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 124 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 93 tests
+running 97 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
 test agents::tests::safeguard_without_structural_anchor_does_not_pass ... ok
@@ -1534,6 +1650,8 @@ test audit::vault::tests::the_merkle_root_changes_when_the_content_changes ... o
 test budget::tests::a_budget_that_closes_is_read_with_a_negative_covariance ... ok
 test budget::tests::a_budget_that_does_not_close_is_refused ... ok
 test budget::tests::a_dominant_event_needs_a_probability_inside_the_open_interval ... ok
+test budget::tests::a_multiverse_needs_two_specifications_an_agreement_inside_them_and_closing_shares ... ok
+test budget::tests::a_reliability_cannot_promise_more_runs_than_one ... ok
 test erlang::tests::erlang_b_and_erlang_c_stay_in_range ... ok
 test erlang::tests::minimal_scale_meets_the_target_and_one_less_does_not ... ok
 test funnel::tests::a_channel_without_information_zeroes_the_evsi_and_forces_an_immediate_stop ... ok
@@ -1603,6 +1721,7 @@ test schema::tests::a_line_break_in_the_definition_survives ... ok
 test schema::tests::a_missing_field_becomes_none ... ok
 test schema::tests::a_missing_step_fails_with_the_version_of_the_hole ... ok
 test schema::tests::a_version_1_2_document_migrates_with_the_new_fields_absent ... ok
+test schema::tests::a_version_1_3_document_migrates_with_the_fields_of_1_4_absent ... ok
 test schema::tests::an_invalid_value_fails ... ok
 test schema::tests::from_text_fails_on_free_text ... ok
 test schema::tests::text_and_from_text_preserve_the_card ... ok
@@ -1610,8 +1729,9 @@ test schema::tests::the_budget_and_the_dominant_event_survive_the_round_trip ...
 test schema::tests::the_chain_applies_rename_drop_and_addition ... ok
 test schema::tests::the_chain_does_not_touch_a_document_already_at_the_card_version ... ok
 test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_version ... ok
+test schema::tests::the_multiverse_and_the_reliability_survive_the_round_trip_and_are_checked ... ok
 
-test result: ok. 93 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 97 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -1904,6 +2024,7 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p16-ponte | DECLARACAO_3.md | ebc18d4bdfe42b39b9d150305ad93a998d5e43b97d019b8d2cf30b60f7bfc547 |
 | p17-schema | DECLARACAO.md | 86d583d6db7071f1e5106ada4a8b21b5204f9dd617227f6cbac432b16d5e857a |
 | p17-schema | DECLARACAO_2.md | 84e6e1ce14273d409dba7740a9e8a203d802ca3a3f3842ef630533b47dfc3d22 |
+| p17-schema | DECLARACAO_3.md | a6a05b0a4f64b0e480a469579dc5d1276e8ce1d9a636f7fccd752826d6ad6ac7 |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
 | p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
@@ -1914,7 +2035,11 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 | p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
 | p25-passk | DECLARACAO.md | fb241c94a4f1a76a915c157510aa574e072c67abb59bfa99c6d85675c9be7c81 |
+| p26-multiverso | DECLARACAO.md | 09eab9c9836d3461fbdc1f962d65e73961424b7513196e51c806739edc53ad76 |
+| p27-stacking | DECLARACAO.md | 0f1945a3891074e686105a5e4a5802dfe242bd262b720acde8b787d12cb0e407 |
+| p28-discrepancia | DECLARACAO.md | 365735a9ff3c16f00b213209bbc26d7446134529836b74e1619a4b7b1f38bff6 |
+| p28-discrepancia | DECLARACAO_2.md | b7c57e1c751796f011114081e42fdf1853fa3ebc8d0eb4d29eda4e4aed31f375 |
 
-Point declarations: 29, of which 8 are declaration 2 or later (declared rectification with both values) | empirical points: 21 | `labs` instruments: 24 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 34, of which 10 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 27 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **6742 lines** and **93927 words**, sha256 `ff9bbefaabccf0776b6e215cae4751a0bde98e254087e4f6234e73d62c6e6a2c`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7004 lines** and **98402 words**, sha256 `320f18685e5b186cd4783c75d560431de78bdfdc409327d98c24a1182c8e8e29`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
