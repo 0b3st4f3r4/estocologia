@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 188 lines**, **84 273 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 222 lines**, **84 921 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 it has 6 188 lines and 84 273 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 222 lines and 84 921 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -314,3 +314,22 @@ dated record is `history/estado-2026-10-19T1235Z.md`.
 | bibliography | 51 lines (50 checked, 1 to check) | 77 lines (50 checked, 27 to check) |
 | assembled book, line count | 6 075 (with 81 961 words) | 6 188 (with 84 273 words) |
 
+## Names, title, references and the order of the chapters (2026-10-19, later the same day)
+
+The follow-up of the critical reading, by the owner's decisions of the same day. The chapters were reordered so that
+the book reads as two: the method (Parts I to IV, Chapters 1 to 14, the three real cases now Chapters 12 to 14) and the
+auditable machine (Part V, Chapters 15 to 21). Every chapter number in the book, in the `labs` flags, in the modules of
+`stochology-book`, in the verifiers, in the reimplementation and in the living documents follows the new numbering;
+the dated records, the declarations and the sealed empirical points keep the numbering of their date, and Appendix E
+carries the table that translates. The R-axis table (`book/r-axis.tsv`) is sealed by `empirical/p18-eixo-r` and stays
+as frozen; the instrument translates its numbers when it prints. The five lenses take the names of their fields, with
+the coined words kept as the labels the outputs print. The title becomes "Stochology: Judgement and Decision under
+Uncertainty", a working text until the outside audit. 24 of the 26 references of D.5 were checked against Crossref,
+arXiv and PMLR. The dated record is `history/estado-2026-10-19T1307Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| order of the chapters | 1 to 11, machine 12 to 15, cases 16 to 21 | 1 to 11, cases 12 to 14, machine 15 to 21 |
+| bibliography | 77 lines (50 checked, 27 to check) | 77 lines (74 checked, 3 to check) |
+| cited blocks, reimplementation | 31 blocks, 462 quantities | unchanged, under the new numbers |
+| assembled book, line count | 6 188 (with 84 273 words) | 6 222 (with 84 921 words) |

@@ -114,7 +114,7 @@ pub fn ece_of_group(confidence: &[f64], correct: &[bool], buckets: usize, region
 }
 
 /// Declared ECE tolerance for n points: it falls with the square root of n. There is no single
-/// number: there is this rule, which is what chapters 15 and 20 leave in place of a fixed value.
+/// number: there is this rule, which is what chapters 18 and 20 leave in place of a fixed value.
 pub fn ece_tolerance(n: usize) -> f64 {
     if n == 0 {
         return f64::INFINITY;

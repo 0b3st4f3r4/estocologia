@@ -23,8 +23,8 @@ example. The order is alphabetical.
 | **Vault** | The part of the data that stays closed until pre-registration, and opens a single time | The sealed envelope of the exam, opened only after the student hands in the answer |
 | **Confounder** | A common cause of two variables that makes it look as if one causes the other | Ice cream and drowning rise together: both rise with the heat |
 | **Counter $K$** | The tally of the number of specifications tried in order to answer the same question | The number of attempts written in the margin of the notebook to get a password right |
-| **Crisonomy** | The lens of judgement: value of information, proper scores, calibration and cost of the error | Paying for one more exam before deciding whether the surgery is worth it |
-| **Chrononomy** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
+| **Decision lens (Crisonomy)** | The lens of judgement: value of information, proper scores, calibration and cost of the error | Paying for one more exam before deciding whether the surgery is worth it |
+| **Time lens (Chrononomy)** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
 | **Design (effect of)** | How many dependent rows are worth one independent row | The same 30 people answering 10 times are not worth 300 people |
 | **Circuit breaker** | The mechanism that swaps the model for a safe reserve when it loses over a moving window | The autopilot that switches itself off when the sensor disagrees for too long |
 | **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
@@ -35,11 +35,11 @@ example. The order is alphabetical.
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
 | **Type M error** | Getting the size of the effect wrong, too large or too small, typically by a study too small for the effect it seeks | A small trial that only reaches significance when chance doubles the effect, and then reports the doubled effect |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
-| **Scalonomy** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
+| **Tail lens (Scalonomy)** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
 | **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
 | **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
 | **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
-| **Fluxonomy** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
+| **Information lens (Fluxonomy)** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
 | **Natural frequencies** | Stating the risk as "x in every 100", with a fixed denominator | "In every 100 patients, 25 wait more than half an hour" instead of "25% risk" |
 | **Goodhart (law of)** | When the measure becomes the goal, it stops measuring | The school that trains the students for the exam and the grade rises without learning rising |
 | **Brier skill** | How much the model improves, in percentage, over the climatologist who only repeats the base rate | How much the rain forecast gains over "it rains as often as always" |
@@ -55,10 +55,10 @@ example. The order is alphabetical.
 | **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
 | **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
 | **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
-| **Lenses (the five)** | The five fixed ways of looking of the program: scale, current, form, time and judgement | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
+| **Lenses (the five)** | The five fixed ways of looking of the program: information, time, tail, invariance and decision, labelled in the code Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
 | **Model ($L_2$)** | The formal, simplified and simulable representation of the world | The scale model of the building, with paper walls |
 | **Null model** | The simulation of what chance alone would produce, to compare with what was observed | Drawing groups by an honest lottery a thousand times before believing in the effect of the medicine |
-| **Morphonomy** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
+| **Invariance lens (Morphonomy)** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
 | **World ($L_1$)** | The reality that generates the data and that we never see in full | The real neighbourhood, with the holes the map does not show |
 | **Murphy (decomposition of)** | The account that separates the error of a forecast into reliability, resolution and difficulty of the event | A good student who fails the exam because of difficulty, not because of not knowing the subject |
 | **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
@@ -143,10 +143,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | Command | What it shows |
 | --- | --- |
 | `cargo run --release --bin labs -- --chapter 19` | The output block of a chapter; replace 19 with any chapter, or use `--all` |
-| `cargo run --release --bin labs -- --bank` | The real call-centre data measured (Chapter 16) |
-| `cargo run --release --bin labs -- --queue` | The queue with abandonment and the four staffing rules (Chapter 16) |
-| `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
-| `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
+| `cargo run --release --bin labs -- --bank` | The real call-centre data measured (Chapter 12) |
+| `cargo run --release --bin labs -- --queue` | The queue with abandonment and the four staffing rules (Chapter 12) |
+| `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 16) |
+| `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
@@ -184,8 +184,11 @@ final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the
 protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
 proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
 check as the other 50 lines. A reading of 2026-10-19 found that the text cites, by author and year, many works that
-the list did not carry; they are gathered in D.5, all marked **[to check]**, because their metadata were written from
-the reading and have not yet passed the same check as D.2 to D.4.
+the list did not carry; they are gathered in D.5. The same day 24 of the 26 were checked against the Crossref API (and
+two against arXiv and the PMLR proceedings): no divergence of content; the issue of Peters 2019 and the volume and
+article number of Kleinberg and colleagues were completed. Two source reservations, as for Chernoff and van Dantzig:
+Crossref gives only the first page of Berkson 1946 and no pages for Hill 1975. Two lines stay **[to check]**: Cover and
+Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter that Crossref does not index.
 
 ### D.2 Classics to begin with
 
@@ -208,10 +211,10 @@ the reading and have not yet passed the same check as D.2 to D.4.
 
 | Reference | Where it enters |
 | --- | --- |
-| **[checked]** Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | The bank call centre, in 2003 (Chapters 16 and 20) |
-| **[checked]** LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | The NSW job-training experiment and the raw difference that deceives (Chapter 17) |
+| **[checked]** Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | The bank call centre, in 2003 (Chapters 12 and 20) |
+| **[checked]** LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | The NSW job-training experiment and the raw difference that deceives (Chapter 13) |
 | **[checked]** Dehejia, R. H.; Wahba, S. *JASA* 94(448):1053–1062, 1999. DOI: 10.1080/01621459.1999.10473858 | The answer to LaLonde: matching hits the number, and why that is still not enough |
-| **[checked]** McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | The Danish fires and the wild tail (Chapter 18) |
+| **[checked]** McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | The Danish fires and the wild tail (Chapter 14) |
 | **[checked]** Embrechts, P.; Klüppelberg, C.; Mikosch, T. *Modelling Extremal Events for Insurance and Finance*, Springer, 1997. DOI: 10.1007/978-3-642-33483-2 | The theory of the tail that the Hill estimator uses |
 | **[checked]** Peters, J.; Bühlmann, P.; Meinshausen, N. *JRSS B* 78(5):947–1012, 2016. DOI: 10.1111/rssb.12167 | ICP, the method of the seven rounds (Chapter 19). Read the discussion: the objections are there |
 | **[checked]** Heinze-Deml, C.; Peters, J.; Meinshausen, N. *Journal of Causal Inference* 6(2):20170016, 2018. DOI: 10.1515/jci-2017-0016 | The nonlinear ICP, which inspired the second ruler of H2c |
@@ -257,32 +260,32 @@ the reading and have not yet passed the same check as D.2 to D.4.
 
 | Reference | Where it enters |
 | --- | --- |
-| **[to check]** Kelly, J. L. *Bell System Technical Journal* 35(4):917–926, 1956 | The growth-optimal fraction (Chapters 10 and 17) |
-| **[to check]** Peters, O. *Nature Physics* 15:1216–1221, 2019 | The ergodicity problem and the Peters coin (Chapter 10) |
-| **[to check]** Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015 | Bernoulli's ship in time (Chapters 10 and 11) |
-| **[to check]** Meng, X.-L. *Annals of Applied Statistics* 12(2):685–726, 2018 | The identity of quality, quantity and difficulty (Chapter 6) |
-| **[to check]** Berkson, J. *Biometrics Bulletin* 2(3):47–53, 1946 | The filter that manufactures relations (Chapters 6 and 9) |
-| **[to check]** Charig, C. R. et al. *BMJ* 292(6524):879–882, 1986 | The kidney-stone table (Chapters 6 and 9) |
-| **[to check]** Cox, R. T. *American Journal of Physics* 14(1):1–13, 1946 | Why belief obeys probability (Chapter 3) |
-| **[to check]** Jaynes, E. T. *Physical Review* 106(4):620–630, 1957 | Maximum entropy (Chapter 3) |
-| **[to check]** Halpern, J. Y. *Journal of Artificial Intelligence Research* 10:67–85, 1999 | The counterexample to Cox (Chapter 21) |
-| **[to check]** Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3):295–314, 1985 | The hot hand (Chapter 7) |
-| **[to check]** Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6):2019–2047, 2018 | The biased test of the hot hand (Chapter 7) |
-| **[to check]** Simmons, J. P.; Nelson, L. D.; Simonsohn, U. *Psychological Science* 22(11):1359–1366, 2011 | The garden of forking paths (Chapter 7) |
-| **[to check]** Ioannidis, J. P. A. *PLoS Medicine* 2(8):e124, 2005 | The predictive value of a finding (Chapter 7) |
-| **[to check]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
-| **[to check]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
-| **[to check]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
+| **[checked]** Kelly, J. L. *Bell System Technical Journal* 35(4):917–926, 1956. DOI: 10.1002/j.1538-7305.1956.tb03809.x | The growth-optimal fraction (Chapters 10 and 13) |
+| **[checked]** Peters, O. *Nature Physics* 15(12):1216–1221, 2019. DOI: 10.1038/s41567-019-0732-0 | The ergodicity problem and the Peters coin (Chapter 10) |
+| **[checked]** Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015 | Bernoulli's ship in time (Chapters 10 and 11) |
+| **[checked]** Meng, X.-L. *Annals of Applied Statistics* 12(2):685–726, 2018 | The identity of quality, quantity and difficulty (Chapter 6) |
+| **[checked]** Berkson, J. *Biometrics Bulletin* 2(3):47–53, 1946 | The filter that manufactures relations (Chapters 6 and 9) |
+| **[checked]** Charig, C. R. et al. *BMJ* 292(6524):879–882, 1986 | The kidney-stone table (Chapters 6 and 9) |
+| **[checked]** Cox, R. T. *American Journal of Physics* 14(1):1–13, 1946 | Why belief obeys probability (Chapter 3) |
+| **[checked]** Jaynes, E. T. *Physical Review* 106(4):620–630, 1957 | Maximum entropy (Chapter 3) |
+| **[checked]** Halpern, J. Y. *Journal of Artificial Intelligence Research* 10:67–85, 1999 | The counterexample to Cox (Chapter 21) |
+| **[checked]** Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3):295–314, 1985 | The hot hand (Chapter 7) |
+| **[checked]** Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6):2019–2047, 2018 | The biased test of the hot hand (Chapter 7) |
+| **[checked]** Simmons, J. P.; Nelson, L. D.; Simonsohn, U. *Psychological Science* 22(11):1359–1366, 2011 | The garden of forking paths (Chapter 7) |
+| **[checked]** Ioannidis, J. P. A. *PLoS Medicine* 2(8):e124, 2005 | The predictive value of a finding (Chapter 7) |
+| **[checked]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
+| **[checked]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
+| **[checked]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
 | **[to check]** Platt, J. C. "Probabilistic outputs for support vector machines", in *Advances in Large Margin Classifiers*, MIT Press, 1999 | Platt recalibration (Chapters 8 and 20) |
-| **[to check]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
-| **[to check]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975 | The tail estimator (Chapters 10, 12 and 18) |
-| **[to check]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
-| **[to check]** Good, I. J. *British Journal for the Philosophy of Science* 17(4):319–321, 1967 | Free information never hurts (Chapter 11) |
-| **[to check]** Lucas, R. E. *Carnegie-Rochester Conference Series on Public Policy* 1:19–46, 1976 | The critique of policy evaluation (Chapters 9 and 11) |
-| **[to check]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
-| **[to check]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
-| **[to check]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS* 2017 (arXiv:1609.05807, 2016) | Calibration within groups (Chapter 11) |
-| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | Fluxonomy under its usual name (Chapter 12) |
+| **[checked]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
+| **[checked]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975. DOI: 10.1214/aos/1176343247 | The tail estimator (Chapters 10, 14 and 15) |
+| **[checked]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
+| **[checked]** Good, I. J. *British Journal for the Philosophy of Science* 17(4):319–321, 1967 | Free information never hurts (Chapter 11) |
+| **[checked]** Lucas, R. E. *Carnegie-Rochester Conference Series on Public Policy* 1:19–46, 1976 | The critique of policy evaluation (Chapters 9 and 11) |
+| **[checked]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
+| **[checked]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
+| **[checked]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS 2017*, LIPIcs 67:43:1–43:23. DOI: 10.4230/LIPIcs.ITCS.2017.43 | Calibration within groups (Chapter 11) |
+| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | The information lens under its usual name (Chapter 15) |
 
 ### D.6 How to use this list
 
@@ -300,18 +303,36 @@ chapter, so that the chapters can teach without carrying the comparison.
 
 **How to read this appendix.** The two rectification tables are for every reader: they show errors that passed
 every gate. The sections by chapter that follow record smaller differences against earlier texts, and the sections
-of Chapters 12 to 15 record differences of naming and of counting between the documents of the repository. Those are
+of Chapters 15 to 18 record differences of naming and of counting between the documents of the repository. Those are
 for whoever audits the repository, and a reader of the book can skip them.
+
+**The numbering of the chapters.** On 2026-10-19 the chapters were reordered, so that the book reads as two: the
+method (Parts I to IV, Chapters 1 to 14, with the three real cases right after the theory) and the auditable machine
+(Part V, Chapters 15 to 21). Every chapter number in this book, this appendix included, follows the new numbering.
+Records outside the book (the dated state records, the declarations and the empirical points) keep the numbering of
+their date; this table translates.
+
+| Before 2026-10-19 | After | Chapter |
+| --- | --- | --- |
+| 12 | 15 | The map of knowledge |
+| 13 | 16 | The team of specialists, the safeguard panel and the two systems |
+| 14 | 17 | The iron contract |
+| 15 | 18 | The vault and the seal |
+| 16 | 12 | The health post and the bank |
+| 17 | 13 | The market and the employment programme |
+| 18 | 14 | The Danish fires |
+
+Chapters 1 to 11 and 19 to 21 keep their numbers.
 
 **Who read from outside.** The rectifications of 2026-10-18 were applied by an AI assistant (the rectification commit
 of that day is authored by "Claude"), and the second table below comes from a later review of the same kind. Both
-readings stand outside the authors' own audit of Chapter 15, but neither meets the independence that Chapter 21 asks
+readings stand outside the authors' own audit of Chapter 18, but neither meets the independence that Chapter 21 asks
 for: no person outside the program has yet checked them. They count as entries in the errata of
 `docs/OUTSIDE_AUDIT.md`, not as its completion.
 
 ### Rectifications of 2026-10-18
 
-A reading from outside, made after the inward audit of Chapter 15, found errors that the instruments reproduced
+A reading from outside, made after the inward audit of Chapter 18, found errors that the instruments reproduced
 faithfully, because the seed fixes a wrong account as well as a right one. Each was corrected in the code, given a test
 that would have caught it, and corrected in the text. The earlier value stays here, beside the corrected one.
 
@@ -337,16 +358,16 @@ that would have caught it, and corrected in the text. The earlier value stays he
 | 9 | Unstable mechanism | coefficient doubled at every site (naive slope 4.0004), $\{X\}$ accepted in 94% | coefficient 0.5, 2 and 3.5 by site, every set rejected | the instability term did not depend on the site |
 | 8 | Resolution of the constant forecaster | 0.0002 | 0.0000 | the boxes of equal mass split runs of identical forecasts |
 | 8 | Platt recalibration | fitted and scored on the same 4,000 days | fitted on the first 2,000, scored on the last 2,000 | the book's own rule asks for scoring out of the fit |
-| 8, 15, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
-| 5, 8, 10, 13, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
-| 13 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
-| 16 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
-| 17 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
-| 17 | 19 October 1987 | Friday | Monday | date |
-| 18 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
+| 8, 18, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
+| 5, 8, 10, 12, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
+| 16 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
+| 12 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
+| 13 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
+| 13 | 19 October 1987 | Friday | Monday | date |
+| 14 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
 | 6 | Exercise on Simpson | cases 81, 234, 192 and 55 | cases 87, 270, 263 and 80 | successes printed as cases |
 | 20 | Platt parameters | "a = 0.98, b = -0.54" | slope 0.98, intercept $-0.54$ | labels swapped against Chapter 8 |
-| 15, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
+| 18, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
 | C | Test count | 373 | 406 | stale count, plus the tests added with these corrections |
 
 ### Rectifications of the text, 2026-10-18 (third review)
@@ -361,12 +382,12 @@ the earlier wording is kept here.
 | 1 | Vulcan | the example of a degenerative repair | a progressive proposal whose prediction (transits) failed; degeneration is a trajectory of a programme | Le Verrier's Vulcan predicted observable transits |
 | 8, 21 | "Resolution is not repaired" | stated of the forecaster | stated of recalibration; new information can raise resolution | the asymmetry belongs to the map from $p$ to $p'$ |
 | 11, A | Chouldechova | approvals, errors and calibration "incompatible" | equal PPV, equal FPR and equal FNR incompatible for an imperfect predictor; calibration within groups is a neighbour | approval parity is not part of the identity |
-| 12 | Type of the Erlang C node | Knightian (specification) | epistemic (specification) | its failures are listed and testable; Knightian is the unlisted mechanism |
-| 12 | Pathology "illusion of the dark room" | name | "case for population" | the dark room is another problem of active inference (Chapter 11) |
-| 12 | Bridge "noise as temperature" | a bridge of the same rank as Jensen | marked heuristic | the gradient noise is anisotropic and state-dependent |
-| 13 | Panel score | a severity from 0 to 10 | read as one bit per safeguard | the band is drawn by the seed and never crosses the floor |
-| 13, 21 | Floor of 1% to 99% | a prohibition on every forecast | a convention of System 1's triage; forecasts declare $\varepsilon$ from the base rate | Cromwell's rule forbids 0 and 1, not 0.5% |
-| 14 | Stratonovich and the drag | "the term $-\sigma^2/2$ does not appear" | the gap of $\tfrac12\sigma^2$ appears in both readings; the convention changes what $\mu$ names | Jensen does not depend on the integral |
+| 15 | Type of the Erlang C node | Knightian (specification) | epistemic (specification) | its failures are listed and testable; Knightian is the unlisted mechanism |
+| 15 | Pathology "illusion of the dark room" | name | "case for population" | the dark room is another problem of active inference (Chapter 11) |
+| 15 | Bridge "noise as temperature" | a bridge of the same rank as Jensen | marked heuristic | the gradient noise is anisotropic and state-dependent |
+| 16 | Panel score | a severity from 0 to 10 | read as one bit per safeguard | the band is drawn by the seed and never crosses the floor |
+| 16, 21 | Floor of 1% to 99% | a prohibition on every forecast | a convention of System 1's triage; forecasts declare $\varepsilon$ from the base rate | Cromwell's rule forbids 0 and 1, not 0.5% |
+| 17 | Stratonovich and the drag | "the term $-\sigma^2/2$ does not appear" | the gap of $\tfrac12\sigma^2$ appears in both readings; the convention changes what $\mu$ names | Jensen does not depend on the integral |
 | 21 | Physics of the noise | "added (Itô) or dragged (Stratonovich)" | the two readings coincide for additive noise and differ for state-dependent noise | definition |
 | A | Type M error | "3 centimetres of rain when it was 3 millimetres" | a small study that reports a doubled effect | a unit error is not a magnitude error |
 | A | ICP | returns "the set" of invariant variables | returns the intersection of the accepted sets, with a declared error rate | definition |
@@ -384,8 +405,8 @@ the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 7, 13, 14 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
-| 7, 13, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
+| 7, 16, 17 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
+| 7, 16, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
 | 10 | Twice Kelly above the start | 0.485, 0.527 and 0.51960 after 10, 100 and 1000 rounds | 0.374, 0.450 and 0.49110 (exact: 0.377, 0.460 and 0.487) | 1.25 and 0.8 multiply to exactly 1; the comparison `> 1.0` let the rounding of each product decide the ties |
 | 10 | Share of the true mean above the maximum of a sample of one million, in the median | 25.12% | 27.55% (median maximum 397,420) | the laboratory printed $n^{1-\alpha}$, which puts the maximum at $n$; the median maximum solves $(1 - m^{-\alpha})^n = 1/2$ |
 | C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
@@ -402,30 +423,30 @@ instruments, and two statements in the text; each is corrected, with a test wher
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 5, 8, 13, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
+| 5, 8, 12, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
 | 5 | Mean of W over a uniform demand between 5 and 11 | 14.10 min | 14.46 min | a six-point midpoint rule; the integral has a closed form |
-| 12 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
-| 16 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
-| 16 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
-| 17 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
+| 15 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
+| 12 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
+| 12 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
+| 13 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
 | 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
 | 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
 ### Rectifications of the recipes, 2026-10-19
 
 Of the 19 quantities that the reimplementation left open, the text now states the recipe of 16, in a paragraph beside
-the run of each laboratory (Chapters 5, 7, 8, 12, 13, 14, 15, 17, 18 and 20), and the reimplementation redoes them from
+the run of each laboratory (Chapters 5, 7, 8, 13, 14, 15, 16, 17, 18 and 20), and the reimplementation redoes them from
 that paragraph: 462 quantities, 459 in agreement, none divergent and 3 open (the upper end of the Kelly interval, the
-skill of the model in the vault and the false negative rate of Hispanics in Chapter 17, whose recipes are longer than a
+skill of the model in the vault and the false negative rate of Hispanics in Chapter 13, whose recipes are longer than a
 paragraph and stay cited from the research record at commit `1bfec905`). Writing the recipes found one more value
 wrong in an instrument and one statement wrong in the text.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 7 | Garden of paths: Simmons' four freedoms, the large family, the Mayo severity of the garden | 21.5%, 47.0% and 0.53; PPV with the garden alpha 0.146 ($R = 1/10$) and 0.362 ($R = 1/3$) | 20.3%, 42.3% and 0.58; PPV 0.159 and 0.387 | the "exclusion of the extreme case" took the first $2m$ rows of the file, all of one group and part of the other, and split them at $m - 1$; it compared mixed groups. Now the first $m$ of each group, without the largest value of the treated. The direction (the garden multiplies the false positive) does not change |
-| 17 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
-| 17 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
-| 15 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
+| 13 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
+| 13 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
+| 18 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
 | C | Test count | 413 | 415 | the bounds of the garden of paths and the declared limit of the Merkle root |
 | 8 | Brier of the overconfident forecaster | — | declared, not changed | the instrument's own seed spread (seeds 2022 to 2027) is 0.1706 to 0.1914; the printed 0.1712 is the low end, and the reimplementation compares within that spread |
 
@@ -438,16 +459,20 @@ and is not the independent audit that Chapter 21 asks for. No instrument changed
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 2, 5 | Table of the two worlds in Step 1 | 9.3 and 20.7 min; 8 and 25 in every 100 above 30 min | 9.1 and 19.6 min; 8 and 24 | the table kept the figures of the retired generator while the block of Chapter 5 prints the instrument's (Chapter 5 section below) |
-| 12 | Exercise 6 | "why was Erlang C typed as knightian and not as epistemic?" | asks why it is epistemic and not Knightian, and what would move it | the node was retyped on 2026-10-18 and the exercise was not |
-| 17 | The worst entry month | "had a mean return equal to that of the market and did not survive to see it" | the order of the returns, not their mean, ruined the cohort | the sentence named no quantity |
-| 18 | Mutual information of the clean window | 0.51 bit, "practically nothing" | about half of the one bit that two equally likely hypotheses allow | 0.51 of a ceiling of 1 is not nothing; the likelihood ratio, 2.2 bits, carries the lesson |
-| 17, 18, 19, 20 | Thousands separator in running prose | 31.919 sessions, 1.488 cases, 11.598 students and others, 37 places | 31,919, 1,488, 11,598 | a decimal point where a thousands separator was due, as in the row of 1978 above |
+| 15 | Exercise 6 | "why was Erlang C typed as knightian and not as epistemic?" | asks why it is epistemic and not Knightian, and what would move it | the node was retyped on 2026-10-18 and the exercise was not |
+| 13 | The worst entry month | "had a mean return equal to that of the market and did not survive to see it" | the order of the returns, not their mean, ruined the cohort | the sentence named no quantity |
+| 14 | Mutual information of the clean window | 0.51 bit, "practically nothing" | about half of the one bit that two equally likely hypotheses allow | 0.51 of a ceiling of 1 is not nothing; the likelihood ratio, 2.2 bits, carries the lesson |
+| 13, 14, 19, 20 | Thousands separator in running prose | 31.919 sessions, 1.488 cases, 11.598 students and others, 37 places | 31,919, 1,488, 11,598 | a decimal point where a thousands separator was due, as in the row of 1978 above |
 | 19 | Verdict of the causal gate | table and summary said "Passed" | the table and the summary add that under the first declared version of each choice the gate does not pass | the end of Step 2 said it; the headline did not |
 | 20 | Calibration criterion of Rhode Island | relative tolerance stated without comment | declared as a change of ruler after two failures, counted as an attempt; it tightens, since 0.03 exceeds the rate | a change of criterion is an attempt whatever its direction |
 | 21 | Lessons 5 and 7 | invariance and pre-registration as successes | two of the areas recovered known causes; declaring makes the path visible, not innocent | the lessons carried less than Chapter 19 concedes |
 | 21 | Negative loss below the threshold of prediction 3 | "after costing less than nothing" | the two arms do not spend the same resource: 13 agents every day against the per-day Erlang scale | the column compares two plans, not the equal-resource toll of Chapter 5 |
-| Preface | What the reader cannot run; status of the bridge thesis | the rule "every number comes from an instrument" without its exceptions | the exceptions listed, and the thesis named a working hypothesis | the rule did not hold for the real cases of Chapters 17 to 20 |
+| Preface | What the reader cannot run; status of the bridge thesis | the rule "every number comes from an instrument" without its exceptions | the exceptions listed, and the thesis named a working hypothesis | the rule did not hold for the real cases of Chapters 13, 14, 19 and 20 |
 | D | References cited and absent from the list | 26 works cited by author and year | listed in D.5, marked [to check] | the check of 50 of 50 covered the list, not the text |
+| D | Check of D.5 | 26 lines to check | 24 checked against Crossref, arXiv and PMLR; Cover and Thomas, and Platt 1999, still to check | the metadata were written from the reading |
+| 15, 16, 17, A | Names of the five lenses | Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy as the names | information, time, tail, invariance and decision, with the coined words kept as the labels the outputs print | a name that needs a translation table in its own chapter costs the reader and adds no mathematics |
+| 12 to 18 | Order of the chapters | the machine (then 12 to 15) before the three real cases (then 16 to 18) | the cases right after the theory (12 to 14), the machine after them (15 to 18); see the numbering above | the method can be read without the machine; the old order made the reader cross the machine to reach the cases |
+| Title | Title of the book | "Stochology: A Textbook" | "Stochology: Judgement and Decision under Uncertainty", a working text | a textbook is what the outside audit of Chapter 21 would certify; it has not been done |
 
 ### Numbers cited without an instrument in this book
 
@@ -468,11 +493,11 @@ others from the research records. Three were recomputed by the critical reading 
 | 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | no recipe in the text |
 | 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | no recipe in the text |
 | 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | no recipe in the text |
-| 12 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
-| 13 | Five of 33 domains change with the literature prior | research record | not reproduced here |
-| 14 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
-| 17 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
-| 18 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
+| 15 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
+| 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
+| 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
+| 13 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
+| 14 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
 | 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
 | 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
 | 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
@@ -552,7 +577,7 @@ do not coincide; both are reported.
 
 The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
 $3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
-in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
+in Chapter 13, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
 $3\times$ above $2\times$, and the cause was attributed to the real tail. The cause was a calibration that dropped the
 factor of 252 sessions per year. With it restored, the Gaussian model puts $2\times$ above $3\times$ and gives drags
 that match those of the real index to the second decimal (see the rectifications above). The earlier attribution is recorded and withdrawn.
@@ -574,56 +599,6 @@ rates by group instead of the units. The divergences are declared and no old val
 was erased.
 
 ### Chapter 12
-
-The earlier text, in Chapter 6, presents the three samples of
-Hill with values close to $1.81$; the instrument measures 1.8444 ($k = 250$), 1.7901 ($k = 500$), 1.7949
-($k = 1,000$) and 1.8032 ($k = 2,000$). The difference is one of sampling and of cutoff, not of formula — the value
-published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
-earlier text and the plan of the repository count gates in different ways: the old book describes
-**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
-governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
-G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
-$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 14 details the seven; no old value
-was erased.
-
-### Chapter 13
-
-The earlier text speaks of "eight tracks and an orchestrator M15". The
-text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
-(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
-`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
-because that is the name of the code. The laboratory of this book measures the
-severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
-machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
-running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
-values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
-2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
-
-### Chapter 14
-
-Two accounts of this chapter diverge between the sources, and both stay
-recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
-and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
-the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
-book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
-count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
-repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
-that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
-gate G4, in the horizon `todos`, reproduces here.
-
-### Chapter 15
-
-Two points stay recorded. (1) The plan publishes, for the
-horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
-horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
-five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
-accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
-exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
-support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
-recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
-No old value was erased.
-
-### Chapter 16
 
 The earlier text and the README of the first simulation record 9.3 min and 20.7 min
 for the two worlds, 8 and 25 patients in every 100 above 30 minutes, medians of 3.8 and 9.3, 90th percentiles of 26.7
@@ -662,7 +637,7 @@ because the mean wait per patient in the oscillating world is a ratio of heavy-t
 with six different seeds, the wait of the world 5 or 11 goes from **19.3 to 20.6 minutes**. The difference
 is inside the variation of the instrument, and the two sets of numbers stay on the record.
 
-### Chapter 17
+### Chapter 13
 
 The report of the market case records 0.051, 0.072 and 0.060 of growth per year;
 the instrument measures **0.0515, 0.0719 and 0.0601** — the coincidence is of three places, because the account is the same. The
@@ -678,7 +653,7 @@ case deserves a note: the earlier text cites "from 1929 to 1932, the capital fal
 **0.00025** — exactly the numbers of the material. The divergence was not of method: it was of window, and the two
 appear now, with the date of each one.
 
-### Chapter 18
+### Chapter 14
 
 The report of the fire case records $\hat\alpha = 1.81$ with interval [1.41;
 2.56] by bootstrap in blocks; the instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;
@@ -691,6 +666,56 @@ $\xi = 0.406$, $\sigma = 7.387$, 83 excesses above 10 — and measures **2.42 bi
 simple monthly frequency of the training set, $p = 5/108 = 0.04630$. The difference is not of account: it is of which world
 "dangerous" one places on the other side. The adjusted tail is more pessimistic than the raw count of months, and that is why it
 requires more clean months. The two values stay on the record; none was erased.
+
+### Chapter 15
+
+The earlier text, in Chapter 6, presents the three samples of
+Hill with values close to $1.81$; the instrument measures 1.8444 ($k = 250$), 1.7901 ($k = 500$), 1.7949
+($k = 1,000$) and 1.8032 ($k = 2,000$). The difference is one of sampling and of cutoff, not of formula — the value
+published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
+earlier text and the plan of the repository count gates in different ways: the old book describes
+**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
+governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
+G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
+$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 17 details the seven; no old value
+was erased.
+
+### Chapter 16
+
+The earlier text speaks of "eight tracks and an orchestrator M15". The
+text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
+(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
+`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
+because that is the name of the code. The laboratory of this book measures the
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
+machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
+running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
+2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
+
+### Chapter 17
+
+Two accounts of this chapter diverge between the sources, and both stay
+recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
+and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
+the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
+book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
+count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
+repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
+that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
+gate G4, in the horizon `todos`, reproduces here.
+
+### Chapter 18
+
+Two points stay recorded. (1) The plan publishes, for the
+horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
+horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
+five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
+accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
+exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
+support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
+recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
+No old value was erased.
 
 ### Chapter 19
 

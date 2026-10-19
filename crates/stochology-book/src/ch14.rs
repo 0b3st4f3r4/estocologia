@@ -1,444 +1,294 @@
-//! Chapter 14 laboratory — cards, prohibitions, invariants Phi1-Phi4 and gates.
+//! Chapter 14 — H1, part 2: the tail of the Danish fires and the art of failing one's own model.
 //!
-//! Validate a complete card and a card with one planted defect at a time,
-//! printing the failures by gate, in the spirit of ~portoes --defeito~.
-//!
-//! Fixed seed. No external dependencies. SplitMix64 built in.
+//! Self-contained, no external dependencies: reads the public dataset, estimates Hill on the real tail and on a
+//! simulated tail, applies the Laplace rule to the 36-month clean window and measures the evidence in bits.
+//! Run from the repository root:
+//!     cargo run --release --bin labs -- --chapter 17
 
-fn splitmix64(state: &mut u64) -> u64 {
-    stochology_core::rng::splitmix64_step(state)
+const RETENTION: f64 = 50.0; // layer "100 xs 50", in M DKK of 1985
+const U_POT: f64 = 10.0; // threshold of the POT fit of the repository
+const N_EXC: f64 = 83.0; // excesses above U_POT in the training set (h1-real/saida/c/resultados.json)
+const SIGMA_POT: f64 = 7.387414319903844; // sigma of the published GPD fit
+const XI_POT: f64 = 0.4064637172276745; // xi of the published GPD fit
+const P_POT: f64 = 0.042961531409410614; // monthly p implied by the training tail (published)
+const TRAIN_YEARS: i32 = 9; // 1980-1988
+const WINDOW: usize = 36; // clean months that the claim reads
+const P_NEGLIGIBLE: f64 = 1.0 / 1200.0; // "negligible risk": one month hit per century
+const N_BOOT: usize = 300; // bootstrap replicas by monthly blocks
+
+#[derive(Clone)]
+struct Sm64 {
+    state: u64,
 }
 
-fn uniform(state: &mut u64, limit: u64) -> u64 {
-    splitmix64(state) % limit
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Gate {
-    Phi1,
-    Phi2,
-    Phi3,
-    Phi4,
-    TypeIII,
-}
-
-impl Gate {
-    fn code(self) -> &'static str {
-        match self {
-            Gate::Phi1 => "Phi1-simulability",
-            Gate::Phi2 => "Phi2-independent-unit",
-            Gate::Phi3 => "Phi3-layers-and-null-model",
-            Gate::Phi4 => "Phi4-scope-and-exit",
-            Gate::TypeIII => "type-III-decider-question",
-        }
+impl Sm64 {
+    fn new(s: u64) -> Self {
+        Sm64 { state: s }
+    }
+    fn next_u64(&mut self) -> u64 {
+        stochology_core::rng::splitmix64_step(&mut self.state)
+    }
+    fn uniform(&mut self) -> f64 {
+        (self.next_u64() >> 11) as f64 * (1.0 / 9007199254740992.0)
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Defect {
-    NoSeed,
-    NoDefinition,
-    NoMarginNoUnit,
-    NoNullModel,
-    NoScopeNoPayerNoExit,
-    QuestionWithoutMark,
-    QuestionWithoutAction,
+/// Hill estimator with the k largest positive observations (delegates to `stochology-horizons`).
+fn hill(x: &[f64], k: usize) -> f64 {
+    let n_pos = x.iter().filter(|v| **v > 0.0).count();
+    stochology_horizons::h1::hill(x, k.min(n_pos.saturating_sub(1)))
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Layer {
-    L1,
-    L2,
-    L3,
+fn quantile(mut v: Vec<f64>, p: f64) -> f64 {
+    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let i = ((p * v.len() as f64).ceil() as usize).max(1).min(v.len()) - 1;
+    v[i]
 }
 
-impl Layer {
-    fn code(self) -> &'static str {
-        match self {
-            Layer::L1 => "L1",
-            Layer::L2 => "L2",
-            Layer::L3 => "L3",
-        }
-    }
+fn mean(x: &[f64]) -> f64 {
+    x.iter().sum::<f64>() / x.len() as f64
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum UncertaintyType {
-    Aleatory,
-    Epistemic,
-    Knightian,
-    NotApplicable,
+fn sd(x: &[f64]) -> f64 {
+    let m = mean(x);
+    (x.iter().map(|v| (v - m) * (v - m)).sum::<f64>() / (x.len() as f64 - 1.0)).sqrt()
 }
 
-impl UncertaintyType {
-    fn code(self) -> &'static str {
-        match self {
-            UncertaintyType::Aleatory => "aleatory",
-            UncertaintyType::Epistemic => "epistemic",
-            UncertaintyType::Knightian => "knightian",
-            UncertaintyType::NotApplicable => "not-applicable",
-        }
-    }
+/// Laplace rule of succession: (k+1)/(n+2).
+fn laplace(k: usize, n: usize) -> f64 {
+    (k as f64 + 1.0) / (n as f64 + 2.0)
 }
 
-#[derive(Debug, Clone)]
-struct Card {
-    id: String,
-    layer: Layer,
-    uncertainty: UncertaintyType,
-    definition: String,
-    simulable_artifact: Option<String>,
-    seed: Option<u64>,
-    independent_unit: Option<String>,
-    margin: Option<f64>,
-    null_model: Option<String>,
-    ecological_scope: bool,
-    who_pays_for_error: Option<String>,
-    exit_clause: Option<String>,
-    decider_question: String,
-    package_action: String,
-    header: [String; 5],
+/// Evidence of a clean window of n months: likelihood ratio "negligible" against "dangerous".
+fn evidence_bits(n: usize, p_dangerous: f64) -> (f64, f64, f64) {
+    let p0_negligible = (1.0 - P_NEGLIGIBLE).powi(n as i32);
+    let p0_danger = (1.0 - p_dangerous).powi(n as i32);
+    let lr = p0_negligible / p0_danger;
+    (lr, lr.log2(), p0_danger)
 }
 
-fn complete_card() -> Card {
-    Card {
-        id: "h0.posto-saude".to_string(),
-        layer: Layer::L1,
-        uncertainty: UncertaintyType::Aleatory,
-        definition: "queue with non-linear arrival and convex waiting time".to_string(),
-        simulable_artifact: Some("crates/stochology-book#ch16".to_string()),
-        seed: Some(2026),
-        independent_unit: Some("day".to_string()),
-        margin: Some(0.51),
-        null_model: Some("historical-mean".to_string()),
-        ecological_scope: true,
-        who_pays_for_error: Some("the patient who waits and gives up".to_string()),
-        exit_clause: Some(
-            "stop if the fraction of waits above 30 min passes 0,25".to_string(),
-        ),
-        decider_question: "should we open a second room on the busy days?".to_string(),
-        package_action: "open a second room".to_string(),
-        header: [
-            "generating_process: queue with an arrival rate that oscillates between 5 and 11 per hour and a non-Poisson arrival"
-                .to_string(),
-            "non_linearity: the wait grows on a curve; f(E[X]) is not E[f(X)] near saturation".to_string(),
-            "unit_and_margin: the independent unit is the DAY; 81 days, not 2,65 million calls".to_string(),
-            "noise_physics: the daily demand has Var/mean = 273 (Poisson: 1); no absorbing states".to_string(),
-            "causal_ladder: step 2 do(staffing) simulated over the real demand; untestable premise: the demand does not react to the staffing".to_string(),
-        ],
-    }
-}
-
-#[derive(Debug, Clone)]
-struct Failure {
-    gate: Gate,
-    detail: String,
-}
-
-fn evaluate(f: &Card) -> Vec<Failure> {
-    let mut failures: Vec<Failure> = Vec::new();
-    let mut add = |gate: Gate, detail: &str| {
-        failures.push(Failure {
-            gate,
-            detail: detail.to_string(),
-        });
-    };
-
-    if f.seed.is_none() || f.simulable_artifact.is_none() {
-        add(Gate::Phi1, "missing fixed seed or simulable artifact");
-    }
-    if f.margin.is_none() || f.independent_unit.is_none() {
-        add(Gate::Phi2, "margin without a declared independent unit");
-    }
-    if f.null_model.is_none() || f.definition.trim().is_empty() {
-        add(Gate::Phi3, "no null model or no one-line definition");
-    }
-    if !f.ecological_scope || f.who_pays_for_error.is_none() || f.exit_clause.is_none() {
-        add(
-            Gate::Phi4,
-            "ecological scope, who pays for the error or exit clause missing",
-        );
-    }
-    let question = f.decider_question.trim();
-    let action = f.package_action.trim().to_lowercase();
-    let matches = !action.is_empty() && question.to_lowercase().contains(&action);
-    if !question.ends_with('?') || !matches {
-        add(
-            Gate::TypeIII,
-            "decider_question must end in ? and cite the action of the package",
-        );
-    }
-    if f.header.iter().any(|c| c.trim().is_empty()) {
-        add(Gate::Phi3, "five-question header incomplete");
-    }
-    for (i, c) in f.header.iter().enumerate() {
-        let expected = [
-            "generating_process",
-            "non_linearity",
-            "unit_and_margin",
-            "noise_physics",
-            "causal_ladder",
-        ][i];
-        if !c.starts_with(expected) {
-            add(Gate::Phi3, "header field out of order");
-        }
-    }
-    failures
-}
-
-// ----------------------------------------------- graph, in the spirit of Ch. 12
-
-#[derive(Debug, Clone, PartialEq)]
-struct Node {
-    id: String,
-    definition: String,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-struct Hyperedge {
-    id: String,
-    members: Vec<String>,
-}
-
-#[derive(Debug, Clone, Default)]
-struct Graph {
-    nodes: Vec<Node>,
-    tree: Vec<(String, String)>,
-    hyperedges: Vec<Hyperedge>,
-}
-
-impl Graph {
-    fn validate(&self) -> Vec<String> {
-        let mut p: Vec<String> = Vec::new();
-        let exists = |id: &str| self.nodes.iter().any(|n| n.id == id);
-        for (from, to) in &self.tree {
-            if !exists(from) || !exists(to) {
-                p.push(format!("edge to absent node: {} -> {}", from, to));
+/// Mutual information, in bits, between "did the window come out clean?" and the 50/50 hypothesis dangerous against negligible.
+fn mutual_information(n: usize, p_dangerous: f64) -> f64 {
+    let pc = [
+        (1.0 - p_dangerous).powi(n as i32),
+        (1.0 - P_NEGLIGIBLE).powi(n as i32),
+    ];
+    let mut mi = 0.0;
+    for (i, hypothesis) in [0.5f64, 0.5].iter().enumerate() {
+        for j in 0..2 {
+            let p = hypothesis * if j == 0 { pc[i] } else { 1.0 - pc[i] };
+            let px = 0.5 * if j == 0 { pc[0] } else { 1.0 - pc[0] }
+                + 0.5 * if j == 0 { pc[1] } else { 1.0 - pc[1] };
+            if p > 0.0 {
+                mi += p * (p / (0.5 * px)).log2();
             }
         }
-        for h in &self.hyperedges {
-            if h.members.len() < 2 {
-                p.push(format!("hyperedge with fewer than two members: {}", h.id));
-            }
-            for m in &h.members {
-                if !exists(m) {
-                    p.push(format!("hyperedge {} cites absent node: {}", h.id, m));
+    }
+    mi
+}
+
+/// Clean months needed for "accusing the danger" to have probability 95%.
+fn months_for_95(p: f64) -> usize {
+    (0.05f64.ln() / (1.0 - p).ln()).ceil() as usize
+}
+
+struct Data {
+    all: Vec<f64>,
+    months_top: Vec<(String, f64)>,
+    by_month: Vec<Vec<f64>>,
+}
+
+/// Reads the dataset: losses in chronological order, the largest loss of each month and the list of losses per month.
+fn read_data(path: &str) -> Data {
+    let text = std::fs::read_to_string(path).expect("did not read the fires CSV");
+    let mut all = Vec::new();
+    let mut months_top: Vec<(String, f64)> = Vec::new();
+    let mut by_month: Vec<Vec<f64>> = (0..(TRAIN_YEARS * 12) as usize)
+        .map(|_| Vec::new())
+        .collect();
+    for (i, line) in text.lines().enumerate() {
+        if i == 0 || line.trim().is_empty() {
+            continue;
+        }
+        let c: Vec<&str> = line.split(',').collect();
+        let loss: f64 = c[1].trim().parse().unwrap();
+        let month = c[0].trim()[..7].to_string();
+        all.push(loss);
+        match months_top.last_mut() {
+            Some((m, mx)) if *m == month => {
+                if loss > *mx {
+                    *mx = loss;
                 }
             }
+            _ => months_top.push((month.clone(), loss)),
         }
-        let mut colour: Vec<(String, u8)> = Vec::new();
-        let mut cycle: Option<String> = None;
-        for n in &self.nodes {
-            if self.visit(&n.id, &mut colour, &mut cycle) {
-                p.push(format!("cycle in E_tree: {:?}", cycle));
-                break;
-            }
+        if &month[..4] < "1989" {
+            let idx = (month[..4].parse::<i32>().unwrap() - 1980) as usize * 12
+                + month[5..7].parse::<usize>().unwrap()
+                - 1;
+            by_month[idx].push(loss);
         }
-        p
     }
-
-    fn visit(&self, id: &str, colour: &mut Vec<(String, u8)>, cycle: &mut Option<String>) -> bool {
-        match colour.iter().find(|(x, _)| x == id).map(|(_, c)| *c) {
-            Some(1) => {
-                *cycle = Some(id.to_string());
-                true
-            }
-            Some(2) => false,
-            _ => {
-                colour.push((id.to_string(), 1));
-                for (from, to) in &self.tree {
-                    if from == id && self.visit(to, colour, cycle) {
-                        return true;
-                    }
-                }
-                if let Some(e) = colour.iter_mut().find(|(x, _)| x == id) {
-                    e.1 = 2;
-                }
-                false
-            }
-        }
+    Data {
+        all,
+        months_top,
+        by_month,
     }
 }
 
-fn good_graph() -> Graph {
-    Graph {
-        nodes: vec![
-            Node {
-                id: "L1_queue".to_string(),
-                definition: "wait measured over 81 days".to_string(),
-            },
-            Node {
-                id: "L2_erlang".to_string(),
-                definition: "stationary level of service".to_string(),
-            },
-            Node {
-                id: "L3_manager".to_string(),
-                definition: "staffing decided by the mean".to_string(),
-            },
-        ],
-        tree: vec![
-            ("L1_queue".to_string(), "L2_erlang".to_string()),
-            ("L2_erlang".to_string(), "L3_manager".to_string()),
-        ],
-        hyperedges: vec![Hyperedge {
-            id: "H1".to_string(),
-            members: vec!["L1_queue".to_string(), "L2_erlang".to_string()],
-        }],
-    }
-}
-fn with_defect(d: Defect) -> Card {
-    let mut f = complete_card();
-    match d {
-        Defect::NoSeed => f.seed = None,
-        Defect::NoDefinition => f.definition = String::new(),
-        Defect::NoMarginNoUnit => {
-            f.margin = None;
-            f.independent_unit = None;
-        }
-        Defect::NoNullModel => f.null_model = None,
-        Defect::NoScopeNoPayerNoExit => {
-            f.ecological_scope = false;
-            f.who_pays_for_error = None;
-            f.exit_clause = None;
-        }
-        Defect::QuestionWithoutMark => {
-            f.decider_question = "should we open a second room on the busy days".to_string()
-        }
-        Defect::QuestionWithoutAction => {
-            f.decider_question = "should we do something on the busy days?".to_string()
-        }
-    }
-    f
+/// Months of the period, months in which the layer was hit and the largest loss of the period.
+fn period(d: &Data, y0: i32, y1: i32) -> (usize, usize, f64) {
+    let of_period: Vec<&(String, f64)> = d
+        .months_top
+        .iter()
+        .filter(|(m, _)| {
+            let year: i32 = m[..4].parse().unwrap();
+            year >= y0 && year <= y1
+        })
+        .collect();
+    let hit = of_period.iter().filter(|(_, mx)| *mx > RETENTION).count();
+    let largest = of_period.iter().map(|(_, mx)| *mx).fold(0.0f64, f64::max);
+    (of_period.len(), hit, largest)
 }
 
-fn names(v: &[Gate]) -> String {
-    v.iter().map(|p| p.code()).collect::<Vec<&str>>().join(",")
+/// Hill k=50 with the months of the training set resampled with replacement (bootstrap of monthly blocks).
+fn bootstrap_hill(d: &Data, k: usize, reps: usize, seed: u64) -> Vec<f64> {
+    let mut rng = Sm64::new(seed);
+    let mut out = Vec::with_capacity(reps);
+    for _ in 0..reps {
+        let mut sample = Vec::new();
+        for _ in 0..d.by_month.len() {
+            let j = (rng.uniform() * d.by_month.len() as f64) as usize % d.by_month.len();
+            sample.extend(d.by_month[j].iter().cloned());
+        }
+        out.push(hill(&sample, k));
+    }
+    out
+}
+
+/// Simulated tail: Pareto with tail alpha, same sample size, Hill k in each repetition.
+fn simulated_tail(alpha: f64, n: usize, k: usize, reps: usize, seed: u64) -> Vec<f64> {
+    let mut rng = Sm64::new(seed);
+    let mut out = Vec::with_capacity(reps);
+    for _ in 0..reps {
+        let sample: Vec<f64> = (0..n)
+            .map(|_| (1.0 - rng.uniform()).powf(-1.0 / alpha))
+            .collect();
+        out.push(hill(&sample, k));
+    }
+    out
+}
+
+/// Resolves the data path: optional base in ESTOCOLOGIA_DADOS, otherwise the repository.
+fn data_path(default: &str) -> String {
+    match std::env::var("ESTOCOLOGIA_DADOS") {
+        Ok(base) => format!("{}/{}", base.trim_end_matches('/'), default),
+        Err(_) => default.to_string(),
+    }
 }
 
 pub fn run() {
-    println!("== Chapter 14 :: the iron contract ==");
+    let path = data_path("data/danish_fire.csv");
+    let d = read_data(&path);
 
-    let f = complete_card();
-    let failures = evaluate(&f);
+    println!("== Chapter 14 :: the tail, the clean window and the information ==");
     println!(
-        "card {}: layer={} uncertainty={} header={} fields | failures={:?} total={}",
-        f.id,
-        f.layer.code(),
-        f.uncertainty.code(),
-        f.header.len(),
-        failures
-            .iter()
-            .map(|x| x.gate.code())
-            .collect::<Vec<&str>>(),
-        failures.len()
+        "Copenhagen Re fires above 1 M DKK, 1980-1990: {} claims in {} months",
+        d.all.len(),
+        d.months_top.len()
     );
 
-    // The declared taxonomy: three layers and four uncertainty types.
-    let layers = [Layer::L1, Layer::L2, Layer::L3];
-    let uncertainties = [
-        UncertaintyType::Aleatory,
-        UncertaintyType::Epistemic,
-        UncertaintyType::Knightian,
-        UncertaintyType::NotApplicable,
-    ];
+    // (1) months in which the layer 100 xs 50 was hit, by period
+    println!();
     println!(
-        "declared taxonomy: layers={:?} uncertainties={:?}",
-        layers.iter().map(|c| c.code()).collect::<Vec<&str>>(),
-        uncertainties
-            .iter()
-            .map(|i| i.code())
-            .collect::<Vec<&str>>()
+        "{:<12} {:>7} {:>17} {:>13}",
+        "period", "months", "months hit", "largest loss"
+    );
+    for (name, y0, y1) in [
+        ("1980-1982", 1980, 1982),
+        ("1983-1985", 1983, 1985),
+        ("1986-1988", 1986, 1988),
+        ("1989-1990", 1989, 1990),
+    ] {
+        let (m, hit, largest) = period(&d, y0, y1);
+        println!("{:<12} {:>7} {:>17} {:>13.1}", name, m, hit, largest);
+    }
+    print!("months hit and value:");
+    for (m, mx) in d.months_top.iter().filter(|(_, mx)| *mx > RETENTION) {
+        print!(" {} {:.1};", m, mx);
+    }
+    println!();
+
+    // (2) Hill on the tail of the training set (1980-1988) and the interval by bootstrap of monthly blocks
+    let train: Vec<f64> = d.by_month.concat();
+    println!();
+    println!(
+        "training 1980-1988: {} claims in {} months",
+        train.len(),
+        TRAIN_YEARS * 12
+    );
+    print!("Hill on the training set:");
+    for k in [25usize, 50, 100] {
+        print!(" k={} alpha={:.4}", k, hill(&train, k));
+    }
+    println!();
+    let rep = bootstrap_hill(&d, 50, N_BOOT, 18_001);
+    println!(
+        "Hill k=50, 95% CI by bootstrap of monthly blocks ({} replicas): [{:.2}; {:.2}]",
+        N_BOOT,
+        quantile(rep.clone(), 0.025),
+        quantile(rep, 0.975)
     );
 
-    let defects = [
-        Defect::NoSeed,
-        Defect::NoDefinition,
-        Defect::NoMarginNoUnit,
-        Defect::NoNullModel,
-        Defect::NoScopeNoPayerNoExit,
-        Defect::QuestionWithoutMark,
-        Defect::QuestionWithoutAction,
-    ];
-    for d in defects {
-        let fx = with_defect(d);
-        let failures = evaluate(&fx);
-        let gates: Vec<Gate> = {
-            let mut v: Vec<Gate> = failures.iter().map(|x| x.gate).collect();
-            v.sort_by_key(|p| p.code());
-            v.dedup();
-            v
-        };
+    // (3) the same estimator on a simulated tail with the estimated alpha
+    let alpha = 1.81f64;
+    let sim = simulated_tail(alpha, 1500, 50, 200, 18_002);
+    println!(
+        "simulated Pareto with alpha = {:.2}, n = 1500, 200 repetitions: mean Hill k=50 = {:.3} (sd {:.3}), 90% of the repetitions between {:.2} and {:.2}",
+        alpha,
+        mean(&sim),
+        sd(&sim),
+        quantile(sim.clone(), 0.05),
+        quantile(sim, 0.95)
+    );
+
+    // (4) the clean window: Laplace, evidence in bits and months for a severe test
+    println!();
+    println!("window of {} months without a claim on the layer:", WINDOW);
+    println!(
+        "Laplace on the window: p = (0+1)/(36+2) = {:.5}, or 1 chance in {:.0} per month",
+        laplace(0, WINDOW),
+        1.0 / laplace(0, WINDOW)
+    );
+    println!(
+        "monthly frequency measured in the training set: p = 5/108 = {:.5}",
+        5.0 / 108.0
+    );
+    println!(
+        "monthly p of the training tail (published POT/GPD fit: xi = {:.3}, sigma = {:.3}, {} excesses above {:.0}): p = {:.5}",
+        XI_POT, SIGMA_POT, N_EXC as usize, U_POT, P_POT
+    );
+    for (name, p) in [("measured frequency", 5.0 / 108.0), ("POT/GPD tail", P_POT)] {
+        let (lr, bits, p0) = evidence_bits(WINDOW, p);
         println!(
-            "defect {:?}: failures={} gates={} detail={:?}",
-            d,
-            failures.len(),
-            names(&gates),
-            failures
-                .first()
-                .map(|x| x.detail.clone())
-                .unwrap_or_default()
+            "  {:<18} p = {:.5}: P(clean window | dangerous) = {:.4}; likelihood ratio = {:.2} ({:.2} bits); clean months for 95% = {}",
+            name,
+            p,
+            p0,
+            lr,
+            bits,
+            months_for_95(p)
+        );
+        println!(
+            "  {:<18} mutual information window x (dangerous vs negligible) = {:.4} bits",
+            "",
+            mutual_information(WINDOW, p)
         );
     }
-
-    // The two graph invariants, in the spirit of --defeito.
-    let g = good_graph();
-    println!("intact graph: validation={:?}", g.validate());
-    let mut g1 = g.clone();
-    g1.tree
-        .push(("L2_erlang".to_string(), "L2_ghost".to_string()));
-    println!("graph with a ghost edge: validation={:?}", g1.validate());
-    let mut g2 = g.clone();
-    g2.tree
-        .push(("L3_manager".to_string(), "L1_queue".to_string()));
+    let (lr_vault, bits_vault, _) = evidence_bits(WINDOW, 2.0 / 24.0);
     println!(
-        "graph with a deductive cycle: validation={:?}",
-        g2.validate()
-    );
-    let mut g3 = g.clone();
-    g3.hyperedges.push(Hyperedge {
-        id: "H2".to_string(),
-        members: vec!["L3_manager".to_string()],
-    });
-    println!(
-        "graph with a one-member hyperedge: validation={:?}",
-        g3.validate()
-    );
-
-    // Property test over the function of the Phi2 gate: the simulated margin
-    // can never be negative and can never shrink when the sample grows.
-    let mut rng = 2026u64;
-    let mut violations = 0usize;
-    let mut smallest = f64::MAX;
-    let mut largest = f64::MIN;
-    for _ in 0..10_000 {
-        let n = (uniform(&mut rng, 900) + 100) as f64;
-        let p = (uniform(&mut rng, 99) + 1) as f64 / 100.0;
-        let margin = 1.96 * (p * (1.0 - p) / n).sqrt();
-        smallest = smallest.min(margin);
-        largest = largest.max(margin);
-        if !(0.0..=0.5).contains(&margin) {
-            violations += 1;
-        }
-    }
-    println!(
-        "property test (10.000 simulated cards): violations={} margin_min={:.5} margin_max={:.5}",
-        violations, smallest, largest
-    );
-
-    let repetitions = 32usize;
-    let mut different = 0usize;
-    for _ in 0..repetitions {
-        let mut a = 2026u64;
-        let mut b = 2026u64;
-        let va: Vec<u64> = (0..16).map(|_| uniform(&mut a, 1_000_000)).collect();
-        let vb: Vec<u64> = (0..16).map(|_| uniform(&mut b, 1_000_000)).collect();
-        if va != vb {
-            different += 1;
-        }
-    }
-    println!(
-        "same seed, two validators: runs that diverge in {} of {}",
-        different, repetitions
+        "reference: under the rate that the vault showed (2 months hit in 24, p = 1/12), the same clean window would be worth {:.2} bits (ratio {:.1})",
+        bits_vault, lr_vault
     );
 }
 
@@ -447,9 +297,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn complete_card_passes_and_a_defect_triggers_a_gate() {
-        assert!(evaluate(&complete_card()).is_empty());
-        assert!(!evaluate(&with_defect(Defect::NoSeed)).is_empty());
-        assert!(good_graph().validate().is_empty());
+    fn laplace_avoids_zero_and_hill_recovers_tail() {
+        assert!((laplace(0, 36) - 1.0 / 38.0).abs() < 1e-12);
+        let (_, bits, _) = evidence_bits(36, 5.0 / 108.0);
+        assert!((bits - 2.42).abs() < 0.02);
+        let xs = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+        assert!(hill(&xs, 3).is_finite());
     }
 }

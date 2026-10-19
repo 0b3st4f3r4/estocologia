@@ -56,7 +56,7 @@ Legend, identical to `docs/EMPIRICAL_REGISTRY.md`:
    with $\mathcal{M}$ and $A_1$–$A_8$, further proposing to replace the central orchestrator with four workbench mechanisms. The two values: the transcript opens with $M_{15}$ and $MB_1$–$MB_8$ and closes
    with $\mathcal{M}$, $A_1$–$A_8$, and the decentralized workbench; the tree uses $\mathcal{M}$ (`orquestrador.rs`), $A_1$–$A_8$
    (`agentes.rs:15`), and implements the orchestrator-free workbench in `crates/stochology-s2/src/banca.rs` (rules G8.1 to G8.4, 25 tests). Labels $M0$–$M15$ and $MB_1$–$MB_8$ have been retired since 2026-10-16, as recorded in
-   Chapter 13 and in `docs/DECLARED_PROPOSALS.md` §4.
+   Chapter 16 and in `docs/DECLARED_PROPOSALS.md` §4.
 2. **Four filters.** The transcript discusses four filters and describes value-of-information pruning as future work. The
    two values: four filters in the transcript; a funnel with **17 tests** in `funil.rs` (878 lines), including
    `o_funil_conta_as_tentativas_ate_a_versao_final`. A state divergence also existed in the tree, in row 2

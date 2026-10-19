@@ -120,7 +120,7 @@ mod tests {
         let loss = chapter_16_post();
         assert!(
             loss.loss > 20.0,
-            "the loss measured at the chapter 16 post: {}",
+            "the loss measured at the chapter 12 post: {}",
             loss.loss
         );
         let decision = decide(&loss, 12.0);

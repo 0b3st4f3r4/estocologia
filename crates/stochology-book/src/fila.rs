@@ -24,7 +24,7 @@
 //! | R3 | R0 plus `extra` agents across the board, with `extra` such that the cost equals that of R2 |
 //!
 //! where `cv` is the standard deviation of the residual of the day total (day total divided by the mean of the
-//! total of its weekday, in the training window) — the 6% of chapter 16 — and `Z_MARGIN` is the 90%
+//! total of its weekday, in the training window) — the 6% of chapter 12 — and `Z_MARGIN` is the 90%
 //! quantile of the normal: it is the "p90" the registry puts in the name of R2.
 //!
 //! Every measure comes out in the unit of the day: agent-hours per day, service level weighted by
@@ -35,7 +35,7 @@
 //!
 //! # Divergence declaration (old registry x this instrument)
 //!
-//! The registry (`h0-real/README.md`, chapter 16) publishes for the 81-day vault: R0 with 2 264
+//! The registry (`h0-real/README.md`, chapter 12) publishes for the 81-day vault: R0 with 2 264
 //! agent-hours per day, 86% and 26% of failed days; R1 with 2 261, 90% and 12%; R3 with 2 433, 94% and
 //! 7.4%; R2 with 2 428, 96% and 3.7%. This module is a **Rust reconstruction** of that
 //! experiment, with the number generator swapped (SplitMix64 against PCG64) and without numpy: the
@@ -346,7 +346,7 @@ fn sd(xs: &[f64]) -> f64 {
 }
 
 /// The residual CV of the registry: standard deviation of the ratio between the day total and the mean of the total
-/// of its weekday, in the training window (the "6%" of chapter 16). It is what the margin of R2 scales.
+/// of its weekday, in the training window (the "6%" of chapter 12). It is what the margin of R2 scales.
 pub fn daily_residual_cv(training: &[BinnedDay]) -> f64 {
     let (profiles, count) = profiles_by_weekday(training);
     let mut ratios = Vec::new();
@@ -1131,7 +1131,7 @@ mod tests {
         let days = load_bins(&c);
         let (training, vault) = split_training_vault(&days);
         let esc = build_scales(&training, &vault, &p);
-        // the residual CV of chapter 16 is 6%; the instrument measures close to it
+        // the residual CV of chapter 12 is 6%; the instrument measures close to it
         assert!(
             esc.cv_residual > 0.04 && esc.cv_residual < 0.08,
             "cv {}",

@@ -24,7 +24,7 @@ sys.path.insert(0, str(HERE))
 
 from common import ROWS, verdict  # noqa: E402
 
-MODULES = ["ch02_ch05", "ch06_ch08", "ch09", "ch10_ch11", "ch12_ch21", "ch16", "ch17", "ch18", "ch19"]
+MODULES = ["ch02_ch05", "ch06_ch08", "ch09", "ch10_ch11", "ch12", "ch13", "ch14", "ch15_ch21", "ch19"]
 
 
 def main() -> int:

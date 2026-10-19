@@ -1,6 +1,9 @@
-# Stochology: A Textbook
+# Stochology: Judgement and Decision under Uncertainty
 
 **21 chapters** · five parts · a three-step ramp per chapter
+
+A working text, not yet a textbook: its central thesis has had one direct test and its outside audit is still
+open (Preface).
 
 Oct 16, 2026 · Silvano Neto
 
@@ -38,8 +41,7 @@ an invitation to check it, not as a certificate.
 the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
 book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
 yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
-Chapter 17, the skills of the forecasters of Chapter 18, and a handful of worked examples in Chapters 3, 7, 10, 11, 13,
-14 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
+Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 
 **The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
@@ -80,8 +82,12 @@ right, it runs.
 | **I. The art of aiming in the dark** | 1 to 4 | What is it to judge under uncertainty, and where do errors live? |
 | **II. The traps of the world and of the data** | 5 to 8 | Why does the mean lie, how do gigantic samples deceive and how is good forecasting measured? |
 | **III. Cause, time and survival** | 9 to 11 | What is a cause, why does time ruin it and who pays for the error? |
-| **IV. Building the auditable machine** | 12 to 15 | How do you turn that thinking into a machine that audits itself? |
-| **V. The machine in the real world** | 16 to 21 | How does the machine face real data, case by case? |
+| **IV. The method on real data** | 12 to 14 | What do the first three parts change on a queue, a market and a fire insurer? |
+| **V. The auditable machine, built and put to work** | 15 to 21 | How do you turn that thinking into a machine that audits itself, and what happens when it meets the data? |
+
+**Two books in one.** Parts I to IV are the method: the theory and the three real cases where it decides something.
+Part V is the machine: a particular architecture built to audit that method, and its record on real data, failures
+included. The first can be read without the second; the second leans on the first.
 
 | Ch. | Title | Central idea |
 | --- | --- | --- |
@@ -96,13 +102,13 @@ right, it runs.
 | 9 | The ladder of cause and effect | Pearl's three steps; confounder against collider; ICP |
 | 10 | Time and ruin | non-ergodicity; volatility drag; Kelly; wild tails |
 | 11 | The price of error | cost/loss; EVPI; Goodhart; Chouldechova's trilemma; exit clause |
-| 12 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
-| 13 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
-| 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
-| 15 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
-| 16 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
-| 17 | The stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
-| 18 | The Danish fires | wild tail; Laplace; failing your own model is a victory |
+| 12 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
+| 13 | The stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
+| 14 | The Danish fires | wild tail; Laplace; failing your own model is a victory |
+| 15 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
+| 16 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
+| 17 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
+| 18 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
 | 19 | Seven rounds of ICP | five honest failures; light, heart and yeast |
 | 20 | The live clock | zero leakage with a canary; Goodhart measured; three vaults |
 | 21 | The seven lessons and the final project | the lessons with their conditions; objections; the resolution axis; the final project |
@@ -115,9 +121,9 @@ right, it runs.
 | --- | --- | --- |
 | High School | chapters 1 to 8, only Step 1 and the *Concept* exercises | 8 meetings |
 | Undergraduate | chapters 1 to 11, the three steps, laboratories in Rust | one semester |
-| Data professional | chapters 1, 2, 5, 6, 8, 14, 15 and Part V | four weeks |
-| Whoever wants only the architecture | chapters 2, 12, 13, 14, 15 | two weeks |
-| Whoever wants to see the method in action | the whole of Part V, returning to the foundations when needed | two weeks |
+| Data professional | chapters 1, 2, 5, 6 and 8, Part IV, and chapters 17 to 21 | four weeks |
+| Whoever wants only the architecture | chapters 2, 15, 16, 17 and 18 | two weeks |
+| Whoever wants to see the method in action | Part IV and chapters 19 to 21, returning to the foundations when needed | two weeks |
 
 **How hard each part is.** The promise to the High School reader holds for Step 1 of Parts I and II, and for the
 *Concept* exercises. Step 2 asks for more as the book advances: probability and logarithms from Chapter 3,

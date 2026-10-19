@@ -1,4 +1,4 @@
-//! System 1: deterministic triage of cards (declared in docs/PLAN.md §4 and in Chapter 13,
+//! System 1: deterministic triage of cards (declared in docs/PLAN.md §4 and in Chapter 16,
 //! implemented here).
 //!
 //! # What this module does
