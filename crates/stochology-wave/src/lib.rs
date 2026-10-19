@@ -19,10 +19,17 @@
 //!   per vertex, and frustration stays as a diagnostic;
 //! - the plasticity gate charges target resonance gain, not a monotone drop of frustration.
 //!
+//! Refinement of 2026-10-19: `channel` carries the STDP rule over N channels on the data's own clock, and `cycle`
+//! gives the phase a meaning, the position in a cycle where a profile peaks, so that the superposition is not a
+//! signed sum in disguise. Both exist so that the engine can be tested on real data
+//! (`empirical/p23-onda/DECLARACAO.md`).
+//!
 //! Nothing here uses an external dependency; the state is deterministic and `wave --check`
 //! takes the report down when any one of the six gates fails.
 
+pub mod channel;
 pub mod complex;
+pub mod cycle;
 pub mod gate;
 pub mod magnetic;
 pub mod phasor;
