@@ -63,6 +63,7 @@ SOURCES = [
     "docs/PLAN.md",
     "docs/EMPIRICAL_REGISTRY.md",
     "docs/RUST_RESULTS.md",
+    "docs/SEED_SPREAD.md",
     "references/VERIFICATION.md",
     "data/SOURCES.md",
 ]

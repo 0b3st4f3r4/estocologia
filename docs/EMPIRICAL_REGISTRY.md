@@ -247,6 +247,18 @@ Instrument: `labs --schema`.
 | The ship of Chapter 11 with `p=0.05; C=1800; L=34000; act=do not protect` is read back; with `act=protect` it is refused (C/L = 0.0529) | `labs --schema` |
 | A field written outside its role, and 3 findings logged with 1 used and 1 listed unused, are refused | `labs --schema` |
 
+## The seed over whole laboratories (2026-10-19)
+
+Item 19 (b). Thirteen instruments rerun under `STOCHOLOGY_SEED_OFFSET` = 1 to 20; record in `docs/SEED_SPREAD.md`.
+
+| Result | Instrument |
+| --- | --- |
+| 312 lines in 13 instruments; lines whose words move under another seed: 3 | `labs --seed-spread` |
+| Chapter 9: {x+w} accepted, rejected under 1 of 20 seeds (p = 4.981e-2); the intersection stays {x} | `labs --seed-spread` |
+| Chapter 15: the Hill estimate at k = 250 reads the tail as not wild under 2 of 20 seeds (2.0961 in one) | `labs --seed-spread` |
+| Chapter 15: rule 1 fails the invariance tolerance of 0.5 under 2 of 20 seeds (9.58, 10.34, 9.95 in one) | `labs --seed-spread` |
+| With the offset unset, the output of `labs --all` is unchanged byte for byte | `labs --all` before and after |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

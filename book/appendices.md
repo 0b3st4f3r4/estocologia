@@ -154,9 +154,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
 | `cargo run --release --bin labs -- --multiverse` | The same question under eighteen reasonable specifications, and how much of its spread each choice carries (Chapter 5) |
 | `cargo run --release --bin labs -- --stacking` | Combining models when none is true: model averaging against stacking, with a duplicated model (Chapter 8) |
+| `cargo run --release --bin labs -- --seed-spread` | Thirteen laboratories rerun under twenty other seeds, line by line: which numbers move, and whether a verdict moves with them (C.3; minutes long) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 426 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 433 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -194,13 +195,19 @@ is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and
 Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
 simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
-The audit does not cover every draw. Of the 27 modules of the laboratories that draw random numbers, 4 print their own
-spread (the propagation, the multiverse, the reliability and the stacking laboratories), 6 are audited by `--mc-error`,
-3 are of another kind (Chapter 1, which is about seeds; the discrepancy, which averages over a thousand datasets; the
-choice of cases of the bridge, a selection and not an estimate), and **14 are not audited**: their numbers are
-reproducible, and how far they would move under another seed has not been measured. A register of the 27 is kept in
-the code, and a test refuses a new module that draws random numbers without saying where its spread is measured, or
-that it is not.
+The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 27 modules of the
+laboratories that draw random numbers, 4 print their own spread (the propagation, the multiverse, the reliability and
+the stacking laboratories), 6 are audited number by number by `--mc-error`, 4 are of another kind (Chapter 1, which
+is about seeds; the discrepancy, which averages over a thousand datasets; the choice of cases of the bridge, a
+selection and not an estimate; the triage of Chapter 16, a hash and not a draw), and the other 13 are rerun whole by
+`labs --seed-spread` under twenty other seeds, line by line against the published run. Numbers move, as they should;
+a word that moves is a verdict that depends on the draw. Of 312 lines, three have words that move, and their
+chapters now say so: one set of Chapter 9 accepted under one seed and rejected under another (the intersection the
+method reports does not move), the tail of Chapter 15 read as not wild at the edge of the cutoff under 2 of 20
+seeds, and an invariance test of Chapter 15 that fails its tolerance under 2 of 20 seeds although the effect does not
+change. A register of the 27 is kept in the code, and a test refuses a new module that draws random numbers without
+saying where its spread is measured. The run of `--seed-spread` takes minutes, so it is recorded with its commit and
+not repeated by the verification suite.
 
 ---
 
@@ -633,6 +640,15 @@ No number changed.
 | --- | --- | --- | --- | --- |
 | 16 | The failures of teams of agents | four caught, seven in part, three not seen | four caught, ten in part, none unseen, with the three that passed between the specialists now declared in the card | the audit of the panel found three failures nothing saw |
 | 17 | The fields of the card | contract 1.4 | contract 1.5: authorship by role, the findings used and not used, and the decision rule recomputed from the card | the same |
+
+### The seed over whole laboratories, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 9 | The single run of the ICP | the verdicts of one seed | the same, and under twenty other seeds the set {X, W} is rejected once while the intersection stays {X} | `labs --seed-spread` |
+| 15 | The tail lens | "the tail is wild" at every cutoff | the same at the published seed; at k = 250 the estimate passes 2 under 2 of 20 other seeds | the same |
+| 15 | The invariance lens | "the two rules pass the invariance test with tolerance 0.5" | the same at the published seed; the first rule fails the tolerance under 2 of 20 other seeds, and a tolerance is set from the noise of the estimate | the same |
+| C.3 | The audit of the seed | 14 modules not audited | none: 13 rerun whole by `--seed-spread`, and the triage of Chapter 16 reclassified as a hash | the same |
 
 ### The seed of the simulations, 2026-10-19
 

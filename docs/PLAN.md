@@ -163,7 +163,7 @@ tests on data did not support its claims, and eight crates remain (`docs/declara
 | `crates/stochology-hypergraph` | live | hypergraph $\mathcal{G}$, structural validator, topological sort, and the five lenses |
 | `crates/stochology-core/src/audit` | live | zero-dependency SHA-256, hash-chained ledger, and Merkle root (module of `-core`) |
 | `crates/stochology-gates` | live | binary `gates`: 7 deterministic governance gates per horizon (G1 to G7) |
-| `crates/stochology-core/src/schema.rs` | live | the contract on disk: canonical card text, version 1.4 (since 2026-10-19 with the optional uncertainty budget and dominant event, and the same day with the optional multiverse and reliability), and the **migration chain in `migracoes.tsv`**, embedded at compile time (module of `-core`) |
+| `crates/stochology-core/src/schema.rs` | live | the contract on disk: canonical card text, version 1.5 (since 2026-10-19 with the optional uncertainty budget and dominant event, the same day with the optional multiverse and reliability, and then with the optional authorship, findings and decision rule), and the **migration chain in `migracoes.tsv`**, embedded at compile time (module of `-core`) |
 | `crates/stochology-s2` | live | deliberative engine (10 modules, 81 unit tests and 7 integration tests): LATS (`lats`), belief state (`crenca`), hypergraph (`hipergrafo`), Metropolis (`inferencia`), panel stress (`estresse`), R-axis (`planejamento`), orchestrator-free FSM bench G8.1–G8.4 (`banca`), Jev-LLM bridge (`ponte`), local runner (`runner`), and Brier calibration (`calibracao`), plus binary `ingest-jev` |
 | `crates/stochology-horizons` | live | the four horizons as modules: `h0` (Erlang B and C, minimum staffing, Poisson null, mandatory summary), `h1` (leverage drag, selection bias, Hill tail estimator), `h2` (causal invariance rounds, counter $K$ and Bonferroni, permutation null, fine-grained genetics resolution), and `h3` (strict clock with canary, ECE, Brier skill score, performative loop) |
 | `crates/stochology-methods` | live | the three field methods as modules: `icp` (invariant causal prediction: environments, ordinary least squares, Kolmogorov-Smirnov, surviving intersection), `drift` (two-sided CUSUM with measured stationary null and Kullback-Leibler divergence), and `fairness` (demographic parity, equal opportunity, subgroup calibration) |
@@ -521,7 +521,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (7 004 lines, 98 402 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (7 050 lines, 99 294 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |

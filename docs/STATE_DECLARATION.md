@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 426 tests passed, none failed
+cargo test --workspace                                  # 433 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -105,7 +105,7 @@ cargo run --release --bin labs -- --h3          # the H3 chain: one derived row,
 cargo run --release --bin labs -- --second-opinion     # second opinion: five verified, two derived, seven registry
 cargo run --release --bin labs -- --bridge       # bridge thesis: re-derived pilot and fair-test gate
 cargo run --release --bin labs -- --listening      # voice of those who pay: 0 of 7 heard, minimum 2
-cargo run --release --bin labs -- --schema      # contract migration chain: 1.0 -> 1.1 -> 1.2 -> 1.3 -> 1.4
+cargo run --release --bin labs -- --schema      # contract migration chain: 1.0 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 1.5
 cargo run --release --bin labs -- --jev         # Jev-LLM bridge: gates close, weights missing
 cargo run --release --bin labs -- --resolution   # R-axis and predictions 3 and 5
 ~~~
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 004 lines**, **98 402 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 050 lines**, **99 294 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 004 lines and 98 402 words, and its 39 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 050 lines and 99 294 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -534,3 +534,21 @@ second declaration after its first run (K = 2). Item 19 holds what the audits le
 | reimplementation | 513 quantities: 510 agree, 3 open | 573 quantities: 570 agree, 3 open; all 573 checked by the family that wrote the instrument |
 | numbers whose only source was the previous book | about 140 measured on 2026-10-18; 314 measured on 2026-10-19 without the old clause | 0; 29 in the provenance ledger |
 | assembled book, line count | 6 654 (with 92 188 words) | 7 004 (with 98 402 words) |
+
+## Item 19: contract 1.5 and the seed over whole laboratories (2026-10-19, later)
+
+The three failures of teams of agents that nothing in the program saw get a place in the card (contract 1.5,
+declaration 4 of point 17), checked when present: the authorship of each field, the findings used and not used, and the
+decision rule recomputed from p against C/L. Every generator of the laboratories adds an audit offset to its declared
+seed (none when unset, so the published outputs do not change), and `labs --seed-spread` reruns the thirteen
+instruments that the register listed as not audited under twenty other seeds: three of 312 lines carry a verdict that
+moves with the draw, and Chapters 9 and 15 say so. The dated record is `history/estado-2026-10-19T2335Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| card contract | 1.4 | 1.5 |
+| instruments in `labs` | 27 | 28 (`--seed-spread`, recorded in `docs/SEED_SPREAD.md`) |
+| `cargo test --workspace` | 426 | **433** |
+| modules that draw random numbers without an audit of their seed | 14 | 0 |
+| failure modes of teams of agents that nothing sees | 3 | 0 (moved to "partly") |
+| assembled book, line count | 7 004 (with 98 402 words) | 7 050 (with 99 294 words) |

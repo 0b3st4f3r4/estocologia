@@ -48,8 +48,8 @@ licence above covers them.
 
 ---
 
-The research concluded on 2026-10-15 and the apparatus is **Rust** (Edition 2024): **eight crates**, **426 tests**,
-**twenty-seven instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates`
+The research concluded on 2026-10-15 and the apparatus is **Rust** (Edition 2024): **eight crates**, **433 tests**,
+**twenty-eight instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates`
 binary that are capable of failing a claim. The
 gates check form, presence and reproducibility, not correctness: on 2026-10-18 an outside reading found errors in
 mathematics and code that every gate had passed, corrected them, and recorded both values in Appendix E of the book
@@ -61,7 +61,7 @@ real-world data.
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 004 lines and 98 402 words assembled from `book/` |
+| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 050 lines and 99 294 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
 | `crates/` | The Rust workspace, **eight crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (book laboratories, binary `labs`), and `-wasm` (WebAssembly playground); the wave engine left on 2026-10-19 (`docs/declarations/REMOVED_WAVE.md`) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
@@ -78,7 +78,7 @@ real-world data.
 | `paper/` | The paper "Stochology: Old Frontiers, New Horizons", with figures |
 | `scripts/style/` | The prose-pass tooling: `scripts/style/check_pass.py` compares each file against its version in `HEAD` |
 | `scripts/check_seals.py` | The verifier for the 32 SHA-256 seals across the tree, executed in a single command from a single directory |
-| `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, twenty-seven instruments, and all verifiers. CI invokes this exact file, not a copy of the list |
+| `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, twenty-seven instruments (all but the slow `--seed-spread`), and all verifiers. CI invokes this exact file, not a copy of the list |
 | `docs/JEV_INTEGRATION.md` | The audit of the transcript *Integration of Jev Models into Stochology*: every claim checked against the code, with declared divergences — the legacy syllabus numbering versus the current nomenclature ($M_{15}$ and $MB_1$–$MB_8$ on one side, $\mathcal{M}$ and $A_1$–$A_8$ on the other), four filters versus five, $\Phi_1$–$\Phi_4$ versus $\Phi_1$–$\Phi_5$, and *LLM-as-Jev* — plus the Jev-LLM bridge as a declared proposal |
 | `docs/declarations/REMOVED_PYTHON.md`, `docs/declarations/REMOVED_NON_SIGNIFICANT.md` | What left the tree on 2026-10-16, with the recovery commit and the blob-hash manifests |
 
@@ -88,13 +88,13 @@ Measurement of this tree on **2026-10-19**, each row with the command that produ
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **426 passed**, 0 failed, across the eight crates (407 before the nineteen tests of 2026-10-19 for item 18: three of `passk.rs`, four of `multiverse.rs`, three of `stacking.rs`, four of `discrepancy.rs`, two of `budget.rs` and two of `schema.rs` for contract 1.4, and one of the seed register in `mc_error.rs`; 401 before the six tests of contract 1.3, `budget.rs` and `schema.rs`; 395 before the three tests of `mc_error.rs` and the three of `propagate.rs`; 442 before the wave engine left with its 38 tests and the 9 of its three instruments; 440 before the two tests of point 24, `resonance.rs`; 438 before the two tests of declaration 2 of point 23, `wave2.rs`; 427 before the refinement and the test of the wave engine, point 23: six tests of `channel.rs` and `cycle.rs`, five of `wave.rs`; 422 before the five tests of the e-process reading of the H2 gate, `eprocess.rs`; 421 before the null of the ECE entered `streams.rs`; 415 before the rebuilt streams of 2026-10-19 added six, the tests of `streams.rs`; 413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
-| Instruments | **27** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--eprocess`, `--mc-error`, `--propagate`, `--passk`, `--multiverse`, `--stacking`, `--discrepancy`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
+| Tests | **433 passed**, 0 failed, across the eight crates (426 before the seven tests of item 19: three of `conduct.rs` and two of `schema.rs` for contract 1.5, and two of `seed_spread.rs`; 407 before the nineteen tests of 2026-10-19 for item 18: three of `passk.rs`, four of `multiverse.rs`, three of `stacking.rs`, four of `discrepancy.rs`, two of `budget.rs` and two of `schema.rs` for contract 1.4, and one of the seed register in `mc_error.rs`; 401 before the six tests of contract 1.3, `budget.rs` and `schema.rs`; 395 before the three tests of `mc_error.rs` and the three of `propagate.rs`; 442 before the wave engine left with its 38 tests and the 9 of its three instruments; 440 before the two tests of point 24, `resonance.rs`; 438 before the two tests of declaration 2 of point 23, `wave2.rs`; 427 before the refinement and the test of the wave engine, point 23: six tests of `channel.rs` and `cycle.rs`, five of `wave.rs`; 422 before the five tests of the e-process reading of the H2 gate, `eprocess.rs`; 421 before the null of the ECE entered `streams.rs`; 415 before the rebuilt streams of 2026-10-19 added six, the tests of `streams.rs`; 413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
+| Instruments | **28** in `labs` (one, `--seed-spread`, takes minutes and is recorded in `docs/SEED_SPREAD.md` rather than run by the suite) (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--eprocess`, `--mc-error`, `--propagate`, `--passk`, `--multiverse`, `--stacking`, `--discrepancy`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **7 004 lines**, **98 402 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **7 050 lines**, **99 294 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **39**, none divergent (48 counted the R-axis lines before the book was rewritten as content only) | `scripts/book/check_labs.py` |
-| Seals | **36 files**, **141 verified targets**, 17 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
+| Seals | **36 files**, **143 verified targets**, 18 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
 ## How to Verify
 
@@ -143,7 +143,7 @@ implementation. Item 15, desk work, closed on 2026-10-19 with a declaration seal
 item 16 closed the same day: the previous book no longer certifies its own numbers, and the 29 that no instrument,
 code or record carries have a checked row in `book/provenance.tsv`. Item 18, from the research on models of the world, of agents
 and of modelling, closed the same day with four laboratories sealed before their runs, the card contract 1.4 and three
-audits; item 19 holds what those audits found open. Items 14 and 15, and the second
+audits; item 19, what those audits found open, closed the same day with contract 1.5 and the audit of the seed over whole laboratories. What remains open needs people or an artifact. Items 14 and 15, and the second
 thesis (c′) of item 9, came from an outside review on 2026-10-18 by a language model plausibly of the same family as the
 program's own agents, so they are refinements, not independent judgment.
 
@@ -154,7 +154,6 @@ program's own agents, so they are refinements, not independent judgment.
 | 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases; for thesis (c′), 0 of 12 in each of the seam and classical strata (`registro_c_linha.tsv`, enforced by `labs --bridge`) | **2027-01-14** |
 | 13. The Jev-LLM bridge | **artifact and code** | the weights with a declared `sha256`; the local runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | no date |
 | 14. Can the layers fail? | **people outside the program** | three coders, two from outside, over at least 60 documented errors (`empirical/p21-camadas/`) | no date |
-| 19. What the audits of 2026-10-19 left open | **desk work** | three failures of teams of agents that nothing sees (`docs/MAST_AUDIT.md`), and 14 modules whose spread under another seed is not measured (Appendix C.3) | no date |
 
 Once the listening window expires without minimum coverage, the seven decisions are archived as a sensitivity
 exercise and do not become public policy guidelines. Once the bridge window expires, the thesis becomes **definitively
