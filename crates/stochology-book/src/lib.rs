@@ -26,6 +26,7 @@ pub mod ch19;
 pub mod ch20;
 pub mod ch21;
 pub mod costura;
+pub mod discrepancy;
 pub mod ensaio;
 pub mod eprocess;
 pub mod escuta;
