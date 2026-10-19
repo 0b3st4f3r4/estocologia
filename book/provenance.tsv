@@ -1,0 +1,38 @@
+# The provenance of the numbers of the book that no instrument output, code, record or registry carries.
+# Read by scripts/style/check_pass.py, which checks every row and fails on a row that no number needs any more.
+# Columns: file, number as printed, kind, pointer, note. Kinds:
+#   derivation  the pointer is arithmetic over numbers the text gives; it must round to the number as printed
+#   file        the pointer is path or path::needle; the file must contain the needle (default: the number)
+#   git         the pointer is commit:path; the file at that commit must contain the number (the earlier text)
+#   reference   the pointer is a phrase of Appendix D, the checked reference that gives a date or a figure
+#   exercise    a value the reader is asked to try; the pointer is path::needle, the line of the instrument it changes
+# Opened on 2026-10-19 when the clause that let the previous book certify its own numbers was removed (item 16).
+ch04.md	0.995	exercise	crates/stochology-book/src/ch04.rs::discount 0.99	the exercise asks to change the discount of the book configuration
+ch05.md	1.875	derivation	120/(12-8)**3	the second derivative of W at lambda = 8, given in the sentence
+ch05.md	19.29	derivation	29.29-10.00	the true difference between the two waits the sentence names
+ch06.md	0.392	derivation	1-0.608	Landon's share among the voters, the complement of Roosevelt's 0.608
+ch07.md	0.0833	derivation	0.5-5/12	the pooled 0.5 against the mean of the proportions per sequence, 5/12
+ch11.md	0.294	derivation	100*1800/34000-5	the threshold C/L in percent minus the chance of 5%
+ch11.md	0.982	derivation	1-1800/100000	the insured month pays the premium of 1,800 on the capital the example uses
+ch11.md	1953	reference	van Dantzig	the flood of 1953 and the Delta Commission, in van Dantzig 1956
+ch13.md	1977	reference	LaLonde	the NSW programme enrolled workers in 1976 and 1977
+ch13.md	2.6	file	scripts/reimplementation/ch13.py::(11.1, 2.6, 19.6)	Wald interval of the experiment, recomputed from the data files by the reimplementation; the Rust laboratory prints only the point
+ch14.md	2.6	derivation	100/38	the rule of succession, 1/38 per month, in 100 months
+ch14.md	0.9704	derivation	(1-1/1200)**36	the chance of a clean window of 36 months under the negligible hypothesis
+ch14.md	2.46	derivation	1/0.406	alpha = 1/xi with the published POT fit xi = 0.406 (the text rounds xi to 0.41)
+ch15.md	28,619	git	70dd3f0:book/cap12.md	the scale audit of the background audit, recorded by the earlier text; the extension was retired
+ch15.md	26,795	git	70dd3f0:book/cap12.md	the same record
+ch15.md	4,628	git	70dd3f0:book/cap12.md	the same record
+appendices.md	0.1559	git	85d3ade:docs/RUST_RESULTS.md	the instrument before the out-of-fit rectification of 2026-10-18
+appendices.md	0.1755	git	85d3ade:docs/RUST_RESULTS.md	the same
+appendices.md	3.06	git	85d3ade:docs/RUST_RESULTS.md	the dike heights before the Gumbel rectification of 2026-10-18
+appendices.md	628	git	85d3ade:docs/RUST_RESULTS.md	the trilemma before the rectification of 2026-10-18
+appendices.md	7.46	git	70dd3f0:book/cap11.md	the earlier text's table of dikes
+appendices.md	3.11	git	70dd3f0:book/cap11.md	the same
+appendices.md	3.81	git	70dd3f0:book/cap11.md	the same
+appendices.md	0.9586	git	70dd3f0:book/cap17.md	the published material of the market case, as the earlier text records it; the report itself is not in the history
+appendices.md	0.7841	git	70dd3f0:book/cap17.md	the same
+appendices.md	0.6405	git	70dd3f0:book/cap17.md	the same
+appendices.md	0.9332	git	70dd3f0:book/cap17.md	the same
+appendices.md	0.6563	git	70dd3f0:book/cap17.md	the same
+appendices.md	2.2373	derivation	log2((1-1/1200)**36/(1-0.04296)**36)	the bits of 36 clean months with the published tail p = 0.04296

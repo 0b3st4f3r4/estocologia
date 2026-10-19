@@ -139,7 +139,9 @@ The chapters themselves carry content only: no path, no reference to the book, t
 block, or the slice of it that teaches, only in the chapters that measure a resolution loss or a threshold (5, 8, 10, 12, and 21). This is the owner's rule of 2026-10-18,
 which moved the declarations out of the chapters and rewrote the book part by part (`docs/declarations/BOOK_REWRITE.md`); since then,
 `scripts/style/check_pass.py` checks each rewritten file for the ramp markers, the word floor, and number provenance (every number
-in running prose must exist in a source or in an output block of the same file), and `check_labs.py` keeps every block equal to
+in running prose must exist in an output block of the same file, in an instrument's output, the code, a record or another
+declared source, or in a row of `book/provenance.tsv` that the script checks; since 2026-10-19 the previous book is no
+longer a source), and `check_labs.py` keeps every block equal to
 its instrument.
 
 ## VI. Rule on New Files

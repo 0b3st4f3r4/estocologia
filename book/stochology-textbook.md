@@ -461,6 +461,27 @@ because most of them arrived on busy days. Counted per patient, the bad days wei
 the **inspection paradox**, or length-biased sampling: whoever samples by arrival over-represents the long intervals.
 Chapter 5 measures both errors.
 
+**A model good enough for the decision.** No Model is true everywhere, and it does not need to be. It needs to be
+right where the decision depends on it. Two errors of the same size on the map can cost very differently: a wrong
+waiting time on the quiet days changes nothing, because nobody hires for them, while the same error on the busy
+days decides the second nurse. In reinforcement learning this has a name, **value equivalence** (Grimm and
+colleagues, 2020): a model of the world is good enough when the decisions it recommends are worth what they would be
+worth in the real world, whatever else it gets wrong. The converse is the trap. An Agent that optimises against a
+Model finds the places where the Model is wrong in its favour, and goes there. Agents trained inside a learned model
+of a game learned to exploit its glitches, winning in the dream and losing in the game (Ha and Schmidhuber, 2018).
+It is Goodhart's law one layer down: the Model became the target. The defence is to test the Model where the Agent
+will act, not on average.
+
+**The modeller is an Agent too.** Whoever builds the Model chooses which data to keep, which variables, which
+formula, and when to stop. Each choice is an action, and the World of that Agent is the space of possible Models.
+The same three bridges reappear one level up: the data the modeller sees are filtered; the fit is misread as a
+fact; and the modeller's choices bend toward the answer that was hoped for. How large that layer is was measured
+once, directly. Seventy-three teams received the same survey data and the same hypothesis, and reached results of
+opposite signs; even after every analytic choice the teams made was coded, more than 95% of the variance of their
+estimates stayed unexplained (Breznau and colleagues, 2022). That spread is a part of the uncertainty of every
+published number, and no standard error contains it. Counting the attempts, and sealing the plan before looking at
+the data, are the bridges of this chapter applied to the modeller.
+
 ---
 
 ### Step 3 — Hands on
@@ -509,6 +530,11 @@ The arithmetic is never wrong. The error is answering a question about the World
    stops being an error.
 6. *(Concept)* In the fair test of the bridge thesis, why must the person who chooses the cases be outside the group
    being tested? What would go wrong if the same person planted the errors and analysed them?
+7. *(Concept)* A route planner uses a traffic model that is accurate on average and wrong on one avenue, where it
+   underestimates the delay. Why will a planner that minimises the predicted time send more and more cars down that
+   avenue? Which layer failed, and where should the model be tested?
+8. *(Concept)* Two analysts with the same data report effects of opposite signs. Name, for each of the three
+   bridges, one choice of the modeller that could produce the difference.
 
 **Summary.**
 
@@ -519,6 +545,10 @@ The arithmetic is never wrong. The error is answering a question about the World
 - Peirce: deduction preserves the truth; induction and abduction amplify it and can fail.
 - "Bias" has three senses, in the data, in the estimator and in the mind, and all of them accumulate.
 - The prosecutor's fallacy swaps $P(E \mid I)$ for $P(I \mid E)$; the size of the lie depends on the World.
+- A Model needs to be right where the decision depends on it; an Agent that optimises against a Model finds where
+  it is wrong, so the Model is tested where the Agent will act.
+- The modeller is an Agent whose World is the space of Models: the spread between analysts with the same data is
+  uncertainty that no standard error contains.
 
 ## Chapter 3. Probability without mystery: bets, trees and Bayes' theorem
 
@@ -753,6 +783,19 @@ Knightian; the decision-maker's doubt about their own calibration is epistemic, 
 the kind fixes is the treatment: frequency and margins for the aleatory, belief charged by calibration for the
 epistemic, scope and an exit clause for the Knightian.
 
+**The ceiling a person sets.** The law of total variance also says how well a person can be predicted. Ask the
+same people the same survey twice, two weeks apart, and a share of the answers changes: that share is aleatory from
+the outside, because nothing about the person that a model could learn decides it. No model of a person can predict
+them better than they predict themselves, so the honest score of such a model is its accuracy **divided by the
+person's own consistency**. Agents built from two-hour interviews with a thousand people reached 83% of that ceiling
+on held-out survey questions, and agents built from demographics alone 74% (Park and colleagues, 2024): the first
+number measures the Model, the gap to 100% is what is left to learn, and the ceiling itself is the World. The same
+law warns against the opposite error. A simulated respondent asked to speak as "a voter of group X" tends to return
+the most common answer of the group, so the first parcel, the variance inside the group, vanishes: in one study of
+such simulated samples, most subgroups came out with almost no internal disagreement on questions where the real
+survey showed plenty (Li, Li and Qiu, 2025). A sample without its aleatory parcel is not a cheaper sample; it is
+another population.
+
 **The Stirling matrix.** Two questions organize the diagnosis. Do we know which outcomes are possible? Do we
 know their probabilities?
 
@@ -821,11 +864,16 @@ interval; the price of stubbornness is false confidence.
    the two coverages and the two widths, the trade-off between memory window and coverage.
 5. *(Concept)* Describe a real case (from your area) in which the process changed regime and the model
    remained confident. In which corner of the Stirling matrix does it fall?
+6. *(Concept)* A model predicts a person's answers with accuracy 0.70, and the person repeats their own answers with
+   consistency 0.80. What is the normalised accuracy? Which parcel of the law of total variance does the missing
+   0.20 of the person belong to, and which parcel the gap between 0.70 and 0.80?
 
 **Summary.**
 
 - Aleatory uncertainty does not shrink with more data; epistemic shrinks; Knightian deceives.
 - The law of total variance separates the first two precisely.
+- A model of a person is scored against the person's own consistency, the aleatory ceiling; a simulated sample that
+  loses the variance inside its groups is another population.
 - The Stirling matrix and the Walker typology organize the diagnosis before the calculation.
 - A world that changes slowly defeats a fixed model in silence: the nominal confidence survives the error.
 
@@ -4007,6 +4055,17 @@ The same discipline decides the grain of a question. Refining from the average d
 when the measured loss of the coarse question pays for the margin the fine one requires; finer grains that the
 instrument cannot measure stay declared, never guessed.
 
+**When to wake System 2: the value of computation.** Deliberation is not free: it costs time, attention and, in a
+machine, calls and money. The right comparison is therefore not between System 1 and a reasoner without limits, but
+between System 1 and System 2 **net of what System 2 costs**. Cognitive science has a name for this reading,
+**resource rationality** (Lieder and Griffiths, 2020): a shortcut that looks like a bias can be the best use of a
+limited budget of computation, and it stops being one only when thinking more would change the act by more than the
+thinking costs. The value of computation is to thinking what the value of information of Chapter 11 is to measuring:
+the expected loss of the act chosen now, minus the expected loss of the act chosen after deliberating, minus the cost
+of deliberating. It is zero when no result of the deliberation could change the act, which is the case of a triage
+far from its threshold. So System 2 is woken where a small revision flips the decision, near the threshold, and where
+the dominant event of a wrong act is severe; everywhere else, the fast answer is the rational one.
+
 ---
 
 ### Step 3 — Hands on
@@ -4115,6 +4174,9 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
    each one.
 7. *(Concept)* Why must System 1 be deterministic (repeated input, equal probability)? Relate it to the fixed seed
    of Chapter 1. Why, in contrast, must the belief of System 2 never reach 0% or 100%?
+8. *(Count)* A triage sends a case to "protect" when its probability passes 0.30. Deliberating costs 2, and the
+   loss of a wrong act is 100. For a case at 0.05 and for a case at 0.29, say whether deliberation could change the
+   act, and whether its value can exceed its cost. Where is System 2 worth waking?
 
 **Summary.**
 
@@ -4127,6 +4189,8 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
   known by construction.
 - System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
   bounded belief state, directed stress and Metropolis, each tested against a null.
+- Thinking more is an act with a value: System 2 is woken where its result could change the decision by more than it
+  costs, near the threshold and where a wrong act is severe.
 
 ## Chapter 17. The iron contract: cards, prohibitions, invariants and gates
 
@@ -4818,6 +4882,16 @@ skill $+0.57$ and conformal coverage $0.89$. The model fitted by the key did a l
 Predicting well inside the training set and failing under a new intervention is the failure mode that invariance exists to
 avoid.
 
+**Invariance as a test of understanding.** The same logic tests a model of another mind. A system that answers
+false-belief questions correctly (where will Sally look for the marble that Anne moved while she was out?) may have
+the mechanism, an account of what Sally saw, or only the form of the stories it has met. The test is an environment
+that changes a detail the mechanism says is irrelevant and one it says is decisive. Language models that pass the
+classical versions failed when the container was made transparent, so that Sally could see the move, or when she was
+told about it (Ullman, 2023): the answer stayed the same where the mechanism says it must change. A model that keeps
+its prediction under an irrelevant alteration and changes it under a relevant one has passed an invariance test; one
+that does the opposite has learned the surface. Average accuracy on the familiar versions cannot tell the two apart,
+which is why the failures on the altered cases weigh more than the successes on the usual ones.
+
 **The multiplicity, counted.** The honest counter of the gate is of **38 distinct tests**, between 32 and 72 according to
 what one counts. The inventory of the path counts still **eleven vault openings**, that is, eleven times in which a
 result was seen before a design decision. With Bonferroni over 38, the level per test falls to $\alpha = 0.05/38 = 0.0013$, at the cost of
@@ -5055,6 +5129,9 @@ each effect stops being a point. **The p was never the problem; the row was the 
 6. *(Count)* With 38 tests corrected by Bonferroni, the level per test is $0.0013$ and the cost of parsimony is
    9.6 bits. The evidence of the yeast is worth 10.9 bits. By how many bits does it pass? And if the cost rose to 12 bits,
    how many areas would remain — and would the gate stay standing?
+7. *(Concept)* Design four versions of a false-belief question: the classical one, one with an irrelevant change
+   (the marble becomes a key), and two with a relevant change (the box is transparent; Sally is told). Which answers
+   must stay the same and which must change? Which pattern of answers would show the surface without the mechanism?
 
 **Summary.**
 
@@ -5069,6 +5146,8 @@ each effect stops being a point. **The p was never the problem; the row was the 
 - With dependent rows corrected, education leaves; the gate stays standing with three areas only by counting a marginal
   genetic replica, and two of the three areas recovered causes that were already known. The effect transports better than the set. The 9 domains predicted the new environment
   with skill from $0.04$ to $0.88$.
+- A model of another mind is tested like a cause: by alterations that its mechanism declares irrelevant and others it
+  declares decisive.
 
 ## Chapter 20. The live clock, the leakage canary and the police in the vault
 
@@ -6038,7 +6117,7 @@ weaker than the others and is declared as such.
 
 ### D.6 The neighbours of the discipline
 
-Cited in Chapter 21 and, the last three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19.
+Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19. The last seven entered the same day with the theory that the research on models of the world, of agents and of modelling brought to Chapters 2, 4, 16 and 19; their metadata were checked against Crossref (the two DOIs of journals) and the arXiv pages.
 
 | Reference | Where it enters |
 | --- | --- |
@@ -6053,6 +6132,13 @@ Cited in Chapter 21 and, the last three, in Chapters 5, 11 and 14; metadata chec
 | **[checked]** JCGM 100:2008. *Evaluation of measurement data — Guide to the expression of uncertainty in measurement* (GUM). Joint Committee for Guides in Metrology, BIPM, 2008. DOI: 10.59161/JCGM100-2008E | The propagation of uncertainty, the first-order law and its limits (Chapter 5) |
 | **[checked]** NIST/SEMATECH. *e-Handbook of Statistical Methods* (NIST Handbook 151). National Institute of Standards and Technology. DOI: 10.18434/M32189 | Moments, correlation and the analysis of uncertainty, for reference (Chapters 5, 6 and 14) |
 | **[checked]** Rockafellar, R. T.; Uryasev, S. "Optimization of conditional value-at-risk", *Journal of Risk* 2(3), 2000 | The conditional value at risk, the mean of the worst cases (Chapter 11) |
+| **[checked]** Grimm, C.; Barreto, A.; Singh, S.; Silver, D. "The Value Equivalence Principle for Model-Based Reinforcement Learning", arXiv:2011.03506, 2020 | A model good enough for the decision (Chapter 2) |
+| **[checked]** Ha, D.; Schmidhuber, J. "World Models", arXiv:1803.10122, 2018. DOI: 10.5281/zenodo.1207631 | An agent that exploits the errors of its own model (Chapter 2) |
+| **[checked]** Breznau, N.; Rinke, E. M.; Wuttke, A. et al. "Observing many researchers using the same data and hypothesis reveals a hidden universe of uncertainty", *PNAS* 119(44):e2203150119, 2022. DOI: 10.1073/pnas.2203150119 | Seventy-three teams, one hypothesis: the modeller as a source of variance (Chapter 2) |
+| **[checked]** Park, J. S.; Zou, C. Q.; Kamphorst, J. et al. "Generative Agent Simulations of 1,000 People", arXiv:2411.10109, 2024 (revised in 2026 as "LLM Agents Grounded in Self-Reports Enable General-Purpose Simulation of Individuals") | Accuracy of a model of a person against the person's own consistency (Chapter 4) |
+| **[checked]** Li, D.; Li, L.; Qiu, H. S. "ChatGPT is not A Man but Das Man: Representativeness and Structural Consistency of Silicon Samples Generated by Large Language Models", arXiv:2507.02919, 2025 | Simulated samples that lose the variance inside their groups (Chapter 4) |
+| **[checked]** Lieder, F.; Griffiths, T. L. "Resource-rational analysis: Understanding human cognition as the optimal use of limited computational resources", *Behavioral and Brain Sciences* 43:e1, 2020. DOI: 10.1017/S0140525X1900061X | The value of computation, and when to wake System 2 (Chapter 16) |
+| **[checked]** Ullman, T. "Large Language Models Fail on Trivial Alterations to Theory-of-Mind Tasks", arXiv:2302.08399, 2023 | Invariance as a test of understanding (Chapter 19) |
 
 ### D.7 How to use this list
 
@@ -6408,8 +6494,10 @@ two values are recorded; none was deleted.
 
 The earlier text records, for an example of 4,000 events, an overconfident
 forecaster that goes from Brier 0.1956 to 0.1851 with Platt, an honest expert at 0.1846 and a noisy forecaster
-that goes from 0.2154 to 0.2089. The instrument measures **0.1712 → 0.1559**, **0.1560** and
-**0.2119 → 0.1755**. The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
+that goes from 0.2154 to 0.2089. The instrument measured **0.1712 → 0.1559**, **0.1560** and
+**0.2119 → 0.1755** until 2026-10-18, fitting and scoring the recalibration on the same days; scored out of the fit, it
+measures **0.1708 → 0.1555**, **0.1547** and **0.2147 → 0.1741** (the provenance check of 2026-10-19 found the
+paragraph still speaking of the old reading in the present). The world is not the same — here the observed base rate is 0.243, against the 0.5 of the
 old example —, and the order of magnitudes is the same: recalibration takes the confident one to the level of the
 honest one and leaves the noisy one behind. The ECE tolerance also diverges in level: H3 publishes a null q95 of
 0.0320 for $n = 1,488$, 0.0034 for 24,466 and 0.0035 for 104,489; here they come out **0.0425**, **0.0043** and

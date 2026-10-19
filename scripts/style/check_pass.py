@@ -8,6 +8,9 @@ Usage:
 
 from __future__ import annotations
 
+import ast
+import bisect
+import math
 import os
 import re
 import subprocess
@@ -42,34 +45,163 @@ BASE = os.environ.get("ESTOCOLOGIA_BASE", "HEAD")
 
 # Files rewritten from scratch under the owner's decision of 2026-10-18: content only, no metacommentary, the
 # whole theory of the research. A rewrite is not a prose pass, so numbers and fences may move. These files are
-# checked for the ramp markers, the word floor, and number provenance instead: every number in running prose
-# must already exist in a source (the baseline book, the paper, the plan, the empirical registry, or the
-# bibliography check) or in an output block of the same file, which check_labs.py holds to the instrument.
+# checked for the ramp markers, the word floor, and number provenance instead.
+#
+# Provenance (item 16, closed on 2026-10-19). A number in running prose has a source when it is
+#   1. in an output block of the same file (check_labs.py holds the block to the instrument);
+#   2. in the literal output of an instrument (docs/RUST_RESULTS.md, regenerated and checked by generate_results.py),
+#      in the code that computes it (crates/*/src), in a record of the research (empirical/**/*.md, governance/*.md),
+#      in the data sources, the paper, the plan, the registry or the bibliography check;
+#   3. with three significant figures or more, the rounding of such a number (0.6168 -> 0.617), or of it times 100
+#      (0.4259 -> 42.6, a share written as a percentage);
+#   4. a row of book/provenance.tsv, which says where it comes from in a form this script checks (see LEDGER_KINDS).
+# Until 2026-10-19 a fifth clause accepted any number of the previous assembled book. It was circular: a stale number
+# certified itself. It is gone.
 REWRITTEN = {"00-opening.md", "appendices.md"} | {f"ch{n:02d}.md" for n in range(1, 22)}
-SOURCES = ["paper/README.md", "docs/PLAN.md", "docs/EMPIRICAL_REGISTRY.md", "references/VERIFICATION.md"]
+SOURCES = [
+    "paper/README.md",
+    "docs/PLAN.md",
+    "docs/EMPIRICAL_REGISTRY.md",
+    "docs/RUST_RESULTS.md",
+    "references/VERIFICATION.md",
+    "data/SOURCES.md",
+]
+SOURCE_GLOBS = ["crates/*/src/**/*.rs", "empirical/**/*.md", "governance/*.md"]
+LEDGER = ROOT / "book" / "provenance.tsv"
+LEDGER_KINDS = {
+    # the expression, arithmetic only, evaluates to the number at the decimals it is printed with
+    "derivation",
+    # the pointer is "path" or "path::needle"; the file exists and contains the needle (default: the number itself)
+    "file",
+    # the pointer is "commit:path"; the file at that commit contains the number (a value the text records as earlier)
+    "git",
+    # the pointer is a phrase of Appendix D (a checked reference) that names the source of a date or a figure
+    "reference",
+    # a value an exercise asks the reader to try; the pointer is "path::needle", the line of the instrument it changes
+    "exercise",
+}
 
 
-def source_numbers() -> set[str]:
+def _source_texts() -> list[str]:
     texts = []
-    proc = subprocess.run(
-        ["git", "show", f"{BASE}:book/stochology-textbook.md"], cwd=ROOT, capture_output=True, text=True
-    )
-    if proc.returncode == 0:
-        texts.append(proc.stdout)
     for rel in SOURCES:
         path = ROOT / rel
         if path.is_file():
             texts.append(path.read_text(encoding="utf-8"))
+    for pattern in SOURCE_GLOBS:
+        for path in sorted(ROOT.glob(pattern)):
+            texts.append(path.read_text(encoding="utf-8", errors="ignore"))
+    return texts
+
+
+def source_numbers() -> set[str]:
     known: set[str] = set()
-    for text in texts:
+    for text in _source_texts():
         # "1 800" is one number written with a thin thousands space; read it whole as well as in parts.
         text = text.replace("{,}", ",")  # LaTeX decimal comma: 1{,}96
+        text = re.sub(r"(?<=\d)_(?=\d)", "", text)  # Rust digit separators: 400_000
         for joined in (text, re.sub(r"(\d) (\d{3})(?!\d)", r"\1\2", text)):
             for n in NUMBER_RE.findall(joined):
                 # A source may write 0,294 or 1.800 (Portuguese decimal comma and thousands point): keep every
                 # reading, so that a number moved into English notation still finds its source.
                 known.update({n, n.replace(",", "."), n.replace(",", ""), n.replace(".", "")})
     return known
+
+
+def source_values(known: set[str]) -> list[float]:
+    values = set()
+    for n in known:
+        if re.fullmatch(r"\d+(?:\.\d+)?", n):
+            values.add(float(n))
+    return sorted(values)
+
+
+def significant(n: str) -> int:
+    return len(n.replace(",", "").replace(".", "").lstrip("0"))
+
+
+def rounds_from(n: str, values: list[float]) -> bool:
+    """A number of three or more significant figures that is the rounding of a source value, or of it times 100."""
+    if significant(n) < 3:
+        return False
+    c = canonical(n)
+    try:
+        x = float(c)
+    except ValueError:
+        return False
+    dec = len(c.split(".")[1]) if "." in c else 0
+    lo, hi = bisect.bisect_left(values, x - 1), bisect.bisect_right(values, x + 1)
+    if any(round(v, dec) == x for v in values[lo:hi]):
+        return True
+    lo, hi = bisect.bisect_left(values, (x - 1) / 100), bisect.bisect_right(values, (x + 1) / 100)
+    return any(round(v * 100, dec) == x for v in values[lo:hi])
+
+
+def safe_eval(expr: str) -> float:
+    tree = ast.parse(expr, mode="eval")
+    allowed = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant, ast.Add, ast.Sub, ast.Mult, ast.Div,
+               ast.Pow, ast.USub, ast.UAdd, ast.Call, ast.Name, ast.Load)
+    funcs = {"log": math.log, "log2": math.log2, "exp": math.exp, "sqrt": math.sqrt}
+    for node in ast.walk(tree):
+        if not isinstance(node, allowed):
+            raise ValueError(f"not arithmetic: {expr}")
+        if isinstance(node, ast.Name) and node.id not in funcs:
+            raise ValueError(f"unknown name {node.id} in {expr}")
+    return float(eval(compile(tree, "<ledger>", "eval"), {"__builtins__": {}}, funcs))
+
+
+def read_ledger() -> tuple[dict[tuple[str, str], tuple[str, str]], list[str]]:
+    """Rows of book/provenance.tsv, checked one by one: (file, number) -> (kind, pointer), and the problems."""
+    rows: dict[tuple[str, str], tuple[str, str]] = {}
+    problems: list[str] = []
+    if not LEDGER.is_file():
+        return rows, problems
+    appendix_d = (ROOT / "book" / "appendices.md").read_text(encoding="utf-8")
+    for i, line in enumerate(LEDGER.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip() or line.startswith("#"):
+            continue
+        parts = line.split("\t")
+        if len(parts) != 5:
+            problems.append(f"provenance.tsv:{i}: five tab-separated fields expected")
+            continue
+        name, number, kind, pointer, _note = parts
+        where = f"provenance.tsv:{i} ({name} {number})"
+        if kind not in LEDGER_KINDS:
+            problems.append(f"{where}: unknown kind {kind}")
+            continue
+        if kind == "derivation":
+            try:
+                value = safe_eval(pointer)
+            except (ValueError, SyntaxError, ZeroDivisionError) as e:
+                problems.append(f"{where}: {e}")
+                continue
+            c = canonical(number)
+            dec = len(c.split(".")[1]) if "." in c else 0
+            if round(value, dec) != float(c):
+                problems.append(f"{where}: {pointer} = {value:.6g}, not {number}")
+                continue
+        elif kind in ("file", "exercise"):
+            path, _, needle = pointer.partition("::")
+            target = ROOT / path
+            needle = needle or number
+            if not target.is_file() or needle not in target.read_text(encoding="utf-8", errors="ignore"):
+                problems.append(f"{where}: {path} does not contain {needle!r}")
+                continue
+        elif kind == "git":
+            commit, _, path = pointer.partition(":")
+            proc = subprocess.run(["git", "show", f"{commit}:{path}"], cwd=ROOT, capture_output=True, text=True)
+            # the earlier text may be the Portuguese one: 0,9586 for 0.9586, 26 795 for 26,795
+            swapped = number.translate(str.maketrans(",.", ".,"))
+            variants = {number, swapped, number.replace(",", " ")}
+            if proc.returncode != 0 or not any(v in proc.stdout for v in variants):
+                problems.append(f"{where}: {commit}:{path} does not contain {number}")
+                continue
+        elif kind == "reference":
+            if pointer not in appendix_d:
+                problems.append(f"{where}: Appendix D does not contain {pointer!r}")
+                continue
+        rows[(name, number)] = (kind, pointer)
+    return rows, problems
 
 
 def canonical(n: str) -> str:
@@ -79,7 +211,8 @@ def canonical(n: str) -> str:
     return n.replace(",", ".")
 
 
-def check_rewrite(name: str, text: str, known: set[str]) -> list[str]:
+def check_rewrite(name: str, text: str, known: set[str], values: list[float],
+                  ledger: dict[tuple[str, str], tuple[str, str]], used: set[tuple[str, str]]) -> list[str]:
     body = extract_section(name, text)
     problems: list[str] = []
     if name.startswith("ch"):
@@ -92,11 +225,16 @@ def check_rewrite(name: str, text: str, known: set[str]) -> list[str]:
     own = {n for _, block in FENCE_RE.findall(body) for n in NUMBER_RE.findall(block)}
     running = FENCE_RE.sub("", body)
     running = "\n".join(l for l in running.splitlines() if not l.startswith("|")).replace("{,}", ",")
-    unknown = sorted(
-        {n for n in NUMBER_RE.findall(running) if n not in known and canonical(n) not in known and n not in own}
-    )
+    unknown = set()
+    for n in set(NUMBER_RE.findall(running)):
+        if n in own or n in known or canonical(n) in known or rounds_from(n, values):
+            continue
+        if (name, n) in ledger:
+            used.add((name, n))
+            continue
+        unknown.add(n)
     if unknown:
-        problems.append(f"numbers without a source: {', '.join(unknown[:12])}")
+        problems.append(f"numbers without a source: {', '.join(sorted(unknown)[:40])}")
     return problems
 
 
@@ -180,11 +318,19 @@ def main() -> int:
 
     failures = 0
     known: set[str] | None = None
+    values: list[float] = []
+    ledger, ledger_problems = read_ledger()
+    used: set[tuple[str, str]] = set()
+    for p in ledger_problems:
+        print(f"   REGRESSION: {p}")
+    failures += len(ledger_problems)
     for path in files:
         name = path.name
         if name in REWRITTEN:
-            known = source_numbers() if known is None else known
-            problems = check_rewrite(name, path.read_text(encoding="utf-8"), known)
+            if known is None:
+                known = source_numbers()
+                values = source_values(known)
+            problems = check_rewrite(name, path.read_text(encoding="utf-8"), known, values, ledger, used)
             if problems:
                 failures += 1
                 print(f"{name}: FAIL (rewrite)")
@@ -277,6 +423,12 @@ def main() -> int:
             failures += 1
             for p in problems:
                 print(f"   REGRESSION: {p}")
+    checked = {path.name for path in files}
+    stale = sorted(k for k in ledger if k[0] in checked and k not in used)
+    for name, number in stale:
+        print(f"   REGRESSION: provenance.tsv names {number} in {name}, which no longer needs it or no longer has it")
+    failures += len(stale)
+    print(f"provenance ledger: {len(ledger)} rows, {len(used)} used")
     print(f"files verified: {len(files)}, with regression: {failures}")
     return 1 if failures else 0
 
