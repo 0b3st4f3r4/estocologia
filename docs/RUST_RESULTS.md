@@ -15,6 +15,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
 | `labs --wave` | The wave engine against data: the STDP arrow in Victoria and the phasor conflict in the New York flights |
+| `labs --wave2` | The same two tests under declaration 2 (K = 2): a day of horizon, and the phase of the deviation from the common daily profile |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -327,6 +328,88 @@ real data:
 == verdicts, by the rules sealed before the run ==
 T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
 T2 the conflict: NOT TESTABLE under this encoding | adds over level agreement: no
+~~~
+
+### The wave engine against data, declaration 2 (K = 2)
+
+T1 with a day of horizon and spikes at 1.0; T2 with the phase of each level's deviation from the common daily profile; controls first, then the verdicts by the rules sealed in empirical/p23-onda/DECLARACAO_2.md.
+
+~~~bash
+./target/release/labs --wave2
+~~~
+
+~~~text
+== The wave engine against data, declaration 2, K = 2 (empirical/p23-onda/DECLARACAO_2.md) ==
+controls on synthetic data, seed 2026:
+
+-- T1 (K = 2) control, planted arrow: 156 weeks --
+  engine                             temperature -> demand 142 | demand -> temperature  14 | none   0 | rate 0.910
+  engine, null pairing (+13 weeks)   temperature -> demand  61 | demand -> temperature  95 | none   0 | rate 0.391
+  rival (lagged cross-correlation)   temperature -> demand 134 | demand -> temperature  22 | none   0 | rate 0.859
+  rival, null pairing                temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
+  engine, margin 0.05 (secondary)    temperature -> demand 124 | demand -> temperature   6 | none  26 | rate 0.795
+  binomial P(X >= 142 | n = 156) = 3.855e-28 | median learnt lag 0.38 h
+  P1 true | P2 true | P3 true | works: true | adds over the rival: false
+
+-- T1 (K = 2) control, independent: 156 weeks --
+  engine                             temperature -> demand  70 | demand -> temperature  86 | none   0 | rate 0.449
+  engine, null pairing (+13 weeks)   temperature -> demand  81 | demand -> temperature  75 | none   0 | rate 0.519
+  rival (lagged cross-correlation)   temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
+  rival, null pairing                temperature -> demand  77 | demand -> temperature  79 | none   0 | rate 0.494
+  engine, margin 0.05 (secondary)    temperature -> demand  47 | demand -> temperature  59 | none  50 | rate 0.301
+  binomial P(X >= 70 | n = 156) = 9.134e-1 | median learnt lag 0.27 h
+  P1 false | P2 false | P3 true | works: false | adds over the rival: false
+
+-- T2 (K = 2) control, common evening peak, planted interaction, phase of the raw profile (declaration 1) --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
+  Brier System 1 (additive) 0.13189 | System 2 (cells) 0.13095
+  gain of System 2: conflict NaN | resonance +0.00094 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+-- T2 (K = 2) control, common evening peak, planted interaction, phase of the deviation --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 19250 beating 27426 conflict 13324
+  Brier System 1 (additive) 0.13603 | System 2 (cells) 0.13136
+  gain of System 2: conflict +0.00666 | resonance +0.00403 | delta +0.00264, 95% CI by day [+0.00156; +0.00365]
+  rival delta (level agreement, no phase) +0.00273 | testable: true
+
+-- T2 (K = 2) control, common evening peak, no interaction, phase of the raw profile (declaration 1) --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
+  Brier System 1 (additive) 0.13407 | System 2 (cells) 0.13385
+  gain of System 2: conflict NaN | resonance +0.00022 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+-- T2 (K = 2) control, common evening peak, no interaction, phase of the deviation --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18192 beating 27661 conflict 14147
+  Brier System 1 (additive) 0.13809 | System 2 (cells) 0.13424
+  gain of System 2: conflict +0.00403 | resonance +0.00408 | delta -0.00005, 95% CI by day [-0.00105; +0.00089]
+  rival delta (level agreement, no phase) -0.00019 | testable: true
+
+real data:
+
+-- T1 (K = 2) Victoria 2012-2014, temperature -> demand: 155 weeks --
+  engine                             temperature -> demand  77 | demand -> temperature  78 | none   0 | rate 0.497
+  engine, null pairing (+13 weeks)   temperature -> demand  59 | demand -> temperature  95 | none   1 | rate 0.381
+  rival (lagged cross-correlation)   temperature -> demand  90 | demand -> temperature  65 | none   0 | rate 0.581
+  rival, null pairing                temperature -> demand  80 | demand -> temperature  75 | none   0 | rate 0.516
+  engine, margin 0.05 (secondary)    temperature -> demand  48 | demand -> temperature  33 | none  74 | rate 0.310
+  binomial P(X >= 77 | n = 155) = 5.638e-1 | median learnt lag 0.04 h
+  P1 false | P2 false | P3 true | works: false | adds over the rival: false
+
+-- T2 (K = 2) New York 2013, vault October to December --
+  training 54835 | vault flights with three eligible sources 77184 | quiescent 0 resonance 25196 beating 40352 conflict 11636
+  Brier System 1 (additive) 0.16676 | System 2 (cells) 0.16604
+  gain of System 2: conflict +0.00024 | resonance +0.00117 | delta -0.00093, 95% CI by day [-0.00165; -0.00022]
+  rival delta (level agreement, no phase) +0.00146 | testable: true
+
+-- T2 (K = 2) New York 2023, vault October to December --
+  training 68257 | vault flights with three eligible sources 98509 | quiescent 0 resonance 35965 beating 52851 conflict 9693
+  Brier System 1 (additive) 0.11771 | System 2 (cells) 0.11736
+  gain of System 2: conflict -0.00029 | resonance +0.00256 | delta -0.00284, 95% CI by day [-0.00365; -0.00193]
+  rival delta (level agreement, no phase) +0.00335 | testable: true
+
+== verdicts of declaration 2 (K = 2), by the rules sealed before the run ==
+T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
+T2 the conflict: NOT SUPPORTED | adds over level agreement: no
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1380,7 +1463,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 108 tests
+running 110 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1484,13 +1567,15 @@ test streams::tests::logistic_recovers_a_known_coefficient ... ok
 test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
+test wave2::tests::a_common_peak_hides_the_conflict_from_the_raw_phase_and_not_from_the_deviation ... ok
+test wave2::tests::the_planted_arrow_survives_the_wider_horizon ... ok
 test wave::tests::a_planted_interaction_in_conflict_raises_the_gain_of_system_2_there ... ok
 test wave::tests::events_open_once_per_excursion_with_the_time_of_day_as_phase ... ok
 test wave::tests::the_anomaly_removes_a_shared_daily_cycle ... ok
 test wave::tests::the_binomial_tail_is_exact_at_small_n ... ok
 test wave::tests::the_planted_arrow_is_found_and_the_independent_one_is_not ... ok
 
-test result: ok. 108 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 110 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1938,7 +2023,8 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
 | p22-parada | DECLARACAO_2.md | db71d78b1c669833b39db53056b2cdfeee4ae671dffcdcf04ee35fe0aa07c288 |
 | p23-onda | DECLARACAO.md | 0dff3c93f89a33a2ea2ac765416572b1a2efcfc459d1dac983eb4cbdf0622615 |
+| p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 
-Point declarations: 25, of which 6 are declaration 2 or later (declared rectification with both values) | empirical points: 19 | `labs` instruments: 22 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams,--wave; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 26, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 19 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams,--wave,--wave2; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6494 lines** and **89541 words**, sha256 `062a898c727a4b2a718d557d360a965f10a88436fc99e7595e8c4696f41fbf19`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6495 lines** and **89580 words**, sha256 `a0451e0b91e636ce41d9db464fe0a0ebacb2c0466cace4f577b03935ad093023`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

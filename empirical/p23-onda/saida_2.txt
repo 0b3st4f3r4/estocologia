@@ -1,0 +1,71 @@
+== The wave engine against data, declaration 2, K = 2 (empirical/p23-onda/DECLARACAO_2.md) ==
+controls on synthetic data, seed 2026:
+
+-- T1 (K = 2) control, planted arrow: 156 weeks --
+  engine                             temperature -> demand 142 | demand -> temperature  14 | none   0 | rate 0.910
+  engine, null pairing (+13 weeks)   temperature -> demand  61 | demand -> temperature  95 | none   0 | rate 0.391
+  rival (lagged cross-correlation)   temperature -> demand 134 | demand -> temperature  22 | none   0 | rate 0.859
+  rival, null pairing                temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
+  engine, margin 0.05 (secondary)    temperature -> demand 124 | demand -> temperature   6 | none  26 | rate 0.795
+  binomial P(X >= 142 | n = 156) = 3.855e-28 | median learnt lag 0.38 h
+  P1 true | P2 true | P3 true | works: true | adds over the rival: false
+
+-- T1 (K = 2) control, independent: 156 weeks --
+  engine                             temperature -> demand  70 | demand -> temperature  86 | none   0 | rate 0.449
+  engine, null pairing (+13 weeks)   temperature -> demand  81 | demand -> temperature  75 | none   0 | rate 0.519
+  rival (lagged cross-correlation)   temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
+  rival, null pairing                temperature -> demand  77 | demand -> temperature  79 | none   0 | rate 0.494
+  engine, margin 0.05 (secondary)    temperature -> demand  47 | demand -> temperature  59 | none  50 | rate 0.301
+  binomial P(X >= 70 | n = 156) = 9.134e-1 | median learnt lag 0.27 h
+  P1 false | P2 false | P3 true | works: false | adds over the rival: false
+
+-- T2 (K = 2) control, common evening peak, planted interaction, phase of the raw profile (declaration 1) --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
+  Brier System 1 (additive) 0.13189 | System 2 (cells) 0.13095
+  gain of System 2: conflict NaN | resonance +0.00094 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+-- T2 (K = 2) control, common evening peak, planted interaction, phase of the deviation --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 19250 beating 27426 conflict 13324
+  Brier System 1 (additive) 0.13603 | System 2 (cells) 0.13136
+  gain of System 2: conflict +0.00666 | resonance +0.00403 | delta +0.00264, 95% CI by day [+0.00156; +0.00365]
+  rival delta (level agreement, no phase) +0.00273 | testable: true
+
+-- T2 (K = 2) control, common evening peak, no interaction, phase of the raw profile (declaration 1) --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
+  Brier System 1 (additive) 0.13407 | System 2 (cells) 0.13385
+  gain of System 2: conflict NaN | resonance +0.00022 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+-- T2 (K = 2) control, common evening peak, no interaction, phase of the deviation --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18192 beating 27661 conflict 14147
+  Brier System 1 (additive) 0.13809 | System 2 (cells) 0.13424
+  gain of System 2: conflict +0.00403 | resonance +0.00408 | delta -0.00005, 95% CI by day [-0.00105; +0.00089]
+  rival delta (level agreement, no phase) -0.00019 | testable: true
+
+real data:
+
+-- T1 (K = 2) Victoria 2012-2014, temperature -> demand: 155 weeks --
+  engine                             temperature -> demand  77 | demand -> temperature  78 | none   0 | rate 0.497
+  engine, null pairing (+13 weeks)   temperature -> demand  59 | demand -> temperature  95 | none   1 | rate 0.381
+  rival (lagged cross-correlation)   temperature -> demand  90 | demand -> temperature  65 | none   0 | rate 0.581
+  rival, null pairing                temperature -> demand  80 | demand -> temperature  75 | none   0 | rate 0.516
+  engine, margin 0.05 (secondary)    temperature -> demand  48 | demand -> temperature  33 | none  74 | rate 0.310
+  binomial P(X >= 77 | n = 155) = 5.638e-1 | median learnt lag 0.04 h
+  P1 false | P2 false | P3 true | works: false | adds over the rival: false
+
+-- T2 (K = 2) New York 2013, vault October to December --
+  training 54835 | vault flights with three eligible sources 77184 | quiescent 0 resonance 25196 beating 40352 conflict 11636
+  Brier System 1 (additive) 0.16676 | System 2 (cells) 0.16604
+  gain of System 2: conflict +0.00024 | resonance +0.00117 | delta -0.00093, 95% CI by day [-0.00165; -0.00022]
+  rival delta (level agreement, no phase) +0.00146 | testable: true
+
+-- T2 (K = 2) New York 2023, vault October to December --
+  training 68257 | vault flights with three eligible sources 98509 | quiescent 0 resonance 35965 beating 52851 conflict 9693
+  Brier System 1 (additive) 0.11771 | System 2 (cells) 0.11736
+  gain of System 2: conflict -0.00029 | resonance +0.00256 | delta -0.00284, 95% CI by day [-0.00365; -0.00193]
+  rival delta (level agreement, no phase) +0.00335 | testable: true
+
+== verdicts of declaration 2 (K = 2), by the rules sealed before the run ==
+T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
+T2 the conflict: NOT SUPPORTED | adds over level agreement: no

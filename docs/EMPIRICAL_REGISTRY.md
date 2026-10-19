@@ -117,7 +117,8 @@ The 38 recorded tests of the H2 gate re-read with the stopping rule of point 22,
 
 Point 23: two layers of the wave engine tested on catalogued data under `empirical/p23-onda/DECLARACAO.md`, sealed
 and committed before the first run. Instrument: `labs --wave`. Verdicts: the arrow not supported; the conflict not
-testable under its encoding.
+testable under its encoding. Declaration 2 (K = 2, `labs --wave2`): the arrow not supported; the conflict refuted, in
+the opposite direction.
 
 | Number | Instrument |
 | --- | --- |
@@ -127,6 +128,8 @@ testable under its encoding.
 | T2, New York 2013 vault: 77,184 flights, all in resonance; 2023 vault: 98,509 flights, 98,146 in resonance and 363 in beating; no conflict in either | `labs --wave` |
 | T2, gain of System 2 over System 1 in Brier: +0.00048 (2013), +0.00038 (2023) | `labs --wave` |
 | Synthetic controls: planted arrow 141 of 156 (rival 155); independent 80 against 64; planted interaction Δ +0.00083 [+0.00003; +0.00166]; none Δ −0.00052 [−0.00107; +0.00004] | `labs --wave` |
+| Declaration 2 (K = 2), T1 with a day of horizon and spikes at 1.0: engine 77 against 78, none 0 (binomial p 0.56); null 59; rival 90, its null 80; P1 false, P2 false, P3 true; not supported | `labs --wave2` |
+| Declaration 2 (K = 2), T2 with the phase of the deviation from the common daily profile: 2013 conflict 11,636, resonance 25,196, Δ −0.00093 [−0.00165; −0.00022], Δ_rival +0.00146; 2023 conflict 9,693, resonance 35,965, Δ −0.00284 [−0.00365; −0.00193], Δ_rival +0.00335; testable, not supported | `labs --wave2` |
 
 ## Recipes of the course examples (2026-10-19)
 
