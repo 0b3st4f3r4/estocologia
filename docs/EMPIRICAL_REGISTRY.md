@@ -199,6 +199,19 @@ Synthetic: 200 tasks, 8 runs of each, chances from four declared laws, 2,000 rep
 | World D, Beta(1.4, 0.6): pass^1 0.7306, pass^8 0.3200, independent 0.0812, ratio 3.9; exact 0.2976 | `labs --passk` |
 | The exact moment lies inside the band of the estimator at every k in every world | `labs --passk` |
 
+## Combining models when none is true (2026-10-19)
+
+Declared and sealed before the first run in `empirical/p27-stacking/` (item 18 (c) of `docs/DECLARED_PROPOSALS.md`).
+Two confident candidates, 40 training and 2,000 test points, 1,000 datasets per world. Verdict: the three rules hold.
+K = 1.
+
+| Result | Instrument |
+| --- | --- |
+| M-open: log score per test point, model averaging −4.8251, stacking −2.0811, best single model −4.9817; difference +2.7441 [+2.7007; +2.7874] | `labs --stacking` |
+| M-open: model averaging above 0.99 or below 0.01 on the left model in 926 of 1,000 datasets | `labs --stacking` |
+| A duplicated model moves model averaging's score by 0.03748 per point and stacking's by 0.00000 | `labs --stacking` |
+| M-closed: model averaging −1.4189, stacking −1.4202; difference −0.0013 [−0.0016; −0.0010] | `labs --stacking` |
+
 ## The card contract 1.4 (2026-10-19)
 
 Two more optional fields: the multiverse of the answer and the reliability of an agent. The chain goes on to 1.4; the

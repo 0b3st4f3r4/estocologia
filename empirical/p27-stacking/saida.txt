@@ -1,0 +1,17 @@
+== Combining models when none is true: Bayesian model averaging against stacking ==
+candidates: N(c, 1) with c ~ N(-2, 0.05^2) (left) and c ~ N(+2, 0.05^2) (right) | 40 training points, 2000 test points, 1000 datasets, seed 2026 | score: mean log predictive density per test point
+
+-- M-open: half the points from each side, neither candidate is true --
+  log score: BMA -4.8251 | stacking -2.0811 | best single model -4.9817 | stacking - BMA +2.7441 [+2.7007; +2.7874]
+  weight on the left model: BMA mean 0.485 (above 0.99 or below 0.01 in 926 of 1000) | stacking mean 0.499
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.499 (was 0.499) | BMA score moves by 0.03748, its left family weighs 0.491 (was 0.485)
+
+-- M-closed: every point from the left, the left candidate is true --
+  log score: BMA -1.4189 | stacking -1.4202 | best single model -1.4189 | stacking - BMA -0.0013 [-0.0016; -0.0010]
+  weight on the left model: BMA mean 1.000 (above 0.99 or below 0.01 in 1000 of 1000) | stacking mean 0.998
+  left model listed twice: stacking score moves by 0.00000 on average, its left family weighs 0.998 (was 0.998) | BMA score moves by 0.00000, its left family weighs 1.000 (was 1.000)
+
+-- the rules declared before the run --
+  R1, M-open: stacking scores above BMA, with the 95% interval of the difference above zero: holds
+  R2, both worlds: listing the left model twice moves stacking's score by less than 0.001 and its left-family weight by less than 0.01: holds
+  R3, M-closed: the two differ by less than 0.01 in mean log score: holds
