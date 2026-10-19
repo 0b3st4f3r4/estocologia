@@ -1,5 +1,5 @@
 # The provenance of the numbers of the book that no instrument output, code, record or registry carries.
-# Read by scripts/style/check_pass.py, which checks every row and fails on a row that no number needs any more.
+# Read by scripts/style/check_pass.py, which checks every row and fails on a row whose number has left the text.
 # Columns: file, number as printed, kind, pointer, note. Kinds:
 #   derivation  the pointer is arithmetic over numbers the text gives; it must round to the number as printed
 #   file        the pointer is path or path::needle; the file must contain the needle (default: the number)
