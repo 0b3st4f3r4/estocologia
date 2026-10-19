@@ -525,7 +525,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 944 lines, 79 179 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 969 lines, 79 884 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
@@ -551,9 +551,10 @@ cargo run --release --bin labs -- --resolution
 ```
 
 Measured with the same total resource budget, paired arms and a staffing that aims at a utilisation of 0.8:
-resolution loss is **22.99 min** where demand oscillates between 5 and 11, **2.50 min** where it oscillates
+resolution loss is **25.54 min** where demand oscillates between 5 and 11, **2.77 min** where it oscillates
 between 7 and 9, and **zero** where it does not oscillate (rectified 2026-10-18; the earlier 46.24 and 5.97 min
-were measured at utilisation 1, a critical queue). The `Resolucao` type and `medir_perda_de_resolucao` live in
+were measured at utilisation 1, a critical queue; rectified again 2026-10-19, from 22.99 and 2.50 min, when the day
+became a Poisson day of 10 hours with the Lindley recursion in its right order, over 4,000 days instead of 200). The `Resolucao` type and `medir_perda_de_resolucao` live in
 `crates/stochology-core/src/resolution.rs`; the full specification, the five falsifiable predictions, and
 the status of the rule are in `book/resolution-horizons.md`. The field entered the card
 as `Ficha.resolucao` and the rule became $\Phi_5$, enforced by the gates binary; predictions 3 and 5

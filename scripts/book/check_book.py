@@ -150,6 +150,12 @@ RETIRED = [
     ("adversarial panel A1", "the safeguard panel runs no attack"),
     ("1000 rounds 0.51960", "twice-Kelly ties counted by rounding"),
     ("25.12%", "the median maximum of a Pareto sample is not n"),
+    # Reimplementation of the chapters, 2026-10-19 (Appendix E).
+    ("loss 22.99 min", "the R horizon's day: Poisson day, Lindley in order, 4,000 days"),
+    ("and 14.10 (uniform 5..11)", "the closed form of the mean of W over a uniform demand"),
+    ("EVPI rises to 3.7000", "the EVPI is E[max] - max E"),
+    ("halves null: per day = 0.0441", "the sd of the signed differences"),
+    ("reinforcement in the surge   163683     2.5", "two nurses, not one at twice the pace"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")

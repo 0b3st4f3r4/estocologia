@@ -93,6 +93,12 @@ impl Measure {
 
 /// One day of queue, with the two arms paired: the same arrivals and the same service bases,
 /// changing only the service rate. Without that the comparison would also measure the draw.
+///
+/// The day lasts `hours`, with Poisson arrivals at rate `lam` and the queue starting empty; each
+/// client waits for what is left of the queue: W_1 = 0, W_{n+1} = max(0, W_n + S_n - gap_{n+1}).
+/// Until 2026-10-19 the day had a fixed count of round(lam * hours) arrivals, and each client's wait
+/// included its own service (the first client waited for a service that did not exist); a
+/// reimplementation from the text found both. See `uniform_open`.
 fn paired_day(
     rng: &mut Rng,
     hours: usize,
@@ -102,18 +108,20 @@ fn paired_day(
 ) -> (Measure, Measure) {
     let mut aggregated = Measure::default();
     let mut fine = Measure::default();
-    let mut aggregated_wait = 0.0_f64;
-    let mut fine_wait = 0.0_f64;
-    // memoryless queue: W_{n+1} = max(0, W_n + service - interarrival gap)
-    for _ in 0..(lam * hours as f64).round() as usize {
-        let u = ((rng.next_u64() >> 11) as f64 + 1.0) / ((1u64 << 53) as f64 + 1.0);
-        let gap = -u.ln() / lam;
-        let base = {
-            let v = ((rng.next_u64() >> 11) as f64 + 1.0) / ((1u64 << 53) as f64 + 1.0);
-            -v.ln()
-        };
-        aggregated_wait = (aggregated_wait + base / mu_aggregated - gap).max(0.0);
-        fine_wait = (fine_wait + base / mu_fine - gap).max(0.0);
+    let (mut aggregated_wait, mut fine_wait) = (0.0_f64, 0.0_f64);
+    let mut previous_base: Option<f64> = None;
+    let mut clock = 0.0_f64;
+    loop {
+        let gap = -uniform_open(rng).ln() / lam;
+        clock += gap;
+        if clock > hours as f64 {
+            break;
+        }
+        if let Some(base) = previous_base {
+            aggregated_wait = (aggregated_wait + base / mu_aggregated - gap).max(0.0);
+            fine_wait = (fine_wait + base / mu_fine - gap).max(0.0);
+        }
+        previous_base = Some(-uniform_open(rng).ln());
         aggregated.wait_sum += aggregated_wait * 60.0;
         fine.wait_sum += fine_wait * 60.0;
         aggregated.clients += 1;
@@ -127,6 +135,15 @@ fn paired_day(
     }
     (aggregated, fine)
 }
+
+/// A uniform draw on the open interval (0, 1), so that its logarithm is finite.
+fn uniform_open(rng: &mut Rng) -> f64 {
+    ((rng.next_u64() >> 11) as f64 + 1.0) / ((1u64 << 53) as f64 + 1.0)
+}
+
+/// Days of the R-horizon laboratories. Until 2026-10-19 they used 200, and the printed waits carried a
+/// seed spread of about 2 minutes against two printed decimals; 4,000 days bring it under half a minute.
+pub const R_HORIZON_DAYS: usize = 4000;
 
 /// The utilisation the staffing aims at: capacity = demand / 0.8. Declared on 2026-10-18; until
 /// then the capacity equalled the demand (utilisation 1), a critical queue with no steady state,
@@ -186,15 +203,19 @@ pub const FAILED_DAY_ABOVE30: f64 = 0.10;
 pub const DECLARED_FAILED_DAY_FRACTION: f64 = 0.25;
 
 /// One simulated day with an integer number of agents, through the memoryless queue recursion.
+///
+/// Declared and left as it was measured: this day keeps the two defects that `paired_day` lost on
+/// 2026-10-19 (a fixed count of round(lam * hours) arrivals, and each client's wait including its own
+/// service), and models c agents as one line served at c clients per hour. Predictions 3 and 5 of the
+/// R axis were declared and measured with it (`empirical/`); correcting it is a new specification,
+/// to be declared before it is run and counted in K, not an edit of the old one.
 fn day_with_agents(rng: &mut Rng, hours: usize, lam: f64, agents: u32) -> Measure {
     let mut measure = Measure::default();
     let mut wait = 0.0_f64;
     let mu = agents.max(1) as f64;
     for _ in 0..(lam * hours as f64).round() as usize {
-        let u = ((rng.next_u64() >> 11) as f64 + 1.0) / ((1u64 << 53) as f64 + 1.0);
-        let gap = -u.ln() / lam;
-        let v = ((rng.next_u64() >> 11) as f64 + 1.0) / ((1u64 << 53) as f64 + 1.0);
-        let base = -v.ln();
+        let gap = -uniform_open(rng).ln() / lam;
+        let base = -uniform_open(rng).ln();
         wait = (wait + base / mu - gap).max(0.0);
         measure.wait_sum += wait * 60.0;
         measure.clients += 1;

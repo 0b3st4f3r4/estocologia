@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 409 tests passed, none failed
+cargo test --workspace                                  # 413 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **5 944 lines**, **79 179 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **5 969 lines**, **79 884 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 944 lines and 79 179 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 969 lines and 79 884 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -257,3 +257,24 @@ $n$. The numpy citation of Appendix C is checked (NumPy 2.5.0 release notes, gh-
 | `scripts/verify.sh` | no reimplementation | runs `decision_labs.py`: 61 of 61 agree |
 | `scripts/book/check_book.py` | refuses 27 retired values | refuses 32 |
 | assembled book, line count | 5 925 (with 78 717 words) | 5 944 (with 79 179 words) |
+
+## The reimplementation of the chapters (2026-10-19, later the same day)
+
+The reimplementation from the text was extended from Chapters 10 and 11 to twenty chapters
+(`scripts/reimplementation/`, run by `run.py` in `scripts/verify.sh`; `decision_labs.py` became `ch10_ch11.py`).
+421 quantities: 402 agree, 19 are open because the text names a procedure without its recipe, none diverges after the
+corrections. It found six wrong values in the instruments and one gap in the text, all listed with both values in
+Appendix E (rectifications of the reimplementation of the chapters): the R horizon's day (a fixed count of arrivals,
+the Lindley recursion off by one client, 200 days), the mean of W over a uniform demand, the EVPI of Chapter 12, the
+reinforcement of the health post (one nurse at twice the pace where the text says two nurses), the bank's halves
+null (the sd of absolute differences), a rounding in Chapter 17, and the unspecified 1-NN of Chapter 19. The day of
+predictions 3 and 5 keeps its old form, declared, because the predictions were declared and measured with it. The
+dated record is `history/estado-2026-10-19T0752Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| reimplementation | 61 quantities, Chapters 10 and 11 | 421 quantities, 20 chapters: 402 agree, 19 open |
+| `cargo test --workspace` | 409 | **413**: four tests that fail on the old code (signed halves null, closed-form Jensen mean, two nurses on one line, EVPI from the payoff table) |
+| R horizon | 5 or 11: loss 22.99 min; 7 or 9: 2.50; 200 days | 25.54 and 2.77; 4,000 days; the decision of System 2 (refine to the day) unchanged |
+| `scripts/book/check_book.py` | refuses 32 retired values | refuses 37 |
+| assembled book, line count | 5 944 (with 79 179 words) | 5 969 (with 79 884 words) |

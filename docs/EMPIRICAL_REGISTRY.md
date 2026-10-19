@@ -53,11 +53,17 @@ measurement remains without an instrument — declaration 2 of `empirical/p14-h3
 | Instrument-measured Goodhart: 0.145 [0.132; 0.157], four times smaller than the declared 0.6 | **P** / **V** | the measurement is registry-only (field result whose raw data is not versioned); the verdict against the declared criterion and the ratio of 4.1483 are **re-derived** from `empirical/p06-laco/resultados.json` by `labs --h3`, with zero divergence |
 | Hypergraph: 454 178 nodes in H3, of which 453 973 are predictions and 205 are topology | **P** | the H3 graph left with the scaffolding; the Rust hypergraph is the validator, not the H3 graph. Class declared in `empirical/p14-h3/registro.tsv` |
 
+## Reimplementation from the text
+
+| Result | Tag | Source / instrument |
+| --- | --- | --- |
+| 421 quantities of 20 chapters recomputed in Python from the text and the data files, without the Rust of each chapter: 402 agree and 19 are open (the text names a procedure without its recipe); none diverges after the rectifications of 2026-10-19. Among them, the bank's halves null per day at 0.0743 (the sd of the signed differences) and the drags predicted by $L^2\sigma^2/2$ in the Dow Jones training set, 0.0153, 0.0612 and 0.1376 per year | **R** | `python3 -I scripts/reimplementation/run.py`; Appendix E, rectifications of the reimplementation of the chapters |
+
 ## R-Axis — question resolution
 
 | Result | Tag | Source / instrument |
 | --- | --- | --- |
-| Resolution loss, both arms staffed for a utilisation of 0.8: 22.99 min where demand oscillates from 5 to 11, 2.50 min where it oscillates from 7 to 9, and 0.00 min where it does not oscillate. Rectified 2026-10-18: the earlier 46.24 and 5.97 min were measured with capacity equal to demand (utilisation 1), a critical queue without steady state | **R** | `labs --resolution`; Chapters 5, 16 and 21 |
+| Resolution loss, both arms staffed for a utilisation of 0.8: 25.54 min where demand oscillates from 5 to 11, 2.77 min where it oscillates from 7 to 9, and 0.00 min where it does not oscillate. Rectified 2026-10-19 (from 22.99 and 2.50: a fixed count of arrivals, the Lindley recursion off by one client, and 200 days). Rectified 2026-10-18: the earlier 46.24 and 5.97 min were measured with capacity equal to demand (utilisation 1), a critical queue without steady state | **R** | `labs --resolution`; Chapters 5, 16 and 21 |
 | Prediction 3 (oscillation threshold): under the plan calibrated on flat demand, the fraction of failed days grows from 0.095 to 0.330 and crosses one-quarter at amplitude 2.5, with resolution loss turning to +2.87 min at the crossing and negative below it; under the Erlang plan, the prediction **does not hold** (flat demand already fails 1 day in 5, the fraction is non-monotonic, and refining at the crossing incurs a cost) | **R** / **D** | `labs --resolution`; background point 15, with K = 2 declared |
 | Prediction 5 (transfer): 0 violations of the implication (no profile survives R1 and fails R0) and 3 counterexamples across 6 profiles × 200 days, with conservation of the aggregate verified. Read on 2026-10-18 as a consequence of arithmetic (a weighted mean of daily shares cannot cross a threshold that no day crosses), so the run tests the implementation, not the world | **R** | `labs --resolution`; background point 15 |
 

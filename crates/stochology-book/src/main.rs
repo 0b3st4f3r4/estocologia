@@ -8,7 +8,7 @@ use stochology_book::{
     ch01, ch02, ch03, ch04, ch05, ch06, ch07, ch08, ch09, ch10, ch11, ch12, ch13, ch14, ch15, ch16,
     ch17, ch18, ch19, ch20, ch21,
 };
-use stochology_core::resolution::{Resolution, measure as measure_loss};
+use stochology_core::resolution::{R_HORIZON_DAYS, Resolution, measure as measure_loss};
 use stochology_core::s1::{Category, S1};
 
 fn main() {
@@ -581,8 +581,8 @@ fn panel_pretest(answers: Option<&str>, answer_key: Option<&str>) {
 
 /// System 2: deliberation over the hypergraph, board belief, inference and the R axis.
 fn run_system2() {
-    use stochology_core::measure_resolution_loss;
     use stochology_core::{Card, Layer, UncertaintyType};
+    use stochology_core::{R_HORIZON_DAYS, measure_resolution_loss};
     use stochology_s2::{
         DECLARED_ORDER, HypergraphWorld, Lats, Metropolis, PanelBelief, action_destination, decide,
         evaluate_resolutions, greedy, learn, log_beta, sample_graph, stress_deliberative,
@@ -671,7 +671,7 @@ fn run_system2() {
         chain.acceptance_rate()
     );
 
-    let loss = measure_resolution_loss(1909, 200, 10, 5.0, 11.0);
+    let loss = measure_resolution_loss(1909, R_HORIZON_DAYS, 10, 5.0, 11.0);
     let decision = decide(&loss, 12.0);
     let out: Vec<String> = evaluate_resolutions(&loss, 12.0)
         .iter()
@@ -685,7 +685,7 @@ fn run_system2() {
         decision.reason,
         out.join(", ")
     );
-    let without_oscillation = measure_resolution_loss(1909, 200, 10, 8.0, 8.0);
+    let without_oscillation = measure_resolution_loss(1909, R_HORIZON_DAYS, 10, 8.0, 8.0);
     println!(
         "R axis without oscillation: loss {:.2} min -> {}",
         without_oscillation.loss,
@@ -743,7 +743,7 @@ fn r_horizon() {
         ("demand 7 or 9 (light oscillation)", 7.0, 9.0),
         ("demand 8 or 8 (no oscillation)", 8.0, 8.0),
     ] {
-        let p = measure_loss(1909, 200, 10, low, high);
+        let p = measure_loss(1909, R_HORIZON_DAYS, 10, low, high);
         println!(
             "{}: mean capacity {:.1} | aggregate wait {:.2} min, fine wait {:.2} min, loss {:.2} min",
             label, p.aggregated_capacity, p.aggregated_wait, p.fine_wait, p.loss
@@ -872,7 +872,7 @@ fn r_horizon() {
         let (cap, case, sentence) = (fields[0], fields[1], fields[2]);
         let reading = match profiles.iter().find(|(name, _, _, _)| *name == case) {
             Some((_, low, high, label)) => {
-                let p = measure_loss(1909, 200, 10, *low, *high);
+                let p = measure_loss(1909, R_HORIZON_DAYS, 10, *low, *high);
                 format!("resolution loss {:.2} min ({})", p.loss, label)
             }
             None => match case {

@@ -148,8 +148,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 409 tests pass |
-| `python3 scripts/reimplementation/decision_labs.py` | That 61 quantities of Chapters 10 and 11, recomputed from the text alone in another language, agree with the book |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 413 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 421 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (402), or are marked open where the text does not give the recipe (19) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -343,7 +343,7 @@ the earlier wording is kept here.
 ### Rectifications of 2026-10-19
 
 Two kinds of change. The safeguard panel stopped printing a number it did not measure, and a reimplementation of the
-decision laboratories from the text alone (`scripts/reimplementation/decision_labs.py`, in Python, written without
+decision laboratories from the text alone (now `scripts/reimplementation/ch10_ch11.py`, in Python, written without
 reading the Rust of Chapters 10 and 11) found two values that the instruments printed faithfully and that were
 wrong. Each was corrected in the code, given a test that fails on the old code, and corrected in the text. The
 reimplementation now runs in `scripts/verify.sh`; it was written by an AI assistant, so it is a cross-check, not
@@ -358,6 +358,25 @@ the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
 | C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
 | 10–21 | Exercise types | *(Computation)*, *(Account)* | *(Count)* | the preface declares three types |
 | C | Test count | 406 | 409 | the count of 2026-10-18 was already stale (408 on the base of these changes); one panel test retired, two tests of Chapter 10 added |
+
+### Rectifications of the reimplementation of the chapters, 2026-10-19
+
+The reimplementation was extended, the same day, from Chapters 10 and 11 to twenty chapters (`scripts/reimplementation/`,
+run by `run.py` in `scripts/verify.sh`): 421 quantities, recomputed in Python from the text and the data files without
+reading the Rust of each chapter, 402 in agreement and 19 marked open because the text names a procedure without
+giving its recipe. The Rust was read only after a divergence, to say where it came from. Six values were wrong in the
+instruments, and two statements in the text; each is corrected, with a test where there is code.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 5, 8, 13, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
+| 5 | Mean of W over a uniform demand between 5 and 11 | 14.10 min | 14.46 min | a six-point midpoint rule; the integral has a closed form |
+| 12 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
+| 16 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
+| 16 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
+| 17 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
+| 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
+| 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
 ### Chapter 4
 
@@ -534,7 +553,8 @@ The instrument of the Erlang C Table reproduces in Rust the central numbers of t
 target (0.6543); the sd between days of
 **2,841** against the **181** that Poisson would predict; and the `Var/mean` of **272.6 in the training set**, which is the published 273.
 In the vault it is 246.7 and in the whole series 261.1, and the reason is the cut of the window. The halves null per day comes out at
-0.0441 against the 0.0474 published (different splitting scheme), and the null per call of this account is 0.0006
+0.0441 against the 0.0474 published (different splitting scheme; since 2026-10-19 it is 0.0743, because the 0.0441
+was the sd of the absolute differences, see the rectifications of 2026-10-19), and the null per call of this account is 0.0006
 by the binomial, against the 0.0033 of the script, which used another design of intraday correlation. The two
 divergences stay declared, together with the Rust reconstruction of the decision table of the schemes R0 to
 R3 by the queue simulation with abandonment (`fila.rs`, measured just above with `labs --queue`).

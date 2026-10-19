@@ -143,6 +143,32 @@ pub fn evpi(payoffs: &[f64], probabilities: &[f64], best_without_info: f64) -> f
     with_info - best_without_info
 }
 
+/// Crisonomy: expected value of perfect information from the payoff table itself, one row per act
+/// and one column per state: E_state[max_act payoff] - max_act E_state[payoff]. Returns
+/// (best expected payoff without information, expected payoff with perfect information, EVPI).
+///
+/// Prefer this to `evpi`, whose caller must pass the best payoff of each state; on 2026-10-19 a
+/// caller passed the payoffs of one act instead, and the EVPI of Chapter 12 came out as zero.
+pub fn evpi_from_actions(actions: &[Vec<f64>], probabilities: &[f64]) -> (f64, f64, f64) {
+    let expected =
+        |row: &Vec<f64>| -> f64 { row.iter().zip(probabilities).map(|(x, p)| x * p).sum() };
+    let without = actions
+        .iter()
+        .map(expected)
+        .fold(f64::NEG_INFINITY, f64::max);
+    let with: f64 = probabilities
+        .iter()
+        .enumerate()
+        .map(|(s, p)| {
+            p * actions
+                .iter()
+                .map(|row| row[s])
+                .fold(f64::NEG_INFINITY, f64::max)
+        })
+        .sum();
+    (without, with, with - without)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -202,11 +228,28 @@ mod tests {
 
     #[test]
     fn evpi_of_the_example_is_three() {
+        // Two acts: A pays 10 in the first state and 0 in the second, B the reverse. The best
+        // payoff of each state is 10, and the best act without information yields 0.7 * 10 = 7.
         let payoffs = [10.0, 10.0];
         let probabilities = [0.7, 0.3];
-        // Best act without information: A yields 0.7*10 = 7.
         assert!((evpi(&payoffs, &probabilities, 7.0) - 3.0).abs() < 1e-9);
-        assert!((evpi(&payoffs, &probabilities, 10.0)).abs() < 1e-9);
+        let (without, with, value) =
+            evpi_from_actions(&[vec![10.0, 0.0], vec![0.0, 10.0]], &probabilities);
+        assert!((without - 7.0).abs() < 1e-12 && (with - 10.0).abs() < 1e-12);
+        assert!((value - 3.0).abs() < 1e-12);
+    }
+
+    #[test]
+    fn the_sensor_of_chapter_12_is_worth_what_it_saves_in_bad_years() {
+        // Act: +10 in a good year (0.7), -4 in a bad one; not acting: 0. Perfect information avoids
+        // the bad years: 7.0 against 5.8, an EVPI of 1.2, not zero.
+        let p = [0.7, 0.3];
+        let (without, with, value) = evpi_from_actions(&[vec![10.0, -4.0], vec![0.0, 0.0]], &p);
+        assert!((without - 5.8).abs() < 1e-12 && (with - 7.0).abs() < 1e-12);
+        assert!((value - 1.2).abs() < 1e-12);
+        // An act whose payoff does not depend on the state leaves nothing for the sensor to change.
+        let (_, _, useless) = evpi_from_actions(&[vec![10.0, 10.0], vec![0.0, 0.0]], &p);
+        assert!(useless.abs() < 1e-12);
     }
 
     #[test]

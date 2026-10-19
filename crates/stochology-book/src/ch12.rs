@@ -6,6 +6,8 @@
 //!
 //! Fixed seed. No external dependencies. SplitMix64 built in.
 
+use stochology_hypergraph::lenses::evpi_from_actions;
+
 fn splitmix64(state: &mut u64) -> u64 {
     stochology_core::rng::splitmix64_step(state)
 }
@@ -216,16 +218,6 @@ fn hill_index(values: &[f64], k: usize) -> f64 {
 
 fn wild_tail(alpha: f64) -> bool {
     stochology_hypergraph::lenses::wild_tail(alpha)
-}
-
-/// Crisonomy: expected value of perfect information, in units of the payoff.
-fn evpi(payoffs: &[f64], probabilities: &[f64], best_without_info: f64) -> f64 {
-    let with: f64 = payoffs
-        .iter()
-        .zip(probabilities.iter())
-        .map(|(w, p)| w * p)
-        .sum();
-    with - best_without_info
 }
 
 fn slope(xs: &[f64], ys: &[f64]) -> f64 {
@@ -461,31 +453,25 @@ pub fn run() {
         );
     }
 
-    // Lens 2 — Crisonomy.
-    let p_ok: f64 = 0.70;
-    let p_failure: f64 = 0.30;
-    let profit: f64 = 10.0;
-    let loss: f64 = 4.0;
-    let act: f64 = profit * p_ok - loss * p_failure;
-    let sensor_evpi = evpi(&[profit, -loss], &[p_ok, p_failure], act);
+    // Lens 2 — Crisonomy. EVPI = E_state[max_act payoff] - max_act E_state[payoff].
+    // Until 2026-10-19 this block passed the payoffs of one act where the best payoff of each state
+    // was due, and printed an EVPI of zero next to a value with information of 7 against 5.8.
+    let probabilities = [0.70_f64, 0.30];
+    let (profit, loss) = (10.0_f64, 4.0_f64);
+    let full = [vec![profit, -loss], vec![0.0, 0.0]];
+    let (without, with, value) = evpi_from_actions(&full, &probabilities);
     println!(
-        "Crisonomy: EVPI = {:.4} | best act without information = {:.4} | value with perfect information = {:.4}",
-        sensor_evpi,
-        act,
-        profit * p_ok + 0.0 * p_failure
+        "Crisonomy: act (+{profit:.0} in a good year, -{loss:.0} in a bad one) or not act: best without information = {without:.4} | with perfect information = {with:.4} | EVPI = {value:.4}"
     );
-    // Without the option of acting, the information becomes worth something.
-    let act_half: f64 = 0.5 * profit - 0.5 * loss;
-    let without_third: f64 = (profit * p_failure * 0.0) + (0.0 * p_failure).max(act_half * p_ok);
+    let half = [vec![0.5 * profit, -0.5 * loss], vec![0.0, 0.0]];
+    let (without_h, with_h, value_h) = evpi_from_actions(&half, &probabilities);
     println!(
-        "Crisonomy: without the option of acting (only betting half = {:.4} or not betting), the best without information is {:.4} and the EVPI rises to {:.4}",
-        act_half,
-        without_third.max(0.0),
-        evpi(&[profit, -loss], &[p_ok, p_failure], without_third.max(0.0))
+        "Crisonomy: only half the stake available: best without information = {without_h:.4} | with perfect information = {with_h:.4} | EVPI = {value_h:.4}"
     );
+    let flat = [vec![profit, profit], vec![0.0, 0.0]];
     println!(
         "Crisonomy: useless sensor (same payoff in both states): EVPI = {:.4}",
-        evpi(&[profit, profit], &[p_ok, p_failure], profit)
+        evpi_from_actions(&flat, &probabilities).2
     );
 
     // Lens 3 — Morphonomy.

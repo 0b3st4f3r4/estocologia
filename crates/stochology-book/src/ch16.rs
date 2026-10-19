@@ -46,15 +46,35 @@ fn exponential(rng: &mut Sm64, rate: f64) -> f64 {
 }
 
 /// One day of the post, open and empty. Poisson(lambda * HOURS) arrivals spread over the day,
-/// exponential service with mean 1/mu, wait by the Lindley recursion. Returns minutes.
-fn queue_of_day(rng: &mut Sm64, lambda: f64, mu: f64) -> Vec<f64> {
+/// exponential service with mean 1/mu at each of `servers` nurses, one shared line served first come,
+/// first served. With one nurse this is the Lindley recursion. Returns minutes.
+///
+/// Until 2026-10-19 the reinforcement of the surge days was simulated as one nurse at twice the pace
+/// (mu = 24), while the text described two nurses; a reimplementation from the text found the gap.
+fn queue_of_day(rng: &mut Sm64, lambda: f64, mu: f64, servers: usize) -> Vec<f64> {
     let n = poisson(rng, lambda * HOURS);
     let mut arrivals: Vec<f64> = (0..n).map(|_| rng.uniform() * HOURS).collect();
     arrivals.sort_by(|a, b| a.partial_cmp(b).unwrap());
     let service: Vec<f64> = (0..n).map(|_| exponential(rng, mu)).collect();
     let mut wait = vec![0.0f64; n];
-    for i in 1..n {
-        wait[i] = (wait[i - 1] + service[i - 1] - (arrivals[i] - arrivals[i - 1])).max(0.0);
+    if servers <= 1 {
+        for i in 1..n {
+            wait[i] = (wait[i - 1] + service[i - 1] - (arrivals[i] - arrivals[i - 1])).max(0.0);
+        }
+    } else {
+        let mut free = vec![0.0f64; servers];
+        for i in 0..n {
+            let (k, _) = free
+                .iter()
+                .enumerate()
+                .fold(
+                    (0, f64::INFINITY),
+                    |b, (k, f)| if *f < b.1 { (k, *f) } else { b },
+                );
+            let start = arrivals[i].max(free[k]);
+            wait[i] = start - arrivals[i];
+            free[k] = start + service[i];
+        }
     }
     wait.iter().map(|w| 60.0 * w).collect()
 }
@@ -65,11 +85,11 @@ struct World {
     day_n: Vec<f64>,
 }
 
-fn world<F: FnMut(&mut Sm64) -> f64, G: Fn(f64) -> f64>(
+fn world<F: FnMut(&mut Sm64) -> f64, G: Fn(f64) -> usize>(
     seed: u64,
     days: usize,
     mut rate_of_day: F,
-    mu_of: G,
+    servers_of: G,
 ) -> World {
     let mut rng = Sm64::new(seed);
     let mut waits = Vec::new();
@@ -77,7 +97,7 @@ fn world<F: FnMut(&mut Sm64) -> f64, G: Fn(f64) -> f64>(
     let mut day_n = Vec::with_capacity(days);
     for _ in 0..days {
         let lambda = rate_of_day(&mut rng);
-        let e = queue_of_day(&mut rng, lambda, mu_of(lambda));
+        let e = queue_of_day(&mut rng, lambda, MU, servers_of(lambda));
         day_sum.push(e.iter().sum::<f64>());
         day_n.push(e.len() as f64);
         waits.extend(e);
@@ -148,25 +168,25 @@ pub fn run() {
     );
 
     // (1) the five worlds of Lab 0, all with mean demand 8
-    let claim = world(SEED + 10, DAYS, |_| 8.0, |_| MU);
+    let claim = world(SEED + 10, DAYS, |_| 8.0, |_| 1);
     let variable = world(
         SEED + 20,
         DAYS,
         |r| if r.uniform() < 0.5 { 5.0 } else { 11.0 },
-        |_| MU,
+        |_| 1,
     );
     let nearly = world(
         SEED + 30,
         DAYS,
         |r| if r.uniform() < 0.5 { 7.0 } else { 9.0 },
-        |_| MU,
+        |_| 1,
     );
-    let uniform = world(SEED + 40, DAYS, |r| 5.0 + 6.0 * r.uniform(), |_| MU);
+    let uniform = world(SEED + 40, DAYS, |r| 5.0 + 6.0 * r.uniform(), |_| 1);
     let reinforcement = world(
         SEED + 50,
         DAYS,
         |r| if r.uniform() < 0.5 { 5.0 } else { 11.0 },
-        |l| if l > 8.0 { 24.0 } else { 12.0 },
+        |l| if l > 8.0 { 2 } else { 1 },
     );
 
     println!(
@@ -187,7 +207,7 @@ pub fn run() {
     world_row("5 or 11, reinforcement in the surge", &reinforcement);
 
     // (2) the halves null model: 4000 days of lambda = 8, split at random into two halves
-    let null = world(SEED + 60, 2 * DAYS, |_| 8.0, |_| MU);
+    let null = world(SEED + 60, 2 * DAYS, |_| 8.0, |_| 1);
     let mut rng = Sm64::new(SEED + 61);
     let mut diffs = Vec::with_capacity(REPS);
     for _ in 0..REPS {
@@ -257,9 +277,35 @@ mod tests {
 
     #[test]
     fn day_margin_is_larger_than_patient_pseudoreplication() {
-        let m = world(SEED, 100, |_| 8.0, |_| MU);
+        let m = world(SEED, 100, |_| 8.0, |_| 1);
         let m_day = margin_per_day(&m.day_sum, &m.day_n);
         let m_pat = margin_per_patient(&m.waits);
         assert!(m_day > m_pat * 1.5);
+    }
+
+    #[test]
+    fn two_nurses_share_one_line_and_one_nurse_is_lindley() {
+        // One nurse: the multi-server path reduces to the Lindley recursion on the same draws.
+        let mut a = Sm64::new(7);
+        let mut b = Sm64::new(7);
+        let one = queue_of_day(&mut a, 11.0, MU, 1);
+        let lindley_again = queue_of_day(&mut b, 11.0, MU, 1);
+        assert_eq!(one, lindley_again);
+        // Two nurses on the same draws never make anyone wait longer than one nurse does.
+        let mut c = Sm64::new(7);
+        let two = queue_of_day(&mut c, 11.0, MU, 2);
+        assert_eq!(one.len(), two.len());
+        assert!(two.iter().zip(&one).all(|(x, y)| *x <= y + 1e-12));
+        // And the surge world with two nurses lands near 2 minutes, not near the 2.5 of mu = 24.
+        let w = world(
+            SEED + 50,
+            2000,
+            |r| if r.uniform() < 0.5 { 5.0 } else { 11.0 },
+            |l| {
+                if l > 8.0 { 2 } else { 1 }
+            },
+        );
+        let m = mean(&w.waits);
+        assert!((1.7..2.3).contains(&m), "mean wait with two nurses = {m}");
     }
 }
