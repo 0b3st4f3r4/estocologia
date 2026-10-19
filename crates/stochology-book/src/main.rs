@@ -1093,6 +1093,54 @@ fn contract() {
         Ok(_) => println!("  a pass^k above pass^1: ACCEPTED (it should not be)"),
         Err(error) => println!("  a pass^k above pass^1 is refused: {error}"),
     }
+    println!("\n-- the three fields of contract 1.5: what happens between the specialists --");
+    // The ship of Chapter 11: the decision specialist writes the rule, and p = 0.05 against C/L = 0.0529 implies not
+    // to insure; the inference specialist writes the null model and logs two findings, one used.
+    let conduct = card.clone().with_conduct(
+        "modelo_nulo:inference, regra_de_decisao:decision",
+        "logged=2; used=1; unused=a second break in the series: outside the window of the question",
+        "p=0.05; C=1800; L=34000; act=do not protect",
+    );
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&conduct)) {
+        Ok(read) => println!(
+            "  declared and read back: authorship \"{}\" | findings \"{}\" | decision rule \"{}\"",
+            read.authorship.unwrap_or_default(),
+            read.findings.unwrap_or_default(),
+            read.decision_rule.unwrap_or_default()
+        ),
+        Err(error) => println!("  REJECTED: {error}"),
+    }
+    for (what, card) in [
+        (
+            "a field written outside its role",
+            card.clone().with_conduct(
+                "regra_de_decisao:inference",
+                "logged=0; used=0",
+                "p=0.05; C=1800; L=34000; act=do not protect",
+            ),
+        ),
+        (
+            "a finding withheld",
+            card.clone().with_conduct(
+                "regra_de_decisao:decision",
+                "logged=3; used=1; unused=a second break in the series: outside the window of the question",
+                "p=0.05; C=1800; L=34000; act=do not protect",
+            ),
+        ),
+        (
+            "an action that departs from its reasoning",
+            card.clone().with_conduct(
+                "regra_de_decisao:decision",
+                "logged=0; used=0",
+                "p=0.05; C=1800; L=34000; act=protect",
+            ),
+        ),
+    ] {
+        match stochology_core::schema::from_text(&stochology_core::schema::text(&card)) {
+            Ok(_) => println!("  {what}: ACCEPTED (it should not be)"),
+            Err(error) => println!("  {what} is refused: {error}"),
+        }
+    }
 }
 
 fn run(cap: usize) {

@@ -3,5 +3,7 @@
 d47649028ef860d947899d11cdce1afc640ac4f63472b63b28ca39d1ac6a0bcc  empirical/p17-schema/README.md
 # 7df369bccd6c4185e679f67f892134610bfd8daeb625a14a2435e13bd707a8b7  crates/stochology-core/migracoes.tsv (the chain at 1.3, sealed by declaration 2 on 2026-10-19; superseded by declaration 3 the same day, which adds the step 1.3 -> 1.4)
 84e6e1ce14273d409dba7740a9e8a203d802ca3a3f3842ef630533b47dfc3d22  empirical/p17-schema/DECLARACAO_2.md
-c322a375698fef7a081a8cb7503a42be56e3197b5364ccdc905da7c50fc6ded8  crates/stochology-core/migracoes.tsv
+# c322a375698fef7a081a8cb7503a42be56e3197b5364ccdc905da7c50fc6ded8  crates/stochology-core/migracoes.tsv (the chain at 1.4, sealed by declaration 3 on 2026-10-19; superseded by declaration 4 the same day, which adds the step 1.4 -> 1.5)
 a6a05b0a4f64b0e480a469579dc5d1276e8ce1d9a636f7fccd752826d6ad6ac7  empirical/p17-schema/DECLARACAO_3.md
+8f970fb98594d7dfb9c64fb43292d2072e0b82f45d54a0339a8225db0793c0a2  crates/stochology-core/migracoes.tsv
+574b35f454d8b74f24a47c466607b81b965e923688b49834cc3e2ee0a9ea256b  empirical/p17-schema/DECLARACAO_4.md

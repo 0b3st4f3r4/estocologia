@@ -46,7 +46,7 @@ impl Version {
 }
 
 /// Version that this crate emits.
-pub const SCHEMA_VERSION: Version = Version::new(1, 4);
+pub const SCHEMA_VERSION: Version = Version::new(1, 5);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SchemaError {
@@ -139,6 +139,9 @@ pub fn document(card: &Card) -> BTreeMap<String, String> {
         ("evento_dominante", optional(&card.dominant_event)),
         ("multiverso", optional(&card.multiverse)),
         ("confiabilidade", optional(&card.reliability)),
+        ("autoria", optional(&card.authorship)),
+        ("achados", optional(&card.findings)),
+        ("regra_de_decisao", optional(&card.decision_rule)),
     ] {
         if let Some(v) = value {
             doc.insert(name.into(), v);
@@ -269,7 +272,31 @@ pub fn card_from_document(doc: &BTreeMap<String, String>) -> Result<Card, Schema
             value: format!("{r} ({e})"),
         })?;
     }
+    let checked = |field: &str,
+                   parse: fn(&str) -> Result<(), String>|
+     -> Result<Option<String>, SchemaError> {
+        match doc.get(field) {
+            Some(v) => {
+                parse(v).map_err(|e| SchemaError::InvalidValue {
+                    field: field.into(),
+                    value: format!("{v} ({e})"),
+                })?;
+                Ok(Some(v.clone()))
+            }
+            None => Ok(None),
+        }
+    };
+    let authorship = checked("autoria", |v| {
+        crate::conduct::parse_authorship(v).map(|_| ())
+    })?;
+    let findings = checked("achados", |v| crate::conduct::parse_findings(v).map(|_| ()))?;
+    let decision_rule = checked("regra_de_decisao", |v| {
+        crate::conduct::parse_decision_rule(v).map(|_| ())
+    })?;
     let mut card = Card::new(&require(doc, "id")?, layer, uncertainty);
+    card.authorship = authorship;
+    card.findings = findings;
+    card.decision_rule = decision_rule;
     card.uncertainty_budget = uncertainty_budget;
     card.dominant_event = dominant_event;
     card.multiverse = multiverse;
@@ -614,7 +641,7 @@ mod tests {
     #[test]
     fn a_version_1_2_document_migrates_with_the_new_fields_absent() {
         let current = text(&full_card());
-        let old = current.replacen("versao = 1.4", "versao = 1.2", 1);
+        let old = current.replacen("versao = 1.5", "versao = 1.2", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(migrated.uncertainty_budget, None);
         assert_eq!(migrated.dominant_event, None);
@@ -650,13 +677,45 @@ mod tests {
     #[test]
     fn a_version_1_3_document_migrates_with_the_fields_of_1_4_absent() {
         let current = text(&full_card());
-        let old = current.replacen("versao = 1.4", "versao = 1.3", 1);
+        let old = current.replacen("versao = 1.5", "versao = 1.3", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(
             (migrated.multiverse.clone(), migrated.reliability.clone()),
             (None, None)
         );
         assert_eq!(migrated, full_card());
+    }
+
+    #[test]
+    fn the_conduct_fields_survive_the_round_trip_and_each_refusal_names_its_field() {
+        let f = full_card().with_conduct(
+            "modelo_nulo:inference, clausula_de_saida:decision",
+            "logged=2; used=1; unused=a break in 2019: outside the window",
+            "p=0.05; C=1800; L=34000; act=do not protect",
+        );
+        assert_eq!(from_text(&text(&f)).expect("round trip"), f);
+        let refused = |card: Card, expected: &str| match from_text(&text(&card)) {
+            Err(SchemaError::InvalidValue { field, .. }) => assert_eq!(field, expected),
+            other => panic!("expected {expected} to be refused, got {other:?}"),
+        };
+        let mut outside = f.clone();
+        outside.authorship = Some("clausula_de_saida:inference".into());
+        refused(outside, "autoria");
+        let mut withheld = f.clone();
+        withheld.findings =
+            Some("logged=3; used=1; unused=a break in 2019: outside the window".into());
+        refused(withheld, "achados");
+        let mut departs = f.clone();
+        departs.decision_rule = Some("p=0.05; C=1800; L=34000; act=protect".into());
+        refused(departs, "regra_de_decisao");
+    }
+
+    #[test]
+    fn a_version_1_4_document_migrates_with_the_fields_of_1_5_absent() {
+        let old = text(&full_card()).replacen("versao = 1.5", "versao = 1.4", 1);
+        let migrated = from_text(&old).expect("migrates");
+        assert_eq!(migrated, full_card());
+        assert_eq!(migrated.decision_rule, None);
     }
 
     #[test]
@@ -771,7 +830,7 @@ mod tests {
         let versions: Vec<String> = DECLARED_CHAIN.versions().iter().map(|v| v.text()).collect();
         assert_eq!(
             versions,
-            vec!["1.0", "1.1", "1.2", "1.3", "1.4"],
+            vec!["1.0", "1.1", "1.2", "1.3", "1.4", "1.5"],
             "the chain declared in the file"
         );
         assert_eq!(

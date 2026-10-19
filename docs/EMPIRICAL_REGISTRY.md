@@ -236,6 +236,17 @@ step 1.3 -> 1.4 introduces both absent (`empirical/p17-schema/DECLARACAO_3.md`).
 | The reliability of world B of Chapter 16, `k=8; pass1=0.5312; passk=0.0700`, is read back | `labs --schema` |
 | A budget with a share for the specification and no multiverse is refused; a pass^k above pass^1 is refused | `labs --schema` |
 
+## The card contract 1.5 (2026-10-19)
+
+Three more optional fields, for what passes between the specialists: the authorship of each field, the findings used and
+not used, and the decision rule recomputed from the card. Step 1.4 -> 1.5 (`empirical/p17-schema/DECLARACAO_4.md`).
+Instrument: `labs --schema`.
+
+| Number | Instrument |
+| --- | --- |
+| The ship of Chapter 11 with `p=0.05; C=1800; L=34000; act=do not protect` is read back; with `act=protect` it is refused (C/L = 0.0529) | `labs --schema` |
+| A field written outside its role, and 3 findings logged with 1 used and 1 listed unused, are refused | `labs --schema` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument
