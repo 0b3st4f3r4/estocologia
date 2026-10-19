@@ -32,6 +32,7 @@ pub mod escuta;
 pub mod fila;
 pub mod genetica;
 pub mod ponte;
+pub mod resonance;
 pub mod segunda;
 pub mod streams;
 pub mod wave;

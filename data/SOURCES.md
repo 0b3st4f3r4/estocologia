@@ -37,6 +37,21 @@ What could not be brought: the Toronto arrests of 2020–2021 and the Rhode Isla
 from the session), the causal chambers, the FDA cardiac trial and the yeast deletions of Chapter 19 (hosted outside the
 reachable mirrors), and the STAR experiment with school identifiers (`AER::STAR` has no school identifier).
 
+## Added on 2026-10-19, later: fresh flights for point 24
+
+For the resonance claim of point 24, which needs flights no reading of this programme had used. The first seven months
+of 2013 and of 2023 come from the same sources as the files above (Rdatasets `nycflights13::flights` at commit
+`1dcc2bf5`, CRAN `nycflights23` at commit `48bca311`), rows that were cut out when those files were written and never
+entered the tree. Houston comes from the CRAN mirror of `hflights` (github.com/cran/hflights, commit
+`3f5a566f8b294da40e0abac2cfab4f7926eeb89d`, version 0.1, licence CC0), read by the same XDR reader kept outside the
+tree. The conversion wrote rows and computed no statistic of the outcome.
+
+| File | Source | What it is | Transformation |
+|---|---|---|---|
+| nyc_flights_2013_h1.csv | Rdatasets `nycflights13::flights` | Departures from New York, January to July 2013 (195 583 rows) | the columns of nyc_flights_2013.csv |
+| nyc_flights_2023_h1.csv | CRAN `nycflights23::flights` | The same for January to July 2023 (258 613 rows) | the same columns |
+| houston_flights_2011.csv | CRAN `hflights::hflights` | Departures from Houston (IAH, HOU), 2011 (224 591 rows with a departure time) | the same columns; scheduled departure and arrival recovered as the actual time minus its delay (the package has no scheduled time); flights with no departure time dropped (cancelled before departure, with no arrival delay either) |
+
 ## Licences, declared on 2026-10-19
 
 The files in this folder are copies of datasets redistributed by R packages. The licence of a package covers its code
@@ -54,6 +69,8 @@ reuses a file should go by its original source.
 | danish_fire.csv | `fitdistrplus` (GPL ≥ 2) | Copenhagen Re fire losses, made public by McNeil (1997) |
 | nyc_flights_2013.csv | `nycflights13` (CC0) | US Bureau of Transportation Statistics, public records |
 | nyc_flights_2023.csv | `nycflights23` (CC0) | US Bureau of Transportation Statistics, public records |
+| nyc_flights_2013_h1.csv, nyc_flights_2023_h1.csv | `nycflights13`, `nycflights23` (CC0) | US Bureau of Transportation Statistics, public records |
+| houston_flights_2011.csv | `hflights` (CC0) | US Bureau of Transportation Statistics, public records |
 | vic_elec.csv | `tsibbledata` (GPL-3) | Australian Energy Market Operator, public half-hourly demand |
 | atlantic_storms.csv | `dplyr` (MIT) | NOAA Atlantic hurricane database (HURDAT2), public records |
 | toronto_arrests.csv | `carData` (GPL ≥ 2) | Toronto Star freedom-of-information request, as published by Fox & Weisberg |
