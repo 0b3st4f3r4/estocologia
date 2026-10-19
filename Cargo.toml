@@ -6,7 +6,6 @@ members = [
     "crates/stochology-methods",
     "crates/stochology-horizons",
     "crates/stochology-s2",
-    "crates/stochology-wave",
     "crates/stochology-gates",
     "crates/stochology-book",
     "crates/stochology-wasm",

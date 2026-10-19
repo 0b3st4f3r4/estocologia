@@ -113,7 +113,7 @@ now point to what survived.
 | Block | Before | After |
 | --- | --- | --- |
 | 1. Theory and invariants | 4 | 0 as code proposals; predictions 3 and 5 closed in item 8 (§2) |
-| 2. Roadmap crates | 11 | 0 — all ten roadmap names plus the `-wave` engine are live (item 1, §2; nine crates after the consolidation of 2026-10-17) |
+| 2. Roadmap crates | 11 | 0 — all ten roadmap names live (item 1, §2; nine crates after the consolidation of 2026-10-17); the `-wave` engine, the eleventh, came to life and left on 2026-10-19 after its sealed tests (`docs/declarations/REMOVED_WAVE.md`) |
 | 3. Declared method not yet implemented | 6 | 0 — System 2 moved to §2 (10 modules) and the remainder was already closed |
 | 4. Open empirical research and human validation | 4 | **3** (SHELF, voice of those who pay for the error, and bridge thesis at scale), in items **3, 5, and 9** — fine-grained genetics closed on 2026-10-16 (item 4, §2) |
 | 5. Registry without second opinion | 12 results | 0 — closed on 2026-10-16 in item 12 (§2: 5 verified, 2 derived, 7 historical record) |

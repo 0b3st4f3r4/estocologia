@@ -14,9 +14,6 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --genetics` | Interventional validation resolution: what the second cell line changes |
 | `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
-| `labs --wave` | The wave engine against data: the STDP arrow in Victoria and the phasor conflict in the New York flights |
-| `labs --wave2` | The same two tests under declaration 2 (K = 2): a day of horizon, and the phase of the deviation from the common daily profile |
-| `labs --resonance` | Point 24: the claim that deliberation pays in resonance, on three vaults never used for it |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -25,9 +22,6 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --jev` | Jev-LLM bridge: bridge gates and what requires frozen weights |
 | `labs --queue` | Queue with abandonment and the four staffing rules (R0 to R3) |
 | `gates` | Seven deterministic gates (G1-G7) and safeguard panel A1-A8 |
-| `wave --check` | Six gates of the wave engine: Hermitian L^(q), Cayley unitarity, seal chain, determinism, and causal arrow |
-| `wave --defect mutation` | Negative proof of the seal chain: exits with 1 |
-| `wave --defect inversion` | Negative proof of the causal arrow: exits with 1 |
 | `labs --rehearsal-shelf` | Synthetic floor of the SHELF panel: four declared respondents on real items |
 | `labs --rehearsal-listening` | Coverage arithmetic and gate boundary for affected-group listening |
 | `labs --rehearsal-bridge` | Roles, cases, and status in the scale bridge gate |
@@ -259,207 +253,6 @@ One ledger per area over the 38 recorded tests, the mean of the e-values, two re
   Trabalho             2      0         0.5000  does not
   Transporte           2      1         2.9927  does not
   areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
-~~~
-
-### The wave engine against data
-
-Synthetic controls, then T1 (the STDP arrow temperature -> demand over the weeks of Victoria) and T2 (the phasor conflict, phase as the hour of peak risk, in the New York flights of 2013 and 2023), with the verdicts by the rules sealed in empirical/p23-onda/DECLARACAO.md before the first run.
-
-~~~bash
-./target/release/labs --wave
-~~~
-
-~~~text
-== The wave engine against data (empirical/p23-onda/DECLARACAO.md) ==
-controls on synthetic data, seed 2026:
-
--- T1 control, planted arrow: 156 weeks --
-  engine                             temperature -> demand 141 | demand -> temperature  15 | none   0 | rate 0.904
-  engine, null pairing (+13 weeks)   temperature -> demand  57 | demand -> temperature  85 | none  14 | rate 0.365
-  rival (lagged cross-correlation)   temperature -> demand 155 | demand -> temperature   1 | none   0 | rate 0.994
-  rival, null pairing                temperature -> demand  74 | demand -> temperature  82 | none   0 | rate 0.474
-  engine, margin 0.05 (secondary)    temperature -> demand 128 | demand -> temperature   7 | none  21 | rate 0.821
-  binomial P(X >= 141 | n = 156) = 3.681e-27 | median learnt lag 0.17 h
-  P1 true | P2 true | P3 true | works: true | adds over the rival: false
-
--- T1 control, independent: 156 weeks --
-  engine                             temperature -> demand  80 | demand -> temperature  64 | none  12 | rate 0.513
-  engine, null pairing (+13 weeks)   temperature -> demand  69 | demand -> temperature  76 | none  11 | rate 0.442
-  rival (lagged cross-correlation)   temperature -> demand  70 | demand -> temperature  86 | none   0 | rate 0.449
-  rival, null pairing                temperature -> demand  76 | demand -> temperature  80 | none   0 | rate 0.487
-  engine, margin 0.05 (secondary)    temperature -> demand  51 | demand -> temperature  42 | none  63 | rate 0.327
-  binomial P(X >= 80 | n = 144) = 1.056e-1 | median learnt lag 0.09 h
-  P1 false | P2 false | P3 true | works: false | adds over the rival: false
-
--- T2 control, planted interaction --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 19804 beating 27088 conflict 13108
-  Brier System 1 (additive) 0.15893 | System 2 (cells) 0.15760
-  gain of System 2: conflict +0.00193 | resonance +0.00109 | delta +0.00083, 95% CI by day [+0.00003; +0.00166]
-  rival delta (level agreement, no phase) +0.00099 | testable: true
-
--- T2 control, no interaction --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 21198 beating 25391 conflict 13411
-  Brier System 1 (additive) 0.15502 | System 2 (cells) 0.15498
-  gain of System 2: conflict -0.00013 | resonance +0.00039 | delta -0.00052, 95% CI by day [-0.00107; +0.00004]
-  rival delta (level agreement, no phase) -0.00154 | testable: true
-
-real data:
-
--- T1 Victoria 2012-2014, temperature -> demand: 155 weeks --
-  engine                             temperature -> demand  53 | demand -> temperature  39 | none  63 | rate 0.342
-  engine, null pairing (+13 weeks)   temperature -> demand  26 | demand -> temperature  36 | none  93 | rate 0.168
-  rival (lagged cross-correlation)   temperature -> demand  92 | demand -> temperature  63 | none   0 | rate 0.594
-  rival, null pairing                temperature -> demand  85 | demand -> temperature  70 | none   0 | rate 0.548
-  engine, margin 0.05 (secondary)    temperature -> demand  31 | demand -> temperature  23 | none 101 | rate 0.200
-  binomial P(X >= 53 | n = 92) = 8.749e-2 | median learnt lag 0.03 h
-  P1 false | P2 false | P3 false | works: false | adds over the rival: false
-
--- T2 New York 2013, vault October to December --
-  training 54835 | vault flights with three eligible sources 77184 | quiescent 0 resonance 77184 beating 0 conflict 0
-  Brier System 1 (additive) 0.16645 | System 2 (cells) 0.16597
-  gain of System 2: conflict NaN | resonance +0.00048 | delta NaN, 95% CI by day [NaN; NaN]
-  rival delta (level agreement, no phase) NaN | testable: false
-
--- T2 New York 2023, vault October to December --
-  training 68257 | vault flights with three eligible sources 98509 | quiescent 0 resonance 98146 beating 363 conflict 0
-  Brier System 1 (additive) 0.11771 | System 2 (cells) 0.11737
-  gain of System 2: conflict NaN | resonance +0.00038 | delta NaN, 95% CI by day [NaN; NaN]
-  rival delta (level agreement, no phase) NaN | testable: false
-
-== verdicts, by the rules sealed before the run ==
-T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
-T2 the conflict: NOT TESTABLE under this encoding | adds over level agreement: no
-~~~
-
-### The wave engine against data, declaration 2 (K = 2)
-
-T1 with a day of horizon and spikes at 1.0; T2 with the phase of each level's deviation from the common daily profile; controls first, then the verdicts by the rules sealed in empirical/p23-onda/DECLARACAO_2.md.
-
-~~~bash
-./target/release/labs --wave2
-~~~
-
-~~~text
-== The wave engine against data, declaration 2, K = 2 (empirical/p23-onda/DECLARACAO_2.md) ==
-controls on synthetic data, seed 2026:
-
--- T1 (K = 2) control, planted arrow: 156 weeks --
-  engine                             temperature -> demand 142 | demand -> temperature  14 | none   0 | rate 0.910
-  engine, null pairing (+13 weeks)   temperature -> demand  61 | demand -> temperature  95 | none   0 | rate 0.391
-  rival (lagged cross-correlation)   temperature -> demand 134 | demand -> temperature  22 | none   0 | rate 0.859
-  rival, null pairing                temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
-  engine, margin 0.05 (secondary)    temperature -> demand 124 | demand -> temperature   6 | none  26 | rate 0.795
-  binomial P(X >= 142 | n = 156) = 3.855e-28 | median learnt lag 0.38 h
-  P1 true | P2 true | P3 true | works: true | adds over the rival: false
-
--- T1 (K = 2) control, independent: 156 weeks --
-  engine                             temperature -> demand  70 | demand -> temperature  86 | none   0 | rate 0.449
-  engine, null pairing (+13 weeks)   temperature -> demand  81 | demand -> temperature  75 | none   0 | rate 0.519
-  rival (lagged cross-correlation)   temperature -> demand  80 | demand -> temperature  76 | none   0 | rate 0.513
-  rival, null pairing                temperature -> demand  77 | demand -> temperature  79 | none   0 | rate 0.494
-  engine, margin 0.05 (secondary)    temperature -> demand  47 | demand -> temperature  59 | none  50 | rate 0.301
-  binomial P(X >= 70 | n = 156) = 9.134e-1 | median learnt lag 0.27 h
-  P1 false | P2 false | P3 true | works: false | adds over the rival: false
-
--- T2 (K = 2) control, common evening peak, planted interaction, phase of the raw profile (declaration 1) --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
-  Brier System 1 (additive) 0.13189 | System 2 (cells) 0.13095
-  gain of System 2: conflict NaN | resonance +0.00094 | delta NaN, 95% CI by day [NaN; NaN]
-  rival delta (level agreement, no phase) NaN | testable: false
-
--- T2 (K = 2) control, common evening peak, planted interaction, phase of the deviation --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 19250 beating 27426 conflict 13324
-  Brier System 1 (additive) 0.13603 | System 2 (cells) 0.13136
-  gain of System 2: conflict +0.00666 | resonance +0.00403 | delta +0.00264, 95% CI by day [+0.00156; +0.00365]
-  rival delta (level agreement, no phase) +0.00273 | testable: true
-
--- T2 (K = 2) control, common evening peak, no interaction, phase of the raw profile (declaration 1) --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 60000 beating 0 conflict 0
-  Brier System 1 (additive) 0.13407 | System 2 (cells) 0.13385
-  gain of System 2: conflict NaN | resonance +0.00022 | delta NaN, 95% CI by day [NaN; NaN]
-  rival delta (level agreement, no phase) NaN | testable: false
-
--- T2 (K = 2) control, common evening peak, no interaction, phase of the deviation --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18192 beating 27661 conflict 14147
-  Brier System 1 (additive) 0.13809 | System 2 (cells) 0.13424
-  gain of System 2: conflict +0.00403 | resonance +0.00408 | delta -0.00005, 95% CI by day [-0.00105; +0.00089]
-  rival delta (level agreement, no phase) -0.00019 | testable: true
-
-real data:
-
--- T1 (K = 2) Victoria 2012-2014, temperature -> demand: 155 weeks --
-  engine                             temperature -> demand  77 | demand -> temperature  78 | none   0 | rate 0.497
-  engine, null pairing (+13 weeks)   temperature -> demand  59 | demand -> temperature  95 | none   1 | rate 0.381
-  rival (lagged cross-correlation)   temperature -> demand  90 | demand -> temperature  65 | none   0 | rate 0.581
-  rival, null pairing                temperature -> demand  80 | demand -> temperature  75 | none   0 | rate 0.516
-  engine, margin 0.05 (secondary)    temperature -> demand  48 | demand -> temperature  33 | none  74 | rate 0.310
-  binomial P(X >= 77 | n = 155) = 5.638e-1 | median learnt lag 0.04 h
-  P1 false | P2 false | P3 true | works: false | adds over the rival: false
-
--- T2 (K = 2) New York 2013, vault October to December --
-  training 54835 | vault flights with three eligible sources 77184 | quiescent 0 resonance 25196 beating 40352 conflict 11636
-  Brier System 1 (additive) 0.16676 | System 2 (cells) 0.16604
-  gain of System 2: conflict +0.00024 | resonance +0.00117 | delta -0.00093, 95% CI by day [-0.00165; -0.00022]
-  rival delta (level agreement, no phase) +0.00146 | testable: true
-
--- T2 (K = 2) New York 2023, vault October to December --
-  training 68257 | vault flights with three eligible sources 98509 | quiescent 0 resonance 35965 beating 52851 conflict 9693
-  Brier System 1 (additive) 0.11771 | System 2 (cells) 0.11736
-  gain of System 2: conflict -0.00029 | resonance +0.00256 | delta -0.00284, 95% CI by day [-0.00365; -0.00193]
-  rival delta (level agreement, no phase) +0.00335 | testable: true
-
-== verdicts of declaration 2 (K = 2), by the rules sealed before the run ==
-T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
-T2 the conflict: NOT SUPPORTED | adds over level agreement: no
-~~~
-
-### Point 24: resonance, not conflict
-
-The claim drawn from declaration 2 of point 23, tested once on New York April to June 2013 and 2023 and Houston October to December 2011, with the verdict by the rules sealed in empirical/p24-ressonancia/DECLARACAO.md.
-
-~~~bash
-./target/release/labs --resonance
-~~~
-
-~~~text
-== Point 24: resonance, not conflict (empirical/p24-ressonancia/DECLARACAO.md) ==
-controls on synthetic data, seed 2026:
-
--- control, interaction in resonance --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18148 beating 28223 conflict 13629
-  Brier System 1 (additive) 0.13832 | System 2 (cells) 0.13353
-  gain of System 2: conflict +0.00447 | resonance +0.00614 | delta -0.00167, 95% CI by day [-0.00282; -0.00054]
-  rival delta (level agreement, no phase) -0.00090 | resonance beats the rival here: true
-
--- control, no interaction --
-  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18192 beating 27661 conflict 14147
-  Brier System 1 (additive) 0.13809 | System 2 (cells) 0.13424
-  gain of System 2: conflict +0.00403 | resonance +0.00408 | delta -0.00005, 95% CI by day [-0.00105; +0.00089]
-  rival delta (level agreement, no phase) -0.00019 | resonance beats the rival here: true
-
-the three fresh vaults:
-
--- New York 2013, April to June --
-  training 52354 | vault flights with three eligible sources 77251 | quiescent 0 resonance 18533 beating 44488 conflict 14230
-  Brier System 1 (additive) 0.18685 | System 2 (cells) 0.18585
-  gain of System 2: conflict -0.00002 | resonance +0.00040 | delta -0.00042, 95% CI by day [-0.00130; +0.00053]
-  rival delta (level agreement, no phase) -0.00204 | resonance beats the rival here: true
-
--- New York 2023, April to June --
-  training 74136 | vault flights with three eligible sources 101457 | quiescent 0 resonance 35519 beating 53217 conflict 12721
-  Brier System 1 (additive) 0.15992 | System 2 (cells) 0.15865
-  gain of System 2: conflict +0.00175 | resonance +0.00138 | delta +0.00038, 95% CI by day [-0.00047; +0.00125]
-  rival delta (level agreement, no phase) +0.00005 | resonance beats the rival here: false
-
--- Houston 2011, October to December --
-  training 37148 | vault flights with three eligible sources 49328 | quiescent 0 resonance 28283 beating 14964 conflict 6081
-  Brier System 1 (additive) 0.13235 | System 2 (cells) 0.13179
-  gain of System 2: conflict -0.00023 | resonance +0.00095 | delta -0.00118, 95% CI by day [-0.00221; -0.00019]
-  rival delta (level agreement, no phase) -0.00149 | resonance beats the rival here: true
-
-== verdict, by the rules sealed before the run ==
-testable in all three: true | delta negative in all three: false | intervals entirely below zero: 1 of 3 (need 2)
-the resonance claim: NOT SUPPORTED | adds over level agreement (in 2 of 3): yes (2 of 3)
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1333,63 +1126,6 @@ report_hash=93565e652be85d38a1283f19bcaa2af7352a6057af866cc46e47c75360afeccd
 verdict: 1 gates failed
 ~~~
 
-### Wave engine: six gates
-
-Six checks on the magnetic hypergraph: structure, Hermitian L^(q), Cayley l2 norm preservation, seal chain, determinism, and STDP causal asymmetry.
-
-~~~bash
-./target/release/wave --check
-~~~
-
-~~~text
-[OK] G1 structure | 4 vertices, 3 hyperedges, q = 0.5
-  [OK] G2 hermitian | largest deviation of L^(q) with respect to L^(q)^dagger: 0.000e0
-  [OK] G3 unitary | l2 norm preserved over 3 steps of dt = 0.65
-  [OK] G4 chain | state seal chained over 3 steps; tampering of 0.001 rejected
-  [OK] G5 determinism | two independent runs seal the same state
-  [OK] G6 causality | minimum asymmetry required of 0.05 in 4 links; synaptic seal 0x06d33ef213a8f4a8
-~~~
-
-### Wave engine negative proof: seal chain
-
-With a 0.001 perturbation in the final state, the seal chain rejects and exits with code 1.
-
-~~~bash
-./target/release/wave --defect mutation
-~~~
-
-~~~text
-[OK] G1 structure | 4 vertices, 3 hyperedges, q = 0.5
-  [OK] G2 hermitian | largest deviation of L^(q) with respect to L^(q)^dagger: 0.000e0
-  [OK] G3 unitary | l2 norm preserved over 3 steps of dt = 0.65
-  [OK] G4 chain | state seal chained over 3 steps; tampering of 0.001 rejected
-  [OK] G5 determinism | two independent runs seal the same state
-  [OK] G6 causality | minimum asymmetry required of 0.05 in 4 links; synaptic seal 0x06d33ef213a8f4a8
-
-[NEGATIVE PROOF] tampering 0.001 in the last state of the chain
-  chain rejected: step 3: state seal diverges (declared 0x27a9cf307a6a5414, measured 0x9d10bccc515646cd)
-~~~
-
-### Wave engine negative proof: causal arrow
-
-With an inverted synaptic matrix link, G6 rejects and exits with code 1.
-
-~~~bash
-./target/release/wave --defect inversion
-~~~
-
-~~~text
-[OK] G1 structure | 4 vertices, 3 hyperedges, q = 0.5
-  [OK] G2 hermitian | largest deviation of L^(q) with respect to L^(q)^dagger: 0.000e0
-  [OK] G3 unitary | l2 norm preserved over 3 steps of dt = 0.65
-  [OK] G4 chain | state seal chained over 3 steps; tampering of 0.001 rejected
-  [OK] G5 determinism | two independent runs seal the same state
-  [OK] G6 causality | minimum asymmetry required of 0.05 in 4 links; synaptic seal 0x06d33ef213a8f4a8
-
-[NEGATIVE PROOF] inverting one causal link of the synaptic matrix
-  insufficient causality in Fluxonomy -> Chrononomy: asymmetry -0.7500
-~~~
-
 ### Synthetic trial: SHELF panel
 
 Four synthetic respondents scored on the five real pretest pools.
@@ -1513,7 +1249,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 112 tests
+running 103 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1604,8 +1340,6 @@ test ponte::tests::the_pilot_re_derives_the_tie_at_the_ceiling ... ok
 test ponte::tests::the_registry_declares_the_verdict_if_the_window_lapses ... ok
 test ponte::tests::the_status_em_teste_without_the_roles_is_rejected ... ok
 test ponte::tests::with_the_roles_designated_the_test_may_run ... ok
-test resonance::tests::an_interaction_planted_in_resonance_is_found_and_its_absence_is_not ... ok
-test resonance::tests::the_rule_needs_three_negatives_and_two_intervals_below_zero ... ok
 test segunda::tests::the_bank_is_recounted_in_rust_and_matches_the_published_numbers ... ok
 test segunda::tests::the_bias_of_the_loop_agrees_in_two_sources ... ok
 test segunda::tests::the_multiplicity_thresholds_match_alpha_over_m ... ok
@@ -1619,15 +1353,8 @@ test streams::tests::logistic_recovers_a_known_coefficient ... ok
 test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
-test wave2::tests::a_common_peak_hides_the_conflict_from_the_raw_phase_and_not_from_the_deviation ... ok
-test wave2::tests::the_planted_arrow_survives_the_wider_horizon ... ok
-test wave::tests::a_planted_interaction_in_conflict_raises_the_gain_of_system_2_there ... ok
-test wave::tests::events_open_once_per_excursion_with_the_time_of_day_as_phase ... ok
-test wave::tests::the_anomaly_removes_a_shared_daily_cycle ... ok
-test wave::tests::the_binomial_tail_is_exact_at_small_n ... ok
-test wave::tests::the_planted_arrow_is_found_and_the_independent_one_is_not ... ok
 
-test result: ok. 112 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 103 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1961,60 +1688,6 @@ test tests::the_bridge_delivers_the_same_numbers_as_the_pure_function ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 34 tests
-test channel::tests::a_planted_lead_gives_a_positive_arrow_and_its_mirror_a_negative_one ... ok
-test channel::tests::events_beyond_the_horizon_leave_the_bus_untouched ... ok
-test channel::tests::five_channels_in_lens_order_reproduce_the_lens_bus ... ok
-test complex::tests::antiphase_sums_to_zero ... ok
-test complex::tests::division_undoes ... ok
-test complex::tests::polar_and_phase_agree ... ok
-test complex::tests::product_with_conjugate_is_modulus_squared ... ok
-test cycle::tests::a_cosine_peaking_at_eighteen_hours_is_recovered ... ok
-test cycle::tests::a_flat_profile_has_no_amplitude ... ok
-test cycle::tests::profiles_half_a_day_apart_cancel_in_the_superposition ... ok
-test magnetic::tests::antiphase_at_the_target_cancels_the_arrival ... ok
-test magnetic::tests::cayley_preserves_the_norm ... ok
-test magnetic::tests::chain_detects_tampering ... ok
-test magnetic::tests::laplacian_is_hermitian ... ok
-test magnetic::tests::same_input_same_seal ... ok
-test magnetic::tests::state_with_wrong_size_is_refused ... ok
-test magnetic::tests::validation_catches_nonexistent_vertex ... ok
-test phasor::tests::in_antiphase_the_energy_collapses_and_opens_system_2 ... ok
-test phasor::tests::in_phase_there_is_superadditive_gain ... ok
-test phasor::tests::propagation_delay_enters_the_phase ... ok
-test phasor::tests::weak_signal_stays_quiescent ... ok
-test plasticity::tests::bad_verdict_is_rolled_back ... ok
-test plasticity::tests::good_verdict_consolidates_and_seals ... ok
-test plasticity::tests::target_outside_the_graph_is_an_error ... ok
-test seal::tests::a_thousandth_of_change_changes_the_seal ... ok
-test seal::tests::dust_below_the_grid_does_not_change_the_seal ... ok
-test seal::tests::wrap_alpha_stays_in_the_interval ... ok
-test seal::tests::wrap_pi_in_antiphase_stays_at_pi_or_minus_pi ... ok
-test seal::tests::zero_and_negative_zero_seal_alike ... ok
-test spike::tests::bus_seal_is_stable ... ok
-test spike::tests::index_and_lens_round_trip ... ok
-test spike::tests::recognizes_cascade_at_any_instant ... ok
-test spike::tests::stdp_creates_causal_asymmetry ... ok
-test spike::tests::wrong_intervals_do_not_match ... ok
-
-test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
-
-running 4 tests
-test full_s1_s2_s1_cycle_seals_the_engine ... ok
-test gate_fails_inverted_matrix ... ok
-test spike_has_stable_logical_size ... ok
-test word_recognized_in_the_real_stream_and_not_in_the_shuffled_one ... ok
-
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
-
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
@@ -2078,6 +1751,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 | p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
 
-Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 24 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--resonance,--s1,--s2,--schema,--second-opinion,--streams,--wave,--wave2; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 21 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **6496 lines** and **89607 words**, sha256 `77bd978e96ad7528fb549e1587f8021f934378edf50068036eb8d4a927e9f08e`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6493 lines** and **89505 words**, sha256 `7504cc96de86487e812820f4ea7de4ad4741bed6ac3144f2841b7bf6510ead25`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

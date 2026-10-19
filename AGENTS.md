@@ -37,7 +37,7 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
 | Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; safeguard panel agent A8 |
 | Phi5 — question resolution | enforced when the unit is a day or coarser: aggregate resolution (R0) fails; finer units remain exempt, as declared | `crates/stochology-core/src/invariants.rs` and `src/resolution.rs` |
 
-The `gates` binary enforces the invariants and the safeguard panel across seven gates (G1 to G7, distinct from the six gates G1 to G6 of the wave engine `wave`) and exits with code 0 or 1.
+The `gates` binary enforces the invariants and the safeguard panel across seven gates (G1 to G7) and exits with code 0 or 1.
 
 ## III. Ontology and the Five Lenses
 
@@ -79,8 +79,8 @@ reading of the list, with what each line enforces:
 
 ~~~bash
 cargo fmt --all --check                             # formatting belongs to rustfmt, not personal taste
-cargo clippy --workspace --all-targets -- -D warnings   # zero warnings tolerated across all nine crates
-cargo test --workspace                              # all nine crates
+cargo clippy --workspace --all-targets -- -D warnings   # zero warnings tolerated across all eight crates
+cargo test --workspace                              # all eight crates
 cargo run --release --bin labs -- --all           # the 21 book laboratories
 cargo run --release --bin labs -- --bank           # real H0, reading data/bank_calls.csv
 cargo run --release --bin labs -- --resolution       # the R horizon
@@ -89,9 +89,6 @@ cargo run --release --bin labs -- --s2              # System 2: hypergraph, beli
 cargo run --release --bin labs -- --queue            # queue with abandonment and the R0-to-R3 table
 cargo run --release --bin gates -- --horizon all --reproduction   # the seven gates
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23  # negative proof: exits with 1
-cargo run --release --bin wave -- --check            # the six gates of the wave engine
-cargo run --release --bin wave -- --defect mutation  # negative proof of the seal chain: exits with 1
-cargo run --release --bin wave -- --defect inversion # negative proof of the causal arrow: exits with 1
 cargo run --release --bin labs -- --rehearsal-shelf      # synthetic floor of the SHELF panel
 cargo run --release --bin labs -- --rehearsal-listening     # coverage arithmetic and boundary of the listening gate
 cargo run --release --bin labs -- --rehearsal-bridge      # roles, cases, and status in the bridge gate
@@ -111,9 +108,6 @@ verification suite, because every row in that table cites one of them:
 cargo run --release --bin labs -- --genetics    # fine resolution in genetics
 cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
 cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
-cargo run --release --bin labs -- --wave        # the wave engine against data (point 23): T1 the arrow, T2 the conflict
-cargo run --release --bin labs -- --wave2       # the same two tests under declaration 2 of point 23 (K = 2)
-cargo run --release --bin labs -- --resonance   # point 24: deliberation pays in resonance? three fresh vaults
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
@@ -123,15 +117,9 @@ cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
 cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 and 5
 ~~~
 
-The wave engine enters the first block because it is an instrument, not a chapter. Its first published numbers
-come from `labs --wave` (point 23, declared and sealed before the first run on 2026-10-19), which tests two of its
-three layers on catalogued data: the STDP arrow was not supported, and the phasor conflict never fired on real
-flights, so it was not testable under its encoding. Under declaration 2 (`labs --wave2`, K = 2) the arrow is still not
-supported, and the conflict, once it fires, points away from where deliberation pays: refuted. The reverse claim
-(point 24, `labs --resonance`), tested on three vaults never used for it, is not supported. Its two divergences from the draft that
-originated it are declared in `crates/stochology-wave/src/lib.rs` — the frustration `<Psi, L Psi>` cannot serve as a
-conflict trigger because in symmetric antiphase it equals zero precisely when conflict exists, and the
-plasticity gate enforces target resonance gain rather than monotonic frustration decay.
+The wave engine (`crates/stochology-wave`) left the tree on 2026-10-19, with its three instruments, after its sealed
+tests on catalogued data (points 23 and 24) did not support its claims; the records stay in `empirical/` and the
+recovery commit is in `docs/declarations/REMOVED_WAVE.md`.
 
 The three dry-run rehearsals (`--rehearsal-*`) are rehearsals, not coverage: they run the instruments of points 12, 13, and 16 over synthetic
 records to measure the floor of a fluent uncalibrated respondent and to expose what the gate cannot
@@ -173,7 +161,7 @@ which name the specifications that were tried and are the record that the counte
 | --- | --- | --- |
 | Book | `book/stochology-textbook.md`, authored in `book/` | 21 chapters, 5 parts, assembled and verified |
 | Site | `site/` (the Docsify page, the landing text `home.md` and `build.sh`), published by `.github/workflows/pages.yml` at obestafera.com | assembled from `book/` on each push to `main`, with the sidebar generated from the headings; apart from the landing text, the site keeps no copy of the book in the tree |
-| Apparatus | `crates/stochology-*` | nine live crates after the consolidation of 2026-10-17: `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book`, `-wasm`, and `-wave`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
+| Apparatus | `crates/stochology-*` | eight live crates since 2026-10-19 (nine after the consolidation of 2026-10-17, until the wave engine left: `docs/declarations/REMOVED_WAVE.md`): `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book` and `-wasm`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
 | Results | `docs/RUST_RESULTS.md` | registry generated directly from the instruments |
 | Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
 | Language | every layer | **English migration of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |

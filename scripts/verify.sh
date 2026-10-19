@@ -36,20 +36,13 @@ step "negative proofs: gates must know how to reject"
 if ./target/release/gates --horizon h3 --defect h3.voos23; then
   echo "FAIL: gates negative proof passed" >&2; exit 1
 fi
-./target/release/wave --check
-if ./target/release/wave --defect mutation; then
-  echo "FAIL: seal chain negative proof passed" >&2; exit 1
-fi
-if ./target/release/wave --defect inversion; then
-  echo "FAIL: causal arrow negative proof passed" >&2; exit 1
-fi
 if ./target/release/labs --unknown-flag; then
   echo "FAIL: labs accepted unknown flag" >&2; exit 1
 fi
 
 if [ "$fast" -eq 0 ]; then
-  step "all twenty-one labs instruments required by §V"
-  for front in all bank resolution s1 s2 queue genetics streams eprocess wave wave2 resonance h3 second-opinion bridge listening schema jev \
+  step "all eighteen labs instruments required by §V"
+  for front in all bank resolution s1 s2 queue genetics streams eprocess h3 second-opinion bridge listening schema jev \
                rehearsal-shelf rehearsal-listening rehearsal-bridge; do
     printf -- "-- labs --%s\n" "$front"
     ./target/release/labs "--$front" > /dev/null

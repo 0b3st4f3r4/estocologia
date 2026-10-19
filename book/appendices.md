@@ -150,10 +150,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
-| `cargo run --release --bin labs -- --wave` | The wave engine against data: the arrow of its spike bus in Victoria and the conflict of its phasors in the New York flights, by rules sealed before the run |
-| `cargo run --release --bin labs -- --wave2` | The same two tests under a second declaration (K = 2): a day of horizon for the arrow, and the phase of each source's deviation from the common daily profile for the conflict |
-| `cargo run --release --bin labs -- --resonance` | The reverse claim, that deliberation pays where the sources are in phase, tested once on three vaults never used for it |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 442 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 395 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |

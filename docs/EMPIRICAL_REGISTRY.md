@@ -116,7 +116,7 @@ The 38 recorded tests of the H2 gate re-read with the stopping rule of point 22,
 ## The wave engine against data (2026-10-19)
 
 Point 23: two layers of the wave engine tested on catalogued data under `empirical/p23-onda/DECLARACAO.md`, sealed
-and committed before the first run. Instrument: `labs --wave`. Verdicts: the arrow not supported; the conflict not
+and committed before the first run. Instrument: `labs --wave` (removed with the wave engine on 2026-10-19; the outputs stay in `empirical/p23-onda/`, and `docs/declarations/REMOVED_WAVE.md` restores the source). Verdicts: the arrow not supported; the conflict not
 testable under its encoding. Declaration 2 (K = 2, `labs --wave2`): the arrow not supported; the conflict refuted, in
 the opposite direction.
 
@@ -134,7 +134,7 @@ the opposite direction.
 ## Resonance, not conflict (2026-10-19)
 
 Point 24: the claim drawn from declaration 2 of point 23, sealed with its data before its single run
-(`empirical/p24-ressonancia/DECLARACAO.md`). Instrument: `labs --resonance`. Verdict: not supported.
+(`empirical/p24-ressonancia/DECLARACAO.md`). Instrument: `labs --resonance` (removed with the wave engine on 2026-10-19; the output stays in `empirical/p24-ressonancia/saida.txt`). Verdict: not supported.
 
 | Number | Instrument |
 | --- | --- |

@@ -15,7 +15,6 @@ stochology-hypergraph = { path = "../stochology-hypergraph" }
 stochology-methods = { path = "../stochology-methods" }
 stochology-horizons = { path = "../stochology-horizons" }
 stochology-s2 = { path = "../stochology-s2" }
-stochology-wave = { path = "../stochology-wave" }
 
 [lints]
 workspace = true
