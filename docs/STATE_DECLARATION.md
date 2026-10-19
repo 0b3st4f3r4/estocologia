@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 421 tests passed, none failed
+cargo test --workspace                                  # 422 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **20 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 365 lines**, **87 427 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 371 lines**, **87 807 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 365 lines and 87 427 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 371 lines and 87 807 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -376,4 +376,21 @@ The dated record is `history/estado-2026-10-19T1429Z.md`.
 | cited blocks | 31 | 32 |
 | reimplementation | 475 quantities: 472 agree, 3 open | 487 quantities: 484 agree, 3 open |
 | assembled book, line count | 6 265 (with 85 797 words) | 6 365 (with 87 427 words) |
+
+## The chapters teach with the instrument (2026-10-19, later the same day)
+
+The rebuild of the streams left the book saying two things: Chapter 20 taught the record's numbers in Step 1 and the
+instrument's in Step 3, and Chapter 8 kept the record's six vaults. By the rule of the Preface (the chapters teach
+with what the reader can run; Appendix E keeps both values), Chapters 8 and 20 now teach with `labs --streams`, which
+also prints the null q95 of the ECE with the real forecasts of each vault; the record's numbers stay in Appendix E,
+and what nothing rebuilds (Toronto 2020–2021, Rhode Island, the replay count, the Goodhart index, the label drift and
+the inverted audit) is marked as the record of the research. Three readings changed with the numbers: the first
+failures are Toronto and the market, not the flights of 2013; the 2023 correction is decisive; and in 2013 the
+correction fixes the bias and fails on the ECE. The dated record is `history/estado-2026-10-19T1524Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| `cargo test --workspace` | 421 | **422** |
+| `scripts/book/check_book.py` | refuses 49 retired values | refuses 52 |
+| assembled book, line count | 6 365 (with 87 427 words) | 6 371 (with 87 807 words) |
 

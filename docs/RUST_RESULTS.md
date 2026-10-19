@@ -183,17 +183,17 @@ energy (Victoria 2014, day ahead, 90% interval):  n =  17424 | coverage 0.886 | 
 bank (Sep-Oct 2003, next working day, 90%):       n =   6422 | coverage 0.884 | gate PASSES
 market (Dow Jones 2000-2023, 99% VaR, 250 days):  n =   6011 | violations 1.53% | Kupiec p = 0.00 | Christoffersen p = 0.02 | gate FAILS
 flights 2013 (Oct-Dec), trained on 54835 flights of the 60 days before:
-   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 | skill +0.0898 | gate PASSES
-   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 | skill +0.0908 | gate FAILS
+   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 (null q95 0.0046) | skill +0.0898 | gate PASSES
+   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 (null q95 0.0046) | skill +0.0908 | gate FAILS
    canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9102
 flights 2023 (Oct-Dec), trained on 68257 flights of the 60 days before:
-   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 | skill +0.0282 | gate FAILS
-   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 | skill +0.0747 | gate PASSES
+   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 (null q95 0.0040) | skill +0.0282 | gate FAILS
+   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 (null q95 0.0034) | skill +0.0747 | gate PASSES
    canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9718
 cyclones (2015-2022, +30 kt in 24 h), trained on 12585 observations of 1975-2014:
-   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 | skill +0.1000 | gate PASSES
+   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 (null q95 0.0107) | skill +0.1000 | gate PASSES
 Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 cases of 1997-2000:
-   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 | skill +0.0812 | gate FAILS
+   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 (null q95 0.0315) | skill +0.0812 | gate FAILS
    canary: clock switched off, skill gain +0.9188
    marker (chance of release below 0.70): false positive and false negative rates by perceived colour
    2001 Black  FPR 0.155  FNR 0.667  (311 cases)
@@ -1253,7 +1253,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 97 tests
+running 98 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1351,8 +1351,9 @@ test streams::tests::kupiec_accepts_the_nominal_rate_and_rejects_ten_times_it ..
 test streams::tests::logistic_recovers_a_known_coefficient ... ok
 test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
+test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 97 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 98 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1795,4 +1796,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 20 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6365 lines** and **87427 words**, sha256 `66efba8bd1b74710e79ba60061d6ec33a41e8e794ef9b268902bbe9222da4eec`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6371 lines** and **87807 words**, sha256 `1347f62c9cd86444446572fb72bf346de34704bca38b0e5fb076f05d503634c7`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

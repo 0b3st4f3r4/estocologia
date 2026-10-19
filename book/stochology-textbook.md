@@ -1585,21 +1585,22 @@ enough to matter for the decision?* is answered by a tolerance fixed by the cost
 shrink with $n$. In a vault of a hundred thousand cases almost any deviation is detectable, including deviations
 too small to change any action. The honest report gives both verdicts: detectable or not, and relevant or not.
 
-Six real binary vaults show it:
+Six real binary vaults show it. Four are rebuilt beside the book in Chapter 20; the two marked come from the record of
+the research.
 
 | vault | n | observed ECE | null q95 | fixed tolerance 0.03 |
 | --- | --- | --- | --- | --- |
-| NY flights 2013 | 84,301 | 0.0267 | 0.0046 | passes |
-| cyclones | 5,766 | 0.0123 | 0.0087 | passes |
-| Toronto prisons 1997–2002 | 1,488 | 0.0363 | 0.0320 | fails |
-| Toronto prisons 2020–2021 | 16,933 | 0.0668 | 0.0115 | fails |
-| NY flights 2023 | 104,489 | 0.0079 | 0.0035 | passes |
-| Rhode Island 2013–2015 | 24,466 | 0.0048 | 0.0034 | passes |
+| NY flights 2013 | 82,609 | 0.0260 | 0.0046 | passes |
+| cyclones | 3,813 | 0.0121 | 0.0107 | passes |
+| Toronto prisons 1997–2002 | 1,488 | 0.0354 | 0.0315 | fails |
+| Toronto prisons 2020–2021 (record) | 16,933 | 0.0668 | 0.0115 | fails |
+| NY flights 2023, with the correction | 104,091 | 0.0177 | 0.0034 | passes |
+| Rhode Island 2013–2015 (record) | 24,466 | 0.0048 | 0.0034 | passes |
 
 The null q95 of the table was computed with the real forecasts of each vault. Against it, all six vaults show
 **detectable** miscalibration, including the four that the fixed rule approved. Detectable is not yet relevant:
-the 2023 flights miss by 0.0079, a deviation that the null detects and that changes no decision taken on a
-delay forecast. The Toronto 1997–2002 case is the fragile one. Its ECE of 0.0363 sits just above the q95 of 0.0320
+Rhode Island misses by 0.0048, a deviation that the null detects and that changes no decision taken on an
+arrest forecast. The Toronto 1997–2002 case is the fragile one. Its ECE of 0.0354 sits just above the q95 of 0.0315
 computed with the real forecasts, and below the q95 of 0.0425 that the laboratory measures with simulated
 forecasts of the same size. The verdict on that vault depends on the spread of its forecasts, and it is reported as
 borderline, not as a failure.
@@ -1612,10 +1613,10 @@ can be honest and uninformative at the same time, and the two things are reporte
 the first is repaired and the second is not.
 
 **Putting calibration to the test requires a new vault.** In the flight forecast, an intercept correction
-($\delta \leftarrow \delta + 0.002(y - p')$) was designed after seeing the 2013 deviation. To be honest, it
-needed a vault nobody had seen, the 435 thousand New York flights in 2023, in the quarter that had
-failed. It passed, with CITL 0.0015 and ECE 0.008, but the model without the correction would also have passed, because
-2023 did not repeat the 2013 deviation. The honest report says that the correction improved the calibration and **was not decisive** for passing.
+($\delta \leftarrow \delta + 0.002(y - p')$) moves the level after each known arrival. In the quarter of 2013 it fixed
+the bias and made the ECE worse. Its honest test needed a vault nobody had seen, the 435 thousand New York flights of
+2023, in the same quarter: there the raw model missed the level and failed, with ECE 0.0646, and the correction took it
+to 0.0177 and passed (Chapter 20). The correction was decisive, and it had to be shown in a vault that it had not seen.
 
 **A guarantee that comes for free.** **Conformal prediction** gives guaranteed coverage without assuming the
 shape of the distribution, $P(Y \in C(X)) \ge 1-\alpha$. It needs only that the new cases be exchangeable with
@@ -1697,8 +1698,8 @@ tolerance, on how many cases there are to see it.
 5. *(Laboratory)* Change the world seed from 2026 to 1909 and to 2027 and measure the expert's Brier
    in the three. How far apart do the three sit, and what does that say about comparing two
    forecasters in a world of 4 thousand days?
-6. *(Concept)* Write, in four lines, the memorandum that explains to the board why the ECE of 0.0363
-   in Toronto 1997–2002 cannot be read with the ruler of the ECE of 0.0079 of the 2023 flights.
+6. *(Concept)* Write, in four lines, the memorandum that explains to the board why the ECE of 0.0354
+   in Toronto 1997–2002 cannot be read with the ruler of the ECE of 0.0177 of the 2023 flights.
 
 **Summary.**
 
@@ -4913,15 +4914,18 @@ chance of a hurricane gaining strength; and the decision to release a detainee i
 it had not happened yet.
 
 The warehouse refuses four things, and refusing is its job: reading the future, opening a vault before the written
-pre-registration, opening the same vault twice and turning the clock back. In the whole replay there were 453,973 forecasts, and none
-of them used future state; **zero violations**, with the count made forecast by forecast.
+pre-registration, opening the same vault twice and turning the clock back. In the replay of the research, over
+453,973 forecasts, none used future state; **zero violations**, with the count made forecast by forecast. Six of the
+streams are rebuilt in Step 3 from public data, and the numbers of this step are theirs wherever they exist; the arrests
+of 2020 and 2021 and the traffic stops of Rhode Island have no copy beside the book, and their numbers come from the
+record of the research, said each time.
 
 **The canary paradox.** "Zero violations" looks great, and it is almost nothing. It is only worth something if the test *could* have
 found a violation. That is why the system planted a **canary** on purpose. It is a column identical to the label,
 published at that instant, when the label becomes knowable. With the honest clock, that column appears in
 no emission, and a forecaster that uses it gains nothing, with **gain 0.000**. Clock switched off, the positive
-control, the column yields gains from $+0.86$ to $+0.92$ in the flights stream, $+0.85$ in the new year of flights,
-$+0.55$ in the one of arrests of 2020 and $+0.97$ in the one of Rhode Island. It is the severe test of Mayo applied to the test
+control, the column yields a skill gain of $+0.91$ in the flights of 2013, $+0.97$ in those of 2023 and $+0.92$ in the
+arrests of 1997 to 2002; the record measured $+0.55$ in the arrests of 2020 and $+0.97$ in Rhode Island. It is the severe test of Mayo applied to the test
 itself. The alarm rings when there is leakage, and stays quiet when there is not.
 
 **The paradox of the good forecaster who errs about the world.** In a call centre, whoever is not served calls again. The
@@ -4935,39 +4939,39 @@ estimated effect fell to 0.56 and the corrected forecast missed the true demand 
 
 **The vault paradox.** Calibration is the promise that "when the model says 30%, it happens in about 30% of the
 cases". It was tested in vaults out of time, opened a single time, and the expected calibration error is the
-mean distance between the predicted and the observed, measured bin by bin. The table below tells the story of the three
-attempts.
+mean distance between the predicted and the observed, measured bin by bin. The table below gives the six rebuilt
+streams; the story of the three attempts follows it.
 
 | Stream | What it predicts | Vault | Calibration in the vault | Gate |
 | --- | --- | --- | --- | --- |
-| Energy (Victoria) | demand of each half hour of tomorrow | 2014, 17,376 | coverage of 90% = 0.887 (official reserve 48% of the time) | Passes |
-| Call centre (bank, 2003) | calls per 5 minutes of the next working day | Sep–Oct, 6,084 | coverage 0.900 | Passes |
-| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6,010 | violations 0.98%; Kupiec p = 0.89; clustered (Christoffersen p = 0.02) | Passes the frequency rule; the independence of the violations fails |
-| Flights (New York, 2013) | chance of a delay above 15 minutes, 2 h before | Oct–Dec, 84,301 | bias $+2.7$ points; ECE 0.027 | Fails |
-| Cyclones | chance of gaining 30 knots in 24 hours | 2015–2022, 5,766 | bias 0.001; ECE 0.012 | Passes |
-| Prisons (Toronto, 1997–2002) | chance of release | 2001–2002, 1,488 | bias 0.016; ECE 0.036 | Fails |
+| Energy (Victoria) | demand of each half hour of tomorrow | 2014, 17,424 | coverage of 90% = 0.886 | Passes |
+| Call centre (bank, 2003) | calls per 5 minutes of the next working day | Sep–Oct, 6,422 | coverage 0.884 | Passes |
+| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6,011 | violations 1.53%; Kupiec p = 0.00; clustered (Christoffersen p = 0.02) | Fails |
+| Flights (New York, 2013) | chance of a delay above 15 minutes, 2 h before | Oct–Dec, 82,609 | bias −0.0171; ECE 0.0260 | Passes |
+| Cyclones | chance of gaining 30 knots in 24 hours | 2015–2022, 3,813 | bias +0.0002; ECE 0.0121 | Passes |
+| Prisons (Toronto, 1997–2002) | chance of release | 2001–2002, 1,488 | bias +0.0165; ECE 0.0354 | Fails |
 
-**The design lesson of the first failure.** In the flights, the last quarter of 2013 had more delays than the model of
-60 days expected, and the bias stayed 2.7 points above the predicted one, for a tolerance of 2. In the prisons, the
-calibration error was 0.036, for a tolerance of 0.03, with only 1,488 cases. And the cause became clear. **The circuit breaker
-compared the model with the reserve, and not with the calibration**. The model kept beating the reserve, and that is why the
-circuit breaker almost did not open, except that it was miscalibrated on average. Being better than the rival and being right are
-different things.
+**The design lesson of the first failures.** In the prisons, the calibration error was 0.0354, for a tolerance of 0.03,
+with only 1,488 cases, and yet the model beat the climatology (skill $+0.0812$). Being better than the rival and being
+right are different things, and a gate that only compares the model with the rival lets the miscalibration through.
+In the market, the value at risk was crossed in 1.53% of the sessions, just above the band, and the crossings came in
+clusters; the frequency alone would hide the second failure, which is the more dangerous one.
 
-**Second attempt: fix the level.** The correction was a continuous recalibration of the intercept, declared
-before and tested in a new vault. The vault was the quarter from October to December repeated, now in 2023, with
-104,489 forecasts. The flights passed, with a bias of 0.0015 and an ECE of 0.008. But the quarter of 2023 did not
-repeat the deviation of 2013. The raw model, without any correction, would also have passed, with ECE 0.014. The correction
-improved the calibration and **was not put to the test**. Step 3 rebuilds this stream from the public data with a
-specification declared beforehand, and there the correction is decisive; the two readings disagree, and both stay.
+**Second attempt: fix the level.** The correction was a continuous recalibration of the intercept, declared before:
+after each arrival becomes known, $\delta \leftarrow \delta + 0.002(y - p')$. In the flights of 2013 it did what it
+promises on the level, taking the bias from $-0.0171$ to $-0.0015$, and it cost the gate: the ECE rose to 0.0322. A
+correction of the mean is not a correction of the shape. Its real test was a new vault, the same quarter of 2023. There
+the model, trained on August and September, overestimated a quarter with fewer delays (bias $+0.0633$, ECE 0.0646) and
+failed; with the correction it ended at $+0.0025$ and 0.0177, and passed. The correction was decisive, and it was
+tested where nobody had looked.
 
-In the prisons, the new Toronto data, from 2020 and 2021, with 65,276 arrests and a vault in the second half of 2021
+In the prisons, the new Toronto data (from the record of the research), from 2020 and 2021, with 65,276 arrests and a vault in the second half of 2021
 over 16,933 cases, changed the question. It became registering at the police station instead of releasing. The model
 hit the mean (0.0002) and separated the cases well, but it was **underconfident**. In the lower bins it predicted 0.12
 where the observed rate was 0.04, and in the upper ones it predicted 0.82 to 0.90 where the rate was 0.91 to 0.94. It is an error of
 **slope**, and touching the intercept does not reach that.
 
-**Third attempt: Rhode Island.** A new specification was declared before opening the vault: a Platt recalibration
+**Third attempt: Rhode Island** (from the record of the research). A new specification was declared before opening the vault: a Platt recalibration
 that adjusts intercept *and* slope, and tested it in a new vault, with 24,466 stops of the state police of Rhode
 Island, between 2013 and 2015, and an arrest rate of 2.26%. The question changed from "release after arrest" to
 "arrest in a traffic stop", and that exchange was confirmed by a human.
@@ -4989,13 +4993,12 @@ The calibration is good, and the **resolution** is not fixed by recalibration. I
 The recalibration fixed the calibration, and could not create the resolution absent from the data.
 
 **Who pays for the error.** The fairness audit was informative in the three prison streams, and the pattern was not
-the same in the three. In Toronto, from 1997 to 2002, the false positive rate of Blacks was about **double** the one of
-Whites in all the years (0.16 to 0.23 against 0.06 to 0.11), in a model that **does not use colour**; it enters through the
-correlates. In Toronto, in 2020 and 2021, the base rates stayed close and the calibration, the false positives and the
+the same in the three. In Toronto, from 1997 to 2002, the marker flagged released Black detainees about **twice** as
+often as released White ones in both years of the vault (0.155 and 0.164 against 0.070 and 0.077), in a model that
+**does not use colour**; it enters through the correlates. In the record, in Toronto in 2020 and 2021, the base rates stayed close and the calibration, the false positives and the
 false negatives stayed under 0.05 between the groups. In Rhode Island, the arrest rate of Black drivers
 was double the one of Whites (3.0–3.8% against 1.4–1.7%), and the false positive rate was almost double in 2013 and 2014
-(0.019 against 0.011; 0.025 against 0.013), again in a model blind to colour. In Toronto, in 2002, the rates of non
-release were close (21% against 19%) and the false positive of Blacks continued about double. Not using colour in the
+(0.019 against 0.011; 0.025 against 0.013), again in a model blind to colour. Not using colour in the
 model does not give parity, because colour enters through the correlates.
 
 ---
@@ -5055,23 +5058,22 @@ that gate, said without decoration.
 **The board against the scoreboard.** Three attacks were tried and neutralised. The forecaster that abstains in the uncertain
 zone receives the score of the reserve and stays behind the honest forecaster in the three binary streams; the forecaster constant
 at the base rate receives weight 0 in the diary; and the second opening of the vault is refused. The Goodhart index, skill in the
-development minus skill in the vault, was reported per stream, and it is small: $+0.14$ in energy, $+0.02$ in the
+development minus skill in the vault, was reported per stream in the record of the research, and it is small: $+0.14$ in energy, $+0.02$ in the
 flights, and negative in the others, where the vault came out above the development.
 
 **Privacy in operation.** The k-anonymity of the prison dataset is 1. In that dataset, 11% of the rows are unique
 in the quasi-identifiers, and 2% stay unique with age in bands of 5 years; no released cohort exceeded the budget
 $\varepsilon = 2$ per person, and the privacy circuit breaker removed the cohort of 1997 from the publication of 2001.
 
-**The calibration tolerance, again.** Chapter 8 measured the noise of the calibration error in these same six
-vaults: against the null of each vault, all six show detectable miscalibration, the Toronto 1997–2002 vault only
-borderline, because in the large vaults the noise is from 0.002 to 0.006 and 0.03 lets detectable miscalibration
-through. Detectable is not the same as relevant, and the gate keeps both readings. By the secondary
-rule, which requires $\max(0.03;\ \text{95\% quantile})$, the picture goes back to what it was: the three approved
-vaults stay approved and the two from Toronto stay failed. The failure of Toronto of 1997–2002 sits on the edge: above
-the null of its real forecasts, below the null that simulated forecasts of the same size give, so it is reported as a
-borderline failure, not as signal.
+**The calibration tolerance, again.** Chapter 8 sets the ECE of each binary vault beside the null of its own
+forecasts: all of them show detectable miscalibration, because in the large vaults the noise is a few thousandths and
+0.03 lets detectable miscalibration through. Detectable is not the same as relevant, and the gate keeps both readings.
+By the secondary rule, which requires $\max(0.03;\ \text{95\% quantile})$, the picture goes back to what it was: the
+vaults approved by the fixed tolerance stay approved and the two from Toronto stay failed. The failure of Toronto of
+1997–2002 sits on the edge: above the null of its real forecasts, below the null that simulated forecasts of the same
+size give, so it is reported as a borderline failure, not as signal.
 
-**The label drift that did not warn.** Would two classical tests of label drift have seen the deviation of 2013 before the original sensor. They did not. The test that compares the realised rate with the predicted
+**The label drift that did not warn** (from the record of the research). Would two classical tests of label drift have seen the deviation of 2013 before the original sensor. They did not. The test that compares the realised rate with the predicted
 mean switched on in the vault on 6 November 2013, and the original sensor had already switched on 16 October; worse, it
 stayed on in 95% of the checks of the 2013 development, because with a window of three thousand flights the delay rate oscillates more than
 0.02 from one day to the next. A permanent alarm warns nothing. The correction held the only real
@@ -5079,8 +5081,8 @@ deviation that appeared, in the third quarter of 2017, when the raw model marked
 $+0.001$. But the declared stress did not discriminate, because the daily readjustment absorbs the drift alone at the level of the
 quarter. The raw model also passed. That is stress, not proof.
 
-**The inverted audit, and who pays.** The question "who pays for the error?" was run
-inside out in the three prison streams. The **chosen** metric is the false positive rate of the marker,
+**The inverted audit, and who pays** (from the record of the research; the rebuild of Step 3 audits only the two
+years of its vault). The question "who pays for the error?" was run inside out in the three prison streams. The **chosen** metric is the false positive rate of the marker,
 $P(\text{marked} \mid \text{does not suffer the outcome})$; the **inverted** one is the false negative rate,
 $P(\text{not marked} \mid \text{suffers the outcome})$. The least favoured group comes out of the largest base rate, the payer is
 the one with the largest rate under the metric in force, and a tie stays with the cases with overlapping confidence intervals. The sweep of
@@ -5153,9 +5155,9 @@ the resolution is not. **The canary** closes the laboratory. With the honest clo
 **0** of the 24,466 emissions, its coefficient stays at zero and the skill gain is 0.0000; with the clock
 switched off, it is available in the 24,466 emissions and the gain is $+0.6521$.
 
-**The real streams, rebuilt.** The numbers of Step 1 come from the research record. Six of its streams have public
-data that can sit beside the book, so they were rebuilt with a specification declared before the run, and the
-instrument prints its own numbers rather than copying the record's. Run it with
+**The real streams.** The six streams of the table of Step 1 run beside the book, on public data, with a specification
+declared before the run; the instrument prints its own numbers, and those are the numbers Step 1 teaches with. Run it
+with
 `cargo run --release --bin labs -- --streams`.
 
 **The recipe of the rebuild.** Nothing is drawn at random. *Energy* and *bank*: the point forecast of a slot is the
@@ -5179,17 +5181,17 @@ energy (Victoria 2014, day ahead, 90% interval):  n =  17424 | coverage 0.886 | 
 bank (Sep-Oct 2003, next working day, 90%):       n =   6422 | coverage 0.884 | gate PASSES
 market (Dow Jones 2000-2023, 99% VaR, 250 days):  n =   6011 | violations 1.53% | Kupiec p = 0.00 | Christoffersen p = 0.02 | gate FAILS
 flights 2013 (Oct-Dec), trained on 54835 flights of the 60 days before:
-   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 | skill +0.0898 | gate PASSES
-   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 | skill +0.0908 | gate FAILS
+   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 (null q95 0.0046) | skill +0.0898 | gate PASSES
+   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 (null q95 0.0046) | skill +0.0908 | gate FAILS
    canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9102
 flights 2023 (Oct-Dec), trained on 68257 flights of the 60 days before:
-   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 | skill +0.0282 | gate FAILS
-   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 | skill +0.0747 | gate PASSES
+   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 (null q95 0.0040) | skill +0.0282 | gate FAILS
+   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 (null q95 0.0034) | skill +0.0747 | gate PASSES
    canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9718
 cyclones (2015-2022, +30 kt in 24 h), trained on 12585 observations of 1975-2014:
-   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 | skill +0.1000 | gate PASSES
+   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 (null q95 0.0107) | skill +0.1000 | gate PASSES
 Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 cases of 1997-2000:
-   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 | skill +0.0812 | gate FAILS
+   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 (null q95 0.0315) | skill +0.0812 | gate FAILS
    canary: clock switched off, skill gain +0.9188
    marker (chance of release below 0.70): false positive and false negative rates by perceived colour
    2001 Black  FPR 0.155  FNR 0.667  (311 cases)
@@ -5198,30 +5200,28 @@ Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 c
    2002 White  FPR 0.077  FNR 0.838  (192 cases)
 ```
 
-Read it against Step 1. **Where the specification is the same, the rebuild lands on the record.** The energy
-interval covers 0.886 of the half hours; the cyclones end with ECE 0.0121 and a bias of $+0.0002$; Toronto 1997–2002
-fails again, with ECE 0.0354 and a bias of $+0.0165$; and the marker blind to colour flags Black detainees who were
-released about twice as often as White ones, 0.155 and 0.164 against 0.070 and 0.077. **The canary behaves as the record
-says**: 0 emissions and no gain with the honest clock, a gain of $+0.91$ or more with the clock switched off.
-
-**Where the rebuild disagrees, both stay.** The value at risk by historical simulation over 250 sessions has 1.53% of
-violations and fails Kupiec, where the record passed with 0.98%; the record does not state its method, and this one
-was declared before the run, so the disagreement is reported, not tuned away. In the flights of 2013 the raw model
-passes and the intercept correction, which fixes the bias, pushes the ECE to 0.0322 and fails. And in 2023 the raw
-model, trained on August and September, overestimates a quarter with fewer delays (bias $+0.0633$) and fails; the
-correction brings it to $+0.0025$ and passes. Step 1 reports, from the record, that the correction was not decisive in
-2023; in the rebuild it is. Which of the two holds depends on choices that the record does not fix, and that is
-exactly why a correction has to be tested in a vault that nobody saw, under a specification written before.
+Read it line by line. **The interval streams pass**: 0.886 of the half hours of Victoria and 0.884 of the five-minute
+slots of the bank fall inside their 90% intervals. **The market fails**, with 1.53% of crossings and a Kupiec p-value
+of 0.00, and the crossings cluster (Christoffersen p = 0.02). **The flights tell the story of the correction**: in 2013
+the raw model passes and the correction fixes the bias but fails on the ECE; in 2023 the raw model fails and the
+correction passes. **The cyclones pass** with ECE 0.0121, and **Toronto fails** with 0.0354. The null in brackets is
+the 95% quantile of the ECE of a perfectly calibrated forecaster with the same forecasts (Chapter 8): every binary
+vault sits above it, so every miscalibration here is detectable, and the gate of 0.03 decides which of them is
+relevant. **The canary** is available in 0 emissions under the honest clock and gives no gain; with the clock switched
+off it gives $+0.91$ or more. **The marker blind to colour** flags released Black detainees about twice as often as
+released White ones, and misses detained Black detainees less often (0.667 and 0.500 against 0.772 and 0.838).
 
 **What could not be rebuilt.** The arrests of 2020 and 2021 in Toronto and the traffic stops of Rhode Island have no
-copy that can sit beside the book, and their numbers in Step 1 stay cited.
+copy that can sit beside the book; their numbers in Step 1 come from the record of the research, and Appendix E sets the
+record's numbers for the six rebuilt streams beside these.
 
 **Exercises.**
 
 1. *(Concept)* Why does a canary that gives no gain with the honest clock prove little if nobody tests it with the
    clock switched off? Give an example of a column that would be a bad canary.
-2. *(Concept)* Explain the failure of the circuit breaker in the flights of 2013 and propose a second criterion of opening based
-   on calibration, saying what price it charges in number of forecast changes.
+2. *(Concept)* In the prisons of 1997–2002 the model beats the climatology and still fails calibration. Explain why a
+   circuit breaker that compares the model with the reserve would not open, and propose a second criterion of opening
+   based on calibration, saying what price it charges in number of forecast changes.
 3. *(Count)* In the laboratory, the fixed climatology has Brier 0.02171 and the official model, 0.02130. Compute the
    skill and check it against the measured number of $+0.0098$ (the measured reference uses the rate of the past, 0.0222, and
    not the rate of the vault).
@@ -5239,15 +5239,15 @@ copy that can sit beside the book, and their numbers in Step 1 stay cited.
   from $+0.55$ to $+0.97$ with the clock switched off.
 - A forecaster can hit what it observes (1% of error) and err about the world (29% of excess); the instrument randomised
   inside the loop undoes the spiral, and the loop declared at 0.6 is four times the measured one, 0.145.
-- Each calibration correction was only accepted in a new vault: flights of 2023 with ECE 0.008, prisons of 2020–2021
-  failed by slope (0.067) and Rhode Island approved with Platt, ECE 0.0048 and skill $+0.019$.
+- Each calibration correction was only accepted in a new vault: the correction of the level failed the flights of 2013
+  and passed those of 2023, from ECE 0.0646 to 0.0177; in the record, the prisons of 2020–2021 failed by slope (0.067)
+  and Rhode Island passed with Platt, ECE 0.0048 and skill $+0.019$.
 - Calibration is fixed; resolution stays where it is. Against a tolerance that depends on the size of the vault, all six
   binary vaults show detectable miscalibration, one only borderline; detectable is not yet relevant.
 - Changing the metric of fairness changes who pays for the error; and none of the affected groups was heard in the seven
   decisions that involve people.
-- Rebuilt from public data under a declared specification, six streams land on the record where the specification is
-  the same (coverage 0.886, ECE 0.0121 and 0.0354) and disagree where it is not (the value at risk fails, and the 2023
-  correction becomes decisive). Both readings stay.
+- Six streams run beside the book on public data, under a specification declared before the run; the market fails
+  its value at risk, and the prisons of 1997–2002 fail calibration while beating the climatology.
 
 ## Chapter 21. The seven lessons and the final project
 
@@ -5677,7 +5677,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 421 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 422 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -6028,14 +6028,20 @@ registry; no instrument changed.
 
 ### The real streams, 2026-10-19
 
-Not a rectification of the text but a new instrument: six streams of Chapter 20 rebuilt on public data, with the
-record and the rebuild side by side in the section of Chapter 20 below. The text of Chapter 20 gained the recipe, the
-output block and its reading; the Preface's list of what the reader cannot run lost them. Two sentences changed:
+A new instrument: six streams of Chapter 20 rebuilt on public data, with the record and the rebuild side by side in
+the section of Chapter 20 below. Following the rule of the Preface, the chapters teach with the instrument's numbers
+and this appendix keeps the record's: Chapters 8 and 20 were brought into line the same day.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 20 | The 2023 correction | "was not put to the test" | the same, and in the rebuild the correction is decisive; both readings stay | the rebuild disagrees with the record |
-| C | Test count | 415 | 421 | the six tests of the rebuilt streams |
+| 20 | Table of the six streams in Step 1 | the record's numbers (coverage 0.887 and 0.900; VaR 0.98%, passes; flights 2013 bias +2.7 points, fails; cyclones ECE 0.012; Toronto ECE 0.036) | the instrument's (0.886 and 0.884; VaR 1.53%, fails; flights 2013 CITL −0.0171 and ECE 0.0260, passes; cyclones 0.0121; Toronto 0.0354) | the chapters teach with what the reader can run |
+| 20 | The first failures | the circuit breaker of the flights of 2013, which compared the model with the reserve | Toronto, which beats the climatology and fails calibration; the market, whose crossings cluster | in the rebuild the flights of 2013 pass and the market fails |
+| 20 | The 2023 correction | "was not put to the test": the raw model would also have passed, ECE 0.014 | decisive: the raw model fails (ECE 0.0646) and the corrected one passes (0.0177); in 2013 the correction fixes the bias and fails on the ECE | the instrument's reading |
+| 20 | Canary, fairness of Toronto 1997–2002, summary, exercise 2 | the record's gains and rates | the instrument's, with the record's kept where nothing was rebuilt (2020–2021, Rhode Island) | the same rule |
+| 20 | Step 2: the replay count, the Goodhart index, the label drift, the inverted audit | stated as measured | marked as the record of the research | no instrument redoes them |
+| 8 | Table of the six binary vaults | the record's ECE and null q95 (0.0267/0.0046, 0.0123/0.0087, 0.0363/0.0320, 0.0079/0.0035) | the instrument's (0.0260/0.0046, 0.0121/0.0107, 0.0354/0.0315, 0.0177/0.0034 with the correction); Toronto 2020–2021 and Rhode Island marked as record | the same rule |
+| 8 | The correction in a new vault; exercise 6 | "was not decisive"; 0.0363 against 0.0079 | decisive; 0.0354 against 0.0177 | the instrument's reading |
+| C | Test count | 415 | 422 | the seven tests of the rebuilt streams |
 | Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
 
 ### Numbers cited without an instrument in this book

@@ -217,6 +217,56 @@ pub fn ece(p: &[f64], y: &[f64]) -> f64 {
     total
 }
 
+/// Simulations and seed of the null ECE, as in Chapter 8.
+const NULL_SIMULATIONS: usize = 2000;
+const NULL_SEED: u64 = 2026;
+
+/// The 95% quantile of the ECE when each outcome is drawn with the chance its own forecast states. The boxes depend
+/// only on the forecasts, so they are built once and each simulation only redraws the outcomes.
+pub fn ece_null_q95(p: &[f64], simulations: usize, seed: u64) -> f64 {
+    let n = p.len();
+    if n == 0 {
+        return 0.0;
+    }
+    let mut idx: Vec<usize> = (0..n).collect();
+    idx.sort_by(|&a, &b| p[a].total_cmp(&p[b]));
+    let mut boxes: Vec<(usize, usize, f64)> = Vec::new();
+    let mut start = 0;
+    for k in 1..=BINS {
+        let mut end = (k * n) / BINS;
+        if k < BINS {
+            while end < n && end > 0 && p[idx[end]] == p[idx[end - 1]] {
+                end += 1;
+            }
+        } else {
+            end = n;
+        }
+        if end > start {
+            let mean_p = idx[start..end].iter().map(|&i| p[i]).sum::<f64>() / (end - start) as f64;
+            boxes.push((start, end, mean_p));
+            start = end;
+        }
+    }
+    let mut state = seed;
+    let mut uniform = || {
+        let v = stochology_core::rng::splitmix64_step(&mut state);
+        (v >> 11) as f64 / (1u64 << 53) as f64
+    };
+    let mut eces: Vec<f64> = (0..simulations)
+        .map(|_| {
+            boxes
+                .iter()
+                .map(|&(s, e, mean_p)| {
+                    let hits = idx[s..e].iter().filter(|&&i| uniform() < p[i]).count() as f64;
+                    (e - s) as f64 / n as f64 * (mean_p - hits / (e - s) as f64).abs()
+                })
+                .sum()
+        })
+        .collect();
+    eces.sort_by(f64::total_cmp);
+    eces[(0.95 * (eces.len() - 1) as f64).round() as usize]
+}
+
 fn brier(p: &[f64], y: &[f64]) -> f64 {
     p.iter().zip(y).map(|(a, b)| (a - b).powi(2)).sum::<f64>() / p.len().max(1) as f64
 }
@@ -229,6 +279,8 @@ pub struct Binary {
     pub citl: f64,
     pub ece: f64,
     pub skill: f64,
+    /// The 95% quantile of the ECE of a perfectly calibrated forecaster with these same forecasts (Chapter 8).
+    pub null_q95: f64,
 }
 
 impl Binary {
@@ -241,6 +293,7 @@ impl Binary {
             citl: mean(p) - mean(y),
             ece: ece(p, y),
             skill: 1.0 - brier(p, y) / reference,
+            null_q95: ece_null_q95(p, NULL_SIMULATIONS, NULL_SEED),
         }
     }
 
@@ -250,11 +303,12 @@ impl Binary {
 
     fn line(&self) -> String {
         format!(
-            "n = {:>6} | rate {:.4} | CITL {:+.4} | ECE {:.4} | skill {:+.4} | gate {}",
+            "n = {:>6} | rate {:.4} | CITL {:+.4} | ECE {:.4} (null q95 {:.4}) | skill {:+.4} | gate {}",
             self.n,
             self.rate,
             self.citl,
             self.ece,
+            self.null_q95,
             self.skill,
             if self.passes() { "PASSES" } else { "FAILS" }
         )
@@ -1028,6 +1082,18 @@ mod tests {
     fn the_chi_square_tail_is_right_at_its_quantiles() {
         assert!((chi2_1_sf(3.841_458_8) - 0.05).abs() < 1e-6);
         assert!((chi2_1_sf(6.634_896_6) - 0.01).abs() < 1e-6);
+    }
+
+    #[test]
+    fn the_null_of_the_ece_shrinks_with_the_size_of_the_vault() {
+        let small: Vec<f64> = (0..1_000)
+            .map(|i| 0.1 + 0.8 * (i % 10) as f64 / 9.0)
+            .collect();
+        let large: Vec<f64> = (0..100_000)
+            .map(|i| 0.1 + 0.8 * (i % 10) as f64 / 9.0)
+            .collect();
+        let (qs, ql) = (ece_null_q95(&small, 400, 7), ece_null_q95(&large, 400, 7));
+        assert!(qs > 0.0 && ql > 0.0 && ql < qs / 5.0, "{qs} {ql}");
     }
 
     #[test]

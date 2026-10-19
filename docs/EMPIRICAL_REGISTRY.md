@@ -100,6 +100,7 @@ sit beside the H3 numbers above, not in their place; where they differ, Appendix
 | Cyclones, 2015–2022 | CITL +0.0002, ECE 0.0121, skill +0.1000, 3 813 observations | `labs --streams` |
 | Toronto, 2001–2002 | CITL +0.0165, ECE 0.0354, 1 488 cases; FPR of the marker 0.155 and 0.164 (Black) against 0.070 and 0.077 (White) | `labs --streams` |
 | Canary | honest clock 0 emissions, gain +0.0000; clock switched off, gain +0.9102, +0.9718, +0.9188 | `labs --streams` |
+| Null q95 of the ECE with the real forecasts (2,000 simulations, seed 2026) | flights 2013 raw 0.0046; flights 2023 corrected 0.0034; cyclones 0.0107; Toronto 0.0315 | `labs --streams` |
 
 ## Recipes of the course examples (2026-10-19)
 

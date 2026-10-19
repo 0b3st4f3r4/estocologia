@@ -170,6 +170,10 @@ RETIRED = [
     ("about 12\nrounds", "ln N over the gap gives 23 and 136"),
     ("1.488 cases", "a thousands separator"),
     ("31.919 sessions", "a thousands separator"),
+    # The chapters teach with the instrument's numbers (Appendix E, the real streams).
+    ("coverage of 90% = 0.887", "the rebuilt energy stream covers 0.886"),
+    ("**was not decisive** for passing", "in the rebuild the 2023 correction is decisive"),
+    ("Its ECE of 0.0363 sits", "the rebuilt Toronto vault has ECE 0.0354"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")
