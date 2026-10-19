@@ -16,6 +16,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
 | `labs --mc-error` | The Monte Carlo error of every simulated number a reading of the book depends on |
 | `labs --propagate` | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |
+| `labs --passk` | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -324,6 +325,76 @@ sensitivities at the mean: dW/dlambda = +3.750 min per arrival/h, dW/dmu = -3.33
   Monte Carlo: mean 10.52 | median 9.99 | sd 2.98 | q95 15.90 | P(W > 20) = 0.0107 (MC sd 0.0002) | days that never clear 0 | decision: promise kept
   budget of the delta variance 6.17 min^2: arrivals 5.06 (82%), pace 7.11 (115%), covariance -6.00 (-97%)
   the linear answer may decide: true (delta and Monte Carlo differ by 0.0107, within half the promise, 0.025)
+~~~
+
+### Reliability is not average success
+
+pass^k over 200 tasks and 8 runs in four declared worlds, with the band of 2,000 repetitions and the three rules sealed in empirical/p25-passk/ before the first run (Chapter 16).
+
+~~~bash
+./target/release/labs --passk
+~~~
+
+~~~text
+== Reliability is not average success: pass^k against the heterogeneity of the tasks ==
+200 tasks, 8 runs of each; pass^k = mean over tasks of C(c, k) / C(8, k); 2000 replicates of the whole experiment, seed 2026
+
+-- world A, every task at 0.5 --
+   k | first run: pass^k  (pass^1)^k | 95% band of pass^k  | exact E[p^k] | 95% band of the gap
+   1 |          0.5025      0.5025  | [0.4769; 0.5231]  |     0.5000   | [+0.0000; +0.0000]
+   2 |          0.2520      0.2525  | [0.2266; 0.2748]  |     0.2500   | [-0.0065; +0.0066]
+   3 |          0.1260      0.1269  | [0.1050; 0.1462]  |     0.1250   | [-0.0099; +0.0104]
+   4 |          0.0626      0.0638  | [0.0469; 0.0796]  |     0.0625   | [-0.0106; +0.0116]
+   5 |          0.0308      0.0320  | [0.0198; 0.0459]  |     0.0312   | [-0.0095; +0.0114]
+   6 |          0.0152      0.0161  | [0.0071; 0.0282]  |     0.0156   | [-0.0080; +0.0109]
+   7 |          0.0081      0.0081  | [0.0019; 0.0187]  |     0.0078   | [-0.0063; +0.0104]
+   8 |          0.0050      0.0041  | [0.0000; 0.0150]  |     0.0039   | [-0.0052; +0.0106]
+  agent card: reliability k = 8; pass^1 0.5025; pass^8 0.0050; read as independent 0.004065; ratio 1.2
+  exact moment inside the band for every k: true | gap band contains 0 for every k >= 2: true | gap band above 0 for every k >= 2: false
+
+-- world B, Beta(2, 2) --
+   k | first run: pass^k  (pass^1)^k | 95% band of pass^k  | exact E[p^k] | 95% band of the gap
+   1 |          0.5312      0.5312  | [0.4637; 0.5375]  |     0.5000   | [+0.0000; +0.0000]
+   2 |          0.3234      0.2822  | [0.2621; 0.3418]  |     0.3000   | [+0.0369; +0.0619]
+   3 |          0.2186      0.1499  | [0.1636; 0.2390]  |     0.2000   | [+0.0546; +0.0941]
+   4 |          0.1614      0.0797  | [0.1084; 0.1794]  |     0.1429   | [+0.0555; +0.1040]
+   5 |          0.1263      0.0423  | [0.0743; 0.1414]  |     0.1071   | [+0.0491; +0.1026]
+   6 |          0.1023      0.0225  | [0.0520; 0.1163]  |     0.0833   | [+0.0399; +0.0963]
+   7 |          0.0844      0.0119  | [0.0375; 0.0988]  |     0.0667   | [+0.0311; +0.0887]
+   8 |          0.0700      0.0063  | [0.0250; 0.0850]  |     0.0545   | [+0.0217; +0.0810]
+  agent card: reliability k = 8; pass^1 0.5312; pass^8 0.0700; read as independent 0.006344; ratio 11.0
+  exact moment inside the band for every k: true | gap band contains 0 for every k >= 2: false | gap band above 0 for every k >= 2: true
+
+-- world C, Beta(0.3, 0.3) --
+   k | first run: pass^k  (pass^1)^k | 95% band of pass^k  | exact E[p^k] | 95% band of the gap
+   1 |          0.5150      0.5150  | [0.4419; 0.5587]  |     0.5000   | [+0.0000; +0.0000]
+   2 |          0.4325      0.2652  | [0.3471; 0.4659]  |     0.4062   | [+0.1406; +0.1708]
+   3 |          0.3920      0.1366  | [0.2996; 0.4192]  |     0.3594   | [+0.2075; +0.2590]
+   4 |          0.3661      0.0703  | [0.2716; 0.3899]  |     0.3294   | [+0.2292; +0.3027]
+   5 |          0.3471      0.0362  | [0.2494; 0.3687]  |     0.3079   | [+0.2305; +0.3218]
+   6 |          0.3321      0.0187  | [0.2334; 0.3518]  |     0.2914   | [+0.2238; +0.3275]
+   7 |          0.3200      0.0096  | [0.2188; 0.3400]  |     0.2782   | [+0.2138; +0.3261]
+   8 |          0.3100      0.0049  | [0.2050; 0.3300]  |     0.2672   | [+0.2037; +0.3213]
+  agent card: reliability k = 8; pass^1 0.5150; pass^8 0.3100; read as independent 0.004948; ratio 62.6
+  exact moment inside the band for every k: true | gap band contains 0 for every k >= 2: false | gap band above 0 for every k >= 2: true
+
+-- world D, Beta(1.4, 0.6) --
+   k | first run: pass^k  (pass^1)^k | 95% band of pass^k  | exact E[p^k] | 95% band of the gap
+   1 |          0.7306      0.7306  | [0.6581; 0.7412]  |     0.7000   | [+0.0000; +0.0000]
+   2 |          0.6032      0.5338  | [0.5093; 0.6100]  |     0.5600   | [+0.0542; +0.0857]
+   3 |          0.5232      0.3900  | [0.4228; 0.5313]  |     0.4760   | [+0.1071; +0.1569]
+   4 |          0.4653      0.2850  | [0.3639; 0.4775]  |     0.4189   | [+0.1471; +0.2095]
+   5 |          0.4193      0.2082  | [0.3213; 0.4371]  |     0.3770   | [+0.1736; +0.2437]
+   6 |          0.3809      0.1521  | [0.2879; 0.4048]  |     0.3447   | [+0.1880; +0.2656]
+   7 |          0.3481      0.1111  | [0.2612; 0.3806]  |     0.3188   | [+0.1924; +0.2798]
+   8 |          0.3200      0.0812  | [0.2400; 0.3600]  |     0.2976   | [+0.1903; +0.2871]
+  agent card: reliability k = 8; pass^1 0.7306; pass^8 0.3200; read as independent 0.081200; ratio 3.9
+  exact moment inside the band for every k: true | gap band contains 0 for every k >= 2: false | gap band above 0 for every k >= 2: true
+
+-- the rules declared before the run --
+  R1, world A: the gap band contains 0 for every k >= 2: holds
+  R2, worlds B, C and D: the gap band lies above 0 for every k >= 2: holds
+  R3, every world: the exact E[p^k] lies inside the band of the estimator for every k: holds
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1325,7 +1396,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 109 tests
+running 112 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1411,6 +1482,9 @@ test fila::tests::working_print ... ok
 test mc_error::tests::clopper_pearson_matches_known_values ... ok
 test mc_error::tests::the_order_interval_brackets_the_quantile ... ok
 test mc_error::tests::the_seeds_are_twenty_and_none_is_the_published_one ... ok
+test passk::tests::jensen_holds_for_the_beta_moments_and_binds_only_without_spread ... ok
+test passk::tests::the_estimator_is_exact_on_known_counts ... ok
+test passk::tests::the_gamma_sampler_has_the_right_mean_below_and_above_one ... ok
 test ponte::tests::a_supported_thesis_without_a_fair_test_is_rejected ... ok
 test ponte::tests::the_choice_is_mechanical_deterministic_and_in_proportion ... ok
 test ponte::tests::the_fair_test_registry_declares_what_is_missing ... ok
@@ -1436,7 +1510,7 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 109 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 112 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1839,7 +1913,8 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p23-onda | DECLARACAO.md | 0dff3c93f89a33a2ea2ac765416572b1a2efcfc459d1dac983eb4cbdf0622615 |
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 | p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
+| p25-passk | DECLARACAO.md | fb241c94a4f1a76a915c157510aa574e072c67abb59bfa99c6d85675c9be7c81 |
 
-Point declarations: 28, of which 8 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 29, of which 8 are declaration 2 or later (declared rectification with both values) | empirical points: 21 | `labs` instruments: 24 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **6654 lines** and **92188 words**, sha256 `f57f6f3c2760bc883ff0d4edb9864f1295f1e07378e01658d4ae501a9306ae40`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6742 lines** and **93927 words**, sha256 `ff9bbefaabccf0776b6e215cae4751a0bde98e254087e4f6234e73d62c6e6a2c`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
