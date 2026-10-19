@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 222 lines**, **84 921 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 265 lines**, **85 797 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 222 lines and 84 921 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 265 lines and 85 797 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -333,3 +333,24 @@ arXiv and PMLR. The dated record is `history/estado-2026-10-19T1307Z.md`.
 | bibliography | 77 lines (50 checked, 27 to check) | 77 lines (74 checked, 3 to check) |
 | cited blocks, reimplementation | 31 blocks, 462 quantities | unchanged, under the new numbers |
 | assembled book, line count | 6 188 (with 84 273 words) | 6 222 (with 84 921 words) |
+
+## The remaining points (2026-10-19, later the same day)
+
+A last pass on the points the critical reading had left open, by the owner's decision of the same day. Five worked
+examples of the course gained a recipe and a check (`scripts/reimplementation/recipes.py`, recorded in
+`docs/EMPIRICAL_REGISTRY.md`); four of them corrected the printed value (0.85% to 0.87%, 0.084 to 0.085, 16% to 15%,
+12 and 112 rounds to 23 and 136). The six that could not be reconstructed lost their numbers and kept their argument.
+The paths of the research record left Chapters 13 and 14 for Appendix E; "textbook" left the living documents (the
+file name stays, because the build, the seals and the site read it); Chapter 19 was retitled; the dictionary was put
+in alphabetical order; the last three references were checked, so all 77 lines of the bibliography are. The real
+datasets of Chapters 19 and 20 were not brought into `data/`: what they need is not the data but an instrument that
+redoes the retired analyses in Rust. The dated record is `history/estado-2026-10-19T1335Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| reimplementation | 462 quantities: 459 agree, 3 open | 475 quantities: 472 agree, 3 open |
+| course examples without a recipe | 11 | none with a number in the text: 5 recipes written, 6 cut |
+| bibliography | 77 lines (74 checked, 3 to check) | 77 lines, all checked (Platt 1999 against a secondary source) |
+| `scripts/book/check_book.py` | refuses 41 retired values | refuses 49 |
+| assembled book, line count | 6 222 (with 84 921 words) | 6 265 (with 85 797 words) |
+

@@ -84,6 +84,24 @@ measurement remains without an instrument — declaration 2 of `empirical/p14-h3
 | Human elicitation (SHELF), second domain: `h2/direito_prisoes` — pre-test approved **at both gates** (skill 0.973 and ECE 0.0450), confirmed quintiles (mean −0.4639 and SD 0.4715 on the log odds-ratio scale, versus −0.3546/0.2833 for the package and −0.3482/0.1046 for the literature) | **R** / **P** | pre-test, fitting, and control checks in Rust (`labs --preteste` and `labs --elicitacao --escala log`); running the funnel with the elicited prior uses the retired p05 copy (**P**): the domain is **rejected at F4** under all three priors — elicitation does not change the action — and what it moves is EVPI, from 0.541955 (package) and 0.009989 (literature) to 1.054148 (elicited), with the posterior mean shifting from −0.729791 to −0.752532 and the posterior/prior SD ratio from 0.275878 to 0.169906. Incomplete panel: 1 of 3, and the expert is the program author | `empirical/p12-shelf/`, `governance/RELEITURA.md` |
 | Human elicitation (SHELF): one expert interviewed in domain `h2/desenvolvimento_preston`; pre-test approved at the adjusted gate (skill 0.65 and ECE 0.2250) and five quantiles confirmed (mean 3.25 and SD 2.2239, versus 6.5 and 2.2239 for the package and 1.536 and 2.6034 for the literature) | **R** / **P** | pre-test, fitting, and control checks in Rust (`labs --preteste` and `labs --elicitacao`); passing through the funnel with the elicited prior runs the retired p05 copy, tagged **P** — `P(adotar compensa)` 0.418875 and F8 action `manter`, versus 0.565375 (`adotar`) for the package and 0.366375 (`manter`) for the literature, both reproduced by the same command. Incomplete panel: 1 of 3, and the expert is the program author | `empirical/p12-shelf/`, `governance/RELEITURA.md` |
 
+## Recipes of the course examples (2026-10-19)
+
+Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument
+is `scripts/reimplementation/recipes.py`, run by `scripts/reimplementation/run.py` inside `scripts/verify.sh`. Every
+account is exact or analytic. The examples that could not be reconstructed were cut from the text, with their earlier
+values in Appendix E.
+
+| Number | Chapter | Recipe | Value |
+| --- | --- | --- | --- |
+| Null paths of a 0.6 coin that reach 20 decibans in 500 tosses | 3 | exact, toss by toss | 0.87% (the text said 0.85% in simulation) |
+| Forecast of whoever ignores the base rate, after a positive and a negative | 7 | mammography test, prior one half | 0.909 and 0.099 |
+| Brier at prevalence 1%: ignoring, using the base rate | 7 | same test | 0.083 and 0.009 |
+| Brier at prevalence 33%: insisting on 1%, ignoring | 7 | same test | 0.28 and 0.085 (the text said 0.084) |
+| Full Kelly on a chance estimated from 25 rounds: share with negative growth | 10 | even odds, chance 0.6, exact binomial | 15% from 18 of 25 (the text said 16%) |
+| Half Kelly against full Kelly | 10 | even odds, chance 0.6 | 75% of the growth |
+| Three players who pool, Peters coin | 10 | mean log of the average of three factors | 1.6% per round |
+| Horizon of the ensemble mean of N trajectories | 10 | ln N / (ln E[M] − E[ln M]) | 23 rounds for 10, 136 for a million (the text said 12 and 112) |
+
 ## Where the Sources Live
 
 | Source | Location |

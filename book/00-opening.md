@@ -109,7 +109,7 @@ included. The first can be read without the second; the second leans on the firs
 | 16 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
 | 17 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
 | 18 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
-| 19 | Seven rounds of ICP | five honest failures; light, heart and yeast |
+| 19 | Seven rounds of ICP | five honest failures; light, heart and yeast; a gate that its first declared version does not pass |
 | 20 | The live clock | zero leakage with a canary; Goodhart measured; three vaults |
 | 21 | The seven lessons and the final project | the lessons with their conditions; objections; the resolution axis; the final project |
 
