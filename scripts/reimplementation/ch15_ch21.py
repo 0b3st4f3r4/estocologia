@@ -1,7 +1,7 @@
-"""Chapters 12, 13, 15, 20 and 21: the accounts that the text states in full.
+"""Chapters 15, 16, 18, 20 and 21: the accounts that the text states in full.
 
-Chapter 12: the EVPI of the sensor, as E_state[max_act payoff] - max_act E_state[payoff] (Chapter 11's definition).
-Chapter 13: the closed form of the Beta(4, 8) mean. Chapter 15: the SHA-256 test vectors. Chapter 20: the arithmetic
+Chapter 15: the EVPI of the sensor, as E_state[max_act payoff] - max_act E_state[payoff] (Chapter 11's definition).
+Chapter 16: the closed form of the Beta(4, 8) mean. Chapter 18: the SHA-256 test vectors. Chapter 20: the arithmetic
 that ties the printed Brier scores, rates and skills together. Chapter 21: the count of the verifier's rejections.
 
 Since 2026-10-19 the chapters state the recipes of the Hill series (12), the System 1 triage (13), the property test
@@ -24,17 +24,17 @@ def evpi(actions: list[list[float]], probs: list[float]) -> tuple[float, float, 
 
 probs = [0.7, 0.3]
 without, with_info, value = evpi([[10, -4], [0, 0]], probs)
-check("12", "sensor: best act without information", 5.8, without, 1e-9)
-check("12", "sensor: value with perfect information", 7.0, with_info, 1e-9)
-check("12", "sensor: EVPI (act or not act)", 1.2, value, 1e-9)
-check("12", "sensor: EVPI with only half the stake", 0.6, evpi([[5, -2], [0, 0]], probs)[2], 1e-9)
-check("12", "useless sensor: EVPI", 0.0, evpi([[10, 10], [0, 0]], probs)[2], 1e-9)
+check("15", "sensor: best act without information", 5.8, without, 1e-9)
+check("15", "sensor: value with perfect information", 7.0, with_info, 1e-9)
+check("15", "sensor: EVPI (act or not act)", 1.2, value, 1e-9)
+check("15", "sensor: EVPI with only half the stake", 0.6, evpi([[5, -2], [0, 0]], probs)[2], 1e-9)
+check("15", "useless sensor: EVPI", 0.0, evpi([[10, 10], [0, 0]], probs)[2], 1e-9)
 
-check("13", "Beta(4, 8) mean, closed form", 0.3333, 4 / 12, 5e-5)
+check("16", "Beta(4, 8) mean, closed form", 0.3333, 4 / 12, 5e-5)
 
-check("15", 'sha256("") prefix as integer', int("e3b0c44298fc1c14", 16),
+check("18", 'sha256("") prefix as integer', int("e3b0c44298fc1c14", 16),
       int(hashlib.sha256(b"").hexdigest()[:16], 16), 0)
-check("15", 'sha256("abc") prefix as integer', int("ba7816bf8f01cfea", 16),
+check("18", 'sha256("abc") prefix as integer', int("ba7816bf8f01cfea", 16),
       int(hashlib.sha256(b"abc").hexdigest()[:16], 16), 0)
 
 vault_rate, dev_rate, train_rate = 0.0220, 0.0222, 0.0352
@@ -56,15 +56,15 @@ import statistics as st  # noqa: E402
 
 from common import logistic_irls, sigmoid  # noqa: E402
 
-# Chapter 12: Hill on 20,000 draws of a Pareto with alpha = 1.81 (this module's own draws)
+# Chapter 15: Hill on 20,000 draws of a Pareto with alpha = 1.81 (this module's own draws)
 rng = random.Random(1909)
 series = sorted(((1 - rng.random()) ** (-1 / 1.81) for _ in range(20_000)), reverse=True)
 for k, book in [(250, 1.8444), (500, 1.7901), (1000, 1.7949), (2000, 1.8032)]:
     hill = 1 / (sum(math.log(series[i] / series[k]) for i in range(k)) / k)
     # three standard errors of Hill, alpha / sqrt(k), cover the difference between two independent draws
-    check("12", f"Hill of the Pareto series, k = {k}", book, hill, 3 * 1.81 / math.sqrt(k) * math.sqrt(2), "simulated")
+    check("15", f"Hill of the Pareto series, k = {k}", book, hill, 3 * 1.81 / math.sqrt(k) * math.sqrt(2), "simulated")
 
-# Chapter 13: the deterministic triage of System 1, exactly
+# Chapter 16: the deterministic triage of System 1, exactly
 MASK = (1 << 64) - 1
 
 
@@ -81,19 +81,19 @@ for byte in b"h3.voos":
     state = (state * 1_099_511_628_211 + byte) & MASK
 _, value = splitmix64(state)
 first = (value % 99 + 1) / 100
-check("13", "System 1 triage of h3.voos: first probability", 0.06, first, 1e-12)
-check("13", "System 1 triage of h3.voos: second probability", 0.94, 1 - first, 1e-12)
+check("16", "System 1 triage of h3.voos: first probability", 0.06, first, 1e-12)
+check("16", "System 1 triage of h3.voos: second probability", 0.94, 1 - first, 1e-12)
 
-# Chapter 14: the bounds of the property test
-check("14", "property test: smallest possible margin", 0.00617, 1.96 * math.sqrt(0.01 * 0.99 / 999), 5e-6)
-check("14", "property test: largest possible margin (n = 100, p = 0.5)", 0.098, 1.96 * math.sqrt(0.25 / 100), 1e-12)
+# Chapter 17: the bounds of the property test
+check("17", "property test: smallest possible margin", 0.00617, 1.96 * math.sqrt(0.01 * 0.99 / 999), 5e-6)
+check("17", "property test: largest possible margin (n = 100, p = 0.5)", 0.098, 1.96 * math.sqrt(0.25 / 100), 1e-12)
 rng = random.Random(2026)
 margins = [1.96 * math.sqrt(p * (1 - p) / n) for n, p in
            ((rng.randrange(100, 1000), rng.randrange(1, 100) / 100) for _ in range(10_000))]
-check("14", "property test: violations of [0; 0.5]", 0, sum(not 0 <= m <= 0.5 for m in margins), 0)
-check("14", "property test: observed maximum near the bound", 0.09798, max(margins), 0.002, "simulated")
+check("17", "property test: violations of [0; 0.5]", 0, sum(not 0 <= m <= 0.5 for m in margins), 0)
+check("17", "property test: observed maximum near the bound", 0.09798, max(margins), 0.002, "simulated")
 
-# Chapter 15: the chain and the Merkle root, exactly
+# Chapter 18: the chain and the Merkle root, exactly
 sha = lambda s: hashlib.sha256(s.encode()).hexdigest()  # noqa: E731
 events = [("h3.voos", "ECE=0.0048"), ("h3.bolsa", "mediana=2.1x"), ("h3.energia", "canario=ok"),
           ("h3.prisoes", "ECE=0.036"), ("h3.ri", "ECE=0.0048 habilidade=0.019")]
@@ -109,17 +109,17 @@ def merkle(level: list[str]) -> str:
     return level[0]
 
 
-check("15", "event 0 hash (first 8 hex digits as integer)", int("902e82d6", 16), int(hashes[0][:8], 16), 0)
-check("15", "Merkle root of the textbook chain (first 8 hex digits as integer)", int("92f2ab76", 16),
+check("18", "event 0 hash (first 8 hex digits as integer)", int("902e82d6", 16), int(hashes[0][:8], 16), 0)
+check("18", "Merkle root of the textbook chain (first 8 hex digits as integer)", int("92f2ab76", 16),
       int(merkle(hashes)[:8], 16), 0)
 corpus = ["ficha=h0.posto-saude|decisao=abrir uma segunda sala", "ficha=h0.banco-2003|decisao=reforcar o atendimento",
           "ficha=h1.a-multiplicativo|decisao=reduzir a alavancagem", "ficha=h1.b-lalonde|decisao=manter o programa",
           "ficha=h1.c-incendios|decisao=triplicar a aposta", "ficha=h3.voos23|decisao=manter o modelo",
           "ficha=h3.prisoes|decisao=trocar o cofre"]
 leaves = [sha(c) for c in corpus]
-check("15", "Merkle root of the batch of 7 cards (first 8 hex digits as integer)", int("17679ce1", 16),
+check("18", "Merkle root of the batch of 7 cards (first 8 hex digits as integer)", int("17679ce1", 16),
       int(merkle(leaves)[:8], 16), 0)
-check("15", "declared limit: repeating the last card keeps the root (1 if so)", 1,
+check("18", "declared limit: repeating the last card keeps the root (1 if so)", 1,
       int(merkle(leaves) == merkle(leaves + leaves[-1:])), 0)
 
 # Chapter 20: the canary, with the covariates grouped into cells (they are binary)

@@ -1,4 +1,4 @@
-"""Chapter 17: leverage on the Dow Jones and the LaLonde decomposition, from the text and the data files.
+"""Chapter 13: leverage on the Dow Jones and the LaLonde decomposition, from the text and the data files.
 
 Every number here is a deterministic account on data/djia_1885_2023.csv, data/nsw_experimental.csv and
 data/cps_observational.csv, except the claim world, which resamples years with Python's own generator.
@@ -42,25 +42,25 @@ per_year = len(train) / len(years)
 mu = st.mean(r for _, r in train)
 sigma = st.pstdev(r for _, r in train)
 
-check("17", "sessions in the whole series", 37930, len(returns), 0)
-check("17", "sessions in the training set", 31919, len(train), 0)
-check("17", "daily arithmetic mean", 0.000240669, mu, 5e-10)
-check("17", "arithmetic mean per year", 0.0668, mu * per_year, 5e-5)
-check("17", "daily sd", 0.010496, sigma, 5e-7)
-check("17", "sd per year", 0.1749, sigma * math.sqrt(per_year), 5e-5)
+check("13", "sessions in the whole series", 37930, len(returns), 0)
+check("13", "sessions in the training set", 31919, len(train), 0)
+check("13", "daily arithmetic mean", 0.000240669, mu, 5e-10)
+check("13", "arithmetic mean per year", 0.0668, mu * per_year, 5e-5)
+check("13", "daily sd", 0.010496, sigma, 5e-7)
+check("13", "sd per year", 0.1749, sigma * math.sqrt(per_year), 5e-5)
 
 growth = {L: st.mean(math.log(1 + L * r) for _, r in train) * per_year for L in (1, 2, 3)}
 for L, g_book, drag_book, pred_book in [(1, 0.0515, 0.0153, 0.0153), (2, 0.0719, 0.0617, 0.0612),
                                         (3, 0.0601, 0.1403, 0.1376)]:
-    check("17", f"time growth per year at {L}x", g_book, growth[L], 5e-5)
-    check("17", f"observed drag per year at {L}x", drag_book, L * mu * per_year - growth[L], 5e-5)
-    check("17", f"drag predicted by L^2 sigma^2 / 2 at {L}x", pred_book, L * L * sigma**2 / 2 * per_year, 5e-5)
+    check("13", f"time growth per year at {L}x", g_book, growth[L], 5e-5)
+    check("13", f"observed drag per year at {L}x", drag_book, L * mu * per_year - growth[L], 5e-5)
+    check("13", f"drag predicted by L^2 sigma^2 / 2 at {L}x", pred_book, L * L * sigma**2 / 2 * per_year, 5e-5)
 
 worst_day, worst = min(train, key=lambda x: x[1])
-check("17", "worst session (return)", -0.2261, worst, 5e-5)
-check("17", "worst session is 1987-10-19 (1 if so)", 1, int(worst_day == "1987-10-19"), 0)
-check("17", "loss of the worst session at 3x", 0.678, 3 * abs(worst), 5e-4)
-check("17", "daily ruin leverage 1/|min r|", 4.42, 1 / abs(worst), 5e-3)
+check("13", "worst session (return)", -0.2261, worst, 5e-5)
+check("13", "worst session is 1987-10-19 (1 if so)", 1, int(worst_day == "1987-10-19"), 0)
+check("13", "loss of the worst session at 3x", 0.678, 3 * abs(worst), 5e-4)
+check("13", "daily ruin leverage 1/|min r|", 4.42, 1 / abs(worst), 5e-3)
 
 
 def held(first: str, last: str, L: float) -> float:
@@ -75,13 +75,13 @@ def held(first: str, last: str, L: float) -> float:
     return w
 
 
-check("17", "calendar 1929-1932 at 1x (capital left)", 0.19521, held("1929-01-01", "1932-12-31", 1), 5e-6)
-check("17", "calendar 1929-1932 at 3x (capital left)", 0.00088, held("1929-01-01", "1932-12-31", 3), 5e-6)
-check("17", "peak to trough 1929-09-03 to 1932-07-08 at 1x", 0.10814, held("1929-09-03", "1932-07-08", 1), 5e-6)
-check("17", "peak to trough 1929-09-03 to 1932-07-08 at 3x", 0.00025, held("1929-09-03", "1932-07-08", 3), 5e-6)
+check("13", "calendar 1929-1932 at 1x (capital left)", 0.19521, held("1929-01-01", "1932-12-31", 1), 5e-6)
+check("13", "calendar 1929-1932 at 3x (capital left)", 0.00088, held("1929-01-01", "1932-12-31", 3), 5e-6)
+check("13", "peak to trough 1929-09-03 to 1932-07-08 at 1x", 0.10814, held("1929-09-03", "1932-07-08", 1), 5e-6)
+check("13", "peak to trough 1929-09-03 to 1932-07-08 at 3x", 0.00025, held("1929-09-03", "1932-07-08", 3), 5e-6)
 
 kelly = max((st.mean(math.log(1 + L * r) for _, r in train), L) for L in [i / 100 for i in range(100, 400)])[1]
-check("17", "empirical Kelly leverage of the series", 2.14, kelly, 0.005)
+check("13", "empirical Kelly leverage of the series", 2.14, kelly, 0.005)
 
 # 20-year cohorts on the first session of each month
 dates = [d for d, _ in train]
@@ -109,10 +109,10 @@ def cohorts(L: float) -> list[float]:
 for L, n_book, med, mean, above in [(1, 1134, 2.13, 2.9, 0.9577), (2, 1134, 2.67, 7.8, 0.7848),
                                      (3, 1134, 2.10, 19.1, 0.6429)]:
     c = cohorts(L)
-    check("17", f"cohorts at {L}x: count", n_book, len(c), 1)
-    check("17", f"cohorts at {L}x: median wealth", med, st.median(c), 0.02)
-    check("17", f"cohorts at {L}x: mean wealth", mean, st.mean(c), 0.15)
-    check("17", f"cohorts at {L}x: share above the start", above, sum(x > 1 for x in c) / len(c), 0.003)
+    check("13", f"cohorts at {L}x: count", n_book, len(c), 1)
+    check("13", f"cohorts at {L}x: median wealth", med, st.median(c), 0.02)
+    check("13", f"cohorts at {L}x: mean wealth", mean, st.mean(c), 0.15)
+    check("13", f"cohorts at {L}x: share above the start", above, sum(x > 1 for x in c) / len(c), 0.003)
 
 # cohorts per unit-year and the claim world
 by_year: dict[str, list[float]] = {}
@@ -126,14 +126,14 @@ def above_share(annual: list[float]) -> float:
 
 
 for L, book in [(1, 0.9583), (3, 0.6458)]:
-    check("17", f"unit-year cohorts above the start at {L}x", book,
+    check("13", f"unit-year cohorts above the start at {L}x", book,
           above_share([sum(math.log(1 + L * r) for r in v) for v in by_year.values()]), 5e-5)
 arith3 = [3 * sum(v) for v in by_year.values()]
 rng = random.Random(1885)
 shares = sorted(above_share([rng.choice(arith3) for _ in arith3]) for _ in range(2000))
-check("17", "claim world: mean share above the start", 0.9286, st.mean(shares), 0.01, "simulated")
-check("17", "claim world: 1% quantile", 0.6354, shares[20], 0.03, "simulated")
-check("17", "claim world: p(share <= 0.6458)", 0.0140, sum(s <= 0.6458 for s in shares) / len(shares), 0.008,
+check("13", "claim world: mean share above the start", 0.9286, st.mean(shares), 0.01, "simulated")
+check("13", "claim world: 1% quantile", 0.6354, shares[20], 0.03, "simulated")
+check("13", "claim world: p(share <= 0.6458)", 0.0140, sum(s <= 0.6458 for s in shares) / len(shares), 0.008,
       "simulated")
 
 # LaLonde
@@ -146,25 +146,25 @@ controls = [r for r in nsw if r["treat"] == "0"]
 emp = lambda g, k: st.mean(float(r[k]) > 0 for r in g)  # noqa: E731
 inc = lambda g, k: st.mean(float(r[k]) for r in g)  # noqa: E731
 
-check("17", "NSW treated", 185, len(treated), 0)
-check("17", "NSW randomised controls", 260, len(controls), 0)
-check("17", "CPS observations", 15992, len(cps), 0)
+check("13", "NSW treated", 185, len(treated), 0)
+check("13", "NSW randomised controls", 260, len(controls), 0)
+check("13", "CPS observations", 15992, len(cps), 0)
 for name, group, b_emp, b_inc in [("NSW treated", treated, 0.757, 6349), ("NSW controls", controls, 0.646, 4555),
                                   ("CPS", cps, 0.864, 14847)]:
-    check("17", f"employment 1978, {name}", b_emp, emp(group, "re78"), 5e-4)
-    check("17", f"mean income 1978, {name} (US$)", b_inc, inc(group, "re78"), 0.5)
+    check("13", f"employment 1978, {name}", b_emp, emp(group, "re78"), 5e-4)
+    check("13", f"mean income 1978, {name} (US$)", b_inc, inc(group, "re78"), 0.5)
 experiment = emp(treated, "re78") - emp(controls, "re78")
 raw = emp(treated, "re78") - emp(cps, "re78")
-check("17", "experiment: employment difference", 0.111, experiment, 5e-4)
-check("17", "experiment: income difference (US$)", 1794, inc(treated, "re78") - inc(controls, "re78"), 0.5)
-check("17", "raw comparison: employment difference", -0.107, raw, 5e-4)
-check("17", "raw comparison: income difference (US$)", -8498, inc(treated, "re78") - inc(cps, "re78"), 0.5)
-check("17", "implied selection bias: employment", -0.218, raw - experiment, 5e-4)
-check("17", "implied selection bias: income (US$)", -10292,
+check("13", "experiment: employment difference", 0.111, experiment, 5e-4)
+check("13", "experiment: income difference (US$)", 1794, inc(treated, "re78") - inc(controls, "re78"), 0.5)
+check("13", "raw comparison: employment difference", -0.107, raw, 5e-4)
+check("13", "raw comparison: income difference (US$)", -8498, inc(treated, "re78") - inc(cps, "re78"), 0.5)
+check("13", "implied selection bias: employment", -0.218, raw - experiment, 5e-4)
+check("13", "implied selection bias: income (US$)", -10292,
       (inc(treated, "re78") - inc(cps, "re78")) - (inc(treated, "re78") - inc(controls, "re78")), 0.5)
 for name, group, book in [("NSW treated", treated, 0.400), ("NSW controls", controls, 0.315), ("CPS", cps, 0.891)]:
-    check("17", f"1975 placebo employment, {name}", book, emp(group, "re75"), 5e-4)
-check("17", "1975 placebo raw difference treated - CPS", -0.491, emp(treated, "re75") - emp(cps, "re75"), 5e-4)
+    check("13", f"1975 placebo employment, {name}", book, emp(group, "re75"), 5e-4)
+check("13", "1975 placebo raw difference treated - CPS", -0.491, emp(treated, "re75") - emp(cps, "re75"), 5e-4)
 
 
 def wald(a: list, b: list, key: str) -> tuple[float, float, float]:
@@ -178,9 +178,9 @@ for what, (est, lo, hi), book in [
     ("randomised experiment", wald(treated, controls, "re78"), (11.1, 2.6, 19.6)),
     ("1975 placebo, experiment", wald(treated, controls, "re75"), (8.5, -0.6, 17.5)),
 ]:
-    check("17", f"{what}: estimate (points)", book[0], 100 * est, 0.05)
-    check("17", f"{what}: 95% interval, lower (points)", book[1], 100 * lo, 0.1)
-    check("17", f"{what}: 95% interval, upper (points)", book[2], 100 * hi, 0.1)
+    check("13", f"{what}: estimate (points)", book[0], 100 * est, 0.05)
+    check("13", f"{what}: 95% interval, lower (points)", book[1], 100 * lo, 0.1)
+    check("13", f"{what}: 95% interval, upper (points)", book[2], 100 * hi, 0.1)
 
 # ------------------------------------------------------------------ the propensity fit, from the recipe of Step 2
 from common import beta_from_quantiles, logistic_irls, normal_cdf, sigmoid  # noqa: E402
@@ -205,13 +205,13 @@ w = [e / (1 - e) for e in score]
 ctrl = [i for i, ti in enumerate(t_obs) if ti == 0]
 trt = [i for i, ti in enumerate(t_obs) if ti == 1]
 ess = sum(w[i] for i in ctrl) ** 2 / sum(w[i] ** 2 for i in ctrl)
-check("17", "propensity fit: effective controls (Kish)", 103, ess, 0.6)
-check("17", "propensity fit: CPS below the smallest treated score (%)", 72,
+check("13", "propensity fit: effective controls (Kish)", 103, ess, 0.6)
+check("13", "propensity fit: CPS below the smallest treated score (%)", 72,
       100 * sum(score[i] < min(score[j] for j in trt) for i in ctrl) / len(ctrl), 0.6)
 y78 = [1.0 if float(r["re78"]) > 0 else 0.0 for r in sample]
 weighted = lambda y, idx: sum(w[i] * y[i] for i in idx) / sum(w[i] for i in idx)  # noqa: E731
 att_ipw = st.mean(y78[i] for i in trt) - weighted(y78, ctrl)
-check("17", "propensity fit: weighted point estimate (points)", 9.0, 100 * att_ipw, 0.06)
+check("13", "propensity fit: weighted point estimate (points)", 9.0, 100 * att_ipw, 0.06)
 
 # the four-cell posterior, standardised to the treated's racial composition (156 of 185 black)
 prior_a, prior_b = beta_from_quantiles({0.25: 0.43333, 0.5: 0.53333, 0.75: 0.63333})
@@ -231,9 +231,9 @@ w_black = 156 / 185
 draws = sorted(w_black * (rng_post.betavariate(*cells[(1, 1)]) - rng_post.betavariate(*cells[(0, 1)]))
                + (1 - w_black) * (rng_post.betavariate(*cells[(1, 0)]) - rng_post.betavariate(*cells[(0, 0)]))
                for _ in range(40000))
-check("17", "propensity fit: posterior mean of the effect (points)", 9.6, 100 * st.mean(draws), 0.25, "simulated")
-check("17", "propensity fit: 95% interval, lower (points)", -0.6, 100 * draws[1000], 0.4, "simulated")
-check("17", "propensity fit: 95% interval, upper (points)", 20.8, 100 * draws[39000], 0.9, "simulated")
+check("13", "propensity fit: posterior mean of the effect (points)", 9.6, 100 * st.mean(draws), 0.25, "simulated")
+check("13", "propensity fit: 95% interval, lower (points)", -0.6, 100 * draws[1000], 0.4, "simulated")
+check("13", "propensity fit: 95% interval, upper (points)", 20.8, 100 * draws[39000], 0.9, "simulated")
 
 # a treatment with no effect, run through the same weighting (normal approximation of its replicas)
 outcome_beta = logistic_irls([X[i] for i in ctrl], [y78[i] for i in ctrl], ridge=1e-3)
@@ -242,10 +242,10 @@ null_mean = st.mean(p_null[i] for i in trt) - weighted(p_null, ctrl)
 w_ctrl = sum(w[i] for i in ctrl)
 null_sd = math.sqrt(sum(p_null[i] * (1 - p_null[i]) for i in trt) / len(trt) ** 2
                     + sum(w[i] ** 2 * p_null[i] * (1 - p_null[i]) for i in ctrl) / w_ctrl ** 2)
-check("17", "inert treatment: centre of the band (points)", 0.9, 100 * null_mean, 0.1)
-check("17", "inert treatment: band, lower (points)", -10.3, 100 * (null_mean - 1.96 * null_sd), 0.5)
-check("17", "inert treatment: band, upper (points)", 11.9, 100 * (null_mean + 1.96 * null_sd), 0.5)
-check("17", "inert treatment: one-sided p of the observed", 0.08, 1 - normal_cdf((att_ipw - null_mean) / null_sd), 0.015)
+check("13", "inert treatment: centre of the band (points)", 0.9, 100 * null_mean, 0.1)
+check("13", "inert treatment: band, lower (points)", -10.3, 100 * (null_mean - 1.96 * null_sd), 0.5)
+check("13", "inert treatment: band, upper (points)", 11.9, 100 * (null_mean + 1.96 * null_sd), 0.5)
+check("13", "inert treatment: one-sided p of the observed", 0.08, 1 - normal_cdf((att_ipw - null_mean) / null_sd), 0.015)
 
 # the 1975 placebo: the score without the 1975 terms, employment in 1975 as the outcome
 Xp = [covariates(r, placebo=True) for r in sample]
@@ -254,9 +254,9 @@ score_p = [sigmoid(sum(b * x for b, x in zip(beta_p, row))) for row in Xp]
 wp = [e / (1 - e) for e in score_p]
 y75 = [1.0 if float(r["re75"]) > 0 else 0.0 for r in sample]
 placebo = st.mean(y75[i] for i in trt) - sum(wp[i] * y75[i] for i in ctrl) / sum(wp[i] for i in ctrl)
-check("17", "propensity placebo, 1975 employment (points)", -12.3, 100 * placebo, 0.06)
+check("13", "propensity placebo, 1975 employment (points)", -12.3, 100 * placebo, 0.06)
 
 missing = "recipe longer than a paragraph; cited from the research record (commit 1bfec905)"
-open_choice("17", "posterior 90% interval of Kelly, upper end", 3.44, missing)
-open_choice("17", "skill of the model in the vault", 0.18, missing)
-open_choice("17", "false negative rate, Hispanics", 0.72, missing)
+open_choice("13", "posterior 90% interval of Kelly, upper end", 3.44, missing)
+open_choice("13", "skill of the model in the vault", 0.18, missing)
+open_choice("13", "false negative rate, Hispanics", 0.72, missing)

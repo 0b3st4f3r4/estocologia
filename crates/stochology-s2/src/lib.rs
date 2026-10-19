@@ -1,7 +1,7 @@
 //! stochology-s2 — the deliberative System 2: tree search, belief state, inference and stress.
 //!
 //! System 1 (deterministic triage, O(1)) lives in `stochology-core/src/s1.rs` and closes the error family
-//! of a card. System 2 is the slow mode that docs/PLAN.md §4 and Chapter 13 declare: **LATS** (tree search
+//! of a card. System 2 is the slow mode that docs/PLAN.md §4 and Chapter 16 declare: **LATS** (tree search
 //! with estimate) plus the **belief-state engine** over the hypergraph, and the fronts that demand
 //! deliberation — heavy inference (MCMC) and adversarial stress.
 //!

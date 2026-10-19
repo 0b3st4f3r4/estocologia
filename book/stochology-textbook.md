@@ -1,6 +1,9 @@
-# Stochology: A Textbook
+# Stochology: Judgement and Decision under Uncertainty
 
 **21 chapters** · five parts · a three-step ramp per chapter
+
+A working text, not yet a textbook: its central thesis has had one direct test and its outside audit is still
+open (Preface).
 
 Oct 16, 2026 · Silvano Neto
 
@@ -38,8 +41,7 @@ an invitation to check it, not as a certificate.
 the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
 book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
 yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
-Chapter 17, the skills of the forecasters of Chapter 18, and a handful of worked examples in Chapters 3, 7, 10, 11, 13,
-14 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
+Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 
 **The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
@@ -80,8 +82,12 @@ right, it runs.
 | **I. The art of aiming in the dark** | 1 to 4 | What is it to judge under uncertainty, and where do errors live? |
 | **II. The traps of the world and of the data** | 5 to 8 | Why does the mean lie, how do gigantic samples deceive and how is good forecasting measured? |
 | **III. Cause, time and survival** | 9 to 11 | What is a cause, why does time ruin it and who pays for the error? |
-| **IV. Building the auditable machine** | 12 to 15 | How do you turn that thinking into a machine that audits itself? |
-| **V. The machine in the real world** | 16 to 21 | How does the machine face real data, case by case? |
+| **IV. The method on real data** | 12 to 14 | What do the first three parts change on a queue, a market and a fire insurer? |
+| **V. The auditable machine, built and put to work** | 15 to 21 | How do you turn that thinking into a machine that audits itself, and what happens when it meets the data? |
+
+**Two books in one.** Parts I to IV are the method: the theory and the three real cases where it decides something.
+Part V is the machine: a particular architecture built to audit that method, and its record on real data, failures
+included. The first can be read without the second; the second leans on the first.
 
 | Ch. | Title | Central idea |
 | --- | --- | --- |
@@ -96,13 +102,13 @@ right, it runs.
 | 9 | The ladder of cause and effect | Pearl's three steps; confounder against collider; ICP |
 | 10 | Time and ruin | non-ergodicity; volatility drag; Kelly; wild tails |
 | 11 | The price of error | cost/loss; EVPI; Goodhart; Chouldechova's trilemma; exit clause |
-| 12 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
-| 13 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
-| 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
-| 15 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
-| 16 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
-| 17 | The stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
-| 18 | The Danish fires | wild tail; Laplace; failing your own model is a victory |
+| 12 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
+| 13 | The stock market and the job | 3x leverage; LaLonde; severity that fails the method itself |
+| 14 | The Danish fires | wild tail; Laplace; failing your own model is a victory |
+| 15 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
+| 16 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
+| 17 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
+| 18 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
 | 19 | Seven rounds of ICP | five honest failures; light, heart and yeast |
 | 20 | The live clock | zero leakage with a canary; Goodhart measured; three vaults |
 | 21 | The seven lessons and the final project | the lessons with their conditions; objections; the resolution axis; the final project |
@@ -115,9 +121,9 @@ right, it runs.
 | --- | --- | --- |
 | High School | chapters 1 to 8, only Step 1 and the *Concept* exercises | 8 meetings |
 | Undergraduate | chapters 1 to 11, the three steps, laboratories in Rust | one semester |
-| Data professional | chapters 1, 2, 5, 6, 8, 14, 15 and Part V | four weeks |
-| Whoever wants only the architecture | chapters 2, 12, 13, 14, 15 | two weeks |
-| Whoever wants to see the method in action | the whole of Part V, returning to the foundations when needed | two weeks |
+| Data professional | chapters 1, 2, 5, 6 and 8, Part IV, and chapters 17 to 21 | four weeks |
+| Whoever wants only the architecture | chapters 2, 15, 16, 17 and 18 | two weeks |
+| Whoever wants to see the method in action | Part IV and chapters 19 to 21, returning to the foundations when needed | two weeks |
 
 **How hard each part is.** The promise to the High School reader holds for Step 1 of Parts I and II, and for the
 *Concept* exercises. Step 2 asks for more as the book advances: probability and logarithms from Chapter 3,
@@ -355,7 +361,7 @@ But the world is the other one. Simulated with the same seed, the two worlds giv
 No arithmetic was wrong, and the mean demand is 8 in both worlds. What changed is the **world**. When demand
 oscillates, the queue of a busy day grows much more than the queue of a quiet day shrinks, because waiting time
 grows **on a curve**. The manager decided for a world that does not exist. Chapter 5 explains the curve, and
-Chapter 16 follows the same queue in real data.
+Chapter 12 follows the same queue in real data.
 
 ---
 
@@ -985,7 +991,7 @@ between them is the grain of the question.
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+demand 5 or 11 (the station of Chapter 12): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
    above 30 min: aggregated 0.4488, fine 0.2081
 demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 21.15 min, fine wait 18.38 min, loss 2.77 min
    above 30 min: aggregated 0.2518, fine 0.2198
@@ -1384,7 +1390,7 @@ reads two bits from the sheet, and the panel is therefore a **checklist of safeg
 was declared and anchored, not that it works, and it is not Mayo's severity. Until 2026-10-19 each band printed a
 "severity" from 0 to 10, drawn by a seed inside a range the bits selected; the number added nothing to the bits and
 borrowed the name of Mayo's concept, so it was removed (Appendix E). The attacks that do run (the audit trail
-tampered on purpose, the planted defects) live in the gates of Chapter 14. The rule is hard on purpose. No average of the bands approves anything, and one weak
+tampered on purpose, the planted defects) live in the gates of Chapter 17. The rule is hard on purpose. No average of the bands approves anything, and one weak
 band declared is worth more than uniform work without an admitted gap. No agent approves the
 work it produced. Three failures eliminate the work before any discussion of merit: temporal leakage, a data
 contract violated without treatment, and the absence of a named human owner.
@@ -1799,7 +1805,7 @@ $Y(0)$ without it, and only one is observed. The comparison between the treated 
 $$\mathbb{E}[Y\mid D{=}1]-\mathbb{E}[Y\mid D{=}0] = \underbrace{\mathbb{E}[Y(1)-Y(0)\mid D{=}1]}_{\text{effect on the treated}} + \underbrace{\mathbb{E}[Y(0)\mid D{=}1]-\mathbb{E}[Y(0)\mid D{=}0]}_{\text{selection bias}}$$
 
 When the treatment is **randomised**, the second term is zero by construction, because whoever was drawn
-for the treatment has the same expected $Y(0)$ as whoever was not. Chapter 17 finds this in the
+for the treatment has the same expected $Y(0)$ as whoever was not. Chapter 13 finds this in the
 LaLonde data, where selection bias flips the sign of the effect. The raw comparison gives $-8,498$
 dollars of income in 1978 and the experiment gives $+1,794$; the difference, $-10,292$, is the middle term.
 
@@ -2115,7 +2121,7 @@ Taleb called the first Mediocristan and the last Extremistan, and added the type
 consequence. The "fourth quadrant", where the tail is wild and the loss depends on the size of the event, is
 where models fail most and cost most. The Hill estimator estimates the tail exponent from the
 $k$ largest values, $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$. The Danish fires, with
-$\alpha$ estimated at 1.81 (interval from 1.41 to 2.56), are in that territory (Chapter 18).
+$\alpha$ estimated at 1.81 (interval from 1.41 to 2.56), are in that territory (Chapter 14).
 
 ---
 
@@ -2227,7 +2233,7 @@ in 100,000 sessions the measured growth per session is $+0.000237$ at $1\times$,
 $+0.000339$ at $3\times$: $2\times$ beats $3\times$, as in the real index. The measured drag rises from
 $0.0156$ per year at $1\times$ to $0.0623$ at $2\times$ and $0.1402$ at $3\times$, in the proportion 1 to 4 to 9:
 the drag **grows with the square of the leverage**, which is the signature of $\mu - \tfrac12 \sigma^2 L^2$, and
-the three values reproduce the drags of the real index of Chapter 17. The 1987 crash, alone, takes **67.8%** of the capital at $3\times$ and
+the three values reproduce the drags of the real index of Chapter 13. The 1987 crash, alone, takes **67.8%** of the capital at $3\times$ and
 22.6% at $1\times$; ruin starts at $L = 4.4$. With a crash planted in the middle of 20,000 sessions,
 the growth of $3\times$ falls to $+0.000033$ per session, far below $1\times$ and $2\times$. **A single day changes
 the order**.
@@ -2590,1120 +2596,9 @@ value and equal miss rates cannot coexist with equal false-alarm rates.
 - Fairness requires choosing between incompatible equalities. Equalising the FNR downwards saves 64 misses and costs
   479 false alarms; upwards it saves 237 false alarms and costs 40 misses; who pays is declared before running.
 
-# Part IV. Building the auditable machine
+# Part IV. The method on real data
 
-## Chapter 12. The map of knowledge: the typed hypergraph and the five lenses
-
-**Objectives.** By the end of this chapter you should know how to read the definition $\mathcal{G} = (V, E_{\mathrm{tree}},
-E_{\mathrm{graph}}, H, \Phi)$, list the five mandatory fields of a node, recognise a pathology edge
-and use the five lenses (Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy) as
-questions that one asks of any problem.
-
----
-
-### Step 1 — The real world and the paradox
-
-**The conclusion that lives in the middle of the paragraph.** In a support desk, a report begins like this:
-*"Considering the two-year history, the mean arrival rate of 312 calls per hour, the mean
-service time of 6.2 minutes and the application of the Erlang C formula with 36 agents, the estimated
-level of service is 82% of the calls answered within 20 seconds, and it is recommended to keep the current
-staffing."* It is a long sentence, correct in its arithmetic and almost impossible to audit. If the conclusion is wrong, the error
-is hidden somewhere between "considering" and "it is recommended", and nobody knows where.
-
-The first measure of an auditable machine is not to compute better. It is **to forbid the long sentence** and
-to force every claim to become a card with fixed fields. A card that does not fill every field does not
-enter the library. In every 100 reports written in prose, a good part hides the fragile point in an
-adjective. In 100 cards with those five fields, the fragile point shows up in the empty field.
-
-**The empty field that denounces.** The report of the support desk uses three things at once: the calls that
-arrived, the formula that forecasts the wait and the decision on staffing. If each one becomes a separate card, three
-questions are visible at once. *Where does the demand number come from?* *Under what conditions does the formula
-hold?* *Who pays if it fails?* The sentence hid all three. The card shows the three that are answered
-and the ones that are not.
-
-**There are three kinds of link, and one of them is an alarm.** First come the dependency links. The
-service time depends on the demand, and the wait depends on the service time. Then come the
-transversal links. The Jensen curve appears in the queue, in the computation of information and in the stock market. Last,
-the **pathology links**, which are not dependencies but misalignments. The most common pathology of this
-story is the **fallacy of the mean**. The formula is applied to the mean rate of the history when it should be
-applied to each day and then the mean of the results taken. In the support desk, the two computations give very different
-numbers, 82% against 57%.
-
-**The five questions that one can always ask.** After building the map, five ways of looking at it
-remain. *Does the account close?* (information is not created out of nothing by reprocessing). *Which time is being spoken of: the
-process, the observer or the simulation?* *Is the tail so heavy that the mean does not even exist?* *Does the structure
-found survive when the environment changes?* *Is the information worth its cost, and are the forecasts
-calibrated?* Each question has a quantity and a number that can be measured. The five together are the **five
-lenses**.
-
----
-
-### Step 2 — The rule of the game
-
-**The formal map.** Knowledge is not kept in ambiguous text. It is kept as a **typed
-hypergraph**, that is, a set of cards (nodes) linked by three families of lines.
-
-$$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
-
-| Component | What it keeps | Example from the support desk |
-| --- | --- | --- |
-| $V$, nodes | Concepts, hypotheses, variables, data sets | `L1_demand`: call counts every 5 minutes |
-| $E_{\mathrm{tree}}$, tree | What depends on what: deductive prerequisites | `L1_demanda` $\to$ `L2_erlang_c`, with the label "input of the model" |
-| $E_{\mathrm{graph}}$, transversal | Mathematical bridges, causal edges $\operatorname{do}(x)$ and pathology edges | Jensen links the mean function to information and to ergodicity |
-| $H$, hyperedges | The five lenses, which wrap whole groups of nodes | Chrononomy over `L1_demanda` and `L2_erlang_c`: "the demand has a calendar" |
-| $\Phi$, invariants | The invariants that every claim fulfils to enter the graph | $\Phi_2$: the margin on the independent unit |
-
-**Every claim becomes executable code.** Each node carries a one-line definition and a pointer to the artifact
-that executes it with a fixed seed. Whoever asserts delivers the code that runs the assertion, and a claim that
-nobody else can run cannot be checked by anybody else.
-
-**The five mandatory fields of a node.** A node without any of them is refused on writing.
-
-| Field | What it declares |
-| --- | --- |
-| `id` | Unique identifier |
-| `layer` | $L_1$ World, $L_2$ Model or $L_3$ Agent |
-| `uncertainty` | Aleatory, epistemic or knightian |
-| `definition` | The mathematical definition, in one line |
-| `artifact` | The pointer to the code that reproduces it with a fixed seed |
-
-The node of the call-centre formula reads:
-
-```yaml
-- id: L2_erlang_c
-  layer: L2
-  uncertainty: epistemic (specification)
-  definition: SL(c, λ) = 1 − C(c, λ·AHT) e^{−(c − λ·AHT) t / AHT}, stationary, no abandonment
-  artifact: queue::service_level
-```
-
-Notice that the Erlang C formula is typed as an **epistemic uncertainty of specification**. It assumes
-stationarity and absence of abandonment, and the World guarantees neither. Those two failures are **listed**, and
-each can be tested against the data, so they are not Knightian in the sense of Chapter 4: Knightian is the mechanism
-nobody wrote down. A field that called every violated assumption "Knightian" would empty the word, and the turkey
-would share a label with a queue that only needs its stationarity checked. The card says, in one field, where the
-formula can fail. The long sentence did not say.
-
-**The pathology edges.** These are not dependencies but structural misalignments, the moment at
-which the Agent applies a Model incompatible with the World.
-
-| Pathology | What the edge marks |
-| --- | --- |
-| Fallacy of the mean | $\mathrm{SL}(\mathbb{E}[\Lambda])$ in place of $\mathbb{E}[\mathrm{SL}(\Lambda)]$ |
-| Fallacy of the stable world | The Agent imposes a stable Model on a World that oscillates |
-| Inspection paradox | Sampling by arrival over-represents the long intervals: the patient-weighted wait counts the busy days more |
-| Transposition of the conditional | $P(E \mid I)$ read as $P(I \mid E)$ — the prosecutor's fallacy |
-| Russell's turkey | The real process is outside the hypothesis space, and more data only increase confidence in the wrong place |
-| Case for population | One looks for the cause of the case, not the cause of the frequency (Rose's sick individuals and sick populations) |
-
-**The mathematical bridges.** The transversal edges link distant modules by an explicit relation,
-navigable in both directions. Four of them recur across the whole theory.
-
-| Bridge | Relation | What it links |
-| --- | --- | --- |
-| Jensen | $\mathbb{E}[f(X)] \ge f(\mathbb{E}[X])$ for convex $f$ | The mean function to information and to ergodicity |
-| Prior as regularisation | $-\ln P(\theta) \leftrightarrow \lambda\Omega(\theta)$ | Bayes to learning with a penalty and to the elicitation of expert priors |
-| Information as growth | $\Delta W \le I(X; Y)$ | Mutual information to the Kelly growth gain |
-| Noise as temperature (heuristic) | Minibatch noise $\leftrightarrow$ temperature $T$ | Stochastic mechanics to active inference and to learning |
-
-The second bridge says that penalising large coefficients is equivalent to declaring a prior that finds them
-unlikely. Whoever regularises is already computing a maximum a posteriori, without saying which prior was used. The third says
-that a gambler with side information $Y$ about the outcome $X$ gains, in growth rate, at most
-$I(X; Y)$ bits per round, and those bits become growth only for whoever bets by Kelly. The fourth says
-that the noise of estimating the gradient on a minibatch acts as a temperature, and helps to escape shallow
-minima. The fourth bridge does not have the rank of the other three. Jensen, the prior as penalty and the bound on
-growth are theorems under stated conditions; the temperature of the minibatch is an analogy that holds only
-approximately, because the noise of the gradient is neither isotropic nor independent of the point where it is
-measured, and whether it helps generalisation is still disputed. It is kept as a question to test, not as a link to
-lean on.
-
-**The five lenses.** The hyperedges work as questions that one asks of any problem. Each lens
-has a quantity that it measures and a critical habit, and it crosses the concepts without adding new objects.
-
-| Lens | Question | What it measures | Critical habit |
-| --- | --- | --- | --- |
-| Fluxonomy | How do probability and information flow and get lost? | Currents, mutual information | Does the account close? Reprocessing does not create information |
-| Chrononomy | Does the mean across many coincide with the mean over time of a single one? | Mixing, relaxation and escape times; $\mathbb{E}[\ln M]$ | Which time is being spoken of: the process, the observer or the simulation? |
-| Scalonomy | Is the tail heavy to the point that the mean does not even exist? | Tail exponent, effective size, capacity of the model | Declare whether the theoretical mean exists |
-| Morphonomy | Does the structure found survive when the environment changes? | Invariance (ICP), compressibility (MDL) | Rewrite the model in two forms and see what is conserved |
-| Crisonomy | Is the information worth its cost, and are the forecasts calibrated? | Loss, proper score, value of information | Charge every number the record of hits at the frequency it promised |
-
-Two examples of how a lens becomes an account. In **Fluxonomy**, the data-processing inequality
-says that, if $Z$ is obtained from $Y$, then $I(X; Z) \le I(X; Y)$. Three newspapers that publish the same research
-are worth one. In **Morphonomy**, two representations can give identical forecasts and still authorise
-different conclusions under intervention, and only the conclusion that is conserved across environments serves outside them.
-
-**The lenses under their usual names.** The five names are this book's; the tools under them are not. A reader who
-knows the field can translate each lens at once, and should, because the usual name leads to the literature:
-
-| Lens | What the field usually calls it | Where to read more |
-| --- | --- | --- |
-| Fluxonomy | information theory: mutual information, the data-processing inequality | Cover and Thomas, *Elements of Information Theory* |
-| Chrononomy | ergodicity, mixing and growth-optimal (Kelly) betting | Peters (2019); Kelly (1956) |
-| Scalonomy | extreme-value theory, tail estimation, effective sample size | Embrechts, Klüppelberg and Mikosch (1997) |
-| Morphonomy | invariance and causal identification; minimum description length | Peters, Bühlmann and Meinshausen (2016) |
-| Crisonomy | decision theory, value of information and proper scoring rules | Raiffa and Schlaifer; Gneiting and Raftery (2007) |
-
-The new names add a habit of asking the five questions in order; they add no mathematics of their own.
-
-Non-ergodicity is not a sixth lens. It is the answer "no" to the question of **Chrononomy**: the mean across many
-and the mean over time of a single one come apart, as in the multiplicative coin of Chapter 10. The lens asks the
-question of every process; most additive processes answer "yes", and there the mean across many is legitimate.
-
-**How a new domain triggers the lenses.** A practical rule: Is it a financial, career or
-insurance process? It triggers **Chrononomy**. Does it involve claims, incomes, virality or the size of
-companies? It triggers **Scalonomy**. Does it involve recommendation, regulation or a published forecast? It triggers
-**Fluxonomy** and **Morphonomy**, with simulation with and without the action.
-
-**Where the data live.** The hypergraph keeps only the light topology: nodes, edges, YAML contracts and hashes.
-Microdata and series stay in partitioned Parquet, queried with explicit column projection, partition
-pruning and a rigid budget of bytes scanned. A rule of scale follows. A model that
-requires a full scan per forecast does not scale, however good its test error.
-
-**Counting nodes inflates easily.** A scale test ran the filter funnel in batch over **329** domains generated by rule from
-a public catalogue (327 up to the end, at 3.8 seconds of processor per domain) and took the graph to
-**26,634 nodes**, 28,619 tree edges, 26,795 bridges and 4,628 hyperedges. Only **6,494** of the nodes are
-concept nodes (domain, layers, variables, environments, filters, decision), and only **554** come from curated packages;
-the other 20,140 are ICP hypotheses, one per subset of predictors tested, which grow like $2^k$ and are not new
-knowledge. The bottleneck is not in the machine but in semantic
-curation, which does not scale by rule, in the supply of data sets with identifiable environments (9% of the catalogue
-pass), in the bridges, which grow with the square of the number of domains, and in keeping everything in memory.
-
----
-
-### Step 3 — Hands on
-
-Three tasks: build a mini-hypergraph with three nodes and three lenses, prove that the validator bites in four
-cases, and run the lenses with a measured number. **Scalonomy** enters through the Hill estimator,
-**Crisonomy** through the expected value of perfect information (EVPI), and **Morphonomy** through the test of
-invariance across regimes. Run it with `cargo run --release --bin labs -- --chapter 12`.
-
-**The recipe of the laboratory.** The series of Scalonomy is 20,000 draws of a Pareto with $\alpha = 1.81$,
-$(1 - u)^{-1/1.81}$ with $u$ uniform, on which Hill is computed at $k$ = 250, 500, 1,000 and 2,000; Hill is the formula
-of Chapter 18. The EVPI of Crisonomy is that of Chapter 11, $\mathbb{E}_\theta[\max_a U] - \max_a \mathbb{E}_\theta[U]$, on the
-payoff table that the paragraph below states.
-
-```text
-== Chapter 12 :: the map of knowledge ==
-graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
-topological order = ["L3_manager", "L2_erlang_c", "L1_demand"] | leaves=1 roots=2 | nodes without lens = []
-proof 1 (edge to an absent node): ["edge to absent node: L2_erlang_c -> L2_ghost_node"]
-proof 2 (deductive cycle): ["cycle in E_tree: [\"L1_demand\", \"L2_erlang_c\", \"L3_manager\"]"]
-proof 3 (hyperedge with one member): ["hyperedge with fewer than two members: H4"]
-proof 4 (node outside every lens): ["L2_orphan"] validation=[]
-lenses triggered = ["Chrononomy", "Crisonomy", "Scalonomy"] | not triggered = ["Fluxonomy", "Morphonomy"]
-Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
-Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
-Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
-Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
-Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
-Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
-Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
-```
-
-Four readings of the output, in the order in which they matter.
-
-**The validator refuses.** The valid graph passes with zero problems. The four proofs show that the refusal is not
-decorative: an edge to a node that does not exist, a deductive cycle (the "return" that turns the tree into a wheel),
-a hyperedge with a single member, and an orphan node outside every lens. Proof 4 shows the structural validator
-letting the orphan node through: the validation `[]` stays empty, while the coverage check points at
-`L2_orphan`.
-The two screens take care of distinct things; one takes care of the form, the other of coverage.
-
-**Not every lens is triggered.** The mini-hypergraph triggers three lenses (Chrononomy, Scalonomy and
-Crisonomy) and leaves Fluxonomy and Morphonomy without a hyperedge. The absence is not an error of the validator. The error
-would be if some **node** stayed outside every lens, and none does. A lens without use is a question that
-has not yet been asked.
-
-**Scalonomy measures the tail.** With seed 1909, 20,000 values of a Pareto with $\alpha = 1.81$ (the
-exponent estimated for the Danish fire losses) and the cutoff at $k = 500$, the Hill estimator returns
-**1.7901**. The tail is wild
-($\hat\alpha < 2$), and for that reason the theoretical variance does not exist. At the edges of the cutoff the number moves, with
-1.8444 at $k = 250$ and 1.8032 at $k = 2,000$, and the sensitivity is the lesson. The tail exponent is an
-estimate, and not a constant of nature.
-
-**Crisonomy depends on which actions exist.** The perfect sensor says whether the year will be good or bad, with
-probability 0.70 of good. Acting yields 10 in a good year and costs 4 in a bad one; not acting yields 0. Without the
-sensor the best is to act, with an expected value of 5.80. With the sensor one acts only in the good years and keeps
-out of the bad ones, which is worth 0.70 × 10 = 7.0000, so the sensor is worth **1.2000**: exactly what it saves in
-the bad years, 0.30 × 4. If only half the stake can be placed (+5 or −2), the best without information is 2.9000,
-with the sensor 3.5000, and the sensor is worth **0.6000**. If the payoff of acting is the same in both states, the sensor
-can never change the decision and is worth 0.0000. (Until 2026-10-19 this paragraph and its laboratory gave
-0.0000 for the first case, as if the sensor never changed the decision; it changes it in every bad year. Appendix E.) **The value of information is not a property of the datum: it is a
-property of the set of available actions.**
-
-**Morphonomy prefers the map to the number.** Three regimes, bases 100, 140 and 120, true effect 10 in all
-three. In the first rule, the slope computed over all the data together gives **24.37**, more than double
-the true effect, because those who received the treatment are concentrated in the high-base regime. Swapping
-only the allocation, and keeping the effect of 10, the marginal slope becomes **−4.60**, negative, when every
-effect within each regime is positive. It is the classic misalignment that Chapter 9 called
-confounding. The slopes by regime, those, stay at 9.96 / 10.09 / 10.15 and 10.34 / 9.92 / 10.15. The
-two rules pass the invariance test with tolerance 0.5. When the middle regime really responds
-40 instead of 10, the invariance **fails** (9.96 against 40.09, step of 30.13). The marginal slope is a
-number; the slope by regime is a structure.
-
-**Exercises.**
-
-1. *(Concept)* Write an $L_1$ node and an $L_2$ node for the claim "with this mean demand, the mean
-   wait will be about 9 minutes". Which pathology edge links them, and in which sense does it point?
-2. *(Concept)* Which lenses must a credit-granting model published to clients trigger?
-   Justify each one in one sentence.
-3. *(Count)* In the output above, the EVPI is 1.2000 with the full stake and 0.6000 with half of it. Explain why
-   halving the stake halves the value of the same sensor, and compute the EVPI when acting costs 1 in a bad year
-   instead of 4.
-4. *(Laboratory)* Add a fourth node `L3_auditor` to the mini-hypergraph and check what the
-   validator does before and after putting it into a hyperedge. Then create a second cycle in the tree and
-   confirm that the message points at the cycle.
-5. *(Laboratory)* Change the tolerance of the invariance test from 0.5 to 2.0 and to 0.05 in the two
-   first rules. In which of them does the structure by regime stop being distinguishable from noise?
-6. *(Concept)* Why was the Erlang C formula typed as epistemic (specification) and not as Knightian? Which
-   observation would move it to Knightian?
-
-**Summary.**
-
-- The typed hypergraph keeps claims as nodes with layer, uncertainty type, formal definition and code.
-- Pathology edges mark misalignments between layers; the validator refuses incomplete nodes, absent
-  endpoints, deductive cycles and hyperedges with fewer than two members.
-- The five lenses are transversal questions with their own quantities: information, time, tail, invariance
-  and cost of information.
-- The same graph gives different numbers according to the lens: Hill returns 1.7901 for $k = 500$; the EVPI returns
-  1.2000, 0.6000 or 0.0000 depending on the available actions; the marginal slope changes sign while the
-  slopes by regime stay equal.
-- The node count inflates easily: of the 26,634 nodes of the scale audit, only 6,494 are concept nodes.
-
-## Chapter 13. The team of specialists, the safeguard panel and the two systems of thought
-
-**Objectives.** By the end of this chapter you should know the blind spot of each of eight specialists, go
-through the six-stage cycle, apply the approval condition of the safeguard panel
-$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X)$, correct a forecast
-when the base rate moves, check a posterior by simulation, and distinguish System 1 (fast triage, probabilities
-held between 1% and 99%) from System 2 (deliberation: tree search, belief state, heavy inference and directed
-stress).
-
----
-
-### Step 1 — The real world and the paradox
-
-**The group that approves itself.** A student hands in a statistics assignment. The student chose the sample,
-cleaned the data, ran the test, looked at the result, changed the test, ran it again and wrote the conclusion.
-When the conclusion finally pleased them, they stopped. Nobody cheated. Each step seemed reasonable at the moment
-it was taken.
-
-Now split the work among eight colleagues, each responsible for one single thing, and hand a ninth colleague the
-**artifacts** in place of the report: the code, the data file, the saved model, the audit trail. The ninth
-colleague's task is to break them. In an assignment made by one person alone, the most fragile part is the one
-nobody looked at from outside. In an assignment with a team that attacks, the fragile part is the one that
-survived the attack.
-
-The ninth colleague has one rule: **do not read the report**. They run the code with a seed that the author did
-not choose, inject a corrupted batch, tamper with a line of the trail to see whether the verifier notices.
-Whoever only reads reports agrees with them.
-
-**The eight specialists and the blind spot of each one.** Each specialist exists because there is a way of erring
-that they see better than the others.
-
-| Specialist | What they do | The blind spot they cover | What they deliver |
-| --- | --- | --- | --- |
-| Code | Turns hypotheses into executable generating processes | "The code runs" is not "the code is the hypothesis" | Fixed seed, pre- and post-conditions, property tests, profiles of time and memory |
-| Data | Audits the entry of the World | What a row is, and why the datum is missing | A data contract, quarantine of defective records, idempotent ingestion, a byte budget |
-| Lifecycle | Tests the model in time | The world changes and the model does not warn | Temporal cutoff without leakage, drift sensors, a policy for ignorance, post-mortem |
-| Inference | Runs the heavy inference | One sample is not an answer | Chain diagnostics, calibration by simulation, conformal prediction |
-| Governance | Takes care of legality, privacy and trail | Personal data is a combination of fields, not a file type | Impact opinion, differential privacy, a named human officer, a hash chain |
-| Fairness | Asks who pays for the error | The chosen metric decides who pays | Audit of error rates between groups, the fairness trilemma |
-| Domain | Translates problems from other areas | The parameter that does not come from the data comes from someone | Glossary, structured elicitation, scope term |
-| Decision | Converts the result into action | A number without a natural frequency decides nothing | Natural frequencies, HOPs, the C/L tree, exit clause |
-| Orchestrator | Coordinates and convenes the panel | No step approves its own result | The model-critique card and the attack on the artifact before approval |
-
-**The craft of each specialist, in one case.** The data specialist begins with a decision that nobody sees:
-**what a row is**. One row per person, per day or per event changes the mean, the variance and the margin, and for
-that reason the grain is declared and proved with a count. The same specialist hunts the **sentinel value**, the
-absence recorded as 0, −1 or 9 999 that enters the sum as if it were data, and requires idempotent ingestion:
-running the load twice cannot change the number. And they ask the question that a limit on nulls does not ask:
-**why is the datum missing?** The mechanism (MCAR, MAR or MNAR, Chapter 6) decides whether discarding the
-incomplete cases is harmless, and a contract that only counts the nulls is silent on the day one appears.
-
-The governance specialist recalls that personal data is not a file type: it is the **combination of fields**
-that decides. Postcode, date of birth and sex, together, probably identify 87% of the people in the United
-States, by the 1990 census. Differential privacy limits how much the presence of one person can change any
-answer. In two databases that differ in the record of a single person, the result of any query cannot change by
-more than a fixed factor. That factor is a budget, spent on each query. The cheapest measure remains not
-collecting.
-
-The lifecycle specialist requires that every model in operation declares its behaviour in three cases: input
-outside the domain, missing field and low confidence. The options are to refuse, to fall back on a safe
-deterministic rule or to return calibrated uncertainty. A model in use degrades for different reasons, which ask
-for different answers.
-
-| Situation | What changes | The right answer |
-| --- | --- | --- |
-| Covariate drift | The distribution of the inputs changes, and the relation between attribute and outcome still holds | Reweight, with weights by the ratio of the densities |
-| Label drift | The frequency of the outcomes changes, and the distribution of the attribute within each outcome still holds | Readjust the base rates (intercept correction) |
-| Concept drift | The relation between attribute and outcome itself changes | No reweighting saves it: rebuild the model |
-| Served population changed | The metric falls because the audience changed | It is not a degradation of the model: read the metric against the base rate |
-
-The domain specialist does not ask an expert for a mean. The Sheffield protocol (SHELF) asks for the **median**,
-the **quartiles** and the **plausible extremes**, fits a distribution to those quantiles and gives it back so that
-the expert confirms it, controlling the interviewer's anchor, the order of the scenarios and overconfidence. When
-no expert can be heard, the least one can do is measure **how much the decision depends on the prior**. In 33
-domains, the prior in use was replaced by a prior from the literature and by a deliberately weak one: five domains
-change status or action with the literature prior and two with the weak one. The lesson is not that the first
-priors were wrong. It is that in five of 33 domains the decision does not survive the replacement.
-
-**System 1 and System 2.** A machine that helps thinking has two modes. **System 1** does fast, categorical
-triage: the same input always gives the same answer, and every probability it emits is **held inside the interval
-from 1% to 99%**. **System 2** deliberates: it searches a tree of options, keeps a belief about where the weak
-point is, runs heavy inference and directs the stress of the panel. The rule of the interval is not aesthetics. A
-probability of 0% or of 100% can be scored, and when it is wrong it is punished hard: the Brier score charges it
-the maximum of 1, and the logarithmic score charges it an infinite penalty. The real defect is in learning. By
-Bayes' rule a prior of 0 or 1 stays at 0 or 1 whatever the evidence, so a system that emits certainties cannot be
-moved by what it sees next (Lindley called this Cromwell's rule).
-
-Cromwell's rule forbids 0 and 1; it does not choose the floor. The interval from 1% to 99% is a **convention of
-System 1's triage**, where the categories are few and none is rare, not a law for every forecast. Applied to a
-forecaster of rare events it would do damage: an event with a base rate of 0.2% forecast at no less than 1% is
-over-forecast five times on every quiet day, and the Brier and logarithmic scores charge for it. For forecasts,
-the floor $\varepsilon$ is declared from the base rate and from the size of the data (Laplace's rule,
-$1/(n+2)$, is one honest choice), and is never wider than the rarest outcome the model must predict.
-
----
-
-### Step 2 — The rule of the game
-
-**The six-stage cycle.** A question goes through six stages, each with its output cards. The path to the decision
-passes through all of them.
-
-1. **Translation and elicitation (Domain).** Card of the transfer, elicitation, scope term.
-2. **Ingestion, grain, causality and ethics (Data, Governance, Fairness).** Data contract, card of the sample,
-   causal graph with the Pearl step, privacy opinion, fairness audit.
-3. **Simulation, null model and frontier (Code, Inference, Lifecycle).** Executable generating process, null model
-   simulated **before** reading any pattern, inference diagnostics, partition outside time, count of attempts.
-4. **Projection onto the five lenses (Orchestrator).** Sweep of Fluxonomy, Chrononomy, Scalonomy, Morphonomy and
-   Crisonomy.
-5. **Safeguard panel (Orchestrator).** Rejected goes back to the stage that failed; approved moves on.
-6. **Decision and closure (Decision).** Memorandum in natural frequencies, HOPs, the C/L tree and exit clause.
-
-A rejected assignment goes back to the **stage in which it failed**, instead of going back to the beginning.
-
-**The safeguard panel.** Three failures eliminate the assignment before any discussion of merit: temporal
-leakage, a violated data contract without treatment and the absence of a named human officer. After that, each
-specialist's work receives its attack, eight in total.
-
-| Attack ($A_i$) | The attack | The safeguard the card must carry |
-| --- | --- | --- |
-| $A_1$ Code | A new battery of properties, with a seed the author did not choose | property test |
-| $A_2$ Data | A batch with corrupted records, which must be isolated | handling of missing values |
-| $A_3$ Lifecycle | A batch with strong drift, live | declared drift |
-| $A_4$ Inference | A pathological data set, to see whether the uncertainty denounces the inadequacy | pathologies covered |
-| $A_5$ Governance | Tampering with the audit trail, which the chain verifier has to detect | intact trail |
-| $A_6$ Fairness | Inverting the chosen metric and showing who would come to pay | audited subgroups |
-| $A_7$ Domain | An atypical scenario of the domain, with an alternative prior | elicited prior |
-| $A_8$ Decision | A crisis that violates the exit clause itself | declared exit clause |
-
-**The approval condition.** For each attack $A_i$ the panel reads two bits from the card: whether the safeguard
-of that row was declared, and whether the structural field that anchors it is present (a property test anchored
-by a runnable artifact and a seed, an exit clause anchored by a named payer of the error). The artifact $X$ is
-approved only if **all** eight rows pass:
-
-$$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X),\qquad
-C_i(X) = \mathrm{safeguard}_i(X) \wedge \mathrm{anchor}_i(X).$$
-
-The $\bigwedge$ is the logical "and". One single row that fails is enough for the assignment to go back. The
-condition reads no seed and no judgement: the same card always gets the same sixteen bits, and it **fails** when a
-safeguard was declared absent or left without its anchor, which is what makes it auditable. The panel is a
-checklist. It answers "was the safeguard declared, with the field that anchors it?", not "does the safeguard hold
-under attack?". The second question belongs to tests that run the attack, such as the tampering of the trail in
-the gates of Chapter 14.
-
-**Why the panel prints bits.** Until 2026-10-19 each row printed a "severity" from 0 to 10, drawn by a seed inside
-a range that the two bits selected, against a floor of 6. No range crossed the floor, so the verdict was always the
-AND of the bits; whether a declared safeguard scored 8, 9 or 10 was decided by the seed and said nothing about the
-artifact. A decimal that only encodes a yes or a no is the false precision this book warns against elsewhere, and
-it borrowed the name of Mayo's severity (Chapter 7), which is a probability about a procedure. The panel now prints
-the bits, and the name was changed with it: it was called the "adversarial panel", which described what it **asks
-for**, an attack on each specialist's work, and not what it **runs**. Both changes are recorded in Appendix E.
-
-**The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
-replicates of the fitted model; comparison with at least one rival model; separation between parameters
-identified by the data and parameters brought from outside; analysis of performativity, Goodhart and Lucas; and a
-defence of the undecidable premises by the **cost of the error**.
-
-**An assignment with a declared gap is worth more than a uniform one.** The complete artifact with one admitted
-weak point beats the uniform artifact that admits no gap at all. In the Danish fire-insurance case, the panel
-rejected the claim; the claim lost, but the rival model **did not win the right to decide** either.
-
-**Correcting a forecast when the base rate moves.** Label drift has a closed-form correction. If the distribution
-of the attribute within each class does not change, the corrected probability is the old one multiplied by the
-ratio between the new base rate and the old one, then renormalised:
-
-$$P_{\text{new}}(y \mid x) \;\propto\; P_{\text{old}}(y \mid x)\,\frac{\pi_{\text{new}}(y)}{\pi_{\text{old}}(y)}$$
-
-With two outcomes, the correction adds a constant to the logit: it is an **intercept correction**. When the new
-base rate is unknown, Saerens, Latinne and Decaestecker (2002) estimate it from the unlabelled new cases
-themselves, alternating two steps until they agree: correct the forecasts with the current guess of the base
-rate, then take the mean of the corrected forecasts as the next guess. The hierarchy of Van Calster and colleagues
-(2016) separates two levels of calibration. One is calibration in the mean, measured by the intercept; the other
-is **weak calibration**, which requires intercept 0 and slope 1. A flight-delay forecast for 2023 passed with the
-intercept correction alone; an arrest forecast for Toronto did not, because its error was one of slope, and no
-shift of base rate repairs a slope.
-
-**Checking a posterior by simulation.** Heavy inference returns a cloud of samples, and the cloud can be the wrong
-size without any warning. Calibration by simulation (SBC) tests the machinery itself. Draw a parameter
-$\tilde\theta$ from the prior, simulate data with it, run the inference on those data and record where the true
-value falls among the $L$ posterior samples. Repeat many times. If the inference is right, the rank is uniform:
-
-$$\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniform}\{0, \dots, L\}$$
-
-A histogram of ranks with a hump in the middle means posteriors that are too wide; a U shape means posteriors that
-are too narrow, the overconfident case; a slope means a biased sampler. The check needs no real data, because the
-truth is known by construction.
-
-**System 2, in four tools.** Deliberation is not a mood; it is a set of procedures, each with a null to beat.
-
-- **Tree search with estimate (upper confidence bound, the search behind LATS).** A greedy agent takes the option of
-  greatest immediate value and stops.
-  Tree search expands the options, estimates the value of each branch by simulation and balances exploring
-  untried branches against exploiting good ones, by the upper confidence bound. It can find a path that begins
-  with a worse step and ends somewhere better, which the greedy agent never sees.
-- **The belief state.** System 2 keeps a probability for each hypothesis about where the weak point is, updated
-  with every card the panel has rejected. The belief has a floor and a ceiling: no hypothesis falls to 0% or rises
-  to 100%, so that a surprise can always move it. Its entropy says how concentrated it is.
-- **Directed stress.** The ordinary panel attacks the eight points in a fixed order. Directed stress attacks first
-  where the belief points and stops at the first rejection. The null is the fixed order: if learning adds nothing,
-  both orders find the same rejection with the same number of attacks.
-- **Heavy inference (Metropolis).** When the posterior has no closed form, a random walk proposes a new value near
-  the current one and accepts it with probability $\min\{1, p(\text{new})/p(\text{current})\}$. The chain spends time
-  in each region in proportion to its posterior probability. Its honesty is tested where the answer is known: on a
-  Beta distribution, the mean of the chain must meet the closed form.
-
-The same discipline decides the grain of a question. Refining from the average day to each day is worth it only
-when the measured loss of the coarse question pays for the margin the fine one requires; finer grains that the
-instrument cannot measure stay declared, never guessed.
-
----
-
-### Step 3 — Hands on
-
-Three measurements: run the complete panel over a card with the eight safeguards and over cards with safeguards
-removed; check that the triage of System 1 never leaves the interval between 1% and 99%; and let System 2
-deliberate. Run the first with `cargo run --release --bin labs -- --chapter 13`.
-
-**The recipe of the laboratory.** The panel reads the eight bits of each card and nothing else. The triage of
-System 1 is a deterministic stand-in, not a model: the bytes $b$ of the card's identifier are folded into a state
-$s \leftarrow 1{,}099{,}511{,}628{,}211\,s + b$ (modulo $2^{64}$, starting at 0), one step of the SplitMix64 generator is
-taken from that state, and the probability is $(v \bmod 99 + 1)/100$, held inside $[0.01; 0.99]$. Its only claims are the
-two the line checks: the same card gives the same number, and no number leaves the interval.
-
-```text
-== Chapter 13 :: the A1-A8 safeguard panel ==
-complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
-card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
-without A1-code: rejecting=["A1-code"] count_rejecting=1
-without A2-data: rejecting=["A2-data"] count_rejecting=1
-without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
-without A4-inference: rejecting=["A4-inference"] count_rejecting=1
-without A5-governance: rejecting=["A5-governance"] count_rejecting=1
-without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
-without A7-domain: rejecting=["A7-domain"] count_rejecting=1
-without A8-decision: rejecting=["A8-decision"] count_rejecting=1
-sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
-seed read by the panel: none (the verdict is a function of the eight bits)
-system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
-```
-
-Four readings.
-
-**The complete card passes.** The eight bits are set, and the verdict reads no seed: there is nothing to vary.
-A rejection comes from a missing safeguard, never from a draw.
-
-**Each safeguard removed brings down exactly the row that charges for it.** In the eight lines of the sweep, the
-set of rejecting rows always has **one** element, and it is always the corresponding one. Without an intact trail
-$A_5$ rejects, without an exit clause $A_8$ rejects, without a property test $A_1$ rejects, and the other seven stay
-set. The panel is not a mean score that dilutes, but a logical "and" that locates the failure.
-
-**Removing two safeguards rejects the card and names both.** With the governance and fairness safeguards removed,
-6 of 8 bits stay set, the card is rejected, and the line says which two rows fell.
-
-**The triage respects the interval.** The last line returns 0.06 and 0.94, sum 1.0000, and zero values outside
-1% to 99%.
-
-A fuller System 1 sorts a card into one of six declared themes with a suffix tree, and the same contract holds on
-every line. Run it with `cargo run --release --bin labs -- --s1`.
-
-```text
-== System 1 :: deterministic triage of cards ==
-suffix tree: 129 suffixes indexed over 6 declared themes
-category=queue probability=0.9117 products=[0.9117, 0.0177, 0.0177, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
-category=causal probability=0.9297 products=[0.0141, 0.9297, 0.0141, 0.0141, 0.0141, 0.0141] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9297 | sum 1.0000 | outside [0.01;0.99] 0
-category=tail probability=0.9117 products=[0.0177, 0.0177, 0.9117, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
-category=calibration probability=0.9415 products=[0.0117, 0.0117, 0.0117, 0.9415, 0.0117, 0.0117] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9415 | sum 1.0000 | outside [0.01;0.99] 0
-category=fairness probability=0.9217 products=[0.0157, 0.0157, 0.0157, 0.0157, 0.9217, 0.0157] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9217 | sum 1.0000 | outside [0.01;0.99] 0
-category=other probability=0.8718 products=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.8718 | sum 1.0000 | outside [0.01;0.99] 0
-```
-
-The sum is 1.0000 and no probability falls outside [0.01; 0.99]. The last line is an input that matches no theme:
-it falls into `other` with 0.8718, the declared prior, not a guess. The limits are worth stating. The vocabulary is
-closed, the matching is lexical and does not understand negation, and this is triage, not judgement. The numbers it
-emits are normalised scores that obey the rules of probability; nobody has checked that a card triaged at 0.91 lands
-in its theme 91 times in 100, so they are not yet calibrated probabilities, and the honest name for them is scores. Judging
-belongs to System 2. Run it with `cargo run --release --bin labs -- --s2`.
-
-```text
-== System 2 :: deliberation over the hypergraph ==
-declared graph: 8 nodes, 6 tree edges, 2 graph edges, 5 hyperedges | validation ok
-nodes that no lens covers: ["f1.code-synthesis"]
-greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution -> f1.code-synthesis (value 1.000, node without lens true)
-board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
-stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
-inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
-R axis: loss of the aggregate 25.54 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
-R axis without oscillation: loss 0.00 min -> R0-agregada
-```
-
-- **The greedy agent stops at the queue** with value 0.600. Tree search goes further and reaches value 1.000, at a
-  node that no lens covers, which is itself a finding: the deliberation found the hole in the map.
-- **The belief** points at governance with probability 0.9205, and entropy 0.4324 says the belief is concentrated.
-- **Directed stress** reaches the rejection with 1 attack; the fixed order needs 5 to reach the same one. Learning
-  saved four attacks and changed no verdict.
-- **Metropolis** on a Beta(4, 8) gives a chain mean of 0.3346 against the closed form 0.3333, with acceptance 0.676.
-- **The grain:** with oscillating demand, the coarse question loses 25.54 minutes, more than the 12.00 minutes of
-  margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
-
-**Exercises.**
-
-1. *(Concept)* A database has one row per medical appointment, and the question is about patients. Which
-   specialist must block the analysis, and with which test?
-2. *(Concept)* Draw the attack of the panel for a credit triage model. Which crisis would violate the exit clause?
-   Which group would come to pay if the metric were inverted?
-3. *(Count)* A card has 7 of its 8 safeguards declared and anchored, and the eighth declared without its anchor.
-   How many of the sixteen bits are set, and is the card approved? Justify with the definition of $\bigwedge$.
-4. *(Laboratory)* Implement calibration by simulation (SBC) for a Beta-Binomial model: draw the parameter from the
-   prior, simulate the data with it and run the sampler. Check that the rank of the true value among the posterior
-   samples is uniform. Then introduce an error in the sampler and watch the histogram stop being flat.
-5. *(Count)* A classifier was trained where the base rate was 10% and now serves a population where it is
-   30%. A case receives 0.20 from the old model. What is the corrected probability? Which assumption must hold for
-   the correction to be right?
-6. *(Concept)* Give one example of each mode of degradation of a model in use (covariate drift, label drift and
-   concept drift) and an example of the fourth situation, which is not a degradation. Say the right answer for
-   each one.
-7. *(Concept)* Why must System 1 be deterministic (repeated input, equal probability)? Relate it to the fixed seed
-   of Chapter 1. Why, in contrast, must the belief of System 2 never reach 0% or 100%?
-
-**Summary.**
-
-- Eight specialists, each linked to a way of erring, plus an orchestrator that attacks; nobody approves the work
-  they produced.
-- The cycle has six stages, and a rejection returns to the stage that failed, not to the beginning.
-- Approval is a logical "and" of eight checks, each a safeguard declared and anchored; each missing safeguard
-  brings down the row that charges for it, and no seed enters the verdict.
-- A moved base rate is corrected on the logit; a wrong slope is not. SBC checks the inference where the truth is
-  known by construction.
-- System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
-  bounded belief state, directed stress and Metropolis, each tested against a null.
-
-## Chapter 14. The iron contract: cards, prohibitions, invariants and gates
-
-**Objectives.** By the end of this chapter you should know how to read and write an epistemological card, fill the
-five questions of the header, state the four prohibitions and the five invariants $\Phi_1$–$\Phi_5$,
-go through the funnel of four filters and say which check each automatic gate makes.
-
----
-
-### Step 1 — The real world and the paradox
-
-**The form that refuses.** Everybody has filled in a form that accepts anything. You write
-"yes" in the remarks field, the system accepts, and three weeks later nobody knows who authorised what.
-The opposite exists and it is boring, and that is what this chapter is about. The form here **refuses** the submission when a
-mandatory field is empty.
-
-The epistemological card is a closed list of questions. It is the **contract** of the work, and not its summary.
-In every 100 cards filled in a hurry, the ones that pass without complaint are the ones that had every
-field answered with something checkable. A card without the field of the generating process does not say "I do not know". It says
-"nobody wrote that", and that is where the error enters.
-
-**The question nobody asks the decider.** There is a specific way of erring that has a name and is almost never
-checked, the **type III error**. In ordinary tests, the type I error is accusing someone who is innocent and the type
-II error is acquitting someone who is guilty. The type III error is more banal and more frequent, and consists in **answering
-brilliantly the wrong question**. The study measures effect A with impeccable precision, and the manager needed to
-know about effect B.
-
-Imagine a city hall that has to decide whether to open a second service room on the busy days. The
-report answers, rigorously, the question *"what is the mean level of service of the year?"* The answer is 82%, and the
-manager reads it as the answer to his question, *"should I open a second room?"*. Nobody wrote the manager's question
-anywhere. In 100 hurried decisions, a respectable part dies from a right account on the
-wrong question, and not from a wrong account.
-
-**How the contract locks that.** The domain package carries a mandatory field, the
-`decision_maker_question`, with three parts in order: **who decides**, **which action the decision changes**
-(copied literally from the decision field of the package) and **the question that decision uses**,
-ending in an interrogation mark. The validator is the code, which refuses generic text without who decides and rejects an action
-different from the one of the package. After that, "the question the model answers is the one the decider asked"
-stopped being an assumption and became a checkable sentence.
-
-**The four things the contract forbids.** The contract of the agents begins with four absolute prohibitions, and
-each one patches a known hole:
-
-1. **Free natural language between agents.** Communication is only through structured cards; free text is
-   ambiguous and invents.
-2. **The solitary mean.** When the function is non-linear, the dynamics multiplicative or the tail heavy, it is
-   forbidden to report only the mean: one reports the result of the mean case, the simulated mean of the
-   results, the median, the quantiles and the cumulative curve.
-3. **Confusing learning with performativity.** Small prediction error does not prove that the model is
-   true; one runs the model with and without the action.
-4. **Dogmatic extremes and omission of trials.** No forecast declares 0% or 100%; every forecast is
-   scored by a proper rule outside the fit; and one declares how many specifications were tried.
-
----
-
-### Step 2 — The rule of the game
-
-**The card and the five questions of the header.** Every payload that circulates opens with five mandatory
-questions.
-
-| Field | Question |
-| --- | --- |
-| `generating_process` | Which hidden mechanism generates the data, written in a simulable way, and in which layer can the claim fail? |
-| `nonlinearity` | Is the result a non-linear function of something that varies? Compare $f(\mathbb{E}[X])$ with $\mathbb{E}[f(X)]$; is the dynamics additive or multiplicative? |
-| `unit_and_margin` | What is the de facto independent unit, and was the margin computed with it? |
-| `noise_physics` | What noise is this (gaussian or with jumps)? Are there absorbing states? Is the agent passive or does it deform the world? |
-| `causal_ladder` | At which step of Pearl is the statement, with which identification strategy and which untestable premise? |
-
-The header of a real claim about a bank call centre, abbreviated:
-
-```yaml
-claim: >
-  "Staffing each half hour by Erlang C on the historical mean rate, the centre answers
-  82% of the calls within 20 s, with a mean wait of 10 s, every day."
-header:
-  nonlinearity: >
-    The Erlang C service level is concave and collapses near saturation: applied to the real
-    rate of each day of the vault, the claim's own formula gives 57% on average, not 82%.
-  unit_and_margin: >
-    The independent unit is the DAY: the calls of one day share the rate and the queue.
-    Effective n = 81 days of vault, not 2.65 million calls.
-  noise_physics: >
-    Daily demand is NOT Poisson: dispersion Var/mean = 273 (Poisson: 1).
-  causal_ladder: >
-    Step 2 (intervention): the staffing rules are do(staffing) simulated on the real demand.
-    Untestable premise: demand does not react to staffing.
-```
-
-Other cards add questions to the five of the header. The card of the evidence asks for the base rate, the
-two likelihoods and the posterior computed in two ways, in odds and in a tree of 10,000 cases, which
-have to coincide. The card of the causal graph begins with the step. The card of the model critique closes the series and says in which
-item each previous card enters.
-
-**The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
-
-| Question | Options | Why it matters |
-| --- | --- | --- |
-| What shape does the noise have? | Gaussian (continuous) or with jumps | A gaussian model does not have 19 October 1987 in its hypothesis space |
-| How does the noise integrate? | Itô or Stratonovich | When the noise depends on the state, the two readings give different drifts |
-| Are there absorbing states? | Yes (ruin, death, bankruptcy) or no | In an absorbing state, the ensemble mean stops describing any trajectory |
-
-The second question looks technical and is not. In a multiplicative growth with proportional noise,
-$dX = \mu X\,dt + \sigma X\,dW$, read in the manner of Itô, the expectation grows at rate $\mu$, but the
-typical trajectory grows at rate
-
-$$\frac{d}{dt}\,\mathbb{E}[\ln X_t] = \mu - \tfrac{1}{2}\sigma^2.$$
-
-It is the volatility drag of leveraged Dow Jones, and it is Jensen again. Read in the manner of Stratonovich, the
-same symbol describes another process: the typical trajectory grows at $\mu$, and the expectation at
-$\mu + \tfrac12\sigma^2$. Notice what changes and what does not. The gap between the growth of the expectation and
-that of the typical trajectory is $\tfrac12\sigma^2$ **in both readings**; the drag is Jensen, and no convention
-removes it. What the convention changes is **which of the two rates the parameter $\mu$ names**, and therefore the
-number one obtains when a $\mu$ estimated under one reading is plugged into the other. With additive noise,
-$dX = \mu\,dt + \sigma\,dW$, the two readings coincide and the question does not arise. The choice depends on the physics.
-Idealised white noise of a discrete system asks for Itô; the limit of a real noise with short correlation asks for
-Stratonovich. The card also asks for a test with a smaller time step. If the result changes when $\Delta t$
-shrinks, the simulation was measuring the integrator instead of the World. That test does **not** decide between Itô and
-Stratonovich, because the Euler scheme converges to the Itô reading, and the Stratonovich one asks for another integrator.
-
-Noise also makes the system jump between stable states. In a system with two wells, the mean time until the jump
-follows the Kramers formula and grows exponentially with the height of the barrier $\Delta U$ with respect to the
-temperature $T$:
-
-$$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
-
-For high barriers, that time has almost no memory. Whoever waited a long time is not closer to the jump.
-Looked at only in the jumps, however, the noise looks like a push. In 591 simulated jumps, the noise just
-before the jump pointed in its direction in 99% of the cases, with no external force at all. Looking for the cause of a
-jump is a selection error; looking for the cause of a change in the frequency of the jumps is not.
-
-**The five invariants.** Nothing enters the graph without passing the invariants, which work as database
-locks. The first four are required from the beginning; the fifth entered with the axis of question resolution
-(Chapter 21) and bites in the case in which the misalignment is most expensive.
-
-| Invariant | What it requires | What it blocks |
-| --- | --- | --- |
-| $\Phi_1$ Simulability | Every claim becomes code with a declared seed and property tests | An argument only in prose |
-| $\Phi_2$ Margin and unit | Every number comes with a margin computed on the de facto independent unit | Pseudoreplication, duplicates, sentinel values |
-| $\Phi_3$ Layers and severe test | Audit the filter of the sample, draw the causal graph and confront the hypothesis with a simulated null model | Pattern read before the null, collider, Simpson |
-| $\Phi_4$ Ecological scope | Judge the decision in the environment in which it will operate, with a scope term and an objective exit clause | A recommendation without a validity date |
-| $\Phi_5$ Resolution of the question | The declared action has to be at the same grain as the independent unit: with the datum at the day or coarser, aggregate resolution (R0) is rejected | An action by day with an account at the aggregate. A unit finer than the day stays outside this lock, and that is declared |
-
-**Testing a property, not an example.** An ordinary test checks one case: with these inputs, this output. A
-**property test** states a rule that must hold for every input, and lets the machine search for a counterexample.
-"The margin of a proportion is never negative and never larger than one half", "the wait of a queue never falls
-when the service gets slower", "running the load twice gives the same table". A generator draws thousands of
-random inputs with a declared seed; when one breaks the rule, the tool shrinks it to the smallest input that still
-breaks it, and that small case is usually the bug. The property is a claim about the code, written in the form of
-a severe test: it could fail on any of the inputs, and it is worth something only because it did not.
-
-**The funnel of four filters.** A system that simulates every hypothesis it meets collapses from cost and from
-inflation of false discoveries. The funnel works with two companions: pruning by value of information and a counter
-of attempts. The four filters refuse by the header (without a
-question, without a generating process, without a unit or null, without an action with an exit). The pruning cuts when the quota of the value
-of information cannot cross the threshold: with $C/L = 0.1$ the quota is worth 0.0090 at $p = 0.001$ and the test of
-0.05 is pruned, while at the threshold $p = 0.10$ the quota is 0.9000. Finally, the counter closes the account: how many specifications were tried, at which filter each one fell, how
-many were approved and which one is final. Its limit is declared: the quota is the expected value of perfect
-information, exact only in the model of two acts and two states. Each front organises
-itself as a funnel, and in it most of the weak hypotheses fall before touching heavy simulation.
-
-1. **Value of information.** The hypothesis that would not change any decision even with a perfect answer is cut. The
-   standard log is "pruned by Crisonomy: curiosity without operational use".
-2. **Topological pruning and unit.** By d-separation, every node that stays outside the Markov blanket of the
-   variable of interest is cut, including the colliders that, if conditioned on, would create Berkson's bias. The claim
-   that the data do not identify is also cut, or the one whose effective size, counted on the independent unit, stays too small to conclude. The data contract also classifies the mechanism of
-   every absence (MCAR, MAR, MNAR or not declared), with the columns the classification covers and a sensitivity
-   analysis when the absence may depend on the value itself. An absence without classification is refused.
-3. **Severe test against the null.** If the alleged pattern already appears in the null model, or in a reference with a single
-   parameter such as the base rate, the research closes there. When the simulation is expensive, that test runs first in a
-   cheap emulator.
-4. **Heavy inference, lenses and panel.** Only the remainder receives the expensive treatment.
-
-**Worked case: the identifiability of $R_0$.** At the beginning of an epidemic, the cases grow like
-$\exp((\beta - \gamma)t)$, and the data determine the **difference** $\beta - \gamma$, not the ratio
-$R_0 = \beta/\gamma$. With 25 days of simulated cases, in which the truth is $R_0 = 2$, the compatible values
-go from **1.38 to 5.90**, and the predicted final size goes from **50% to 100%** of the population. With 45 days, $R_0$
-stays between **2.00 and 2.24**, but by then the curve has already doubled. Taking the duration of the infection from other studies narrows
-$R_0$ to **1.81 to 2.11**. That is not a defect, as long as one declares that the margin became the one of the source.
-
-**The automatic gates.** No delivery is consolidated without passing the gates on a clean machine. The
-agents and the $\Phi$ have already been formalised; the gates **repeat the work and compare**. A repeated input has
-to produce an identical output, and a planted defect has to be detected. Seven gates make a complete set.
-
-| Gate | Who answers | What it verifies | What it does not guarantee |
-| --- | --- | --- | --- |
-| G1 | Orchestrator | Determinism: the Merkle root of the second run is identical to the one of the first | That the result is right: a wrong account reproduces as faithfully as a right one |
-| G2 | Code | Fixed seed declared in every card | That the seed was chosen before the result was seen |
-| G3 | Code | Declared scope: only a simulable artifact | That the artifact simulates the claim it is attached to |
-| G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock | That the fields are true, or that the decider question is the decider's: the lock reads a question mark and a quoted action, not meaning |
-| G5 | Governance | SHA-256 trail intact **and** tampering detected | Provenance or truth: a fabricated record sealed before publication passes |
-| G6 | Orchestrator | Safeguard panel $A_1$–$A_8$: every check declared and anchored | That any safeguard works: the panel checks declared and anchored safeguards, it runs no attack |
-| G7 | Decision | Declared exit clause and $A_8$ above the floor | That the exit clause will be honoured when its trigger fires |
-
-Two details make the set worth more than the sum. G5 does not verify only that the chain is intact. It
-**tampers on purpose** and requires the verification to fail with the tampered chain. G1, in turn,
-compares two runs of the declared horizon. A gate that never fails is not a gate (Chapter 15). The last column is
-there for the same reason. A gate that passes is evidence only of what it checks, and every one of the seven checks
-form, presence or reproducibility; none of them checks that a number is correct. That job stays with the tests that
-compare a result with a known answer, and with readers who redo the account.
-
----
-
-### Step 3 — Hands on
-
-The laboratory validates a complete card and a card with one planted defect at a time, printing the failures by
-gate. Run it with `cargo run --release --bin labs -- --chapter 14`.
-
-**The recipe of the laboratory.** The property test draws 10,000 cards with a sample size $n$ uniform between
-100 and 999 and a rate $p$ uniform in $\{0.01, 0.02, \ldots, 0.99\}$, and computes the margin $1.96\sqrt{p(1-p)/n}$. It
-checks one property only, that the margin lies in $[0; 0.5]$; by construction it lies between
-$1.96\sqrt{0.01 \cdot 0.99/999} = 0.00617$ and $1.96\sqrt{0.25/100} = 0.098$. That the margin shrinks when $n$ grows is
-true of the formula and is not what this test checks.
-
-```text
-== Chapter 14 :: the iron contract ==
-card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
-declared taxonomy: layers=["L1", "L2", "L3"] uncertainties=["aleatory", "epistemic", "knightian", "not-applicable"]
-defect NoSeed: failures=1 gates=Phi1-simulability detail="missing fixed seed or simulable artifact"
-defect NoDefinition: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
-defect NoMarginNoUnit: failures=1 gates=Phi2-independent-unit detail="margin without a declared independent unit"
-defect NoNullModel: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
-defect NoScopeNoPayerNoExit: failures=1 gates=Phi4-scope-and-exit detail="ecological scope, who pays for the error or exit clause missing"
-defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
-defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
-intact graph: validation=[]
-graph with a ghost edge: validation=["edge to absent node: L2_erlang -> L2_ghost"]
-graph with a deductive cycle: validation=["cycle in E_tree: Some(\"L1_queue\")"]
-graph with a one-member hyperedge: validation=["hyperedge with fewer than two members: H2"]
-property test (10.000 simulated cards): violations=0 margin_min=0.00617 margin_max=0.09798
-same seed, two validators: runs that diverge in 0 of 32
-```
-
-Four readings.
-
-**The complete card passes without a single failure.** Five fields of the header in the required order, seed
-declared, simulable artifact, margin with independent unit, null model, ecological scope, who pays
-for the error, exit clause and the question of the decider citing the action. The total is zero. The type III
-lock is **literal**, and the question has to end in an interrogation mark **and** contain the action of the package.
-
-**Each defect falls at the right gate.** Seven planted defects, seven rejections, one per gate, without
-contamination. Without a seed it falls at $\Phi_1$; without a margin or unit it falls at $\Phi_2$; without a definition or without a
-null model it falls at $\Phi_3$; without scope, without who pays or without an exit clause it falls at $\Phi_4$. The two
-defects of the question of the decider both fall at the type III lock, but for different reasons. One loses the
-interrogation mark, the other loses the action. **The message is identical in the two cases.** The validator
-states the requirement of the rule, without saying which part was missing. It is a small detail that exercise 4 asks
-to improve.
-
-**The structural validator crosses the chapters.** The three refusals of Chapter 12 reappear here:
-an edge to a ghost node, a deductive cycle and a hyperedge with a single member. That is on purpose. A lock that only
-exists in one chapter is a lock that nobody uses.
-
-**The property test and the seed.** Ten thousand simulated cards with margin $1.96\sqrt{p(1-p)/n}$ for
-$n$ between 100 and 999 and $p$ between 0.01 and 0.99 give **zero violations**, with margins between 0.00617 and 0.09798. The
-confidence interval is never negative nor greater than a half. The two validators run over the declared
-seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
-
-**Exercises.**
-
-1. *(Concept)* Fill the five questions of the header for the claim "students who study with music
-   get higher grades".
-2. *(Concept)* Which filter of the funnel must cut the question "what is the favourite colour of the clients who buy
-   insurance?" in an insurer that is not going to change the product?
-3. *(Count)* Why do 25 days of exponential growth identify $\beta - \gamma$ and not $\beta/\gamma$?
-   Show that two pairs $(\beta, \gamma)$ with equal differences generate identical initial curves.
-4. *(Laboratory)* Improve the message of the type III lock to distinguish "the interrogation mark is missing"
-   from "the question does not cite the action". Make the two defects fall into different messages and reproduce the
-   table.
-5. *(Laboratory)* Write a property test that verifies that the simulated wait of a queue is always
-   non-negative and does not decrease when the service time increases, keeping the arrivals fixed.
-6. *(Concept)* Explain, in three sentences, why G5 is stronger than a test that only checks whether the chain
-   is intact, since it tampers on purpose with the chain it produced.
-
-**Summary.**
-
-- The card is a closed list of questions; five are mandatory in every payload, and the field
-  `decision_maker_question` locks the type III error.
-- The four prohibitions and the five invariants are locks, and not recommendations; $\Phi_5$ is the newest and the narrowest.
-- The funnel cuts cheaply before spending expensively: value of information, topological and unit pruning, severe test
-  against the null, and only then heavy inference and panel.
-- Seven gates repeat the work and compare, each with a pass or a fail and no third outcome, and a gate that
-  never fails is not a gate.
-- A property test states a rule that must hold for every input and lets the machine hunt for the
-  counterexample.
-
-## Chapter 15. The vault, the cryptographic seal and the audit against itself
-
-**Objectives.** By the end of this chapter you should know how to explain why pre-registration with a hash published
-before the data is a seal against adjustment after seeing the result, what the counter of attempts $K$ measures, why the
-vault outside time opens a single time, how the forecast diary and the signed opinions work, and
-why the auditor being a stakeholder is a limit that no signature resolves.
-
----
-
-### Step 1 — The real world and the paradox
-
-**Painting the target after the shot.** A marksman fires ten shots at the wall of a barn. Then he looks at the
-holes, picks up a brush and draws a target around the tightest group. Then he shows the target and says: "five
-hits in the centre". The count of hits is right, and the target is fake. The only thing that separates science
-from this marksman is **when** the target was drawn.
-
-There is no way to undo that by looking at the result. The seal consists in writing and **freezing** the
-target before the shot, in a way that nobody can alter afterwards without it being noticed. In every 100
-published results, the ones that look most like cheating are precisely the clean ones, adjusted a little bit
-after seeing the data. The difference between "I adjusted the model" and "I adjusted the model after seeing the result"
-is not in the model, but in the **order of the facts**.
-
-**The seal is a number.** How to freeze? By publishing the **hash** of the file. The hash is a fingerprint. It takes
-the whole content, from the first to the last character, and returns a line of 64 characters. Changing one comma
-changes the whole fingerprint. Publishing the hash before the shot is like sealing the envelope at a notary. You do not have to
-show the content now, but afterwards nobody opens the envelope without it showing.
-
-**The vault.** Imagine a bank that receives a payment slip from each client. One day the bank decides to build a
-"vault outside time": a folder with the data of the next three months, which no analyst may open. The
-model is built with the past; when it is finished, someone opens the vault and runs the model against data it
-never saw. Opening the vault costs the one thing it had: surprise. When a vault has already been opened and the
-model needs a correction, the correction is worth something only when tested in a **new vault**, which nobody saw.
-
-**The forecast diary.** Every probabilistic forecast issued stays recorded in a continuous ledger, with
-the source, the filter, whether the system can influence the outcome, how many factors the justification has and the
-step of Pearl. And with a limit: **the forecast is never 0% nor 100%**, but something between "one in a hundred" and
-"ninety-nine in a hundred". A certainty that fails is punished by the score, but it cannot be revised by the
-evidence; with the limit, each forecaster keeps a belief that can still move and a record that can be charged.
-
----
-
-### Step 2 — The rule of the game
-
-**The risk of scale is epistemological.** When a system tests hundreds of hypotheses and specifications in
-parallel, the greatest risk is not technical; it is overfitting at industrial scale, the garden of forking paths
-walked by indefatigable machines. Three mechanisms contain it: the sealed pre-registration with a counter of
-attempts, the vault outside time, and the forecast diary on a chained bus.
-
-**Pre-registration with hash and counter of attempts.** Before anyone touches the test partition, the hypothesis
-is frozen with a hash. Every change of criterion, of test or of data is written in a declaration, with its SHA-256
-recorded **before** running. The rule does not forbid learning from a failure: a new run may be written knowing
-the previous ones. What it forbids is hiding that it was. Every correction made after seeing a result stays on
-record and **counts in $K$**, the number of specifications tried for the question, and the final report is obliged
-to declare it.
-
-Counting honestly is harder than it looks. In a real search for causal structure across twelve domains, the
-counter per domain stopped at $K = 3$, and the search stopped there because of it. But the same transfer gate had
-been tried across seven runs, and the counter per domain did not see that. Recounted across the whole gate, the
-honest number was **38 distinct tests**, within a band from 32 to 72 according to the counting criterion. Both
-numbers are right; they count different things. The lesson is that $K$ must be counted at the level at which the
-claim is made. With a Bonferroni correction at $K = 38$, the conclusion survived, with smaller sets of causes.
-
-A counter alone only makes the attempts visible. To make them cost something, $K$ should also penalise complexity,
-by the minimum description length (MDL) or by the Occam factor, together with the correction for multiple
-comparisons. A model that needed many tries and many parameters to fit has said less about the world than one that
-fitted at the first attempt with few.
-
-**What a seal proves, and what it does not.** A hash proves **integrity**: the file is the same, character by
-character, as the file that was sealed. It does not prove **provenance**, who produced the content and how, and
-much less **truth**. An invented record, sealed, carries a fingerprint as valid as that of an honest one. A gate
-for the listening of affected groups showed the limit: it checked whether each record had a name and a transcript
-file, and seven fabricated records, each with a plausible name and a transcript, opened it. Provenance needs
-something else, such as a transcript signed by whoever was heard, with the hash of the signed file chained into
-the record. Even then the signature says who spoke, not that what was said is true. The same holds for the garden
-of forking paths: the hash alone does not stop it. What stops it is the hash written **before** the data are
-seen, together with the counter $K$. Sealed after the result, the most selective analysis gets an impeccable
-fingerprint.
-
-**The vault outside time.** The future temporal partition stays in the exclusive custody of the lifecycle
-specialist. No one who builds models reads it during development; it is opened a single time, to score calibration
-and to verify the absence of leakage. The rule is hard and has a consequence: when a vault has been opened and the
-model needs a correction, the correction is worth something only when tested in a **new** vault. One real study
-opened three new vaults this way: the 2023 flights, the Toronto arrests of 2020–2021 and the Rhode Island traffic
-stops.
-
-**The forecast diary and the bus.** Each forecaster records every probabilistic forecast in a continuous ledger,
-restricted to the interval $[1\%, 99\%]$. Forecasters whose Brier score loses to the base rate, or whose Kelly
-capital collapses, have their weight reduced. The bus that carries the cards is **chained by hash**: each message
-carries the hash of the previous one, and the trail cannot be rewritten without breaking the chain. The chain has
-its own failure modes. One real diary added into a single score a forecaster that appeared in different projects
-under the same name; the error was invisible in any single line and showed only when the scores were recomputed
-by project.
-
-**Risk opinions and the named officer.** The governance specialist issues a risk opinion for each project
-evaluated, including the ones that never reach a decision, and a **named human officer** signs it. The signature
-is recorded apart from the result files, with each opinion identified by the SHA-256 of the file at the moment of
-signing, so that signing does not rewrite the outputs a clean reproduction compares. An opinion may carry a factual
-caveat that the signature does not remove: a recommendation derived from a decision and a cost that were
-**assumed** for the exercise is not policy advice, and the opinion has to say so.
-
-**The limit: the auditor is a stakeholder.** An audit authorised by whoever is audited has limited value. The named
-officer answers the questions an audit has to answer (who decided to use it, who approved it, who watches the
-scoreboard, who switches it off), but naming an officer **does not make the audit independent**. What an honest
-audit can do from inside is record what it **could not look at** and which affected groups were heard. In seven
-real decisions that involved people (cutting a benefit by 10%, reducing class sizes, replacing free care with a
-copayment, judging a training programme against survey controls, and three review marks on police data streams),
-**none of the seven affected groups was heard**, and an elicitation with human experts was never done. A signature
-on a summary is worth what it is: the declaration of whoever runs the work that they read a summary.
-
-**Auditing your own claims.** Governance also serves to mark the points **not** measured, and then to measure them.
-The method is the one of every severe test, turned inward: list the claims the work sustains but never tested,
-write for each one a declaration with a hash **before** measuring, measure, and report the result with its limits.
-A change of criterion after seeing the result enters as a new declaration and counts in $K$. Four such checks show
-what the method finds.
-
-| The assumption | What was measured | Result |
-| --- | --- | --- |
-| Whoever abandons a queue calls back with probability 0.6 | A quasi-experimental design in a real support desk, 1999 | **0.145** [0.132; 0.157], four times less than assumed |
-| The tolerance of the calibration error can be fixed at 0.03 | The null simulated with the same forecasts and the same $n$ | All six binary vaults show detectable miscalibration, one of them only borderline; detectable is not the same as relevant (Chapter 8) |
-| ICP may treat every row as independent | Clustered tests and block permutation, with 16 instants per volunteer and 80 schools | Pharmacology survives intact; Education drops out |
-| A method that checks every bridge catches errors that common practice lets through | A blind pilot of 12 cases, two arms | A tie at the ceiling: 8 of 8 defects found in both arms, so the claim is not supported |
-
-**The inward audit found no error of arithmetic and narrowed the reach the numbers were allowed to claim.** A later
-reading from outside found what the inward audit had missed: a Kelly fraction computed with the wrong chance, a
-value of information that chose the best act inside each branch, a test of invariance that let the environment move
-the outcome, a market calibration that dropped a factor of 252 (Appendix E lists every one, with both values).
-That is the strongest argument of this chapter, measured on the book itself: an audit run by the authors of the
-claims is weaker than one run from outside, however honest the authors. One limit stays declared: the outside
-readings of 2026-10-18 were made with an AI assistant, outside the authors' audit but not by people outside the
-program. They are the first entries of a public errata, not the independent audit that Chapter 21 asks for.
-
-### Step 3 — Hands on
-
-Two tasks: build a ledger chained by SHA-256 and prove that changing **one character** in the past
-brings the chain down; and compute the Merkle root of a batch of cards. The code brings SHA-256 written by hand,
-without dependencies, and checks the implementation against the known vectors. Run it with
-`cargo run --release --bin labs -- --chapter 15`.
-
-**The recipe of the laboratory.** Each event of the chain is hashed as
-SHA-256 of the text `session|index|card|content|previous`, with the session `sessao-h3`, the index from 0, and the
-previous hash of the first event written as 64 zeros. The Merkle root pairs the hexadecimal hashes of a level in order,
-hashes the concatenated text of each pair, and repeats the last hash of a level when the level has an odd count, up to a
-single hash. That last rule has a known weakness, declared here: a list and the same list with its last element
-repeated have the same root, so the root alone does not prove how many cards there were (the gates record the count
-beside it).
-
-```text
-== Chapter 15 :: the vault, the seal and the audit ==
-sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
-  event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
-  event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
-  event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
-  event 3 card=h3.prisoes content=ECE=0.036 hash=4248815bc8f679d9
-  event 4 card=h3.ri content=ECE=0.0048 habilidade=0.019 hash=8059d78760a22282
-tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
-tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
-one extra character in each event: 5 of 5 alterations invalidate the chain
-batch of cards: n=7 merkle_root=17679ce182647dbb
-swapping one card of the batch changes the root in 7 of 7 cases
-```
-
-Four readings.
-
-**The implementation is right, and that is the basis of everything.** The two known vectors of SHA-256 match
-character by character. The empty string gives `e3b0c442...b855` and `abc` gives `ba7816bf...15ad`. Without that
-check, all the rest of the trail would be a number invented with the appearance of security.
-
-**One character in the past brings the chain down.** The chain of five events is intact. Changing
-`canario=ok` to `canario=nok` in event 2 and **recomputing the hash of that event** (the most
-obvious attack, in which content and hash agree with each other), the verification fails. Event 3 keeps the old hash of
-event 2 as the "previous" one, and the incompatibility appears. Of the five alterations tested, one per event,
-**5 of 5** invalidate the chain.
-
-**The chain alone is not enough: the root is the proof.** If the attacker also rewrites the three following events,
-the chain closes locally again (the verification passes), but the **published root** changes. That line is the
-heart of the chapter. The trail becomes inviolable by the hash published **before**, and not by the chain. Whoever
-keeps only the chain keeps a document that can be rewritten in its entirety; whoever keeps the root keeps the
-seal.
-
-**The Merkle root always changes.** The batch of seven cards has root `17679ce1...`. Swapping any one of the
-seven for an altered version, the root changes in **7 of 7** cases. That is what allows sealing a whole batch with
-64 characters instead of 64 per file.
-
-**Exercises.**
-
-1. *(Concept)* Why does opening the vault twice destroy its value? Relate it to Mayo's severity,
-   that is, to the requirement that a test could have given another result.
-2. *(Concept)* A colleague proposes rewriting the result files with the signature inside. Which property
-   of the clean reproduction would that break?
-3. *(Count)* The counter per domain stopped at $K = 3$; the recount across the whole gate measured $K = 38$
-   distinct tests. Explain, in three sentences, why the two numbers coexist without either of them
-   being wrong.
-4. *(Laboratory)* Extend the laboratory to a bus in which each message carries the hash of the previous one
-   **and** the index, and write a verifier that detects not only the alteration of content but also the exchange of
-   order of two messages.
-5. *(Laboratory)* Compute the Merkle root of the batch of seven cards down to the intermediate roots and confirm
-   how many hashes are recomputed when only the last card changes.
-6. *(Concept)* Propose a procedure to make the audit of decisions that involve people less dependent on whoever
-   runs the work.
-
-**Summary.**
-
-- Pre-registration with a hash is a seal against adjustment after seeing the result, as long as the hash is published
-  to someone outside before the data are seen. The hypothesis is frozen before, and the published hash is the seal.
-- The counter $K$ makes the attempts visible, and it must be counted at the level of the claim: 38 tests at the
-  gate against 3 per domain.
-- The vault outside time opens only once; a correction asks for a new vault.
-- The diary scores each forecaster with a proper rule, inside $[1\%, 99\%]$, and weighs the agents by the scoreboard; the
-  chain of cards is chained by SHA-256.
-- Signed opinions name the officer of record, but they do not make the audit independent. None of the seven affected
-  groups was heard.
-- A self-audit applies the severe test to the work's own assumptions, and usually narrows the reach of its numbers.
-
-# Part V. The machine in the real world
-
-## Chapter 16. The health post and the 2.65 million calls of the bank
+## Chapter 12. The health post and the 2.65 million calls of the bank
 
 **Objectives.** By the end of this chapter you must know why the same mean demand can produce two very
 different waits, how much the convexity of the queue charges whoever decides, why the independent unit of a margin
@@ -3754,7 +2649,8 @@ close. The patients of the same day share the same demand, and sharing is not be
 **The real case is the call centre of a bank.** The post was an assumption; the centre is observation. It is 2.65 million
 real calls of a North American bank call centre, counted every 5 minutes, over 164 working days of
 2003. The schedule is built on the 83 training days (March to June), with a peak of 234 attendants and 2,264
-agent-hours per day, and applied to the 81 vault days (July to October). The claim is the standard practice of the
+agent-hours per day, and applied to the 81 vault days (July to October): the vault is the stretch of data kept closed
+until the method is fixed, and opened once (Chapter 18). The claim is the standard practice of the
 industry: *staffing each half hour by the Erlang C formula on the mean rate of the history guarantees 82% of the calls
 answered within 20 seconds, every day.*
 
@@ -3865,10 +2761,10 @@ it was built to ask.
 
 The laboratory rebuilds the health post with a fixed seed: one day of the post with Poisson arrivals spread over
 the day, exponential service and the Lindley recursion for the wait, which is the rule "I wait for what is left
-of the queue, or nothing, whichever is larger". Run it with `cargo run --release --bin labs -- --chapter 16`.
+of the queue, or nothing, whichever is larger". Run it with `cargo run --release --bin labs -- --chapter 15`.
 
 ```text
-== Chapter 16 :: the same mean, two waits ==
+== Chapter 12 :: the same mean, two waits ==
 2000 days of 10 h per world, one attendant, mu = 12 per hour, seed 1909 (+ world index)
 world (patients per hour)    patients    wait  median     p90  >30min   margin/day     margin/pat.
 8 every day (the claim)        159716     9.1     3.7    26.1      8%         0.14            0.03
@@ -3954,7 +2850,7 @@ the coarse question in its purest form:
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+demand 5 or 11 (the station of Chapter 12): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
    above 30 min: aggregated 0.4488, fine 0.2081
 ```
 
@@ -3990,7 +2886,7 @@ about 5.
 - In 2.65 million real calls, the standard schedule of the industry fails in about 31 of every 100 days, and spending
   about 7% more agent-hours where the risk is brings that down to about 5.
 
-## Chapter 17. The illusion of multiplying by 3 in the market and the employment programme
+## Chapter 13. The illusion of multiplying by 3 in the market and the employment programme
 
 **Objectives.** By the end of this chapter you must know how to measure the volatility drag, to distinguish the mean of
 the ensemble from the typical trajectory, to compute the leverage at which a single day destroys the capital and to recognise a selection
@@ -4180,10 +3076,10 @@ for the others. Equalising them captures 22 more unemployed people and costs 87 
 measured in numbers. There is no way to get the three things right at once, and someone will pay for the choice (Chapter 11).
 
 **Approval is not truth.** Both analyses of this chapter went through the whole cycle and passed the safeguard
-panel. Passing means that the cards declared and anchored every safeguard, not that the analyses were right, and
+panel that Part V builds (Chapters 16 and 17). Passing means that the cards declared and anchored every safeguard, not that the analyses were right, and
 much less that the claims were true: the market claim was refuted, and
 the programme's effect stood only under randomisation. The third real case of this part, the Danish fire losses
-of Chapter 18, met a different end: the data rejected it.
+of Chapter 14, met a different end: the data rejected it.
 
 ---
 
@@ -4192,10 +3088,10 @@ of Chapter 18, met a different end: the data rejected it.
 The laboratory reads the three public datasets and measures all the quantities cited above: the time growth and the drag,
 the 20-year cohorts with a monthly start, the 1987 shock, the Depression, the claim world by resampling of
 years and the raw decomposition of the NSW against the CPS. Run it with
-`cargo run --release --bin labs -- --chapter 17`.
+`cargo run --release --bin labs -- --chapter 16`.
 
 ```text
-== Chapter 17 :: volatility drag and the selection bias ==
+== Chapter 13 :: volatility drag and the selection bias ==
 training 1885-1999: 31919 sessions in 115 years; whole series 1885-2023: 37930 sessions
 daily arithmetic mean = 0.000240669 (0.0668 per year), daily sd = 0.010496 (0.1749 per year)
 
@@ -4267,7 +3163,7 @@ difference of −10,292 dollars is the selection bias, measured and not assumed.
   with no effect produces through the same weighting; the 1975 placebo (−12.3 points) shows that selection is still
   there, and the raw comparison of 1978 carries a selection bias of 10,292 dollars per person.
 
-## Chapter 18. The Danish fires and the art of failing one's own model
+## Chapter 14. The Danish fires and the art of failing one's own model
 
 **Objectives.** By the end of this chapter you must know why a clean window is weak evidence, what the effect of
 a tail with $\alpha$ below 2 is on any mean, how the Laplace rule turns "never happened" into "one
@@ -4336,7 +3232,7 @@ vault does not rank the forecasters, it only fails to show that any of them beat
 was growing **4.6% per year** (p = 2·10⁻⁶), and the world was not stationary. The elicited (simulated) prior dominated the
 posterior.
 
-The safeguard panel rejected the analysis, and the tests were not adjusted so that it would pass. One sentence
+The safeguard panel (Chapter 16) rejected the analysis, and the tests were not adjusted so that it would pass. One sentence
 summarises the verdict: **the claim loses, but the model does not win the right to decide.** No decision was
 issued, and the rejection is the published result.
 
@@ -4429,7 +3325,7 @@ learn about the method and not to estimate the risk of the insurance.
 **degenerative** (it only protects the theory). This analysis had every reason to choose the degenerative path. It was enough to change the retention, to touch
 the prior or to change the period of the vault. None of that was done. The numbers stayed as they were, the
 analysis was rejected, and the failure deserves to be recorded with the same care as the two approvals of
-Chapter 17.
+Chapter 13.
 
 ---
 
@@ -4437,10 +3333,10 @@ Chapter 17.
 
 The laboratory reads the real series, measures Hill on the tail of the training set and on a simulated tail, counts the months in which the layer
 was hit and computes Laplace, the likelihood ratio and the bits of the clean window. Run it with
-`cargo run --release --bin labs -- --chapter 18`.
+`cargo run --release --bin labs -- --chapter 17`.
 
 ```text
-== Chapter 18 :: the tail, the clean window and the information ==
+== Chapter 14 :: the tail, the clean window and the information ==
 Copenhagen Re fires above 1 M DKK, 1980-1990: 2167 claims in 132 months
 
 period        months        months hit  largest loss
@@ -4504,6 +3400,1119 @@ would be worth double.
 - In the vault, no forecaster beat the simple historical frequency: model −0.015, POT −0.003, Laplace −0.024,
   claim −0.052, and the claim loses without the model winning the right to decide.
 - Failing the model that one wrote, without touching the tests so that it passes, is a result.
+
+# Part V. The auditable machine, built and put to work
+
+## Chapter 15. The map of knowledge: the typed hypergraph and the five lenses
+
+**Objectives.** By the end of this chapter you should know how to read the definition $\mathcal{G} = (V, E_{\mathrm{tree}},
+E_{\mathrm{graph}}, H, \Phi)$, list the five mandatory fields of a node, recognise a pathology edge
+and use the five lenses (information, time, tail, invariance and decision) as
+questions that one asks of any problem.
+
+---
+
+### Step 1 — The real world and the paradox
+
+**The conclusion that lives in the middle of the paragraph.** In a support desk, a report begins like this:
+*"Considering the two-year history, the mean arrival rate of 312 calls per hour, the mean
+service time of 6.2 minutes and the application of the Erlang C formula with 36 agents, the estimated
+level of service is 82% of the calls answered within 20 seconds, and it is recommended to keep the current
+staffing."* It is a long sentence, correct in its arithmetic and almost impossible to audit. If the conclusion is wrong, the error
+is hidden somewhere between "considering" and "it is recommended", and nobody knows where.
+
+The first measure of an auditable machine is not to compute better. It is **to forbid the long sentence** and
+to force every claim to become a card with fixed fields. A card that does not fill every field does not
+enter the library. In every 100 reports written in prose, a good part hides the fragile point in an
+adjective. In 100 cards with those five fields, the fragile point shows up in the empty field.
+
+**The empty field that denounces.** The report of the support desk uses three things at once: the calls that
+arrived, the formula that forecasts the wait and the decision on staffing. If each one becomes a separate card, three
+questions are visible at once. *Where does the demand number come from?* *Under what conditions does the formula
+hold?* *Who pays if it fails?* The sentence hid all three. The card shows the three that are answered
+and the ones that are not.
+
+**There are three kinds of link, and one of them is an alarm.** First come the dependency links. The
+service time depends on the demand, and the wait depends on the service time. Then come the
+transversal links. The Jensen curve appears in the queue, in the computation of information and in the stock market. Last,
+the **pathology links**, which are not dependencies but misalignments. The most common pathology of this
+story is the **fallacy of the mean**. The formula is applied to the mean rate of the history when it should be
+applied to each day and then the mean of the results taken. In the support desk, the two computations give very different
+numbers, 82% against 57%.
+
+**The five questions that one can always ask.** After building the map, five ways of looking at it
+remain. *Does the account close?* (information is not created out of nothing by reprocessing). *Which time is being spoken of: the
+process, the observer or the simulation?* *Is the tail so heavy that the mean does not even exist?* *Does the structure
+found survive when the environment changes?* *Is the information worth its cost, and are the forecasts
+calibrated?* Each question has a quantity and a number that can be measured. The five together are the **five
+lenses**.
+
+---
+
+### Step 2 — The rule of the game
+
+**The formal map.** Knowledge is not kept in ambiguous text. It is kept as a **typed
+hypergraph**, that is, a set of cards (nodes) linked by three families of lines.
+
+$$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
+
+| Component | What it keeps | Example from the support desk |
+| --- | --- | --- |
+| $V$, nodes | Concepts, hypotheses, variables, data sets | `L1_demand`: call counts every 5 minutes |
+| $E_{\mathrm{tree}}$, tree | What depends on what: deductive prerequisites | `L1_demanda` $\to$ `L2_erlang_c`, with the label "input of the model" |
+| $E_{\mathrm{graph}}$, transversal | Mathematical bridges, causal edges $\operatorname{do}(x)$ and pathology edges | Jensen links the mean function to information and to ergodicity |
+| $H$, hyperedges | The five lenses, which wrap whole groups of nodes | The time lens over `L1_demanda` and `L2_erlang_c`: "the demand has a calendar" |
+| $\Phi$, invariants | The invariants that every claim fulfils to enter the graph | $\Phi_2$: the margin on the independent unit |
+
+**Every claim becomes executable code.** Each node carries a one-line definition and a pointer to the artifact
+that executes it with a fixed seed. Whoever asserts delivers the code that runs the assertion, and a claim that
+nobody else can run cannot be checked by anybody else.
+
+**The five mandatory fields of a node.** A node without any of them is refused on writing.
+
+| Field | What it declares |
+| --- | --- |
+| `id` | Unique identifier |
+| `layer` | $L_1$ World, $L_2$ Model or $L_3$ Agent |
+| `uncertainty` | Aleatory, epistemic or knightian |
+| `definition` | The mathematical definition, in one line |
+| `artifact` | The pointer to the code that reproduces it with a fixed seed |
+
+The node of the call-centre formula reads:
+
+```yaml
+- id: L2_erlang_c
+  layer: L2
+  uncertainty: epistemic (specification)
+  definition: SL(c, λ) = 1 − C(c, λ·AHT) e^{−(c − λ·AHT) t / AHT}, stationary, no abandonment
+  artifact: queue::service_level
+```
+
+Notice that the Erlang C formula is typed as an **epistemic uncertainty of specification**. It assumes
+stationarity and absence of abandonment, and the World guarantees neither. Those two failures are **listed**, and
+each can be tested against the data, so they are not Knightian in the sense of Chapter 4: Knightian is the mechanism
+nobody wrote down. A field that called every violated assumption "Knightian" would empty the word, and the turkey
+would share a label with a queue that only needs its stationarity checked. The card says, in one field, where the
+formula can fail. The long sentence did not say.
+
+**The pathology edges.** These are not dependencies but structural misalignments, the moment at
+which the Agent applies a Model incompatible with the World.
+
+| Pathology | What the edge marks |
+| --- | --- |
+| Fallacy of the mean | $\mathrm{SL}(\mathbb{E}[\Lambda])$ in place of $\mathbb{E}[\mathrm{SL}(\Lambda)]$ |
+| Fallacy of the stable world | The Agent imposes a stable Model on a World that oscillates |
+| Inspection paradox | Sampling by arrival over-represents the long intervals: the patient-weighted wait counts the busy days more |
+| Transposition of the conditional | $P(E \mid I)$ read as $P(I \mid E)$ — the prosecutor's fallacy |
+| Russell's turkey | The real process is outside the hypothesis space, and more data only increase confidence in the wrong place |
+| Case for population | One looks for the cause of the case, not the cause of the frequency (Rose's sick individuals and sick populations) |
+
+**The mathematical bridges.** The transversal edges link distant modules by an explicit relation,
+navigable in both directions. Four of them recur across the whole theory.
+
+| Bridge | Relation | What it links |
+| --- | --- | --- |
+| Jensen | $\mathbb{E}[f(X)] \ge f(\mathbb{E}[X])$ for convex $f$ | The mean function to information and to ergodicity |
+| Prior as regularisation | $-\ln P(\theta) \leftrightarrow \lambda\Omega(\theta)$ | Bayes to learning with a penalty and to the elicitation of expert priors |
+| Information as growth | $\Delta W \le I(X; Y)$ | Mutual information to the Kelly growth gain |
+| Noise as temperature (heuristic) | Minibatch noise $\leftrightarrow$ temperature $T$ | Stochastic mechanics to active inference and to learning |
+
+The second bridge says that penalising large coefficients is equivalent to declaring a prior that finds them
+unlikely. Whoever regularises is already computing a maximum a posteriori, without saying which prior was used. The third says
+that a gambler with side information $Y$ about the outcome $X$ gains, in growth rate, at most
+$I(X; Y)$ bits per round, and those bits become growth only for whoever bets by Kelly. The fourth says
+that the noise of estimating the gradient on a minibatch acts as a temperature, and helps to escape shallow
+minima. The fourth bridge does not have the rank of the other three. Jensen, the prior as penalty and the bound on
+growth are theorems under stated conditions; the temperature of the minibatch is an analogy that holds only
+approximately, because the noise of the gradient is neither isotropic nor independent of the point where it is
+measured, and whether it helps generalisation is still disputed. It is kept as a question to test, not as a link to
+lean on.
+
+**The five lenses.** The hyperedges work as questions that one asks of any problem. Each lens
+has a quantity that it measures and a critical habit, and it crosses the concepts without adding new objects.
+
+| Lens | Question | What it measures | Critical habit |
+| --- | --- | --- | --- |
+| Information | How do probability and information flow and get lost? | Currents, mutual information | Does the account close? Reprocessing does not create information |
+| Time | Does the mean across many coincide with the mean over time of a single one? | Mixing, relaxation and escape times; $\mathbb{E}[\ln M]$ | Which time is being spoken of: the process, the observer or the simulation? |
+| Tail | Is the tail heavy to the point that the mean does not even exist? | Tail exponent, effective size, capacity of the model | Declare whether the theoretical mean exists |
+| Invariance | Does the structure found survive when the environment changes? | Invariance (ICP), compressibility (MDL) | Rewrite the model in two forms and see what is conserved |
+| Decision | Is the information worth its cost, and are the forecasts calibrated? | Loss, proper score, value of information | Charge every number the record of hits at the frequency it promised |
+
+Two examples of how a lens becomes an account. Under the **information** lens, the data-processing inequality
+says that, if $Z$ is obtained from $Y$, then $I(X; Z) \le I(X; Y)$. Three newspapers that publish the same research
+are worth one. Under the **invariance** lens, two representations can give identical forecasts and still authorise
+different conclusions under intervention, and only the conclusion that is conserved across environments serves outside them.
+
+**The lenses, their fields and their labels.** The tools under each lens belong to a field with its own name, and the
+name of the field is the one that leads to the literature. The laboratory and the code label the lenses with five
+coined words, and those words appear in the printed outputs below; the table says which is which.
+
+| Lens | Label in the outputs | What the field calls it | Where to read more |
+| --- | --- | --- | --- |
+| Information | Fluxonomy | information theory: mutual information, the data-processing inequality | Cover and Thomas, *Elements of Information Theory* |
+| Time | Chrononomy | ergodicity, mixing and growth-optimal (Kelly) betting | Peters (2019); Kelly (1956) |
+| Tail | Scalonomy | extreme-value theory, tail estimation, effective sample size | Embrechts, Klüppelberg and Mikosch (1997) |
+| Invariance | Morphonomy | invariance and causal identification; minimum description length | Peters, Bühlmann and Meinshausen (2016) |
+| Decision | Crisonomy | decision theory, value of information and proper scoring rules | Raiffa and Schlaifer; Gneiting and Raftery (2007) |
+
+The labels add a habit of asking the five questions in order; they add no mathematics of their own.
+
+Non-ergodicity is not a sixth lens. It is the answer "no" to the question of the **time** lens: the mean across many
+and the mean over time of a single one come apart, as in the multiplicative coin of Chapter 10. The lens asks the
+question of every process; most additive processes answer "yes", and there the mean across many is legitimate.
+
+**How a new domain triggers the lenses.** A practical rule: Is it a financial, career or
+insurance process? It triggers the **time** lens. Does it involve claims, incomes, virality or the size of
+companies? It triggers the **tail** lens. Does it involve recommendation, regulation or a published forecast? It
+triggers the **information** and **invariance** lenses, with simulation with and without the action.
+
+**Where the data live.** The hypergraph keeps only the light topology: nodes, edges, YAML contracts and hashes.
+Microdata and series stay in partitioned Parquet, queried with explicit column projection, partition
+pruning and a rigid budget of bytes scanned. A rule of scale follows. A model that
+requires a full scan per forecast does not scale, however good its test error.
+
+**Counting nodes inflates easily.** A scale test ran the filter funnel in batch over **329** domains generated by rule from
+a public catalogue (327 up to the end, at 3.8 seconds of processor per domain) and took the graph to
+**26,634 nodes**, 28,619 tree edges, 26,795 bridges and 4,628 hyperedges. Only **6,494** of the nodes are
+concept nodes (domain, layers, variables, environments, filters, decision), and only **554** come from curated packages;
+the other 20,140 are ICP hypotheses, one per subset of predictors tested, which grow like $2^k$ and are not new
+knowledge. The bottleneck is not in the machine but in semantic
+curation, which does not scale by rule, in the supply of data sets with identifiable environments (9% of the catalogue
+pass), in the bridges, which grow with the square of the number of domains, and in keeping everything in memory.
+
+---
+
+### Step 3 — Hands on
+
+Three tasks: build a mini-hypergraph with three nodes and three lenses, prove that the validator bites in four
+cases, and run the lenses with a measured number. The **tail** lens (Scalonomy) enters through the Hill estimator,
+the **decision** lens (Crisonomy) through the expected value of perfect information (EVPI), and the **invariance** lens
+(Morphonomy) through the test of
+invariance across regimes. Run it with `cargo run --release --bin labs -- --chapter 18`.
+
+**The recipe of the laboratory.** The series of the tail lens is 20,000 draws of a Pareto with $\alpha = 1.81$,
+$(1 - u)^{-1/1.81}$ with $u$ uniform, on which Hill is computed at $k$ = 250, 500, 1,000 and 2,000; Hill is the formula
+of Chapter 14. The EVPI of the decision lens is that of Chapter 11, $\mathbb{E}_\theta[\max_a U] - \max_a \mathbb{E}_\theta[U]$, on the
+payoff table that the paragraph below states.
+
+```text
+== Chapter 15 :: the map of knowledge ==
+graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
+topological order = ["L3_manager", "L2_erlang_c", "L1_demand"] | leaves=1 roots=2 | nodes without lens = []
+proof 1 (edge to an absent node): ["edge to absent node: L2_erlang_c -> L2_ghost_node"]
+proof 2 (deductive cycle): ["cycle in E_tree: [\"L1_demand\", \"L2_erlang_c\", \"L3_manager\"]"]
+proof 3 (hyperedge with one member): ["hyperedge with fewer than two members: H4"]
+proof 4 (node outside every lens): ["L2_orphan"] validation=[]
+lenses triggered = ["Chrononomy", "Crisonomy", "Scalonomy"] | not triggered = ["Fluxonomy", "Morphonomy"]
+Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
+Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
+Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
+Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
+Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
+```
+
+Four readings of the output, in the order in which they matter.
+
+**The validator refuses.** The valid graph passes with zero problems. The four proofs show that the refusal is not
+decorative: an edge to a node that does not exist, a deductive cycle (the "return" that turns the tree into a wheel),
+a hyperedge with a single member, and an orphan node outside every lens. Proof 4 shows the structural validator
+letting the orphan node through: the validation `[]` stays empty, while the coverage check points at
+`L2_orphan`.
+The two screens take care of distinct things; one takes care of the form, the other of coverage.
+
+**Not every lens is triggered.** The mini-hypergraph triggers three lenses (time, tail and decision,
+printed as Chrononomy, Scalonomy and Crisonomy) and leaves information and invariance without a hyperedge. The absence is not an error of the validator. The error
+would be if some **node** stayed outside every lens, and none does. A lens without use is a question that
+has not yet been asked.
+
+**The tail lens measures the tail.** With seed 1909, 20,000 values of a Pareto with $\alpha = 1.81$ (the
+exponent estimated for the Danish fire losses) and the cutoff at $k = 500$, the Hill estimator returns
+**1.7901**. The tail is wild
+($\hat\alpha < 2$), and for that reason the theoretical variance does not exist. At the edges of the cutoff the number moves, with
+1.8444 at $k = 250$ and 1.8032 at $k = 2,000$, and the sensitivity is the lesson. The tail exponent is an
+estimate, and not a constant of nature.
+
+**The decision lens depends on which actions exist.** The perfect sensor says whether the year will be good or bad, with
+probability 0.70 of good. Acting yields 10 in a good year and costs 4 in a bad one; not acting yields 0. Without the
+sensor the best is to act, with an expected value of 5.80. With the sensor one acts only in the good years and keeps
+out of the bad ones, which is worth 0.70 × 10 = 7.0000, so the sensor is worth **1.2000**: exactly what it saves in
+the bad years, 0.30 × 4. If only half the stake can be placed (+5 or −2), the best without information is 2.9000,
+with the sensor 3.5000, and the sensor is worth **0.6000**. If the payoff of acting is the same in both states, the sensor
+can never change the decision and is worth 0.0000. (Until 2026-10-19 this paragraph and its laboratory gave
+0.0000 for the first case, as if the sensor never changed the decision; it changes it in every bad year. Appendix E.) **The value of information is not a property of the datum: it is a
+property of the set of available actions.**
+
+**The invariance lens prefers the map to the number.** Three regimes, bases 100, 140 and 120, true effect 10 in all
+three. In the first rule, the slope computed over all the data together gives **24.37**, more than double
+the true effect, because those who received the treatment are concentrated in the high-base regime. Swapping
+only the allocation, and keeping the effect of 10, the marginal slope becomes **−4.60**, negative, when every
+effect within each regime is positive. It is the classic misalignment that Chapter 9 called
+confounding. The slopes by regime, those, stay at 9.96 / 10.09 / 10.15 and 10.34 / 9.92 / 10.15. The
+two rules pass the invariance test with tolerance 0.5. When the middle regime really responds
+40 instead of 10, the invariance **fails** (9.96 against 40.09, step of 30.13). The marginal slope is a
+number; the slope by regime is a structure.
+
+**Exercises.**
+
+1. *(Concept)* Write an $L_1$ node and an $L_2$ node for the claim "with this mean demand, the mean
+   wait will be about 9 minutes". Which pathology edge links them, and in which sense does it point?
+2. *(Concept)* Which lenses must a credit-granting model published to clients trigger?
+   Justify each one in one sentence.
+3. *(Count)* In the output above, the EVPI is 1.2000 with the full stake and 0.6000 with half of it. Explain why
+   halving the stake halves the value of the same sensor, and compute the EVPI when acting costs 1 in a bad year
+   instead of 4.
+4. *(Laboratory)* Add a fourth node `L3_auditor` to the mini-hypergraph and check what the
+   validator does before and after putting it into a hyperedge. Then create a second cycle in the tree and
+   confirm that the message points at the cycle.
+5. *(Laboratory)* Change the tolerance of the invariance test from 0.5 to 2.0 and to 0.05 in the two
+   first rules. In which of them does the structure by regime stop being distinguishable from noise?
+6. *(Concept)* Why was the Erlang C formula typed as epistemic (specification) and not as Knightian? Which
+   observation would move it to Knightian?
+
+**Summary.**
+
+- The typed hypergraph keeps claims as nodes with layer, uncertainty type, formal definition and code.
+- Pathology edges mark misalignments between layers; the validator refuses incomplete nodes, absent
+  endpoints, deductive cycles and hyperedges with fewer than two members.
+- The five lenses are transversal questions with their own quantities: information, time, tail, invariance
+  and cost of information.
+- The same graph gives different numbers according to the lens: Hill returns 1.7901 for $k = 500$; the EVPI returns
+  1.2000, 0.6000 or 0.0000 depending on the available actions; the marginal slope changes sign while the
+  slopes by regime stay equal.
+- The node count inflates easily: of the 26,634 nodes of the scale audit, only 6,494 are concept nodes.
+
+## Chapter 16. The team of specialists, the safeguard panel and the two systems of thought
+
+**Objectives.** By the end of this chapter you should know the blind spot of each of eight specialists, go
+through the six-stage cycle, apply the approval condition of the safeguard panel
+$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X)$, correct a forecast
+when the base rate moves, check a posterior by simulation, and distinguish System 1 (fast triage, probabilities
+held between 1% and 99%) from System 2 (deliberation: tree search, belief state, heavy inference and directed
+stress).
+
+---
+
+### Step 1 — The real world and the paradox
+
+**The group that approves itself.** A student hands in a statistics assignment. The student chose the sample,
+cleaned the data, ran the test, looked at the result, changed the test, ran it again and wrote the conclusion.
+When the conclusion finally pleased them, they stopped. Nobody cheated. Each step seemed reasonable at the moment
+it was taken.
+
+Now split the work among eight colleagues, each responsible for one single thing, and hand a ninth colleague the
+**artifacts** in place of the report: the code, the data file, the saved model, the audit trail. The ninth
+colleague's task is to break them. In an assignment made by one person alone, the most fragile part is the one
+nobody looked at from outside. In an assignment with a team that attacks, the fragile part is the one that
+survived the attack.
+
+The ninth colleague has one rule: **do not read the report**. They run the code with a seed that the author did
+not choose, inject a corrupted batch, tamper with a line of the trail to see whether the verifier notices.
+Whoever only reads reports agrees with them.
+
+**The eight specialists and the blind spot of each one.** Each specialist exists because there is a way of erring
+that they see better than the others.
+
+| Specialist | What they do | The blind spot they cover | What they deliver |
+| --- | --- | --- | --- |
+| Code | Turns hypotheses into executable generating processes | "The code runs" is not "the code is the hypothesis" | Fixed seed, pre- and post-conditions, property tests, profiles of time and memory |
+| Data | Audits the entry of the World | What a row is, and why the datum is missing | A data contract, quarantine of defective records, idempotent ingestion, a byte budget |
+| Lifecycle | Tests the model in time | The world changes and the model does not warn | Temporal cutoff without leakage, drift sensors, a policy for ignorance, post-mortem |
+| Inference | Runs the heavy inference | One sample is not an answer | Chain diagnostics, calibration by simulation, conformal prediction |
+| Governance | Takes care of legality, privacy and trail | Personal data is a combination of fields, not a file type | Impact opinion, differential privacy, a named human officer, a hash chain |
+| Fairness | Asks who pays for the error | The chosen metric decides who pays | Audit of error rates between groups, the fairness trilemma |
+| Domain | Translates problems from other areas | The parameter that does not come from the data comes from someone | Glossary, structured elicitation, scope term |
+| Decision | Converts the result into action | A number without a natural frequency decides nothing | Natural frequencies, HOPs, the C/L tree, exit clause |
+| Orchestrator | Coordinates and convenes the panel | No step approves its own result | The model-critique card and the attack on the artifact before approval |
+
+**The craft of each specialist, in one case.** The data specialist begins with a decision that nobody sees:
+**what a row is**. One row per person, per day or per event changes the mean, the variance and the margin, and for
+that reason the grain is declared and proved with a count. The same specialist hunts the **sentinel value**, the
+absence recorded as 0, −1 or 9 999 that enters the sum as if it were data, and requires idempotent ingestion:
+running the load twice cannot change the number. And they ask the question that a limit on nulls does not ask:
+**why is the datum missing?** The mechanism (MCAR, MAR or MNAR, Chapter 6) decides whether discarding the
+incomplete cases is harmless, and a contract that only counts the nulls is silent on the day one appears.
+
+The governance specialist recalls that personal data is not a file type: it is the **combination of fields**
+that decides. Postcode, date of birth and sex, together, probably identify 87% of the people in the United
+States, by the 1990 census. Differential privacy limits how much the presence of one person can change any
+answer. In two databases that differ in the record of a single person, the result of any query cannot change by
+more than a fixed factor. That factor is a budget, spent on each query. The cheapest measure remains not
+collecting.
+
+The lifecycle specialist requires that every model in operation declares its behaviour in three cases: input
+outside the domain, missing field and low confidence. The options are to refuse, to fall back on a safe
+deterministic rule or to return calibrated uncertainty. A model in use degrades for different reasons, which ask
+for different answers.
+
+| Situation | What changes | The right answer |
+| --- | --- | --- |
+| Covariate drift | The distribution of the inputs changes, and the relation between attribute and outcome still holds | Reweight, with weights by the ratio of the densities |
+| Label drift | The frequency of the outcomes changes, and the distribution of the attribute within each outcome still holds | Readjust the base rates (intercept correction) |
+| Concept drift | The relation between attribute and outcome itself changes | No reweighting saves it: rebuild the model |
+| Served population changed | The metric falls because the audience changed | It is not a degradation of the model: read the metric against the base rate |
+
+The domain specialist does not ask an expert for a mean. The Sheffield protocol (SHELF) asks for the **median**,
+the **quartiles** and the **plausible extremes**, fits a distribution to those quantiles and gives it back so that
+the expert confirms it, controlling the interviewer's anchor, the order of the scenarios and overconfidence. When
+no expert can be heard, the least one can do is measure **how much the decision depends on the prior**. In 33
+domains, the prior in use was replaced by a prior from the literature and by a deliberately weak one: five domains
+change status or action with the literature prior and two with the weak one. The lesson is not that the first
+priors were wrong. It is that in five of 33 domains the decision does not survive the replacement.
+
+**System 1 and System 2.** A machine that helps thinking has two modes. **System 1** does fast, categorical
+triage: the same input always gives the same answer, and every probability it emits is **held inside the interval
+from 1% to 99%**. **System 2** deliberates: it searches a tree of options, keeps a belief about where the weak
+point is, runs heavy inference and directs the stress of the panel. The rule of the interval is not aesthetics. A
+probability of 0% or of 100% can be scored, and when it is wrong it is punished hard: the Brier score charges it
+the maximum of 1, and the logarithmic score charges it an infinite penalty. The real defect is in learning. By
+Bayes' rule a prior of 0 or 1 stays at 0 or 1 whatever the evidence, so a system that emits certainties cannot be
+moved by what it sees next (Lindley called this Cromwell's rule).
+
+Cromwell's rule forbids 0 and 1; it does not choose the floor. The interval from 1% to 99% is a **convention of
+System 1's triage**, where the categories are few and none is rare, not a law for every forecast. Applied to a
+forecaster of rare events it would do damage: an event with a base rate of 0.2% forecast at no less than 1% is
+over-forecast five times on every quiet day, and the Brier and logarithmic scores charge for it. For forecasts,
+the floor $\varepsilon$ is declared from the base rate and from the size of the data (Laplace's rule,
+$1/(n+2)$, is one honest choice), and is never wider than the rarest outcome the model must predict.
+
+---
+
+### Step 2 — The rule of the game
+
+**The six-stage cycle.** A question goes through six stages, each with its output cards. The path to the decision
+passes through all of them.
+
+1. **Translation and elicitation (Domain).** Card of the transfer, elicitation, scope term.
+2. **Ingestion, grain, causality and ethics (Data, Governance, Fairness).** Data contract, card of the sample,
+   causal graph with the Pearl step, privacy opinion, fairness audit.
+3. **Simulation, null model and frontier (Code, Inference, Lifecycle).** Executable generating process, null model
+   simulated **before** reading any pattern, inference diagnostics, partition outside time, count of attempts.
+4. **Projection onto the five lenses (Orchestrator).** Sweep of the information, time, tail,
+   invariance and decision lenses.
+5. **Safeguard panel (Orchestrator).** Rejected goes back to the stage that failed; approved moves on.
+6. **Decision and closure (Decision).** Memorandum in natural frequencies, HOPs, the C/L tree and exit clause.
+
+A rejected assignment goes back to the **stage in which it failed**, instead of going back to the beginning.
+
+**The safeguard panel.** Three failures eliminate the assignment before any discussion of merit: temporal
+leakage, a violated data contract without treatment and the absence of a named human officer. After that, each
+specialist's work receives its attack, eight in total.
+
+| Attack ($A_i$) | The attack | The safeguard the card must carry |
+| --- | --- | --- |
+| $A_1$ Code | A new battery of properties, with a seed the author did not choose | property test |
+| $A_2$ Data | A batch with corrupted records, which must be isolated | handling of missing values |
+| $A_3$ Lifecycle | A batch with strong drift, live | declared drift |
+| $A_4$ Inference | A pathological data set, to see whether the uncertainty denounces the inadequacy | pathologies covered |
+| $A_5$ Governance | Tampering with the audit trail, which the chain verifier has to detect | intact trail |
+| $A_6$ Fairness | Inverting the chosen metric and showing who would come to pay | audited subgroups |
+| $A_7$ Domain | An atypical scenario of the domain, with an alternative prior | elicited prior |
+| $A_8$ Decision | A crisis that violates the exit clause itself | declared exit clause |
+
+**The approval condition.** For each attack $A_i$ the panel reads two bits from the card: whether the safeguard
+of that row was declared, and whether the structural field that anchors it is present (a property test anchored
+by a runnable artifact and a seed, an exit clause anchored by a named payer of the error). The artifact $X$ is
+approved only if **all** eight rows pass:
+
+$$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X),\qquad
+C_i(X) = \mathrm{safeguard}_i(X) \wedge \mathrm{anchor}_i(X).$$
+
+The $\bigwedge$ is the logical "and". One single row that fails is enough for the assignment to go back. The
+condition reads no seed and no judgement: the same card always gets the same sixteen bits, and it **fails** when a
+safeguard was declared absent or left without its anchor, which is what makes it auditable. The panel is a
+checklist. It answers "was the safeguard declared, with the field that anchors it?", not "does the safeguard hold
+under attack?". The second question belongs to tests that run the attack, such as the tampering of the trail in
+the gates of Chapter 17.
+
+**Why the panel prints bits.** Until 2026-10-19 each row printed a "severity" from 0 to 10, drawn by a seed inside
+a range that the two bits selected, against a floor of 6. No range crossed the floor, so the verdict was always the
+AND of the bits; whether a declared safeguard scored 8, 9 or 10 was decided by the seed and said nothing about the
+artifact. A decimal that only encodes a yes or a no is the false precision this book warns against elsewhere, and
+it borrowed the name of Mayo's severity (Chapter 7), which is a probability about a procedure. The panel now prints
+the bits, and the name was changed with it: it was called the "adversarial panel", which described what it **asks
+for**, an attack on each specialist's work, and not what it **runs**. Both changes are recorded in Appendix E.
+
+**The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
+replicates of the fitted model; comparison with at least one rival model; separation between parameters
+identified by the data and parameters brought from outside; analysis of performativity, Goodhart and Lucas; and a
+defence of the undecidable premises by the **cost of the error**.
+
+**An assignment with a declared gap is worth more than a uniform one.** The complete artifact with one admitted
+weak point beats the uniform artifact that admits no gap at all. In the Danish fire-insurance case, the panel
+rejected the claim; the claim lost, but the rival model **did not win the right to decide** either.
+
+**Correcting a forecast when the base rate moves.** Label drift has a closed-form correction. If the distribution
+of the attribute within each class does not change, the corrected probability is the old one multiplied by the
+ratio between the new base rate and the old one, then renormalised:
+
+$$P_{\text{new}}(y \mid x) \;\propto\; P_{\text{old}}(y \mid x)\,\frac{\pi_{\text{new}}(y)}{\pi_{\text{old}}(y)}$$
+
+With two outcomes, the correction adds a constant to the logit: it is an **intercept correction**. When the new
+base rate is unknown, Saerens, Latinne and Decaestecker (2002) estimate it from the unlabelled new cases
+themselves, alternating two steps until they agree: correct the forecasts with the current guess of the base
+rate, then take the mean of the corrected forecasts as the next guess. The hierarchy of Van Calster and colleagues
+(2016) separates two levels of calibration. One is calibration in the mean, measured by the intercept; the other
+is **weak calibration**, which requires intercept 0 and slope 1. A flight-delay forecast for 2023 passed with the
+intercept correction alone; an arrest forecast for Toronto did not, because its error was one of slope, and no
+shift of base rate repairs a slope.
+
+**Checking a posterior by simulation.** Heavy inference returns a cloud of samples, and the cloud can be the wrong
+size without any warning. Calibration by simulation (SBC) tests the machinery itself. Draw a parameter
+$\tilde\theta$ from the prior, simulate data with it, run the inference on those data and record where the true
+value falls among the $L$ posterior samples. Repeat many times. If the inference is right, the rank is uniform:
+
+$$\mathrm{rank}(\tilde\theta; \theta^{(1)}, \dots, \theta^{(L)}) \sim \mathrm{Uniform}\{0, \dots, L\}$$
+
+A histogram of ranks with a hump in the middle means posteriors that are too wide; a U shape means posteriors that
+are too narrow, the overconfident case; a slope means a biased sampler. The check needs no real data, because the
+truth is known by construction.
+
+**System 2, in four tools.** Deliberation is not a mood; it is a set of procedures, each with a null to beat.
+
+- **Tree search with estimate (upper confidence bound, the search behind LATS).** A greedy agent takes the option of
+  greatest immediate value and stops.
+  Tree search expands the options, estimates the value of each branch by simulation and balances exploring
+  untried branches against exploiting good ones, by the upper confidence bound. It can find a path that begins
+  with a worse step and ends somewhere better, which the greedy agent never sees.
+- **The belief state.** System 2 keeps a probability for each hypothesis about where the weak point is, updated
+  with every card the panel has rejected. The belief has a floor and a ceiling: no hypothesis falls to 0% or rises
+  to 100%, so that a surprise can always move it. Its entropy says how concentrated it is.
+- **Directed stress.** The ordinary panel attacks the eight points in a fixed order. Directed stress attacks first
+  where the belief points and stops at the first rejection. The null is the fixed order: if learning adds nothing,
+  both orders find the same rejection with the same number of attacks.
+- **Heavy inference (Metropolis).** When the posterior has no closed form, a random walk proposes a new value near
+  the current one and accepts it with probability $\min\{1, p(\text{new})/p(\text{current})\}$. The chain spends time
+  in each region in proportion to its posterior probability. Its honesty is tested where the answer is known: on a
+  Beta distribution, the mean of the chain must meet the closed form.
+
+The same discipline decides the grain of a question. Refining from the average day to each day is worth it only
+when the measured loss of the coarse question pays for the margin the fine one requires; finer grains that the
+instrument cannot measure stay declared, never guessed.
+
+---
+
+### Step 3 — Hands on
+
+Three measurements: run the complete panel over a card with the eight safeguards and over cards with safeguards
+removed; check that the triage of System 1 never leaves the interval between 1% and 99%; and let System 2
+deliberate. Run the first with `cargo run --release --bin labs -- --chapter 12`.
+
+**The recipe of the laboratory.** The panel reads the eight bits of each card and nothing else. The triage of
+System 1 is a deterministic stand-in, not a model: the bytes $b$ of the card's identifier are folded into a state
+$s \leftarrow 1{,}099{,}511{,}628{,}211\,s + b$ (modulo $2^{64}$, starting at 0), one step of the SplitMix64 generator is
+taken from that state, and the probability is $(v \bmod 99 + 1)/100$, held inside $[0.01; 0.99]$. Its only claims are the
+two the line checks: the same card gives the same number, and no number leaves the interval.
+
+```text
+== Chapter 16 :: the A1-A8 safeguard panel ==
+complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
+card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
+without A1-code: rejecting=["A1-code"] count_rejecting=1
+without A2-data: rejecting=["A2-data"] count_rejecting=1
+without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
+without A4-inference: rejecting=["A4-inference"] count_rejecting=1
+without A5-governance: rejecting=["A5-governance"] count_rejecting=1
+without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
+without A7-domain: rejecting=["A7-domain"] count_rejecting=1
+without A8-decision: rejecting=["A8-decision"] count_rejecting=1
+sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
+seed read by the panel: none (the verdict is a function of the eight bits)
+system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
+```
+
+Four readings.
+
+**The complete card passes.** The eight bits are set, and the verdict reads no seed: there is nothing to vary.
+A rejection comes from a missing safeguard, never from a draw.
+
+**Each safeguard removed brings down exactly the row that charges for it.** In the eight lines of the sweep, the
+set of rejecting rows always has **one** element, and it is always the corresponding one. Without an intact trail
+$A_5$ rejects, without an exit clause $A_8$ rejects, without a property test $A_1$ rejects, and the other seven stay
+set. The panel is not a mean score that dilutes, but a logical "and" that locates the failure.
+
+**Removing two safeguards rejects the card and names both.** With the governance and fairness safeguards removed,
+6 of 8 bits stay set, the card is rejected, and the line says which two rows fell.
+
+**The triage respects the interval.** The last line returns 0.06 and 0.94, sum 1.0000, and zero values outside
+1% to 99%.
+
+A fuller System 1 sorts a card into one of six declared themes with a suffix tree, and the same contract holds on
+every line. Run it with `cargo run --release --bin labs -- --s1`.
+
+```text
+== System 1 :: deterministic triage of cards ==
+suffix tree: 129 suffixes indexed over 6 declared themes
+category=queue probability=0.9117 products=[0.9117, 0.0177, 0.0177, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
+category=causal probability=0.9297 products=[0.0141, 0.9297, 0.0141, 0.0141, 0.0141, 0.0141] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9297 | sum 1.0000 | outside [0.01;0.99] 0
+category=tail probability=0.9117 products=[0.0177, 0.0177, 0.9117, 0.0177, 0.0177, 0.0177] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9117 | sum 1.0000 | outside [0.01;0.99] 0
+category=calibration probability=0.9415 products=[0.0117, 0.0117, 0.0117, 0.9415, 0.0117, 0.0117] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9415 | sum 1.0000 | outside [0.01;0.99] 0
+category=fairness probability=0.9217 products=[0.0157, 0.0157, 0.0157, 0.0157, 0.9217, 0.0157] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.9217 | sum 1.0000 | outside [0.01;0.99] 0
+category=other probability=0.8718 products=[0.0256, 0.0256, 0.0256, 0.0256, 0.0256, 0.8718] sum=1.0000 out_of[0.01;0.99]=0 | probability 0.8718 | sum 1.0000 | outside [0.01;0.99] 0
+```
+
+The sum is 1.0000 and no probability falls outside [0.01; 0.99]. The last line is an input that matches no theme:
+it falls into `other` with 0.8718, the declared prior, not a guess. The limits are worth stating. The vocabulary is
+closed, the matching is lexical and does not understand negation, and this is triage, not judgement. The numbers it
+emits are normalised scores that obey the rules of probability; nobody has checked that a card triaged at 0.91 lands
+in its theme 91 times in 100, so they are not yet calibrated probabilities, and the honest name for them is scores. Judging
+belongs to System 2. Run it with `cargo run --release --bin labs -- --s2`.
+
+```text
+== System 2 :: deliberation over the hypergraph ==
+declared graph: 8 nodes, 6 tree edges, 2 graph edges, 5 hyperedges | validation ok
+nodes that no lens covers: ["f1.code-synthesis"]
+greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution -> f1.code-synthesis (value 1.000, node without lens true)
+board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
+stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
+inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
+R axis: loss of the aggregate 25.54 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis without oscillation: loss 0.00 min -> R0-agregada
+```
+
+- **The greedy agent stops at the queue** with value 0.600. Tree search goes further and reaches value 1.000, at a
+  node that no lens covers, which is itself a finding: the deliberation found the hole in the map.
+- **The belief** points at governance with probability 0.9205, and entropy 0.4324 says the belief is concentrated.
+- **Directed stress** reaches the rejection with 1 attack; the fixed order needs 5 to reach the same one. Learning
+  saved four attacks and changed no verdict.
+- **Metropolis** on a Beta(4, 8) gives a chain mean of 0.3346 against the closed form 0.3333, with acceptance 0.676.
+- **The grain:** with oscillating demand, the coarse question loses 25.54 minutes, more than the 12.00 minutes of
+  margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
+
+**Exercises.**
+
+1. *(Concept)* A database has one row per medical appointment, and the question is about patients. Which
+   specialist must block the analysis, and with which test?
+2. *(Concept)* Draw the attack of the panel for a credit triage model. Which crisis would violate the exit clause?
+   Which group would come to pay if the metric were inverted?
+3. *(Count)* A card has 7 of its 8 safeguards declared and anchored, and the eighth declared without its anchor.
+   How many of the sixteen bits are set, and is the card approved? Justify with the definition of $\bigwedge$.
+4. *(Laboratory)* Implement calibration by simulation (SBC) for a Beta-Binomial model: draw the parameter from the
+   prior, simulate the data with it and run the sampler. Check that the rank of the true value among the posterior
+   samples is uniform. Then introduce an error in the sampler and watch the histogram stop being flat.
+5. *(Count)* A classifier was trained where the base rate was 10% and now serves a population where it is
+   30%. A case receives 0.20 from the old model. What is the corrected probability? Which assumption must hold for
+   the correction to be right?
+6. *(Concept)* Give one example of each mode of degradation of a model in use (covariate drift, label drift and
+   concept drift) and an example of the fourth situation, which is not a degradation. Say the right answer for
+   each one.
+7. *(Concept)* Why must System 1 be deterministic (repeated input, equal probability)? Relate it to the fixed seed
+   of Chapter 1. Why, in contrast, must the belief of System 2 never reach 0% or 100%?
+
+**Summary.**
+
+- Eight specialists, each linked to a way of erring, plus an orchestrator that attacks; nobody approves the work
+  they produced.
+- The cycle has six stages, and a rejection returns to the stage that failed, not to the beginning.
+- Approval is a logical "and" of eight checks, each a safeguard declared and anchored; each missing safeguard
+  brings down the row that charges for it, and no seed enters the verdict.
+- A moved base rate is corrected on the logit; a wrong slope is not. SBC checks the inference where the truth is
+  known by construction.
+- System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
+  bounded belief state, directed stress and Metropolis, each tested against a null.
+
+## Chapter 17. The iron contract: cards, prohibitions, invariants and gates
+
+**Objectives.** By the end of this chapter you should know how to read and write an epistemological card, fill the
+five questions of the header, state the four prohibitions and the five invariants $\Phi_1$–$\Phi_5$,
+go through the funnel of four filters and say which check each automatic gate makes.
+
+---
+
+### Step 1 — The real world and the paradox
+
+**The form that refuses.** Everybody has filled in a form that accepts anything. You write
+"yes" in the remarks field, the system accepts, and three weeks later nobody knows who authorised what.
+The opposite exists and it is boring, and that is what this chapter is about. The form here **refuses** the submission when a
+mandatory field is empty.
+
+The epistemological card is a closed list of questions. It is the **contract** of the work, and not its summary.
+In every 100 cards filled in a hurry, the ones that pass without complaint are the ones that had every
+field answered with something checkable. A card without the field of the generating process does not say "I do not know". It says
+"nobody wrote that", and that is where the error enters.
+
+**The question nobody asks the decider.** There is a specific way of erring that has a name and is almost never
+checked, the **type III error**. In ordinary tests, the type I error is accusing someone who is innocent and the type
+II error is acquitting someone who is guilty. The type III error is more banal and more frequent, and consists in **answering
+brilliantly the wrong question**. The study measures effect A with impeccable precision, and the manager needed to
+know about effect B.
+
+Imagine a city hall that has to decide whether to open a second service room on the busy days. The
+report answers, rigorously, the question *"what is the mean level of service of the year?"* The answer is 82%, and the
+manager reads it as the answer to his question, *"should I open a second room?"*. Nobody wrote the manager's question
+anywhere. In 100 hurried decisions, a respectable part dies from a right account on the
+wrong question, and not from a wrong account.
+
+**How the contract locks that.** The domain package carries a mandatory field, the
+`decision_maker_question`, with three parts in order: **who decides**, **which action the decision changes**
+(copied literally from the decision field of the package) and **the question that decision uses**,
+ending in an interrogation mark. The validator is the code, which refuses generic text without who decides and rejects an action
+different from the one of the package. After that, "the question the model answers is the one the decider asked"
+stopped being an assumption and became a checkable sentence.
+
+**The four things the contract forbids.** The contract of the agents begins with four absolute prohibitions, and
+each one patches a known hole:
+
+1. **Free natural language between agents.** Communication is only through structured cards; free text is
+   ambiguous and invents.
+2. **The solitary mean.** When the function is non-linear, the dynamics multiplicative or the tail heavy, it is
+   forbidden to report only the mean: one reports the result of the mean case, the simulated mean of the
+   results, the median, the quantiles and the cumulative curve.
+3. **Confusing learning with performativity.** Small prediction error does not prove that the model is
+   true; one runs the model with and without the action.
+4. **Dogmatic extremes and omission of trials.** No forecast declares 0% or 100%; every forecast is
+   scored by a proper rule outside the fit; and one declares how many specifications were tried.
+
+---
+
+### Step 2 — The rule of the game
+
+**The card and the five questions of the header.** Every payload that circulates opens with five mandatory
+questions.
+
+| Field | Question |
+| --- | --- |
+| `generating_process` | Which hidden mechanism generates the data, written in a simulable way, and in which layer can the claim fail? |
+| `nonlinearity` | Is the result a non-linear function of something that varies? Compare $f(\mathbb{E}[X])$ with $\mathbb{E}[f(X)]$; is the dynamics additive or multiplicative? |
+| `unit_and_margin` | What is the de facto independent unit, and was the margin computed with it? |
+| `noise_physics` | What noise is this (gaussian or with jumps)? Are there absorbing states? Is the agent passive or does it deform the world? |
+| `causal_ladder` | At which step of Pearl is the statement, with which identification strategy and which untestable premise? |
+
+The header of a real claim about a bank call centre, abbreviated:
+
+```yaml
+claim: >
+  "Staffing each half hour by Erlang C on the historical mean rate, the centre answers
+  82% of the calls within 20 s, with a mean wait of 10 s, every day."
+header:
+  nonlinearity: >
+    The Erlang C service level is concave and collapses near saturation: applied to the real
+    rate of each day of the vault, the claim's own formula gives 57% on average, not 82%.
+  unit_and_margin: >
+    The independent unit is the DAY: the calls of one day share the rate and the queue.
+    Effective n = 81 days of vault, not 2.65 million calls.
+  noise_physics: >
+    Daily demand is NOT Poisson: dispersion Var/mean = 273 (Poisson: 1).
+  causal_ladder: >
+    Step 2 (intervention): the staffing rules are do(staffing) simulated on the real demand.
+    Untestable premise: demand does not react to staffing.
+```
+
+Other cards add questions to the five of the header. The card of the evidence asks for the base rate, the
+two likelihoods and the posterior computed in two ways, in odds and in a tree of 10,000 cases, which
+have to coincide. The card of the causal graph begins with the step. The card of the model critique closes the series and says in which
+item each previous card enters.
+
+**The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
+
+| Question | Options | Why it matters |
+| --- | --- | --- |
+| What shape does the noise have? | Gaussian (continuous) or with jumps | A gaussian model does not have 19 October 1987 in its hypothesis space |
+| How does the noise integrate? | Itô or Stratonovich | When the noise depends on the state, the two readings give different drifts |
+| Are there absorbing states? | Yes (ruin, death, bankruptcy) or no | In an absorbing state, the ensemble mean stops describing any trajectory |
+
+The second question looks technical and is not. In a multiplicative growth with proportional noise,
+$dX = \mu X\,dt + \sigma X\,dW$, read in the manner of Itô, the expectation grows at rate $\mu$, but the
+typical trajectory grows at rate
+
+$$\frac{d}{dt}\,\mathbb{E}[\ln X_t] = \mu - \tfrac{1}{2}\sigma^2.$$
+
+It is the volatility drag of leveraged Dow Jones, and it is Jensen again. Read in the manner of Stratonovich, the
+same symbol describes another process: the typical trajectory grows at $\mu$, and the expectation at
+$\mu + \tfrac12\sigma^2$. Notice what changes and what does not. The gap between the growth of the expectation and
+that of the typical trajectory is $\tfrac12\sigma^2$ **in both readings**; the drag is Jensen, and no convention
+removes it. What the convention changes is **which of the two rates the parameter $\mu$ names**, and therefore the
+number one obtains when a $\mu$ estimated under one reading is plugged into the other. With additive noise,
+$dX = \mu\,dt + \sigma\,dW$, the two readings coincide and the question does not arise. The choice depends on the physics.
+Idealised white noise of a discrete system asks for Itô; the limit of a real noise with short correlation asks for
+Stratonovich. The card also asks for a test with a smaller time step. If the result changes when $\Delta t$
+shrinks, the simulation was measuring the integrator instead of the World. That test does **not** decide between Itô and
+Stratonovich, because the Euler scheme converges to the Itô reading, and the Stratonovich one asks for another integrator.
+
+Noise also makes the system jump between stable states. In a system with two wells, the mean time until the jump
+follows the Kramers formula and grows exponentially with the height of the barrier $\Delta U$ with respect to the
+temperature $T$:
+
+$$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
+
+For high barriers, that time has almost no memory. Whoever waited a long time is not closer to the jump.
+Looked at only in the jumps, however, the noise looks like a push. In 591 simulated jumps, the noise just
+before the jump pointed in its direction in 99% of the cases, with no external force at all. Looking for the cause of a
+jump is a selection error; looking for the cause of a change in the frequency of the jumps is not.
+
+**The five invariants.** Nothing enters the graph without passing the invariants, which work as database
+locks. The first four are required from the beginning; the fifth entered with the axis of question resolution
+(Chapter 21) and bites in the case in which the misalignment is most expensive.
+
+| Invariant | What it requires | What it blocks |
+| --- | --- | --- |
+| $\Phi_1$ Simulability | Every claim becomes code with a declared seed and property tests | An argument only in prose |
+| $\Phi_2$ Margin and unit | Every number comes with a margin computed on the de facto independent unit | Pseudoreplication, duplicates, sentinel values |
+| $\Phi_3$ Layers and severe test | Audit the filter of the sample, draw the causal graph and confront the hypothesis with a simulated null model | Pattern read before the null, collider, Simpson |
+| $\Phi_4$ Ecological scope | Judge the decision in the environment in which it will operate, with a scope term and an objective exit clause | A recommendation without a validity date |
+| $\Phi_5$ Resolution of the question | The declared action has to be at the same grain as the independent unit: with the datum at the day or coarser, aggregate resolution (R0) is rejected | An action by day with an account at the aggregate. A unit finer than the day stays outside this lock, and that is declared |
+
+**Testing a property, not an example.** An ordinary test checks one case: with these inputs, this output. A
+**property test** states a rule that must hold for every input, and lets the machine search for a counterexample.
+"The margin of a proportion is never negative and never larger than one half", "the wait of a queue never falls
+when the service gets slower", "running the load twice gives the same table". A generator draws thousands of
+random inputs with a declared seed; when one breaks the rule, the tool shrinks it to the smallest input that still
+breaks it, and that small case is usually the bug. The property is a claim about the code, written in the form of
+a severe test: it could fail on any of the inputs, and it is worth something only because it did not.
+
+**The funnel of four filters.** A system that simulates every hypothesis it meets collapses from cost and from
+inflation of false discoveries. The funnel works with two companions: pruning by value of information and a counter
+of attempts. The four filters refuse by the header (without a
+question, without a generating process, without a unit or null, without an action with an exit). The pruning cuts when the quota of the value
+of information cannot cross the threshold: with $C/L = 0.1$ the quota is worth 0.0090 at $p = 0.001$ and the test of
+0.05 is pruned, while at the threshold $p = 0.10$ the quota is 0.9000. Finally, the counter closes the account: how many specifications were tried, at which filter each one fell, how
+many were approved and which one is final. Its limit is declared: the quota is the expected value of perfect
+information, exact only in the model of two acts and two states. Each front organises
+itself as a funnel, and in it most of the weak hypotheses fall before touching heavy simulation.
+
+1. **Value of information.** The hypothesis that would not change any decision even with a perfect answer is cut. The
+   standard log is "pruned by Crisonomy: curiosity without operational use", Crisonomy being the label of the decision lens.
+2. **Topological pruning and unit.** By d-separation, every node that stays outside the Markov blanket of the
+   variable of interest is cut, including the colliders that, if conditioned on, would create Berkson's bias. The claim
+   that the data do not identify is also cut, or the one whose effective size, counted on the independent unit, stays too small to conclude. The data contract also classifies the mechanism of
+   every absence (MCAR, MAR, MNAR or not declared), with the columns the classification covers and a sensitivity
+   analysis when the absence may depend on the value itself. An absence without classification is refused.
+3. **Severe test against the null.** If the alleged pattern already appears in the null model, or in a reference with a single
+   parameter such as the base rate, the research closes there. When the simulation is expensive, that test runs first in a
+   cheap emulator.
+4. **Heavy inference, lenses and panel.** Only the remainder receives the expensive treatment.
+
+**Worked case: the identifiability of $R_0$.** At the beginning of an epidemic, the cases grow like
+$\exp((\beta - \gamma)t)$, and the data determine the **difference** $\beta - \gamma$, not the ratio
+$R_0 = \beta/\gamma$. With 25 days of simulated cases, in which the truth is $R_0 = 2$, the compatible values
+go from **1.38 to 5.90**, and the predicted final size goes from **50% to 100%** of the population. With 45 days, $R_0$
+stays between **2.00 and 2.24**, but by then the curve has already doubled. Taking the duration of the infection from other studies narrows
+$R_0$ to **1.81 to 2.11**. That is not a defect, as long as one declares that the margin became the one of the source.
+
+**The automatic gates.** No delivery is consolidated without passing the gates on a clean machine. The
+agents and the $\Phi$ have already been formalised; the gates **repeat the work and compare**. A repeated input has
+to produce an identical output, and a planted defect has to be detected. Seven gates make a complete set.
+
+| Gate | Who answers | What it verifies | What it does not guarantee |
+| --- | --- | --- | --- |
+| G1 | Orchestrator | Determinism: the Merkle root of the second run is identical to the one of the first | That the result is right: a wrong account reproduces as faithfully as a right one |
+| G2 | Code | Fixed seed declared in every card | That the seed was chosen before the result was seen |
+| G3 | Code | Declared scope: only a simulable artifact | That the artifact simulates the claim it is attached to |
+| G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock | That the fields are true, or that the decider question is the decider's: the lock reads a question mark and a quoted action, not meaning |
+| G5 | Governance | SHA-256 trail intact **and** tampering detected | Provenance or truth: a fabricated record sealed before publication passes |
+| G6 | Orchestrator | Safeguard panel $A_1$–$A_8$: every check declared and anchored | That any safeguard works: the panel checks declared and anchored safeguards, it runs no attack |
+| G7 | Decision | Declared exit clause and $A_8$ above the floor | That the exit clause will be honoured when its trigger fires |
+
+Two details make the set worth more than the sum. G5 does not verify only that the chain is intact. It
+**tampers on purpose** and requires the verification to fail with the tampered chain. G1, in turn,
+compares two runs of the declared horizon. A gate that never fails is not a gate (Chapter 18). The last column is
+there for the same reason. A gate that passes is evidence only of what it checks, and every one of the seven checks
+form, presence or reproducibility; none of them checks that a number is correct. That job stays with the tests that
+compare a result with a known answer, and with readers who redo the account.
+
+---
+
+### Step 3 — Hands on
+
+The laboratory validates a complete card and a card with one planted defect at a time, printing the failures by
+gate. Run it with `cargo run --release --bin labs -- --chapter 13`.
+
+**The recipe of the laboratory.** The property test draws 10,000 cards with a sample size $n$ uniform between
+100 and 999 and a rate $p$ uniform in $\{0.01, 0.02, \ldots, 0.99\}$, and computes the margin $1.96\sqrt{p(1-p)/n}$. It
+checks one property only, that the margin lies in $[0; 0.5]$; by construction it lies between
+$1.96\sqrt{0.01 \cdot 0.99/999} = 0.00617$ and $1.96\sqrt{0.25/100} = 0.098$. That the margin shrinks when $n$ grows is
+true of the formula and is not what this test checks.
+
+```text
+== Chapter 17 :: the iron contract ==
+card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
+declared taxonomy: layers=["L1", "L2", "L3"] uncertainties=["aleatory", "epistemic", "knightian", "not-applicable"]
+defect NoSeed: failures=1 gates=Phi1-simulability detail="missing fixed seed or simulable artifact"
+defect NoDefinition: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
+defect NoMarginNoUnit: failures=1 gates=Phi2-independent-unit detail="margin without a declared independent unit"
+defect NoNullModel: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
+defect NoScopeNoPayerNoExit: failures=1 gates=Phi4-scope-and-exit detail="ecological scope, who pays for the error or exit clause missing"
+defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
+defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
+intact graph: validation=[]
+graph with a ghost edge: validation=["edge to absent node: L2_erlang -> L2_ghost"]
+graph with a deductive cycle: validation=["cycle in E_tree: Some(\"L1_queue\")"]
+graph with a one-member hyperedge: validation=["hyperedge with fewer than two members: H2"]
+property test (10.000 simulated cards): violations=0 margin_min=0.00617 margin_max=0.09798
+same seed, two validators: runs that diverge in 0 of 32
+```
+
+Four readings.
+
+**The complete card passes without a single failure.** Five fields of the header in the required order, seed
+declared, simulable artifact, margin with independent unit, null model, ecological scope, who pays
+for the error, exit clause and the question of the decider citing the action. The total is zero. The type III
+lock is **literal**, and the question has to end in an interrogation mark **and** contain the action of the package.
+
+**Each defect falls at the right gate.** Seven planted defects, seven rejections, one per gate, without
+contamination. Without a seed it falls at $\Phi_1$; without a margin or unit it falls at $\Phi_2$; without a definition or without a
+null model it falls at $\Phi_3$; without scope, without who pays or without an exit clause it falls at $\Phi_4$. The two
+defects of the question of the decider both fall at the type III lock, but for different reasons. One loses the
+interrogation mark, the other loses the action. **The message is identical in the two cases.** The validator
+states the requirement of the rule, without saying which part was missing. It is a small detail that exercise 4 asks
+to improve.
+
+**The structural validator crosses the chapters.** The three refusals of Chapter 15 reappear here:
+an edge to a ghost node, a deductive cycle and a hyperedge with a single member. That is on purpose. A lock that only
+exists in one chapter is a lock that nobody uses.
+
+**The property test and the seed.** Ten thousand simulated cards with margin $1.96\sqrt{p(1-p)/n}$ for
+$n$ between 100 and 999 and $p$ between 0.01 and 0.99 give **zero violations**, with margins between 0.00617 and 0.09798. The
+confidence interval is never negative nor greater than a half. The two validators run over the declared
+seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
+
+**Exercises.**
+
+1. *(Concept)* Fill the five questions of the header for the claim "students who study with music
+   get higher grades".
+2. *(Concept)* Which filter of the funnel must cut the question "what is the favourite colour of the clients who buy
+   insurance?" in an insurer that is not going to change the product?
+3. *(Count)* Why do 25 days of exponential growth identify $\beta - \gamma$ and not $\beta/\gamma$?
+   Show that two pairs $(\beta, \gamma)$ with equal differences generate identical initial curves.
+4. *(Laboratory)* Improve the message of the type III lock to distinguish "the interrogation mark is missing"
+   from "the question does not cite the action". Make the two defects fall into different messages and reproduce the
+   table.
+5. *(Laboratory)* Write a property test that verifies that the simulated wait of a queue is always
+   non-negative and does not decrease when the service time increases, keeping the arrivals fixed.
+6. *(Concept)* Explain, in three sentences, why G5 is stronger than a test that only checks whether the chain
+   is intact, since it tampers on purpose with the chain it produced.
+
+**Summary.**
+
+- The card is a closed list of questions; five are mandatory in every payload, and the field
+  `decision_maker_question` locks the type III error.
+- The four prohibitions and the five invariants are locks, and not recommendations; $\Phi_5$ is the newest and the narrowest.
+- The funnel cuts cheaply before spending expensively: value of information, topological and unit pruning, severe test
+  against the null, and only then heavy inference and panel.
+- Seven gates repeat the work and compare, each with a pass or a fail and no third outcome, and a gate that
+  never fails is not a gate.
+- A property test states a rule that must hold for every input and lets the machine hunt for the
+  counterexample.
+
+## Chapter 18. The vault, the cryptographic seal and the audit against itself
+
+**Objectives.** By the end of this chapter you should know how to explain why pre-registration with a hash published
+before the data is a seal against adjustment after seeing the result, what the counter of attempts $K$ measures, why the
+vault outside time opens a single time, how the forecast diary and the signed opinions work, and
+why the auditor being a stakeholder is a limit that no signature resolves.
+
+---
+
+### Step 1 — The real world and the paradox
+
+**Painting the target after the shot.** A marksman fires ten shots at the wall of a barn. Then he looks at the
+holes, picks up a brush and draws a target around the tightest group. Then he shows the target and says: "five
+hits in the centre". The count of hits is right, and the target is fake. The only thing that separates science
+from this marksman is **when** the target was drawn.
+
+There is no way to undo that by looking at the result. The seal consists in writing and **freezing** the
+target before the shot, in a way that nobody can alter afterwards without it being noticed. In every 100
+published results, the ones that look most like cheating are precisely the clean ones, adjusted a little bit
+after seeing the data. The difference between "I adjusted the model" and "I adjusted the model after seeing the result"
+is not in the model, but in the **order of the facts**.
+
+**The seal is a number.** How to freeze? By publishing the **hash** of the file. The hash is a fingerprint. It takes
+the whole content, from the first to the last character, and returns a line of 64 characters. Changing one comma
+changes the whole fingerprint. Publishing the hash before the shot is like sealing the envelope at a notary. You do not have to
+show the content now, but afterwards nobody opens the envelope without it showing.
+
+**The vault.** Imagine a bank that receives a payment slip from each client. One day the bank decides to build a
+"vault outside time": a folder with the data of the next three months, which no analyst may open. The
+model is built with the past; when it is finished, someone opens the vault and runs the model against data it
+never saw. Opening the vault costs the one thing it had: surprise. When a vault has already been opened and the
+model needs a correction, the correction is worth something only when tested in a **new vault**, which nobody saw.
+
+**The forecast diary.** Every probabilistic forecast issued stays recorded in a continuous ledger, with
+the source, the filter, whether the system can influence the outcome, how many factors the justification has and the
+step of Pearl. And with a limit: **the forecast is never 0% nor 100%**, but something between "one in a hundred" and
+"ninety-nine in a hundred". A certainty that fails is punished by the score, but it cannot be revised by the
+evidence; with the limit, each forecaster keeps a belief that can still move and a record that can be charged.
+
+---
+
+### Step 2 — The rule of the game
+
+**The risk of scale is epistemological.** When a system tests hundreds of hypotheses and specifications in
+parallel, the greatest risk is not technical; it is overfitting at industrial scale, the garden of forking paths
+walked by indefatigable machines. Three mechanisms contain it: the sealed pre-registration with a counter of
+attempts, the vault outside time, and the forecast diary on a chained bus.
+
+**Pre-registration with hash and counter of attempts.** Before anyone touches the test partition, the hypothesis
+is frozen with a hash. Every change of criterion, of test or of data is written in a declaration, with its SHA-256
+recorded **before** running. The rule does not forbid learning from a failure: a new run may be written knowing
+the previous ones. What it forbids is hiding that it was. Every correction made after seeing a result stays on
+record and **counts in $K$**, the number of specifications tried for the question, and the final report is obliged
+to declare it.
+
+Counting honestly is harder than it looks. In a real search for causal structure across twelve domains, the
+counter per domain stopped at $K = 3$, and the search stopped there because of it. But the same transfer gate had
+been tried across seven runs, and the counter per domain did not see that. Recounted across the whole gate, the
+honest number was **38 distinct tests**, within a band from 32 to 72 according to the counting criterion. Both
+numbers are right; they count different things. The lesson is that $K$ must be counted at the level at which the
+claim is made. With a Bonferroni correction at $K = 38$, the conclusion survived, with smaller sets of causes.
+
+A counter alone only makes the attempts visible. To make them cost something, $K$ should also penalise complexity,
+by the minimum description length (MDL) or by the Occam factor, together with the correction for multiple
+comparisons. A model that needed many tries and many parameters to fit has said less about the world than one that
+fitted at the first attempt with few.
+
+**What a seal proves, and what it does not.** A hash proves **integrity**: the file is the same, character by
+character, as the file that was sealed. It does not prove **provenance**, who produced the content and how, and
+much less **truth**. An invented record, sealed, carries a fingerprint as valid as that of an honest one. A gate
+for the listening of affected groups showed the limit: it checked whether each record had a name and a transcript
+file, and seven fabricated records, each with a plausible name and a transcript, opened it. Provenance needs
+something else, such as a transcript signed by whoever was heard, with the hash of the signed file chained into
+the record. Even then the signature says who spoke, not that what was said is true. The same holds for the garden
+of forking paths: the hash alone does not stop it. What stops it is the hash written **before** the data are
+seen, together with the counter $K$. Sealed after the result, the most selective analysis gets an impeccable
+fingerprint.
+
+**The vault outside time.** The future temporal partition stays in the exclusive custody of the lifecycle
+specialist. No one who builds models reads it during development; it is opened a single time, to score calibration
+and to verify the absence of leakage. The rule is hard and has a consequence: when a vault has been opened and the
+model needs a correction, the correction is worth something only when tested in a **new** vault. One real study
+opened three new vaults this way: the 2023 flights, the Toronto arrests of 2020–2021 and the Rhode Island traffic
+stops.
+
+**The forecast diary and the bus.** Each forecaster records every probabilistic forecast in a continuous ledger,
+restricted to the interval $[1\%, 99\%]$. Forecasters whose Brier score loses to the base rate, or whose Kelly
+capital collapses, have their weight reduced. The bus that carries the cards is **chained by hash**: each message
+carries the hash of the previous one, and the trail cannot be rewritten without breaking the chain. The chain has
+its own failure modes. One real diary added into a single score a forecaster that appeared in different projects
+under the same name; the error was invisible in any single line and showed only when the scores were recomputed
+by project.
+
+**Risk opinions and the named officer.** The governance specialist issues a risk opinion for each project
+evaluated, including the ones that never reach a decision, and a **named human officer** signs it. The signature
+is recorded apart from the result files, with each opinion identified by the SHA-256 of the file at the moment of
+signing, so that signing does not rewrite the outputs a clean reproduction compares. An opinion may carry a factual
+caveat that the signature does not remove: a recommendation derived from a decision and a cost that were
+**assumed** for the exercise is not policy advice, and the opinion has to say so.
+
+**The limit: the auditor is a stakeholder.** An audit authorised by whoever is audited has limited value. The named
+officer answers the questions an audit has to answer (who decided to use it, who approved it, who watches the
+scoreboard, who switches it off), but naming an officer **does not make the audit independent**. What an honest
+audit can do from inside is record what it **could not look at** and which affected groups were heard. In seven
+real decisions that involved people (cutting a benefit by 10%, reducing class sizes, replacing free care with a
+copayment, judging a training programme against survey controls, and three review marks on police data streams),
+**none of the seven affected groups was heard**, and an elicitation with human experts was never done. A signature
+on a summary is worth what it is: the declaration of whoever runs the work that they read a summary.
+
+**Auditing your own claims.** Governance also serves to mark the points **not** measured, and then to measure them.
+The method is the one of every severe test, turned inward: list the claims the work sustains but never tested,
+write for each one a declaration with a hash **before** measuring, measure, and report the result with its limits.
+A change of criterion after seeing the result enters as a new declaration and counts in $K$. Four such checks show
+what the method finds.
+
+| The assumption | What was measured | Result |
+| --- | --- | --- |
+| Whoever abandons a queue calls back with probability 0.6 | A quasi-experimental design in a real support desk, 1999 | **0.145** [0.132; 0.157], four times less than assumed |
+| The tolerance of the calibration error can be fixed at 0.03 | The null simulated with the same forecasts and the same $n$ | All six binary vaults show detectable miscalibration, one of them only borderline; detectable is not the same as relevant (Chapter 8) |
+| ICP may treat every row as independent | Clustered tests and block permutation, with 16 instants per volunteer and 80 schools | Pharmacology survives intact; Education drops out |
+| A method that checks every bridge catches errors that common practice lets through | A blind pilot of 12 cases, two arms | A tie at the ceiling: 8 of 8 defects found in both arms, so the claim is not supported |
+
+**The inward audit found no error of arithmetic and narrowed the reach the numbers were allowed to claim.** A later
+reading from outside found what the inward audit had missed: a Kelly fraction computed with the wrong chance, a
+value of information that chose the best act inside each branch, a test of invariance that let the environment move
+the outcome, a market calibration that dropped a factor of 252 (Appendix E lists every one, with both values).
+That is the strongest argument of this chapter, measured on the book itself: an audit run by the authors of the
+claims is weaker than one run from outside, however honest the authors. One limit stays declared: the outside
+readings of 2026-10-18 were made with an AI assistant, outside the authors' audit but not by people outside the
+program. They are the first entries of a public errata, not the independent audit that Chapter 21 asks for.
+
+### Step 3 — Hands on
+
+Two tasks: build a ledger chained by SHA-256 and prove that changing **one character** in the past
+brings the chain down; and compute the Merkle root of a batch of cards. The code brings SHA-256 written by hand,
+without dependencies, and checks the implementation against the known vectors. Run it with
+`cargo run --release --bin labs -- --chapter 14`.
+
+**The recipe of the laboratory.** Each event of the chain is hashed as
+SHA-256 of the text `session|index|card|content|previous`, with the session `sessao-h3`, the index from 0, and the
+previous hash of the first event written as 64 zeros. The Merkle root pairs the hexadecimal hashes of a level in order,
+hashes the concatenated text of each pair, and repeats the last hash of a level when the level has an odd count, up to a
+single hash. That last rule has a known weakness, declared here: a list and the same list with its last element
+repeated have the same root, so the root alone does not prove how many cards there were (the gates record the count
+beside it).
+
+```text
+== Chapter 18 :: the vault, the seal and the audit ==
+sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
+  event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
+  event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
+  event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
+  event 3 card=h3.prisoes content=ECE=0.036 hash=4248815bc8f679d9
+  event 4 card=h3.ri content=ECE=0.0048 habilidade=0.019 hash=8059d78760a22282
+tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
+tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
+one extra character in each event: 5 of 5 alterations invalidate the chain
+batch of cards: n=7 merkle_root=17679ce182647dbb
+swapping one card of the batch changes the root in 7 of 7 cases
+```
+
+Four readings.
+
+**The implementation is right, and that is the basis of everything.** The two known vectors of SHA-256 match
+character by character. The empty string gives `e3b0c442...b855` and `abc` gives `ba7816bf...15ad`. Without that
+check, all the rest of the trail would be a number invented with the appearance of security.
+
+**One character in the past brings the chain down.** The chain of five events is intact. Changing
+`canario=ok` to `canario=nok` in event 2 and **recomputing the hash of that event** (the most
+obvious attack, in which content and hash agree with each other), the verification fails. Event 3 keeps the old hash of
+event 2 as the "previous" one, and the incompatibility appears. Of the five alterations tested, one per event,
+**5 of 5** invalidate the chain.
+
+**The chain alone is not enough: the root is the proof.** If the attacker also rewrites the three following events,
+the chain closes locally again (the verification passes), but the **published root** changes. That line is the
+heart of the chapter. The trail becomes inviolable by the hash published **before**, and not by the chain. Whoever
+keeps only the chain keeps a document that can be rewritten in its entirety; whoever keeps the root keeps the
+seal.
+
+**The Merkle root always changes.** The batch of seven cards has root `17679ce1...`. Swapping any one of the
+seven for an altered version, the root changes in **7 of 7** cases. That is what allows sealing a whole batch with
+64 characters instead of 64 per file.
+
+**Exercises.**
+
+1. *(Concept)* Why does opening the vault twice destroy its value? Relate it to Mayo's severity,
+   that is, to the requirement that a test could have given another result.
+2. *(Concept)* A colleague proposes rewriting the result files with the signature inside. Which property
+   of the clean reproduction would that break?
+3. *(Count)* The counter per domain stopped at $K = 3$; the recount across the whole gate measured $K = 38$
+   distinct tests. Explain, in three sentences, why the two numbers coexist without either of them
+   being wrong.
+4. *(Laboratory)* Extend the laboratory to a bus in which each message carries the hash of the previous one
+   **and** the index, and write a verifier that detects not only the alteration of content but also the exchange of
+   order of two messages.
+5. *(Laboratory)* Compute the Merkle root of the batch of seven cards down to the intermediate roots and confirm
+   how many hashes are recomputed when only the last card changes.
+6. *(Concept)* Propose a procedure to make the audit of decisions that involve people less dependent on whoever
+   runs the work.
+
+**Summary.**
+
+- Pre-registration with a hash is a seal against adjustment after seeing the result, as long as the hash is published
+  to someone outside before the data are seen. The hypothesis is frozen before, and the published hash is the seal.
+- The counter $K$ makes the attempts visible, and it must be counted at the level of the claim: 38 tests at the
+  gate against 3 per domain.
+- The vault outside time opens only once; a correction asks for a new vault.
+- The diary scores each forecaster with a proper rule, inside $[1\%, 99\%]$, and weighs the agents by the scoreboard; the
+  chain of cards is chained by SHA-256.
+- Signed opinions name the officer of record, but they do not make the audit independent. None of the seven affected
+  groups was heard.
+- A self-audit applies the severe test to the work's own assumptions, and usually narrows the reach of its numbers.
 
 ## Chapter 19. Seven rounds to find true causes in science
 
@@ -5465,8 +5474,8 @@ example. The order is alphabetical.
 | **Vault** | The part of the data that stays closed until pre-registration, and opens a single time | The sealed envelope of the exam, opened only after the student hands in the answer |
 | **Confounder** | A common cause of two variables that makes it look as if one causes the other | Ice cream and drowning rise together: both rise with the heat |
 | **Counter $K$** | The tally of the number of specifications tried in order to answer the same question | The number of attempts written in the margin of the notebook to get a password right |
-| **Crisonomy** | The lens of judgement: value of information, proper scores, calibration and cost of the error | Paying for one more exam before deciding whether the surgery is worth it |
-| **Chrononomy** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
+| **Decision lens (Crisonomy)** | The lens of judgement: value of information, proper scores, calibration and cost of the error | Paying for one more exam before deciding whether the surgery is worth it |
+| **Time lens (Chrononomy)** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
 | **Design (effect of)** | How many dependent rows are worth one independent row | The same 30 people answering 10 times are not worth 300 people |
 | **Circuit breaker** | The mechanism that swaps the model for a safe reserve when it loses over a moving window | The autopilot that switches itself off when the sensor disagrees for too long |
 | **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
@@ -5477,11 +5486,11 @@ example. The order is alphabetical.
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
 | **Type M error** | Getting the size of the effect wrong, too large or too small, typically by a study too small for the effect it seeks | A small trial that only reaches significance when chance doubles the effect, and then reports the doubled effect |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
-| **Scalonomy** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
+| **Tail lens (Scalonomy)** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
 | **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
 | **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
 | **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
-| **Fluxonomy** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
+| **Information lens (Fluxonomy)** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
 | **Natural frequencies** | Stating the risk as "x in every 100", with a fixed denominator | "In every 100 patients, 25 wait more than half an hour" instead of "25% risk" |
 | **Goodhart (law of)** | When the measure becomes the goal, it stops measuring | The school that trains the students for the exam and the grade rises without learning rising |
 | **Brier skill** | How much the model improves, in percentage, over the climatologist who only repeats the base rate | How much the rain forecast gains over "it rains as often as always" |
@@ -5497,10 +5506,10 @@ example. The order is alphabetical.
 | **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
 | **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
 | **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
-| **Lenses (the five)** | The five fixed ways of looking of the program: scale, current, form, time and judgement | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
+| **Lenses (the five)** | The five fixed ways of looking of the program: information, time, tail, invariance and decision, labelled in the code Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
 | **Model ($L_2$)** | The formal, simplified and simulable representation of the world | The scale model of the building, with paper walls |
 | **Null model** | The simulation of what chance alone would produce, to compare with what was observed | Drawing groups by an honest lottery a thousand times before believing in the effect of the medicine |
-| **Morphonomy** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
+| **Invariance lens (Morphonomy)** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
 | **World ($L_1$)** | The reality that generates the data and that we never see in full | The real neighbourhood, with the holes the map does not show |
 | **Murphy (decomposition of)** | The account that separates the error of a forecast into reliability, resolution and difficulty of the event | A good student who fails the exam because of difficulty, not because of not knowing the subject |
 | **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
@@ -5585,10 +5594,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | Command | What it shows |
 | --- | --- |
 | `cargo run --release --bin labs -- --chapter 19` | The output block of a chapter; replace 19 with any chapter, or use `--all` |
-| `cargo run --release --bin labs -- --bank` | The real call-centre data measured (Chapter 16) |
-| `cargo run --release --bin labs -- --queue` | The queue with abandonment and the four staffing rules (Chapter 16) |
-| `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
-| `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
+| `cargo run --release --bin labs -- --bank` | The real call-centre data measured (Chapter 12) |
+| `cargo run --release --bin labs -- --queue` | The queue with abandonment and the four staffing rules (Chapter 12) |
+| `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 16) |
+| `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
@@ -5626,8 +5635,11 @@ final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the
 protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
 proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
 check as the other 50 lines. A reading of 2026-10-19 found that the text cites, by author and year, many works that
-the list did not carry; they are gathered in D.5, all marked **[to check]**, because their metadata were written from
-the reading and have not yet passed the same check as D.2 to D.4.
+the list did not carry; they are gathered in D.5. The same day 24 of the 26 were checked against the Crossref API (and
+two against arXiv and the PMLR proceedings): no divergence of content; the issue of Peters 2019 and the volume and
+article number of Kleinberg and colleagues were completed. Two source reservations, as for Chernoff and van Dantzig:
+Crossref gives only the first page of Berkson 1946 and no pages for Hill 1975. Two lines stay **[to check]**: Cover and
+Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter that Crossref does not index.
 
 ### D.2 Classics to begin with
 
@@ -5650,10 +5662,10 @@ the reading and have not yet passed the same check as D.2 to D.4.
 
 | Reference | Where it enters |
 | --- | --- |
-| **[checked]** Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | The bank call centre, in 2003 (Chapters 16 and 20) |
-| **[checked]** LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | The NSW job-training experiment and the raw difference that deceives (Chapter 17) |
+| **[checked]** Shen, H.; Huang, J. Z. *Annals of Applied Statistics* 2(2):601–623, 2008. DOI: 10.1214/08-AOAS164 | The bank call centre, in 2003 (Chapters 12 and 20) |
+| **[checked]** LaLonde, R. J. *American Economic Review* 76(4):604–620, 1986 (JSTOR 1806062) | The NSW job-training experiment and the raw difference that deceives (Chapter 13) |
 | **[checked]** Dehejia, R. H.; Wahba, S. *JASA* 94(448):1053–1062, 1999. DOI: 10.1080/01621459.1999.10473858 | The answer to LaLonde: matching hits the number, and why that is still not enough |
-| **[checked]** McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | The Danish fires and the wild tail (Chapter 18) |
+| **[checked]** McNeil, A. J. *ASTIN Bulletin* 27(1):117–137, 1997. DOI: 10.2143/AST.27.1.563210 | The Danish fires and the wild tail (Chapter 14) |
 | **[checked]** Embrechts, P.; Klüppelberg, C.; Mikosch, T. *Modelling Extremal Events for Insurance and Finance*, Springer, 1997. DOI: 10.1007/978-3-642-33483-2 | The theory of the tail that the Hill estimator uses |
 | **[checked]** Peters, J.; Bühlmann, P.; Meinshausen, N. *JRSS B* 78(5):947–1012, 2016. DOI: 10.1111/rssb.12167 | ICP, the method of the seven rounds (Chapter 19). Read the discussion: the objections are there |
 | **[checked]** Heinze-Deml, C.; Peters, J.; Meinshausen, N. *Journal of Causal Inference* 6(2):20170016, 2018. DOI: 10.1515/jci-2017-0016 | The nonlinear ICP, which inspired the second ruler of H2c |
@@ -5699,32 +5711,32 @@ the reading and have not yet passed the same check as D.2 to D.4.
 
 | Reference | Where it enters |
 | --- | --- |
-| **[to check]** Kelly, J. L. *Bell System Technical Journal* 35(4):917–926, 1956 | The growth-optimal fraction (Chapters 10 and 17) |
-| **[to check]** Peters, O. *Nature Physics* 15:1216–1221, 2019 | The ergodicity problem and the Peters coin (Chapter 10) |
-| **[to check]** Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015 | Bernoulli's ship in time (Chapters 10 and 11) |
-| **[to check]** Meng, X.-L. *Annals of Applied Statistics* 12(2):685–726, 2018 | The identity of quality, quantity and difficulty (Chapter 6) |
-| **[to check]** Berkson, J. *Biometrics Bulletin* 2(3):47–53, 1946 | The filter that manufactures relations (Chapters 6 and 9) |
-| **[to check]** Charig, C. R. et al. *BMJ* 292(6524):879–882, 1986 | The kidney-stone table (Chapters 6 and 9) |
-| **[to check]** Cox, R. T. *American Journal of Physics* 14(1):1–13, 1946 | Why belief obeys probability (Chapter 3) |
-| **[to check]** Jaynes, E. T. *Physical Review* 106(4):620–630, 1957 | Maximum entropy (Chapter 3) |
-| **[to check]** Halpern, J. Y. *Journal of Artificial Intelligence Research* 10:67–85, 1999 | The counterexample to Cox (Chapter 21) |
-| **[to check]** Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3):295–314, 1985 | The hot hand (Chapter 7) |
-| **[to check]** Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6):2019–2047, 2018 | The biased test of the hot hand (Chapter 7) |
-| **[to check]** Simmons, J. P.; Nelson, L. D.; Simonsohn, U. *Psychological Science* 22(11):1359–1366, 2011 | The garden of forking paths (Chapter 7) |
-| **[to check]** Ioannidis, J. P. A. *PLoS Medicine* 2(8):e124, 2005 | The predictive value of a finding (Chapter 7) |
-| **[to check]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
-| **[to check]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
-| **[to check]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
+| **[checked]** Kelly, J. L. *Bell System Technical Journal* 35(4):917–926, 1956. DOI: 10.1002/j.1538-7305.1956.tb03809.x | The growth-optimal fraction (Chapters 10 and 13) |
+| **[checked]** Peters, O. *Nature Physics* 15(12):1216–1221, 2019. DOI: 10.1038/s41567-019-0732-0 | The ergodicity problem and the Peters coin (Chapter 10) |
+| **[checked]** Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015 | Bernoulli's ship in time (Chapters 10 and 11) |
+| **[checked]** Meng, X.-L. *Annals of Applied Statistics* 12(2):685–726, 2018 | The identity of quality, quantity and difficulty (Chapter 6) |
+| **[checked]** Berkson, J. *Biometrics Bulletin* 2(3):47–53, 1946 | The filter that manufactures relations (Chapters 6 and 9) |
+| **[checked]** Charig, C. R. et al. *BMJ* 292(6524):879–882, 1986 | The kidney-stone table (Chapters 6 and 9) |
+| **[checked]** Cox, R. T. *American Journal of Physics* 14(1):1–13, 1946 | Why belief obeys probability (Chapter 3) |
+| **[checked]** Jaynes, E. T. *Physical Review* 106(4):620–630, 1957 | Maximum entropy (Chapter 3) |
+| **[checked]** Halpern, J. Y. *Journal of Artificial Intelligence Research* 10:67–85, 1999 | The counterexample to Cox (Chapter 21) |
+| **[checked]** Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3):295–314, 1985 | The hot hand (Chapter 7) |
+| **[checked]** Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6):2019–2047, 2018 | The biased test of the hot hand (Chapter 7) |
+| **[checked]** Simmons, J. P.; Nelson, L. D.; Simonsohn, U. *Psychological Science* 22(11):1359–1366, 2011 | The garden of forking paths (Chapter 7) |
+| **[checked]** Ioannidis, J. P. A. *PLoS Medicine* 2(8):e124, 2005 | The predictive value of a finding (Chapter 7) |
+| **[checked]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
+| **[checked]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
+| **[checked]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
 | **[to check]** Platt, J. C. "Probabilistic outputs for support vector machines", in *Advances in Large Margin Classifiers*, MIT Press, 1999 | Platt recalibration (Chapters 8 and 20) |
-| **[to check]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
-| **[to check]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975 | The tail estimator (Chapters 10, 12 and 18) |
-| **[to check]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
-| **[to check]** Good, I. J. *British Journal for the Philosophy of Science* 17(4):319–321, 1967 | Free information never hurts (Chapter 11) |
-| **[to check]** Lucas, R. E. *Carnegie-Rochester Conference Series on Public Policy* 1:19–46, 1976 | The critique of policy evaluation (Chapters 9 and 11) |
-| **[to check]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
-| **[to check]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
-| **[to check]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS* 2017 (arXiv:1609.05807, 2016) | Calibration within groups (Chapter 11) |
-| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | Fluxonomy under its usual name (Chapter 12) |
+| **[checked]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
+| **[checked]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975. DOI: 10.1214/aos/1176343247 | The tail estimator (Chapters 10, 14 and 15) |
+| **[checked]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
+| **[checked]** Good, I. J. *British Journal for the Philosophy of Science* 17(4):319–321, 1967 | Free information never hurts (Chapter 11) |
+| **[checked]** Lucas, R. E. *Carnegie-Rochester Conference Series on Public Policy* 1:19–46, 1976 | The critique of policy evaluation (Chapters 9 and 11) |
+| **[checked]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
+| **[checked]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
+| **[checked]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS 2017*, LIPIcs 67:43:1–43:23. DOI: 10.4230/LIPIcs.ITCS.2017.43 | Calibration within groups (Chapter 11) |
+| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | The information lens under its usual name (Chapter 15) |
 
 ### D.6 How to use this list
 
@@ -5742,18 +5754,36 @@ chapter, so that the chapters can teach without carrying the comparison.
 
 **How to read this appendix.** The two rectification tables are for every reader: they show errors that passed
 every gate. The sections by chapter that follow record smaller differences against earlier texts, and the sections
-of Chapters 12 to 15 record differences of naming and of counting between the documents of the repository. Those are
+of Chapters 15 to 18 record differences of naming and of counting between the documents of the repository. Those are
 for whoever audits the repository, and a reader of the book can skip them.
+
+**The numbering of the chapters.** On 2026-10-19 the chapters were reordered, so that the book reads as two: the
+method (Parts I to IV, Chapters 1 to 14, with the three real cases right after the theory) and the auditable machine
+(Part V, Chapters 15 to 21). Every chapter number in this book, this appendix included, follows the new numbering.
+Records outside the book (the dated state records, the declarations and the empirical points) keep the numbering of
+their date; this table translates.
+
+| Before 2026-10-19 | After | Chapter |
+| --- | --- | --- |
+| 12 | 15 | The map of knowledge |
+| 13 | 16 | The team of specialists, the safeguard panel and the two systems |
+| 14 | 17 | The iron contract |
+| 15 | 18 | The vault and the seal |
+| 16 | 12 | The health post and the bank |
+| 17 | 13 | The market and the employment programme |
+| 18 | 14 | The Danish fires |
+
+Chapters 1 to 11 and 19 to 21 keep their numbers.
 
 **Who read from outside.** The rectifications of 2026-10-18 were applied by an AI assistant (the rectification commit
 of that day is authored by "Claude"), and the second table below comes from a later review of the same kind. Both
-readings stand outside the authors' own audit of Chapter 15, but neither meets the independence that Chapter 21 asks
+readings stand outside the authors' own audit of Chapter 18, but neither meets the independence that Chapter 21 asks
 for: no person outside the program has yet checked them. They count as entries in the errata of
 `docs/OUTSIDE_AUDIT.md`, not as its completion.
 
 ### Rectifications of 2026-10-18
 
-A reading from outside, made after the inward audit of Chapter 15, found errors that the instruments reproduced
+A reading from outside, made after the inward audit of Chapter 18, found errors that the instruments reproduced
 faithfully, because the seed fixes a wrong account as well as a right one. Each was corrected in the code, given a test
 that would have caught it, and corrected in the text. The earlier value stays here, beside the corrected one.
 
@@ -5779,16 +5809,16 @@ that would have caught it, and corrected in the text. The earlier value stays he
 | 9 | Unstable mechanism | coefficient doubled at every site (naive slope 4.0004), $\{X\}$ accepted in 94% | coefficient 0.5, 2 and 3.5 by site, every set rejected | the instability term did not depend on the site |
 | 8 | Resolution of the constant forecaster | 0.0002 | 0.0000 | the boxes of equal mass split runs of identical forecasts |
 | 8 | Platt recalibration | fitted and scored on the same 4,000 days | fitted on the first 2,000, scored on the last 2,000 | the book's own rule asks for scoring out of the fit |
-| 8, 15, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
-| 5, 8, 10, 13, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
-| 13 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
-| 16 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
-| 17 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
-| 17 | 19 October 1987 | Friday | Monday | date |
-| 18 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
+| 8, 18, 20, 21 | Calibration tolerance by $n$ | "none of the six vaults passes" | all six detectable, Toronto 1997–2002 borderline (q95 0.0320 with its real forecasts, 0.0425 with simulated ones) | the verdict depends on the spread of the forecasts |
+| 5, 8, 10, 12, 16, 21 | Loss of resolution of the post | 46.24 min (5 or 11), 5.97 min (7 or 9) | 22.99 and 2.50 min | both arms staffed at capacity equal to demand, a critical queue without steady state; now a utilisation of 0.8 |
+| 16 | Panel band of a safeguard without anchor | severity 5 or 6, drawn by the seed (the seed decided the verdict) | 4 or 5, below the floor under every seed | a band that crosses the floor makes the gate a lottery |
+| 12 | Health post, Step 1 and decision table | 9.3 and 20.7 min; failing days 26, 12, 3.7, 7.4 | 9.1 and 19.3 min; 30.9, 19.8, 4.9, 9.9 | the old figures came from the retired generator and engine; the chapter now cites its own instrument |
+| 13 | Ruin leverage | $1/\min_t\lvert r_t\rvert$ | $1/\lvert\min_t r_t\rvert$ | the minimum of absolute values is near zero |
+| 13 | 19 October 1987 | Friday | Monday | date |
+| 14 | Tail index below 2 | "the long-run mean does not converge" | the mean exists and converges slowly; the variance is infinite; the layer caps payments | statement |
 | 6 | Exercise on Simpson | cases 81, 234, 192 and 55 | cases 87, 270, 263 and 80 | successes printed as cases |
 | 20 | Platt parameters | "a = 0.98, b = -0.54" | slope 0.98, intercept $-0.54$ | labels swapped against Chapter 8 |
-| 15, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
+| 18, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
 | C | Test count | 373 | 406 | stale count, plus the tests added with these corrections |
 
 ### Rectifications of the text, 2026-10-18 (third review)
@@ -5803,12 +5833,12 @@ the earlier wording is kept here.
 | 1 | Vulcan | the example of a degenerative repair | a progressive proposal whose prediction (transits) failed; degeneration is a trajectory of a programme | Le Verrier's Vulcan predicted observable transits |
 | 8, 21 | "Resolution is not repaired" | stated of the forecaster | stated of recalibration; new information can raise resolution | the asymmetry belongs to the map from $p$ to $p'$ |
 | 11, A | Chouldechova | approvals, errors and calibration "incompatible" | equal PPV, equal FPR and equal FNR incompatible for an imperfect predictor; calibration within groups is a neighbour | approval parity is not part of the identity |
-| 12 | Type of the Erlang C node | Knightian (specification) | epistemic (specification) | its failures are listed and testable; Knightian is the unlisted mechanism |
-| 12 | Pathology "illusion of the dark room" | name | "case for population" | the dark room is another problem of active inference (Chapter 11) |
-| 12 | Bridge "noise as temperature" | a bridge of the same rank as Jensen | marked heuristic | the gradient noise is anisotropic and state-dependent |
-| 13 | Panel score | a severity from 0 to 10 | read as one bit per safeguard | the band is drawn by the seed and never crosses the floor |
-| 13, 21 | Floor of 1% to 99% | a prohibition on every forecast | a convention of System 1's triage; forecasts declare $\varepsilon$ from the base rate | Cromwell's rule forbids 0 and 1, not 0.5% |
-| 14 | Stratonovich and the drag | "the term $-\sigma^2/2$ does not appear" | the gap of $\tfrac12\sigma^2$ appears in both readings; the convention changes what $\mu$ names | Jensen does not depend on the integral |
+| 15 | Type of the Erlang C node | Knightian (specification) | epistemic (specification) | its failures are listed and testable; Knightian is the unlisted mechanism |
+| 15 | Pathology "illusion of the dark room" | name | "case for population" | the dark room is another problem of active inference (Chapter 11) |
+| 15 | Bridge "noise as temperature" | a bridge of the same rank as Jensen | marked heuristic | the gradient noise is anisotropic and state-dependent |
+| 16 | Panel score | a severity from 0 to 10 | read as one bit per safeguard | the band is drawn by the seed and never crosses the floor |
+| 16, 21 | Floor of 1% to 99% | a prohibition on every forecast | a convention of System 1's triage; forecasts declare $\varepsilon$ from the base rate | Cromwell's rule forbids 0 and 1, not 0.5% |
+| 17 | Stratonovich and the drag | "the term $-\sigma^2/2$ does not appear" | the gap of $\tfrac12\sigma^2$ appears in both readings; the convention changes what $\mu$ names | Jensen does not depend on the integral |
 | 21 | Physics of the noise | "added (Itô) or dragged (Stratonovich)" | the two readings coincide for additive noise and differ for state-dependent noise | definition |
 | A | Type M error | "3 centimetres of rain when it was 3 millimetres" | a small study that reports a doubled effect | a unit error is not a magnitude error |
 | A | ICP | returns "the set" of invariant variables | returns the intersection of the accepted sets, with a declared error rate | definition |
@@ -5826,8 +5856,8 @@ the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 7, 13, 14 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
-| 7, 13, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
+| 7, 16, 17 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
+| 7, 16, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
 | 10 | Twice Kelly above the start | 0.485, 0.527 and 0.51960 after 10, 100 and 1000 rounds | 0.374, 0.450 and 0.49110 (exact: 0.377, 0.460 and 0.487) | 1.25 and 0.8 multiply to exactly 1; the comparison `> 1.0` let the rounding of each product decide the ties |
 | 10 | Share of the true mean above the maximum of a sample of one million, in the median | 25.12% | 27.55% (median maximum 397,420) | the laboratory printed $n^{1-\alpha}$, which puts the maximum at $n$; the median maximum solves $(1 - m^{-\alpha})^n = 1/2$ |
 | C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
@@ -5844,30 +5874,30 @@ instruments, and two statements in the text; each is corrected, with a test wher
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 5, 8, 13, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
+| 5, 8, 12, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
 | 5 | Mean of W over a uniform demand between 5 and 11 | 14.10 min | 14.46 min | a six-point midpoint rule; the integral has a closed form |
-| 12 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
-| 16 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
-| 16 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
-| 17 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
+| 15 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
+| 12 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
+| 12 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
+| 13 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
 | 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
 | 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
 ### Rectifications of the recipes, 2026-10-19
 
 Of the 19 quantities that the reimplementation left open, the text now states the recipe of 16, in a paragraph beside
-the run of each laboratory (Chapters 5, 7, 8, 12, 13, 14, 15, 17, 18 and 20), and the reimplementation redoes them from
+the run of each laboratory (Chapters 5, 7, 8, 13, 14, 15, 16, 17, 18 and 20), and the reimplementation redoes them from
 that paragraph: 462 quantities, 459 in agreement, none divergent and 3 open (the upper end of the Kelly interval, the
-skill of the model in the vault and the false negative rate of Hispanics in Chapter 17, whose recipes are longer than a
+skill of the model in the vault and the false negative rate of Hispanics in Chapter 13, whose recipes are longer than a
 paragraph and stay cited from the research record at commit `1bfec905`). Writing the recipes found one more value
 wrong in an instrument and one statement wrong in the text.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 7 | Garden of paths: Simmons' four freedoms, the large family, the Mayo severity of the garden | 21.5%, 47.0% and 0.53; PPV with the garden alpha 0.146 ($R = 1/10$) and 0.362 ($R = 1/3$) | 20.3%, 42.3% and 0.58; PPV 0.159 and 0.387 | the "exclusion of the extreme case" took the first $2m$ rows of the file, all of one group and part of the other, and split them at $m - 1$; it compared mixed groups. Now the first $m$ of each group, without the largest value of the treated. The direction (the garden multiplies the false positive) does not change |
-| 17 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
-| 17 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
-| 15 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
+| 13 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
+| 13 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
+| 18 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
 | C | Test count | 413 | 415 | the bounds of the garden of paths and the declared limit of the Merkle root |
 | 8 | Brier of the overconfident forecaster | — | declared, not changed | the instrument's own seed spread (seeds 2022 to 2027) is 0.1706 to 0.1914; the printed 0.1712 is the low end, and the reimplementation compares within that spread |
 
@@ -5880,16 +5910,20 @@ and is not the independent audit that Chapter 21 asks for. No instrument changed
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 2, 5 | Table of the two worlds in Step 1 | 9.3 and 20.7 min; 8 and 25 in every 100 above 30 min | 9.1 and 19.6 min; 8 and 24 | the table kept the figures of the retired generator while the block of Chapter 5 prints the instrument's (Chapter 5 section below) |
-| 12 | Exercise 6 | "why was Erlang C typed as knightian and not as epistemic?" | asks why it is epistemic and not Knightian, and what would move it | the node was retyped on 2026-10-18 and the exercise was not |
-| 17 | The worst entry month | "had a mean return equal to that of the market and did not survive to see it" | the order of the returns, not their mean, ruined the cohort | the sentence named no quantity |
-| 18 | Mutual information of the clean window | 0.51 bit, "practically nothing" | about half of the one bit that two equally likely hypotheses allow | 0.51 of a ceiling of 1 is not nothing; the likelihood ratio, 2.2 bits, carries the lesson |
-| 17, 18, 19, 20 | Thousands separator in running prose | 31.919 sessions, 1.488 cases, 11.598 students and others, 37 places | 31,919, 1,488, 11,598 | a decimal point where a thousands separator was due, as in the row of 1978 above |
+| 15 | Exercise 6 | "why was Erlang C typed as knightian and not as epistemic?" | asks why it is epistemic and not Knightian, and what would move it | the node was retyped on 2026-10-18 and the exercise was not |
+| 13 | The worst entry month | "had a mean return equal to that of the market and did not survive to see it" | the order of the returns, not their mean, ruined the cohort | the sentence named no quantity |
+| 14 | Mutual information of the clean window | 0.51 bit, "practically nothing" | about half of the one bit that two equally likely hypotheses allow | 0.51 of a ceiling of 1 is not nothing; the likelihood ratio, 2.2 bits, carries the lesson |
+| 13, 14, 19, 20 | Thousands separator in running prose | 31.919 sessions, 1.488 cases, 11.598 students and others, 37 places | 31,919, 1,488, 11,598 | a decimal point where a thousands separator was due, as in the row of 1978 above |
 | 19 | Verdict of the causal gate | table and summary said "Passed" | the table and the summary add that under the first declared version of each choice the gate does not pass | the end of Step 2 said it; the headline did not |
 | 20 | Calibration criterion of Rhode Island | relative tolerance stated without comment | declared as a change of ruler after two failures, counted as an attempt; it tightens, since 0.03 exceeds the rate | a change of criterion is an attempt whatever its direction |
 | 21 | Lessons 5 and 7 | invariance and pre-registration as successes | two of the areas recovered known causes; declaring makes the path visible, not innocent | the lessons carried less than Chapter 19 concedes |
 | 21 | Negative loss below the threshold of prediction 3 | "after costing less than nothing" | the two arms do not spend the same resource: 13 agents every day against the per-day Erlang scale | the column compares two plans, not the equal-resource toll of Chapter 5 |
-| Preface | What the reader cannot run; status of the bridge thesis | the rule "every number comes from an instrument" without its exceptions | the exceptions listed, and the thesis named a working hypothesis | the rule did not hold for the real cases of Chapters 17 to 20 |
+| Preface | What the reader cannot run; status of the bridge thesis | the rule "every number comes from an instrument" without its exceptions | the exceptions listed, and the thesis named a working hypothesis | the rule did not hold for the real cases of Chapters 13, 14, 19 and 20 |
 | D | References cited and absent from the list | 26 works cited by author and year | listed in D.5, marked [to check] | the check of 50 of 50 covered the list, not the text |
+| D | Check of D.5 | 26 lines to check | 24 checked against Crossref, arXiv and PMLR; Cover and Thomas, and Platt 1999, still to check | the metadata were written from the reading |
+| 15, 16, 17, A | Names of the five lenses | Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy as the names | information, time, tail, invariance and decision, with the coined words kept as the labels the outputs print | a name that needs a translation table in its own chapter costs the reader and adds no mathematics |
+| 12 to 18 | Order of the chapters | the machine (then 12 to 15) before the three real cases (then 16 to 18) | the cases right after the theory (12 to 14), the machine after them (15 to 18); see the numbering above | the method can be read without the machine; the old order made the reader cross the machine to reach the cases |
+| Title | Title of the book | "Stochology: A Textbook" | "Stochology: Judgement and Decision under Uncertainty", a working text | a textbook is what the outside audit of Chapter 21 would certify; it has not been done |
 
 ### Numbers cited without an instrument in this book
 
@@ -5910,11 +5944,11 @@ others from the research records. Three were recomputed by the critical reading 
 | 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | no recipe in the text |
 | 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | no recipe in the text |
 | 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | no recipe in the text |
-| 12 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
-| 13 | Five of 33 domains change with the literature prior | research record | not reproduced here |
-| 14 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
-| 17 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
-| 18 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
+| 15 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
+| 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
+| 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
+| 13 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
+| 14 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
 | 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
 | 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
 | 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
@@ -5994,7 +6028,7 @@ do not coincide; both are reported.
 
 The time-growth table of the empirical registry (5.1% at $1\times$, 7.2% at $2\times$ and 6.0% at
 $3\times$, plus the drag of 0.14 per year at $3\times$; the same three portfolios appear in decimal
-in Chapter 17, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
+in Chapter 13, which measures 0.0515, 0.0719 and 0.0601) was recorded here until 2026-10-18 as not reproduced, with
 $3\times$ above $2\times$, and the cause was attributed to the real tail. The cause was a calibration that dropped the
 factor of 252 sessions per year. With it restored, the Gaussian model puts $2\times$ above $3\times$ and gives drags
 that match those of the real index to the second decimal (see the rectifications above). The earlier attribution is recorded and withdrawn.
@@ -6016,56 +6050,6 @@ rates by group instead of the units. The divergences are declared and no old val
 was erased.
 
 ### Chapter 12
-
-The earlier text, in Chapter 6, presents the three samples of
-Hill with values close to $1.81$; the instrument measures 1.8444 ($k = 250$), 1.7901 ($k = 500$), 1.7949
-($k = 1,000$) and 1.8032 ($k = 2,000$). The difference is one of sampling and of cutoff, not of formula — the value
-published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
-earlier text and the plan of the repository count gates in different ways: the old book describes
-**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
-governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
-G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
-$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 14 details the seven; no old value
-was erased.
-
-### Chapter 13
-
-The earlier text speaks of "eight tracks and an orchestrator M15". The
-text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
-(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
-`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
-because that is the name of the code. The laboratory of this book measures the
-severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
-machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
-running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
-values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
-2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
-
-### Chapter 14
-
-Two accounts of this chapter diverge between the sources, and both stay
-recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
-and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
-the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
-book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
-count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
-repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
-that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
-gate G4, in the horizon `todos`, reproduces here.
-
-### Chapter 15
-
-Two points stay recorded. (1) The plan publishes, for the
-horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
-horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
-five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
-accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
-exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
-support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
-recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
-No old value was erased.
-
-### Chapter 16
 
 The earlier text and the README of the first simulation record 9.3 min and 20.7 min
 for the two worlds, 8 and 25 patients in every 100 above 30 minutes, medians of 3.8 and 9.3, 90th percentiles of 26.7
@@ -6104,7 +6088,7 @@ because the mean wait per patient in the oscillating world is a ratio of heavy-t
 with six different seeds, the wait of the world 5 or 11 goes from **19.3 to 20.6 minutes**. The difference
 is inside the variation of the instrument, and the two sets of numbers stay on the record.
 
-### Chapter 17
+### Chapter 13
 
 The report of the market case records 0.051, 0.072 and 0.060 of growth per year;
 the instrument measures **0.0515, 0.0719 and 0.0601** — the coincidence is of three places, because the account is the same. The
@@ -6120,7 +6104,7 @@ case deserves a note: the earlier text cites "from 1929 to 1932, the capital fal
 **0.00025** — exactly the numbers of the material. The divergence was not of method: it was of window, and the two
 appear now, with the date of each one.
 
-### Chapter 18
+### Chapter 14
 
 The report of the fire case records $\hat\alpha = 1.81$ with interval [1.41;
 2.56] by bootstrap in blocks; the instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;
@@ -6133,6 +6117,56 @@ $\xi = 0.406$, $\sigma = 7.387$, 83 excesses above 10 — and measures **2.42 bi
 simple monthly frequency of the training set, $p = 5/108 = 0.04630$. The difference is not of account: it is of which world
 "dangerous" one places on the other side. The adjusted tail is more pessimistic than the raw count of months, and that is why it
 requires more clean months. The two values stay on the record; none was erased.
+
+### Chapter 15
+
+The earlier text, in Chapter 6, presents the three samples of
+Hill with values close to $1.81$; the instrument measures 1.8444 ($k = 250$), 1.7901 ($k = 500$), 1.7949
+($k = 1,000$) and 1.8032 ($k = 2,000$). The difference is one of sampling and of cutoff, not of formula — the value
+published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
+earlier text and the plan of the repository count gates in different ways: the old book describes
+**five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
+governance, fairness and exit), while the `gates` binary implements **seven** (G1 determinism,
+G2 fixed seed, G3 declared scope, G4 invariants and type III, G5 integrity of the trail, G6 panel
+$A_1$–$A_8$, G7 exit clause), with exit code 0 or 1. Chapter 17 details the seven; no old value
+was erased.
+
+### Chapter 16
+
+The earlier text speaks of "eight tracks and an orchestrator M15". The
+text of the repository (`docs/PLAN.md`) calls the orchestrator the orchestrator and the implementation
+(`OrquestradorM`) as well; the label M15, like the MB labels of the panel, is historical and is declared in
+`AGENTS.md` §VIII, along with the ME numbering of the script. They are the same object, and this book uses the orchestrator
+because that is the name of the code. The laboratory of this book measures the
+severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
+machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
+running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
+2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
+
+### Chapter 17
+
+Two accounts of this chapter diverge between the sources, and both stay
+recorded. (1) The previous book describes **five** automatic gates — contracts and seeds; declarative schema
+and idempotence; convergence of the chains; temporal cutoff; governance, fairness and exit —, while
+the `gates` binary implements **seven** (G1 to G7). The difference is one of grouping: gate 3 of the old
+book ("convergence of the chains") disappears from the binary, and gate 5 splits into G5, G6 and G7. The two texts
+count the same pipeline in different ways; no list was erased. (2) The previous book and the plan of the
+repository say that "in $H_0$ the pipeline applies $\Phi_1$–$\Phi_4$", and the laboratory measures exactly
+that: a complete card generates zero invariant failures, and each defect generates one. The number "failures = 0" of
+gate G4, in the horizon `todos`, reproduces here.
+
+### Chapter 18
+
+Two points stay recorded. (1) The plan publishes, for the
+horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
+horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
+five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
+accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
+exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
+support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable
+recursion of Erlang B only affects the decision, not the forecasts, but it changes the hash of the module and **counts in $K$ (3)**.
+No old value was erased.
 
 ### Chapter 19
 

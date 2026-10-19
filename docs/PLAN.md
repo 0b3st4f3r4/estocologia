@@ -399,26 +399,26 @@ performativity (Goodhart and the Lucas critique); Chouldechova's trilemma and th
 
 ### 9.6 Part IV — Building the auditable machine
 
-**Chapter 12. The map of knowledge: the typed hypergraph and the five lenses.** Long texts hide errors;
+**Chapter 15. The map of knowledge: the typed hypergraph and the five lenses.** Long texts hide errors;
 the card (node) required to declare identifier, layer, uncertainty type, formula, and executable code;
 pathology edges in red; the five lenses (Fluxonomy, Chrononomy, Scalonomy, Morphonomy, Crisonomy).
 *Laboratory:* the first mini-hypergraph, with the validator rejecting incomplete cards.
 
-**Chapter 13. The team of specialists ($F_1$ to $F_8$), the safeguard panel, and AI under control.**
+**Chapter 16. The team of specialists ($F_1$ to $F_8$), the safeguard panel, and AI under control.**
 How to use AI in science without being fooled: each lane covers a blind spot ($F_1$ simulation, $F_2$
 grain and missingness, $F_3$ clock and drift, $F_4$ statistics and SBC, $F_5$ privacy and SHA-256,
 $F_6$ fairness, $F_7$ SHELF priors, $F_8$ communication and exit); the six-stage cycle and the panel
 $A_1$–$A_8$; System 1 and System 2 (*LLM-as-Jev*, deterministic suffix tree). *Laboratory:* Saerens's
 prior-shift corrector ($F_3$) and simulation-based calibration (SBC).
 
-**Chapter 14. The iron contract: cards, prohibitions, invariants, and gates.** The pilot's checklist as
+**Chapter 17. The iron contract: cards, prohibitions, invariants, and gates.** The pilot's checklist as
 `ficha.yaml`; the 5 header questions and the Type III error lock (`pergunta_do_decisor` ending with "?");
 the 4 prohibitions (no free text between agents, no mental math by AI, nobody approves their own work,
 0% and 100% forbidden); invariants $\Phi_1$–$\Phi_4$, the 4-filter funnel, and the 5 gates.
 *Laboratory:* `ficha.yaml` validator and property-based test attempting to break a function with
 thousands of random inputs.
 
-**Chapter 15. The vault, the cryptographic password, and auditing oneself.** Painting the bullseye after
+**Chapter 18. The vault, the cryptographic password, and auditing oneself.** Painting the bullseye after
 the shot; the three locks (pre-registration with SHA-256 hash, trial counter $K$, out-of-time vault);
 the Brier and Kelly logbook and the 21 signed opinions; the spirit of the background audit (10 hard
 tests against the machine itself). *Laboratory:* SHA-256 hash chain where altering a single comma in the
@@ -426,7 +426,7 @@ past invalidates the report — exactly what `LivroRazao::verificar()` performs.
 
 ### 9.7 Part V — The machine in the real world ($H_0$ to $H_3$ and stocktaking)
 
-**Chapter 16. $H_0$: the health clinic and the 2.65 million bank calls.** Clinic with 12 consultations/hour
+**Chapter 12. $H_0$: the health clinic and the 2.65 million bank calls.** Clinic with 12 consultations/hour
 and average arrival of 8: a constant day yields a 9.3-minute wait; a day alternating between 5 and 11
 yields 20.7 minutes and triples the share waiting over half an hour (from 8 to 25 in 100). The split-half
 test shows that the independent unit is the **day** ($\pm 0.51$ min), not the patient ($\pm 0.07$ min).
@@ -434,7 +434,7 @@ In the real case, 2.65 million calls amount to **81 vault days**: the Erlang C f
 service, delivers 57%, and fails on 26 out of every 100 days; adding $+7\%$ agents only during peak hours
 cuts failures to fewer than 4 in 100 days. *Laboratory:* Lindley recursion with seed `1909`.
 
-**Chapter 17. $H_1$, part 1: the illusion of $3\times$ stock leverage and the job training program.**
+**Chapter 13. $H_1$, part 1: the illusion of $3\times$ stock leverage and the job training program.**
 Project A — $3\times$ leveraged Dow Jones (1885–2023): real compound growth rises from 5.1%/yr ($1\times$)
 to 7.2%/yr ($2\times$) and **drops to 6.0%/yr ($3\times$)**; the 1987 crash ($-22.6\%$) wipes out 68% of
 $3\times$ holders, leaving median wealth at $2.1\times$ while the deceptive mean reports $19\times$.
@@ -443,7 +443,7 @@ $+\$1,794$ (selection bias of $-\$10,292$); matching hits the right number ($+9.
 but fails severity because, on the 1975 placebo, it fabricated a phantom effect of $-12.3$ pp.
 *Laboratory:* the 1987 shock on $1\times$, $2\times$, and $3\times$ portfolios and bias decomposition.
 
-**Chapter 18. $H_1$, part 2: the Danish fires and the art of rejecting one's own model.** 36 months
+**Chapter 14. $H_1$, part 2: the Danish fires and the art of rejecting one's own model.** 36 months
 without a mega-fire (50 to 150 million kroner) led the insurer to triple its exposure; the tail is wild
 ($\hat{\alpha} = 1.81$, near-infinite variance) and 36 clean months carry only $2.2$ bits of evidence
 (Laplace: monthly hazard is still $1/38$). In August 1989, a 152-million-krone fire bankrupts the
@@ -525,7 +525,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 188 lines, 84 273 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 222 lines, 84 921 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
@@ -616,8 +616,8 @@ mandated by the rule for new files. What each document became:
 
 | Plan front | Where it lives today |
 |---|---|
-| $H_0$ simulated and real | `docs/EMPIRICAL_REGISTRY.md`; measured by `labs --chapter 16` and `labs --bank` |
-| $H_1$ simulated and real | `docs/EMPIRICAL_REGISTRY.md`; measured by `labs --chapter 17` and `labs --chapter 18` over `data/` |
+| $H_0$ simulated and real | `docs/EMPIRICAL_REGISTRY.md`; measured by `labs --chapter 15` and `labs --bank` |
+| $H_1$ simulated and real | `docs/EMPIRICAL_REGISTRY.md`; measured by `labs --chapter 16` and `labs --chapter 17` over `data/` |
 | $H_2$ and re-runs $K=1..3$ | `docs/EMPIRICAL_REGISTRY.md`; the method runs in simulation via `labs --chapter 19` |
 | $H_3$ (mesh under strict clock) | `docs/EMPIRICAL_REGISTRY.md`; the mechanism runs in simulation via `labs --chapter 20` |
 | Datasets and checksums | `data/` with `SOURCES.md` and `SHA256SUMS` |

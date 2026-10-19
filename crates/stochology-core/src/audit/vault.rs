@@ -1,7 +1,7 @@
 //! Vault outside of time: declared split of the series into **train** and **vault**, with a single
 //! opening.
 //!
-//! Declared in Chapters 15 and 20 ("the vault outside of time", "the vault is the password") and in
+//! Declared in Chapters 18 and 20 ("the vault outside of time", "the vault is the password") and in
 //! the inventory of proposals not yet demanded: in Rust the chained ledger and the Merkle root
 //! existed, and the vault was described and not a component. This module closes the gap with the
 //! hard rule of the project:

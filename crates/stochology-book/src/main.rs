@@ -736,7 +736,7 @@ fn r_horizon() {
     println!("paired arms: same arrivals and same service bases; only the service rate changes");
     for (label, low, high) in [
         (
-            "demand 5 or 11 (the station of Chapter 16)",
+            "demand 5 or 11 (the station of Chapter 12)",
             5.0_f64,
             11.0_f64,
         ),
@@ -860,6 +860,9 @@ fn r_horizon() {
         ("plano", 8.0, 8.0, "flat demand"),
     ];
     let table = std::fs::read_to_string("book/r-axis.tsv").unwrap_or_default();
+    // The table is frozen and sealed (empirical/p18-eixo-r) in the chapter numbering of 2026-10-16; the chapters were
+    // reordered on 2026-10-19, so each row is printed under its current number, in current order.
+    let mut rows: Vec<(usize, String)> = Vec::new();
     for line in table.lines() {
         let l = line.trim_end();
         if l.is_empty() || l.starts_with('#') {
@@ -869,7 +872,8 @@ fn r_horizon() {
         if fields.len() < 3 || fields[0] == "cap" {
             continue;
         }
-        let (cap, case, sentence) = (fields[0], fields[1], fields[2]);
+        let (frozen, case, sentence) = (fields[0], fields[1], fields[2]);
+        let cap = current_chapter(frozen.parse().unwrap_or(0));
         let reading = match profiles.iter().find(|(name, _, _, _)| *name == case) {
             Some((_, low, high, label)) => {
                 let p = measure_loss(1909, R_HORIZON_DAYS, 10, *low, *high);
@@ -887,7 +891,25 @@ fn r_horizon() {
                 _ => "no loss measured in this chapter".to_string(),
             },
         };
-        println!("chapter {cap:>2} | {reading} | {sentence}");
+        rows.push((cap, format!("chapter {cap:>2} | {reading} | {sentence}")));
+    }
+    rows.sort_by_key(|(cap, _)| *cap);
+    for (_, row) in rows {
+        println!("{row}");
+    }
+}
+
+/// The chapter number of today for a number frozen before the reordering of 2026-10-19 (Appendix E).
+fn current_chapter(frozen: usize) -> usize {
+    match frozen {
+        12 => 15,
+        13 => 16,
+        14 => 17,
+        15 => 18,
+        16 => 12,
+        17 => 13,
+        18 => 14,
+        n => n,
     }
 }
 

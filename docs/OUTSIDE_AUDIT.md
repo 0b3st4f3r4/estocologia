@@ -9,12 +9,12 @@ fraction computed with the wrong chance, a value of information that chose the b
 test, a test of invariance that let the environment move the outcome, a market calibration that dropped a factor of
 252, a review board whose verdict a seed could decide, and figures in the prose that no instrument produced any more.
 Each of them was reproduced, bit for bit, by a fixed-seed instrument, and each passed the gates, because the gates
-check form, presence and reproducibility, not correctness (Chapter 14 now says so in the table of gates). The full list,
+check form, presence and reproducibility, not correctness (Chapter 17 now says so in the table of gates). The full list,
 with both values, is the rectification table of Appendix E.
 
-The inward audit of Chapter 15 had concluded that no number fell by an error of arithmetic. That conclusion was
+The inward audit of Chapter 18 had concluded that no number fell by an error of arithmetic. That conclusion was
 wrong, and the way it was wrong is the argument of this file: the authors of a claim are a weak auditor of it,
-however honest they are. Chapter 15 already said this about signed opinions; it holds for the mathematics too.
+however honest they are. Chapter 18 already said this about signed opinions; it holds for the mathematics too.
 
 The readings of 2026-10-18 themselves have a declared limit. They were made with an AI assistant: the first
 rectification commit is authored by "Claude", and a second review of the same kind added the second table of
@@ -42,7 +42,7 @@ Three activities, in increasing order of cost. None of them is run by the progra
 - The two outputs are compared number by number. A difference beyond the declared tolerance opens an `errata`
   issue. Agreement is weak evidence where the specification leaves choices open (Chapter 21 notes this about an
   earlier reimplementation), so the specification records which choices it fixes.
-- Priority: the laboratories whose numbers carry a decision (Chapters 10, 11, 16 and 17), then the methods
+- Priority: the laboratories whose numbers carry a decision (Chapters 10, 11, 12 and 13), then the methods
   (Chapters 8, 9 and 19).
 
 ### 3. A red team for the claims
@@ -76,7 +76,7 @@ The same day the reimplementation was extended to twenty chapters, in the priori
 carry decisions (16 and 17), then the methods (8, 9 and 19), then the rest. 421 quantities; 402 agree, 19 are open,
 none diverges after the corrections. The Rust of a chapter was read only after a divergence, to locate it. The run
 found six wrong values in the instruments (the R horizon's day, the mean of W over a uniform demand, the EVPI of
-Chapter 12, the reinforcement of the health post, the bank's halves null, and a rounding) and one gap in the text
+Chapter 15, the reinforcement of the health post, the bank's halves null, and a rounding) and one gap in the text
 (the 1-NN of the saturation rule); Appendix E lists them with both values.
 
 The 19 open quantities are the honest remainder: the text names a procedure (a propensity fit, the four forecasters of
@@ -90,9 +90,9 @@ and agreement is weak evidence where the reimplementer could have absorbed the a
 The remedy was then applied: the recipes of 16 of the 19 open quantities were written into the chapters, beside the
 run of each laboratory, and the reimplementation redoes them from those paragraphs. 462 quantities; 459 agree, none
 diverges, 3 are open (the upper end of the Kelly interval, the skill of the model in the vault and the false negative
-rate of Hispanics in Chapter 17, whose recipes are longer than a paragraph and stay cited from the research record at
+rate of Hispanics in Chapter 13, whose recipes are longer than a paragraph and stay cited from the research record at
 commit `1bfec905`). Writing the recipes found one more wrong value (the exclusion freedom of the garden of paths
-compared mixed groups: 21.5% and 47.0% became 20.3% and 42.3%), one statement wrong in the text (Chapter 17 read the
+compared mixed groups: 21.5% and 47.0% became 20.3% and 42.3%), one statement wrong in the text (Chapter 13 read the
 observed +9.0 as the result of the inert treatment, whose band is centred near +0.9), and a known weakness of the
 Merkle root, now declared with a test. Where a quantity is a simulation, the tolerance is the spread of the book's own
 instrument across seeds, measured and written beside the check, not a number chosen to make it pass.

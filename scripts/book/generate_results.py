@@ -153,7 +153,7 @@ def main() -> int:
     )
     parts.append("## 1. Real H0 and Empirical Instruments in Rust\n")
     parts.append(section_block(
-        "Bank call center (Chapter 16)",
+        "Bank call center (Chapter 12)",
         [str(BIN), "--bank"],
         "Reads BTdata/bank_calls.csvBT (5-minute public dataset), builds the Erlang C schedule over the mean "
         "training profile, and measures holdout performance.",
