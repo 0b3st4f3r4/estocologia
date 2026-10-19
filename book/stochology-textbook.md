@@ -84,7 +84,7 @@ right, it runs.
 | 10 | Time and ruin | non-ergodicity; volatility drag; Kelly; wild tails |
 | 11 | The price of error | cost/loss; EVPI; Goodhart; Chouldechova's trilemma; exit clause |
 | 12 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
-| 13 | The team of specialists and the two systems | eight specialists; the adversarial panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
+| 13 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
 | 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
 | 15 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
 | 16 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |
@@ -1343,10 +1343,11 @@ has a Brier score of **0.083**, against **0.009** for whoever uses it. In a refe
 real prevalence is 33%, whoever insists on 1% has **0.28**, against **0.084** for whoever ignores it. A single
 heuristic is an error in one environment and a success in the other. The Brier score is the subject of Chapter 8.
 
-**The adversarial board.** In a research process, the defence against the garden is a formal attack, not
-a good intention. Eight agents try to break the artefact before approval, each one in a band:
+**The safeguard panel.** In a research process, the defence against the garden is a formal attack, not
+a good intention. Eight bands name the attack that each part of the artefact should survive, and demand the
+safeguard that answers it:
 
-| Band attacked | The attack |
+| Band | The attack it names |
 | --- | --- |
 | Code | A new battery of properties, with a seed the author did not choose |
 | Data | A batch with corrupted records, which has to be isolated |
@@ -1357,17 +1358,17 @@ a good intention. Eight agents try to break the artefact before approval, each o
 | Domain | An atypical scenario of the domain, with an alternative prior, to see whether the decision holds |
 | Decision | A crisis that violates the exit clause itself |
 
-Approval requires that **all** eight reach the minimum severity:
+Approval requires that **all** eight bands pass, and a band passes when its safeguard is declared and anchored
+on the specification sheet:
 
-$$\text{Approved}(X) = \bigwedge_{i=1}^{8}\Big(A_i(X) \ge \text{Severity}_{\min}\Big)$$
+$$\text{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X),\qquad C_i(X) = \text{safeguard}_i(X) \wedge \text{anchor}_i(X).$$
 
-with $\text{Severity}_{\min} = 6$ on a scale from 0 to 10, and the same specification sheet, judged again with the
-same seed, always returns the same severity. One warning about the word. In the machine of this book the
-"severity" of each band is not measured by running the attack in the table: it is a number drawn, with a declared
-seed, inside a band that the sheet's declared safeguard selects, high when the safeguard is there and low when it is
-not. The board is therefore a **checklist of safeguards** with a reproducible score. It shows that a safeguard was
-declared and anchored, not that it works, and it is not Mayo's severity. The attacks that do run (the audit trail
-tampered on purpose, the planted defects) live in the gates of Chapter 14. The rule is hard on purpose. The board's average grade approves nothing, and one weak
+One warning about the word "attack". In the machine of this book no band runs the attack in the table. Each band
+reads two bits from the sheet, and the panel is therefore a **checklist of safeguards**. It shows that a safeguard
+was declared and anchored, not that it works, and it is not Mayo's severity. Until 2026-10-19 each band printed a
+"severity" from 0 to 10, drawn by a seed inside a range the bits selected; the number added nothing to the bits and
+borrowed the name of Mayo's concept, so it was removed (Appendix E). The attacks that do run (the audit trail
+tampered on purpose, the planted defects) live in the gates of Chapter 14. The rule is hard on purpose. No average of the bands approves anything, and one weak
 band declared is worth more than uniform work without an admitted gap. No agent approves the
 work it produced. Three failures eliminate the work before any discussion of merit: temporal leakage, a data
 contract violated without treatment, and the absence of a named human owner.
@@ -1377,7 +1378,7 @@ contract violated without treatment, and the absence of a named human owner.
 ### Step 3 — Hands on
 
 The laboratory measures four things: the garden of models on pure noise, the exact null model of the hot hand,
-the garden of paths and the severity of the board. Run it with `cargo run --release --bin labs -- --chapter 7`.
+the garden of paths and the verdict of the safeguard panel. Run it with `cargo run --release --bin labs -- --chapter 7`.
 
 ```text
 == Chapter 7 :: hunting ghosts in the noise ==
@@ -1391,8 +1392,8 @@ Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-
 Ioannidis with R = 1/1000, power 0.80: PPV = 0.016 with alpha 0.05 and 0.002 with the garden alpha
 Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.146 with the garden alpha
 Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.362 with the garden alpha
-board A1-A8 with seed 2026, card with the eight safeguards: severities [9, 8, 10, 9, 8, 9, 8, 10], floor 6, approved = true
-the same card without one band's safeguard: the lowest severity drops to 2 (rejected)
+safeguard panel A1-A8, card with the eight safeguards: bits [1, 1, 1, 1, 1, 1, 1, 1], approved = true
+the same card without one band's safeguard: 7 of 8 bits set, approved = false
 ```
 
 Five readings. **(1)** The winner of the garden of models has error 0.814 on validation, against 1.000 for
@@ -1404,11 +1405,11 @@ The ghost is the difference between the two. **(3)** The four classical freedoms
 positive from 5.2% (pre-registered test) to **21.5%**, and the large family, with optional stopping at
 four points, three sets of covariates, exclusion of the extreme case and two subgroups, takes it to
 **47.0%**. **(4)** The Mayo severity of the pre-registered "$p = 0.04$" is 0.96; that of the number that comes
-out of the garden is 0.53, because what produces the number is the procedure. **(5)** The A1–A8 board with
-seed 2026 gives severities 9, 8, 10, 9, 8, 9, 8 and 10 on a sheet with the eight safeguards, approved, and
-one band without its safeguard is enough for the lowest severity to fall to 2 and the approval to vanish. The AND of the eight does not
-forgive. Read the numbers for what they are: the band of each severity was fixed by the declared safeguards, and the
-draw inside the band only shows that the verdict does not depend on the seed.
+out of the garden is 0.53, because what produces the number is the procedure. **(5)** The A1–A8 panel sets the
+eight bits on a sheet with the eight safeguards and approves it; one band without its safeguard leaves 7 of 8 bits
+set, and the approval vanishes. The AND of the eight does not forgive. Read the contrast with reading (4): Mayo's
+severity is a probability about a procedure, and it can be 0.96 or 0.53; the panel's verdict is a bit about a
+declaration, and it carries no probability at all.
 
 **Exercises.**
 
@@ -1423,10 +1424,10 @@ draw inside the band only shows that the verdict does not depend on the seed.
 4. *(Laboratory)* Add to the garden the freedom "use the mean or the median of the outcome, whichever gives the
    smallest p" and measure the new false-positive rate. What consequence does that have for declaring the freedoms
    before running?
-5. *(Count)* On the adversarial board, the severity of each agent is drawn between 8 and 10 when the safeguard
-   exists and between 2 and 4 when it does not. Compute the probability of approval of a sheet with the eight
-   safeguards and of a sheet with a single band without its safeguard. Then explain why the design chose
-   those two intervals, and not a draw from 0 to 10.
+5. *(Concept)* Until 2026-10-19 the panel printed, for each band, a "severity" drawn between 8 and 10 when the
+   safeguard existed and between 2 and 4 when it did not, against a floor of 6. Show that the verdict was the same
+   as the AND of the eight bits under every seed. What did the number add, and why is calling it "severity" a
+   misuse of Mayo's word?
 6. *(Concept)* Give an example from your field in which ignoring the base rate is an adaptation to the environment, with
    the two Brier numbers that support your answer.
 
@@ -1440,7 +1441,7 @@ draw inside the band only shows that the verdict does not depend on the seed.
 - Ioannidis: the predictive value of a finding falls with $\alpha$ and with the chances that the hypothesis is false.
 - Five errors, not two: I (false alarm), II (blindness), III (right answer to the wrong question), S
   (flipped sign) and M (exaggeration). The defence is institutional: Mayo's severity and a test that could have
-  failed, with the A1–A8 board as a checklist that makes the missing safeguard visible.
+  failed, with the A1–A8 safeguard panel as a checklist of bits that makes the missing safeguard visible.
 
 ## Chapter 8. The forecaster's thermometer: calibration, resolution and the Brier score
 
@@ -2057,7 +2058,7 @@ round, when each one alone would decay. **The question that decides the case is 
 moment of order $k$ exists if and only if $k < \alpha$. With $\alpha = 1.1$, the mean exists and is worth
 11, but the mean of a million observations has median 8.39, falls below 11 in 95% of the samples, and
 the usual 95% interval contains the true value in only 26% of them. The fraction of the mean that comes from
-values above $m$ is $m^{1-\alpha}$; in the median, 25.12% of the true mean comes from values larger than
+values above $m$ is $m^{1-\alpha}$; in the median, 27.55% of the true mean comes from values larger than
 the largest the sample of one million saw.
 
 **The three states of chance (Mandelbrot).** Mandelbrot classified chance by the way sums behave.
@@ -2097,7 +2098,7 @@ time growth per round: f* = +0.006211 | 2f* = +0.000000 | f = 0.70 -0.014200 | f
 
 all-in (f = 1.00)          above the start: 10 rounds 0.374  100 rounds 0.128  1000 rounds 0.00000
                            ruin (< 1e-6 of the capital) = 0.9971  final median = 1.322e-23  final mean = 2.725e-6
-twice Kelly (f = 0.50)     above the start: 10 rounds 0.485  100 rounds 0.527  1000 rounds 0.51960
+twice Kelly (f = 0.50)     above the start: 10 rounds 0.374  100 rounds 0.450  1000 rounds 0.49110
                            ruin (< 1e-6 of the capital) = 0.0244  final median = 1.000e0  final mean = 7.375e6
 full Kelly (f = 0.25)      above the start: 10 rounds 0.618  100 rounds 0.684  1000 rounds 0.96120
                            ruin (< 1e-6 of the capital) = 0.0000  final median = 4.983e2  final mean = 1.127e5
@@ -2121,7 +2122,7 @@ true mean (alpha/(alpha-1)) = 11.0
 n =      1000: mean of the sample means =     7.76  median =    6.22  below 11 in 0.94  95% CI covers in 0.24
 n =   1000000: mean of the sample means =     9.53  median =    8.39  below 11 in 0.95  95% CI covers in 0.26
 share of each sample's sum that comes from its single largest value (n = 1 000 000): 0.088
-in the median, 25.12% of the true mean comes from values above the maximum of a sample of one million
+in the median, 27.55% of the true mean comes from values above the maximum of a sample of one million (median maximum 397420)
 
 Hill estimator with alpha = 1.1 and n = 200 000:
   k =    100  alpha_hat = 1.083  95% CI approx [0.870; 1.295]
@@ -2161,7 +2162,7 @@ time is $+0.006211$ per round, positive for the first time. At twice that fracti
 $99.71\%$ of the trajectories, the final median is $1.322 \times 10^{-23}$ and the $\log_{10}$ of the final
 mean is $-5.6$. **The richest trajectory alone accounts for 100% of the cohort mean**, that is, the richest 1%
 explains everything the mean has of wealth. With **twice Kelly** $(f = 0.50)$ the growth is zero: the final median
-is $1.000$, half of the trajectories end above the start (0.51960), ruin touches 0.0244 of them, and the mean
+is $1.000$, just under half of the trajectories end strictly above the start (0.49110; the rest end at it or below, because 1.25 and 0.8 multiply to exactly 1 and every equal number of heads and tails returns to the start), ruin touches 0.0244 of them, and the mean
 still explodes to $7.375 \times 10^6$. With **full Kelly** $(f = 0.25)$ ruin is zero, a fraction 0.96120 of the trajectories ends
 above the start and the final median is $4.983 \times 10^2$; with **half Kelly** $(f = 0.125)$ the median is
 $1.062 \times 10^2$ and 0.99650 end above the start. The contrast is the point of the chapter. **Twice the optimal
@@ -2524,14 +2525,14 @@ value and equal miss rates cannot coexist with equal false-alarm rates.
 
 **Exercises.**
 
-1. *(Computation)* In the Bernoulli ship, insurance costs 1,800 and covers a loss of 34,000 with chance of
+1. *(Count)* In the Bernoulli ship, insurance costs 1,800 and covers a loss of 34,000 with chance of
    5%. By the cost/loss rule, should the shipowner insure? How does the growth in time answer?
    Explain the two answers in one sentence each.
-2. *(Computation)* Redo the EVPI with prevalence 0.10 (exactly the threshold). Does the value of perfect
+2. *(Count)* Redo the EVPI with prevalence 0.10 (exactly the threshold). Does the value of perfect
    information increase or decrease? How does that guide the spending on tests?
 3. *(Concept)* In the example of the two-route app, who errs more, the naive forecaster or the
    forecaster that equalises the times? In what sense is the second one "performatively stable"?
-4. *(Computation)* With the rates of the laboratory (White with 0.069, 0.24, 0.105), compute the PPV of the matrix
+4. *(Count)* With the rates of the laboratory (White with 0.069, 0.24, 0.105), compute the PPV of the matrix
    and check that the identity of Chouldechova returns the observed FPR. Then fix the PPV and the FNR of White for
    Black, with base rate 0.111, and compute the FPR the identity forces.
 5. *(Laboratory)* In the laboratory, change the base rate of the second group from 0.111 to 0.20 and redo the
@@ -2806,7 +2807,7 @@ number; the slope by regime is a structure.
    wait will be about 9 minutes". Which pathology edge links them, and in which sense does it point?
 2. *(Concept)* Which lenses must a credit-granting model published to clients trigger?
    Justify each one in one sentence.
-3. *(Computation)* In the output above, the EVPI is 0.0000 with the option of acting and 3.7000 without it. Explain why the same
+3. *(Count)* In the output above, the EVPI is 0.0000 with the option of acting and 3.7000 without it. Explain why the same
    sensor is worth zero in one case and 3.70 in the other, and compute the EVPI for a third option whose best value
    without information is 4.00.
 4. *(Laboratory)* Add a fourth node `L3_auditor` to the mini-hypergraph and check what the
@@ -2828,11 +2829,11 @@ number; the slope by regime is a structure.
   slopes by regime stay equal.
 - The node count inflates easily: of the 26,634 nodes of the scale audit, only 6,494 are concept nodes.
 
-## Chapter 13. The team of specialists, the adversarial panel and the two systems of thought
+## Chapter 13. The team of specialists, the safeguard panel and the two systems of thought
 
 **Objectives.** By the end of this chapter you should know the blind spot of each of eight specialists, go
-through the six-stage cycle, apply the approval condition of the adversarial panel
-$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} \left( A_i(X) \ge \mathrm{Severity}_{\min} \right)$, correct a forecast
+through the six-stage cycle, apply the approval condition of the safeguard panel
+$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X)$, correct a forecast
 when the base rate moves, check a posterior by simulation, and distinguish System 1 (fast triage, probabilities
 held between 1% and 99%) from System 2 (deliberation: tree search, belief state, heavy inference and directed
 stress).
@@ -2936,12 +2937,12 @@ passes through all of them.
    simulated **before** reading any pattern, inference diagnostics, partition outside time, count of attempts.
 4. **Projection onto the five lenses (Orchestrator).** Sweep of Fluxonomy, Chrononomy, Scalonomy, Morphonomy and
    Crisonomy.
-5. **Adversarial panel (Orchestrator).** Rejected goes back to the stage that failed; approved moves on.
+5. **Safeguard panel (Orchestrator).** Rejected goes back to the stage that failed; approved moves on.
 6. **Decision and closure (Decision).** Memorandum in natural frequencies, HOPs, the C/L tree and exit clause.
 
 A rejected assignment goes back to the **stage in which it failed**, instead of going back to the beginning.
 
-**The adversarial panel.** Three failures eliminate the assignment before any discussion of merit: temporal
+**The safeguard panel.** Three failures eliminate the assignment before any discussion of merit: temporal
 leakage, a violated data contract without treatment and the absence of a named human officer. After that, each
 specialist's work receives its attack, eight in total.
 
@@ -2956,28 +2957,28 @@ specialist's work receives its attack, eight in total.
 | $A_7$ Domain | An atypical scenario of the domain, with an alternative prior | elicited prior |
 | $A_8$ Decision | A crisis that violates the exit clause itself | declared exit clause |
 
-**The approval condition.** Each attack $A_i$ returns a **severity** on the scale from 0 to 10, and the artifact
-$X$ is approved only if **all** eight reach the floor:
+**The approval condition.** For each attack $A_i$ the panel reads two bits from the card: whether the safeguard
+of that row was declared, and whether the structural field that anchors it is present (a property test anchored
+by a runnable artifact and a seed, an exit clause anchored by a named payer of the error). The artifact $X$ is
+approved only if **all** eight rows pass:
 
-$$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \mathrm{Severity}_{\min} \Big),\qquad
-\mathrm{Severity}_{\min} = 6.$$
+$$\mathrm{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X),\qquad
+C_i(X) = \mathrm{safeguard}_i(X) \wedge \mathrm{anchor}_i(X).$$
 
-The $\bigwedge$ is the logical "and". One single attack below the floor is enough for the assignment to go back.
-The severity is deterministic: it comes from the corresponding safeguard of the card and from an explicit seed,
-and judging the same card again with the same seed always returns the same number. The condition **fails** when a
-safeguard was declared absent, and that is what makes it auditable. No subjective judgement hides in the score,
-and neither does any attack: the score is drawn inside a band that the declared safeguard and its structural anchor
-select, and no band crosses the floor, so the seed never decides a verdict. The panel is a checklist with a
-reproducible score. It answers "was the safeguard declared, with the field that anchors it?", not "does the
-safeguard hold under attack?". The second question belongs to tests that run the attack, such as the tampering of
-the trail in the gates of Chapter 14.
+The $\bigwedge$ is the logical "and". One single row that fails is enough for the assignment to go back. The
+condition reads no seed and no judgement: the same card always gets the same sixteen bits, and it **fails** when a
+safeguard was declared absent or left without its anchor, which is what makes it auditable. The panel is a
+checklist. It answers "was the safeguard declared, with the field that anchors it?", not "does the safeguard hold
+under attack?". The second question belongs to tests that run the attack, such as the tampering of the trail in
+the gates of Chapter 14.
 
-**Read the verdict, not the number.** Because no band crosses the floor, the score carries exactly one bit per
-safeguard: declared and anchored, or not. Whether a declared safeguard scores 8, 9 or 10 is decided by the seed and
-says nothing about the artifact. The name "adversarial" describes what the panel **asks for**, an attack on each
-specialist's work, not what it **runs**; the attacks that are actually run live in the gates and in the property
-tests. A decimal score that only encodes a yes or a no is the kind of false precision this book warns against
-elsewhere, and the honest output of the panel is the list of eight bits.
+**Why the panel prints bits.** Until 2026-10-19 each row printed a "severity" from 0 to 10, drawn by a seed inside
+a range that the two bits selected, against a floor of 6. No range crossed the floor, so the verdict was always the
+AND of the bits; whether a declared safeguard scored 8, 9 or 10 was decided by the seed and said nothing about the
+artifact. A decimal that only encodes a yes or a no is the false precision this book warns against elsewhere, and
+it borrowed the name of Mayo's severity (Chapter 7), which is a probability about a procedure. The panel now prints
+the bits, and the name was changed with it: it was called the "adversarial panel", which described what it **asks
+for**, an attack on each specialist's work, and not what it **runs**. Both changes are recorded in Appendix E.
 
 **The model-critique card.** The orchestrator approves only after filling five items: a predictive check against
 replicates of the fitted model; comparison with at least one rival model; separation between parameters
@@ -3045,39 +3046,34 @@ removed; check that the triage of System 1 never leaves the interval between 1% 
 deliberate. Run the first with `cargo run --release --bin labs -- --chapter 13`.
 
 ```text
-== Chapter 13 :: the A1-A8 adversarial panel ==
-complete card (card h3.voos): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=8 A6-fairness=9 A7-domain=8 A8-decision=10 | lowest=8 floor=6 approved=true
-card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=9 A2-data=8 A3-lifecycle=10 A4-inference=9 A5-governance=2 A6-fairness=3 A7-domain=8 A8-decision=10 | lowest=2 floor=6 approved=false
-without A1-code: rejecting=["A1-code"] count_rejecting=1 lowest=3
-without A2-data: rejecting=["A2-data"] count_rejecting=1 lowest=2
-without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1 lowest=4
-without A4-inference: rejecting=["A4-inference"] count_rejecting=1 lowest=3
-without A5-governance: rejecting=["A5-governance"] count_rejecting=1 lowest=2
-without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1 lowest=3
-without A7-domain: rejecting=["A7-domain"] count_rejecting=1 lowest=2
-without A8-decision: rejecting=["A8-decision"] count_rejecting=1 lowest=4
-sweep: cards rejected=8 of 8 | lowest global severity=2 | severities < floor per agent=[1, 1, 1, 1, 1, 1, 1, 1]
-complete card with seed 7: lowest=8 approved=true
-complete card with seed 2026: lowest=8 approved=true
-complete card with seed 999983: lowest=8 approved=true
+== Chapter 13 :: the A1-A8 safeguard panel ==
+complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
+card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
+without A1-code: rejecting=["A1-code"] count_rejecting=1
+without A2-data: rejecting=["A2-data"] count_rejecting=1
+without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
+without A4-inference: rejecting=["A4-inference"] count_rejecting=1
+without A5-governance: rejecting=["A5-governance"] count_rejecting=1
+without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
+without A7-domain: rejecting=["A7-domain"] count_rejecting=1
+without A8-decision: rejecting=["A8-decision"] count_rejecting=1
+sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
+seed read by the panel: none (the verdict is a function of the eight bits)
 system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
 ```
 
 Four readings.
 
-**The complete card passes, with room to spare.** The eight severities stay between 8 and 10, and the smallest is
-8, two points above the floor 6. Changing the seed (7, 2026, 999983) does not alter the verdict. A rejection comes
-from a missing safeguard, not from the luck of the seed.
+**The complete card passes.** The eight bits are set, and the verdict reads no seed: there is nothing to vary.
+A rejection comes from a missing safeguard, never from a draw.
 
-**Each safeguard removed brings down exactly the attack that charges for it.** In the eight lines of the sweep,
-the set of rejecting attacks always has **one** element, and it is always the corresponding one. Without an intact
-trail $A_5$ rejects (severity 2), without an exit clause $A_8$ rejects (4), without a property test $A_1$ rejects
-(3). The other seven stay intact. The panel is not a mean score that dilutes, but a logical "and" that locates the
-failure.
+**Each safeguard removed brings down exactly the row that charges for it.** In the eight lines of the sweep, the
+set of rejecting rows always has **one** element, and it is always the corresponding one. Without an intact trail
+$A_5$ rejects, without an exit clause $A_8$ rejects, without a property test $A_1$ rejects, and the other seven stay
+set. The panel is not a mean score that dilutes, but a logical "and" that locates the failure.
 
-**Removing two safeguards rejects the whole card.** With the governance and fairness safeguards removed, the
-severities fall to 2 and 3 and the card is rejected, with 8 rejections in 8 defective cards and the smallest
-global severity at 2.
+**Removing two safeguards rejects the card and names both.** With the governance and fairness safeguards removed,
+6 of 8 bits stay set, the card is rejected, and the line says which two rows fell.
 
 **The triage respects the interval.** The last line returns 0.06 and 0.94, sum 1.0000, and zero values outside
 1% to 99%.
@@ -3130,12 +3126,12 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
    specialist must block the analysis, and with which test?
 2. *(Concept)* Draw the attack of the panel for a credit triage model. Which crisis would violate the exit clause?
    Which group would come to pay if the metric were inverted?
-3. *(Computation)* The complete card has smallest severity 8 and floor 6. How many attacks can fall to the low range
-   (2 to 4) without rejecting the card? Justify with the definition of $\bigwedge$.
+3. *(Count)* A card has 7 of its 8 safeguards declared and anchored, and the eighth declared without its anchor.
+   How many of the sixteen bits are set, and is the card approved? Justify with the definition of $\bigwedge$.
 4. *(Laboratory)* Implement calibration by simulation (SBC) for a Beta-Binomial model: draw the parameter from the
    prior, simulate the data with it and run the sampler. Check that the rank of the true value among the posterior
    samples is uniform. Then introduce an error in the sampler and watch the histogram stop being flat.
-5. *(Computation)* A classifier was trained where the base rate was 10% and now serves a population where it is
+5. *(Count)* A classifier was trained where the base rate was 10% and now serves a population where it is
    30%. A case receives 0.20 from the old model. What is the corrected probability? Which assumption must hold for
    the correction to be right?
 6. *(Concept)* Give one example of each mode of degradation of a model in use (covariate drift, label drift and
@@ -3149,8 +3145,8 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
 - Eight specialists, each linked to a way of erring, plus an orchestrator that attacks; nobody approves the work
   they produced.
 - The cycle has six stages, and a rejection returns to the stage that failed, not to the beginning.
-- Approval is a logical "and" of the eight severities against the floor 6; each missing safeguard brings down the
-  attack that charges for it.
+- Approval is a logical "and" of eight checks, each a safeguard declared and anchored; each missing safeguard
+  brings down the row that charges for it, and no seed enters the verdict.
 - A moved base rate is corrected on the logit; a wrong slope is not. SBC checks the inference where the truth is
   known by construction.
 - System 1 triages deterministically with probabilities between 1% and 99%. System 2 deliberates by tree search, a
@@ -3345,7 +3341,7 @@ to produce an identical output, and a planted defect has to be detected. Seven g
 | G3 | Code | Declared scope: only a simulable artifact | That the artifact simulates the claim it is attached to |
 | G4 | Code and Domain | Invariants $\Phi_1$–$\Phi_4$ and the type III lock | That the fields are true, or that the decider question is the decider's: the lock reads a question mark and a quoted action, not meaning |
 | G5 | Governance | SHA-256 trail intact **and** tampering detected | Provenance or truth: a fabricated record sealed before publication passes |
-| G6 | Orchestrator | Adversarial panel $A_1$–$A_8$ with the floor | That any safeguard works: the panel checks declared and anchored safeguards, it runs no attack |
+| G6 | Orchestrator | Safeguard panel $A_1$–$A_8$: every check declared and anchored | That any safeguard works: the panel checks declared and anchored safeguards, it runs no attack |
 | G7 | Decision | Declared exit clause and $A_8$ above the floor | That the exit clause will be honoured when its trigger fires |
 
 Two details make the set worth more than the sum. G5 does not verify only that the chain is intact. It
@@ -3411,7 +3407,7 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
    get higher grades".
 2. *(Concept)* Which filter of the funnel must cut the question "what is the favourite colour of the clients who buy
    insurance?" in an insurer that is not going to change the product?
-3. *(Computation)* Why do 25 days of exponential growth identify $\beta - \gamma$ and not $\beta/\gamma$?
+3. *(Count)* Why do 25 days of exponential growth identify $\beta - \gamma$ and not $\beta/\gamma$?
    Show that two pairs $(\beta, \gamma)$ with equal differences generate identical initial curves.
 4. *(Laboratory)* Improve the message of the type III lock to distinguish "the interrogation mark is missing"
    from "the question does not cite the action". Make the two defects fall into different messages and reproduce the
@@ -3616,7 +3612,7 @@ seven for an altered version, the root changes in **7 of 7** cases. That is what
    that is, to the requirement that a test could have given another result.
 2. *(Concept)* A colleague proposes rewriting the result files with the signature inside. Which property
    of the clean reproduction would that break?
-3. *(Computation)* The counter per domain stopped at $K = 3$; the recount across the whole gate measured $K = 38$
+3. *(Count)* The counter per domain stopped at $K = 3$; the recount across the whole gate measured $K = 38$
    distinct tests. Explain, in three sentences, why the two numbers coexist without either of them
    being wrong.
 4. *(Laboratory)* Extend the laboratory to a bus in which each message carries the hash of the previous one
@@ -3903,7 +3899,7 @@ about 5.
 
 **Exercises.**
 
-1. *(Account)* Use $W(\lambda)=\lambda/(\mu(\mu-\lambda))$ with $\mu = 12$ to find the long-run wait with
+1. *(Count)* Use $W(\lambda)=\lambda/(\mu(\mu-\lambda))$ with $\mu = 12$ to find the long-run wait with
    $\lambda = 8$, $\lambda = 5$ and $\lambda = 11$; then compute the mean of the last two and compare it with the 19.3
    minutes of the simulation. Why does the formula give more?
 2. *(Concept)* Why does the mean per patient weight the surge days more? Compute, in every 100 patients, how many
@@ -3911,7 +3907,7 @@ about 5.
 3. *(Laboratory)* Run the laboratory with seed 1909 and confirm the wait of the world 5 or 11 and the
    margin per day. Then change the surge reinforcement from 24 to 18 consultations per hour: does the mean wait improve?
    Does the tail change size?
-4. *(Account)* In every 100 patients of the claim world, 8 wait more than 30 minutes; in the real world, 24. How many
+4. *(Count)* In every 100 patients of the claim world, 8 wait more than 30 minutes; in the real world, 24. How many
    more patients are they, if the post serves 8,000 patients per year?
 5. *(Concept)* Write, in four sentences and in natural frequencies, the memo of the call-centre case for the board
    of the bank, with an exit clause (which new fact would make the decision be reviewed).
@@ -4096,7 +4092,7 @@ k-anonymity of the rows goes from 1 to 11 after the generalisation of quasi-iden
 for the others. Equalising them captures 22 more unemployed people and costs 87 false positives. It is the trilemma of Chouldechova
 measured in numbers. There is no way to get the three things right at once, and someone will pay for the choice (Chapter 11).
 
-**Approval is not truth.** Both analyses of this chapter went through the whole cycle and passed the adversarial
+**Approval is not truth.** Both analyses of this chapter went through the whole cycle and passed the safeguard
 panel. Passing means that the cards declared and anchored every safeguard, not that the analyses were right, and
 much less that the claims were true: the market claim was refuted, and
 the programme's effect stood only under randomisation. The third real case of this part, the Danish fire losses
@@ -4156,10 +4152,10 @@ difference of −10.292 dollars is the selection bias, measured and not assumed.
 
 **Exercises.**
 
-1. *(Account)* Use the second-order drag, $\tfrac{1}{2}L^2\sigma^2$, with $\sigma = 0.1749$ per year to
+1. *(Count)* Use the second-order drag, $\tfrac{1}{2}L^2\sigma^2$, with $\sigma = 0.1749$ per year to
    predict the drag of 1×, 2× and 3× and compare with 0.0153, 0.0617 and 0.1403 measured. At which leverage does the drag
    start to exceed the arithmetic gain?
-2. *(Account)* Which leverage zeroes the capital on the day of −22.61%? And on the worst day of 1929? Explain why "ruin"
+2. *(Count)* Which leverage zeroes the capital on the day of −22.61%? And on the worst day of 1929? Explain why "ruin"
    is an absorbing state and the effect of that on the ensemble mean.
 3. *(Concept)* Explain the sentence "whoever holds for decades always wins" and distinguish what the refutation
    brings down from what it leaves standing.
@@ -4168,7 +4164,7 @@ difference of −10.292 dollars is the selection bias, measured and not assumed.
    median?
 5. *(Concept)* Why does the placebo with the employment of 1975 measure the selection bias? Write the answer using the
    decomposition of the raw difference.
-6. *(Account)* With the measured levels of employment in 1978 (76% of the treated, 65% of the randomised controls), compute the
+6. *(Count)* With the measured levels of employment in 1978 (76% of the treated, 65% of the randomised controls), compute the
    effect in percentage points and explain why the raw comparison gives the opposite sign.
 
 **Summary.**
@@ -4252,7 +4248,7 @@ vault does not rank the forecasters, it only fails to show that any of them beat
 was growing **4.6% per year** (p = 2·10⁻⁶), and the world was not stationary. The elicited (simulated) prior dominated the
 posterior.
 
-The adversarial panel rejected the analysis, and the tests were not adjusted so that it would pass. One sentence
+The safeguard panel rejected the analysis, and the tests were not adjusted so that it would pass. One sentence
 summarises the verdict: **the claim loses, but the model does not win the right to decide.** No decision was
 issued, and the rejection is the published result.
 
@@ -4385,11 +4381,11 @@ would be worth double.
 
 **Exercises.**
 
-1. *(Account)* With the Laplace rule, compute the monthly chance after 12, 36 and 69 clean months. How many clean months
+1. *(Count)* With the Laplace rule, compute the monthly chance after 12, 36 and 69 clean months. How many clean months
    would be needed for the monthly chance to fall below 1 in 100?
 2. *(Concept)* Explain why $\alpha = 1.81$ prevents computing an honest margin of error for the annual loss,
    and why the interval [1.41; 2.56] crosses the boundary at which the variance exists.
-3. *(Account)* Using $P(\text{clean} \mid p) = (1-p)^{36}$, compute the likelihood ratio between
+3. *(Count)* Using $P(\text{clean} \mid p) = (1-p)^{36}$, compute the likelihood ratio between
    $p = 1/1200$ and $p = 1/12$. In bits, and in words: what do those bits authorise one to conclude?
 4. *(Laboratory)* Run the laboratory with (k = 50) and then change the window from 36 to 72 clean
    months: how many bits is the larger window worth? How many months would be needed for 95%?
@@ -4749,7 +4745,7 @@ each effect stops being a point. **The p was never the problem; the row was the 
    come out empty. Which premise of the ICP does the year violate?
 2. *(Concept)* In world C, without the saturation rule the method returns the empty set. Write in three sentences why
    accepting a saturated set is not evidence of invariance.
-3. *(Account)* In the laboratory, the floor of the permutation with 999 draws is $1/1,000 = 0.001$. What is the smallest p-value
+3. *(Count)* In the laboratory, the floor of the permutation with 999 draws is $1/1,000 = 0.001$. What is the smallest p-value
    possible with 9.999 draws, and why does that matter for the validation of the yeast, where each mutant is an
    environment of one row? Check the account in the two-row arrangement: if each row has the floor $1/1,000$ and the
    combined one is the product, where does the floor of the design with two rows sit?
@@ -4757,7 +4753,7 @@ each effect stops being a point. **The p was never the problem; the row was the 
    and run again. Does the gate keep failing? What does that say about the power of the test?
 5. *(Concept)* The multiplicity correction shrinks the sets and still leaves four areas. Why can it also
    create invariant sets in domains that rejected everything, and why is that a caveat?
-6. *(Account)* With 38 tests corrected by Bonferroni, the level per test is $0.0013$ and the cost of parsimony is
+6. *(Count)* With 38 tests corrected by Bonferroni, the level per test is $0.0013$ and the cost of parsimony is
    9.6 bits. The evidence of the yeast is worth 10.9 bits. By how many bits does it pass? And if the cost rose to 12 bits,
    how many areas would remain — and would the gate stay standing?
 
@@ -5025,7 +5021,7 @@ switched off, it is available in the 24.466 emissions and the gain is $+0.6521$.
    clock switched off? Give an example of a column that would be a bad canary.
 2. *(Concept)* Explain the failure of the circuit breaker in the flights of 2013 and propose a second criterion of opening based
    on calibration, saying what price it charges in number of forecast changes.
-3. *(Account)* In the laboratory, the fixed climatology has Brier 0.02171 and the official model, 0.02130. Compute the
+3. *(Count)* In the laboratory, the fixed climatology has Brier 0.02171 and the official model, 0.02130. Compute the
    skill and check it against the measured number of $+0.0098$ (the measured reference uses the rate of the past, 0.0222, and
    not the rate of the vault).
 4. *(Laboratory)* Change, in the laboratory, the rate of the training period bringing it close to the rate of the vault (change the
@@ -5297,7 +5293,7 @@ rubber stamp.
    without any trigger. Which of the two survives a change of management?
 3. *(Laboratory)* Run the verifier and add a card 13 with a correct decider question and a seed that is
    not numeric ("any"). How many cards are refused now, and by which rule?
-4. *(Account)* Five of 33 domains changed status or action when a prior from the literature replaced the prior in
+4. *(Count)* Five of 33 domains changed status or action when a prior from the literature replaced the prior in
    use. Write that number as a natural frequency ("in every 100 domains...") and
    say why it is the size of what remains to be measured.
 5. *(Concept)* The blind pilot tied at the ceiling: each arm pointed to 8 defects, and the two lists came out identical.
@@ -5333,7 +5329,7 @@ example. The order is alphabetical.
 | **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
 | **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
 | **Background audit** | A front that tests an assumption of the program itself, with a declaration written before running | The teacher who redoes the exam before applying it to the students, with the answer key sealed |
-| **Adversarial panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it scores declarations with a reproducible number and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
+| **Safeguard panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it prints one pair of bits per safeguard and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
 | **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
 | **Bayes (rule of)** | The rule that says how today's belief is updated with the evidence of now, starting from yesterday's belief | A positive pregnancy test in a low-risk person can still be a false positive most of the time |
 | **Brier (score of)** | The mean of the squared error of a probabilistic forecast: lower is better, and 0 is perfect | Betting 90% on a game and losing costs more on the scoreboard than betting 55% and losing |
@@ -5469,7 +5465,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 406 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 409 tests pass |
+| `python3 scripts/reimplementation/decision_labs.py` | That 61 quantities of Chapters 10 and 11, recomputed from the text alone in another language, agree with the book |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -5480,9 +5477,11 @@ shocks, and the identical code, run with the same seed, gave 0.5529 and 2,395 sh
 the code. There were two numerical libraries in the interpreter, and the default path imported 2.4.6 before 2.5.1.
 The point of the divergence was isolated. In the two versions, the generator started from the same state, and a
 binomial draw of 248 trials with probability 0.6 returns 171 in one and 150 in the other, because 2.5 fixed the
-Stirling series of the acceptance test of the BTPE algorithm. What this book measured is the pair of draws, 171
-and 150, under the same state; the account of the upstream fix is the program's reading of the two sources, and
-the citation of the numpy change that made it is still owed (Appendix E, Chapter 20). If you meet a divergence like this, the path is always
+Stirling series of the acceptance test of the BTPE algorithm. The fix is upstream and documented: the NumPy 2.5.0
+release notes, under "Corrections to the BTPE binomial sampler" (gh-31238), state that the third and fourth terms
+were added instead of subtracted, an error inherited from the 1988 paper of Kachitvichyanukul and Schmeiser, that the
+leading coefficient read 13680 instead of 13860, and that `Generator.binomial` may therefore return different samples
+for the same seed, while the legacy `RandomState` keeps the old stream. If you meet a divergence like this, the path is always
 the same. **First the environment, then the code**: record the version of every library next to the number, because
 a number without its environment is a number nobody can audit.
 
@@ -5658,6 +5657,25 @@ the earlier wording is kept here.
 | A | Erlang C | "the queue does not exceed five people" | a share of customers served within a time | Erlang C gives the chance of waiting, not a bound on the queue |
 | 1, 2 | Exercise type | *(Calculation)* | *(Count)* | the preface declares three types |
 
+### Rectifications of 2026-10-19
+
+Two kinds of change. The safeguard panel stopped printing a number it did not measure, and a reimplementation of the
+decision laboratories from the text alone (`scripts/reimplementation/decision_labs.py`, in Python, written without
+reading the Rust of Chapters 10 and 11) found two values that the instruments printed faithfully and that were
+wrong. Each was corrected in the code, given a test that fails on the old code, and corrected in the text. The
+reimplementation now runs in `scripts/verify.sh`; it was written by an AI assistant, so it is a cross-check, not
+the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 7, 13, 14 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
+| 7, 13, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
+| 10 | Twice Kelly above the start | 0.485, 0.527 and 0.51960 after 10, 100 and 1000 rounds | 0.374, 0.450 and 0.49110 (exact: 0.377, 0.460 and 0.487) | 1.25 and 0.8 multiply to exactly 1; the comparison `> 1.0` let the rounding of each product decide the ties |
+| 10 | Share of the true mean above the maximum of a sample of one million, in the median | 25.12% | 27.55% (median maximum 397,420) | the laboratory printed $n^{1-\alpha}$, which puts the maximum at $n$; the median maximum solves $(1 - m^{-\alpha})^n = 1/2$ |
+| C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
+| 10–21 | Exercise types | *(Computation)*, *(Account)* | *(Count)* | the preface declares three types |
+| C | Test count | 406 | 409 | the count of 2026-10-18 was already stale (408 on the base of these changes); one panel test retired, two tests of Chapter 10 added |
+
 ### Chapter 4
 
 The earlier text (and the course outline) records 11% coverage
@@ -5777,7 +5795,8 @@ because that is the name of the code. The laboratory of this book measures the
 severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
 machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
 running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
-values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
+2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
 
 ### Chapter 14
 
@@ -5900,7 +5919,7 @@ two numeric packages inside a single interpreter: numpy 2.5.1 of the record and 
 imports first. The exact point of the divergence was found: with the state of the generator identical, a binomial draw
 of 248 trials with probability 0.6 returns 171 in one version and 150 in the other, because version 2.5 corrected the
 Stirling series of the acceptance test of BTPE — the third and the fourth terms were added instead of subtracted, and the
-main coefficient said 13680 where it should say 13860. From there on the two simulations decorrelate, and the
+main coefficient said 13680 where it should say 13860 (NumPy 2.5.0 release notes, gh-31238, checked on 2026-10-19). From there on the two simulations decorrelate, and the
 exploration draw changes pattern. **No published number changed**: the r̂ of 0.5632 with 2,375 shocks reproduces
 in the record environment, and the other value is the one of the other package. The lesson for whoever goes to check: record the version of the
 environment together with the number, because a number without an environment is a number that nobody can audit.

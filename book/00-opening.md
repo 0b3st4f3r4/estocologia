@@ -84,7 +84,7 @@ right, it runs.
 | 10 | Time and ruin | non-ergodicity; volatility drag; Kelly; wild tails |
 | 11 | The price of error | cost/loss; EVPI; Goodhart; Chouldechova's trilemma; exit clause |
 | 12 | The map of knowledge | the typed hypergraph; the five lenses; pathology edges |
-| 13 | The team of specialists and the two systems | eight specialists; the adversarial panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
+| 13 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
 | 14 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
 | 15 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
 | 16 | The health post and the bank | the same mean, two waits; Erlang C against the real queue |

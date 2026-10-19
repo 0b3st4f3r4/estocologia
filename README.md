@@ -3,9 +3,9 @@
 Stochology is the science (or art) of studying judgment and decision-making under uncertainty.
 
 This repository holds the research conducted under the project architecture (typed hypergraph, World/Model/Agent
-layers, adversarial review board A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
+layers, safeguard panel A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
 H3, on real-world data. The research concluded on 2026-10-15 and the engineering apparatus is **Rust** (Edition 2024):
-**nine crates**, **406 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
+**nine crates**, **409 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
 that are capable of failing a claim. The gates check form, presence and reproducibility, not correctness: on
 2026-10-18 an outside reading found errors in mathematics and code that every gate had passed, corrected them, and
 recorded both values in Appendix E of the book (see `docs/OUTSIDE_AUDIT.md`).
@@ -14,16 +14,16 @@ recorded both values in Appendix E of the book (see `docs/OUTSIDE_AUDIT.md`).
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The textbook in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 5 925 lines and 78 717 words assembled from `book/` |
+| `book/stochology-textbook.md` | The textbook in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 5 944 lines and 79 179 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
-| `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, review board A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (textbook laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
+| `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (textbook laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
 | `docs/RUST_RESULTS.md` | The registry generated directly from the instruments themselves: each block is the literal output of the command above it. §5 is the state manifest, with the `sha256` of every point declaration |
 | `data/` | The five datasets read by the instruments (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), with provenance in `SOURCES.md` and checksums in `SHA256SUMS` |
 | `empirical/` | The foundational empirical points: central thesis, independence, multiplicity, priors, performative loop, ICP, calibration, genetics, H3, R-axis predictions, bridge at scale, SHELF, affected-party listening, second opinion, Jev, whether the layers can fail, and the stopping rule. Each folder contains its declaration and `*.sha256` seal |
 | `governance/` | Risk opinions and the audit of who pays for the error |
-| `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the review board, the cycle, and the **mandatory verification of §V** |
-| `docs/PLAN.md` | Master plan: epistemology, pedagogy, architecture, adversarial review board A1–A8, and governance |
+| `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the safeguard panel, the cycle, and the **mandatory verification of §V** |
+| `docs/PLAN.md` | Master plan: epistemology, pedagogy, architecture, safeguard panel A1–A8, and governance |
 | `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **eight live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), the Jev-LLM bridge (13), whether the layers can fail (14), the H2 gate under an e-process (15), the book as its own source (16), and an audit from outside (17). The nine closed items are in §2, alongside their proofs |
 | `docs/OUTSIDE_AUDIT.md` | Why an audit by the authors is not enough, measured on 2026-10-18, and the protocol for one from outside: public errata, blind reimplementation, red team |
 | `docs/STATE_DECLARATION.md` | **The state of the tree, not an edition.** There are no numbered editions or versions, before or after publication: there is a live state recording what it measured, what it rejected against itself, what it could not do, and how it is reproduced. Its seal is `docs/STATE_DECLARATION.sha256`. The corrections of 2026-10-17 live in `history/` as dated records with before-and-after hashes |
@@ -41,11 +41,11 @@ Measurement of this tree on **2026-10-18**, each row with the command that produ
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **406 passed**, 0 failed, across the nine crates (395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
+| Tests | **409 passed**, 0 failed, across the nine crates (the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
 | Instruments | **19** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **5 925 lines**, **78 717 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **5 944 lines**, **79 179 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
 | Seals | **30 files**, **90 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 

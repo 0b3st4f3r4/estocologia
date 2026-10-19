@@ -72,6 +72,22 @@ pub struct Cohort {
 }
 
 /// One trajectory of the Peters coin: heads multiplies by 1.5, tails by 0.6.
+/// Tolerance on the log of the wealth below which a trajectory counts as back at the start.
+const LOG_TIE_TOLERANCE: f64 = 1e-9;
+
+/// Median of the maximum of `n` draws from a Pareto with P(X > x) = x^(-alpha):
+/// P(max <= m) = (1 - m^(-alpha))^n = 1/2.
+pub fn median_maximum(n: u64, alpha: f64) -> f64 {
+    let tail = -(-std::f64::consts::LN_2 / n as f64).exp_m1();
+    tail.powf(-1.0 / alpha)
+}
+
+/// Share of the true mean carried by values above m: m^(1 - alpha), evaluated at the median maximum.
+/// Until 2026-10-19 the laboratory printed n^(1 - alpha), which places the maximum at n itself.
+pub fn share_of_mean_above_median_maximum(n: u64, alpha: f64) -> f64 {
+    median_maximum(n, alpha).powf(1.0 - alpha)
+}
+
 /// Every round risks the fraction f of the wealth.
 pub fn one_trajectory(rng: &mut SplitMix64, steps: usize, f: f64) -> Vec<f64> {
     let mut wealth = 1.0;
@@ -94,7 +110,10 @@ pub fn cohort(seed: u64, trajectories: usize, steps: usize, stake: Stake) -> Coh
     for _ in 0..trajectories {
         let curve = one_trajectory(&mut rng, steps, stake.fraction());
         for (i, m) in marks.iter().enumerate() {
-            if *m <= steps && curve[*m] > 1.0 {
+            // Strictly above the start, in log space with a tolerance: at f = 0.50 the factors 1.25 and
+            // 0.8 multiply to exactly 1, so k heads and k tails return to the start in exact arithmetic,
+            // and a bare `> 1.0` let the rounding of the product decide each tie (until 2026-10-19).
+            if *m <= steps && curve[*m].ln() > LOG_TIE_TOLERANCE {
                 above[i] += 1;
             }
         }
@@ -509,8 +528,9 @@ fn wild_tail() {
         pareto_samples(99, 1_000_000, 1.1, 200).share_of_sum_from_the_largest
     );
     println!(
-        "in the median, {:.2}% of the true mean comes from values above the maximum of a sample of one million",
-        100.0 * (1.0 / 1_000_000f64).powf(0.1)
+        "in the median, {:.2}% of the true mean comes from values above the maximum of a sample of one million (median maximum {:.0})",
+        100.0 * share_of_mean_above_median_maximum(1_000_000, 1.1),
+        median_maximum(1_000_000, 1.1)
     );
     println!();
     println!("Hill estimator with alpha = 1.1 and n = 200 000:");
@@ -655,5 +675,34 @@ mod tests {
                 theory
             );
         }
+    }
+
+    #[test]
+    fn the_share_above_the_maximum_uses_the_median_maximum_not_n() {
+        let m = super::median_maximum(1_000_000, 1.1);
+        // (1 - m^-alpha)^n = 1/2 at the median.
+        let cdf = (1.0 - m.powf(-1.1)).powf(1_000_000.0);
+        assert!(
+            (cdf - 0.5).abs() < 1e-9,
+            "cdf at the median maximum = {cdf}"
+        );
+        let share = super::share_of_mean_above_median_maximum(1_000_000, 1.1);
+        assert!((share - 0.27547).abs() < 1e-4, "share = {share}");
+        assert!(
+            (share - 1e-6f64.powf(0.1)).abs() > 0.02,
+            "the old n^(1-alpha) is retired"
+        );
+    }
+
+    #[test]
+    fn twice_kelly_ties_do_not_count_as_above_the_start() {
+        // At f = 0.50 five heads and five tails return exactly to the start; in exact arithmetic the
+        // share strictly above the start after 10 rounds is P(heads >= 6) = 386/1024 = 0.377.
+        let c = super::cohort(7, 20_000, 10, super::Stake::TwiceKelly);
+        assert!(
+            (c.above_start[0] - 386.0 / 1024.0).abs() < 0.015,
+            "above the start = {}",
+            c.above_start[0]
+        );
     }
 }

@@ -1,6 +1,6 @@
 //! The belief-state engine: what System 2 believes, with the floor and the ceiling of the contract.
 
-use stochology_core::{AgentA, Approval, Card, MINIMUM_SEVERITY};
+use stochology_core::{AgentA, Approval, Card};
 
 /// Epistemological floor: no probability descends to 0%.
 pub const FLOOR: f64 = 0.01;
@@ -77,7 +77,7 @@ impl BeliefState {
         let rejected: Vec<(String, f64)> = approval
             .items
             .iter()
-            .filter(|(_, s)| *s < MINIMUM_SEVERITY)
+            .filter(|(_, c)| !c.passed())
             .map(|(a, _)| (a.name().to_string(), weight))
             .collect();
         for (hypothesis, w) in rejected {

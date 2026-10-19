@@ -144,6 +144,12 @@ RETIRED = [
     ("Illusion of the dark room", "the dark room is another problem"),
     ("in which the term $-\\sigma^2/2$ does not appear", "the drag appears in both readings"),
     ("An experiment is scientific only if", "a seed buys reproducibility, not validity"),
+    # Rectifications of 2026-10-19 (Appendix E): the panel prints bits; a reimplementation found two values.
+    ("lowest global severity", "the panel prints bits, not a severity"),
+    ("\\mathrm{Severity}_{\\min}", "the panel prints bits, not a severity"),
+    ("adversarial panel A1", "the safeguard panel runs no attack"),
+    ("1000 rounds 0.51960", "twice-Kelly ties counted by rounding"),
+    ("25.12%", "the median maximum of a Pareto sample is not n"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")

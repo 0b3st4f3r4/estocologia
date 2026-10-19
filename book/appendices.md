@@ -12,7 +12,7 @@ example. The order is alphabetical.
 | **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
 | **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
 | **Background audit** | A front that tests an assumption of the program itself, with a declaration written before running | The teacher who redoes the exam before applying it to the students, with the answer key sealed |
-| **Adversarial panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it scores declarations with a reproducible number and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
+| **Safeguard panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it prints one pair of bits per safeguard and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
 | **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
 | **Bayes (rule of)** | The rule that says how today's belief is updated with the evidence of now, starting from yesterday's belief | A positive pregnancy test in a low-risk person can still be a false positive most of the time |
 | **Brier (score of)** | The mean of the squared error of a probabilistic forecast: lower is better, and 0 is perfect | Betting 90% on a game and losing costs more on the scoreboard than betting 55% and losing |
@@ -148,7 +148,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 406 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 409 tests pass |
+| `python3 scripts/reimplementation/decision_labs.py` | That 61 quantities of Chapters 10 and 11, recomputed from the text alone in another language, agree with the book |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -159,9 +160,11 @@ shocks, and the identical code, run with the same seed, gave 0.5529 and 2,395 sh
 the code. There were two numerical libraries in the interpreter, and the default path imported 2.4.6 before 2.5.1.
 The point of the divergence was isolated. In the two versions, the generator started from the same state, and a
 binomial draw of 248 trials with probability 0.6 returns 171 in one and 150 in the other, because 2.5 fixed the
-Stirling series of the acceptance test of the BTPE algorithm. What this book measured is the pair of draws, 171
-and 150, under the same state; the account of the upstream fix is the program's reading of the two sources, and
-the citation of the numpy change that made it is still owed (Appendix E, Chapter 20). If you meet a divergence like this, the path is always
+Stirling series of the acceptance test of the BTPE algorithm. The fix is upstream and documented: the NumPy 2.5.0
+release notes, under "Corrections to the BTPE binomial sampler" (gh-31238), state that the third and fourth terms
+were added instead of subtracted, an error inherited from the 1988 paper of Kachitvichyanukul and Schmeiser, that the
+leading coefficient read 13680 instead of 13860, and that `Generator.binomial` may therefore return different samples
+for the same seed, while the legacy `RandomState` keeps the old stream. If you meet a divergence like this, the path is always
 the same. **First the environment, then the code**: record the version of every library next to the number, because
 a number without its environment is a number nobody can audit.
 
@@ -337,6 +340,25 @@ the earlier wording is kept here.
 | A | Erlang C | "the queue does not exceed five people" | a share of customers served within a time | Erlang C gives the chance of waiting, not a bound on the queue |
 | 1, 2 | Exercise type | *(Calculation)* | *(Count)* | the preface declares three types |
 
+### Rectifications of 2026-10-19
+
+Two kinds of change. The safeguard panel stopped printing a number it did not measure, and a reimplementation of the
+decision laboratories from the text alone (`scripts/reimplementation/decision_labs.py`, in Python, written without
+reading the Rust of Chapters 10 and 11) found two values that the instruments printed faithfully and that were
+wrong. Each was corrected in the code, given a test that fails on the old code, and corrected in the text. The
+reimplementation now runs in `scripts/verify.sh`; it was written by an AI assistant, so it is a cross-check, not
+the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 7, 13, 14 | Output of the panel A1–A8 | a severity from 0 to 10 per agent, drawn by a seed inside a range that the bits selected; floor 6; G6 "worst 8" | two bits per agent (safeguard, anchor) and their AND; no seed; G6 "96 of 96 checks declared and anchored" | the number carried nothing beyond the bits and borrowed Mayo's word |
+| 7, 13, A, and the repository | Name of the panel | "adversarial panel", "adversarial board", "review board" | "safeguard panel" | it names attacks and checks safeguards; it runs no attack |
+| 10 | Twice Kelly above the start | 0.485, 0.527 and 0.51960 after 10, 100 and 1000 rounds | 0.374, 0.450 and 0.49110 (exact: 0.377, 0.460 and 0.487) | 1.25 and 0.8 multiply to exactly 1; the comparison `> 1.0` let the rounding of each product decide the ties |
+| 10 | Share of the true mean above the maximum of a sample of one million, in the median | 25.12% | 27.55% (median maximum 397,420) | the laboratory printed $n^{1-\alpha}$, which puts the maximum at $n$; the median maximum solves $(1 - m^{-\alpha})^n = 1/2$ |
+| C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
+| 10–21 | Exercise types | *(Computation)*, *(Account)* | *(Count)* | the preface declares three types |
+| C | Test count | 406 | 409 | the count of 2026-10-18 was already stale (408 on the base of these changes); one panel test retired, two tests of Chapter 10 added |
+
 ### Chapter 4
 
 The earlier text (and the course outline) records 11% coverage
@@ -456,7 +478,8 @@ because that is the name of the code. The laboratory of this book measures the
 severities from the **eight concerns of the card** (true/false flags) and not from the attacks themselves, and the
 machinery of the repository does the same (the review of 2026-10-18 states it in the module itself):
 running the attack is the machinery of the repository, and the number the panel publishes is the one of the severity. For that reason the
-values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack.
+values 8, 9 and 10 here reproduce the worst = 8 of the gate, and not a report of an executed attack. Since
+2026-10-19 neither prints a severity: the laboratory and the gate print the bits (rectifications of 2026-10-19).
 
 ### Chapter 14
 
@@ -579,7 +602,7 @@ two numeric packages inside a single interpreter: numpy 2.5.1 of the record and 
 imports first. The exact point of the divergence was found: with the state of the generator identical, a binomial draw
 of 248 trials with probability 0.6 returns 171 in one version and 150 in the other, because version 2.5 corrected the
 Stirling series of the acceptance test of BTPE — the third and the fourth terms were added instead of subtracted, and the
-main coefficient said 13680 where it should say 13860. From there on the two simulations decorrelate, and the
+main coefficient said 13680 where it should say 13860 (NumPy 2.5.0 release notes, gh-31238, checked on 2026-10-19). From there on the two simulations decorrelate, and the
 exploration draw changes pattern. **No published number changed**: the r̂ of 0.5632 with 2,375 shocks reproduces
 in the record environment, and the other value is the one of the other package. The lesson for whoever goes to check: record the version of the
 environment together with the number, because a number without an environment is a number that nobody can audit.

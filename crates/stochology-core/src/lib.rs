@@ -1,5 +1,5 @@
 //! Core of Stochology: layers L1-L3, invariants Phi1-Phi4,
-//! adversarial panel A1-A8 and orchestrator M.
+//! safeguard panel A1-A8 and orchestrator M.
 //!
 //! Every artifact is deterministic: no function uses a clock, system entropy or
 //! global state. Seeds are explicit in every card.
@@ -16,7 +16,7 @@ pub mod rng;
 pub mod s1;
 pub mod schema;
 
-pub use agents::{AgentA, Approval, MINIMUM_SEVERITY, Severity, approve, stress};
+pub use agents::{AgentA, Approval, Check, approve, check};
 pub use funnel::{DominanceMatrix, LocalPolicy, OptimalStop};
 pub use invariants::{Failure, Gate, evaluate, report};
 pub use layer::{Card, Layer, UncertaintyType};

@@ -109,8 +109,9 @@ The machine's cognition operates in coupled modes under central governance:
   SBC), $F_5$ (privacy and SHA-256 trail), $F_6$ (fairness and who pays for the error), $F_7$ (SHELF
   priors), and $F_8$ (communication and exit clause).
 
-The **adversarial panel** is the orchestrator's attack arm: each lane has an agent $A_i$ that attempts
-to break the artifact prior to approval (Section 8).
+The **safeguard panel** (called the adversarial panel until 2026-10-19) is the orchestrator's checklist: each
+lane has an agent $A_i$ that names the attack the artifact should survive and checks that the card declares and
+anchors the safeguard against it (Section 8). It runs no attack; the attacks that run live in the gates.
 
 ---
 
@@ -125,7 +126,7 @@ to break the artifact prior to approval (Section 8).
 - **Cryptographic trail:** ledger chained by SHA-256 hashes and a Merkle DAG, out-of-time vault, and
   trial counter $K$.
 - **Seven automated gates:** G1 determinism, G2 fixed seed, G3 declared scope, G4 invariants and
-  Type III error, G5 trail integrity, G6 adversarial panel $A_1$–$A_8$, G7 exit clause.
+  Type III error, G5 trail integrity, G6 safeguard panel $A_1$–$A_8$, G7 exit clause.
 
 ---
 
@@ -172,7 +173,7 @@ pass into nine without dropping a test: `-audit` and `-schema` became modules of
 distinct scopes:
 - In `gates` (`stochology-gates`), **G1 to G7** enforce card governance per horizon: G1 determinism
   (identical Merkle root across two passes), G2 fixed seed, G3 declared scope, G4 invariants $\Phi_1$–$\Phi_5$
-  and Type III error prevention, G5 SHA-256 trail integrity, G6 adversarial panel $A_1$–$A_8$ (floor 6), and G7
+  and Type III error prevention, G5 SHA-256 trail integrity, G6 safeguard panel $A_1$–$A_8$ (every check declared and anchored), and G7
   exit clause.
 - In `wave` (`stochology-wave`), **G1 to G6** enforce the physics of the wave engine: G1 Hermiticity of the
   magnetic Laplacian $L^{(q)}$, G2 unitarity of the Cayley propagator, G3 seal chain over the phasor state, G4
@@ -215,10 +216,10 @@ cargo run --release --bin gates -- --horizon h3 --defect h3.voos23
 
 ---
 
-## 8. Adversarial Panel: Formalization of $A_1$ to $A_8$
+## 8. Safeguard Panel: Formalization of $A_1$ to $A_8$
 
 - **The orchestrator ($\mathcal{M}$):** coordinates the hypergraph and manages acceptance gates.
-- **The adversarial panel agents ($A_1 \dots A_8$):** each $A_i$ applies a specific stress test to its lane:
+- **The safeguard panel agents ($A_1 \dots A_8$):** each $A_i$ names the stress test of its lane and checks the safeguard against it:
   - $A_1$: property-based tests on code.
   - $A_2$: noise and sentinel value injection into data.
   - $A_3$: live temporal drift simulation.
@@ -230,12 +231,14 @@ cargo run --release --bin gates -- --horizon h3 --defect h3.voos23
 
 The approval condition for artifact $X$ by the ensemble of agents is:
 
-$$\text{Aprovado}(X) = \bigwedge_{i=1}^{8} \Big( A_i(X) \ge \text{Severidade}_{\min} \Big)$$
+$$\text{Approved}(X) = \bigwedge_{i=1}^{8} C_i(X),\qquad C_i(X) = \text{safeguard}_i(X) \wedge \text{anchor}_i(X)$$
 
-with $\text{Severidade}_{\min} = 6$ on the $0$–$10$ scale. Each $A_i$ computes severity from the
-corresponding safeguard on the card (property test, missing-data handling, declared drift, covered
-pathologies, intact trail, audited subgroups, elicited prior, exit clause) and an explicit seed — the
-same card and the same seed return the exact same severity, always.
+Each $A_i$ reads two bits from the card: the corresponding safeguard (property test, missing-data handling,
+declared drift, covered pathologies, intact trail, audited subgroups, elicited prior, exit clause) and the
+structural field that anchors it. No seed enters the verdict. Until 2026-10-19 the two bits were printed as a
+severity from 0 to 10 drawn by a seed against a floor of 6; the number added nothing to the bits and was removed
+(Appendix E of the book). The sketch below is the original design draft, in its original names; the live code is
+`crates/stochology-core/src/agents.rs` and `orchestrator.rs`.
 
 ```rust
 use stochology_core::{AgenteA, Ficha, OrquestradorM, Severidade, SEVERIDADE_MINIMA};
@@ -401,7 +404,7 @@ the card (node) required to declare identifier, layer, uncertainty type, formula
 pathology edges in red; the five lenses (Fluxonomy, Chrononomy, Scalonomy, Morphonomy, Crisonomy).
 *Laboratory:* the first mini-hypergraph, with the validator rejecting incomplete cards.
 
-**Chapter 13. The team of specialists ($F_1$ to $F_8$), the adversarial panel, and AI under control.**
+**Chapter 13. The team of specialists ($F_1$ to $F_8$), the safeguard panel, and AI under control.**
 How to use AI in science without being fooled: each lane covers a blind spot ($F_1$ simulation, $F_2$
 grain and missingness, $F_3$ clock and drift, $F_4$ statistics and SBC, $F_5$ privacy and SHA-256,
 $F_6$ fairness, $F_7$ SHELF priors, $F_8$ communication and exit); the six-stage cycle and the panel
@@ -522,7 +525,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 925 lines, 78 717 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (5 944 lines, 79 179 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |

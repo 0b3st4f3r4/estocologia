@@ -1,4 +1,4 @@
-//! Deliberative adversarial stress: the panel A1-A8 attacked in the order that belief learned.
+//! Deliberative stress: the safeguard panel A1-A8 read in the order that belief learned.
 //!
 //! The ordinary stress runs the eight bands always in the same order. Here System 2 keeps a **belief state
 //! about the bands** — fed by the cards that the panel has already rejected — and attacks first whoever belief
@@ -11,7 +11,7 @@
 //! Declared and not implemented: the asymmetric cost of each attack (here an attack costs the same as any
 //! other) and the choice of which care to add to the card after the rejection.
 
-use stochology_core::{AgentA, Approval, Card, MINIMUM_SEVERITY, Severity, approve, stress};
+use stochology_core::{AgentA, Approval, Card, Check, approve, check};
 
 use crate::belief::{BeliefState, panel_belief};
 
@@ -22,10 +22,10 @@ pub const DECLARED_ORDER: [AgentA; 8] = AgentA::ALL;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Attack {
     pub agent: AgentA,
-    pub severity: Severity,
+    pub check: Check,
     pub attacks: usize,
     pub failed: bool,
-    pub trail: Vec<(AgentA, Severity)>,
+    pub trail: Vec<(AgentA, Check)>,
 }
 
 /// The belief of System 2 about the bands: which one will reject the next card.
@@ -79,15 +79,15 @@ impl PanelBelief {
 }
 
 /// Runs the panel in the given order and stops at the first rejection.
-pub fn stress_in_order(card: &Card, seed: u64, order: &[AgentA]) -> Attack {
+pub fn stress_in_order(card: &Card, order: &[AgentA]) -> Attack {
     let mut trail = Vec::new();
     for agent in order {
-        let severity = stress(*agent, card, seed);
-        trail.push((*agent, severity));
-        if severity < MINIMUM_SEVERITY {
+        let result = check(*agent, card);
+        trail.push((*agent, result));
+        if !result.passed() {
             return Attack {
                 agent: *agent,
-                severity,
+                check: result,
                 attacks: trail.len(),
                 failed: true,
                 trail,
@@ -95,14 +95,17 @@ pub fn stress_in_order(card: &Card, seed: u64, order: &[AgentA]) -> Attack {
         }
     }
     let last = order.last().copied().unwrap_or(AgentA::A8Decision);
-    let severity = trail
+    let last_check = trail
         .iter()
         .find(|(a, _)| *a == last)
-        .map(|(_, s)| *s)
-        .unwrap_or(Severity(0));
+        .map(|(_, c)| *c)
+        .unwrap_or(Check {
+            safeguard: false,
+            anchor: false,
+        });
     Attack {
         agent: last,
-        severity,
+        check: last_check,
         attacks: trail.len(),
         failed: false,
         trail,
@@ -110,14 +113,14 @@ pub fn stress_in_order(card: &Card, seed: u64, order: &[AgentA]) -> Attack {
 }
 
 /// The deliberative attack: the order comes from belief, and the result is the same as `stress_in_order`.
-pub fn stress_deliberative(card: &Card, seed: u64, panel: &PanelBelief) -> Attack {
-    stress_in_order(card, seed, &panel.order())
+pub fn stress_deliberative(card: &Card, panel: &PanelBelief) -> Attack {
+    stress_in_order(card, &panel.order())
 }
 
 /// Learns from a batch of cards, as System 2 would before attacking the next one.
-pub fn learn(panel: &mut PanelBelief, cards: &[Card], seed: u64, weight: f64) {
+pub fn learn(panel: &mut PanelBelief, cards: &[Card], weight: f64) {
     for card in cards {
-        panel.update(&approve(card, seed), weight);
+        panel.update(&approve(card), weight);
     }
 }
 
@@ -148,15 +151,15 @@ mod tests {
     #[test]
     fn belief_learns_the_weak_band_and_attacks_it_first() {
         let mut panel = PanelBelief::new();
-        learn(&mut panel, &cards_without_trail(), 2026, 3.0);
+        learn(&mut panel, &cards_without_trail(), 3.0);
         assert_eq!(panel.order()[0], AgentA::A5Governance);
         let candidate = {
             let mut f = complete_card("target.1");
             f.trail_intact = false;
             f
         };
-        let deliberated = stress_deliberative(&candidate, 2026, &panel);
-        let declared = stress_in_order(&candidate, 2026, &DECLARED_ORDER);
+        let deliberated = stress_deliberative(&candidate, &panel);
+        let declared = stress_in_order(&candidate, &DECLARED_ORDER);
         assert!(deliberated.failed && declared.failed);
         assert_eq!(deliberated.agent, AgentA::A5Governance);
         assert_eq!(
@@ -178,9 +181,9 @@ mod tests {
     #[test]
     fn a_card_with_all_eight_cares_fails_in_no_order() {
         let mut panel = PanelBelief::new();
-        learn(&mut panel, &cards_without_trail(), 2026, 3.0);
+        learn(&mut panel, &cards_without_trail(), 3.0);
         let good = complete_card("good.1");
-        let deliberated = stress_deliberative(&good, 2026, &panel);
+        let deliberated = stress_deliberative(&good, &panel);
         assert!(
             !deliberated.failed,
             "the stress is not a witch hunt: {deliberated:?}"
@@ -189,18 +192,13 @@ mod tests {
             deliberated.attacks, 8,
             "with no rejection, the whole panel runs"
         );
-        assert!(
-            deliberated
-                .trail
-                .iter()
-                .all(|(_, s)| *s >= MINIMUM_SEVERITY)
-        );
+        assert!(deliberated.trail.iter().all(|(_, c)| c.passed()));
     }
 
     #[test]
     fn the_panel_belief_respects_the_floor_and_the_ceiling() {
         let mut panel = PanelBelief::new();
-        learn(&mut panel, &cards_without_trail(), 2026, 3.0);
+        learn(&mut panel, &cards_without_trail(), 3.0);
         let mut sum = 0.0;
         for agent in AgentA::ALL {
             let p = panel.probability(agent);
@@ -220,12 +218,12 @@ mod tests {
         let panel = PanelBelief::new();
         let card = complete_card("determinism.1");
         assert_eq!(
-            stress_deliberative(&card, 2026, &panel),
-            stress_deliberative(&card, 2026, &panel)
+            stress_deliberative(&card, &panel),
+            stress_deliberative(&card, &panel)
         );
         assert_eq!(
-            stress_in_order(&card, 2026, &DECLARED_ORDER),
-            stress_in_order(&card, 2026, &DECLARED_ORDER)
+            stress_in_order(&card, &DECLARED_ORDER),
+            stress_in_order(&card, &DECLARED_ORDER)
         );
     }
 }

@@ -49,10 +49,26 @@ Three activities, in increasing order of cost. None of them is run by the progra
 
 - People outside the program choose hard cases for the bridge thesis (item 9) and for the coding of layers
   (item 14), as Chapter 2 already requires.
-- The red team also receives the review board as it is: a checklist of declared safeguards with a reproducible
-  score. Its task is to find a card that passes the board and is wrong.
+- The red team also receives the safeguard panel as it is: a checklist of declared and anchored safeguards that
+  prints one pair of bits per agent. Its task is to find a card that passes the panel and is wrong.
 
 ## What is not claimed
+
+## The first reimplementation (2026-10-19)
+
+Activity 2 was run once, on the laboratories that carry decisions in Chapters 10 and 11, and its limits are declared
+first: it was written by an AI assistant of the same kind as the readings of 2026-10-18, in Python, from the text of
+the book alone, without reading `crates/stochology-book/src/ch10.rs` or `ch11.rs`. It recomputes 61 quantities,
+exact accounts where the chapter states one and the exact value behind each simulation otherwise, and it now runs
+in `scripts/verify.sh` (`scripts/reimplementation/decision_labs.py`).
+
+It found two values that the instruments printed faithfully and that were wrong, both in Chapter 10: the share of
+twice-Kelly trajectories above the start, where floating-point rounding decided the exact ties (0.485 printed,
+0.377 exact after 10 rounds), and the share of the true mean of a Pareto above the maximum of a sample of one
+million (25.12% printed, 27.55% exact), where the laboratory put the maximum at $n$. Both are corrected, with tests,
+in Appendix E. The other 59 quantities agreed. Agreement here is weak evidence where the reimplementer could have
+absorbed the author's choices from the text; the two divergences are strong evidence, because the text alone was
+enough to find them.
 
 This file does not make the program audited. It records how an audit from outside would run and what it would need:
 people who are not the authors. Until they exist, item 17 stays open.
