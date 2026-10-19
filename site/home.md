@@ -186,3 +186,9 @@ Wherever a number authorises a decision that someone will pay for:
 
 In every case, Stochology turns a conjecture about the uncertain into a public commitment: traceable, refutable and
 answerable to those who live with the consequences of the decision.
+
+---
+
+*The text of this site and of the book is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/):
+share and adapt it, crediting "Silvano Neto, Stochology" and saying what you changed. The code is under MIT; each
+dataset keeps the licence of its source.*

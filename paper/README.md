@@ -2,6 +2,8 @@
 
 Silvano Neto · October 14, 2026, updated on October 15, October 18 and October 19, 2026
 
+*Text and figures under CC BY 4.0; the code that produces the numbers is under MIT (see the repository README).*
+
 ## Abstract
 
 Stochology is the science (or art) that studies judgment and decision under uncertainty. This paper argues that it is not a new branch of statistics, but a seam: it joins three traditions that grew apart (the philosophy of induction, statistical inference, and the mechanics of stochastic processes) and organizes them into three layers, World, Model, and Agent. The central thesis is that most of the errors of reasoning under uncertainty are not errors of arithmetic, but misalignment between those layers.

@@ -1,7 +1,8 @@
 cff-version: 1.2.0
 message: >-
   The project keeps history, not versions: cite the commit you read, by its hash and date, and the repository
-  URL. There are no releases or tags by rule (AGENTS.md, section VI).
+  URL. There are no releases or tags by rule (AGENTS.md, section VI). The text (book, paper, site, documents)
+  is under CC BY 4.0 and the code under MIT; the datasets keep their own licences (data/SOURCES.md).
 title: "Stochology: Judgement and Decision under Uncertainty"
 type: software
 authors:
@@ -10,7 +11,9 @@ authors:
     email: dev@silvanoneto.com
 repository-code: https://github.com/0b3st4f3r4/estocologia
 url: https://obestafera.com
-license: MIT
+license:
+  - CC-BY-4.0
+  - MIT
 abstract: >-
   A working text and an apparatus in Rust on judgement and decision under uncertainty: 21 chapters with
   fixed-seed laboratories, instruments over ten public datasets, seven gates able to fail a claim, and a
