@@ -84,12 +84,12 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 395 tests passed, none failed
+cargo test --workspace                                  # 401 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
 python3 scripts/book/build.py --check                   # the 21-chapter ramp AND the file on disk
-python3 scripts/book/check_labs.py                      # 33 cited blocks, 0 divergent
+python3 scripts/book/check_labs.py                      # 34 cited blocks, 0 divergent
 python3 scripts/book/check_book.py
 python3 scripts/book/generate_results.py --check        # the registry and the state manifest
 python3 scripts/check_seals.py                          # the 28 seals: 82 targets, 9 outside the tree, 0 issues
@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 493 lines**, **89 505 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 636 lines**, **91 896 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 493 lines and 89 505 words, and its 33 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 636 lines and 91 896 words, and its 34 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -481,3 +481,21 @@ commit. The dated record is `history/estado-2026-10-19T1859Z.md`.
 | instruments in `labs` | 24 | 21 |
 | `cargo test --workspace` | 442 | **395** |
 | assembled book, line count | 6 496 (with 89 607 words) | 6 493 (with 89 505 words) |
+
+## Uncertainty propagated to the decision, and the seed audited (2026-10-19, later the same day)
+
+By the owner's request, what a lecture on the propagation of uncertainty teaches entered the book with the book's own
+instruments: `labs --mc-error` measures how far each simulated number moves with the seed (no reading moves; two
+published values sit at the edge of their spread, and the chapters say so), and `labs --propagate` gives three answers
+to the same question on the health post, with the uncertainty budget and the rule on when the linear answer may decide
+(Chapter 5). Chapters 5, 6, 11 and 14 gained the loss behind a summary, the variance of a sum, the expected cost by
+term with the conditional value at risk, and the instability of the higher moments. The dated record is
+`history/estado-2026-10-19T1925Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| instruments in `labs` | 21 | 23 (`--mc-error`, `--propagate`) |
+| `cargo test --workspace` | 395 | **401** |
+| cited blocks | 33 | 34 |
+| reimplementation | 487 quantities: 484 agree, 3 open | 513 quantities: 510 agree, 3 open |
+| assembled book, line count | 6 493 (with 89 505 words) | 6 636 (with 91 896 words) |

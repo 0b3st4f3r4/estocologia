@@ -159,7 +159,11 @@ fn recalibrate(forecasts: &[f64], a: f64, b: f64) -> Vec<f64> {
 
 /// ECE tolerance: 2 000 simulations of perfectly calibrated labels with the same
 /// forecasts, and the quantile of the null ECE.
-fn ece_tolerance(seed: u64, forecasts: &[f64], simulations: usize) -> (f64, f64, f64, f64, f64) {
+pub(crate) fn ece_tolerance(
+    seed: u64,
+    forecasts: &[f64],
+    simulations: usize,
+) -> (f64, f64, f64, f64, f64) {
     let mut rng = SplitMix64::new(seed);
     let mut eces = Vec::with_capacity(simulations);
     for _ in 0..simulations {
@@ -179,6 +183,14 @@ fn ece_tolerance(seed: u64, forecasts: &[f64], simulations: usize) -> (f64, f64,
         eces.iter().sum::<f64>() / eces.len() as f64,
         above,
     )
+}
+
+/// The forecasts of the first vault of the tolerance table (Toronto's size), drawn exactly as `run` draws them.
+pub(crate) fn toronto_like_forecasts() -> Vec<f64> {
+    let mut rng = SplitMix64::new(20261015);
+    (0..1_488)
+        .map(|_| sigmoid(logit(0.50) + 1.0 * rng.normal()))
+        .collect()
 }
 
 pub fn run() {

@@ -218,15 +218,24 @@ pub fn ece(p: &[f64], y: &[f64]) -> f64 {
 }
 
 /// Simulations and seed of the null ECE, as in Chapter 8.
-const NULL_SIMULATIONS: usize = 2000;
-const NULL_SEED: u64 = 2026;
+pub const NULL_SIMULATIONS: usize = 2000;
+pub const NULL_SEED: u64 = 2026;
 
-/// The 95% quantile of the ECE when each outcome is drawn with the chance its own forecast states. The boxes depend
-/// only on the forecasts, so they are built once and each simulation only redraws the outcomes.
+/// The 95% quantile of the ECE when each outcome is drawn with the chance its own forecast states.
 pub fn ece_null_q95(p: &[f64], simulations: usize, seed: u64) -> f64 {
+    let eces = ece_null_draws(p, simulations, seed);
+    if eces.is_empty() {
+        return 0.0;
+    }
+    eces[(0.95 * (eces.len() - 1) as f64).round() as usize]
+}
+
+/// The simulated null ECEs, sorted. The boxes depend only on the forecasts, so they are built once and each
+/// simulation only redraws the outcomes.
+pub fn ece_null_draws(p: &[f64], simulations: usize, seed: u64) -> Vec<f64> {
     let n = p.len();
     if n == 0 {
-        return 0.0;
+        return Vec::new();
     }
     let mut idx: Vec<usize> = (0..n).collect();
     idx.sort_by(|&a, &b| p[a].total_cmp(&p[b]));
@@ -264,7 +273,7 @@ pub fn ece_null_q95(p: &[f64], simulations: usize, seed: u64) -> f64 {
         })
         .collect();
     eces.sort_by(f64::total_cmp);
-    eces[(0.95 * (eces.len() - 1) as f64).round() as usize]
+    eces
 }
 
 fn brier(p: &[f64], y: &[f64]) -> f64 {
@@ -281,6 +290,8 @@ pub struct Binary {
     pub skill: f64,
     /// The 95% quantile of the ECE of a perfectly calibrated forecaster with these same forecasts (Chapter 8).
     pub null_q95: f64,
+    /// The forecasts themselves, kept for the audit of the Monte Carlo error of `null_q95`.
+    pub forecasts: Vec<f64>,
 }
 
 impl Binary {
@@ -294,6 +305,7 @@ impl Binary {
             ece: ece(p, y),
             skill: 1.0 - brier(p, y) / reference,
             null_q95: ece_null_q95(p, NULL_SIMULATIONS, NULL_SEED),
+            forecasts: p.to_vec(),
         }
     }
 

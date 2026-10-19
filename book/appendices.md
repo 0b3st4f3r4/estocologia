@@ -150,8 +150,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 395 tests pass |
-| `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
+| `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
+| `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 401 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -169,6 +171,24 @@ leading coefficient read 13680 instead of 13860, and that `Generator.binomial` m
 for the same seed, while the legacy `RandomState` keeps the old stream. If you meet a divergence like this, the path is always
 the same. **First the environment, then the code**: record the version of every library next to the number, because
 a number without its environment is a number nobody can audit.
+
+### C.3 The seed is part of the number too
+
+A fixed seed makes a simulated number reproducible on any machine; it does not make it exact. Another seed gives
+another draw, and the distance between the two is the Monte Carlo error of the number, which shrinks like
+$1/\sqrt N$ in the number of draws and faster for a mean than for a tail quantile. `labs --mc-error` measures it for
+every simulated number on which a reading of the book depends: each simulated quantile is rerun under twenty other
+seeds, and each simulated share gets its exact Clopper-Pearson interval.
+
+No reading moves. In the four binary vaults of Chapters 8 and 20, the ECE stays above the null q95 under every seed,
+including the cyclones, where the margin is the narrowest (ECE 0.0121 against seeds from 0.0107 to 0.0111). The
+bootstrap interval of the tail index in Chapter 14 contains 2 under every seed. The share of 0.0140 in Chapter 13 has
+the exact interval [0.0093; 0.0202], and the 20.3% of Chapter 7 the interval [19.06%; 21.58%].
+
+Two published values sit at the edge of their spread, and the chapters now say so. The null q95 of 0.0425 in Chapter 8
+is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and the upper bound 2.61 of the interval in
+Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
+simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
 ---
 
@@ -293,7 +313,7 @@ weaker than the others and is declared as such.
 
 ### D.6 The neighbours of the discipline
 
-Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
+Cited in Chapter 21 and, the last three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19.
 
 | Reference | Where it enters |
 | --- | --- |
@@ -305,6 +325,9 @@ Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
 | **[checked]** Spiegelhalter, D. "Risk and Uncertainty Communication", *Annual Review of Statistics and Its Application* 4:31–60, 2017. DOI: 10.1146/annurev-statistics-010814-020148 | Natural frequencies and absolute risk (Chapters 11 and 21) |
 | **[checked]** Gelman, A.; Hennig, C. "Beyond Subjective and Objective in Statistics", *JRSS A* 180(4):967–1033, 2017. DOI: 10.1111/rssa.12276 | Belief charged by frequency (Chapter 21) |
 | **[checked]** Gelman, A.; Vehtari, A.; Simpson, D. et al. "Bayesian Workflow", arXiv:2011.01808, 2020 | Predictive checks, SBC and rival models (Chapters 16 and 21) |
+| **[checked]** JCGM 100:2008. *Evaluation of measurement data — Guide to the expression of uncertainty in measurement* (GUM). Joint Committee for Guides in Metrology, BIPM, 2008. DOI: 10.59161/JCGM100-2008E | The propagation of uncertainty, the first-order law and its limits (Chapter 5) |
+| **[checked]** NIST/SEMATECH. *e-Handbook of Statistical Methods* (NIST Handbook 151). National Institute of Standards and Technology. DOI: 10.18434/M32189 | Moments, correlation and the analysis of uncertainty, for reference (Chapters 5, 6 and 14) |
+| **[checked]** Rockafellar, R. T.; Uryasev, S. "Optimization of conditional value-at-risk", *Journal of Risk* 2(3), 2000 | The conditional value at risk, the mean of the worst cases (Chapter 11) |
 
 ### D.7 How to use this list
 
@@ -546,6 +569,32 @@ and an answer key for the 126 exercises, published on the site beside the chapte
 | 21, D | The neighbours of the discipline | the first objection answered in a table row | model cards, datasheets, pre-registration, forecasting tournaments, risk communication, the Bayesian workflow and the open research culture, each with what is borrowed; eight references checked | a discipline that did not name its owners would be claiming what it borrowed |
 | C | Instruments and tests | 21 instruments; 422 tests | `labs --eprocess` added; the five tests of `eprocess.rs` | the new instrument |
 | Exercises | Answers | none published | `book/answers.md`: every Count answer with its computation, every Laboratory answer with what to change and what to see, numbers only where measured | the course had a key; the book did not |
+
+### Uncertainty propagated to the decision, 2026-10-19
+
+Text added after a reading of the propagation of uncertainty, rebuilt with the book's own instruments and sources.
+No number changed.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 5 | Three answers to the same question | the toll of Jensen measured; no comparison of methods | plug-in, delta method and Monte Carlo on the health post with uncertain, correlated rates; the uncertainty budget; the rule on when the linear answer may decide (`labs --propagate`) | a tangent does not see a tail, and the decision read the tail |
+| 5 | Which summary answers | mean, median and quantiles listed | each tied to the loss it minimises | choosing the summary is choosing whose error counts |
+| 6 | The effective sizes | several, each with its own story | one formula, the variance of a sum with its covariances | leaving the covariance out is a claim about the world |
+| 11 | The expected cost | the threshold and the value of information | written term by term, with the conditional value at risk | frequency and severity are different axes |
+| 14 | The higher moments | the tail read through Hill and quantiles | why: the higher the moment, the louder one point; why an extreme is never removed for being extreme | the instability of the higher moments |
+| D | References | — | GUM, the NIST/SEMATECH e-Handbook, Rockafellar and Uryasev | checked against the publishers |
+
+### The seed of the simulations, 2026-10-19
+
+A new instrument, `labs --mc-error`, measures how far each simulated number that a reading depends on moves with the
+seed (Appendix C.3). No number changed and no reading moved; two published values were found at the edge of their
+seed spread, and the chapters now say so.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 8 | The null q95 at 1,488 cases | 0.0425, as if exact | 0.0425, the largest of twenty-one seeds; about 0.042 | a simulated quantile carries the error of its draws |
+| 14 | The bootstrap interval of the tail index | [1.37; 2.61], as if exact | the same, with its upper bound above every other seed's | the same |
+| C | Reproduction | the environment is part of the number | also the seed: C.3 | the same |
 
 ### Numbers cited without an instrument in this book
 

@@ -476,7 +476,7 @@ assistant, from the chapters as they stand; it is part of the book's errata like
    test needs defects hard enough that at least one arm misses some.
 6. *(Essay)* One acceptable answer uses the three conditions of Chapter 21: the model declares its failure modes
    (the Erlang C card lists non-stationarity and abandonment, and the real rate gives 57% where the formula
-   promised 82%); someone outside reproduces every number (the 33 cited blocks match their instruments, and a
-   reimplementation from the text agrees on 484 of 487 quantities); and no decision depends on an unwritten
+   promised 82%); someone outside reproduces every number (the 34 cited blocks match their instruments, and a
+   reimplementation from the text agrees on 510 of 513 quantities); and no decision depends on an unwritten
    assumption (the Danish analysis was rejected rather than rescued, with skill $-0.015$ against the climatology).
    The essay should end by saying which of the three the reader's own project has not yet met.

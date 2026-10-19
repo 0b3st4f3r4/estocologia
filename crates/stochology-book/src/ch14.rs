@@ -166,6 +166,13 @@ fn bootstrap_hill(d: &Data, k: usize, reps: usize, seed: u64) -> Vec<f64> {
     out
 }
 
+/// The 95% bootstrap interval of Hill k=50 on the training months, as `run` prints it, under any seed.
+pub(crate) fn hill_interval(seed: u64) -> (f64, f64) {
+    let d = read_data(&data_path("data/danish_fire.csv"));
+    let rep = bootstrap_hill(&d, 50, N_BOOT, seed);
+    (quantile(rep.clone(), 0.025), quantile(rep, 0.975))
+}
+
 /// Simulated tail: Pareto with tail alpha, same sample size, Hill k in each repetition.
 fn simulated_tail(alpha: f64, n: usize, k: usize, reps: usize, seed: u64) -> Vec<f64> {
     let mut rng = Sm64::new(seed);

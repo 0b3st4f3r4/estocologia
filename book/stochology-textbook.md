@@ -949,7 +949,10 @@ or a drift across weeks would escape it, and the honest version then splits whol
 **The prohibition of the solitary mean.** When the function is nonlinear, the dynamics multiplicative or the
 tail heavy, reporting only the mean is prohibited. One reports the average case $f(\mathbb{E}[X])$, the
 simulated mean $\mathbb{E}[f(X)]$, the median, the quantiles and the cumulative curve. Each of them answers a
-different question, and the toll we have just measured is the distance between the first two.
+different question, and the toll we have just measured is the distance between the first two. Which one is "the"
+answer is not a matter of taste but of the loss. The mean is the number that minimises the expected squared error;
+the median, the expected absolute error; a quantile, a loss that charges a miss on one side more than on the other,
+which is the loss of a promise ("no more than 1 day in 20"). Choosing the summary is choosing whose error counts.
 
 ---
 
@@ -1016,6 +1019,62 @@ minutes. Without oscillation it costs nothing, 0.00, because then the average da
 the coarse plan offers a capacity of 10 to a demand of 11, and that queue has no long run at all. The loss of
 resolution is the Jensen toll seen from the side of the decision: it exists only when the world varies, and it
 grows with the variation.
+
+**Three answers to the same question.** So far the demand varied and the formula stood still. Now let the rates
+themselves be uncertain: from day to day the arrivals move around 8 per hour and the pace of the nurse around 12, and
+the post has promised that the mean wait of a day passes 20 minutes on no more than 1 day in 20. Three methods answer.
+The **plug-in** puts the mean rates into the formula and returns one number, with no probability attached. The
+**delta method** draws the tangent plane of the formula at the mean rates: the variance of the wait is the sum of
+each rate's variance times its sensitivity squared, plus twice the covariance times both sensitivities, and read as
+a normal it gives a probability. Its second-order correction moves the mean by half the curvature times the variance,
+Jensen again. **Monte Carlo** draws the two rates from their joint distribution, correlation included, applies the
+formula to each draw and counts the days above the line. The laboratory runs the three under three correlations
+between arrivals and pace (`cargo run --release --bin labs -- --propagate`):
+
+```text
+== Three answers to the same question: the wait of a day at the health post ==
+W = 60 lambda / (mu (mu - lambda)) min | lambda ~ N(8, 0.6^2) per hour | mu ~ N(12, 0.8^2) per hour | question: P(W > 20 min), promise <= 0.05 | 400000 draws, seed 2026
+sensitivities at the mean: dW/dlambda = +3.750 min per arrival/h, dW/dmu = -3.333 min per service/h
+
+-- correlation between arrivals and pace: -0.5 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 11.37) | sd 4.26 | P(W > 20) = 0.0095 | decision: promise kept
+  Monte Carlo: mean 12.82 | median 9.99 | sd 165.93 | q95 24.47 | P(W > 20) = 0.0884 (MC sd 0.0004) | days that never clear 199 | decision: second nurse
+  budget of the delta variance 18.17 min^2: arrivals 5.06 (28%), pace 7.11 (39%), covariance +6.00 (+33%)
+  the linear answer may decide: false (delta and Monte Carlo differ by 0.0789, more than half the promise, 0.025)
+
+-- correlation between arrivals and pace: +0.0 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 10.92) | sd 3.49 | P(W > 20) = 0.0021 | decision: promise kept
+  Monte Carlo: mean 11.22 | median 9.99 | sd 9.08 | q95 19.99 | P(W > 20) = 0.0499 (MC sd 0.0003) | days that never clear 14 | decision: promise kept
+  budget of the delta variance 12.17 min^2: arrivals 5.06 (42%), pace 7.11 (58%), covariance -0.00 (-0%)
+  the linear answer may decide: false (delta and Monte Carlo differ by 0.0478, more than half the promise, 0.025)
+
+-- correlation between arrivals and pace: +0.5 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 10.47) | sd 2.48 | P(W > 20) = 0.0000 | decision: promise kept
+  Monte Carlo: mean 10.52 | median 9.99 | sd 2.98 | q95 15.90 | P(W > 20) = 0.0107 (MC sd 0.0002) | days that never clear 0 | decision: promise kept
+  budget of the delta variance 6.17 min^2: arrivals 5.06 (82%), pace 7.11 (115%), covariance -6.00 (-97%)
+  the linear answer may decide: true (delta and Monte Carlo differ by 0.0107, within half the promise, 0.025)
+```
+
+Read it line by line. **10.00 in every block**: the plug-in cannot see the correlation, nor the variance, nor the
+line; it answers a question nobody asked. **The delta probability against Monte Carlo**: with no correlation the
+tangent promises 0.0021 and the curve delivers 0.0499; the formula climbs ever more steeply towards the day when
+arrivals reach the pace, and a tangent cannot know that. **The covariance in the budget**: when busy days slow the
+nurse (correlation −0.5), the two sensitivities have opposite signs and the covariance term adds to the variance
+instead of cancelling it; 199 of the 400000 days never clear their queue, and Monte Carlo asks for the second nurse
+that the tangent and the plug-in would refuse. When the nurse speeds up on busy days (+0.5), the same term cancels
+most of the spread and the three answers agree. **sd 165.93**: the mean and the standard deviation of a curve that
+blows up are not summaries; the median, 9.99 in every block, and the q95 are. **0.0499 against 0.05**: with no
+correlation the promise is kept by a margin smaller than the Monte Carlo error of the count, and the honest answer is
+that the post sits on its own line.
+
+Three rules come out of the block. The output of a model under uncertainty is a distribution, not a number, and the
+decision reads the part of it that the promise names, here a tail. The covariance is not a detail of the inputs: it
+can double the variance or erase it, and leaving it out is a structural assumption about the world. And when the
+linear answer and the simulated one disagree about the probability that decides, by more than the decision can bear,
+the linear answer is not allowed to decide: the laboratory writes that rule into its last line.
 
 **Exercises.**
 
@@ -1178,6 +1237,18 @@ design effect is about two hundred and the 2.65 million calls weigh like some th
 fewer than 2.65 million and far more than 81. Treating the
 patients of one day, or the calls of one hour, as independent observations is
 **pseudoreplication**: the margin comes out too small and the test approves what it should not.
+
+**One formula behind all of them.** The variance of a sum is the sum of the variances **plus twice every covariance**:
+
+$$\operatorname{Var}\Big(\sum_i X_i\Big) \;=\; \sum_i \operatorname{Var}(X_i) \;+\; 2\sum_{i<j} \operatorname{Cov}(X_i, X_j)$$
+
+Every effective size in this book is this line. The patients of a day share its demand, so their covariances are
+positive and the margin per patient forgets them (Chapter 5); the letters of *Onegin* alternate, so theirs are
+negative and the sample is worth more than its count; the respondents of the *Literary Digest* share a reason to
+answer, which is Meng's $\rho$; the players who pool in Chapter 10 cancel each other's swings; two sources of error
+moved by the same cause, the same rain on two sensors or the same evening on every route, err together. Independence
+is sufficient for the cross terms to vanish, not necessary, and it is never free: leaving the covariance out is not a
+simplification, it is a claim about the world, and Chapter 5 shows a case where the claim is worth a second nurse.
 
 **The call-centre case, in full.** The sector claimed the following. Staffing each half hour by
 Erlang C on the historical mean rate would guarantee 82% of calls answered within 20 seconds, every
@@ -1583,7 +1654,9 @@ $\mathrm{ECE} \le 0.03$ type looks austere, but it is not. The ECE of a **perfec
 is not zero, but a random number whose scale moves with $1/\sqrt n$. The honest tolerance is the 95% quantile
 of that null, computed with those forecasts at the $n$ of the vault, and it shrinks as $n$ grows. In a
 vault of 1,488 cases the median noise is 0.0292 and its 95% quantile 0.0425; in one of 104,489, the 95% quantile
-is 0.0037. A fixed tolerance is, then, two things. **Too tight** in the small vaults, where it fails an honest
+is 0.0037. The quantile is itself drawn at random, and it moves with the seed: under twenty other seeds the 0.0425
+ranges from 0.0409 to 0.0424, so the seed printed here happened to give the largest value, and the honest report is
+"about 0.042". A fixed seed makes a simulated number reproducible, not exact. A fixed tolerance is, then, two things. **Too tight** in the small vaults, where it fails an honest
 forecaster, and **too loose** in the large ones, where it lets through perfectly detectable miscalibration.
 
 Two different questions hide here, and Royall's distinction of Chapter 3 separates them. *Can the miscalibration
@@ -2364,6 +2437,16 @@ so that one treats when the chance passes 0.10. A sensitive test (sensitivity 0.
 still carries 0.079 bit and is worth exactly zero, because even its negative result leaves the chance of disease at
 0.24, above the threshold, and does not change the action. The value of a test is computed branch by branch: after
 each result the decider picks one act for that result, and the test is worth only what that choice gains.
+
+**Where the expected cost is born.** An expected cost is a sum of probability times consequence, term by term, and
+the terms are worth writing out, because frequency and severity are different axes. A failure that happens once in a
+hundred cases and costs a hundred times more than the common nuisance contributes as much as the nuisance on every
+case; a list of events sorted by frequency then hides the event that carries the risk. Two systems can also share the
+same expected cost and have nothing else in common: one loses a little every week, the other loses everything once.
+The expectation is neutral to how the loss is spread, which is why a promise about the bad cases is stated as a tail:
+the conditional value at risk (Rockafellar and Uryasev, 2000) is the mean of the worst fraction of outcomes, and it
+moves when the tail moves while the expectation barely notices. Rarity does not neutralise a grave consequence;
+small times large is not necessarily small.
 
 **Not all information is welcome.** Good (1967) proved that free information never makes the decision
 of someone with preferences over states of the world worse. But whoever has preferences over future
@@ -3285,6 +3368,15 @@ estimated variance will be too small. For the layer, which caps each payment, th
 the frequency of the hits. The case repeats the lesson of Chapter 4. A
 process can be outside the hypothesis space of the model, and the data do not warn with a pretty chart.
 
+**The higher the moment, the louder one point.** A moment of order $k$ weighs each observation by the $k$-th power of
+its distance from the centre, so one observation ten times farther out weighs a hundred times more in the variance
+and ten thousand times more in the kurtosis. The higher moments are the first to become unstable as the tail grows
+heavy, and with $\alpha$ below 4 the kurtosis of the population does not even exist, whatever the sample prints. That
+is why this chapter reads the tail through quantiles, the months hit and the Hill index at several $k$, and not
+through a sample kurtosis, and why the three Hill values above differ so much. It is also why an extreme observation
+is never removed because it is extreme: in this series the month that decides the fate of the insurer is exactly the
+one an automatic cleaning would throw away.
+
 **The Laplace rule of succession.** After $s$ successes in $n$ trials, the probability of the next
 success is
 
@@ -3384,7 +3476,9 @@ Read it line by line. **4, 1, 0**: the months hit in each three-year block of th
 read was real, surrounded by years with four and one month hit. **1.9625 / 1.8109 / 1.4100**: the series gives
 three tail indices according to the number of observations used; the tail is heavy with room to spare, and its exact value
 is not stable. **1.900 with sd 0.265**: in a simulated tail with $\alpha = 1.81$, the Hill estimator
-has that uncertainty in samples of that size, the honest translation of the interval [1.41; 2.56]. **0.1815**: in every
+has that uncertainty in samples of that size, the honest translation of the interval [1.41; 2.56]. The bootstrap
+interval printed above, [1.37; 2.61], is drawn too: under twenty other seeds its upper bound ranges from 2.43 to 2.60,
+and the reading does not move, since the interval contains 2 under every seed. **0.1815**: in every
 100 windows of three years, 18 come out clean in the dangerous world. **0.02632**: the Laplace rule puts the estimate at 1 in 38, never zero.
 **2.24 bits and 69 months**: the clean window is 4.7 times more likely in the negligible world, that is, 2.2 bits of
 evidence, and almost six clean years for a severe test. **4.48 bits**: against the rate of the vault, that window
@@ -5769,8 +5863,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 395 tests pass |
-| `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
+| `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
+| `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 401 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -5788,6 +5884,24 @@ leading coefficient read 13680 instead of 13860, and that `Generator.binomial` m
 for the same seed, while the legacy `RandomState` keeps the old stream. If you meet a divergence like this, the path is always
 the same. **First the environment, then the code**: record the version of every library next to the number, because
 a number without its environment is a number nobody can audit.
+
+### C.3 The seed is part of the number too
+
+A fixed seed makes a simulated number reproducible on any machine; it does not make it exact. Another seed gives
+another draw, and the distance between the two is the Monte Carlo error of the number, which shrinks like
+$1/\sqrt N$ in the number of draws and faster for a mean than for a tail quantile. `labs --mc-error` measures it for
+every simulated number on which a reading of the book depends: each simulated quantile is rerun under twenty other
+seeds, and each simulated share gets its exact Clopper-Pearson interval.
+
+No reading moves. In the four binary vaults of Chapters 8 and 20, the ECE stays above the null q95 under every seed,
+including the cyclones, where the margin is the narrowest (ECE 0.0121 against seeds from 0.0107 to 0.0111). The
+bootstrap interval of the tail index in Chapter 14 contains 2 under every seed. The share of 0.0140 in Chapter 13 has
+the exact interval [0.0093; 0.0202], and the 20.3% of Chapter 7 the interval [19.06%; 21.58%].
+
+Two published values sit at the edge of their spread, and the chapters now say so. The null q95 of 0.0425 in Chapter 8
+is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and the upper bound 2.61 of the interval in
+Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
+simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
 ---
 
@@ -5912,7 +6026,7 @@ weaker than the others and is declared as such.
 
 ### D.6 The neighbours of the discipline
 
-Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
+Cited in Chapter 21 and, the last three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19.
 
 | Reference | Where it enters |
 | --- | --- |
@@ -5924,6 +6038,9 @@ Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
 | **[checked]** Spiegelhalter, D. "Risk and Uncertainty Communication", *Annual Review of Statistics and Its Application* 4:31–60, 2017. DOI: 10.1146/annurev-statistics-010814-020148 | Natural frequencies and absolute risk (Chapters 11 and 21) |
 | **[checked]** Gelman, A.; Hennig, C. "Beyond Subjective and Objective in Statistics", *JRSS A* 180(4):967–1033, 2017. DOI: 10.1111/rssa.12276 | Belief charged by frequency (Chapter 21) |
 | **[checked]** Gelman, A.; Vehtari, A.; Simpson, D. et al. "Bayesian Workflow", arXiv:2011.01808, 2020 | Predictive checks, SBC and rival models (Chapters 16 and 21) |
+| **[checked]** JCGM 100:2008. *Evaluation of measurement data — Guide to the expression of uncertainty in measurement* (GUM). Joint Committee for Guides in Metrology, BIPM, 2008. DOI: 10.59161/JCGM100-2008E | The propagation of uncertainty, the first-order law and its limits (Chapter 5) |
+| **[checked]** NIST/SEMATECH. *e-Handbook of Statistical Methods* (NIST Handbook 151). National Institute of Standards and Technology. DOI: 10.18434/M32189 | Moments, correlation and the analysis of uncertainty, for reference (Chapters 5, 6 and 14) |
+| **[checked]** Rockafellar, R. T.; Uryasev, S. "Optimization of conditional value-at-risk", *Journal of Risk* 2(3), 2000 | The conditional value at risk, the mean of the worst cases (Chapter 11) |
 
 ### D.7 How to use this list
 
@@ -6165,6 +6282,32 @@ and an answer key for the 126 exercises, published on the site beside the chapte
 | 21, D | The neighbours of the discipline | the first objection answered in a table row | model cards, datasheets, pre-registration, forecasting tournaments, risk communication, the Bayesian workflow and the open research culture, each with what is borrowed; eight references checked | a discipline that did not name its owners would be claiming what it borrowed |
 | C | Instruments and tests | 21 instruments; 422 tests | `labs --eprocess` added; the five tests of `eprocess.rs` | the new instrument |
 | Exercises | Answers | none published | `book/answers.md`: every Count answer with its computation, every Laboratory answer with what to change and what to see, numbers only where measured | the course had a key; the book did not |
+
+### Uncertainty propagated to the decision, 2026-10-19
+
+Text added after a reading of the propagation of uncertainty, rebuilt with the book's own instruments and sources.
+No number changed.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 5 | Three answers to the same question | the toll of Jensen measured; no comparison of methods | plug-in, delta method and Monte Carlo on the health post with uncertain, correlated rates; the uncertainty budget; the rule on when the linear answer may decide (`labs --propagate`) | a tangent does not see a tail, and the decision read the tail |
+| 5 | Which summary answers | mean, median and quantiles listed | each tied to the loss it minimises | choosing the summary is choosing whose error counts |
+| 6 | The effective sizes | several, each with its own story | one formula, the variance of a sum with its covariances | leaving the covariance out is a claim about the world |
+| 11 | The expected cost | the threshold and the value of information | written term by term, with the conditional value at risk | frequency and severity are different axes |
+| 14 | The higher moments | the tail read through Hill and quantiles | why: the higher the moment, the louder one point; why an extreme is never removed for being extreme | the instability of the higher moments |
+| D | References | — | GUM, the NIST/SEMATECH e-Handbook, Rockafellar and Uryasev | checked against the publishers |
+
+### The seed of the simulations, 2026-10-19
+
+A new instrument, `labs --mc-error`, measures how far each simulated number that a reading depends on moves with the
+seed (Appendix C.3). No number changed and no reading moved; two published values were found at the edge of their
+seed spread, and the chapters now say so.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 8 | The null q95 at 1,488 cases | 0.0425, as if exact | 0.0425, the largest of twenty-one seeds; about 0.042 | a simulated quantile carries the error of its draws |
+| 14 | The bootstrap interval of the tail index | [1.37; 2.61], as if exact | the same, with its upper bound above every other seed's | the same |
+| C | Reproduction | the environment is part of the number | also the seed: C.3 | the same |
 
 ### Numbers cited without an instrument in this book
 
