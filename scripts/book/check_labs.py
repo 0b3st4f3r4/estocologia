@@ -47,6 +47,7 @@ def main() -> int:
         ("labs --propagate", run_output([str(BIN), "--propagate"])),
         ("labs --passk", run_output([str(BIN), "--passk"])),
         ("labs --multiverse", run_output([str(BIN), "--multiverse"])),
+        ("labs --stacking", run_output([str(BIN), "--stacking"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
         ("labs --h3", run_output([str(BIN), "--h3"])),
         ("labs --bridge", run_output([str(BIN), "--bridge"])),

@@ -139,6 +139,7 @@ def main() -> int:
         "| BTlabs --mc-errorBT | The Monte Carlo error of every simulated number a reading of the book depends on |\n"
         "| BTlabs --propagateBT | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |\n"
         "| BTlabs --multiverseBT | The multiverse of the health post: eighteen reasonable specifications, declared before the run |\n"
+        "| BTlabs --stackingBT | Combining models when none is true: Bayesian model averaging against stacking, declared before the run |\n"
         "| BTlabs --passkBT | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
@@ -218,6 +219,12 @@ def main() -> int:
         [str(BIN), "--multiverse"],
         "The question of Chapter 5 under eighteen specifications with common draws, and the between-specification "
         "variance split by choice, sealed in empirical/p26-multiverso/ before the first run (Chapter 5).",
+    ))
+    parts.append(section_block(
+        "Combining models when none is true",
+        [str(BIN), "--stacking"],
+        "Two confident candidates in an M-open and an M-closed world, combined by model averaging and by stacking, with "
+        "a duplicated model, sealed in empirical/p27-stacking/ before the first run (Chapter 8).",
     ))
     parts.append(section_block(
         "Reliability is not average success",
