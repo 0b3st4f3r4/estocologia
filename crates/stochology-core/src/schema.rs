@@ -46,7 +46,7 @@ impl Version {
 }
 
 /// Version that this crate emits.
-pub const SCHEMA_VERSION: Version = Version::new(1, 3);
+pub const SCHEMA_VERSION: Version = Version::new(1, 4);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SchemaError {
@@ -137,6 +137,8 @@ pub fn document(card: &Card) -> BTreeMap<String, String> {
         ("clausula_de_saida", optional(&card.exit_clause)),
         ("orcamento_de_incerteza", optional(&card.uncertainty_budget)),
         ("evento_dominante", optional(&card.dominant_event)),
+        ("multiverso", optional(&card.multiverse)),
+        ("confiabilidade", optional(&card.reliability)),
     ] {
         if let Some(v) = value {
             doc.insert(name.into(), v);
@@ -242,9 +244,35 @@ pub fn card_from_document(doc: &BTreeMap<String, String>) -> Result<Card, Schema
             value: format!("{d} ({e})"),
         })?;
     }
+    let multiverse = doc.get("multiverso").cloned();
+    if let Some(m) = &multiverse {
+        crate::budget::parse_multiverse(m).map_err(|e| SchemaError::InvalidValue {
+            field: "multiverso".into(),
+            value: format!("{m} ({e})"),
+        })?;
+    }
+    if let Some(b) = &uncertainty_budget {
+        if crate::budget::names_specification(b) && multiverse.is_none() {
+            return Err(SchemaError::InvalidValue {
+                field: "orcamento_de_incerteza".into(),
+                value: format!(
+                    "{b} (a share for the specification is measured by a multiverse, and none is declared)"
+                ),
+            });
+        }
+    }
+    let reliability = doc.get("confiabilidade").cloned();
+    if let Some(r) = &reliability {
+        crate::budget::parse_reliability(r).map_err(|e| SchemaError::InvalidValue {
+            field: "confiabilidade".into(),
+            value: format!("{r} ({e})"),
+        })?;
+    }
     let mut card = Card::new(&require(doc, "id")?, layer, uncertainty);
     card.uncertainty_budget = uncertainty_budget;
     card.dominant_event = dominant_event;
+    card.multiverse = multiverse;
+    card.reliability = reliability;
     card.definition = doc.get("definicao").cloned().unwrap_or_default();
     card.decision_maker_question = doc.get("pergunta_do_decisor").cloned().unwrap_or_default();
     card.package_action = doc.get("acao_do_pacote").cloned().unwrap_or_default();
@@ -585,7 +613,7 @@ mod tests {
     #[test]
     fn a_version_1_2_document_migrates_with_the_new_fields_absent() {
         let current = text(&full_card());
-        let old = current.replacen("versao = 1.3", "versao = 1.2", 1);
+        let old = current.replacen("versao = 1.4", "versao = 1.2", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(migrated.uncertainty_budget, None);
         assert_eq!(migrated.dominant_event, None);
@@ -596,6 +624,38 @@ mod tests {
                 .iter()
                 .any(|d| d.contains("introduces orcamento_de_incerteza"))
         );
+    }
+
+    #[test]
+    fn the_multiverse_and_the_reliability_survive_the_round_trip_and_are_checked() {
+        let f = full_card()
+            .with_budget("inputs=0.40; specification=0.60", "rain; p=0.1; share=0.5")
+            .with_multiverse("specifications=18; agree=10; shares=service-cv:0.93, rate-law:0.00, correlation:0.06, interaction:0.02")
+            .with_reliability("k=8; pass1=0.5312; passk=0.0700");
+        assert_eq!(from_text(&text(&f)).expect("round trip"), f);
+        let mut no_multiverse = f.clone();
+        no_multiverse.multiverse = None;
+        assert!(matches!(
+            from_text(&text(&no_multiverse)),
+            Err(SchemaError::InvalidValue { field, .. }) if field == "orcamento_de_incerteza"
+        ));
+        let promising = full_card().with_reliability("k=8; pass1=0.5; passk=0.6");
+        assert!(matches!(
+            from_text(&text(&promising)),
+            Err(SchemaError::InvalidValue { field, .. }) if field == "confiabilidade"
+        ));
+    }
+
+    #[test]
+    fn a_version_1_3_document_migrates_with_the_fields_of_1_4_absent() {
+        let current = text(&full_card());
+        let old = current.replacen("versao = 1.4", "versao = 1.3", 1);
+        let migrated = from_text(&old).expect("migrates");
+        assert_eq!(
+            (migrated.multiverse.clone(), migrated.reliability.clone()),
+            (None, None)
+        );
+        assert_eq!(migrated, full_card());
     }
 
     #[test]
@@ -710,7 +770,7 @@ mod tests {
         let versions: Vec<String> = DECLARED_CHAIN.versions().iter().map(|v| v.text()).collect();
         assert_eq!(
             versions,
-            vec!["1.0", "1.1", "1.2", "1.3"],
+            vec!["1.0", "1.1", "1.2", "1.3", "1.4"],
             "the chain declared in the file"
         );
         assert_eq!(

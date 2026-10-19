@@ -69,6 +69,10 @@ pub struct Card {
     pub uncertainty_budget: Option<String>,
     /// Contract 1.3: the event that carries the expected cost, `name; p=probability; share=fraction`.
     pub dominant_event: Option<String>,
+    /// Contract 1.4: the specifications the answer was computed under, `specifications=N; agree=A; shares=...`.
+    pub multiverse: Option<String>,
+    /// Contract 1.4: what average success hides, for a card of an agent, `k=K; pass1=P1; passk=PK`.
+    pub reliability: Option<String>,
 }
 
 impl Card {
@@ -98,6 +102,8 @@ impl Card {
             elicited_prior: false,
             uncertainty_budget: None,
             dominant_event: None,
+            multiverse: None,
+            reliability: None,
         }
     }
 
@@ -105,6 +111,18 @@ impl Card {
     pub fn with_budget(mut self, budget: &str, dominant_event: &str) -> Self {
         self.uncertainty_budget = Some(budget.to_string());
         self.dominant_event = Some(dominant_event.to_string());
+        self
+    }
+
+    /// Declares the multiverse of the answer (contract 1.4).
+    pub fn with_multiverse(mut self, multiverse: &str) -> Self {
+        self.multiverse = Some(multiverse.to_string());
+        self
+    }
+
+    /// Declares the reliability of an agent over k runs (contract 1.4).
+    pub fn with_reliability(mut self, reliability: &str) -> Self {
+        self.reliability = Some(reliability.to_string());
         self
     }
 

@@ -138,6 +138,7 @@ def main() -> int:
         "| BTlabs --eprocessBT | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |\n"
         "| BTlabs --mc-errorBT | The Monte Carlo error of every simulated number a reading of the book depends on |\n"
         "| BTlabs --propagateBT | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |\n"
+        "| BTlabs --multiverseBT | The multiverse of the health post: eighteen reasonable specifications, declared before the run |\n"
         "| BTlabs --passkBT | Reliability is not average success: pass^k against the heterogeneity of the tasks, declared before the run |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
@@ -211,6 +212,12 @@ def main() -> int:
         "The wait of a day at the health post with uncertain, correlated rates: plug-in, delta method with its "
         "second-order mean, Monte Carlo, the uncertainty budget, and the rule on when the linear answer may decide "
         "(Chapter 5).",
+    ))
+    parts.append(section_block(
+        "The multiverse of the health post",
+        [str(BIN), "--multiverse"],
+        "The question of Chapter 5 under eighteen specifications with common draws, and the between-specification "
+        "variance split by choice, sealed in empirical/p26-multiverso/ before the first run (Chapter 5).",
     ))
     parts.append(section_block(
         "Reliability is not average success",
