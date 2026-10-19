@@ -34,6 +34,19 @@ architecture check form, presence and reproducibility, not correctness. Appendix
 of code that passed every test and every gate of this book until an outside reading found them. Read each number as
 an invitation to check it, not as a certificate.
 
+**What the reader cannot run.** The rule above holds for the simulations and for five real datasets: the bank calls,
+the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
+book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
+yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
+Chapter 17, the skills of the forecasters of Chapter 18, and a handful of worked examples in Chapters 3, 7, 10, 11, 13,
+14 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
+They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
+
+**The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
+world, the model and the agent, not an error of arithmetic) has had one direct test, and it tied at the ceiling
+(Chapter 21). Until a fair test, with cases chosen and judged by people outside the work, is run, the thesis is a
+working hypothesis about where to look first, not a result, and the book should be read that way.
+
 ---
 
 ## The three-step ramp
@@ -336,8 +349,8 @@ But the world is the other one. Simulated with the same seed, the two worlds giv
 
 | World | Mean wait per patient | In each 100 patients, how many wait more than 30 min |
 | --- | --- | --- |
-| Always 8 per hour | 9.3 minutes | 8 |
-| Half the days with 5, half with 11 | 20.7 minutes | 25 |
+| Always 8 per hour | 9.1 minutes | 8 |
+| Half the days with 5, half with 11 | 19.6 minutes | 24 |
 
 No arithmetic was wrong, and the mean demand is 8 in both worlds. What changed is the **world**. When demand
 oscillates, the queue of a busy day grows much more than the queue of a quiet day shrinks, because waiting time
@@ -825,8 +838,8 @@ other.
 
 | World | Mean wait per patient | In each 100 patients, how many wait more than 30 min |
 | --- | --- | --- |
-| Always 8 per hour | 9.3 minutes | 8 |
-| Half the days with 5, half with 11 | 20.7 minutes | 25 |
+| Always 8 per hour | 9.1 minutes | 8 |
+| Half the days with 5, half with 11 | 19.6 minutes | 24 |
 
 The mean changed in nothing. The mean wait more than doubled, and the number of people waiting more than half
 an hour tripled. A decision about hiring staff, taken in the first world, is applied in the second.
@@ -2846,7 +2859,8 @@ number; the slope by regime is a structure.
    confirm that the message points at the cycle.
 5. *(Laboratory)* Change the tolerance of the invariance test from 0.5 to 2.0 and to 0.05 in the two
    first rules. In which of them does the structure by regime stop being distinguishable from noise?
-6. *(Concept)* Why was the Erlang C formula typed as knightian and not as epistemic?
+6. *(Concept)* Why was the Erlang C formula typed as epistemic (specification) and not as Knightian? Which
+   observation would move it to Knightian?
 
 **Summary.**
 
@@ -3987,12 +4001,12 @@ bias, including the uncomfortable case in which the fit hits the number and stil
 ### Step 1 — The real world and the paradox
 
 **The promise of leverage.** An investor opens 115 years of Dow Jones quotes (from 1885 to the end of 1999,
-31.919 sessions) and computes the mean of the daily returns, 0.0668 per year as an arithmetic sum. The conclusion seems
+31,919 sessions) and computes the mean of the daily returns, 0.0668 per year as an arithmetic sum. The conclusion seems
 inevitable: *"the index yields 0.07 per year; leveraged 3 times, it yields 0.20 per year, and whoever holds for decades
 always wins."*
 
 Except that 0.20 is the number of the average day seen from outside. Over time, a **trajectory** lives another
-thing. Measured in those 31.919 sessions, with daily rebalancing:
+thing. Measured in those 31,919 sessions, with daily rebalancing:
 
 | Leverage | The arithmetic sum promises | The growth realised in time | What volatility charges |
 | --- | --- | --- | --- |
@@ -4028,9 +4042,9 @@ the typical cohort that the investor holds barely doubles. About 35.7 in every 1
 end below the starting point, the exact complement of the 64.3% that end above it.
 
 **How many independent observations is that?** The cohorts overlap, since one year enters dozens of
-20-year windows, and that is why the 1.134 cohorts of the training set are worth only about **5.8 blocks
+20-year windows, and that is why the 1,134 cohorts of the training set are worth only about **5.8 blocks
 independent**. Counting cohorts is not counting observations. A margin computed
-over 1.134 would be about 14 times smaller than the honest one ($\sqrt{1134/5.8}$). It is the lesson of the independent
+over 1,134 would be about 14 times smaller than the honest one ($\sqrt{1134/5.8}$). It is the lesson of the independent
 unit of Chapter 6, now in time.
 
 **The Great Depression, in natural frequencies.** From the peak of 3 September 1929 to the trough of 8 July 1932,
@@ -4043,13 +4057,13 @@ to compare the participants with workers from a national survey (CPS), in 1978:
 
 | Group | In every 100, employed in 1978 | Mean income in 1978 |
 | --- | --- | --- |
-| Participants of the programme (185 people) | 76 | 6.349 dollars |
-| Randomised: 260 controls, also applicants, out of the programme | 65 | 4.555 dollars |
-| National survey (15.992 people) | 86 | 14.847 dollars |
+| Participants of the programme (185 people) | 76 | 6,349 dollars |
+| Randomised: 260 controls, also applicants, out of the programme | 65 | 4,555 dollars |
+| National survey (15,992 people) | 86 | 14,847 dollars |
 
 Read raw, the table condemns the programme. The participants are 10.7 percentage points **less** employed than the
-population and earn 8.498 dollars less. Read through the randomisation, the table absolves the programme. Among similar
-applicants, those who entered stayed 11.1 points more employed and earned 1.794 dollars more. Between the two
+population and earn 8,498 dollars less. Read through the randomisation, the table absolves the programme. Among similar
+applicants, those who entered stayed 11.1 points more employed and earned 1,794 dollars more. Between the two
 readings there is a distance of 10,292 dollars per person, and that distance is not an effect of the training. It is the difference
 between whoever applies to a training programme and the average worker of the country.
 
@@ -4110,8 +4124,9 @@ year in the twentieth century), and there is no financing cost of the leverage.
 
 **Who pays for the error.** The 65.5% of the summed wealth of the cohorts come from the best 10% of starts; the worst entry
 dates are all from 1929 (3 September, 1 July, 1 August). In every 100 cohorts of 20 years, 4 end
-below the start without leverage, 22 with 2× and 36 with 3×. Whoever entered in the worst month had a mean return equal to that of the
-market and did not survive to see it.
+below the start without leverage, 22 with 2× and 36 with 3×. Whoever entered in the worst month faced, over the 20 years, the same kind of daily returns as
+everyone else; what ruined the cohort was the order in which they came, with the worst sessions first, and a mean
+says nothing about order.
 
 **The LaLonde decomposition.** Comparing participants with non-participants gives:
 
@@ -4295,7 +4310,7 @@ $$\frac{0+1}{36+2} = \frac{1}{38} \approx 0.0263.$$
 In every 100 months, 2.6 months hit, never zero. "It never happened" is not "it cannot happen". It is "it has not
 happened yet".
 
-**The tail.** The Hill estimator, applied to the 1.714 losses of the training set, gives for the tail index
+**The tail.** The Hill estimator, applied to the 1,714 losses of the training set, gives for the tail index
 $\hat\alpha = 1.81$, with a 95% interval from 1.41 to 2.56 (bootstrap by monthly blocks). That matters because an
 index below $2$ means **infinite variance** of the losses. The mean still exists, because the index is above 1, and the
 running mean does converge, but slowly and by jumps: the usual margin, built on a variance, does not apply. A single
@@ -4378,7 +4393,8 @@ The likelihood ratio is 4.72, or **2.2 bits** of evidence. Two bits is very litt
 to sell three times the capital. The severity criterion says how much would be needed. For the procedure "the layer
 was not touched" to have 95% chance of accusing the danger, **69 clean months** would be necessary, almost six years.
 The evidence is also measured the other way, as mutual information between the result of the window and the hypothesis
-dangerous-against-negligible, **0.51 bits**, practically nothing. And, for comparison, if the real world were the one of the vault
+dangerous-against-negligible, **0.51 bits**, about half of the one bit that a window can carry between two equally
+likely hypotheses: the window leaves the question open in either direction. And, for comparison, if the real world were the one of the vault
 (2 months hit in 24, $p = 1/12$), that clean window would be worth 4.5 bits. Three clean years are reasonable evidence
 against a monthly rate of 8% and ridiculous evidence against one of 4%.
 
@@ -4538,9 +4554,13 @@ running. The counter of attempts, called $K$, is the honest scoreboard of that s
 | 6 | gene deletions in yeast | 3 (education, physics and genetics) | Passed the rule, with a caveat |
 | 7 | FDA cardiology clinical trial | 4 (the three previous ones and pharmacology) | Passed |
 
+Read the last column together with the end of Step 2. "Passed" is the verdict of the rule as it stood in each round,
+after the corrections of the rounds before it. Under the first declared version of each choice the gate does not pass,
+and once the dependent rows are corrected it stands with three areas only by counting a marginal replica in genetics.
+
 **The light tunnel.** In a physical chamber built in Switzerland to study causality (Gamella, Peters and Bühlmann,
 2025), a researcher turns a knob that controls an electric current, three LEDs of different colours light up, and
-light sensors measure the response. Of 1.024 possible combinations of candidate causes, the method accepted 128, and
+light sensors measure the response. Of 1,024 possible combinations of candidate causes, the method accepted 128, and
 their intersection (the set that all of them have in common) was $\{\text{red},\ \text{green},\ \text{blue}\}$. They are the
 three LEDs. The light sensors stayed out, despite being strongly correlated with
 the current, because they are **children** of the LEDs. It was a check of the method against a known truth, and the method got it right.
@@ -4562,11 +4582,11 @@ model that used *all* the variables exploded, with a loss of the order of $10^{1
 measure of the electrocardiogram outside everything that was in the training set.
 
 **The yeast.** With 2014 data on gene deletions in yeast, the method gave an invariant set in one
-domain out of ten drawn. It rejected 1.022 of the 1.024 sets, accepted two, and the best p-value stayed at
+domain out of ten drawn. It rejected 1,022 of the 1,024 sets, accepted two, and the best p-value stayed at
 $0.0072$, just above the threshold of $0.005$.
 The validation by intervention, which checks gene by gene, did not confirm two of the three genes of the set; only the
 first moved the target in the predicted direction. The output was approved **with a caveat on the record**. A replica declared
-later drew 40 new genes from a set of 4.681, with a level of $0.05/40 = 0.00125$ per gene, and found one
+later drew 40 new genes from a set of 4,681, with a level of $0.05/40 = 0.00125$ per gene, and found one
 gene that passes the strict validation, with a null rate of $p = 0.001$. It is the floor of 999 draws. The replica shows
 *one gene in one mutant*, and not an effect measured with resolution. Each mutant is an environment of a single row, and the smallest
 possible p-value there is $1/1,000$.
@@ -4580,7 +4600,7 @@ effect in both, **1 of 40** passes: the mover, with $p = 10^{-6}$, which is the 
 effect of it in the second row is $+0.028$, against $+1.016$ of the mover. What was missing was a row, not a smaller p-value.
 
 **The fall of education.** Education was the most comfortable area. They were small classes drawn in the STAR experiment of
-Tennessee, 11.598 students. When the students stopped being counted as 11.598 independent observations and
+Tennessee, 11,598 students. When the students stopped being counted as 11,598 independent observations and
 started being counted as **80 schools**, the accepted sets had no variable in common, and the
 invariant set became empty. That does not mean that a small class has no effect. It means that, with 80
 true units, the test lost the power to point to a set, which is the only product that it delivers.
@@ -4651,14 +4671,14 @@ gained, health gained only by saturation.
 **The validation by intervention, and its limit.** The external check of a gene is direct. One deletes the gene $x$ and
 sees whether the target $Y$ moves in the direction that the coefficient predicts. The strict criterion asks for two things: that the deletion
 worked (the deleted gene itself is the smallest value of its column) and that $Y$ falls outside the range of the other
-1.740 samples. In the 27 genes of the 10 sets with a gene of the replica, the deletion worked in 26 and **one** gene passed
+1,740 samples. In the 27 genes of the 10 sets with a gene of the replica, the deletion worked in 26 and **one** gene passed
 the strict criterion. It is the pair of the domain n34, with $Y = $ YLR354C and $x_6 = $ YIL033C, whose mutant puts $Y$ at the minimum
-of the 1.741 rows, in the direction of the positive coefficient $+0.053$. The null rate was fixed afterwards, by permutation of the
-label of the mutant among the 1.741 rows, with 999 draws and seed 20261015. The observed is 1 pair in 27, the null mean is 0, and $p = 0.001$, the floor of the test. The
+of the 1,741 rows, in the direction of the positive coefficient $+0.053$. The null rate was fixed afterwards, by permutation of the
+label of the mutant among the 1,741 rows, with 999 draws and seed 20261015. The observed is 1 pair in 27, the null mean is 0, and $p = 0.001$, the floor of the test. The
 reading has two halves, and they point to opposite sides. Against the chance of the label the evidence is strong. Against reading that as a measured effect, the evidence is null. Almost all of the p comes from the
 half that is a fact of the data. Deleting a gene removes its expression, so the minimum of the column is on the row of the
 mutant, and permuting the label destroys exactly that half. The half that remains, the target outside the range of the other
-1.740 rows, on its own gives $p = 0.031$, marginal.
+1,740 rows, on its own gives $p = 0.031$, marginal.
 
 **What invariance buys.** In verapamil, the drug that the model never saw, the invariant model predicted with
 skill $+0.57$ and conformal coverage $0.89$. The model fitted by the key did a little better, $+0.65$.
@@ -4830,7 +4850,7 @@ each effect stops being a point. **The p was never the problem; the row was the 
 2. *(Concept)* In world C, without the saturation rule the method returns the empty set. Write in three sentences why
    accepting a saturated set is not evidence of invariance.
 3. *(Count)* In the laboratory, the floor of the permutation with 999 draws is $1/1,000 = 0.001$. What is the smallest p-value
-   possible with 9.999 draws, and why does that matter for the validation of the yeast, where each mutant is an
+   possible with 9,999 draws, and why does that matter for the validation of the yeast, where each mutant is an
    environment of one row? Check the account in the two-row arrangement: if each row has the floor $1/1,000$ and the
    combined one is the product, where does the floor of the design with two rows sit?
 4. *(Laboratory)* Change, in the laboratory, the shift of $Y$ of world B from $[0; 6; -4]$ to $[0; 1; -0.5]$
@@ -4846,7 +4866,9 @@ each effect stops being a point. **The p was never the problem; the row was the 
 - The gate asked for a non-empty invariant set in three distinct areas; the first round gave one, and
   against the claim, because the year and the region act directly on the outcome.
 - The gate only passed in the sixth round, with a caveat recorded in genetics, and the five failures stayed in the counter
-  $K$: convenience environments, a code error in the test, the exchange of ruler and the saturation rule.
+  $K$: convenience environments, a code error in the test, the exchange of ruler and the saturation rule. Under the first
+  declared version of each choice it does not pass at all: seven rounds aimed at a gate fixed in advance are a garden of
+  forking paths walked in public, visible because it was sealed, not innocent because of it.
 - Two rounds checked the method against known truth. The light tunnel recovered the three LEDs and the trial of the
   FDA recovered the three drugs that block hERG, with verapamil predicted at $+0.57$.
 - With dependent rows corrected, education leaves; the gate stays standing with three areas only by counting a marginal
@@ -4872,7 +4894,7 @@ chance of a hurricane gaining strength; and the decision to release a detainee i
 it had not happened yet.
 
 The warehouse refuses four things, and refusing is its job: reading the future, opening a vault before the written
-pre-registration, opening the same vault twice and turning the clock back. In the whole replay there were 453.973 forecasts, and none
+pre-registration, opening the same vault twice and turning the clock back. In the whole replay there were 453,973 forecasts, and none
 of them used future state; **zero violations**, with the count made forecast by forecast.
 
 **The canary paradox.** "Zero violations" looks great, and it is almost nothing. It is only worth something if the test *could* have
@@ -4899,34 +4921,34 @@ attempts.
 
 | Stream | What it predicts | Vault | Calibration in the vault | Gate |
 | --- | --- | --- | --- | --- |
-| Energy (Victoria) | demand of each half hour of tomorrow | 2014, 17.376 | coverage of 90% = 0.887 (official reserve 48% of the time) | Passes |
-| Call centre (bank, 2003) | calls per 5 minutes of the next working day | Sep–Oct, 6.084 | coverage 0.900 | Passes |
-| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6.010 | violations 0.98%; Kupiec p = 0.89; clustered (Christoffersen p = 0.02) | Passes the frequency rule; the independence of the violations fails |
-| Flights (New York, 2013) | chance of a delay above 15 minutes, 2 h before | Oct–Dec, 84.301 | bias $+2.7$ points; ECE 0.027 | Fails |
-| Cyclones | chance of gaining 30 knots in 24 hours | 2015–2022, 5.766 | bias 0.001; ECE 0.012 | Passes |
-| Prisons (Toronto, 1997–2002) | chance of release | 2001–2002, 1.488 | bias 0.016; ECE 0.036 | Fails |
+| Energy (Victoria) | demand of each half hour of tomorrow | 2014, 17,376 | coverage of 90% = 0.887 (official reserve 48% of the time) | Passes |
+| Call centre (bank, 2003) | calls per 5 minutes of the next working day | Sep–Oct, 6,084 | coverage 0.900 | Passes |
+| Market (Dow Jones) | 99% value at risk of the next session | 2000–2023, 6,010 | violations 0.98%; Kupiec p = 0.89; clustered (Christoffersen p = 0.02) | Passes the frequency rule; the independence of the violations fails |
+| Flights (New York, 2013) | chance of a delay above 15 minutes, 2 h before | Oct–Dec, 84,301 | bias $+2.7$ points; ECE 0.027 | Fails |
+| Cyclones | chance of gaining 30 knots in 24 hours | 2015–2022, 5,766 | bias 0.001; ECE 0.012 | Passes |
+| Prisons (Toronto, 1997–2002) | chance of release | 2001–2002, 1,488 | bias 0.016; ECE 0.036 | Fails |
 
 **The design lesson of the first failure.** In the flights, the last quarter of 2013 had more delays than the model of
 60 days expected, and the bias stayed 2.7 points above the predicted one, for a tolerance of 2. In the prisons, the
-calibration error was 0.036, for a tolerance of 0.03, with only 1.488 cases. And the cause became clear. **The circuit breaker
+calibration error was 0.036, for a tolerance of 0.03, with only 1,488 cases. And the cause became clear. **The circuit breaker
 compared the model with the reserve, and not with the calibration**. The model kept beating the reserve, and that is why the
 circuit breaker almost did not open, except that it was miscalibrated on average. Being better than the rival and being right are
 different things.
 
 **Second attempt: fix the level.** The correction was a continuous recalibration of the intercept, declared
 before and tested in a new vault. The vault was the quarter from October to December repeated, now in 2023, with
-104.489 forecasts. The flights passed, with a bias of 0.0015 and an ECE of 0.008. But the quarter of 2023 did not
+104,489 forecasts. The flights passed, with a bias of 0.0015 and an ECE of 0.008. But the quarter of 2023 did not
 repeat the deviation of 2013. The raw model, without any correction, would also have passed, with ECE 0.014. The correction
 improved the calibration and **was not put to the test**.
 
-In the prisons, the new Toronto data, from 2020 and 2021, with 65.276 arrests and a vault in the second half of 2021
-over 16.933 cases, changed the question. It became registering at the police station instead of releasing. The model
+In the prisons, the new Toronto data, from 2020 and 2021, with 65,276 arrests and a vault in the second half of 2021
+over 16,933 cases, changed the question. It became registering at the police station instead of releasing. The model
 hit the mean (0.0002) and separated the cases well, but it was **underconfident**. In the lower bins it predicted 0.12
 where the observed rate was 0.04, and in the upper ones it predicted 0.82 to 0.90 where the rate was 0.91 to 0.94. It is an error of
 **slope**, and touching the intercept does not reach that.
 
-**Third attempt: Rhode Island.** A new specification was declared before opening the vault,, a Platt recalibration
-that adjusts intercept *and* slope, and tested it in a new vault, with 24.466 stops of the state police of Rhode
+**Third attempt: Rhode Island.** A new specification was declared before opening the vault: a Platt recalibration
+that adjusts intercept *and* slope, and tested it in a new vault, with 24,466 stops of the state police of Rhode
 Island, between 2013 and 2015, and an arrest rate of 2.26%. The question changed from "release after arrest" to
 "arrest in a traffic stop", and that exchange was confirmed by a human.
 
@@ -4936,7 +4958,10 @@ Island, between 2013 and 2015, and an arrest rate of 2.26%. The question changed
 | Raw model, in shadow | 0.013 | 0.013 | $+0.004$ |
 
 It passed, with an ECE of $0.21\,\bar{y}$ against the limit of $0.3\,\bar{y}$. The vault had that criterion relative to the
-rate, and the raw model, which overestimated the rate by **58%**, would have failed. That is what shows the value of Platt. The
+rate, and the raw model, which overestimated the rate by **58%**, would have failed. That is what shows the value of Platt. The change of ruler, from an absolute tolerance to one
+relative to the rate, came after two failures and counts as one more attempt; it is a tightening, not a loosening. With
+the rate near 2 in 100, the absolute tolerance of 0.03 is larger than the rate itself, and under it the raw model would
+have passed too. The
 recalibration ended with slope 1.07 and intercept $-0.30$, and the circuit breaker put the reserve as official in 12%
 of the vault. Two caveats remain, and the first is the most important. **The skill is small** ($+0.019$). Arrest
 in a traffic stop is a rare event (2 in every 100 stops) and little predictable from the available variables.
@@ -5078,7 +5103,7 @@ switched off; the skill gain is that of the model with the canary over the raw m
 
 The world is a traffic stop. The outcome is "there was an arrest", with three covariates (night, high speed,
 plate of another state) and an additive model in log-odds. The training period (2005–2012) has a higher base
-rate; the development (the period before the vault) and the vault (2013–2015, 24.466 stops) have the same distribution and
+rate; the development (the period before the vault) and the vault (2013–2015, 24,466 stops) have the same distribution and
 rate, about 2.2%. The raw model is trained in the old period and applied to the vault, and the Platt correction is
 fitted in the development, where the labels are already known.
 
@@ -5105,8 +5130,8 @@ $-0.54$), goes back to the right level, with bias $+0.0002$ and ECE 0.0022, and 
 the correction did **nothing**. The skill rose from $-0.0020$ to $+0.0098$, and not to $+0.5$. The slope
 hardly changed (the fit stayed at 0.98), and the resolution continues to be the one of the data. The calibration is fixed;
 the resolution is not. **The canary** closes the laboratory. With the honest clock, the canary column becomes available in
-**0** of the 24.466 emissions, its coefficient stays at zero and the skill gain is 0.0000; with the clock
-switched off, it is available in the 24.466 emissions and the gain is $+0.6521$.
+**0** of the 24,466 emissions, its coefficient stays at zero and the skill gain is 0.0000; with the clock
+switched off, it is available in the 24,466 emissions and the gain is $+0.6521$.
 
 **Exercises.**
 
@@ -5171,14 +5196,16 @@ sentences, and each one was born from a concrete case.
 5. **The effect transports better than the list of causes.** Exact invariance is rare. When it appears and is
    checked against a known truth (the light tunnel and the hERG blockers), it protects against the new
    intervention, as verapamil showed. When it does not appear, the direction and the size of the effect still usually survive.
-   9 domains predicted the never-seen environment with skill from 0.04 to 0.88.
+   9 domains predicted the never-seen environment with skill from 0.04 to 0.88. Of the areas where exact invariance
+   held, two recovered causes known before the test; the search found no new cause that survived without a caveat.
 6. **Calibration is fixed afterwards, resolution is not.** Recalibration cannot add what only new information adds. Three vaults were needed for the calibration to pass the
    tolerance of 0.03, and a later measurement showed that this tolerance was loose in the large vaults, where a
    detectable miscalibration is not always a relevant one. The final skill
    stayed at $+0.019$. Saying "it is well calibrated" does not ensure that the model separates the cases well.
 7. **Declaring before running makes the failure useful.** Seven rounds in the search for invariant causes and three vaults in the arrest forecasts only count as
    science because each change was written with a hash **before** running, and because each adjustment made after seeing a
-   result stayed on the record and counted in the counter $K$.
+   result stayed on the record and counted in the counter $K$. Declaring makes the path visible; it does not make it
+   innocent. Under the first declared version of each choice, the gate of the causal search does not pass.
 
 **Turning the test inward.** A discipline that demands a severe test of the claims of others has to pass the same
 test. When ten of its own assumptions, things the text affirmed and had never tested, were each put to a declared
@@ -5288,7 +5315,12 @@ plan that survives every day also survives the aggregate, while the converse doe
 ```
 
 With the plan calibrated on flat demand, the threshold appears at amplitude 2.5, where the coarse question starts
-to cost (2.87 minutes) after costing less than nothing below it; the fraction of failed days grows monotonically.
+to cost (2.87 minutes); the fraction of failed days grows monotonically. Below the threshold the loss column is
+negative, and that does not contradict Chapter 5. In this specification the two arms do not spend the same resource:
+the coarse plan keeps its 13 agents every day, calibrated so that flat demand fails on at most 10% of the days, while
+the fine plan staffs each day with the smallest Erlang scale for that day, which near flat demand is fewer agents. The
+coarse plan waits less there because it pays for more people, and the column is a comparison of two plans, not the
+toll of the coarse question at equal resource that Chapter 5 measures.
 (With the uncalibrated Erlang plan of the average day the fraction is not monotone, and the threshold reading is
 weaker.) Across six profiles, no profile survives each day and fails the aggregate, and three pass the aggregate
 while failing some day.
@@ -5593,7 +5625,9 @@ and Baltagi and Levin came out in *Structural Change and Economic Dynamics*. Two
 final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the sources consulted. SHELF is a
 protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
 proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
-check as the other 50 lines.
+check as the other 50 lines. A reading of 2026-10-19 found that the text cites, by author and year, many works that
+the list did not carry; they are gathered in D.5, all marked **[to check]**, because their metadata were written from
+the reading and have not yet passed the same check as D.2 to D.4.
 
 ### D.2 Classics to begin with
 
@@ -5661,7 +5695,38 @@ check as the other 50 lines.
 | **[checked]** Janssen, K. J. M. et al. *Canadian Journal of Anesthesia* 56(3):194–201, 2009 | Adjusting a risk model to local circumstances |
 | **[checked]** Van Calster, B. et al. *Journal of Clinical Epidemiology* 74:167–176, 2016 | The hierarchy of calibration, from utopia to empirical data |
 
-### D.5 How to use this list
+### D.5 Cited in the text and missing from the list until 2026-10-19
+
+| Reference | Where it enters |
+| --- | --- |
+| **[to check]** Kelly, J. L. *Bell System Technical Journal* 35(4):917–926, 1956 | The growth-optimal fraction (Chapters 10 and 17) |
+| **[to check]** Peters, O. *Nature Physics* 15:1216–1221, 2019 | The ergodicity problem and the Peters coin (Chapter 10) |
+| **[to check]** Peters, O.; Adamou, A. "Insurance makes wealth grow faster", arXiv:1507.04655, 2015 | Bernoulli's ship in time (Chapters 10 and 11) |
+| **[to check]** Meng, X.-L. *Annals of Applied Statistics* 12(2):685–726, 2018 | The identity of quality, quantity and difficulty (Chapter 6) |
+| **[to check]** Berkson, J. *Biometrics Bulletin* 2(3):47–53, 1946 | The filter that manufactures relations (Chapters 6 and 9) |
+| **[to check]** Charig, C. R. et al. *BMJ* 292(6524):879–882, 1986 | The kidney-stone table (Chapters 6 and 9) |
+| **[to check]** Cox, R. T. *American Journal of Physics* 14(1):1–13, 1946 | Why belief obeys probability (Chapter 3) |
+| **[to check]** Jaynes, E. T. *Physical Review* 106(4):620–630, 1957 | Maximum entropy (Chapter 3) |
+| **[to check]** Halpern, J. Y. *Journal of Artificial Intelligence Research* 10:67–85, 1999 | The counterexample to Cox (Chapter 21) |
+| **[to check]** Gilovich, T.; Vallone, R.; Tversky, A. *Cognitive Psychology* 17(3):295–314, 1985 | The hot hand (Chapter 7) |
+| **[to check]** Miller, J. B.; Sanjurjo, A. *Econometrica* 86(6):2019–2047, 2018 | The biased test of the hot hand (Chapter 7) |
+| **[to check]** Simmons, J. P.; Nelson, L. D.; Simonsohn, U. *Psychological Science* 22(11):1359–1366, 2011 | The garden of forking paths (Chapter 7) |
+| **[to check]** Ioannidis, J. P. A. *PLoS Medicine* 2(8):e124, 2005 | The predictive value of a finding (Chapter 7) |
+| **[to check]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
+| **[to check]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
+| **[to check]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
+| **[to check]** Platt, J. C. "Probabilistic outputs for support vector machines", in *Advances in Large Margin Classifiers*, MIT Press, 1999 | Platt recalibration (Chapters 8 and 20) |
+| **[to check]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
+| **[to check]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975 | The tail estimator (Chapters 10, 12 and 18) |
+| **[to check]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
+| **[to check]** Good, I. J. *British Journal for the Philosophy of Science* 17(4):319–321, 1967 | Free information never hurts (Chapter 11) |
+| **[to check]** Lucas, R. E. *Carnegie-Rochester Conference Series on Public Policy* 1:19–46, 1976 | The critique of policy evaluation (Chapters 9 and 11) |
+| **[to check]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
+| **[to check]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
+| **[to check]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS* 2017 (arXiv:1609.05807, 2016) | Calibration within groups (Chapter 11) |
+| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | Fluxonomy under its usual name (Chapter 12) |
+
+### D.6 How to use this list
 
 Read in the order that curiosity asks for, and distrust whoever presents any of these works as a
 final answer. Three practical pieces of advice. First, read the data before the method, because almost every error of
@@ -5805,6 +5870,54 @@ wrong in an instrument and one statement wrong in the text.
 | 15 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
 | C | Test count | 413 | 415 | the bounds of the garden of paths and the declared limit of the Merkle root |
 | 8 | Brier of the overconfident forecaster | — | declared, not changed | the instrument's own seed spread (seeds 2022 to 2027) is 0.1706 to 0.1914; the printed 0.1712 is the low end, and the reimplementation compares within that spread |
+
+### Rectifications of a critical reading, 2026-10-19
+
+A critical reading of the assembled book, made with an AI assistant, compared each chapter with its own output blocks,
+with the rest of the book and with what the reader can run. Like the readings above it is outside the authors' audit
+and is not the independent audit that Chapter 21 asks for. No instrument changed; every change is in the text.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 2, 5 | Table of the two worlds in Step 1 | 9.3 and 20.7 min; 8 and 25 in every 100 above 30 min | 9.1 and 19.6 min; 8 and 24 | the table kept the figures of the retired generator while the block of Chapter 5 prints the instrument's (Chapter 5 section below) |
+| 12 | Exercise 6 | "why was Erlang C typed as knightian and not as epistemic?" | asks why it is epistemic and not Knightian, and what would move it | the node was retyped on 2026-10-18 and the exercise was not |
+| 17 | The worst entry month | "had a mean return equal to that of the market and did not survive to see it" | the order of the returns, not their mean, ruined the cohort | the sentence named no quantity |
+| 18 | Mutual information of the clean window | 0.51 bit, "practically nothing" | about half of the one bit that two equally likely hypotheses allow | 0.51 of a ceiling of 1 is not nothing; the likelihood ratio, 2.2 bits, carries the lesson |
+| 17, 18, 19, 20 | Thousands separator in running prose | 31.919 sessions, 1.488 cases, 11.598 students and others, 37 places | 31,919, 1,488, 11,598 | a decimal point where a thousands separator was due, as in the row of 1978 above |
+| 19 | Verdict of the causal gate | table and summary said "Passed" | the table and the summary add that under the first declared version of each choice the gate does not pass | the end of Step 2 said it; the headline did not |
+| 20 | Calibration criterion of Rhode Island | relative tolerance stated without comment | declared as a change of ruler after two failures, counted as an attempt; it tightens, since 0.03 exceeds the rate | a change of criterion is an attempt whatever its direction |
+| 21 | Lessons 5 and 7 | invariance and pre-registration as successes | two of the areas recovered known causes; declaring makes the path visible, not innocent | the lessons carried less than Chapter 19 concedes |
+| 21 | Negative loss below the threshold of prediction 3 | "after costing less than nothing" | the two arms do not spend the same resource: 13 agents every day against the per-day Erlang scale | the column compares two plans, not the equal-resource toll of Chapter 5 |
+| Preface | What the reader cannot run; status of the bridge thesis | the rule "every number comes from an instrument" without its exceptions | the exceptions listed, and the thesis named a working hypothesis | the rule did not hold for the real cases of Chapters 17 to 20 |
+| D | References cited and absent from the list | 26 works cited by author and year | listed in D.5, marked [to check] | the check of 50 of 50 covered the list, not the text |
+
+### Numbers cited without an instrument in this book
+
+The preface promises that every number comes from an instrument the reader can run or from a cited source. These do
+not come from an instrument beside the book; most come from worked examples of the paper and of the obsolete course,
+others from the research records. Three were recomputed by the critical reading of 2026-10-19 from the text alone.
+
+| Chapter | Number | Where it comes from | Status |
+| --- | --- | --- | --- |
+| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | no recipe in the text |
+| 3 | 229 tosses to separate a 0.6 coin with odds of 100 to 1 | Kullback-Leibler | recomputed: 228.7 |
+| 3 | Maximum entropy with mean 4.5: about 5% on face 1 and 35% on face 6 | Jaynes | recomputed: 5.4% and 34.7% |
+| 3 | 0.85% of null paths reach 20 decibans | course simulation in the paper | no recipe in the text |
+| 7 | Brier 0.083 and 0.009, 0.28 and 0.084 of the base-rate heuristic | course example in the paper | no recipe in the text |
+| 10 | Mean of N trajectories follows the expectation for about 12 rounds (N = 10) and 112 (a million) | course example | no recipe; ln N over the gap of the two growth rates gives 23 and 136, so the rule the text uses needs to be stated |
+| 10 | Full Kelly negative in 16% of estimates from 25 rounds | course example | no recipe in the text |
+| 10 | Three players who pool grow 1.6% per round | course example | no recipe in the text |
+| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | no recipe in the text |
+| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | no recipe in the text |
+| 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | no recipe in the text |
+| 12 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
+| 13 | Five of 33 domains change with the literature prior | research record | not reproduced here |
+| 14 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
+| 17 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
+| 18 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
+| 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
+| 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
+| 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
 
 ### Chapter 4
 
