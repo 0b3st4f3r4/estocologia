@@ -29,9 +29,6 @@ fn main() {
     let mut genetics_flag = false;
     let mut streams_flag = false;
     let mut eprocess_flag = false;
-    let mut wave_flag = false;
-    let mut wave2_flag = false;
-    let mut resonance_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -92,9 +89,6 @@ fn main() {
             "--genetics" => genetics_flag = true,
             "--streams" => streams_flag = true,
             "--eprocess" => eprocess_flag = true,
-            "--wave" => wave_flag = true,
-            "--wave2" => wave2_flag = true,
-            "--resonance" => resonance_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -115,7 +109,7 @@ fn main() {
     }
     if help {
         println!(
-            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --wave | --wave2 | --resonance"
+            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams"
         );
         println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
@@ -156,18 +150,6 @@ fn main() {
     }
     if streams_flag {
         stochology_book::streams::run();
-        return;
-    }
-    if resonance_flag {
-        stochology_book::resonance::run();
-        return;
-    }
-    if wave2_flag {
-        stochology_book::wave2::run();
-        return;
-    }
-    if wave_flag {
-        stochology_book::wave::run();
         return;
     }
     if eprocess_flag {

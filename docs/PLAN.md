@@ -153,7 +153,8 @@ their own tests, the last of them is the wave engine (`stochology-wave`, binary 
 remains as a module inside `core`. The consolidation of 2026-10-17 folded the sixteen crates of the first
 pass into nine without dropping a test: `-audit` and `-schema` became modules of `-core`, `-icp`,
 `-drift`, and `-fairness` became modules of `-methods`, and `-h0` to `-h3` became modules of
-`-horizons` (`docs/declarations/CRATE_CONSOLIDATION.md`).
+`-horizons` (`docs/declarations/CRATE_CONSOLIDATION.md`). On 2026-10-19 the wave engine left the tree after its sealed
+tests on data did not support its claims, and eight crates remain (`docs/declarations/REMOVED_WAVE.md`).
 
 | Crate | Status | Contents |
 |---|---|---|
@@ -167,25 +168,18 @@ pass into nine without dropping a test: `-audit` and `-schema` became modules of
 | `crates/stochology-horizons` | live | the four horizons as modules: `h0` (Erlang B and C, minimum staffing, Poisson null, mandatory summary), `h1` (leverage drag, selection bias, Hill tail estimator), `h2` (causal invariance rounds, counter $K$ and Bonferroni, permutation null, fine-grained genetics resolution), and `h3` (strict clock with canary, ECE, Brier skill score, performative loop) |
 | `crates/stochology-methods` | live | the three field methods as modules: `icp` (invariant causal prediction: environments, ordinary least squares, Kolmogorov-Smirnov, surviving intersection), `drift` (two-sided CUSUM with measured stationary null and Kullback-Leibler divergence), and `fairness` (demographic parity, equal opportunity, subgroup calibration) |
 | `crates/stochology-wasm` | live | WebAssembly playground: minimal C ABI bridge |
-| `crates/stochology-wave` | live | wave engine (binary `wave`): local phasor superposition, magnetic Laplacian with Cayley propagator, Kuramoto-Oja plasticity, and spike bus with STDP, with six dedicated gates; since 2026-10-19 also `channel` (the STDP rule over N channels on the data's clock) and `cycle` (phase as the hour of a profile's peak), tested on data by `labs --wave` (point 23): the arrow not supported, the conflict not testable under its encoding; and by `labs --wave2` (declaration 2, K = 2): the arrow still not supported, the conflict refuted in the opposite direction; and the reverse claim drawn from that (point 24, `labs --resonance`), on three fresh vaults: not supported |
+| `crates/stochology-wave` | removed on 2026-10-19 | the wave engine (phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, STDP spike bus); its sealed tests on data (points 23 and 24) did not support its claims; recovery in `docs/declarations/REMOVED_WAVE.md` |
 
-**Disambiguation of gates `G1`–`G7` (`gates`) and `G1`–`G6` (`wave`).** The two binaries use the `G` prefix in
-distinct scopes:
-- In `gates` (`stochology-gates`), **G1 to G7** enforce card governance per horizon: G1 determinism
-  (identical Merkle root across two passes), G2 fixed seed, G3 declared scope, G4 invariants $\Phi_1$–$\Phi_5$
-  and Type III error prevention, G5 SHA-256 trail integrity, G6 safeguard panel $A_1$–$A_8$ (every check declared and anchored), and G7
-  exit clause.
-- In `wave` (`stochology-wave`), **G1 to G6** enforce the physics of the wave engine: G1 Hermiticity of the
-  magnetic Laplacian $L^{(q)}$, G2 unitarity of the Cayley propagator, G3 seal chain over the phasor state, G4
-  determinism of phase evolution, G5 target resonance gain under Kuramoto-Oja plasticity, and G6 causal arrow
-  of the spike bus under STDP.
+**The gates `G1`–`G7` (`gates`)** enforce card governance per horizon: G1 determinism (identical Merkle root across
+two passes), G2 fixed seed, G3 declared scope, G4 invariants $\Phi_1$–$\Phi_5$ and Type III error prevention, G5 SHA-256
+trail integrity, G6 safeguard panel $A_1$–$A_8$ (every check declared and anchored), and G7 exit clause. (Until
+2026-10-19 the wave engine had its own G1 to G6; it left the tree with them.)
 
 Verification of the deterministic gates on a clean machine:
 
 ```bash
 cargo test --workspace
 cargo run --release --bin gates -- --horizon all --reproduction
-cargo run --release --bin wave -- --check
 ```
 
 Actual output measured in this repository (12 cards, 4 horizons):
@@ -527,7 +521,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 496 lines, 89 607 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 493 lines, 89 505 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
@@ -661,7 +655,7 @@ cd h1 && python3 portoes.py --reproduction
 ```
 
 State measured in this session (2026-10-17): `cargo test --workspace` passes with **373 tests across the
-nine crates**, zero failures; all **twenty-four instruments** of `labs` exit with code 0;
+nine crates**, zero failures; all **twenty-one instruments** of `labs` exit with code 0 (counted on 2026-10-19, eight crates and 395 tests after the wave engine left);
 `--horizon all --reproduction` returns "7 gates ok" with an identical second pass and Merkle root
 `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`; and the negative proof
 `--horizon h3 --defect h3.voos23` exits with 1, failing at G6.

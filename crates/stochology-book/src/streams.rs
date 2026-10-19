@@ -47,7 +47,7 @@ fn split_csv(line: &str) -> Vec<String> {
 }
 
 /// Reads a CSV into a header index and rows of fields.
-pub(crate) fn read_csv(path: &str) -> (HashMap<String, usize>, Vec<Vec<String>>) {
+fn read_csv(path: &str) -> (HashMap<String, usize>, Vec<Vec<String>>) {
     let text = std::fs::read_to_string(path).unwrap_or_else(|_| panic!("could not read {path}"));
     let mut lines = text.lines();
     let header: HashMap<String, usize> = split_csv(lines.next().unwrap_or_default())
@@ -59,7 +59,7 @@ pub(crate) fn read_csv(path: &str) -> (HashMap<String, usize>, Vec<Vec<String>>)
     (header, rows)
 }
 
-pub(crate) fn num(s: &str) -> Option<f64> {
+fn num(s: &str) -> Option<f64> {
     if s.is_empty() || s == "NA" {
         None
     } else {
@@ -79,11 +79,11 @@ pub fn days_from_civil(y: i64, m: i64, d: i64) -> i64 {
 }
 
 /// Day of the week, 0 = Monday.
-pub(crate) fn weekday(days: i64) -> usize {
+fn weekday(days: i64) -> usize {
     (days + 3).rem_euclid(7) as usize
 }
 
-pub(crate) fn parse_date(s: &str) -> i64 {
+fn parse_date(s: &str) -> i64 {
     let y: i64 = s[0..4].parse().unwrap_or(1970);
     let m: i64 = s[5..7].parse().unwrap_or(1);
     let d: i64 = s[8..10].parse().unwrap_or(1);
@@ -92,11 +92,11 @@ pub(crate) fn parse_date(s: &str) -> i64 {
 
 // ---------------------------------------------------------------- the binary toolbox
 
-pub(crate) fn sigmoid(z: f64) -> f64 {
+fn sigmoid(z: f64) -> f64 {
     1.0 / (1.0 + (-z).exp())
 }
 
-pub(crate) fn logit(p: f64) -> f64 {
+fn logit(p: f64) -> f64 {
     let p = p.clamp(1e-9, 1.0 - 1e-9);
     (p / (1.0 - p)).ln()
 }
@@ -174,7 +174,7 @@ fn solve(mut a: Vec<Vec<f64>>) -> Vec<f64> {
     (0..p).map(|j| a[j][p]).collect()
 }
 
-pub(crate) fn predict(b: &[f64], row: &[f64]) -> f64 {
+fn predict(b: &[f64], row: &[f64]) -> f64 {
     sigmoid(row.iter().zip(b).map(|(v, c)| v * c).sum())
 }
 
@@ -319,19 +319,18 @@ impl Binary {
 
 /// One flight, with the instants of the clock in minutes since 1970.
 #[derive(Debug, Clone)]
-pub(crate) struct Flight {
-    pub(crate) emission: i64,
+struct Flight {
+    emission: i64,
     known: i64,
-    pub(crate) day: i64,
-    pub(crate) carrier: String,
-    pub(crate) origin: String,
-    pub(crate) dest: String,
-    pub(crate) dep_hour: i64,
+    day: i64,
+    carrier: String,
+    origin: String,
+    dep_hour: i64,
     distance: f64,
-    pub(crate) y: f64,
+    y: f64,
 }
 
-pub(crate) fn load_flights(path: &str, year: i64) -> Vec<Flight> {
+fn load_flights(path: &str, year: i64) -> Vec<Flight> {
     let (h, rows) = read_csv(path);
     let col = |r: &Vec<String>, name: &str| r[h[name]].clone();
     let mut out = Vec::new();
@@ -356,7 +355,6 @@ pub(crate) fn load_flights(path: &str, year: i64) -> Vec<Flight> {
             day,
             carrier: col(r, "carrier"),
             origin: col(r, "origin"),
-            dest: col(r, "dest"),
             dep_hour: dep / 100,
             distance: num(&col(r, "distance")).unwrap_or(1.0),
             y: if delay > 15.0 { 1.0 } else { 0.0 },

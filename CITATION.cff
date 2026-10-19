@@ -16,7 +16,7 @@ license:
   - MIT
 abstract: >-
   A working text and an apparatus in Rust on judgement and decision under uncertainty: 21 chapters with
-  fixed-seed laboratories, instruments over thirteen public datasets, seven gates able to fail a claim, and a
+  fixed-seed laboratories, instruments over ten public datasets, seven gates able to fail a claim, and a
   public record of the errors found in the text and the code, with both values.
 keywords:
   - decision under uncertainty

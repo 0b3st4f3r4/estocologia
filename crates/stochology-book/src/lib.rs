@@ -32,11 +32,8 @@ pub mod escuta;
 pub mod fila;
 pub mod genetica;
 pub mod ponte;
-pub mod resonance;
 pub mod segunda;
 pub mod streams;
-pub mod wave;
-pub mod wave2;
 
 /// The Jev-LLM bridge lives in the System 2 crate; here stays only the bridge to the laboratory.
 pub use stochology_s2::bridge as jev;

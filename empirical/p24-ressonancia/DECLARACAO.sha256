@@ -1,5 +1,5 @@
 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19  empirical/p24-ressonancia/DECLARACAO.md
-c901e63314324b75c6d7ebdfb000327583bb1a4bea8bc5bcbf733020aaa3e97a  crates/stochology-book/src/resonance.rs
+# c901e63314324b75c6d7ebdfb000327583bb1a4bea8bc5bcbf733020aaa3e97a  crates/stochology-book/src/resonance.rs (out of the tree since 2026-10-19 with the wave crate; docs/declarations/REMOVED_WAVE.md; recover with git show 72169954:crates/stochology-book/src/resonance.rs)
 7b119575c938e2b8c226da75a4508a9882e7f973bb08794df64efb2c7d94ebd7  data/nyc_flights_2013_h1.csv
 950bc37d305a3059a6379b62e6433ecbcb5ba0444d0e5b7355739ec9da396815  data/nyc_flights_2023_h1.csv
 42770fa6ad078e3735654a5697ee566e07afb3f855f1aa277e02328924cccf2f  data/houston_flights_2011.csv

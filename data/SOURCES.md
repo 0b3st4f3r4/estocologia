@@ -44,7 +44,9 @@ of 2013 and of 2023 come from the same sources as the files above (Rdatasets `ny
 `1dcc2bf5`, CRAN `nycflights23` at commit `48bca311`), rows that were cut out when those files were written and never
 entered the tree. Houston comes from the CRAN mirror of `hflights` (github.com/cran/hflights, commit
 `3f5a566f8b294da40e0abac2cfab4f7926eeb89d`, version 0.1, licence CC0), read by the same XDR reader kept outside the
-tree. The conversion wrote rows and computed no statistic of the outcome.
+tree. The conversion wrote rows and computed no statistic of the outcome. Since the wave engine left the tree later the
+same day (`docs/declarations/REMOVED_WAVE.md`), no instrument reads these three files; they stay as the sealed data of
+point 24.
 
 | File | Source | What it is | Transformation |
 |---|---|---|---|

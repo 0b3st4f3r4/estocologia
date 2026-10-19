@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 442 tests passed, none failed
+cargo test --workspace                                  # 395 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -120,9 +120,9 @@ Python).
 
 In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 are second-or-later declarations (corrections
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
-**9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
+**8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 496 lines**, **89 607 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 493 lines**, **89 505 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 496 lines and 89 607 words, and its 33 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 493 lines and 89 505 words, and its 33 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -467,3 +467,17 @@ and two required. The dated record is `history/estado-2026-10-19T1840Z.md`.
 | `cargo test --workspace` | 440 | **442** |
 | seals | 31 | 32 |
 | assembled book, line count | 6 495 (with 89 580 words) | 6 496 (with 89 607 words) |
+
+## The wave engine removed (2026-10-19, later the same day)
+
+By the owner's decision, the wave engine left the tree with its three instruments after its sealed tests on data
+(points 23 and 24) did not support its claims. The records, the outputs and the sealed data stay; the removed sources
+stay in the seals as lines declared out of the tree, and `docs/declarations/REMOVED_WAVE.md` gives the recovery
+commit. The dated record is `history/estado-2026-10-19T1859Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| crates | 9 | 8 |
+| instruments in `labs` | 24 | 21 |
+| `cargo test --workspace` | 442 | **395** |
+| assembled book, line count | 6 496 (with 89 607 words) | 6 493 (with 89 505 words) |
