@@ -45,6 +45,7 @@ def main() -> int:
         ("labs --eprocess", run_output([str(BIN), "--eprocess"])),
         ("labs --wave", run_output([str(BIN), "--wave"])),
         ("labs --wave2", run_output([str(BIN), "--wave2"])),
+        ("labs --resonance", run_output([str(BIN), "--resonance"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
         ("labs --h3", run_output([str(BIN), "--h3"])),
         ("labs --bridge", run_output([str(BIN), "--bridge"])),
