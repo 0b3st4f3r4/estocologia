@@ -14,6 +14,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --genetics` | Interventional validation resolution: what the second cell line changes |
 | `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
+| `labs --wave` | The wave engine against data: the STDP arrow in Victoria and the phasor conflict in the New York flights |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -256,6 +257,76 @@ One ledger per area over the 38 recorded tests, the mean of the e-values, two re
   Trabalho             2      0         0.5000  does not
   Transporte           2      1         2.9927  does not
   areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
+~~~
+
+### The wave engine against data
+
+Synthetic controls, then T1 (the STDP arrow temperature -> demand over the weeks of Victoria) and T2 (the phasor conflict, phase as the hour of peak risk, in the New York flights of 2013 and 2023), with the verdicts by the rules sealed in empirical/p23-onda/DECLARACAO.md before the first run.
+
+~~~bash
+./target/release/labs --wave
+~~~
+
+~~~text
+== The wave engine against data (empirical/p23-onda/DECLARACAO.md) ==
+controls on synthetic data, seed 2026:
+
+-- T1 control, planted arrow: 156 weeks --
+  engine                             temperature -> demand 141 | demand -> temperature  15 | none   0 | rate 0.904
+  engine, null pairing (+13 weeks)   temperature -> demand  57 | demand -> temperature  85 | none  14 | rate 0.365
+  rival (lagged cross-correlation)   temperature -> demand 155 | demand -> temperature   1 | none   0 | rate 0.994
+  rival, null pairing                temperature -> demand  74 | demand -> temperature  82 | none   0 | rate 0.474
+  engine, margin 0.05 (secondary)    temperature -> demand 128 | demand -> temperature   7 | none  21 | rate 0.821
+  binomial P(X >= 141 | n = 156) = 3.681e-27 | median learnt lag 0.17 h
+  P1 true | P2 true | P3 true | works: true | adds over the rival: false
+
+-- T1 control, independent: 156 weeks --
+  engine                             temperature -> demand  80 | demand -> temperature  64 | none  12 | rate 0.513
+  engine, null pairing (+13 weeks)   temperature -> demand  69 | demand -> temperature  76 | none  11 | rate 0.442
+  rival (lagged cross-correlation)   temperature -> demand  70 | demand -> temperature  86 | none   0 | rate 0.449
+  rival, null pairing                temperature -> demand  76 | demand -> temperature  80 | none   0 | rate 0.487
+  engine, margin 0.05 (secondary)    temperature -> demand  51 | demand -> temperature  42 | none  63 | rate 0.327
+  binomial P(X >= 80 | n = 144) = 1.056e-1 | median learnt lag 0.09 h
+  P1 false | P2 false | P3 true | works: false | adds over the rival: false
+
+-- T2 control, planted interaction --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 19804 beating 27088 conflict 13108
+  Brier System 1 (additive) 0.15893 | System 2 (cells) 0.15760
+  gain of System 2: conflict +0.00193 | resonance +0.00109 | delta +0.00083, 95% CI by day [+0.00003; +0.00166]
+  rival delta (level agreement, no phase) +0.00099 | testable: true
+
+-- T2 control, no interaction --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 21198 beating 25391 conflict 13411
+  Brier System 1 (additive) 0.15502 | System 2 (cells) 0.15498
+  gain of System 2: conflict -0.00013 | resonance +0.00039 | delta -0.00052, 95% CI by day [-0.00107; +0.00004]
+  rival delta (level agreement, no phase) -0.00154 | testable: true
+
+real data:
+
+-- T1 Victoria 2012-2014, temperature -> demand: 155 weeks --
+  engine                             temperature -> demand  53 | demand -> temperature  39 | none  63 | rate 0.342
+  engine, null pairing (+13 weeks)   temperature -> demand  26 | demand -> temperature  36 | none  93 | rate 0.168
+  rival (lagged cross-correlation)   temperature -> demand  92 | demand -> temperature  63 | none   0 | rate 0.594
+  rival, null pairing                temperature -> demand  85 | demand -> temperature  70 | none   0 | rate 0.548
+  engine, margin 0.05 (secondary)    temperature -> demand  31 | demand -> temperature  23 | none 101 | rate 0.200
+  binomial P(X >= 53 | n = 92) = 8.749e-2 | median learnt lag 0.03 h
+  P1 false | P2 false | P3 false | works: false | adds over the rival: false
+
+-- T2 New York 2013, vault October to December --
+  training 54835 | vault flights with three eligible sources 77184 | quiescent 0 resonance 77184 beating 0 conflict 0
+  Brier System 1 (additive) 0.16645 | System 2 (cells) 0.16597
+  gain of System 2: conflict NaN | resonance +0.00048 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+-- T2 New York 2023, vault October to December --
+  training 68257 | vault flights with three eligible sources 98509 | quiescent 0 resonance 98146 beating 363 conflict 0
+  Brier System 1 (additive) 0.11771 | System 2 (cells) 0.11737
+  gain of System 2: conflict NaN | resonance +0.00038 | delta NaN, 95% CI by day [NaN; NaN]
+  rival delta (level agreement, no phase) NaN | testable: false
+
+== verdicts, by the rules sealed before the run ==
+T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
+T2 the conflict: NOT TESTABLE under this encoding | adds over level agreement: no
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1309,7 +1380,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 103 tests
+running 108 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1413,8 +1484,13 @@ test streams::tests::logistic_recovers_a_known_coefficient ... ok
 test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
+test wave::tests::a_planted_interaction_in_conflict_raises_the_gain_of_system_2_there ... ok
+test wave::tests::events_open_once_per_excursion_with_the_time_of_day_as_phase ... ok
+test wave::tests::the_anomaly_removes_a_shared_daily_cycle ... ok
+test wave::tests::the_binomial_tail_is_exact_at_small_n ... ok
+test wave::tests::the_planted_arrow_is_found_and_the_independent_one_is_not ... ok
 
-test result: ok. 103 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 108 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1748,11 +1824,17 @@ test tests::the_bridge_delivers_the_same_numbers_as_the_pure_function ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 28 tests
+running 34 tests
+test channel::tests::a_planted_lead_gives_a_positive_arrow_and_its_mirror_a_negative_one ... ok
+test channel::tests::events_beyond_the_horizon_leave_the_bus_untouched ... ok
+test channel::tests::five_channels_in_lens_order_reproduce_the_lens_bus ... ok
 test complex::tests::antiphase_sums_to_zero ... ok
 test complex::tests::division_undoes ... ok
 test complex::tests::polar_and_phase_agree ... ok
 test complex::tests::product_with_conjugate_is_modulus_squared ... ok
+test cycle::tests::a_cosine_peaking_at_eighteen_hours_is_recovered ... ok
+test cycle::tests::a_flat_profile_has_no_amplitude ... ok
+test cycle::tests::profiles_half_a_day_apart_cancel_in_the_superposition ... ok
 test magnetic::tests::antiphase_at_the_target_cancels_the_arrival ... ok
 test magnetic::tests::cayley_preserves_the_norm ... ok
 test magnetic::tests::chain_detects_tampering ... ok
@@ -1778,7 +1860,7 @@ test spike::tests::recognizes_cascade_at_any_instant ... ok
 test spike::tests::stdp_creates_causal_asymmetry ... ok
 test spike::tests::wrong_intervals_do_not_match ... ok
 
-test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1855,7 +1937,8 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
 | p22-parada | DECLARACAO_2.md | db71d78b1c669833b39db53056b2cdfeee4ae671dffcdcf04ee35fe0aa07c288 |
+| p23-onda | DECLARACAO.md | 0dff3c93f89a33a2ea2ac765416572b1a2efcfc459d1dac983eb4cbdf0622615 |
 
-Point declarations: 24, of which 6 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 21 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 25, of which 6 are declaration 2 or later (declared rectification with both values) | empirical points: 19 | `labs` instruments: 22 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams,--wave; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6493 lines** and **89505 words**, sha256 `b9d7b35f2473dcce19d11e6494091dac1bff8f94a19a81079d135f80c91bd526`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6494 lines** and **89541 words**, sha256 `062a898c727a4b2a718d557d360a965f10a88436fc99e7595e8c4696f41fbf19`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
