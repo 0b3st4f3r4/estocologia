@@ -9,6 +9,26 @@ pub fn splitmix64_step(state: &mut u64) -> u64 {
     z ^ (z >> 31)
 }
 
+/// The seed offset of an audit run: the value of `STOCHOLOGY_SEED_OFFSET`, or 0 when it is unset or unreadable.
+///
+/// Every generator of the laboratories adds it to its declared seed when it is built ([`offset_seed`]), so that
+/// `labs --seed-spread` can rerun an instrument under other seeds without touching its code. Outside such a run the
+/// variable is unset, the offset is 0 and every published number is the one its declared seed gives.
+pub fn seed_offset() -> u64 {
+    static OFFSET: std::sync::OnceLock<u64> = std::sync::OnceLock::new();
+    *OFFSET.get_or_init(|| {
+        std::env::var("STOCHOLOGY_SEED_OFFSET")
+            .ok()
+            .and_then(|v| v.trim().parse().ok())
+            .unwrap_or(0)
+    })
+}
+
+/// A declared seed moved by the audit offset (unchanged when no audit runs).
+pub fn offset_seed(seed: u64) -> u64 {
+    seed.wrapping_add(seed_offset())
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Rng {
     state: u64,
@@ -16,7 +36,9 @@ pub struct Rng {
 
 impl Rng {
     pub fn new(seed: u64) -> Self {
-        Rng { state: seed }
+        Rng {
+            state: offset_seed(seed),
+        }
     }
 
     pub fn next_u64(&mut self) -> u64 {

@@ -22,7 +22,7 @@ struct Sm64 {
 impl Sm64 {
     fn new(seed: u64) -> Self {
         Sm64 {
-            state: seed ^ 0x9E37_79B9_7F4A_7C15,
+            state: stochology_core::rng::offset_seed(seed) ^ 0x9E37_79B9_7F4A_7C15,
         }
     }
     fn next(&mut self) -> u64 {

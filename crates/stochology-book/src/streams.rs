@@ -256,7 +256,7 @@ pub fn ece_null_draws(p: &[f64], simulations: usize, seed: u64) -> Vec<f64> {
             start = end;
         }
     }
-    let mut state = seed;
+    let mut state = stochology_core::rng::offset_seed(seed);
     let mut uniform = || {
         let v = stochology_core::rng::splitmix64_step(&mut state);
         (v >> 11) as f64 / (1u64 << 53) as f64

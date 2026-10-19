@@ -18,7 +18,9 @@ struct Sm64 {
 
 impl Sm64 {
     fn new(seed: u64) -> Self {
-        Sm64 { state: seed }
+        Sm64 {
+            state: stochology_core::rng::offset_seed(seed),
+        }
     }
     fn next_u64(&mut self) -> u64 {
         stochology_core::rng::splitmix64_step(&mut self.state)

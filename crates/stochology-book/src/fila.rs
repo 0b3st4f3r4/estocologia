@@ -263,7 +263,7 @@ fn exponential(rng: &mut banco::Rng, mean: f64) -> f64 {
 
 /// Seed of a day and a replica, by the SplitMix64 finalisation.
 fn day_seed(base: u64, day: usize, replica: usize) -> u64 {
-    let mut z = (base
+    let mut z = (stochology_core::rng::offset_seed(base)
         ^ (day as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
         ^ (replica as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F))
     .wrapping_sub(0x9E37_79B9_7F4A_7C15);

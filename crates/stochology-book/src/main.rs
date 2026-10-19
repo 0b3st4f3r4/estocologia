@@ -35,6 +35,7 @@ fn main() {
     let mut multiverse_flag = false;
     let mut stacking_flag = false;
     let mut discrepancy_flag = false;
+    let mut seed_spread_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -101,6 +102,7 @@ fn main() {
             "--multiverse" => multiverse_flag = true,
             "--stacking" => stacking_flag = true,
             "--discrepancy" => discrepancy_flag = true,
+            "--seed-spread" => seed_spread_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -121,7 +123,7 @@ fn main() {
     }
     if help {
         println!(
-            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk | --multiverse | --stacking | --discrepancy"
+            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk | --multiverse | --stacking | --discrepancy | --seed-spread"
         );
         println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
@@ -162,6 +164,10 @@ fn main() {
     }
     if streams_flag {
         stochology_book::streams::run();
+        return;
+    }
+    if seed_spread_flag {
+        stochology_book::seed_spread::run();
         return;
     }
     if discrepancy_flag {
