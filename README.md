@@ -37,6 +37,15 @@ the text, the rebuild of the real streams in Rust, and the corrections those fou
 the author's own audit, but not outside the tools the author used, and no person outside the programme has checked
 them. They do not count as the independent audit the book asks for.
 
+**Licences.** Two, by kind of work, decided by the owner on 2026-10-19. The **text** is under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0, `LICENSE-TEXT`): the book (`book/`), the paper with its figures
+(`paper/`), the site's text (`site/home.md`) and the prose documents of the repository (the Markdown files outside
+`crates/` and `scripts/`). Anyone may copy, adapt, translate and reuse it, commercially or not, crediting
+"Silvano Neto, *Stochology*, github.com/0b3st4f3r4/estocologia", linking the licence and saying what was changed.
+The **code** (`crates/`, `scripts/`, `site/index.html`, `site/build.sh`) is under the MIT licence (`LICENSE`). The
+**datasets** in `data/` keep the licences of their sources, declared one by one in `data/SOURCES.md`; neither
+licence above covers them.
+
 ---
 
 The research concluded on 2026-10-15 and the apparatus is **Rust** (Edition 2024): **nine crates**, **427 tests**,

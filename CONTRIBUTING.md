@@ -29,6 +29,12 @@ open, so say which choices you had to make.
 - The project keeps history, not versions: no tags, no "v2" files. A change of state is a dated record in `history/`.
 - Rust 1.97.1 is pinned in `rust-toolchain.toml`; Python tooling is standard library only (Python 3.13).
 
+## Licence of what you contribute
+
+What goes in comes out under the same terms: a contribution to the text (the book, the paper, the documents) is
+offered under CC BY 4.0 (`LICENSE-TEXT`), and a contribution to the code under MIT (`LICENSE`). A dataset enters
+only with its licence declared in `data/SOURCES.md`.
+
 ## What outside participation is waiting for
 
 Four items depend on people who are not the authors, and no code closes them (`docs/DECLARED_PROPOSALS.md`): the

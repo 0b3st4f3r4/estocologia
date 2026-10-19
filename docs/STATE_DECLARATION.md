@@ -418,3 +418,9 @@ owner and for people outside the programme, and the record lists it.
 | cited blocks | 32 | 33 |
 | declared proposals open | eight | seven (item 15 closed) |
 | assembled book, line count | 6 371 (with 87 807 words) | 6 493 (with 89 505 words) |
+
+## The licence of the text (2026-10-19, later the same day)
+
+By the owner's decision, the text (the book, the paper, the site and the prose documents) is under CC BY 4.0
+(`LICENSE-TEXT`); the code stays under MIT and the datasets under the licences of their sources. No number and no
+instrument changed. The dated record is `history/estado-2026-10-19T1655Z.md`.
