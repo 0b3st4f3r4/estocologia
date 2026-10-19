@@ -37,6 +37,7 @@ pub mod passk;
 pub mod ponte;
 pub mod propagate;
 pub mod segunda;
+pub mod stacking;
 pub mod streams;
 
 /// The Jev-LLM bridge lives in the System 2 crate; here stays only the bridge to the laboratory.

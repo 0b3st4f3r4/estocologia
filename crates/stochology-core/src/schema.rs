@@ -251,15 +251,16 @@ pub fn card_from_document(doc: &BTreeMap<String, String>) -> Result<Card, Schema
             value: format!("{m} ({e})"),
         })?;
     }
-    if let Some(b) = &uncertainty_budget {
-        if crate::budget::names_specification(b) && multiverse.is_none() {
-            return Err(SchemaError::InvalidValue {
-                field: "orcamento_de_incerteza".into(),
-                value: format!(
-                    "{b} (a share for the specification is measured by a multiverse, and none is declared)"
-                ),
-            });
-        }
+    if let Some(b) = &uncertainty_budget
+        && crate::budget::names_specification(b)
+        && multiverse.is_none()
+    {
+        return Err(SchemaError::InvalidValue {
+            field: "orcamento_de_incerteza".into(),
+            value: format!(
+                "{b} (a share for the specification is measured by a multiverse, and none is declared)"
+            ),
+        });
     }
     let reliability = doc.get("confiabilidade").cloned();
     if let Some(r) = &reliability {
