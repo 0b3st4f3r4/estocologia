@@ -136,6 +136,14 @@ RETIRED = [
     ("larger than that of any single stratum", "a standardised difference lies between the strata"),
     ("No published number fell", "the outside reading found errors"),
     ("does not converge", "the mean of a tail with index above 1 exists"),
+    # Third review of 2026-10-18 (Appendix E, second table): statements no instrument produces.
+    ("Vulcan, was postulated and never found", "Vulcan predicted transits; it failed, it was not empty"),
+    ("noise enters added", "Ito and Stratonovich coincide for additive noise"),
+    ("outside the interval from 1% to 99% nor", "Cromwell forbids 0 and 1; the 1%-99% floor is System 1's"),
+    ("Knightian (specification)", "listed, testable failures are epistemic"),
+    ("Illusion of the dark room", "the dark room is another problem"),
+    ("in which the term $-\\sigma^2/2$ does not appear", "the drag appears in both readings"),
+    ("An experiment is scientific only if", "a seed buys reproducibility, not validity"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")

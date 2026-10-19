@@ -20,7 +20,7 @@ python3 scripts/book/check_labs.py     # checks each chapter's output block agai
 python3 scripts/book/generate_results.py  # writes docs/RUST_RESULTS.md with the literal output of the instruments
 python3 scripts/book/generate_results.py --check   # checks whether the registry is up to date
 python3 scripts/book/build.py              # writes book/stochology-textbook.md when the 21 are ready
-cargo run --release --bin labs -- --all    # roda todos os laboratórios com semente fixa
+cargo run --release --bin labs -- --all    # runs every laboratory with a fixed seed
 cargo test --workspace                       # tests of the book crates and of the architecture
 ```
 

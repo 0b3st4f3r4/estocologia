@@ -28,6 +28,12 @@ quoted in the text, and skip the exercises marked as *Laboratory*.
 run, or from a cited source. Where a measured number differs from one recorded elsewhere, both values and the cause
 are kept in Appendix E, so that the chapters can teach without carrying the comparison.
 
+**What that rule does not promise.** A number that anyone can run is a number anyone can **check**, not a number
+that is **right**. The fixed seed reproduces a wrong account as faithfully as a right one, and the gates of the
+architecture check form, presence and reproducibility, not correctness. Appendix E lists the errors of formula and
+of code that passed every test and every gate of this book until an outside reading found them. Read each number as
+an invitation to check it, not as a certificate.
+
 ---
 
 ## The three-step ramp
