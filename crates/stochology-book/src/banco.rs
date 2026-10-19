@@ -201,15 +201,12 @@ pub fn measure(path: &str, seed: u64, replicas: usize) -> BankMeasure {
         let a: f64 = shuffled_levels[..half].iter().sum::<f64>() / half as f64;
         let b: f64 =
             shuffled_levels[half..].iter().sum::<f64>() / (shuffled_levels.len() - half) as f64;
-        halves.push((a - b).abs());
+        // The signed difference: its sd is what the call-unit margin below predicts. Until 2026-10-19
+        // this pushed |a - b|, whose sd is sqrt(1 - 2/pi) = 0.60 of the sd of a - b, so the day margin
+        // came out 40% too small (0.0441 against about 0.08); a reimplementation from the text found it.
+        halves.push(a - b);
     }
-    let halves_mean = halves.iter().sum::<f64>() / halves.len() as f64;
-    let day_null = (halves
-        .iter()
-        .map(|x| (x - halves_mean) * (x - halves_mean))
-        .sum::<f64>()
-        / (halves.len() as f64 - 1.0))
-        .sqrt();
+    let day_null = sd_of_differences(&halves);
     let n_calls: f64 = totals.iter().sum();
     // halves null on the call unit: two equal halves of independent calls
     let call_null = (2.0 * mean_level * (1.0 - mean_level) / (n_calls / 2.0)).sqrt();
@@ -245,6 +242,12 @@ pub fn measure(path: &str, seed: u64, replicas: usize) -> BankMeasure {
 /// Deterministic generator re-exported from the core, without duplication.
 pub use stochology_core::Rng;
 
+/// Sample standard deviation of the signed differences between two halves.
+pub fn sd_of_differences(diffs: &[f64]) -> f64 {
+    let m = diffs.iter().sum::<f64>() / diffs.len() as f64;
+    (diffs.iter().map(|x| (x - m) * (x - m)).sum::<f64>() / (diffs.len() as f64 - 1.0)).sqrt()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -273,5 +276,16 @@ mod tests {
         assert!(sl >= GOAL, "level {sl}");
         let sl_minus_one = service_level(c as f64 - 1.0, 300.0 * AHT_S / 3600.0, AHT_S, TARGET_S);
         assert!(sl_minus_one < GOAL, "level with one fewer: {sl_minus_one}");
+    }
+
+    #[test]
+    fn the_halves_null_is_the_sd_of_signed_differences() {
+        // Differences symmetric around zero: the sd of the signed values is 1 here, while the sd of
+        // their absolute values would be 0 (all equal to 1). The day margin must use the former.
+        let diffs = [1.0, -1.0, 1.0, -1.0, 1.0, -1.0];
+        let sd = sd_of_differences(&diffs);
+        assert!((sd - (6.0f64 / 5.0).sqrt()).abs() < 1e-12, "sd = {sd}");
+        let abs: Vec<f64> = diffs.iter().map(|d: &f64| d.abs()).collect();
+        assert!(sd_of_differences(&abs) < 1e-12);
     }
 }

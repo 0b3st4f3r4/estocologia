@@ -928,7 +928,7 @@ and counts the failures of the class. Run it with `cargo run --release --bin lab
 ```text
 == Chapter 5 :: when the mean lies ==
 W(5) = 3.57 min, W(8) = 10.00 min, W(11) = 55.00 min
-Jensen: f(E[X]) = 10.00 min | E[f(X)] = 29.29 (5 or 11) and 14.10 (uniform 5..11)
+Jensen: f(E[X]) = 10.00 min | E[f(X)] = 29.29 (5 or 11) and 14.46 (uniform 5..11)
 second order: half f''(8) Var(X) = 8.44 min (5 or 11) and 2.81 min (uniform)
                  8 every day:  319405 patients | mean   9.1 min | median   3.7 | p90  26.2 | >30 min:   7.6 per 100
                      5 or 11:  319115 patients | mean  19.6 min | median   8.6 | p90  56.1 | >30 min:  23.7 per 100
@@ -969,16 +969,16 @@ between them is the grain of the question.
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
-   above 30 min: aggregated 0.4232, fine 0.1782
-demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
-   above 30 min: aggregated 0.2266, fine 0.1946
-demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
-   above 30 min: aggregated 0.1969, fine 0.1969
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+   above 30 min: aggregated 0.4488, fine 0.2081
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 21.15 min, fine wait 18.38 min, loss 2.77 min
+   above 30 min: aggregated 0.2518, fine 0.2198
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 18.52 min, fine wait 18.52 min, loss 0.00 min
+   above 30 min: aggregated 0.2209, fine 0.2209
 ```
 
-With demand of 5 or 11, the coarse plan makes patients wait 38.94 minutes on average and the fine plan 15.95: the
-coarse question costs **22.99 minutes** per patient. With a light oscillation, from 7 to 9, it costs 2.50
+With demand of 5 or 11, the coarse plan makes patients wait 43.73 minutes on average and the fine plan 18.20: the
+coarse question costs **25.54 minutes** per patient. With a light oscillation, from 7 to 9, it costs 2.77
 minutes. Without oscillation it costs nothing, 0.00, because then the average day is every day. On the surge day
 the coarse plan offers a capacity of 10 to a demand of 11, and that queue has no long run at all. The loss of
 resolution is the Jensen toll seen from the side of the decision: it exists only when the world varies, and it
@@ -1624,12 +1624,12 @@ to 0.0243 with spread forecasts.
 of sample size. A light oscillation of demand, between 7 and 9, costs little to ignore:
 
 ```text
-demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
-   above 30 min: aggregated 0.2266, fine 0.1946
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 21.15 min, fine wait 18.38 min, loss 2.77 min
+   above 30 min: aggregated 0.2518, fine 0.2198
 ```
 
-The coarse plan loses 2.50 minutes per patient, and the share of patients waiting more than 30 minutes moves
-from 0.1946 to 0.2266, about three points. A difference of that size is of the order of the calibration noise of a
+The coarse plan loses 2.77 minutes per patient, and the share of patients waiting more than 30 minutes moves
+from 0.2198 to 0.2518, about three points. A difference of that size is of the order of the calibration noise of a
 small vault. Whether a coarse question can be caught costing something depends, like the calibration
 tolerance, on how many cases there are to see it.
 
@@ -2201,8 +2201,8 @@ limiting case that is worth seeing once. When the world does not oscillate, aski
 answer as asking the average day:
 
 ```text
-demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
-   above 30 min: aggregated 0.1969, fine 0.1969
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 18.52 min, fine wait 18.52 min, loss 0.00 min
+   above 30 min: aggregated 0.2209, fine 0.2209
 ```
 
 The loss of resolution is exactly zero. A finer question is worth its cost only when the world varies at the
@@ -2754,8 +2754,8 @@ Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
-Crisonomy: EVPI = 0.0000 | best act without information = 5.8000 | value with perfect information = 7.0000
-Crisonomy: without the option of acting (only betting half = 3.0000 or not betting), the best without information is 2.1000 and the EVPI rises to 3.7000
+Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
+Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
 Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
 Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
 Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
@@ -2784,11 +2784,13 @@ exponent estimated for the Danish fire losses) and the cutoff at $k = 500$, the 
 estimate, and not a constant of nature.
 
 **Crisonomy depends on which actions exist.** The perfect sensor says whether the year will be good or bad, with
-probability 0.70 of good. Profiting yields 10, losing costs 4. Whoever can *act or not act* already acts without the
-sensor, because the expected value of acting is 5.80, greater than zero, and so the sensor is worth **0.0000**, because
-it never changes the decision. Without the option of acting, leaving *bet half* (value 3.00) or *not bet*
-(0.00), the best without information falls to 2.1000 and the sensor comes to be worth **3.7000**. If the payoff is
-equal in both states, it is worth 0.0000 again. **The value of information is not a property of the datum: it is a
+probability 0.70 of good. Acting yields 10 in a good year and costs 4 in a bad one; not acting yields 0. Without the
+sensor the best is to act, with an expected value of 5.80. With the sensor one acts only in the good years and keeps
+out of the bad ones, which is worth 0.70 × 10 = 7.0000, so the sensor is worth **1.2000**: exactly what it saves in
+the bad years, 0.30 × 4. If only half the stake can be placed (+5 or −2), the best without information is 2.9000,
+with the sensor 3.5000, and the sensor is worth **0.6000**. If the payoff of acting is the same in both states, the sensor
+can never change the decision and is worth 0.0000. (Until 2026-10-19 this paragraph and its laboratory gave
+0.0000 for the first case, as if the sensor never changed the decision; it changes it in every bad year. Appendix E.) **The value of information is not a property of the datum: it is a
 property of the set of available actions.**
 
 **Morphonomy prefers the map to the number.** Three regimes, bases 100, 140 and 120, true effect 10 in all
@@ -2807,9 +2809,9 @@ number; the slope by regime is a structure.
    wait will be about 9 minutes". Which pathology edge links them, and in which sense does it point?
 2. *(Concept)* Which lenses must a credit-granting model published to clients trigger?
    Justify each one in one sentence.
-3. *(Count)* In the output above, the EVPI is 0.0000 with the option of acting and 3.7000 without it. Explain why the same
-   sensor is worth zero in one case and 3.70 in the other, and compute the EVPI for a third option whose best value
-   without information is 4.00.
+3. *(Count)* In the output above, the EVPI is 1.2000 with the full stake and 0.6000 with half of it. Explain why
+   halving the stake halves the value of the same sensor, and compute the EVPI when acting costs 1 in a bad year
+   instead of 4.
 4. *(Laboratory)* Add a fourth node `L3_auditor` to the mini-hypergraph and check what the
    validator does before and after putting it into a hyperedge. Then create a second cycle in the tree and
    confirm that the message points at the cycle.
@@ -2825,7 +2827,7 @@ number; the slope by regime is a structure.
 - The five lenses are transversal questions with their own quantities: information, time, tail, invariance
   and cost of information.
 - The same graph gives different numbers according to the lens: Hill returns 1.7901 for $k = 500$; the EVPI returns
-  0.0000 or 3.7000 depending on the available actions; the marginal slope changes sign while the
+  1.2000, 0.6000 or 0.0000 depending on the available actions; the marginal slope changes sign while the
   slopes by regime stay equal.
 - The node count inflates easily: of the 26,634 nodes of the scale audit, only 6,494 are concept nodes.
 
@@ -3107,7 +3109,7 @@ greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution 
 board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
 stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
 inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
-R axis: loss of the aggregate 22.99 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis: loss of the aggregate 25.54 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
 R axis without oscillation: loss 0.00 min -> R0-agregada
 ```
 
@@ -3117,7 +3119,7 @@ R axis without oscillation: loss 0.00 min -> R0-agregada
 - **Directed stress** reaches the rejection with 1 attack; the fixed order needs 5 to reach the same one. Learning
   saved four attacks and changed no verdict.
 - **Metropolis** on a Beta(4, 8) gives a chain mean of 0.3346 against the closed form 0.3333, with acceptance 0.676.
-- **The grain:** with oscillating demand, the coarse question loses 22.99 minutes, more than the 12.00 minutes of
+- **The grain:** with oscillating demand, the coarse question loses 25.54 minutes, more than the 12.00 minutes of
   margin the fine question costs, so System 2 refines to the day; without oscillation, it stays at the aggregate.
 
 **Exercises.**
@@ -3675,7 +3677,7 @@ waits 8.1 minutes**, less than the 10 minutes that the claim promised as a mean.
 sees the promise kept; the whole difference is in the tail, where 24 in every 100 patients pass half an hour of wait.
 
 **Reinforcement only on surge days.** With two nurses on the
-days of 11 patients and one on the days of 5, the mean wait falls to 2.5 minutes and fewer than 1 patient in every 100
+days of 11 patients and one on the days of 5, the mean wait falls to 1.9 minutes and fewer than 1 patient in every 100
 passes 30 minutes. The slack does not need to be larger; it needs to be where the risk is.
 
 **The hidden question is how many patients a margin is worth.** Every margin of error needs a unit. If the
@@ -3700,7 +3702,7 @@ The dataset showed this.
   of the week still has a coefficient of variation of 6%.
 - **Jensen lives inside the formula itself.** Applied to the real rate of each day, the Erlang C of the claim gives 57% on
   average, and not 82%. The service level is concave in load.
-- **The unit is the day.** Splitting the days at random, the halves null gives an sd of 0.0441 for the service level,
+- **The unit is the day.** Splitting the days at random, the halves null gives an sd of 0.0743 for the service level,
   where the binomial margin that treats every call as independent predicts 0.0006.
 - **Severe test.** In 400 days simulated in the world that the claim describes, none fell below the target. In the real
   vault, replayed call by call, about three days in every ten did.
@@ -3762,7 +3764,7 @@ give very different waits:
 | 7 or 9 | 10.1 min | 9 |
 | uniform between 5 and 11 | 12.8 min | 14 |
 | 5 or 11 | 19.3 min | 24 |
-| 5 or 11, with reinforcement only on surge days | 2.5 min | fewer than 1 |
+| 5 or 11, with reinforcement only on surge days | 1.9 min | fewer than 1 |
 
 **The independent unit decides the margin.** The effective size of a sample is a property of the process, not of the
 count (Chapter 6). Calls of the same day share the rate and the queue; treating them as independent observations
@@ -3810,7 +3812,7 @@ world (patients per hour)    patients    wait  median     p90  >30min   margin/d
 7 or 9                         159057    10.1     4.0    29.1      9%         0.20            0.04
 uniform between 5 and 11       160475    12.8     5.0    37.1     14%         0.32            0.05
 5 or 11                        158656    19.3     8.1    55.8     24%         0.51            0.07
-5 or 11, reinforcement in the surge   163683     2.5     0.0     8.2      0%         0.03            0.01
+5 or 11, reinforcement in the surge   163683     1.9     0.0     6.8      0%         0.04            0.01
 
 halves null: 4000 days of demand 8, 2000 splits of 2000 days against 2000
 measured sd of the differences = 0.2062 min
@@ -3824,7 +3826,7 @@ tail: 8 in 100 patients wait more than 30 min in world 8; 24 in 100 in world 5 o
 
 Read it line by line. **9.1 against 19.3.** The mean demand is the same, 8 patients per hour, and the wait more than
 doubles only because the world oscillates. **8% against 24%** and **26.1 against 55.8** at the 90th percentile. The mean separates the two
-worlds, and the tail separates far more. **Reinforcement in the surge is 2.5 min and 0%**, and the slack where the risk is zeroes the tail.
+worlds, and the tail separates far more. **Reinforcement in the surge is 1.9 min and 0%**, and the slack where the risk is zeroes the tail.
 **0.2062, 0.1928 and 0.0473.** The sd measured in the halves null is five times larger than the margin of the unit
 "patient". Whoever measured the wait treating each patient as independent would declare a precision that the world does not
 have. **10.2 min, 49.4 sd, 0.0000.** The difference between the worlds is too large to come from chance, and the
@@ -3843,7 +3845,7 @@ training 83 days (Mar-Jun) | vault 81 days (Jul-Oct) | 2649354 calls in the vaul
 roster of the mean profile: 234 agents at the peak, 2259 agent-hours per day
 service level on the mean profile = 0.8193 | mean of the vault days = 0.5683 | days below the goal of 80% = 0.6543
 dispersion between days: Var/mean = 246.7 in the vault, 272.6 in the training window, 261.1 over all | deviation between days = 2841 | Poisson would predict 181
-halves null: per day = 0.0441 | per call = 0.0006
+halves null: per day = 0.0743 | per call = 0.0006
 ```
 
 The industry formula, applied to the mean profile, promises 82% (0.8193). Applied to the real rate of each vault
@@ -3889,11 +3891,11 @@ the coarse question in its purest form:
 ```text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
-   above 30 min: aggregated 0.4232, fine 0.1782
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+   above 30 min: aggregated 0.4488, fine 0.2081
 ```
 
-With the same total capacity, staffing every day for the mean costs 22.99 minutes of wait per patient more than
+With the same total capacity, staffing every day for the mean costs 25.54 minutes of wait per patient more than
 staffing each day for its own demand. At the bank, the same refinement is worth about 31 failing days in 100 against
 about 5.
 
@@ -3905,7 +3907,7 @@ about 5.
 2. *(Concept)* Why does the mean per patient weight the surge days more? Compute, in every 100 patients, how many
    arrive on days of 11 and how many on days of 5.
 3. *(Laboratory)* Run the laboratory with seed 1909 and confirm the wait of the world 5 or 11 and the
-   margin per day. Then change the surge reinforcement from 24 to 18 consultations per hour: does the mean wait improve?
+   margin per day. Then replace the second nurse of the surge days by one nurse working at twice the pace, 24 consultations per hour, as Chapter 5 does: why do two nurses sharing one line wait less (1.9 against 2.5 minutes)?
    Does the tail change size?
 4. *(Count)* In every 100 patients of the claim world, 8 wait more than 30 minutes; in the real world, 24. How many
    more patients are they, if the post serves 8,000 patients per year?
@@ -4023,7 +4025,7 @@ $$g_L \;\approx\; L\mu \;-\; \frac{L^2\sigma^2}{2}, \qquad
 \text{drag}_L \;=\; L\mu - g_L \;\approx\; \frac{L^2\sigma^2}{2}.$$
 
 The drag grows with the **square** of the leverage. Measured in the training set (daily sd $\sigma = 0.010496$, or
-0.1749 per year), the observed drags are 0.0153, 0.0617 and 0.1403, against 0.0153, 0.0612 and 0.1377 predicted by the
+0.1749 per year), the observed drags are 0.0153, 0.0617 and 0.1403, against 0.0153, 0.0612 and 0.1376 predicted by the
 formula. The second-order account already catches the essential, and little is left for the higher moments of the distribution.
 The approximation holds for small returns and no large jump; on a day of −22.6% it stops
 describing what happened and only underestimates the damage.
@@ -4540,7 +4542,10 @@ guarantee that all the causes appear, and it says nothing about the size of the 
    accepting a saturated set is not evidence. The **saturation rule** started to exclude those sets from the
    family. They count neither as accepted nor as rejected. The measure is the hit rate of the nearest neighbour,
    leaving the row out (1-NN LOO), when predicting the environment from the columns of $S$; mean hit rate $\ge 0.99$
-   means saturated. In the RAND insurance experiment, the copayment is constant inside each regime of
+   means saturated. The distance is Euclidean on the columns standardised to mean 0 and sd 1, and a row whose
+   columns are tied with other rows scores the share of the tied rows that share its environment. (The text did not
+   say this until 2026-10-19; a reimplementation that read a factor as a plain number at distance 1 found only 11 of
+   the 16 saturated sets of the laboratory.) In the RAND insurance experiment, the copayment is constant inside each regime of
    plan. The set that depended on it left in round 4, as the declaration foresaw.
 3. **The rows are not independent.** 16 instants per volunteer in the cardiac trial, up to 403 students per school
    in STAR, 225 thousand flights in 364 days. Treating dependent rows as independent narrows the margin. The correction
@@ -5169,7 +5174,7 @@ frequencies, with an exit clause, defended before a board.
 **The resolution of the question, and two predictions that could fail.** The decider question has a grain, and the
 grain is a variable of the model. R0 asks about the average day, R1 about each day, R2 about the hour and R3 about
 the subgroup. With the same total resource, paired arms and a staffing that aims at a utilisation of 0.8, asking
-coarsely costs 22.99 minutes of mean wait where demand oscillates from 5 to 11, 2.50 where it oscillates from 7 to 9
+coarsely costs 25.54 minutes of mean wait where demand oscillates from 5 to 11, 2.77 where it oscillates from 7 to 9
 and nothing where it does not oscillate (Chapters 5, 8 and 10). The axis states two claims; only one of them is an
 empirical prediction. Prediction 3: there is an amplitude of
 oscillation above which a plan made for the average day fails on more than a quarter of the days. Prediction 5: a
@@ -5465,8 +5470,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 409 tests pass |
-| `python3 scripts/reimplementation/decision_labs.py` | That 61 quantities of Chapters 10 and 11, recomputed from the text alone in another language, agree with the book |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 413 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 421 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (402), or are marked open where the text does not give the recipe (19) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -5660,7 +5665,7 @@ the earlier wording is kept here.
 ### Rectifications of 2026-10-19
 
 Two kinds of change. The safeguard panel stopped printing a number it did not measure, and a reimplementation of the
-decision laboratories from the text alone (`scripts/reimplementation/decision_labs.py`, in Python, written without
+decision laboratories from the text alone (now `scripts/reimplementation/ch10_ch11.py`, in Python, written without
 reading the Rust of Chapters 10 and 11) found two values that the instruments printed faithfully and that were
 wrong. Each was corrected in the code, given a test that fails on the old code, and corrected in the text. The
 reimplementation now runs in `scripts/verify.sh`; it was written by an AI assistant, so it is a cross-check, not
@@ -5675,6 +5680,25 @@ the independent reimplementation that `docs/OUTSIDE_AUDIT.md` asks of people.
 | C, E | The numpy case | the upstream change "still owed" | NumPy 2.5.0 release notes, gh-31238 | checked on 2026-10-19 |
 | 10–21 | Exercise types | *(Computation)*, *(Account)* | *(Count)* | the preface declares three types |
 | C | Test count | 406 | 409 | the count of 2026-10-18 was already stale (408 on the base of these changes); one panel test retired, two tests of Chapter 10 added |
+
+### Rectifications of the reimplementation of the chapters, 2026-10-19
+
+The reimplementation was extended, the same day, from Chapters 10 and 11 to twenty chapters (`scripts/reimplementation/`,
+run by `run.py` in `scripts/verify.sh`): 421 quantities, recomputed in Python from the text and the data files without
+reading the Rust of each chapter, 402 in agreement and 19 marked open because the text names a procedure without
+giving its recipe. The Rust was read only after a divergence, to say where it came from. Six values were wrong in the
+instruments, and two statements in the text; each is corrected, with a test where there is code.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 5, 8, 13, 16, 21 | R horizon: wait of the coarse and the fine plan, and the loss | 5 or 11: 38.94, 15.95 and 22.99 min; 7 or 9: 19.17, 16.67 and 2.50; 8 or 8: 16.72 | 43.73, 18.20 and 25.54; 21.15, 18.38 and 2.77; 18.52 | the day had a fixed count of arrivals, each wait included the client's own service, and 200 days left a spread of about 2 minutes under two printed decimals; now a Poisson day of 10 hours, the Lindley recursion in its right order, 4,000 days. The decision (refine to the day) does not change |
+| 5 | Mean of W over a uniform demand between 5 and 11 | 14.10 min | 14.46 min | a six-point midpoint rule; the integral has a closed form |
+| 12 | EVPI of the sensor | 0.0000 with the option of acting, 3.7000 without it | 1.2000 with the full stake, 0.6000 with half of it, 0.0000 for a payoff that does not depend on the state | the payoffs of one act were passed where the best payoff of each state was due; the text said the sensor never changes the decision, and it changes it in every bad year |
+| 16 | Reinforcement of the surge days | 2.5 min, p90 8.2 | 1.9 min, p90 6.8 | the text says two nurses; the instrument ran one nurse at twice the pace. Chapter 5, whose text says the capacity doubles, keeps the 2.5 |
+| 16 | Halves null of the bank, per day | 0.0441 | 0.0743 | the sd of the absolute differences, about 0.6 of the sd of the differences |
+| 17 | Drag predicted at 3x | 0.1377 | 0.1376 | rounding in the text |
+| 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
+| 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
 ### Chapter 4
 
@@ -5851,7 +5875,8 @@ The instrument of the Erlang C Table reproduces in Rust the central numbers of t
 target (0.6543); the sd between days of
 **2,841** against the **181** that Poisson would predict; and the `Var/mean` of **272.6 in the training set**, which is the published 273.
 In the vault it is 246.7 and in the whole series 261.1, and the reason is the cut of the window. The halves null per day comes out at
-0.0441 against the 0.0474 published (different splitting scheme), and the null per call of this account is 0.0006
+0.0441 against the 0.0474 published (different splitting scheme; since 2026-10-19 it is 0.0743, because the 0.0441
+was the sd of the absolute differences, see the rectifications of 2026-10-19), and the null per call of this account is 0.0006
 by the binomial, against the 0.0033 of the script, which used another design of intraday correlation. The two
 divergences stay declared, together with the Rust reconstruction of the decision table of the schemes R0 to
 R3 by the queue simulation with abandonment (`fila.rs`, measured just above with `labs --queue`).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reimplementation of the decision laboratories of Chapters 10 and 11, from the text of the book alone.
+"""Chapters 10 and 11: the decision laboratories, from the text of the book alone.
 
 Protocol (docs/OUTSIDE_AUDIT.md, activity 2). Every quantity below is recomputed from the specification that the
 chapter states in words and formulas, without reading the Rust of the laboratory, and compared with the value the
@@ -11,7 +11,7 @@ Declared limit: this reimplementation was written by the same kind of AI assista
 2026-10-18, on 2026-10-19. It did not read crates/stochology-book/src/ch10.rs or ch11.rs before writing these
 accounts, but it is not independent in the sense of Chapter 21. It is a cross-check, not an outside audit.
 
-Standard library only. Usage: python3 scripts/reimplementation/decision_labs.py   (exit 1 on any divergence)
+Standard library only. Run through scripts/reimplementation/run.py.
 """
 
 from __future__ import annotations
@@ -20,11 +20,7 @@ import math
 import sys
 from math import comb, exp, log
 
-ROWS: list[tuple[str, str, float, float, float, str]] = []
-
-
-def check(chapter: str, what: str, book: float, ours: float, tol: float, kind: str = "exact") -> None:
-    ROWS.append((chapter, what, book, ours, tol, kind))
+from common import check
 
 
 # ---------------------------------------------------------------- Chapter 10: the Peters coin
@@ -189,18 +185,3 @@ for xi, t100, t10k, hopt in [(-0.1, 4.07, 5.84, 5.839), (0.0, 4.76, 8.27, 7.564)
 # Chouldechova: FPR = p/(1-p) * (1-PPV)/PPV * (1-FNR)
 fpr = lambda prev, ppv, fnr: prev / (1 - prev) * (1 - ppv) / ppv * (1 - fnr)  # noqa: E731
 check("11", "identity forces FPR on Black (PPV and FNR of White)", 0.1769, fpr(0.111, 0.3491, 0.240), 5e-4)
-
-
-def main() -> int:
-    bad = 0
-    print(f"{'ch':<3} {'quantity':<58} {'book':>12} {'reimpl.':>12}  verdict")
-    for ch, what, book, ours, tol, kind in ROWS:
-        ok = abs(book - ours) <= tol
-        bad += not ok
-        print(f"{ch:<3} {what:<58} {book:>12.6g} {ours:>12.6g}  {'agrees' if ok else 'DIVERGES'} ({kind})")
-    print(f"\n{len(ROWS)} quantities, {len(ROWS) - bad} agree, {bad} diverge")
-    return 1 if bad else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

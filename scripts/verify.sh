@@ -65,8 +65,8 @@ python3 scripts/book/check_labs.py
 step "parts, chapters, code fences, and order"
 python3 scripts/book/check_book.py
 
-step "reimplementation of the decision laboratories (Chapters 10 and 11) from the text alone"
-python3 -I scripts/reimplementation/decision_labs.py > /dev/null
+step "reimplementation of the laboratories from the text alone"
+python3 -I scripts/reimplementation/run.py > /dev/null
 
 step "the generated record docs/RUST_RESULTS.md"
 python3 scripts/book/generate_results.py --check

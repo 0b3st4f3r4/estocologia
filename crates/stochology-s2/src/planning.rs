@@ -92,15 +92,15 @@ pub fn decide(loss: &ResolutionLoss, margin_cost_min: f64) -> ResolutionDecision
 #[cfg(test)]
 mod tests {
     use super::*;
-    use stochology_core::measure_resolution_loss;
+    use stochology_core::{R_HORIZON_DAYS, measure_resolution_loss};
 
     /// The calls are those of the instrument itself (`labs --resolucao`): 1909, 200 days, 10 hours.
     fn chapter_16_post() -> ResolutionLoss {
-        measure_resolution_loss(1909, 200, 10, 5.0, 11.0)
+        measure_resolution_loss(1909, R_HORIZON_DAYS, 10, 5.0, 11.0)
     }
 
     fn without_volatility() -> ResolutionLoss {
-        measure_resolution_loss(1909, 200, 10, 8.0, 8.0)
+        measure_resolution_loss(1909, R_HORIZON_DAYS, 10, 8.0, 8.0)
     }
 
     #[test]

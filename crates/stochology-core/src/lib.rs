@@ -21,7 +21,9 @@ pub use funnel::{DominanceMatrix, LocalPolicy, OptimalStop};
 pub use invariants::{Failure, Gate, evaluate, report};
 pub use layer::{Card, Layer, UncertaintyType};
 pub use orchestrator::OrchestratorM;
-pub use resolution::{Resolution, ResolutionLoss, measure as measure_resolution_loss};
+pub use resolution::{
+    R_HORIZON_DAYS, Resolution, ResolutionLoss, measure as measure_resolution_loss,
+};
 pub use rng::Rng;
 
 /// Hill estimator over the `k` largest positive values, using `cutoff_index` (`k` or `k - 1`) as threshold.

@@ -44,7 +44,7 @@ training 83 days (Mar-Jun) | vault 81 days (Jul-Oct) | 2649354 calls in the vaul
 roster of the mean profile: 234 agents at the peak, 2259 agent-hours per day
 service level on the mean profile = 0.8193 | mean of the vault days = 0.5683 | days below the goal of 80% = 0.6543
 dispersion between days: Var/mean = 246.7 in the vault, 272.6 in the training window, 261.1 over all | deviation between days = 2841 | Poisson would predict 181
-halves null: per day = 0.0441 | per call = 0.0006
+halves null: per day = 0.0743 | per call = 0.0006
 ~~~
 
 ### Queue with abandonment and staffing rules (R0 to R3)
@@ -132,7 +132,7 @@ greedy: stops at h0.queue (value 0.600) | LATS: root.stochology -> r.resolution 
 board belief: most likely band A5-governance with probability 0.9205 | entropy 0.4324
 stress: deliberated stopped at A5-governance with 1 attack(s) | declared order stopped at A5-governance with 5 attacks | same rejection true
 inference: Beta(4, 8) chain mean 0.3346 against the closed form 0.3333 | acceptance 0.676
-R axis: loss of the aggregate 22.99 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
+R axis: loss of the aggregate 25.54 min against a margin of 12.00 min -> R1-dia (the loss of the aggregate pays for the margin of the day) | out of measured reach: R2-hora, R3-subpergunta
 R axis without oscillation: loss 0.00 min -> R0-agregada
 ~~~
 
@@ -418,12 +418,12 @@ Paired arms under identical total resources measuring resolution loss.
 ~~~text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 38.94 min, fine wait 15.95 min, loss 22.99 min
-   above 30 min: aggregated 0.4232, fine 0.1782
-demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 19.17 min, fine wait 16.67 min, loss 2.50 min
-   above 30 min: aggregated 0.2266, fine 0.1946
-demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 16.72 min, fine wait 16.72 min, loss 0.00 min
-   above 30 min: aggregated 0.1969, fine 0.1969
+demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+   above 30 min: aggregated 0.4488, fine 0.2081
+demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 21.15 min, fine wait 18.38 min, loss 2.77 min
+   above 30 min: aggregated 0.2518, fine 0.2198
+demand 8 or 8 (no oscillation): mean capacity 10.0 | aggregate wait 18.52 min, fine wait 18.52 min, loss 0.00 min
+   above 30 min: aggregated 0.2209, fine 0.2209
 resolution ladder: R0-agregada -> R1-dia -> R2-hora -> R3-subpergunta
 
 -- prediction 3: the oscillation threshold (failed day: more than 10% above 30 min; threshold: more than 1/4 of the days) --
@@ -459,10 +459,10 @@ chapter  1 | no loss measured in this chapter | the chapter presents the target 
 chapter  2 | no loss measured in this chapter | the three layers; the grain of the question does not enter the account here
 chapter  3 | no loss measured in this chapter | probability without a scale decision
 chapter  4 | no loss measured in this chapter | the three kinds of uncertainty; the R axis is orthogonal to them
-chapter  5 | resolution loss 22.99 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
+chapter  5 | resolution loss 25.54 min (demand from 5 to 11) | the mean lies: the chapter is the post that oscillates between 5 and 11
 chapter  6 | no loss measured in this chapter | the independent unit is Phi2; the R axis is its cousin in the grain of the question
 chapter  7 | no loss measured in this chapter | severe tests and multiplicity; no scale decision
-chapter  8 | resolution loss 2.50 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
+chapter  8 | resolution loss 2.77 min (demand from 7 to 9) | the calibration tolerance depends on the n of the vault: the oscillation from 7 to 9 is the light case
 chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
 chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
 chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
@@ -470,11 +470,11 @@ chapter 12 | no loss measured in this chapter | the map of knowledge; no scale d
 chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
 chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
 chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 22.99 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
+chapter 16 | resolution loss 25.54 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
 chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
 chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
 chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
-chapter 20 | resolution loss 22.99 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
+chapter 20 | resolution loss 25.54 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
 chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
 ~~~
 
@@ -511,7 +511,7 @@ width of the fixed interval at step 100 = 0.1564, at step 6400 = 0.0240
 width of the interval with forgetting at step 6400 = 0.1360 (ratio 5.7x the final fixed one)
 == Chapter 5 :: when the mean lies ==
 W(5) = 3.57 min, W(8) = 10.00 min, W(11) = 55.00 min
-Jensen: f(E[X]) = 10.00 min | E[f(X)] = 29.29 (5 or 11) and 14.10 (uniform 5..11)
+Jensen: f(E[X]) = 10.00 min | E[f(X)] = 29.29 (5 or 11) and 14.46 (uniform 5..11)
 second order: half f''(8) Var(X) = 8.44 min (5 or 11) and 2.81 min (uniform)
                  8 every day:  319405 patients | mean   9.1 min | median   3.7 | p90  26.2 | >30 min:   7.6 per 100
                      5 or 11:  319115 patients | mean  19.6 min | median   8.6 | p90  56.1 | >30 min:  23.7 per 100
@@ -749,8 +749,8 @@ Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
 Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
-Crisonomy: EVPI = 0.0000 | best act without information = 5.8000 | value with perfect information = 7.0000
-Crisonomy: without the option of acting (only betting half = 3.0000 or not betting), the best without information is 2.1000 and the EVPI rises to 3.7000
+Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
+Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
 Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
 Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
 Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
@@ -806,7 +806,7 @@ world (patients per hour)    patients    wait  median     p90  >30min   margin/d
 7 or 9                         159057    10.1     4.0    29.1      9%         0.20            0.04
 uniform between 5 and 11       160475    12.8     5.0    37.1     14%         0.32            0.05
 5 or 11                        158656    19.3     8.1    55.8     24%         0.51            0.07
-5 or 11, reinforcement in the surge   163683     2.5     0.0     8.2      0%         0.03            0.01
+5 or 11, reinforcement in the surge   163683     1.9     0.0     6.8      0%         0.04            0.01
 
 halves null: 4000 days of demand 8, 2000 splits of 2000 days against 2000
 measured sd of the differences = 0.2062 min
@@ -1218,10 +1218,11 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 87 tests
+running 90 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
+test banco::tests::the_halves_null_is_the_sd_of_signed_differences ... ok
 test ch01::tests::different_seeds_almost_never_match ... ok
 test ch01::tests::honest_coin_concentrates_near_half ... ok
 test ch01::tests::two_machines_agree_draw_by_draw ... ok
@@ -1235,6 +1236,7 @@ test ch04::tests::the_bias_moves_from_two_tenths_to_six_tenths ... ok
 test ch04::tests::the_fixed_interval_shrinks_and_the_discounted_one_stays_wide ... ok
 test ch04::tests::the_fixed_model_is_almost_always_wrong_and_the_forgetting_model_covers ... ok
 test ch05::tests::jensen_in_the_queue_varies_above_the_constant ... ok
+test ch05::tests::the_uniform_jensen_mean_is_exact ... ok
 test ch06::tests::berkson_induces_negative_correlation_and_persistence_reduces_effective_n ... ok
 test ch07::tests::garden_inflates_false_positive_and_hot_hand_has_negative_bias ... ok
 test ch08::tests::constant_forecaster_has_zero_resolution ... ok
@@ -1258,6 +1260,7 @@ test ch13::tests::panel_approves_complete_card_and_rejects_when_a_concern_is_mis
 test ch14::tests::complete_card_passes_and_a_defect_triggers_a_gate ... ok
 test ch15::tests::ledger_detects_tampering_in_the_past ... ok
 test ch16::tests::day_margin_is_larger_than_patient_pseudoreplication ... ok
+test ch16::tests::two_nurses_share_one_line_and_one_nurse_is_lindley ... ok
 test ch17::tests::leverage_drag_and_selection_bias_match_stochology_horizons_h1 ... ok
 test ch18::tests::laplace_avoids_zero_and_hill_recovers_tail ... ok
 test ch19::tests::ols_recovers_a_line_and_kruskal_is_zero_on_identical_groups ... ok
@@ -1307,7 +1310,7 @@ test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_div
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
 
-test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 90 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1482,7 +1485,7 @@ test h3::tests::the_passive_correlation_follows_the_exact_account ... ok
 
 test result: ok. 68 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 12 tests
+running 13 tests
 test lenses::tests::brier_and_murphy_close_the_account ... ok
 test lenses::tests::deterministic_chain_respects_processing ... ok
 test lenses::tests::evpi_of_the_example_is_three ... ok
@@ -1490,13 +1493,14 @@ test lenses::tests::hill_recovers_pareto_alpha ... ok
 test lenses::tests::invariant_regime_approves_broken_regime ... ok
 test lenses::tests::peters_coin_is_not_ergodic ... ok
 test lenses::tests::simple_slope ... ok
+test lenses::tests::the_sensor_of_chapter_12_is_worth_what_it_saves_in_bad_years ... ok
 test lenses::tests::volatility_drag_discounts_variance ... ok
 test tests::complete_graph_validates ... ok
 test tests::deductive_cycle_fails ... ok
 test tests::edge_to_missing_node_fails ... ok
 test tests::node_without_lens_is_flagged ... ok
 
-test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 26 tests
 test drift::tests::kl_is_zero_against_itself_and_grows_with_distance ... ok
@@ -1748,4 +1752,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **5944 lines** and **79179 words**, sha256 `7551ed3271bb922cebb1e56cb3271a0c552be64d6ed45d9a79f12c430d25dd00`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **5969 lines** and **79884 words**, sha256 `0b9cf535e59bb85cc02e73f91266f4522cb9611f2b30169e3f21d133c3d560e2`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

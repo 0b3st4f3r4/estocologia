@@ -149,7 +149,10 @@ pub fn run() {
     let e_f_bimodal = 0.5 * w_formula(5.0, mu) + 0.5 * w_formula(11.0, mu);
     let var_bimodal = 9.0;
     let var_uniform = 3.0;
-    let e_f_uniform = (5..=10).map(|i| w_formula(i as f64 + 0.5, mu)).sum::<f64>() / 6.0;
+    // Exact mean of W over a uniform rate on [5, 11]: 60 / (mu (b - a)) * [(a - b) + mu ln((mu - a)/(mu - b))].
+    // Until 2026-10-19 a six-point midpoint rule gave 14.10 min instead of 14.46; a reimplementation found it.
+    let (a, b) = (5.0_f64, 11.0_f64);
+    let e_f_uniform = 60.0 / (mu * (b - a)) * ((a - b) + mu * ((mu - a) / (mu - b)).ln());
     let f2 = 120.0 / (mu - 8.0).powi(3);
     println!(
         "Jensen: f(E[X]) = {:.2} min | E[f(X)] = {:.2} (5 or 11) and {:.2} (uniform 5..11)",
@@ -287,5 +290,17 @@ mod tests {
         );
         assert!(variable.mean_wait_min > constant.mean_wait_min);
         assert!((w_formula(8.0, 12.0) - 10.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn the_uniform_jensen_mean_is_exact() {
+        let mu = 12.0_f64;
+        let exact = 60.0 / (mu * 6.0) * (-6.0 + mu * 7.0_f64.ln());
+        let fine: f64 = (0..600_000)
+            .map(|i| w_formula(5.0 + 6.0 * (i as f64 + 0.5) / 600_000.0, mu))
+            .sum::<f64>()
+            / 600_000.0;
+        assert!((exact - fine).abs() < 1e-6, "{exact} {fine}");
+        assert!((exact - 14.459).abs() < 1e-3);
     }
 }

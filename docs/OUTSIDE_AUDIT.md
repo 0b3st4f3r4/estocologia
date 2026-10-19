@@ -60,7 +60,7 @@ Activity 2 was run once, on the laboratories that carry decisions in Chapters 10
 first: it was written by an AI assistant of the same kind as the readings of 2026-10-18, in Python, from the text of
 the book alone, without reading `crates/stochology-book/src/ch10.rs` or `ch11.rs`. It recomputes 61 quantities,
 exact accounts where the chapter states one and the exact value behind each simulation otherwise, and it now runs
-in `scripts/verify.sh` (`scripts/reimplementation/decision_labs.py`).
+in `scripts/verify.sh` (now `scripts/reimplementation/ch10_ch11.py`, run by `run.py`).
 
 It found two values that the instruments printed faithfully and that were wrong, both in Chapter 10: the share of
 twice-Kelly trajectories above the start, where floating-point rounding decided the exact ties (0.485 printed,
@@ -69,6 +69,21 @@ million (25.12% printed, 27.55% exact), where the laboratory put the maximum at 
 in Appendix E. The other 59 quantities agreed. Agreement here is weak evidence where the reimplementer could have
 absorbed the author's choices from the text; the two divergences are strong evidence, because the text alone was
 enough to find them.
+
+## The reimplementation of the chapters (2026-10-19)
+
+The same day the reimplementation was extended to twenty chapters, in the priority of activity 2: the chapters that
+carry decisions (16 and 17), then the methods (8, 9 and 19), then the rest. 421 quantities; 402 agree, 19 are open,
+none diverges after the corrections. The Rust of a chapter was read only after a divergence, to locate it. The run
+found six wrong values in the instruments (the R horizon's day, the mean of W over a uniform demand, the EVPI of
+Chapter 12, the reinforcement of the health post, the bank's halves null, and a rounding) and one gap in the text
+(the 1-NN of the saturation rule); Appendix E lists them with both values.
+
+The 19 open quantities are the honest remainder: the text names a procedure (a propensity fit, the four forecasters of
+Chapter 8, the gardens of Chapter 7, a posterior interval, the canary model) without the recipe a reader would need
+to recompute it. Each is a place where the book is still its own source (item 16), and the remedy is to write the
+recipe into the chapter, not to copy it from the code. The same limits hold as before: an AI assistant wrote this,
+and agreement is weak evidence where the reimplementer could have absorbed the author's choices from the text.
 
 This file does not make the program audited. It records how an audit from outside would run and what it would need:
 people who are not the authors. Until they exist, item 17 stays open.
