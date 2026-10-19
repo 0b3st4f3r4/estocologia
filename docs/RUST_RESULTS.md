@@ -16,6 +16,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
 | `labs --wave` | The wave engine against data: the STDP arrow in Victoria and the phasor conflict in the New York flights |
 | `labs --wave2` | The same two tests under declaration 2 (K = 2): a day of horizon, and the phase of the deviation from the common daily profile |
+| `labs --resonance` | Point 24: the claim that deliberation pays in resonance, on three vaults never used for it |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -410,6 +411,55 @@ real data:
 == verdicts of declaration 2 (K = 2), by the rules sealed before the run ==
 T1 the arrow: NOT SUPPORTED | adds over the cross-correlation: no
 T2 the conflict: NOT SUPPORTED | adds over level agreement: no
+~~~
+
+### Point 24: resonance, not conflict
+
+The claim drawn from declaration 2 of point 23, tested once on New York April to June 2013 and 2023 and Houston October to December 2011, with the verdict by the rules sealed in empirical/p24-ressonancia/DECLARACAO.md.
+
+~~~bash
+./target/release/labs --resonance
+~~~
+
+~~~text
+== Point 24: resonance, not conflict (empirical/p24-ressonancia/DECLARACAO.md) ==
+controls on synthetic data, seed 2026:
+
+-- control, interaction in resonance --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18148 beating 28223 conflict 13629
+  Brier System 1 (additive) 0.13832 | System 2 (cells) 0.13353
+  gain of System 2: conflict +0.00447 | resonance +0.00614 | delta -0.00167, 95% CI by day [-0.00282; -0.00054]
+  rival delta (level agreement, no phase) -0.00090 | resonance beats the rival here: true
+
+-- control, no interaction --
+  training 60000 | vault flights with three eligible sources 60000 | quiescent 0 resonance 18192 beating 27661 conflict 14147
+  Brier System 1 (additive) 0.13809 | System 2 (cells) 0.13424
+  gain of System 2: conflict +0.00403 | resonance +0.00408 | delta -0.00005, 95% CI by day [-0.00105; +0.00089]
+  rival delta (level agreement, no phase) -0.00019 | resonance beats the rival here: true
+
+the three fresh vaults:
+
+-- New York 2013, April to June --
+  training 52354 | vault flights with three eligible sources 77251 | quiescent 0 resonance 18533 beating 44488 conflict 14230
+  Brier System 1 (additive) 0.18685 | System 2 (cells) 0.18585
+  gain of System 2: conflict -0.00002 | resonance +0.00040 | delta -0.00042, 95% CI by day [-0.00130; +0.00053]
+  rival delta (level agreement, no phase) -0.00204 | resonance beats the rival here: true
+
+-- New York 2023, April to June --
+  training 74136 | vault flights with three eligible sources 101457 | quiescent 0 resonance 35519 beating 53217 conflict 12721
+  Brier System 1 (additive) 0.15992 | System 2 (cells) 0.15865
+  gain of System 2: conflict +0.00175 | resonance +0.00138 | delta +0.00038, 95% CI by day [-0.00047; +0.00125]
+  rival delta (level agreement, no phase) +0.00005 | resonance beats the rival here: false
+
+-- Houston 2011, October to December --
+  training 37148 | vault flights with three eligible sources 49328 | quiescent 0 resonance 28283 beating 14964 conflict 6081
+  Brier System 1 (additive) 0.13235 | System 2 (cells) 0.13179
+  gain of System 2: conflict -0.00023 | resonance +0.00095 | delta -0.00118, 95% CI by day [-0.00221; -0.00019]
+  rival delta (level agreement, no phase) -0.00149 | resonance beats the rival here: true
+
+== verdict, by the rules sealed before the run ==
+testable in all three: true | delta negative in all three: false | intervals entirely below zero: 1 of 3 (need 2)
+the resonance claim: NOT SUPPORTED | adds over level agreement (in 2 of 3): yes (2 of 3)
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1463,7 +1513,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 110 tests
+running 112 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1554,6 +1604,8 @@ test ponte::tests::the_pilot_re_derives_the_tie_at_the_ceiling ... ok
 test ponte::tests::the_registry_declares_the_verdict_if_the_window_lapses ... ok
 test ponte::tests::the_status_em_teste_without_the_roles_is_rejected ... ok
 test ponte::tests::with_the_roles_designated_the_test_may_run ... ok
+test resonance::tests::an_interaction_planted_in_resonance_is_found_and_its_absence_is_not ... ok
+test resonance::tests::the_rule_needs_three_negatives_and_two_intervals_below_zero ... ok
 test segunda::tests::the_bank_is_recounted_in_rust_and_matches_the_published_numbers ... ok
 test segunda::tests::the_bias_of_the_loop_agrees_in_two_sources ... ok
 test segunda::tests::the_multiplicity_thresholds_match_alpha_over_m ... ok
@@ -1575,7 +1627,7 @@ test wave::tests::the_anomaly_removes_a_shared_daily_cycle ... ok
 test wave::tests::the_binomial_tail_is_exact_at_small_n ... ok
 test wave::tests::the_planted_arrow_is_found_and_the_independent_one_is_not ... ok
 
-test result: ok. 110 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 112 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -2024,7 +2076,8 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p22-parada | DECLARACAO_2.md | db71d78b1c669833b39db53056b2cdfeee4ae671dffcdcf04ee35fe0aa07c288 |
 | p23-onda | DECLARACAO.md | 0dff3c93f89a33a2ea2ac765416572b1a2efcfc459d1dac983eb4cbdf0622615 |
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
+| p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
 
-Point declarations: 26, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 19 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams,--wave,--wave2; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 24 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--resonance,--s1,--s2,--schema,--second-opinion,--streams,--wave,--wave2; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6495 lines** and **89580 words**, sha256 `a0451e0b91e636ce41d9db464fe0a0ebacb2c0466cace4f577b03935ad093023`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6496 lines** and **89607 words**, sha256 `77bd978e96ad7528fb549e1587f8021f934378edf50068036eb8d4a927e9f08e`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

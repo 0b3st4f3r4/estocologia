@@ -131,6 +131,19 @@ the opposite direction.
 | Declaration 2 (K = 2), T1 with a day of horizon and spikes at 1.0: engine 77 against 78, none 0 (binomial p 0.56); null 59; rival 90, its null 80; P1 false, P2 false, P3 true; not supported | `labs --wave2` |
 | Declaration 2 (K = 2), T2 with the phase of the deviation from the common daily profile: 2013 conflict 11,636, resonance 25,196, Δ −0.00093 [−0.00165; −0.00022], Δ_rival +0.00146; 2023 conflict 9,693, resonance 35,965, Δ −0.00284 [−0.00365; −0.00193], Δ_rival +0.00335; testable, not supported | `labs --wave2` |
 
+## Resonance, not conflict (2026-10-19)
+
+Point 24: the claim drawn from declaration 2 of point 23, sealed with its data before its single run
+(`empirical/p24-ressonancia/DECLARACAO.md`). Instrument: `labs --resonance`. Verdict: not supported.
+
+| Number | Instrument |
+| --- | --- |
+| New York, April to June 2013: conflict 14,230, resonance 18,533; Δ −0.00042 [−0.00130; +0.00053]; rival −0.00204 | `labs --resonance` |
+| New York, April to June 2023: conflict 12,721, resonance 35,519; Δ +0.00038 [−0.00047; +0.00125]; rival +0.00005 | `labs --resonance` |
+| Houston, October to December 2011: conflict 6,081, resonance 28,283; Δ −0.00118 [−0.00221; −0.00019]; rival −0.00149 | `labs --resonance` |
+| Rule: Δ < 0 in all three and the interval below zero in two; met: negative in two, below zero in one | `labs --resonance` |
+| Synthetic controls: interaction in resonance Δ −0.00167 [−0.00282; −0.00054]; none Δ −0.00005 [−0.00105; +0.00089] | `labs --resonance` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

@@ -99,7 +99,7 @@ python3 scripts/book/build.py --check               # the ramp AND the disk: the
 python3 scripts/book/check_labs.py                  # every cited block checked against its instrument
 python3 scripts/book/check_book.py                  # parts, chapters, fences, and ordering
 python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
-python3 scripts/check_seals.py                      # the 31 SHA-256 seals, paths relative to root
+python3 scripts/check_seals.py                      # the 32 SHA-256 seals, paths relative to root
 python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
 git tag --list                                      # must be empty: history only, no versions (§VI)
 ~~~
@@ -113,6 +113,7 @@ cargo run --release --bin labs -- --streams     # the real streams of Chapter 20
 cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
 cargo run --release --bin labs -- --wave        # the wave engine against data (point 23): T1 the arrow, T2 the conflict
 cargo run --release --bin labs -- --wave2       # the same two tests under declaration 2 of point 23 (K = 2)
+cargo run --release --bin labs -- --resonance   # point 24: deliberation pays in resonance? three fresh vaults
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
@@ -126,7 +127,8 @@ The wave engine enters the first block because it is an instrument, not a chapte
 come from `labs --wave` (point 23, declared and sealed before the first run on 2026-10-19), which tests two of its
 three layers on catalogued data: the STDP arrow was not supported, and the phasor conflict never fired on real
 flights, so it was not testable under its encoding. Under declaration 2 (`labs --wave2`, K = 2) the arrow is still not
-supported, and the conflict, once it fires, points away from where deliberation pays: refuted. Its two divergences from the draft that
+supported, and the conflict, once it fires, points away from where deliberation pays: refuted. The reverse claim
+(point 24, `labs --resonance`), tested on three vaults never used for it, is not supported. Its two divergences from the draft that
 originated it are declared in `crates/stochology-wave/src/lib.rs` — the frustration `<Psi, L Psi>` cannot serve as a
 conflict trigger because in symmetric antiphase it equals zero precisely when conflict exists, and the
 plasticity gate enforces target resonance gain rather than monotonic frustration decay.
