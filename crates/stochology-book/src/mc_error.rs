@@ -230,6 +230,120 @@ pub fn run() {
             "  Chapter {ch:>2}: {what}: {share:.4} of {n} (about {x}) | Monte Carlo sd {sd:.4} | exact 95% interval [{lo:.4}; {hi:.4}]"
         );
     }
+
+    let own = SEED_REGISTER
+        .iter()
+        .filter(|(_, how)| how.starts_with("its own"))
+        .count();
+    let audited = SEED_REGISTER
+        .iter()
+        .filter(|(_, how)| how.contains("--mc-error"))
+        .count();
+    let not_audited = SEED_REGISTER
+        .iter()
+        .filter(|(_, how)| how.starts_with("not audited"))
+        .count();
+    println!(
+        "\n-- the register of seeds: {} modules draw random numbers | {own} print their own spread | {audited} are audited here | {not_audited} are not audited | {} other ({}) --",
+        SEED_REGISTER.len(),
+        SEED_REGISTER.len() - own - audited - not_audited,
+        SEED_REGISTER
+            .iter()
+            .filter(|(_, how)| !how.starts_with("its own")
+                && !how.contains("--mc-error")
+                && !how.starts_with("not audited"))
+            .map(|(file, _)| *file)
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
+}
+
+/// How the Monte Carlo error of each module that draws random numbers is reported (item 18 (g), 2026-10-19). A test
+/// reads every source file of the crate and refuses one that draws random numbers and is not listed here, so that a new
+/// stochastic laboratory cannot enter without saying where its spread is measured, or that it is not.
+pub const SEED_REGISTER: [(&str, &str); 27] = [
+    (
+        "banco.rs",
+        "not audited: the halves null of the bank is drawn under one seed",
+    ),
+    (
+        "ch01.rs",
+        "the chapter is about seeds: it prints three, and a test checks that two seeds almost never match",
+    ),
+    ("ch04.rs", "not audited: the moving coin under one seed"),
+    ("ch05.rs", "not audited"),
+    ("ch06.rs", "not audited"),
+    (
+        "ch07.rs",
+        "shares of the gardens of paths: exact interval in --mc-error",
+    ),
+    (
+        "ch08.rs",
+        "the null q95 at Toronto's size: twenty seeds in --mc-error",
+    ),
+    ("ch09.rs", "not audited"),
+    (
+        "ch10.rs",
+        "shares of the investors: exact interval in --mc-error",
+    ),
+    ("ch11.rs", "not audited"),
+    ("ch12.rs", "not audited"),
+    (
+        "ch13.rs",
+        "the p of the claim world: exact interval in --mc-error",
+    ),
+    (
+        "ch14.rs",
+        "the bootstrap interval of the tail index: twenty seeds in --mc-error",
+    ),
+    ("ch15.rs", "not audited"),
+    ("ch16.rs", "not audited"),
+    ("ch17.rs", "not audited"),
+    ("ch19.rs", "not audited"),
+    ("ch20.rs", "not audited"),
+    (
+        "discrepancy.rs",
+        "averages over 1,000 datasets; the rms error at x = 8 carries the spread of one dataset",
+    ),
+    (
+        "ensaio.rs",
+        "not audited: the synthetic respondents of the rehearsals",
+    ),
+    (
+        "fila.rs",
+        "not audited: the queue with abandonment under one seed",
+    ),
+    (
+        "multiverse.rs",
+        "its own: the Monte Carlo sd of each specification is printed",
+    ),
+    (
+        "passk.rs",
+        "its own: the band of 2,000 repetitions is printed",
+    ),
+    (
+        "ponte.rs",
+        "a selection, not an estimate: the seed draws the cases, and a test checks it",
+    ),
+    (
+        "propagate.rs",
+        "its own: the Monte Carlo sd of each probability is printed",
+    ),
+    (
+        "stacking.rs",
+        "its own: the interval of the paired difference over 1,000 datasets is printed",
+    ),
+    (
+        "streams.rs",
+        "the null q95 of the rebuilt vaults: twenty seeds in --mc-error",
+    ),
+];
+
+/// Whether a source draws random numbers: a generator is built or a step of SplitMix64 is taken.
+pub fn draws_random_numbers(source: &str) -> bool {
+    ["Rng::new", "splitmix", "SplitMix", "fn rng", "struct Rng"]
+        .iter()
+        .any(|needle| source.contains(needle))
 }
 
 #[cfg(test)]
@@ -255,6 +369,44 @@ mod tests {
         let v: Vec<f64> = (0..2000).map(|i| i as f64).collect();
         let (lo, hi) = order_interval(&v, 0.95);
         assert!(lo < 1899.0 && hi > 1899.0 && hi - lo < 50.0, "{lo} {hi}");
+    }
+
+    #[test]
+    fn every_module_that_draws_random_numbers_says_where_its_spread_is_measured() {
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
+        let mut unlisted = Vec::new();
+        let mut drawing = 0;
+        for entry in std::fs::read_dir(&dir).expect("the source directory") {
+            let path = entry.expect("an entry").path();
+            let name = path
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("")
+                .to_string();
+            if !name.ends_with(".rs")
+                || name == "main.rs"
+                || name == "lib.rs"
+                || name == "mc_error.rs"
+            {
+                continue;
+            }
+            let source = std::fs::read_to_string(&path).expect("readable");
+            if draws_random_numbers(&source) {
+                drawing += 1;
+                if !SEED_REGISTER.iter().any(|(file, _)| *file == name) {
+                    unlisted.push(name);
+                }
+            }
+        }
+        assert!(
+            unlisted.is_empty(),
+            "draws random numbers and is not in SEED_REGISTER: {unlisted:?}"
+        );
+        assert_eq!(
+            drawing,
+            SEED_REGISTER.len(),
+            "a listed module no longer draws, or was removed"
+        );
     }
 
     #[test]

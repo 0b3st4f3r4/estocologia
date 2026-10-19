@@ -178,7 +178,12 @@ RETIRED = [
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")
     for needle, why in RETIRED:
-        if needle in body:
+        # a number is retired as a whole number: 0.419 is not inside 0.4192 (found on 2026-10-19 by a new block)
+        if needle[0].isdigit() and needle[-1].isdigit():
+            found = re.search(r"(?<![\d.])" + re.escape(needle) + r"(?![\d])", body) is not None
+        else:
+            found = needle in body
+        if found:
             problems.append(f"{chapter.name}: retired value {needle!r} is back ({why})")
 
 if problems:

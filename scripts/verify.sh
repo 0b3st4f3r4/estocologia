@@ -41,7 +41,7 @@ if ./target/release/labs --unknown-flag; then
 fi
 
 if [ "$fast" -eq 0 ]; then
-  step "all twenty labs instruments required by §V"
+  step "all twenty-four labs instruments required by §V"
   for front in all bank resolution s1 s2 queue genetics streams eprocess mc-error propagate passk multiverse stacking discrepancy h3 second-opinion bridge listening schema jev \
                rehearsal-shelf rehearsal-listening rehearsal-bridge; do
     printf -- "-- labs --%s\n" "$front"
@@ -64,7 +64,7 @@ python3 -I scripts/reimplementation/run.py > /dev/null
 step "the generated record docs/RUST_RESULTS.md"
 python3 scripts/book/generate_results.py --check
 
-step "all 32 SHA-256 seals"
+step "all 36 SHA-256 seals"
 python3 scripts/check_seals.py
 
 step "prose pass against baseline"

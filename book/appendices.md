@@ -156,8 +156,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --stacking` | Combining models when none is true: model averaging against stacking, with a duplicated model (Chapter 8) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
-| `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 426 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -193,6 +193,14 @@ Two published values sit at the edge of their spread, and the chapters now say s
 is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and the upper bound 2.61 of the interval in
 Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
 simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
+
+The audit does not cover every draw. Of the 27 modules of the laboratories that draw random numbers, 4 print their own
+spread (the propagation, the multiverse, the reliability and the stacking laboratories), 6 are audited by `--mc-error`,
+3 are of another kind (Chapter 1, which is about seeds; the discrepancy, which averages over a thousand datasets; the
+choice of cases of the bridge, a selection and not an estimate), and **14 are not audited**: their numbers are
+reproducible, and how far they would move under another seed has not been measured. A register of the 27 is kept in
+the code, and a test refuses a new module that draws random numbers without saying where its spread is measured, or
+that it is not.
 
 ---
 
@@ -317,7 +325,7 @@ weaker than the others and is declared as such.
 
 ### D.6 The neighbours of the discipline
 
-Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19. The last ten entered the same day with the theory that the research on models of the world, of agents and of modelling brought to Chapters 2, 4, 8, 14, 16 and 19; their metadata were checked against Crossref (the five DOIs of journals; Crossref gives no pages for Yao and colleagues) and the arXiv pages.
+Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata checked against Crossref, arXiv and the publishers on 2026-10-19. The last eleven entered the same day with the theory that the research on models of the world, of agents and of modelling brought to Chapters 2, 4, 8, 14, 16 and 19; their metadata were checked against Crossref (the five DOIs of journals; Crossref gives no pages for Yao and colleagues) and the arXiv pages.
 
 | Reference | Where it enters |
 | --- | --- |
@@ -340,6 +348,7 @@ Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata chec
 | **[checked]** Lieder, F.; Griffiths, T. L. "Resource-rational analysis: Understanding human cognition as the optimal use of limited computational resources", *Behavioral and Brain Sciences* 43:e1, 2020. DOI: 10.1017/S0140525X1900061X | The value of computation, and when to wake System 2 (Chapter 16) |
 | **[checked]** Ullman, T. "Large Language Models Fail on Trivial Alterations to Theory-of-Mind Tasks", arXiv:2302.08399, 2023 | Invariance as a test of understanding (Chapter 19) |
 | **[checked]** Yao, Y.; Vehtari, A.; Simpson, D.; Gelman, A. "Using Stacking to Average Bayesian Predictive Distributions (with Discussion)", *Bayesian Analysis* 13(3), 2018. DOI: 10.1214/17-BA1091 | Stacking against model averaging when no candidate is true (Chapter 8) |
+| **[checked]** Cemri, M.; Pan, M. Z.; Yang, S. et al. "Why Do Multi-Agent LLM Systems Fail?", arXiv:2503.13657, 2025 | The failures of teams of agents, against the panel (Chapter 16) |
 | **[checked]** Kennedy, M. C.; O'Hagan, A. "Bayesian Calibration of Computer Models", *JRSS B* 63(3):425–464, 2001. DOI: 10.1111/1467-9868.00294 | Simulator, discrepancy and noise (Chapter 14) |
 | **[checked]** Brynjarsdóttir, J.; O'Hagan, A. "Learning about physical parameters: the importance of model discrepancy", *Inverse Problems* 30(11):114007, 2014. DOI: 10.1088/0266-5611/30/11/114007 | What the discrepancy may not do, and why the parameter needs it (Chapter 14) |
 
@@ -613,7 +622,7 @@ No number changed.
 | 5 | The health post | three answers under one specification | a fourth: eighteen specifications with common draws, of which eight ask for the second nurse; the service cv carries 0.93 of the spread (`labs --multiverse`, sealed in point 26 before its run) | the uncertainty of an answer includes the choice of the model |
 | 8 | Proper scores | rules that judge a forecast | also a rule that combines models: stacking against model averaging, with the laboratory of two confident experts (`labs --stacking`, sealed in point 27 before its run) | the research on models of modelling and the M-open setting |
 | 14 | Failing one's own model | the tail model failed on purpose | also a parameter failed by its own model: calibrated without discrepancy it is learnt wrong with a narrow interval; with a discrepancy that is zero and flat at the origin it comes back (`labs --discrepancy`, sealed in point 28 before its run; a second declaration added the rms error at twice the range, after a drafted reading took a small mean error for a good prediction, never published) | the research on models of modelling and on emulators |
-| 16 | The machine | System 2 woken by margin; agents judged by average success | the value of computation; reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
+| 16 | The machine | System 2 woken by margin; agents judged by average success; the panel without a map of how teams fail | the value of computation; the fourteen failure modes of teams of agents held against the panel (four caught, seven in part, three not seen; `docs/MAST_AUDIT.md`); reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
 | 17 | The card | contract 1.3 | contract 1.4: the multiverse and the reliability, optional, validated when present | the two laboratories measured what the card had no place for |
 | 19 | Invariance | causes across environments | also models of other minds, tested by alterations their mechanism declares irrelevant or decisive | the research on theory of mind in language models |
 | E | Chapter 8 | "the instrument measures 0.1712 → 0.1559, 0.1560 and 0.2119 → 0.1755" | measured until 2026-10-18 in sample; out of the fit it measures 0.1708 → 0.1555, 0.1547 and 0.2147 → 0.1741 | the provenance check that closed item 16 found the paragraph speaking of the old reading in the present |
