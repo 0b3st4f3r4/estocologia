@@ -109,7 +109,7 @@ included. The first can be read without the second; the second leans on the firs
 | 16 | The team of specialists, the safeguard panel and the two systems | eight specialists; the safeguard panel A1–A8; base-rate correction and SBC; System 1 and System 2 |
 | 17 | The iron contract | cards; four prohibitions; invariants Φ1–Φ5; property tests; the funnel; gates |
 | 18 | The vault and the seal | pre-registration with hash; counter K; the vault; auditing one's own claims |
-| 19 | Seven rounds of ICP | five honest failures; light, heart and yeast |
+| 19 | Seven rounds of ICP | five honest failures; light, heart and yeast; a gate that its first declared version does not pass |
 | 20 | The live clock | zero leakage with a canary; Goodhart measured; three vaults |
 | 21 | The seven lessons and the final project | the lessons with their conditions; objections; the resolution axis; the final project |
 
@@ -587,9 +587,10 @@ did this number come from?", not because each interpretation belongs to one laye
 2 are swaps of reading: a frequency of the World read as a degree of belief of the Agent, or a count of equally
 possible cases in the Model read as a property of the World.
 
-**Coherence is cheap.** An agent who commits the conjunction fallacy loses 0.05 per round to the Dutch
-bookmaker and 0.60 to whoever knows the world. Making the agent coherent reduces the loss only to 0.55. The
-most visible error was not the most expensive one. **What punishes disagreement with the World is
+**Coherence is cheap.** An agent who commits the conjunction fallacy can be Dutch-booked, but what the
+bookmaker takes is bounded by the size of the incoherence, which is usually small. What a bettor who knows the world
+takes grows with the distance between the agent's numbers and the world's frequencies, and making the agent coherent
+does not shrink that distance. The most visible error is not the most expensive one. **What punishes disagreement with the World is
 calibration** (hence Chapter 8).
 
 **Bayes in odds.** Written in odds, Bayes' rule separates the likelihood ratio from the prior odds:
@@ -628,8 +629,9 @@ $k$ is at most $1/k$, whatever the sample size:
 
 $$P_{H_0}\Big(\sup_n \mathrm{LR}_n \ge k\Big)\le \frac{1}{k}$$
 
-In simulation, only **0.85%** of the paths under the null reached 20 decibans (ratio 100), against a bound
-of 1%.
+For a coin of 0.6 against an honest one, with paths of 500 tosses, **0.87%** of the paths under the null reach 20
+decibans (ratio 100) at some point, against a bound of 1%. The number is exact: it counts, toss by toss, the chance
+of the paths that have not yet crossed.
 
 ---
 
@@ -1360,9 +1362,11 @@ proposes a criterion instead of choosing a side. A departure is an **error** whe
 information was available and the combination rule was violated; it is a **candidate adaptation** when the norm
 assumes information that the environment does not supply reliably.
 
-The two numbers that separate the cases. In a screening with prevalence 1%, whoever ignores the base rate
-has a Brier score of **0.083**, against **0.009** for whoever uses it. In a referral clinic, where the
-real prevalence is 33%, whoever insists on 1% has **0.28**, against **0.084** for whoever ignores it. A single
+The two numbers that separate the cases. Take the mammography test of Chapter 3 (90 in 100 sick women test
+positive, 9 in 100 healthy ones too). Whoever ignores the base rate forecasts as if the prior were one half: 0.909
+after a positive, 0.099 after a negative. In a screening with prevalence 1%, that forecaster has an expected Brier
+score of **0.083**, against **0.009** for whoever uses the base rate. In a referral clinic, where the real prevalence
+is 33%, whoever insists on 1% has **0.28**, against **0.085** for whoever ignores it. A single
 heuristic is an error in one environment and a success in the other. The Brier score is the subject of Chapter 8.
 
 **The safeguard panel.** In a research process, the defence against the garden is a formal attack, not
@@ -2054,8 +2058,10 @@ spreadsheet and the life of whoever bets.
 
 In 1,000 rounds the expectation is worth $1.55 \times 10^{21}$ and the median $10^{-23}$. The factors are
 independent and identically distributed; **what is not ergodic is the product**. Even whoever simulates falls into the trap, because the
-mean of $N$ trajectories follows the expectation only for a time that grows like $\ln N$, about 12
-rounds with 10 trajectories and 112 with a million.
+mean of $N$ trajectories follows the expectation only for a time that grows like $\ln N$. A one-line estimate is
+$\ln N / (\ln \mathbb{E}[M] - \mathbb{E}[\ln M])$, the time at which the gap between the two growth rates has eaten
+the head start that the luckiest of $N$ trajectories can give: about 23 rounds with 10 trajectories and 136 with a
+million.
 
 **How much to expose: Kelly's criterion (1956).** Instead of staking everything, one chooses the fraction $f$ of the
 wealth:
@@ -2076,9 +2082,10 @@ $0.50$, has growth exactly zero, and above it the trajectory decays: at $f = 0.7
 round. Overbetting does not merely lower the growth; past twice the optimum it turns a favourable bet into a
 losing one.
 
-**Epistemic uncertainty is an argument for staking less.** With the probability estimated over 25
-rounds, full Kelly has a negative growth rate in 16% of the estimates, while half Kelly
-guarantees 75% of the growth with a quarter of the variance.
+**Epistemic uncertainty is an argument for staking less.** Take the even-odds bet with chance 0.6 and estimate the
+chance by the frequency of 25 rounds. Full Kelly on the estimate, $2\hat p - 1$, has a negative growth rate under the
+true chance whenever $\hat p$ reaches 18 of 25, which happens in 15% of the estimates (the binomial count is exact).
+Half Kelly keeps 75% of the growth of full Kelly with a quarter of the variance of the stake.
 
 **Laplace smoothing.** The simplest estimator of a probability is the observed frequency
 $k/n$. It has a fatal defect in rare events. With zero losses in 250 weeks, it says that the
@@ -2095,7 +2102,8 @@ of 100,000 pays 1,800 to cover a loss of 34,000 that occurs with chance 5%. In e
 loses 100 per month and the insurer gains 100. In time growth, the shipowner gains by insuring: his growth goes
 from $-0.0208$ to $-0.0182$ per month. The insurer, which holds many independent contracts, turns the same premium
 into positive growth once the contracts are many enough (Chapter 11 measures it). In the Peters coin, three players who split the wealth every round grow 1.6% per
-round, when each one alone would decay. **The question that decides the case is who holds the trajectories.**
+round (the mean of the logarithm of the average of their three factors, over the eight outcomes), when each one
+alone would decay. **The question that decides the case is who holds the trajectories.**
 
 **When the mean ceases to exist.** In a Pareto distribution, with $P(X > x) = x^{-\alpha}$, the
 moment of order $k$ exists if and only if $k < \alpha$. With $\alpha = 1.1$, the mean exists and is worth
@@ -2114,8 +2122,8 @@ the largest the sample of one million saw.
 
 The theorem of **Fisher, Tippett and Gnedenko** says that the normalised maximum of many draws can only
 converge to three families, Gumbel, Fréchet or Weibull, and that is why the tail is estimated from the maximum,
-not from the mean. In an example with 50 years of heavy-tailed returns, the 1-in-100-year loss comes out at 17.4%
-by the extremes distribution against 3.9% for a Gaussian fitted to the daily returns: more than four times.
+not from the mean. A Gaussian fitted to daily returns puts the 1-in-100-year loss where the bulk of the data is,
+and a heavy tail puts it far beyond: the distribution of the maxima is fitted to the extremes themselves.
 
 Taleb called the first Mediocristan and the last Extremistan, and added the type of
 consequence. The "fourth quadrant", where the tail is wild and the loss depends on the size of the event, is
@@ -2317,9 +2325,9 @@ zero and leverages. It is the **rare event that does not appear in the sample**,
 
 **The forecast that changes what it forecasts.** A published forecast is not a thermometer, because people
 react to it. A traffic app that sends every user to yesterday's fastest route
-moves the traffic jam to the route it recommended. With half of the drivers following the
-app, those who use it take 41.0 minutes and those who do not, 36.8. The forecaster who splits the users to
-equalise the times is wrong by 0.3 minute, and everybody takes 35.0. **The metric became a target and stopped
+moves the traffic jam to the route it recommended. Once enough drivers follow the app, those who use it take
+longer than those who do not. A forecaster who splits the users so as to equalise the times ends with everybody on
+the same time, and its forecast is close to right because it built the world it forecasts. **The metric became a target and stopped
 measuring.** That is Goodhart's law. The second forecaster did not escape the loop: he *designed* it and
 stabilised it.
 
@@ -2376,8 +2384,9 @@ probability the account depends on does not deserve trust.**
 
 **The forecast that changes what it forecasts.** When a model is published, people react to it. Lucas
 (1976) showed the phenomenon in economics. The parameters of a model estimated under a policy depend
-on the rules the agents expect, and they change when the policy changes. In one example, the old
-Phillips curve promises 4.59% unemployment and the new regime delivers 5.88%. The answer of Perdomo and
+on the rules the agents expect, and they change when the policy changes. A Phillips curve
+estimated under one policy promises a lower unemployment than the new regime delivers, because the agents have
+learnt the new rule. The answer of Perdomo and
 colleagues (2020) is conceptual: **performatively stable** is the model that is optimal for the
 distribution it induces.
 
@@ -3052,8 +3061,7 @@ practice, it compares the treated with a handful of CPS people who look like the
 different in things that the model does not see.
 
 **Where the numbers of the propensity fit come from.** They are not printed by the laboratory; they come from the
-research record (`empirical/p05-prioris/h1-real/README.md`), computed by code retired from the tree on 2026-10-16 and
-kept at commit `1bfec905` (`fundo/p05-prioris/h1-real/projetos/b_real.py`). The recipe, so that a reader can redo it:
+research record, computed by code that no longer runs beside the book (Appendix E says where it is kept). The recipe, so that a reader can redo it:
 the propensity score is a logistic regression of being treated on the Dehejia–Wahba covariates (age and its square,
 centred at 30 and scaled by 10; education and its square, centred at 11 and scaled by 3; black, Hispanic, married,
 no degree; income of 1974 and of 1975 in tens of thousands, their squares and an indicator of zero income), with a
@@ -3064,8 +3072,8 @@ independent Beta posteriors, one per arm and race, with the weighted controls en
 Beta(1, 1) priors except for untreated black men, whose prior is a Beta fitted to the quartiles of a simulated
 elicitation (0.433, 0.533, 0.633). The weighted point estimate is +9.0. The placebo removes the 1975 terms from the
 score and uses employment in 1975 as the outcome. The Kelly interval of the market case, the skill in the vault and the
-false negative rates below come from the same record and the same commit (`a_real.py` and `b_real.py`), and their
-recipes are longer than a paragraph; they stay cited, not reproduced in the tree.
+false negative rates below come from the same record, and their
+recipes are longer than a paragraph; they stay cited, not reproduced beside the book.
 
 **What the vault showed.** With the 260 randomised controls, the skill of the model is +0.18 (it predicted 0.655 of
 employment, the observed was 0.646); the logistic regression stays at +0.09 and the raw counterfactual of the CPS, at −0.002. The
@@ -3303,12 +3311,12 @@ Positive skill means that the forecaster beats the constant; **negative, that it
 (−0.015), the POT (−0.003) and the Laplace (−0.024) lost; the claim (−0.052) lost more. No forecaster won the
 right to decide, and the record of the analysis says so. The recipe: each forecaster states one monthly chance for
 the 24 months of the vault, two of which were hit; the climatology is the frequency of the training set, 5/108; the
-claim's zero is held at 1%, the floor of the forecast diary; Laplace is 1/38; the POT is the chance of the tail above;
+claim's zero is held at 1%, the floor that the forecast diary of Chapter 18 imposes; Laplace is 1/38; the POT is the chance of the tail above;
 the model is the mean of the Beta posterior of the monthly chance, with 5 hits in 108 months and a Beta prior fitted to
 the quartiles of a simulated elicitation (0.011, 0.0187 and 0.0283 per month). The trend of the claims is a Poisson
 regression of the monthly count of all claims above 1 M DKK in the training set on time in years, with a likelihood
-ratio test against a constant rate. These come from the research record (`empirical/p05-prioris/h1-real/README.md`;
-the code is at commit `1bfec905`, `fundo/p05-prioris/h1-real/projetos/c_real.py`).
+ratio test against a constant rate. These come from the research record, made with code that no longer runs beside the
+book (Appendix E says where it is kept).
 
 **The same pattern elsewhere.** The insurance seller of Chapter 10 lives the same story. In 37% of the simulated
 histories of 250 weeks not a single loss appears. "I never lost" is worth 1.3 bits of evidence against a negligible
@@ -4141,8 +4149,8 @@ temperature $T$:
 $$\tau \approx \frac{2\pi}{\sqrt{U''(x_{\min})\,\lvert U''(x_{\max})\rvert}}\; e^{\Delta U/T}.$$
 
 For high barriers, that time has almost no memory. Whoever waited a long time is not closer to the jump.
-Looked at only in the jumps, however, the noise looks like a push. In 591 simulated jumps, the noise just
-before the jump pointed in its direction in 99% of the cases, with no external force at all. Looking for the cause of a
+Looked at only in the jumps, however, the noise looks like a push: just before a jump, the noise almost always
+points in its direction, with no external force at all, because a jump is selected precisely by the noise that made it. Looking for the cause of a
 jump is a selection error; looking for the cause of a change in the frequency of the jumps is not.
 
 **The five invariants.** Nothing enters the graph without passing the invariants, which work as database
@@ -4189,10 +4197,10 @@ itself as a funnel, and in it most of the weak hypotheses fall before touching h
 
 **Worked case: the identifiability of $R_0$.** At the beginning of an epidemic, the cases grow like
 $\exp((\beta - \gamma)t)$, and the data determine the **difference** $\beta - \gamma$, not the ratio
-$R_0 = \beta/\gamma$. With 25 days of simulated cases, in which the truth is $R_0 = 2$, the compatible values
-go from **1.38 to 5.90**, and the predicted final size goes from **50% to 100%** of the population. With 45 days, $R_0$
-stays between **2.00 and 2.24**, but by then the curve has already doubled. Taking the duration of the infection from other studies narrows
-$R_0$ to **1.81 to 2.11**. That is not a defect, as long as one declares that the margin became the one of the source.
+$R_0 = \beta/\gamma$. With a few weeks of noisy cases, a wide range of $R_0$ fits the curve equally well, and the
+predicted final size ranges from about half the population to all of it. More days narrow the range, but by then the
+curve has already grown. Taking the duration of the infection from other studies fixes $\gamma$ and narrows $R_0$
+at once. That is not a defect, as long as one declares that the margin became the one of the source.
 
 **The automatic gates.** No delivery is consolidated without passing the gates on a clean machine. The
 agents and the $\Phi$ have already been formalised; the gates **repeat the work and compare**. A repeated input has
@@ -4514,7 +4522,7 @@ seven for an altered version, the root changes in **7 of 7** cases. That is what
   groups was heard.
 - A self-audit applies the severe test to the work's own assumptions, and usually narrows the reach of its numbers.
 
-## Chapter 19. Seven rounds to find true causes in science
+## Chapter 19. Seven rounds in search of invariant causes, and what they found
 
 **Objectives.** By the end of this chapter you must know how one defines an environment that *intervenes* in a variable, why a
 cause only deserves that name if it survives the exchange of environments, why a demanding gate failed five times before
@@ -5460,78 +5468,78 @@ example. The order is alphabetical.
 | --- | --- | --- |
 | **Abduction** | Choosing, among the hypotheses considered, the one that makes what was seen least surprising | The noise in the engine wakes the neighbour: the simplest explanation is the car, not a drone |
 | **Agent ($L_3$)** | Whoever decides, with limited time, attention and money: a person, an institution or an algorithm | You choosing the way home at 7 a.m., with the tank on reserve |
-| **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
-| **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
+| **Aleatory uncertainty** | The variability of the world, which more data do not reduce | The outcome of the honest die: rolling ten thousand times does not make the die predictable |
 | **Background audit** | A front that tests an assumption of the program itself, with a declaration written before running | The teacher who redoes the exam before applying it to the students, with the answer key sealed |
-| **Safeguard panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it prints one pair of bits per safeguard and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
-| **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
 | **Bayes (rule of)** | The rule that says how today's belief is updated with the evidence of now, starting from yesterday's belief | A positive pregnancy test in a low-risk person can still be a false positive most of the time |
+| **Bias (three senses)** | Distortion of the datum, of the estimator and of the mind, and the three accumulate | An uncalibrated scale, an average that mixes weights and the haste of whoever reads the number |
 | **Brier (score of)** | The mean of the squared error of a probabilistic forecast: lower is better, and 0 is perfect | Betting 90% on a game and losing costs more on the scoreboard than betting 55% and losing |
+| **Brier skill** | How much the model improves, in percentage, over the climatologist who only repeats the base rate | How much the rain forecast gains over "it rains as often as always" |
 | **Calibration** | The property of whoever says "30%" and gets it right in about 30% of the cases | A meteorologist who says "chance of rain" 100 times and it rains in 62 of them is miscalibrated |
 | **Canary** | A leak planted on purpose to prove that the leakage test works | The test camera the shop triggers on purpose to check whether the alarm rings |
-| **Heavy tail** | A distribution in which extreme events are far more frequent than the bell curve would suppose | Days of −10% on the stock market exist; in a Gaussian world they would almost never happen |
-| **Exit clause** | The objective trigger that says when the recommendation stops holding | "I review the medicine if the fever stays above 39 °C for two days in a row" |
-| **Vault** | The part of the data that stays closed until pre-registration, and opens a single time | The sealed envelope of the exam, opened only after the student hands in the answer |
+| **Chouldechova's trilemma** | With different base rates between groups and an imperfect classifier, equal predictive value (PPV) and equal false-positive and false-negative rates cannot hold together. Equal PPV is one kind of calibration; calibration within groups (Kleinberg and colleagues) is a related but distinct one | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
+| **Circuit breaker** | The mechanism that swaps the model for a safe reserve when it loses over a moving window | The autopilot that switches itself off when the sensor disagrees for too long |
 | **Confounder** | A common cause of two variables that makes it look as if one causes the other | Ice cream and drowning rise together: both rise with the heat |
 | **Counter $K$** | The tally of the number of specifications tried in order to answer the same question | The number of attempts written in the margin of the notebook to get a password right |
 | **Decision lens (Crisonomy)** | The lens of judgement: value of information, proper scores, calibration and cost of the error | Paying for one more exam before deciding whether the surgery is worth it |
-| **Time lens (Chrononomy)** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
+| **Decision-maker's question** | The question the decision uses, with who decides, which action changes and the question mark at the end | "Does reducing the class to 15 students improve reading one year later?" |
 | **Design (effect of)** | How many dependent rows are worth one independent row | The same 30 people answering 10 times are not worth 300 people |
-| **Circuit breaker** | The mechanism that swaps the model for a safe reserve when it loses over a moving window | The autopilot that switches itself off when the sensor disagrees for too long |
-| **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
 | **ECE (expected calibration error)** | The mean distance between predicted and observed, computed by confidence bands | Estimating the error of a thermometer band by band, from 35 to 42 degrees |
+| **Epistemic uncertainty** | The model's ignorance about the world, which shrinks with data | Not knowing the average height of the class; measuring everyone solves it |
 | **Erlang C** | The classical formula that estimates how many attendants are needed for a queue | How many checkouts to open at the supermarket so that 80% of the customers wait less than 20 seconds |
+| **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
+| **Exit clause** | The objective trigger that says when the recommendation stops holding | "I review the medicine if the fever stays above 39 °C for two days in a row" |
+| **Filtered sample** | A sample that contains only the cases that survived some filter, taken for the whole population | Counting how many famous musicians dropped out of college and concluding that college gets in the way |
+| **Fixed seed** | The starting point of the draw, declared so that two machines produce the same world | The recipe with the exact amount, so that the cake comes out the same at the neighbour's house |
+| **Gate** | The automatic test that says yes or no, with exit code 0 or 1 | The subway turnstile: it does not open for whoever has not gone through |
+| **Goodhart (law of)** | When the measure becomes the goal, it stops measuring | The school that trains the students for the exam and the grade rises without learning rising |
+| **Heavy tail** | A distribution in which extreme events are far more frequent than the bell curve would suppose | Days of −10% on the stock market exist; in a Gaussian world they would almost never happen |
+| **ICP (invariant causal prediction)** | The method that returns the variables common to every set whose relation to the outcome does not change across environments: a conservative estimate of the direct causes, wrong with at most the declared chance | The recipe that works in your house and in your grandmother's, with a different oven |
+| **Independent unit** | The smallest unit whose observations do not share the same source of variation | The school, and not the student, when students of the same school resemble one another |
+| **Information lens (Fluxonomy)** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
+| **Inspection paradox** | Sampling by arrival over-represents the long intervals, so the experience of the average arrival is worse than the average interval | Asked how long they waited, most patients answer from the busy days, because most of them came on busy days |
+| **Invariance lens (Morphonomy)** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
+| **Invariants $\Phi_1$ to $\Phi_5$** | The five boundary conditions every claim must satisfy: simulability ($\Phi_1$), independent unit ($\Phi_2$), severe test ($\Phi_3$), scope and exit clause ($\Phi_4$) and resolution of the question ($\Phi_5$) | The five locks of the sheet that reject a work before the argument |
+| **Jensen (inequality of)** | The mean of a curved function is not the function of the mean | The average waiting time grows when arrivals oscillate, even with the same average arrival |
+| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
+| **Knightian uncertainty** | In this book, a real process outside the hypothesis space that nobody listed, in which more data give false confidence (Knight's own sense, probabilities that cannot be measured, is its neighbour, Chapter 4) | The turkey that fattens for a thousand days until Christmas Day |
+| **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
+| **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
+| **Lenses (the five)** | The five fixed ways of looking of the program: information, time, tail, invariance and decision, labelled in the code Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
+| **Likelihood** | The chance of seeing what was seen, supposing each hypothesis true | "How likely is this stain on the roof if it is rain? And if it is seepage?" |
+| **Meng's identity** | The equation that says how much of the final answer depends on the data that are missing | Assessing the class by measuring only those who came to the exam: the absent ones change the average |
+| **Model ($L_2$)** | The formal, simplified and simulable representation of the world | The scale model of the building, with paper walls |
+| **Murphy (decomposition of)** | The account that separates the error of a forecast into reliability, resolution and difficulty of the event | A good student who fails the exam because of difficulty, not because of not knowing the subject |
+| **Natural frequencies** | Stating the risk as "x in every 100", with a fixed denominator | "In every 100 patients, 25 wait more than half an hour" instead of "25% risk" |
+| **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
+| **Null model** | The simulation of what chance alone would produce, to compare with what was observed | Drawing groups by an honest lottery a thousand times before believing in the effect of the medicine |
+| **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
+| **$p$-value** | The frequency with which a world without effect would produce a result at least as extreme as the one seen | Flipping the coin 100 times and seeing 62 heads: how strange is that in the honest world? |
+| **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
+| **Pearl (ladder of)** | The three rungs: see, act and imagine what did not happen | Watching the price of tomatoes rise, deciding to buy pineapple, and imagining how things would be without the frost |
+| **$\Phi_5$ (resolution of the question)** | The invariant that rejects aggregated decision ($R_0$) when the independent unit is the day or coarser | Scaling by the average day when the clinic alternates between calm and surge |
+| **Pre-registration with hash** | Freezing the criterion before seeing the data, with the cryptographic digest recorded | Writing the guess and sealing the envelope before opening the result |
+| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
+| **Pseudoreplication** | Treating dependent observations as independent, shrinking the margin for no reason | Counting ten photos of the same person as ten people in the crowd |
+| **Resolution** | The capacity to separate the cases that have the event from those that do not | Telling the days of heavy rain from the drizzle, and not only getting the month's average right |
+| **Ruin** | Reaching zero and no longer being able to play, regardless of the average of the bets | Whoever uses the whole credit card at the limit loses the right to stay in the game |
+| **Safeguard panel** | The checklist of eight safeguards that a card must declare and anchor before approval; it prints one pair of bits per safeguard and runs no attack itself | The pre-flight checklist: it proves that every item was looked at, not that the plane will fly |
+| **Saturation** | When the environment is a function of the variables of the set, and the test has no way of rejecting | Counting the traffic light's colour to forecast the traffic light's colour |
+| **Scope term** | The declaration of where the conclusion holds and where it does not | "This holds for the morning shift; at the weekend the queue is another one" |
+| **Severity** | The chance that the procedure would have given a less favourable result if the claim were false | The fire drill that counts only because the alarm would have rung had there been smoke |
+| **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
+| **Sheet bus** | The channel through which the pieces of the work exchange sheets, chained by cryptographic digest, so that nothing can be rewritten without breaking the chain | The minutes of a meeting signed page by page: changing one page invalidates the signature of the following ones |
+| **SHELF** | The protocol for eliciting experts by median, quartiles and extremes | Asking the doctor not for a guess, but for a range and a most probable value |
+| **$t_{\mathrm{disp}}$ (clock)** | The instant at which each datum becomes knowable | The exam result that only exists after it leaves the laboratory |
+| **Tail lens (Scalonomy)** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
+| **Time lens (Chrononomy)** | The lens of time: the average of many people against the average of one life, ruin and growth | Whoever bets half the estate every month goes broke before harvesting the pretty average |
 | **Type I error** | Raising the alarm when there was nothing | The smoke detector that goes off while the bread is toasting |
 | **Type II error** | Not raising the alarm when there was something | The detector with a weak battery that stays silent in the fire |
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
 | **Type M error** | Getting the size of the effect wrong, too large or too small, typically by a study too small for the effect it seeks | A small trial that only reaches significance when chance doubles the effect, and then reports the doubled effect |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
-| **Tail lens (Scalonomy)** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
-| **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
-| **EVPI and EVSI** | How much perfect information is worth, and how much the information from one sample is worth, in expected money | How much you would pay to know today tomorrow's demand, before buying the stock |
-| **Sheet** | The closed list of questions asked of a text, a number or a model | The mechanic's checklist: without it, the same item is always forgotten |
-| **Information lens (Fluxonomy)** | The lens of the current: how probability and information flow, and where they are lost | The telephone game: the message loses bits at every repetition |
-| **Natural frequencies** | Stating the risk as "x in every 100", with a fixed denominator | "In every 100 patients, 25 wait more than half an hour" instead of "25% risk" |
-| **Goodhart (law of)** | When the measure becomes the goal, it stops measuring | The school that trains the students for the exam and the grade rises without learning rising |
-| **Brier skill** | How much the model improves, in percentage, over the climatologist who only repeats the base rate | How much the rain forecast gains over "it rains as often as always" |
 | **Typed hypergraph** | A map of knowledge in which the links have a type and can join more than two things | The subway map with named lines, and not only points joined by strokes |
-| **ICP (invariant causal prediction)** | The method that returns the variables common to every set whose relation to the outcome does not change across environments: a conservative estimate of the direct causes, wrong with at most the declared chance | The recipe that works in your house and in your grandmother's, with a different oven |
-| **Meng's identity** | The equation that says how much of the final answer depends on the data that are missing | Assessing the class by measuring only those who came to the exam: the absent ones change the average |
-| **Aleatory uncertainty** | The variability of the world, which more data do not reduce | The outcome of the honest die: rolling ten thousand times does not make the die predictable |
-| **Epistemic uncertainty** | The model's ignorance about the world, which shrinks with data | Not knowing the average height of the class; measuring everyone solves it |
-| **Knightian uncertainty** | In this book, a real process outside the hypothesis space that nobody listed, in which more data give false confidence (Knight's own sense, probabilities that cannot be measured, is its neighbour, Chapter 4) | The turkey that fattens for a thousand days until Christmas Day |
-| **Invariants $\Phi_1$ to $\Phi_5$** | The five boundary conditions every claim must satisfy: simulability ($\Phi_1$), independent unit ($\Phi_2$), severe test ($\Phi_3$), scope and exit clause ($\Phi_4$) and resolution of the question ($\Phi_5$) | The five locks of the sheet that reject a work before the argument |
-| **$\Phi_5$ (resolution of the question)** | The invariant that rejects aggregated decision ($R_0$) when the independent unit is the day or coarser | Scaling by the average day when the clinic alternates between calm and surge |
-| **Jensen (inequality of)** | The mean of a curved function is not the function of the mean | The average waiting time grows when arrivals oscillate, even with the same average arrival |
-| **Kelly (criterion of)** | The fraction of the estate that maximizes growth over the long run: $p/a - (1-p)/b$ for a bet that gains $b$ or loses $a$ | Betting 20% when the chance is 60% at 1 to 1, a quarter in the Peters coin; twice that has zero growth |
-| **Kupiec (test of)** | The test that checks whether the number of violations of the value at risk is the expected one | Checking whether the flood insurance triggered at the promised frequency |
-| **Laplace (rule of)** | The rule that adds one imaginary success and one imaginary failure before estimating a probability | "I never saw that happen" in 36 months is not the same as "it cannot happen" |
-| **Lenses (the five)** | The five fixed ways of looking of the program: information, time, tail, invariance and decision, labelled in the code Fluxonomy, Chrononomy, Scalonomy, Morphonomy and Crisonomy | Five specialists examining the same house: plumber, electrician, mason, architect and the resident |
-| **Model ($L_2$)** | The formal, simplified and simulable representation of the world | The scale model of the building, with paper walls |
-| **Null model** | The simulation of what chance alone would produce, to compare with what was observed | Drawing groups by an honest lottery a thousand times before believing in the effect of the medicine |
-| **Invariance lens (Morphonomy)** | The lens of form: what is preserved when the environment changes | The accent that survives the move to another city |
+| **Vault** | The part of the data that stays closed until pre-registration, and opens a single time | The sealed envelope of the exam, opened only after the student hands in the answer |
 | **World ($L_1$)** | The reality that generates the data and that we never see in full | The real neighbourhood, with the holes the map does not show |
-| **Murphy (decomposition of)** | The account that separates the error of a forecast into reliability, resolution and difficulty of the event | A good student who fails the exam because of difficulty, not because of not knowing the subject |
-| **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
-| **$p$-value** | The frequency with which a world without effect would produce a result at least as extreme as the one seen | Flipping the coin 100 times and seeing 62 heads: how strange is that in the honest world? |
-| **Pearl (ladder of)** | The three rungs: see, act and imagine what did not happen | Watching the price of tomatoes rise, deciding to buy pineapple, and imagining how things would be without the frost |
-| **Decision-maker's question** | The question the decision uses, with who decides, which action changes and the question mark at the end | "Does reducing the class to 15 students improve reading one year later?" |
-| **Gate** | The automatic test that says yes or no, with exit code 0 or 1 | The subway turnstile: it does not open for whoever has not gone through |
-| **Pre-registration with hash** | Freezing the criterion before seeing the data, with the cryptographic digest recorded | Writing the guess and sealing the envelope before opening the result |
-| **Pseudoreplication** | Treating dependent observations as independent, shrinking the margin for no reason | Counting ten photos of the same person as ten people in the crowd |
-| **Resolution** | The capacity to separate the cases that have the event from those that do not | Telling the days of heavy rain from the drizzle, and not only getting the month's average right |
-| **Ruin** | Reaching zero and no longer being able to play, regardless of the average of the bets | Whoever uses the whole credit card at the limit loses the right to stay in the game |
-| **Saturation** | When the environment is a function of the variables of the set, and the test has no way of rejecting | Counting the traffic light's colour to forecast the traffic light's colour |
-| **Fixed seed** | The starting point of the draw, declared so that two machines produce the same world | The recipe with the exact amount, so that the cake comes out the same at the neighbour's house |
-| **Severity** | The chance that the procedure would have given a less favourable result if the claim were false | The fire drill that counts only because the alarm would have rung had there been smoke |
-| **SHELF** | The protocol for eliciting experts by median, quartiles and extremes | Asking the doctor not for a guess, but for a range and a most probable value |
-| **$t_{\mathrm{disp}}$ (clock)** | The instant at which each datum becomes knowable | The exam result that only exists after it leaves the laboratory |
-| **Scope term** | The declaration of where the conclusion holds and where it does not | "This holds for the morning shift; at the weekend the queue is another one" |
-| **Chouldechova's trilemma** | With different base rates between groups and an imperfect classifier, equal predictive value (PPV) and equal false-positive and false-negative rates cannot hold together. Equal PPV is one kind of calibration; calibration within groups (Kleinberg and colleagues) is a related but distinct one | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
-| **Inspection paradox** | Sampling by arrival over-represents the long intervals, so the experience of the average arrival is worse than the average interval | Asked how long they waited, most patients answer from the busy days, because most of them came on busy days |
-| **Independent unit** | The smallest unit whose observations do not share the same source of variation | The school, and not the student, when students of the same school resemble one another |
-| **Likelihood** | The chance of seeing what was seen, supposing each hypothesis true | "How likely is this stain on the roof if it is rain? And if it is seepage?" |
-| **Bias (three senses)** | Distortion of the datum, of the estimator and of the mind, and the three accumulate | An uncalibrated scale, an average that mixes weights and the haste of whoever reads the number |
 
 ---
 
@@ -5632,14 +5640,16 @@ third-party files are not reproduced. The check found no divergence of content, 
 missing, and corrected two earlier citations: the article on the benefit cap is by **Meyer**, Viscusi and Durbin,
 and Baltagi and Levin came out in *Structural Change and Economic Dynamics*. Two source reservations remain: the
 final page of Chernoff 1954 and that of van Dantzig 1956 did not come out in the sources consulted. SHELF is a
-protocol, not a book. The line marked **[to check]** in D.2 entered with the review of 2026-10-18, which found that the
-proper scoring rules had been credited to Savage 1951, an article on decision criteria; its metadata await the same
-check as the other 50 lines. A reading of 2026-10-19 found that the text cites, by author and year, many works that
+protocol, not a book. The line on proper scoring rules in D.2 entered with the review of 2026-10-18, which found that they
+had been credited to Savage 1951, an article on decision criteria; its three references were checked against Crossref
+on 2026-10-19. A reading of 2026-10-19 found that the text cites, by author and year, many works that
 the list did not carry; they are gathered in D.5. The same day 24 of the 26 were checked against the Crossref API (and
 two against arXiv and the PMLR proceedings): no divergence of content; the issue of Peters 2019 and the volume and
 article number of Kleinberg and colleagues were completed. Two source reservations, as for Chernoff and van Dantzig:
-Crossref gives only the first page of Berkson 1946 and no pages for Hill 1975. Two lines stay **[to check]**: Cover and
-Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter that Crossref does not index.
+Crossref gives only the first page of Berkson 1946 and no pages for Hill 1975. Cover and Thomas, refused once by a rate limit, was checked later
+the same day by its DOI (Crossref dates the online edition 2005; the second print edition is 2006). Platt 1999 is a
+book chapter that Crossref does not index; its full title and pages were checked against a secondary source, which is
+weaker than the others and is declared as such.
 
 ### D.2 Classics to begin with
 
@@ -5649,7 +5659,7 @@ Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter 
 | **[checked]** Hume, *Enquiry* (1748; the title *Enquiry* is from the 1758 edition) | The question that no statistics solves: why does the future resemble the past? |
 | **[checked]** Knight, *Risk, Uncertainty and Profit* (1921) | The distinction between measurable risk and uncertainty that cannot be measured, in Chapter 4 |
 | **[checked]** Savage, *The Foundations of Statistics* (1954) and Savage, *JASA* 46:55–67 (1951) | Belief measured by betting, and the minimax-regret criterion of Chapter 11 |
-| **[to check]** Brier, *Monthly Weather Review* 78(1):1–3 (1950); Good, *JRSS B* 14(1):107–114 (1952); Savage, *JASA* 66(336):783–801 (1971) | Where the proper scoring rules come from: the quadratic score, the logarithmic score, and the theory that ties them to honest elicitation |
+| **[checked]** Brier, *Monthly Weather Review* 78(1):1–3 (1950); Good, *JRSS B* 14(1):107–114 (1952); Savage, *JASA* 66(336):783–801 (1971) | Where the proper scoring rules come from: the quadratic score, the logarithmic score, and the theory that ties them to honest elicitation |
 | **[checked]** Wald, *Statistical Decision Functions* (1950) and Chernoff, *Econometrica* 22(4) (1954) | Deciding with loss, and not only with probability: the basis of Chapter 11 |
 | **[checked]** Royall, *Statistical Evidence: A Likelihood Paradigm* (1997) | Likelihood as a measure of evidence, and not as a final answer |
 | **[checked]** Tversky and Kahneman, "Judgment under Uncertainty" (1974) | The catalogue of mental shortcuts that Chapter 2 organizes by ignored model of chance |
@@ -5727,7 +5737,7 @@ Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter 
 | **[checked]** Open Science Collaboration. *Science* 349(6251):aac4716, 2015 | The replication of 100 psychology studies (Chapter 7) |
 | **[checked]** Murphy, A. H. *Journal of Applied Meteorology* 12(4):595–600, 1973 | The decomposition of the Brier score (Chapters 8 and 20) |
 | **[checked]** Gneiting, T.; Raftery, A. E. *JASA* 102(477):359–378, 2007 | Proper scoring rules (Chapter 8) |
-| **[to check]** Platt, J. C. "Probabilistic outputs for support vector machines", in *Advances in Large Margin Classifiers*, MIT Press, 1999 | Platt recalibration (Chapters 8 and 20) |
+| **[checked]** Platt, J. C. "Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods", in *Advances in Large Margin Classifiers*, MIT Press, 1999, pp. 61–74 | Platt recalibration (Chapters 8 and 20) |
 | **[checked]** Hernán, M. A. et al. *Epidemiology* 19(6):766–779, 2008 | Hormone therapy reanalysed as a trial (Chapter 9) |
 | **[checked]** Hill, B. M. *Annals of Statistics* 3(5):1163–1174, 1975. DOI: 10.1214/aos/1176343247 | The tail estimator (Chapters 10, 14 and 15) |
 | **[checked]** Clauset, A.; Shalizi, C. R.; Newman, M. E. J. *SIAM Review* 51(4):661–703, 2009 | Proof before declaring a power law (Chapter 21) |
@@ -5736,7 +5746,7 @@ Thomas, whose query was refused by a rate limit, and Platt 1999, a book chapter 
 | **[checked]** Perdomo, J.; Zrnic, T.; Mendler-Dünner, C.; Hardt, M. *ICML*, PMLR 119:7599–7609, 2020 | Performative stability (Chapter 11) |
 | **[checked]** Chouldechova, A. *Big Data* 5(2):153–163, 2017 | The identity of the trilemma (Chapters 11 and 20) |
 | **[checked]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS 2017*, LIPIcs 67:43:1–43:23. DOI: 10.4230/LIPIcs.ITCS.2017.43 | Calibration within groups (Chapter 11) |
-| **[to check]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006 | The information lens under its usual name (Chapter 15) |
+| **[checked]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006. DOI: 10.1002/047174882X | The information lens under its usual name (Chapter 15) |
 
 ### D.6 How to use this list
 
@@ -5925,30 +5935,53 @@ and is not the independent audit that Chapter 21 asks for. No instrument changed
 | 12 to 18 | Order of the chapters | the machine (then 12 to 15) before the three real cases (then 16 to 18) | the cases right after the theory (12 to 14), the machine after them (15 to 18); see the numbering above | the method can be read without the machine; the old order made the reader cross the machine to reach the cases |
 | Title | Title of the book | "Stochology: A Textbook" | "Stochology: Judgement and Decision under Uncertainty", a working text | a textbook is what the outside audit of Chapter 21 would certify; it has not been done |
 
+### Rectifications of the remaining points, 2026-10-19
+
+A last pass of the same day, on the points the critical reading had left open. Text, the reimplementation and the
+registry; no instrument changed.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 3 | Null paths reaching 20 decibans | 0.85% "in simulation", no horizon | 0.87% over paths of 500 tosses, exact | the simulation had no declared horizon; the exact count needs one |
+| 3 | Dutch book and calibration | 0.05, 0.60 and 0.55 | the argument without the numbers | no recipe in any source |
+| 7 | Brier of the base-rate heuristic in a referral clinic | 0.084 | 0.085, with the recipe (mammography test, prior one half) | the recipe gives 0.0851 |
+| 10 | Horizon of the ensemble mean | about 12 rounds for 10 trajectories and 112 for a million | 23 and 136, by ln N over the gap of the two growth rates | the earlier pair does not grow like ln N, which the sentence claimed |
+| 10 | Full Kelly on an estimated chance | 16% | 15%, from 18 of 25, exact binomial | the recipe gives 15.4% |
+| 10 | Extremes against Gaussian | 17.4% against 3.9% | the argument without the numbers | no recipe in any source |
+| 11 | Two-route app; Phillips curve | 41.0, 36.8, 35.0 and 0.3 min; 4.59% and 5.88% | the argument without the numbers | no recipe in any source |
+| 17 | Kramers jumps; identifiability of R0 | 591 jumps, 99%; 1.38 to 5.90, 2.00 to 2.24, 1.81 to 2.11 | the argument without the numbers | no recipe in any source |
+| 13, 14 | Paths of the research record | written in the chapter | moved to the sections of Chapters 13 and 14 below | the chapters carry content only |
+| 14 | Floor of the claim's forecast | "the floor of the forecast diary" | points to Chapter 18, where the diary is defined | the reordering put the diary after the chapter |
+| 19 | Title | "Seven rounds to find true causes in science" | "Seven rounds in search of invariant causes, and what they found" | the title promised what the chapter concedes it did not deliver |
+| A | Order of the dictionary | the order of the Portuguese original | alphabetical in English | the table says it is alphabetical |
+| D | The last references to check | Cover and Thomas, Platt 1999, and the D.2 line on scoring rules | all checked; Platt against a secondary source | 77 of 77 lines checked |
+
 ### Numbers cited without an instrument in this book
 
 The preface promises that every number comes from an instrument the reader can run or from a cited source. These do
 not come from an instrument beside the book; most come from worked examples of the paper and of the obsolete course,
-others from the research records. Three were recomputed by the critical reading of 2026-10-19 from the text alone.
+others from the research records. The critical reading of 2026-10-19 recomputed three of them from the text, and a
+later pass the same day wrote a recipe for five more, reproduced in `scripts/reimplementation/recipes.py`, and cut the
+numbers of the six that could not be reconstructed, keeping the argument.
 
 | Chapter | Number | Where it comes from | Status |
 | --- | --- | --- | --- |
-| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | no recipe in the text |
+| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | not reconstructable from the text; the numbers were cut and the argument kept |
 | 3 | 229 tosses to separate a 0.6 coin with odds of 100 to 1 | Kullback-Leibler | recomputed: 228.7 |
 | 3 | Maximum entropy with mean 4.5: about 5% on face 1 and 35% on face 6 | Jaynes | recomputed: 5.4% and 34.7% |
-| 3 | 0.85% of null paths reach 20 decibans | course simulation in the paper | no recipe in the text |
-| 7 | Brier 0.083 and 0.009, 0.28 and 0.084 of the base-rate heuristic | course example in the paper | no recipe in the text |
-| 10 | Mean of N trajectories follows the expectation for about 12 rounds (N = 10) and 112 (a million) | course example | no recipe; ln N over the gap of the two growth rates gives 23 and 136, so the rule the text uses needs to be stated |
-| 10 | Full Kelly negative in 16% of estimates from 25 rounds | course example | no recipe in the text |
-| 10 | Three players who pool grow 1.6% per round | course example | no recipe in the text |
-| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | no recipe in the text |
-| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | no recipe in the text |
-| 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | no recipe in the text |
-| 15 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
-| 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
-| 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | no recipe in the text |
+| 3 | 0.85% of null paths reach 20 decibans | course simulation in the paper | recipe written: paths of 500 tosses, exact count 0.87% |
+| 7 | Brier 0.083 and 0.009, 0.28 and 0.084 of the base-rate heuristic | course example in the paper | recipe written: the mammography test with a prior of one half; 0.083, 0.009, 0.28 and 0.085 |
+| 10 | Mean of N trajectories follows the expectation for about 12 rounds (N = 10) and 112 (a million) | course example | recipe written: ln N over the gap of the two growth rates, 23 and 136; a simulation of the median ensemble mean agrees |
+| 10 | Full Kelly negative in 16% of estimates from 25 rounds | course example | recipe written: even odds, chance 0.6, exact binomial, 15% |
+| 10 | Three players who pool grow 1.6% per round | course example | recipe written: exact over the eight outcomes, 1.6% |
+| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
+| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
+| 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 13 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
 | 14 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
+| 15 | Scale audit: 329 domains, 26,634 nodes, 6,494 concept nodes | research record | not reproduced here |
+| 16 | Five of 33 domains change with the literature prior | research record | not reproduced here |
+| 17 | R0 between 1.38 and 5.90 with 25 days; Kramers, 591 jumps, 99% | course examples in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 19 | Every result on real data: chambers, cardiac trial, small classes, yeast | research record | not reproduced here; the laboratory is a simulation |
 | 20 | Every stream, vault and fairness audit | research record | not reproduced here; the laboratory is a simulation |
 | 21 | Loss aversion of 2.25 justified only with 56% of the wealth at stake | paper | recomputed: a loss of a share x needs a gain of x/(1 − x) to break even in growth, and 1/(1 − x) = 2.25 at x = 0.556 |
@@ -6090,6 +6123,11 @@ is inside the variation of the instrument, and the two sets of numbers stay on t
 
 ### Chapter 13
 
+**Where the cited numbers of this chapter live.** The numbers that the text attributes to the research record come
+from `empirical/p05-prioris/h1-real/README.md`, computed by code retired from the tree on 2026-10-16 and kept at
+commit `1bfec905` (`fundo/p05-prioris/h1-real/projetos/`, `a_real.py` and `b_real.py`). Until 2026-10-19 these paths were written in the
+chapter; they moved here because the chapters carry content only.
+
 The report of the market case records 0.051, 0.072 and 0.060 of growth per year;
 the instrument measures **0.0515, 0.0719 and 0.0601** — the coincidence is of three places, because the account is the same. The
 published cohorts with a monthly start are 1,135 and the ones here are 1,134 (the difference is the border criterion: one cohort
@@ -6105,6 +6143,11 @@ case deserves a note: the earlier text cites "from 1929 to 1932, the capital fal
 appear now, with the date of each one.
 
 ### Chapter 14
+
+**Where the cited numbers of this chapter live.** The numbers that the text attributes to the research record come
+from `empirical/p05-prioris/h1-real/README.md`, computed by code retired from the tree on 2026-10-16 and kept at
+commit `1bfec905` (`fundo/p05-prioris/h1-real/projetos/`, `c_real.py`). Until 2026-10-19 these paths were written in the
+chapter; they moved here because the chapters carry content only.
 
 The report of the fire case records $\hat\alpha = 1.81$ with interval [1.41;
 2.56] by bootstrap in blocks; the instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;

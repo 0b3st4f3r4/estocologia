@@ -161,6 +161,15 @@ RETIRED = [
     ("1 - false-positive rate = 0.53", "the exclusion freedom compared mixed groups"),
     ("inert** treatment would have given +9.0", "+9.0 is the observed estimate; the inert one is centred near +0.9"),
     ("10.292 dollars", "a thousands separator, as in Chapter 9"),
+    # Critical reading of 2026-10-19 and its follow-ups (Appendix E).
+    ("| 9.3 minutes |", "the two worlds of Step 1 carry the instrument's 9.1 and 19.6"),
+    ("| 20.7 minutes |", "the two worlds of Step 1 carry the instrument's 9.1 and 19.6"),
+    ("practically nothing", "0.51 bit is half the ceiling of one bit"),
+    ("0.084** for whoever ignores", "the recipe gives 0.085"),
+    ("in 16% of the estimates", "the exact binomial gives 15%"),
+    ("about 12\nrounds", "ln N over the gap gives 23 and 136"),
+    ("1.488 cases", "a thousands separator"),
+    ("31.919 sessions", "a thousands separator"),
 ]
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")
