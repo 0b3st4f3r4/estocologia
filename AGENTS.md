@@ -18,7 +18,7 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
    for the error, and an exit clause.
 2. **No solitary mean.** Wherever the function is nonlinear, the dynamics are multiplicative, or the tail is
    heavy, reporting only the mean is prohibited: report the evaluation at the mean $f(E[X])$, the simulated expectation $E[f(X)]$, the
-   median, the quantiles, and the cumulative distribution curve. Chapter 5 of the textbook measures the Jensen toll; the instrument
+   median, the quantiles, and the cumulative distribution curve. Chapter 5 of the book measures the Jensen toll; the instrument
    `labs --chapter 5` reproduces it.
 3. **No confusing learning with performativity.** Small prediction error does not prove that a model is
    true. Run with and without the intervention (`do(a)` versus passive observation) and declare the feedback loop: the measured Goodhart effect
@@ -81,7 +81,7 @@ reading of the list, with what each line enforces:
 cargo fmt --all --check                             # formatting belongs to rustfmt, not personal taste
 cargo clippy --workspace --all-targets -- -D warnings   # zero warnings tolerated across all nine crates
 cargo test --workspace                              # all nine crates
-cargo run --release --bin labs -- --all           # the 21 textbook laboratories
+cargo run --release --bin labs -- --all           # the 21 book laboratories
 cargo run --release --bin labs -- --bank           # real H0, reading data/bank_calls.csv
 cargo run --release --bin labs -- --resolution       # the R horizon
 cargo run --release --bin labs -- --s1              # System 1 triage

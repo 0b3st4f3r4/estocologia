@@ -1,6 +1,6 @@
 # `book/` — the book in 21 chapters
 
-This folder keeps the textbook being unfolded into **21 chapters and 5 parts**, with **three steps
+This folder keeps the book being unfolded into **21 chapters and 5 parts**, with **three steps
 per chapter** (high-school intuition, accessible formalization, laboratory in Rust). The plan of the
 unfolding is §9 of `docs/PLAN.md`.
 
