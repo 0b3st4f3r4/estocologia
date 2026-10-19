@@ -37,10 +37,12 @@ architecture check form, presence and reproducibility, not correctness. Appendix
 of code that passed every test and every gate of this book until an outside reading found them. Read each number as
 an invitation to check it, not as a certificate.
 
-**What the reader cannot run.** The rule above holds for the simulations and for five real datasets: the bank calls,
-the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
-book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
-yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
+**What the reader cannot run.** The rule above holds for the simulations and for ten real datasets: the bank calls,
+the Dow Jones, the two files of the job-training experiment, the Danish fires, and the five public sources on which
+Chapter 20 rebuilds its streams (the flights of 2013 and 2023, the electricity of Victoria, the Atlantic cyclones and
+the Toronto arrests of 1997 to 2002). It does not hold for everything the book cites. The real cases of Chapter 19 (the
+physical chambers, the cardiac trial, the small classes and the yeast), the arrests of 2020 and 2021 and the traffic
+stops of Chapter 20, the propensity fit and the Kelly interval of
 Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 

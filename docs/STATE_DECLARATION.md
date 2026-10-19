@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 415 tests passed, none failed
+cargo test --workspace                                  # 421 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -119,10 +119,10 @@ Python).
 ## 6. The Manifest
 
 In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 are second-or-later declarations (corrections
-with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
+with both values side by side), **16 foundational empirical points**, **20 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **6 265 lines**, **85 797 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **6 365 lines**, **87 427 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 265 lines and 85 797 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 6 365 lines and 87 427 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -353,4 +353,27 @@ redoes the retired analyses in Rust. The dated record is `history/estado-2026-10
 | bibliography | 77 lines (74 checked, 3 to check) | 77 lines, all checked (Platt 1999 against a secondary source) |
 | `scripts/book/check_book.py` | refuses 41 retired values | refuses 49 |
 | assembled book, line count | 6 222 (with 84 921 words) | 6 265 (with 85 797 words) |
+
+## The real streams, rebuilt (2026-10-19, later the same day)
+
+Six streams of H3 rebuilt in Rust on public data, by the owner's decision of the same day. Five datasets entered
+`data/` (`data/SOURCES.md`, `data/SHA256SUMS`): the New York flights of 2013 and 2023, the electricity demand of
+Victoria, the Atlantic storms and the Toronto arrests of 1997 to 2002. A new instrument, `labs --streams`
+(`crates/stochology-book/src/streams.rs`, six tests), rebuilds energy, bank, market, the two flights vaults, the
+cyclones and Toronto under a specification written in Chapter 20 before the run, with the clock, the canary and the
+fairness audit; Chapter 20 gained the recipe, the block and its reading. Where the specification is the same, the
+rebuild lands on the record; the value at risk and the 2023 correction disagree, and Appendix E keeps both. A
+reimplementation from the text (`scripts/reimplementation/ch20_streams.py`) redoes Toronto, the market and the energy
+interval and agrees with every number. Not rebuilt, and why, in `data/SOURCES.md`: Toronto 2020–2021 and Rhode Island
+(portals not reachable), the chambers, the cardiac trial and the yeast of Chapter 19, and STAR with school identifiers.
+The dated record is `history/estado-2026-10-19T1429Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| datasets in `data/` | 5 | 10 |
+| instruments in `labs` | 19 | 20 (`--streams`) |
+| `cargo test --workspace` | 415 | **421** |
+| cited blocks | 31 | 32 |
+| reimplementation | 475 quantities: 472 agree, 3 open | 487 quantities: 484 agree, 3 open |
+| assembled book, line count | 6 265 (with 85 797 words) | 6 365 (with 87 427 words) |
 

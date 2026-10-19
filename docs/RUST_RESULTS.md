@@ -12,6 +12,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --s2` | System 2: hypergraph search, board belief state, Metropolis inference, and R-axis |
 | `labs --pretest` | Calibration pretest null for the SHELF panel |
 | `labs --genetics` | Interventional validation resolution: what the second cell line changes |
+| `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -165,6 +166,40 @@ planted by the instrument: true mover = mutant 7 | line artifact = mutant 23
   effect on the second line: artifact  +0.028 (does not reproduce) | mover  +1.016 (does reproduce) | in single-line validation the estimate is a point and the span is zero
 
 reading: with one line the floor of 0.001000 and the threshold of 0.001250 let 4 of the 40 mutants through — the true mover, the line artifact and two mutants that are just noise. All of them sit on the design floor, and the p-value distinguishes none of the three from what we are looking for. With the second line the artifact leaves the list, because its effect on the second line is zero, and the floor drops to 0.000001000: 1 of the 40 mutants pass. The p was never the problem: the problem was there being a single line.
+~~~
+
+### The real streams of Chapter 20, rebuilt
+
+Energy, bank, market, flights of 2013 and 2023, cyclones and Toronto 1997-2002, from public data with a specification declared before the run; the canary under both clocks; the fairness audit by colour.
+
+~~~bash
+./target/release/labs --streams
+~~~
+
+~~~text
+== Chapter 20 :: the real streams, rebuilt beside the book ==
+no step draws a random number | gates: |CITL| <= 0.02, ECE <= 0.03, skill > 0 | coverage 0.86 to 0.94 | VaR 0.5% to 1.5% and Kupiec p > 0.05
+energy (Victoria 2014, day ahead, 90% interval):  n =  17424 | coverage 0.886 | gate PASSES
+bank (Sep-Oct 2003, next working day, 90%):       n =   6422 | coverage 0.884 | gate PASSES
+market (Dow Jones 2000-2023, 99% VaR, 250 days):  n =   6011 | violations 1.53% | Kupiec p = 0.00 | Christoffersen p = 0.02 | gate FAILS
+flights 2013 (Oct-Dec), trained on 54835 flights of the 60 days before:
+   raw model:             n =  82609 | rate 0.2214 | CITL -0.0171 | ECE 0.0260 | skill +0.0898 | gate PASSES
+   intercept correction:  n =  82609 | rate 0.2214 | CITL -0.0015 | ECE 0.0322 | skill +0.0908 | gate FAILS
+   canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9102
+flights 2023 (Oct-Dec), trained on 68257 flights of the 60 days before:
+   raw model:             n = 104091 | rate 0.1273 | CITL +0.0633 | ECE 0.0646 | skill +0.0282 | gate FAILS
+   intercept correction:  n = 104091 | rate 0.1273 | CITL +0.0025 | ECE 0.0177 | skill +0.0747 | gate PASSES
+   canary: honest clock available in 0 emissions, skill gain +0.0000 | clock switched off, skill gain +0.9718
+cyclones (2015-2022, +30 kt in 24 h), trained on 12585 observations of 1975-2014:
+   model:                 n =   3813 | rate 0.0462 | CITL +0.0002 | ECE 0.0121 | skill +0.1000 | gate PASSES
+Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 cases of 1997-2000:
+   model:                 n =   1488 | rate 0.8253 | CITL +0.0165 | ECE 0.0354 | skill +0.0812 | gate FAILS
+   canary: clock switched off, skill gain +0.9188
+   marker (chance of release below 0.70): false positive and false negative rates by perceived colour
+   2001 Black  FPR 0.155  FNR 0.667  (311 cases)
+   2001 White  FPR 0.070  FNR 0.772  (900 cases)
+   2002 Black  FPR 0.164  FNR 0.500  (85 cases)
+   2002 White  FPR 0.077  FNR 0.838  (192 cases)
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1218,7 +1253,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 91 tests
+running 97 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1310,8 +1345,14 @@ test segunda::tests::the_multiplicity_thresholds_match_alpha_over_m ... ok
 test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_divergence ... ok
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
+test streams::tests::christoffersen_rejects_clustered_violations ... ok
+test streams::tests::ece_is_zero_for_boxes_that_match_their_rate ... ok
+test streams::tests::kupiec_accepts_the_nominal_rate_and_rejects_ten_times_it ... ok
+test streams::tests::logistic_recovers_a_known_coefficient ... ok
+test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
+test streams::tests::the_civil_calendar_is_right ... ok
 
-test result: ok. 91 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 97 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1752,6 +1793,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
 
-Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 20 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6265 lines** and **85797 words**, sha256 `89c67acad7c4909bb0f92fe23533f62455740d18db68161bd7ac4080e6637f9f`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6365 lines** and **87427 words**, sha256 `66efba8bd1b74710e79ba60061d6ec33a41e8e794ef9b268902bbe9222da4eec`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

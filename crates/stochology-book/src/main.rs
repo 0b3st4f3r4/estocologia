@@ -27,6 +27,7 @@ fn main() {
     let mut answer_key: Option<String> = None;
     let mut queue_flag = false;
     let mut genetics_flag = false;
+    let mut streams_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -85,6 +86,7 @@ fn main() {
             }
             "--queue" => queue_flag = true,
             "--genetics" => genetics_flag = true,
+            "--streams" => streams_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -104,7 +106,9 @@ fn main() {
         i += 1;
     }
     if help {
-        println!("usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics");
+        println!(
+            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams"
+        );
         println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
         println!("            | --rehearsal-shelf | --rehearsal-listening | --rehearsal-bridge]");
@@ -140,6 +144,10 @@ fn main() {
     }
     if genetics_flag {
         genetica::run();
+        return;
+    }
+    if streams_flag {
+        stochology_book::streams::run();
         return;
     }
     if listening_flag {

@@ -16,3 +16,24 @@ FRED, UCI, Kaggle) are blocked by the network of this environment. SHA-256 sums 
 Classic references (cited from memory, to be checked): Shen & Huang (2008) for the call series;
 LaLonde (1986) and Dehejia & Wahba (1999) for the NSW; McNeil (1997) and Embrechts, Klüppelberg & Mikosch (1997)
 for the Danish losses.
+
+## Added on 2026-10-19: the real streams of Chapter 20
+
+Downloaded on 2026-10-19 by a sparse `git clone` of the Rdatasets repository (github.com/vincentarelbundock/Rdatasets,
+commit `1dcc2bf5f955cc1224a3e1307256e1fe86b68dae`) and of the CRAN mirror of `nycflights23` (github.com/cran/nycflights23,
+commit `48bca3116609b15fee8be2eb71b3f16383ca3ec6`, version 0.2.0, licence CC0); `raw.githubusercontent.com` and PyPI were not
+reachable from the session, so the `.rda` file of `nycflights23` was read by a minimal reader of R's XDR serialization
+written for this purpose and kept outside the tree. Read by `labs --streams` (`crates/stochology-book/src/streams.rs`).
+
+| File | Source | What it is | Transformation |
+|---|---|---|---|
+| nyc_flights_2013.csv | Rdatasets `nycflights13::flights` | Departures from New York (EWR, JFK, LGA), 2013 | rows of August to December; columns month, day, sched_dep_time, sched_arr_time, carrier, origin, dest, distance, arr_delay |
+| nyc_flights_2023.csv | CRAN `nycflights23::flights` | The same for 2023 (435 352 flights in the year) | the same rows and columns |
+| vic_elec.csv | Rdatasets `tsibbledata::vic_elec` | Half-hourly electricity demand of Victoria, Australia, 2012–2014, with temperature and holidays | none |
+| atlantic_storms.csv | Rdatasets `dplyr::storms` | NOAA best-track positions and winds of Atlantic storms, every 6 hours, 1975–2024 | none |
+| toronto_arrests.csv | Rdatasets `carData::Arrests` | Arrests for simple possession of marijuana in Toronto, 1997–2002 (5 226), with release, perceived colour and covariates | none |
+
+What could not be brought: the Toronto arrests of 2020–2021 and the Rhode Island traffic stops (portals not reachable
+from the session), the causal chambers, the FDA cardiac trial and the yeast deletions of Chapter 19 (hosted outside the
+reachable mirrors), and the STAR experiment with school identifiers (`AER::STAR` has no school identifier).
+
