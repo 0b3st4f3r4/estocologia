@@ -109,6 +109,7 @@ verification suite, because every row in that table cites one of them:
 
 ~~~bash
 cargo run --release --bin labs -- --genetics    # fine resolution in genetics
+cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale

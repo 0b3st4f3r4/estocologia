@@ -5,7 +5,7 @@ Stochology is the science (or art) of studying judgment and decision-making unde
 This repository holds the research conducted under the project architecture (typed hypergraph, World/Model/Agent
 layers, safeguard panel A1–A8, orchestrator M, structured specification sheets, invariants Φ1–Φ5), from H0 to
 H3, on real-world data. The research concluded on 2026-10-15 and the engineering apparatus is **Rust** (Edition 2024):
-**nine crates**, **415 tests**, **nineteen instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
+**nine crates**, **421 tests**, **twenty instruments** (plus 5 modifier flags) in the `labs` binary, and **seven gates** (G1 to G7) in the `gates` binary (distinct from the six gates G1 to G6 of the wave engine `wave`)
 that are capable of failing a claim. The gates check form, presence and reproducibility, not correctness: on
 2026-10-18 an outside reading found errors in mathematics and code that every gate had passed, corrected them, and
 recorded both values in Appendix E of the book (see `docs/OUTSIDE_AUDIT.md`).
@@ -14,12 +14,12 @@ recorded both values in Appendix E of the book (see `docs/OUTSIDE_AUDIT.md`).
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 6 265 lines and 85 797 words assembled from `book/` |
+| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 6 365 lines and 87 427 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
 | `crates/` | The Rust workspace, **nine crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (book laboratories, binary `labs`), `-wasm` (WebAssembly playground), and `-wave` (binary `wave`: local phasor superposition, magnetic Laplacian, Kuramoto-Oja plasticity, and STDP spike bus) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
 | `docs/RUST_RESULTS.md` | The registry generated directly from the instruments themselves: each block is the literal output of the command above it. §5 is the state manifest, with the `sha256` of every point declaration |
-| `data/` | The five datasets read by the instruments (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`), with provenance in `SOURCES.md` and checksums in `SHA256SUMS` |
+| `data/` | The ten datasets read by the instruments (`bank_calls.csv`, `djia_1885_2023.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `danish_fire.csv`, and, since 2026-10-19, `nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `vic_elec.csv`, `atlantic_storms.csv`, `toronto_arrests.csv`), with provenance in `SOURCES.md` and checksums in `SHA256SUMS` |
 | `empirical/` | The foundational empirical points: central thesis, independence, multiplicity, priors, performative loop, ICP, calibration, genetics, H3, R-axis predictions, bridge at scale, SHELF, affected-party listening, second opinion, Jev, whether the layers can fail, and the stopping rule. Each folder contains its declaration and `*.sha256` seal |
 | `governance/` | Risk opinions and the audit of who pays for the error |
 | `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the safeguard panel, the cycle, and the **mandatory verification of §V** |
@@ -31,7 +31,7 @@ recorded both values in Appendix E of the book (see `docs/OUTSIDE_AUDIT.md`).
 | `paper/` | The paper "Stochology: Old Frontiers, New Horizons", with figures |
 | `scripts/style/` | The prose-pass tooling: `scripts/style/check_pass.py` compares each file against its version in `HEAD` |
 | `scripts/check_seals.py` | The verifier for the 30 SHA-256 seals across the tree, executed in a single command from a single directory |
-| `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, nineteen instruments, and all verifiers. CI invokes this exact file, not a copy of the list |
+| `scripts/verify.sh` | **The mandatory verification of §V in a single command**: formatting, lints, tests, eight gate suites, twenty instruments, and all verifiers. CI invokes this exact file, not a copy of the list |
 | `docs/JEV_INTEGRATION.md` | The audit of the transcript *Integration of Jev Models into Stochology*: every claim checked against the code, with declared divergences — the legacy syllabus numbering versus the current nomenclature ($M_{15}$ and $MB_1$–$MB_8$ on one side, $\mathcal{M}$ and $A_1$–$A_8$ on the other), four filters versus five, $\Phi_1$–$\Phi_4$ versus $\Phi_1$–$\Phi_5$, and *LLM-as-Jev* — plus the Jev-LLM bridge as a declared proposal |
 | `docs/declarations/REMOVED_PYTHON.md`, `docs/declarations/REMOVED_NON_SIGNIFICANT.md` | What left the tree on 2026-10-16, with the recovery commit and the blob-hash manifests |
 
@@ -41,11 +41,11 @@ Measurement of this tree on **2026-10-18**, each row with the command that produ
 
 | Metric | Value | Command |
 |---|---|---|
-| Tests | **415 passed**, 0 failed, across the nine crates (413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
-| Instruments | **19** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
+| Tests | **421 passed**, 0 failed, across the nine crates (415 before the rebuilt streams of 2026-10-19 added six, the tests of `streams.rs`; 413 before the recipes of 2026-10-19 added two: the bounds of the garden of paths and the declared limit of the Merkle root; 409 before the reimplementation of the chapters on 2026-10-19 added four tests that fail on the old code; the 406 declared on 2026-10-18 was stale: the base of the rectifications of 2026-10-19 measured 408, which retired one panel test and added two tests of Chapter 10; 395 before the rectifications of 2026-10-18, which added eleven tests that fail on the old code; the 373 written here earlier was already stale: the tree measured 377 before the e-process ledger added nine and the gate of thesis (c′) another nine) | `cargo test --workspace` |
+| Instruments | **20** in `labs` (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **6 265 lines**, **85 797 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **6 365 lines**, **87 427 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **48**, none divergent | `scripts/book/check_labs.py` |
 | Seals | **30 files**, **90 verified targets**, 9 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
