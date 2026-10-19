@@ -4,3 +4,5 @@
 816f1c6e2d6fbcba2cf287f054808ab609f03ff03722cddb80dcfe36fbf66620  crates/stochology-wave/src/cycle.rs
 4b84515212804c44026eab408383c52841d775700d5a9380f8632b8f9a52cf14  empirical/p23-onda/README.md
 bfff7ae7cbe236050af9dbab02f91012d9a50e5f97be09258d9c6362a0ecd9e9  empirical/p23-onda/saida.txt
+62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994  empirical/p23-onda/DECLARACAO_2.md
+d3e09ec43b9a62f0f5c596fc29c711a76361c7caa2b4b6f79764afcb41613173  crates/stochology-book/src/wave2.rs
