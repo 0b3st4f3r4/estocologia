@@ -9,7 +9,7 @@ Two layers coexist here, and the distinction is honest:
 - **Live engineering layer (Rust, Edition 2024):** the crates in `crates/`, with deterministic tests and
   gates that run in this repository today (Sections 7 and 12).
 - **Empirical registry layer (Python):** the fronts `h0-lab0/`, `h0-real/`, `h1/`, `h1-real/`,
-  `h2/…h2g/`, `h3/`, `empirical/`, `governance/`, `data/`, `paper/`, and the textbook
+  `h2/…h2g/`, `h3/`, `empirical/`, `governance/`, `data/`, `paper/`, and the book
   `book/stochology-textbook.md`. This is the trail of the research concluded on 2026-10-15, described in
   Sections 6 and 11.
 
@@ -44,7 +44,7 @@ Mixing layers ceases to be a textual oversight and becomes a compilation error o
 
 ---
 
-## 2. Pedagogical Ramp and Structure of the Textbook
+## 2. Pedagogical Ramp and Structure of the Book
 
 So that any student (from high school to graduate school) can traverse the learning curve without abrupt
 leaps, the work adopts a progressive scaffolding ramp of **3 steps per chapter**:
@@ -158,7 +158,7 @@ pass into nine without dropping a test: `-audit` and `-schema` became modules of
 | Crate | Status | Contents |
 |---|---|---|
 | `crates/stochology-core` | live | layers, card (`Ficha`), invariants $\Phi_1$–$\Phi_5$, Type III, panel $A_1$–$A_8$, orchestrator $\mathcal{M}$, SplitMix64 RNG, System 1 triage, and filter funnel |
-| `crates/stochology-book` | live | chapter-by-chapter textbook laboratories, with binary `labs --chapter N` and `--all` |
+| `crates/stochology-book` | live | chapter-by-chapter book laboratories, with binary `labs --chapter N` and `--all` |
 | `crates/stochology-hypergraph` | live | hypergraph $\mathcal{G}$, structural validator, topological sort, and the five lenses |
 | `crates/stochology-core/src/audit` | live | zero-dependency SHA-256, hash-chained ledger, and Merkle root (module of `-core`) |
 | `crates/stochology-gates` | live | binary `gates`: 7 deterministic governance gates per horizon (G1 to G7) |
@@ -286,7 +286,7 @@ pub enum AgenteA {
 
 ---
 
-## 9. Pedagogy: The Textbook Restructured into 21 Chapters
+## 9. Pedagogy: The Book Restructured into 21 Chapters
 
 ### 9.1 Pedagogical philosophy of the 21-chapter book
 
@@ -512,9 +512,9 @@ fill out `ficha.yaml`, simulate the world, and defend the conclusion.
 | `crates/gates-cli` | `crates/stochology-gates` |
 | roadmap crates (`estocologia-schema`, `-s1`, `-s2`, `-h0` … `-h3`, `-icp`, `-drift`, `-fairness`, `-wasm`) | same `stochology-` prefix, and all ten names came to life on 2026-10-16 |
 
-**The binaries did not change names**: `labs` and `gates`. Reason: the textbook, this plan, and the
+**The binaries did not change names**: `labs` and `gates`. Reason: the book, this plan, and the
 `portoes.py` scripts in the Python fronts invoke them by those names, keeping the command typed by the
-reader identical regardless of folder language. The assembled textbook file is now at
+reader identical regardless of folder language. The assembled book file is now at
 `book/stochology-textbook.md`.
 
 ### 9.10 Book status and how to build
@@ -525,7 +525,7 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 222 lines, 84 921 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (6 265 lines, 85 797 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
 | IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
@@ -586,7 +586,7 @@ mandated by the rule for new files. What each document became:
 | --- | --- | --- |
 | *Architecture* | data layers (hypergraph, columnar, vector index), seed-isolated runtime, lane agents, card bus | Sections 3, 4, and 7 of this plan; `crates/stochology-hypergraph` and `crates/stochology-core` |
 | *Scalable research plan* (5 axes) | maturity axes, funnel with EVSI pruning, horizontal scaling, anti-overfitting governance, and infrastructure | table below |
-| *Foundations: three layers and inference* | uncertainty taxonomy and the three layers | Chapters 2 and 4 of the textbook; Sections 1 and 3 of this plan |
+| *Foundations: three layers and inference* | uncertainty taxonomy and the three layers | Chapters 2 and 4 of the book; Sections 1 and 3 of this plan |
 | Paper *Old Frontiers, New Horizons* | was already the canonical text of `paper/README.md` (newer and longer); the downloaded copy was an earlier draft | `paper/` |
 | *Integrating Jev Models into Stochology* (Gemini transcript) | verification of every claim against the codebase: what already exists with file and command, the divergences — legacy roadmap numbering ($M_{15}$ and $MB_1$–$MB_8$) versus current nomenclature ($\mathcal{M}$ and $A_1$–$A_8$), four filters versus five, $\Phi_1$–$\Phi_4$ versus $\Phi_1$–$\Phi_5$, *LLM-as-Jev* — and the Jev-LLM bridge as a declared proposal | `docs/JEV_INTEGRATION.md`; item 13 of `docs/DECLARED_PROPOSALS.md` |
 
@@ -623,7 +623,7 @@ mandated by the rule for new files. What each document became:
 | Datasets and checksums | `data/` with `SOURCES.md` and `SHA256SUMS` |
 | $F_5$ risk opinions | `governance/` |
 | Background audit (10 points) | `empirical/p01-tese/`, `p02-independencia/`, `p03-multiplicidade/`, `p05-prioris/`, `p06-laco/`, `p07-icp/`, `p08-calibracao/`, `p12-shelf/`; points 9 and 10 (scaling and data), along with rare-event and clinical extensions, left the working tree on 2026-10-16 because they did not support a central result, and can be recovered from commit `1bfec905` |
-| Textbook (21 chapters in 5 parts, with Appendices A to D) | `book/stochology-textbook.md`, authored in `book/` |
+| Book (21 chapters in 5 parts, with Appendices A to D) | `book/stochology-textbook.md`, authored in `book/` |
 | Paper | `paper/` |
 
 Reproduction commands for the empirical registry (Python 3.13, fixed seed). **The Python simulation code
@@ -636,7 +636,7 @@ cd h3 && python3 rodar.py && python3 grafo.py && python3 figura.py && python3 po
 ```
 
 Measurement taken prior to retirement: `cd h1 && python3 -m pytest -q` returned `24 passed in 17.51s`.
-The textbook in `book/stochology-textbook.md` is already the 21-chapter edition: Section 9 of this plan
+The book in `book/stochology-textbook.md` is already the 21-chapter edition: Section 9 of this plan
 ceased to be a specification and now describes what is on disk. The 14-chapter text lives in the git
 history at commit `1bfec905`.
 

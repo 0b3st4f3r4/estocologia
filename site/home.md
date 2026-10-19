@@ -8,7 +8,7 @@ Jacob Bernoulli's *Ars Conjectandi* was published: the art of conjecturing, whic
 The purpose of the discipline is not to optimise a metric. It is to say, before anyone acts, what a piece of
 quantitative evidence authorises one to conclude, and what it forbids.
 
-[Read the textbook](00-opening.md)
+[Read the book](00-opening.md)
 
 ## 1. The roots
 
@@ -113,7 +113,7 @@ When a claim fails a gate, the verdict is **"unsupported under this test"**, nev
 ### The apparatus
 
 All of this runs in Rust: nine crates, 395 tests, seven gates able to fail a claim and 21 laboratories with a fixed
-seed, one per chapter of the textbook. Every output block quoted in the book is checked against the instrument that
+seed, one per chapter of the book. Every output block quoted in the book is checked against the instrument that
 produces it.
 
 ## 3. What the real data taught
