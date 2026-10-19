@@ -73,6 +73,12 @@ pub struct Card {
     pub multiverse: Option<String>,
     /// Contract 1.4: what average success hides, for a card of an agent, `k=K; pass1=P1; passk=PK`.
     pub reliability: Option<String>,
+    /// Contract 1.5: who wrote each field, `field:role, ...`, each field in its own role.
+    pub authorship: Option<String>,
+    /// Contract 1.5: the findings logged, used and not used, `logged=N; used=U; unused=finding: reason | ...`.
+    pub findings: Option<String>,
+    /// Contract 1.5: the inequality the action rests on, `p=P; C=C; L=L; act=protect|do not protect`.
+    pub decision_rule: Option<String>,
 }
 
 impl Card {
@@ -104,6 +110,9 @@ impl Card {
             dominant_event: None,
             multiverse: None,
             reliability: None,
+            authorship: None,
+            findings: None,
+            decision_rule: None,
         }
     }
 
@@ -123,6 +132,14 @@ impl Card {
     /// Declares the reliability of an agent over k runs (contract 1.4).
     pub fn with_reliability(mut self, reliability: &str) -> Self {
         self.reliability = Some(reliability.to_string());
+        self
+    }
+
+    /// Declares who wrote each field, the findings and the decision rule (contract 1.5).
+    pub fn with_conduct(mut self, authorship: &str, findings: &str, decision_rule: &str) -> Self {
+        self.authorship = Some(authorship.to_string());
+        self.findings = Some(findings.to_string());
+        self.decision_rule = Some(decision_rule.to_string());
         self
     }
 

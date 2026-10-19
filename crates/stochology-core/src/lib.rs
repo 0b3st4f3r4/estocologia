@@ -7,6 +7,7 @@
 pub mod agents;
 pub mod audit;
 pub mod budget;
+pub mod conduct;
 pub mod erlang;
 pub mod funnel;
 pub mod invariants;
