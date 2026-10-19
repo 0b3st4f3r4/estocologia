@@ -149,7 +149,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 421 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 422 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -500,14 +500,20 @@ registry; no instrument changed.
 
 ### The real streams, 2026-10-19
 
-Not a rectification of the text but a new instrument: six streams of Chapter 20 rebuilt on public data, with the
-record and the rebuild side by side in the section of Chapter 20 below. The text of Chapter 20 gained the recipe, the
-output block and its reading; the Preface's list of what the reader cannot run lost them. Two sentences changed:
+A new instrument: six streams of Chapter 20 rebuilt on public data, with the record and the rebuild side by side in
+the section of Chapter 20 below. Following the rule of the Preface, the chapters teach with the instrument's numbers
+and this appendix keeps the record's: Chapters 8 and 20 were brought into line the same day.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| 20 | The 2023 correction | "was not put to the test" | the same, and in the rebuild the correction is decisive; both readings stay | the rebuild disagrees with the record |
-| C | Test count | 415 | 421 | the six tests of the rebuilt streams |
+| 20 | Table of the six streams in Step 1 | the record's numbers (coverage 0.887 and 0.900; VaR 0.98%, passes; flights 2013 bias +2.7 points, fails; cyclones ECE 0.012; Toronto ECE 0.036) | the instrument's (0.886 and 0.884; VaR 1.53%, fails; flights 2013 CITL −0.0171 and ECE 0.0260, passes; cyclones 0.0121; Toronto 0.0354) | the chapters teach with what the reader can run |
+| 20 | The first failures | the circuit breaker of the flights of 2013, which compared the model with the reserve | Toronto, which beats the climatology and fails calibration; the market, whose crossings cluster | in the rebuild the flights of 2013 pass and the market fails |
+| 20 | The 2023 correction | "was not put to the test": the raw model would also have passed, ECE 0.014 | decisive: the raw model fails (ECE 0.0646) and the corrected one passes (0.0177); in 2013 the correction fixes the bias and fails on the ECE | the instrument's reading |
+| 20 | Canary, fairness of Toronto 1997–2002, summary, exercise 2 | the record's gains and rates | the instrument's, with the record's kept where nothing was rebuilt (2020–2021, Rhode Island) | the same rule |
+| 20 | Step 2: the replay count, the Goodhart index, the label drift, the inverted audit | stated as measured | marked as the record of the research | no instrument redoes them |
+| 8 | Table of the six binary vaults | the record's ECE and null q95 (0.0267/0.0046, 0.0123/0.0087, 0.0363/0.0320, 0.0079/0.0035) | the instrument's (0.0260/0.0046, 0.0121/0.0107, 0.0354/0.0315, 0.0177/0.0034 with the correction); Toronto 2020–2021 and Rhode Island marked as record | the same rule |
+| 8 | The correction in a new vault; exercise 6 | "was not decisive"; 0.0363 against 0.0079 | decisive; 0.0354 against 0.0177 | the instrument's reading |
+| C | Test count | 415 | 422 | the seven tests of the rebuilt streams |
 | Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
 
 ### Numbers cited without an instrument in this book
