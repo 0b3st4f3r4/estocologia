@@ -46,6 +46,13 @@ stops of Chapter 20, the propensity fit and the Kelly interval of
 Chapter 13, the skills of the forecasters of Chapter 14, and a handful of worked examples in Chapters 3, 7, 10, 11, 16, 17 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
 They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
 
+**Who wrote what.** The theory, the architecture, the research and the first text are the author's. From 2026-10-18
+on, an AI assistant read the book critically, reimplemented its laboratories from the text, rebuilt the real streams
+of Chapter 20 and wrote the corrections those readings found; Appendix E lists each change with both values, and the
+dated records of the repository say which pass made it. Those readings are outside the author's own audit and inside
+the author's tools, and no person outside the programme has checked them yet. Chapter 21 says what an audit from
+outside would need; until it exists, read every correction here as one more claim to check.
+
 **The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
 world, the model and the agent, not an error of arithmetic) has had one direct test, and it tied at the ceiling
 (Chapter 21). Until a fair test, with cases chosen and judged by people outside the work, is run, the thesis is a
@@ -4713,6 +4720,68 @@ $\{\text{small\_years\_before}, \text{small\_class}\}$ becomes $\{\text{small\_c
 $\{\text{plate}, x_1, x_5, x_9\}$ becomes $\{\text{plate}, x_5\}$, and $x_1$ leaves, the only gene that the validation by
 intervention confirmed.
 
+**The stopping rule, declared after the path.** Bonferroni over 38 divides $\alpha$ by a number the path chose, and
+"run another round until three areas pass" is a stopping rule that was never declared. An **e-process** closes that
+gap: each test contributes an e-value (here, a calibrated form of its per-domain p-value), the evidence accumulates
+by a rule fixed before looking, and by Ville's inequality the chance that it ever reaches $1/\alpha$ under the null is
+at most $\alpha$, whatever the stopping rule. Applied to the 38 recorded tests under a declaration written before the
+computation (one ledger per area, the mean of the e-values because the rounds reuse data, a test with no non-empty set
+counting as a p-value of 1), the reading is this:
+
+```text
+== The H2 gate under the e-process, retroactively ==
+38 distinct tests as recorded, 2 clustered rows admitted by the declaration | alpha = 0.05 | threshold 1/alpha = 20 | merge: mean within each area | gate: 3 areas
+
+-- reading: as recorded --
+  area             tests claims         mean e  verdict
+  Agronomia            1      0         0.5000  does not
+  Biologia             2      0         0.5000  does not
+  Clima                1      0         0.5000  does not
+  Crédito              2      0         0.5000  does not
+  Desenvolvimento      1      0         0.5000  does not
+  Direito              5      3         2.3749  does not
+  Educação             5      2      4414.5557  crosses 1/alpha
+  Energia              1      0         0.5000  does not
+  Engenharia           1      0         0.5000  does not
+  Epidemiologia        2      0         0.5000  does not
+  Farmacologia         1      1 1309803451.4320  crosses 1/alpha
+  Física               1      1 1309803451.4320  crosses 1/alpha
+  Genética             5      1         6.9919  does not
+  Logística            1      0         0.5000  does not
+  Saúde                5      0         0.5000  does not
+  Trabalho             2      0         0.5000  does not
+  Transporte           2      1         2.9927  does not
+  areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
+
+-- reading: with dependent rows corrected --
+  area             tests claims         mean e  verdict
+  Agronomia            1      0         0.5000  does not
+  Biologia             2      0         0.5000  does not
+  Clima                1      0         0.5000  does not
+  Crédito              2      0         0.5000  does not
+  Desenvolvimento      1      0         0.5000  does not
+  Direito              5      3         2.3749  does not
+  Educação             6      3      3678.8880  crosses 1/alpha
+  Energia              1      0         0.5000  does not
+  Engenharia           1      0         0.5000  does not
+  Epidemiologia        2      0         0.5000  does not
+  Farmacologia         1      1 1309803451.4320  crosses 1/alpha
+  Física               1      1 1309803451.4320  crosses 1/alpha
+  Genética             5      1         6.9919  does not
+  Logística            1      0         0.5000  does not
+  Saúde                5      0         0.5000  does not
+  Trabalho             2      0         0.5000  does not
+  Transporte           2      1         2.9927  does not
+  areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
+```
+
+Three areas cross: education, pharmacology and physics; genetics does not, with a mean e-value of 7 against the 20
+required. Replacing education's published set by its clustered p-value of 0.76, as the declaration admits, does not
+move its verdict, because the mean also carries the two earlier rounds on the same data, which the declaration left
+as recorded. The e-process answers a different question from the clustering correction: it asks whether the path of
+rounds was allowed to stop where it stopped, and says yes for three areas, not for genetics. It does not repair the
+rows of a test, and the clustered reading of the paragraph above stands beside it.
+
 **Two caveats that weigh more than the correction.** The first: dividing $\alpha$ is not monotone in the ICP. With a lower
 level, domains that rejected everything start to accept some set, and invariant sets appear in models
 almost rejected. The second: the approval depends on the version of the procedure. With its first version reconstructed, STAR is
@@ -5335,6 +5404,28 @@ that are made to it.
 | "Ergodicity became doctrine." | The lens of time relies on the research programme of Ole Peters, which is contested, and the discipline teaches it as a debate. By the criterion of growth, the loss aversion of about 2.25 measured in the laboratory is only justified when 56% of the wealth is at stake: the thesis explains the refusal to risk half a patrimony, not the aversion to small bets. Something similar holds for the tails: Taleb asks that a heavy tail be assumed until proof to the contrary; Clauset, Shalizi and Newman ask for proof before declaring a power law. The question is whose is the burden of proof, and the answer depends on how much it costs to err |
 | "The auditor is a party with an interest." | True whenever the opinions are signed by whoever runs the work: naming someone responsible does not make the audit independent. A cheaper and weaker check is to reimplement results from zero, from the specification alone. In one such check four results agreed and no error was found, but several choices that the specification does not fix came out equal to the original, which weakens the test. Real independence asks for people from outside, with the same contract |
 
+**The neighbours, and what is borrowed from each.** The first objection deserves a longer answer than a table row,
+because the pieces of the machine have owners, and a discipline that did not name them would be claiming what it only
+borrowed. The card of Chapter 17, with its fixed fields, is a cousin of the **model card** (Mitchell and colleagues,
+2019) and of the **datasheet for datasets** (Gebru and colleagues, 2021): both force a model or a dataset to declare
+its intended use, its provenance and where it fails. The card adds what those two leave out, the generating process,
+the independent unit, the null model and who pays for the error, and it is refused by code, not by a reviewer. The
+seal of Chapter 18 is **pre-registration** (Nosek and colleagues, 2018), with a hash in place of a registry and the
+counter $K$ in place of the honour system; the registered report, which commits a journal before the data are seen,
+is the institutional form of the same idea, and this book has no journal. The forecast diary and the proper score out
+of sample are the discipline of the **forecasting tournament** (Tetlock and colleagues, 2014), where calibration and
+resolution are charged on the forecaster and not on the forecast. The natural frequencies, the fixed denominator and
+the absolute risk before the relative are **risk communication** as Gigerenzer and Spiegelhalter (2017) teach it. The
+predictive check, the simulation-based calibration and the habit of fitting a rival model are the **Bayesian
+workflow** (Gelman and colleagues, 2020), and the refusal to choose between belief and frequency, charging the one by
+the other, is close to what Gelman and Hennig (2017) call going beyond the subjective and the objective. The open
+research culture of the replication movement (Nosek and colleagues, 2015) is the ground all of this stands on.
+
+What is not borrowed is the joint: that a claim about an uncertain world is checked in three layers at once, that its
+uncertainty is typed before it is computed, and that the same gates apply to the author's claims as to anyone else's,
+with the failures published. Whether that joint is worth more than its parts is the question the bridge thesis asks,
+and it has not been answered.
+
 **The card demands five questions and four prohibitions.** The instrument that turns a doubt into an auditable
 claim asks five header questions. What is the **generative process** of the data, with seed; where does the
 **non-linearity** live; what is the **independent unit**; what is the **physics of the noise**: its shape (Gaussian or with
@@ -5677,7 +5768,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 422 tests pass |
+| `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 427 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -5818,7 +5910,22 @@ weaker than the others and is declared as such.
 | **[checked]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS 2017*, LIPIcs 67:43:1–43:23. DOI: 10.4230/LIPIcs.ITCS.2017.43 | Calibration within groups (Chapter 11) |
 | **[checked]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006. DOI: 10.1002/047174882X | The information lens under its usual name (Chapter 15) |
 
-### D.6 How to use this list
+### D.6 The neighbours of the discipline
+
+Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
+
+| Reference | Where it enters |
+| --- | --- |
+| **[checked]** Mitchell, M.; Wu, S.; Zaldivar, A. et al. "Model Cards for Model Reporting", *FAT\* '19*, pp. 220–229, 2019. DOI: 10.1145/3287560.3287596 | The card as a cousin of the model card (Chapter 21) |
+| **[checked]** Gebru, T.; Morgenstern, J.; Vecchione, B. et al. "Datasheets for datasets", *Communications of the ACM* 64(12):86–92, 2021. DOI: 10.1145/3458723 | The card as a cousin of the datasheet (Chapter 21) |
+| **[checked]** Nosek, B. A.; Ebersole, C. R.; DeHaven, A. C.; Mellor, D. T. "The preregistration revolution", *PNAS* 115(11):2600–2606, 2018. DOI: 10.1073/pnas.1708274114 | The seal as pre-registration (Chapters 18 and 21) |
+| **[checked]** Nosek, B. A.; Alter, G.; Banks, G. C. et al. "Promoting an open research culture", *Science* 348(6242):1422–1425, 2015. DOI: 10.1126/science.aab2374 | The open research culture (Chapter 21) |
+| **[checked]** Tetlock, P. E.; Mellers, B. A.; Rohrbaugh, N.; Chen, E. "Forecasting Tournaments", *Current Directions in Psychological Science* 23(4):290–295, 2014. DOI: 10.1177/0963721414534257 | The forecast diary as a tournament (Chapters 18 and 21) |
+| **[checked]** Spiegelhalter, D. "Risk and Uncertainty Communication", *Annual Review of Statistics and Its Application* 4:31–60, 2017. DOI: 10.1146/annurev-statistics-010814-020148 | Natural frequencies and absolute risk (Chapters 11 and 21) |
+| **[checked]** Gelman, A.; Hennig, C. "Beyond Subjective and Objective in Statistics", *JRSS A* 180(4):967–1033, 2017. DOI: 10.1111/rssa.12276 | Belief charged by frequency (Chapter 21) |
+| **[checked]** Gelman, A.; Vehtari, A.; Simpson, D. et al. "Bayesian Workflow", arXiv:2011.01808, 2020 | Predictive checks, SBC and rival models (Chapters 16 and 21) |
+
+### D.7 How to use this list
 
 Read in the order that curiosity asks for, and distrust whoever presents any of these works as a
 final answer. Three practical pieces of advice. First, read the data before the method, because almost every error of
@@ -6043,6 +6150,21 @@ and this appendix keeps the record's: Chapters 8 and 20 were brought into line t
 | 8 | The correction in a new vault; exercise 6 | "was not decisive"; 0.0363 against 0.0079 | decisive; 0.0354 against 0.0177 | the instrument's reading |
 | C | Test count | 415 | 422 | the seven tests of the rebuilt streams |
 | Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
+
+### The desk work before the public, 2026-10-19
+
+No number changed. What entered was the record of who wrote what (Preface), the neighbours of the discipline and
+what is borrowed from each (Chapter 21 and D.6), the stopping rule of the transfer gate read under an e-process
+(Chapter 19, `labs --eprocess`, with the declaration sealed before the run in `empirical/p22-parada/DECLARACAO_2.md`),
+and an answer key for the 126 exercises, published on the site beside the chapters and not assembled into the book.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| Preface | Who wrote what | not stated | a paragraph: the theory, the architecture, the research and the first text are the author's; from 2026-10-18 an AI assistant read, reimplemented, rebuilt and wrote the corrections, inside the author's tools and checked by no one outside | a reader has the right to know |
+| 19 | The stopping rule of the seven rounds | Bonferroni over 38, chosen after the path | the e-process over the 38 recorded tests: three areas cross, genetics does not, education stays in by the mean of its earlier rounds | the declaration admitted the clustered rows; the mean carries the rounds left as recorded |
+| 21, D | The neighbours of the discipline | the first objection answered in a table row | model cards, datasheets, pre-registration, forecasting tournaments, risk communication, the Bayesian workflow and the open research culture, each with what is borrowed; eight references checked | a discipline that did not name its owners would be claiming what it borrowed |
+| C | Instruments and tests | 21 instruments; 422 tests | `labs --eprocess` added; the five tests of `eprocess.rs` | the new instrument |
+| Exercises | Answers | none published | `book/answers.md`: every Count answer with its computation, every Laboratory answer with what to change and what to see, numbers only where measured | the course had a key; the book did not |
 
 ### Numbers cited without an instrument in this book
 

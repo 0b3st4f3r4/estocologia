@@ -27,6 +27,7 @@ pub mod ch20;
 pub mod ch21;
 pub mod costura;
 pub mod ensaio;
+pub mod eprocess;
 pub mod escuta;
 pub mod fila;
 pub mod genetica;

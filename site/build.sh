@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Assembles the book site into a directory (default _site): the Docsify page, the landing text, the chapter files
-# as written in book/, and a sidebar generated from their part, chapter and appendix headings, so it cannot drift from the text.
+# as written in book/, the answer key (published beside the chapters, not assembled into the textbook), and a sidebar
+# generated from their part, chapter and appendix headings, so it cannot drift from the text.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 out="${1:-$root/_site}"
@@ -32,4 +33,6 @@ for f in "${files[@]}"; do
     echo "  - [${title}](${f%.md})" >> "$sidebar"
   fi
 done
-echo "site assembled in $out: ${#files[@]} pages"
+cp "$root/book/answers.md" "$out/answers.md"
+echo "- [Answer key](answers.md)" >> "$sidebar"
+echo "site assembled in $out: $(( ${#files[@]} + 1 )) pages"

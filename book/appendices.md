@@ -149,7 +149,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 12 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
 | `cargo run --release --bin labs -- --streams` | The real streams of Chapter 20, rebuilt on public data |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 422 tests pass |
+| `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 427 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -290,7 +291,22 @@ weaker than the others and is declared as such.
 | **[checked]** Kleinberg, J.; Mullainathan, S.; Raghavan, M. *ITCS 2017*, LIPIcs 67:43:1–43:23. DOI: 10.4230/LIPIcs.ITCS.2017.43 | Calibration within groups (Chapter 11) |
 | **[checked]** Cover, T. M.; Thomas, J. A. *Elements of Information Theory*, 2nd ed., Wiley, 2006. DOI: 10.1002/047174882X | The information lens under its usual name (Chapter 15) |
 
-### D.6 How to use this list
+### D.6 The neighbours of the discipline
+
+Cited in Chapter 21; metadata checked against Crossref and arXiv on 2026-10-19.
+
+| Reference | Where it enters |
+| --- | --- |
+| **[checked]** Mitchell, M.; Wu, S.; Zaldivar, A. et al. "Model Cards for Model Reporting", *FAT\* '19*, pp. 220–229, 2019. DOI: 10.1145/3287560.3287596 | The card as a cousin of the model card (Chapter 21) |
+| **[checked]** Gebru, T.; Morgenstern, J.; Vecchione, B. et al. "Datasheets for datasets", *Communications of the ACM* 64(12):86–92, 2021. DOI: 10.1145/3458723 | The card as a cousin of the datasheet (Chapter 21) |
+| **[checked]** Nosek, B. A.; Ebersole, C. R.; DeHaven, A. C.; Mellor, D. T. "The preregistration revolution", *PNAS* 115(11):2600–2606, 2018. DOI: 10.1073/pnas.1708274114 | The seal as pre-registration (Chapters 18 and 21) |
+| **[checked]** Nosek, B. A.; Alter, G.; Banks, G. C. et al. "Promoting an open research culture", *Science* 348(6242):1422–1425, 2015. DOI: 10.1126/science.aab2374 | The open research culture (Chapter 21) |
+| **[checked]** Tetlock, P. E.; Mellers, B. A.; Rohrbaugh, N.; Chen, E. "Forecasting Tournaments", *Current Directions in Psychological Science* 23(4):290–295, 2014. DOI: 10.1177/0963721414534257 | The forecast diary as a tournament (Chapters 18 and 21) |
+| **[checked]** Spiegelhalter, D. "Risk and Uncertainty Communication", *Annual Review of Statistics and Its Application* 4:31–60, 2017. DOI: 10.1146/annurev-statistics-010814-020148 | Natural frequencies and absolute risk (Chapters 11 and 21) |
+| **[checked]** Gelman, A.; Hennig, C. "Beyond Subjective and Objective in Statistics", *JRSS A* 180(4):967–1033, 2017. DOI: 10.1111/rssa.12276 | Belief charged by frequency (Chapter 21) |
+| **[checked]** Gelman, A.; Vehtari, A.; Simpson, D. et al. "Bayesian Workflow", arXiv:2011.01808, 2020 | Predictive checks, SBC and rival models (Chapters 16 and 21) |
+
+### D.7 How to use this list
 
 Read in the order that curiosity asks for, and distrust whoever presents any of these works as a
 final answer. Three practical pieces of advice. First, read the data before the method, because almost every error of
@@ -515,6 +531,21 @@ and this appendix keeps the record's: Chapters 8 and 20 were brought into line t
 | 8 | The correction in a new vault; exercise 6 | "was not decisive"; 0.0363 against 0.0079 | decisive; 0.0354 against 0.0177 | the instrument's reading |
 | C | Test count | 415 | 422 | the seven tests of the rebuilt streams |
 | Preface | What the reader cannot run | the flights, the cyclones and the arrests among the citations | rebuilt by `labs --streams`; the arrests of 2020–2021 and the traffic stops stay cited | the data now sit beside the book |
+
+### The desk work before the public, 2026-10-19
+
+No number changed. What entered was the record of who wrote what (Preface), the neighbours of the discipline and
+what is borrowed from each (Chapter 21 and D.6), the stopping rule of the transfer gate read under an e-process
+(Chapter 19, `labs --eprocess`, with the declaration sealed before the run in `empirical/p22-parada/DECLARACAO_2.md`),
+and an answer key for the 126 exercises, published on the site beside the chapters and not assembled into the book.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| Preface | Who wrote what | not stated | a paragraph: the theory, the architecture, the research and the first text are the author's; from 2026-10-18 an AI assistant read, reimplemented, rebuilt and wrote the corrections, inside the author's tools and checked by no one outside | a reader has the right to know |
+| 19 | The stopping rule of the seven rounds | Bonferroni over 38, chosen after the path | the e-process over the 38 recorded tests: three areas cross, genetics does not, education stays in by the mean of its earlier rounds | the declaration admitted the clustered rows; the mean carries the rounds left as recorded |
+| 21, D | The neighbours of the discipline | the first objection answered in a table row | model cards, datasheets, pre-registration, forecasting tournaments, risk communication, the Bayesian workflow and the open research culture, each with what is borrowed; eight references checked | a discipline that did not name its owners would be claiming what it borrowed |
+| C | Instruments and tests | 21 instruments; 422 tests | `labs --eprocess` added; the five tests of `eprocess.rs` | the new instrument |
+| Exercises | Answers | none published | `book/answers.md`: every Count answer with its computation, every Laboratory answer with what to change and what to see, numbers only where measured | the course had a key; the book did not |
 
 ### Numbers cited without an instrument in this book
 

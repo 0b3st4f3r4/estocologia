@@ -16,7 +16,7 @@ measurement remains without an instrument — declaration 2 of `empirical/p14-h3
 
 | Result | Tag | Source / instrument |
 | --- | --- | --- |
-| Clinic: the same mean arrival rate of 8 per hour gives a 9.3 min wait in the constant world and 20.7 min in the world oscillating between 5 and 11; 8 and 25 out of every 100 patients wait over 30 min | **D** | `labs --chapter 15` measures 9.1 and 19.3 min, with the divergence declared |
+| Clinic: the same mean arrival rate of 8 per hour gives a 9.1 min wait in the constant world and 19.3 min in the world oscillating between 5 and 11; 8 and 24 out of every 100 patients wait over 30 min (the retired generator gave 9.3 and 20.7, 8 and 25; Appendix E) | **R** | `labs --chapter 12` |
 | Independent unit of the queue: daily margin of 0.51 min versus 0.07 per patient | **R** | `labs --chapter 15` |
 | Bank call center: 2.65 million calls, 83 training days and 81 vault days, peak of 234 agents | **R** | `labs --bank`, reading `data/bank_calls.csv`. **Second opinion (point 19): confirmed** — independent recount yields 164 days, 2 654 950 calls in the vault versus 2 649 354, and between-day Var/mean of 261.7 (all) and 247.4 (vault) versus 261.1 and 246.7; the 0.2% difference comes from the operating hour window (07:00 to 20:00) used by the laboratory |
 | Erlang C promises 82% on the average profile and delivers 57% on the real day, with 65% of days below target | **R** | `labs --bank`: 0.8193, 0.5683, and 0.6543 |
@@ -101,6 +101,17 @@ sit beside the H3 numbers above, not in their place; where they differ, Appendix
 | Toronto, 2001–2002 | CITL +0.0165, ECE 0.0354, 1 488 cases; FPR of the marker 0.155 and 0.164 (Black) against 0.070 and 0.077 (White) | `labs --streams` |
 | Canary | honest clock 0 emissions, gain +0.0000; clock switched off, gain +0.9102, +0.9718, +0.9188 | `labs --streams` |
 | Null q95 of the ECE with the real forecasts (2,000 simulations, seed 2026) | flights 2013 raw 0.0046; flights 2023 corrected 0.0034; cyclones 0.0107; Toronto 0.0315 | `labs --streams` |
+
+## H2 under the e-process (2026-10-19)
+
+The 38 recorded tests of the H2 gate re-read with the stopping rule of point 22, under `empirical/p22-parada/DECLARACAO_2.md`
+(sealed before the run). Instrument: `labs --eprocess`, reading `empirical/p22-parada/testes.tsv`.
+
+| Number | Instrument |
+| --- | --- |
+| One ledger per area, mean of the mixture-calibrated e-values; a test with no non-empty set counts as p = 1 (e = 1/2) | `labs --eprocess` |
+| Areas that cross 1/α = 20, as recorded: 3 (education 4414.6, pharmacology and physics at the clamp of p = 10⁻¹²); genetics 7.0, law 2.4, transport 3.0 | `labs --eprocess` |
+| With the clustered rows admitted by the declaration: education 3678.9, still crossing; the same three areas | `labs --eprocess` |
 
 ## Recipes of the course examples (2026-10-19)
 

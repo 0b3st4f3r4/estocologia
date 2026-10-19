@@ -13,6 +13,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --pretest` | Calibration pretest null for the SHELF panel |
 | `labs --genetics` | Interventional validation resolution: what the second cell line changes |
 | `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
+| `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -200,6 +201,61 @@ Toronto (2001-2002, chance of release, model blind to colour), trained on 3738 c
    2001 White  FPR 0.070  FNR 0.772  (900 cases)
    2002 Black  FPR 0.164  FNR 0.500  (85 cases)
    2002 White  FPR 0.077  FNR 0.838  (192 cases)
+~~~
+
+### The H2 gate under the e-process, retroactively
+
+One ledger per area over the 38 recorded tests, the mean of the e-values, two readings as declared in empirical/p22-parada/DECLARACAO_2.md.
+
+~~~bash
+./target/release/labs --eprocess
+~~~
+
+~~~text
+== The H2 gate under the e-process, retroactively ==
+38 distinct tests as recorded, 2 clustered rows admitted by the declaration | alpha = 0.05 | threshold 1/alpha = 20 | merge: mean within each area | gate: 3 areas
+
+-- reading: as recorded --
+  area             tests claims         mean e  verdict
+  Agronomia            1      0         0.5000  does not
+  Biologia             2      0         0.5000  does not
+  Clima                1      0         0.5000  does not
+  Crédito              2      0         0.5000  does not
+  Desenvolvimento      1      0         0.5000  does not
+  Direito              5      3         2.3749  does not
+  Educação             5      2      4414.5557  crosses 1/alpha
+  Energia              1      0         0.5000  does not
+  Engenharia           1      0         0.5000  does not
+  Epidemiologia        2      0         0.5000  does not
+  Farmacologia         1      1 1309803451.4320  crosses 1/alpha
+  Física               1      1 1309803451.4320  crosses 1/alpha
+  Genética             5      1         6.9919  does not
+  Logística            1      0         0.5000  does not
+  Saúde                5      0         0.5000  does not
+  Trabalho             2      0         0.5000  does not
+  Transporte           2      1         2.9927  does not
+  areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
+
+-- reading: with dependent rows corrected --
+  area             tests claims         mean e  verdict
+  Agronomia            1      0         0.5000  does not
+  Biologia             2      0         0.5000  does not
+  Clima                1      0         0.5000  does not
+  Crédito              2      0         0.5000  does not
+  Desenvolvimento      1      0         0.5000  does not
+  Direito              5      3         2.3749  does not
+  Educação             6      3      3678.8880  crosses 1/alpha
+  Energia              1      0         0.5000  does not
+  Engenharia           1      0         0.5000  does not
+  Epidemiologia        2      0         0.5000  does not
+  Farmacologia         1      1 1309803451.4320  crosses 1/alpha
+  Física               1      1 1309803451.4320  crosses 1/alpha
+  Genética             5      1         6.9919  does not
+  Logística            1      0         0.5000  does not
+  Saúde                5      0         0.5000  does not
+  Trabalho             2      0         0.5000  does not
+  Transporte           2      1         2.9927  does not
+  areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1253,7 +1309,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 98 tests
+running 103 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1317,6 +1373,11 @@ test ensaio::tests::the_five_real_pools_have_items ... ok
 test ensaio::tests::the_real_registry_is_sealed_and_the_synthetic_one_with_seven_opens ... ok
 test ensaio::tests::the_synthetic_bridge_only_opens_with_everything_and_rejects_a_forged_status ... ok
 test ensaio::tests::the_three_rehearsals_run_and_label_themselves_synthetic ... ok
+test eprocess::tests::a_saturated_set_makes_no_claim ... ok
+test eprocess::tests::a_test_without_a_set_makes_no_claim_and_contributes_one_half ... ok
+test eprocess::tests::one_strong_claim_among_empty_rounds_can_carry_an_area_and_a_weak_one_cannot ... ok
+test eprocess::tests::the_clustered_row_replaces_the_recorded_one_only_in_the_second_reading ... ok
+test eprocess::tests::the_sealed_table_has_the_declared_shape ... ok
 test escuta::tests::a_decision_issued_with_nobody_heard_is_rejected ... ok
 test escuta::tests::listening_without_a_signed_record_does_not_count ... ok
 test escuta::tests::the_deadline_and_the_minimum_coverage_come_from_the_registry ... ok
@@ -1353,7 +1414,7 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 98 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 103 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1793,7 +1854,8 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
 | p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
+| p22-parada | DECLARACAO_2.md | db71d78b1c669833b39db53056b2cdfeee4ae671dffcdcf04ee35fe0aa07c288 |
 
-Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 20 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
+Point declarations: 24, of which 6 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 21 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6371 lines** and **87807 words**, sha256 `1347f62c9cd86444446572fb72bf346de34704bca38b0e5fb076f05d503634c7`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6493 lines** and **89505 words**, sha256 `b9d7b35f2473dcce19d11e6494091dac1bff8f94a19a81079d135f80c91bd526`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

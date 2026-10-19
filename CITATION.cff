@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: >-
+  The project keeps history, not versions: cite the commit you read, by its hash and date, and the repository
+  URL. There are no releases or tags by rule (AGENTS.md, section VI).
+title: "Stochology: Judgement and Decision under Uncertainty"
+type: software
+authors:
+  - family-names: Neto
+    given-names: Silvano
+    email: dev@silvanoneto.com
+repository-code: https://github.com/0b3st4f3r4/estocologia
+url: https://obestafera.com
+license: MIT
+abstract: >-
+  A working text and an apparatus in Rust on judgement and decision under uncertainty: 21 chapters with
+  fixed-seed laboratories, instruments over ten public datasets, seven gates able to fail a claim, and a
+  public record of the errors found in the text and the code, with both values.
+keywords:
+  - decision under uncertainty
+  - calibration
+  - causal invariance
+  - non-ergodicity
+  - reproducibility

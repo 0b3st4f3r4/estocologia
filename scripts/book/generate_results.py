@@ -136,6 +136,7 @@ def main() -> int:
         "| BTlabs --pretestBT | Calibration pretest null for the SHELF panel |\n"
         "| BTlabs --geneticsBT | Interventional validation resolution: what the second cell line changes |\n"
         "| BTlabs --streamsBT | The real streams of Chapter 20, rebuilt on public data with a declared specification |\n"
+        "| BTlabs --eprocessBT | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
@@ -192,6 +193,12 @@ def main() -> int:
         [str(BIN), "--streams"],
         "Energy, bank, market, flights of 2013 and 2023, cyclones and Toronto 1997-2002, from public data with a "
         "specification declared before the run; the canary under both clocks; the fairness audit by colour.",
+    ))
+    parts.append(section_block(
+        "The H2 gate under the e-process, retroactively",
+        [str(BIN), "--eprocess"],
+        "One ledger per area over the 38 recorded tests, the mean of the e-values, two readings as declared in "
+        "empirical/p22-parada/DECLARACAO_2.md.",
     ))
     parts.append(section_block(
         "H3 chain re-executed from the repository tree",

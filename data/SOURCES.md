@@ -37,3 +37,29 @@ What could not be brought: the Toronto arrests of 2020–2021 and the Rhode Isla
 from the session), the causal chambers, the FDA cardiac trial and the yeast deletions of Chapter 19 (hosted outside the
 reachable mirrors), and the STAR experiment with school identifiers (`AER::STAR` has no school identifier).
 
+## Licences, declared on 2026-10-19
+
+The files in this folder are copies of datasets redistributed by R packages. The licence of a package covers its code
+and documentation; whether it also covers the data it redistributes, and under what terms the original collector
+released them, is not settled by the package field alone. The table gives both: the licence field of the package of
+origin, read from its `DESCRIPTION` on the CRAN mirror on GitHub on 2026-10-19, and the original source of the data as
+the package documents it. The repository's own MIT licence covers the code of this tree, not these files. Whoever
+reuses a file should go by its original source.
+
+| File | Package (licence field) | Original source as documented by the package |
+|---|---|---|
+| bank_calls.csv | `fpp3` (GPL-3) | Weinberg, Brown & Stroud (2007), call-centre data of a North American bank, as used by Shen & Huang (2008) |
+| djia_1885_2023.csv | `stevedata` (GPL-2) | daily closes of the Dow Jones Industrial Average, compiled by the package author from public quotes |
+| nsw_experimental.csv, cps_observational.csv | `causaldata` (MIT) | LaLonde (1986) and Dehejia & Wahba (1999), public research data |
+| danish_fire.csv | `fitdistrplus` (GPL ≥ 2) | Copenhagen Re fire losses, made public by McNeil (1997) |
+| nyc_flights_2013.csv | `nycflights13` (CC0) | US Bureau of Transportation Statistics, public records |
+| nyc_flights_2023.csv | `nycflights23` (CC0) | US Bureau of Transportation Statistics, public records |
+| vic_elec.csv | `tsibbledata` (GPL-3) | Australian Energy Market Operator, public half-hourly demand |
+| atlantic_storms.csv | `dplyr` (MIT) | NOAA Atlantic hurricane database (HURDAT2), public records |
+| toronto_arrests.csv | `carData` (GPL ≥ 2) | Toronto Star freedom-of-information request, as published by Fox & Weisberg |
+
+The GPL packages are not linked, imported or executed by anything in this tree; only their data files were copied, and
+the files are not derived works of the package code. The question of the data's own terms stays open for the files
+whose original collector states none (the bank calls, the Dow Jones compilation and the Toronto arrests), and is
+declared here rather than resolved.
+
