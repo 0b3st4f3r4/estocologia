@@ -30,7 +30,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 
 ## 1. Real H0 and Empirical Instruments in Rust
 
-### Bank call center (Chapter 16)
+### Bank call center (Chapter 12)
 
 Reads `data/bank_calls.csv` (5-minute public dataset), builds the Erlang C schedule over the mean training profile, and measures holdout performance.
 
@@ -418,7 +418,7 @@ Paired arms under identical total resources measuring resolution loss.
 ~~~text
 == R horizon :: resolution of the question ==
 paired arms: same arrivals and same service bases; only the service rate changes
-demand 5 or 11 (the station of Chapter 16): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
+demand 5 or 11 (the station of Chapter 12): mean capacity 10.0 | aggregate wait 43.73 min, fine wait 18.20 min, loss 25.54 min
    above 30 min: aggregated 0.4488, fine 0.2081
 demand 7 or 9 (light oscillation): mean capacity 10.0 | aggregate wait 21.15 min, fine wait 18.38 min, loss 2.77 min
    above 30 min: aggregated 0.2518, fine 0.2198
@@ -466,13 +466,13 @@ chapter  8 | resolution loss 2.77 min (demand from 7 to 9) | the calibration tol
 chapter  9 | no loss measured in this chapter | the ladder of cause; the grain enters as the unit of the environments
 chapter 10 | resolution loss 0.00 min (flat demand) | drag and ruin are measured per day; without oscillation, refining buys nothing
 chapter 11 | no loss measured in this chapter | the trilemma is the subquestion of R3: every hour, and for whom
-chapter 12 | no loss measured in this chapter | the map of knowledge; no scale decision
-chapter 13 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
-chapter 14 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
-chapter 15 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
-chapter 16 | resolution loss 25.54 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
-chapter 17 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
-chapter 18 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
+chapter 12 | resolution loss 25.54 min (demand from 5 to 11) | the chapter brings the R0 to R3 table of the post and of the bank
+chapter 13 | no loss measured in this chapter | the independent unit is the person; the R axis appears as the grain of the comparison
+chapter 14 | resolution loss 0.00 min (flat demand) | the fires: the number changes with the window, and the window is the grain
+chapter 15 | no loss measured in this chapter | the map of knowledge; no scale decision
+chapter 16 | no loss measured in this chapter | the adversarial panel judges the card, not its grain
+chapter 17 | no loss measured in this chapter | the contract carries the resolution field (R0 to R3) and Phi5; the lock only bites when the unit is a day or coarser
+chapter 18 | no loss measured in this chapter | every vault is a new grain: the ruler of the R axis when the correction changes the question
 chapter 19 | no loss measured in this chapter | grouping by school brings the area down; by student it does not: the independent unit in the vocabulary of the axis
 chapter 20 | resolution loss 25.54 min (demand from 5 to 11) | the live vault: laboratory 0.0022 and real vault 0.0048 are two grains of test
 chapter 21 | oscillation threshold at amplitude 2.5 (calibrated plan) | the chapter names the axis and predictions 3 and 5
@@ -737,69 +737,7 @@ White          0.1050           0.1050       -2.8e-17
 Black          0.1960           0.1960       -2.8e-17
 the trilemma: with PPV 0.3491 and FNR 0.240 in BOTH groups, the identity forces FPR 0.1050 for White and 0.1769 for Black
 
-== Chapter 12 :: the map of knowledge ==
-graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
-topological order = ["L3_manager", "L2_erlang_c", "L1_demand"] | leaves=1 roots=2 | nodes without lens = []
-proof 1 (edge to an absent node): ["edge to absent node: L2_erlang_c -> L2_ghost_node"]
-proof 2 (deductive cycle): ["cycle in E_tree: [\"L1_demand\", \"L2_erlang_c\", \"L3_manager\"]"]
-proof 3 (hyperedge with one member): ["hyperedge with fewer than two members: H4"]
-proof 4 (node outside every lens): ["L2_orphan"] validation=[]
-lenses triggered = ["Chrononomy", "Crisonomy", "Scalonomy"] | not triggered = ["Fluxonomy", "Morphonomy"]
-Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
-Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
-Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
-Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
-Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
-Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
-Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
-Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
-== Chapter 13 :: the A1-A8 safeguard panel ==
-complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
-card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
-without A1-code: rejecting=["A1-code"] count_rejecting=1
-without A2-data: rejecting=["A2-data"] count_rejecting=1
-without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
-without A4-inference: rejecting=["A4-inference"] count_rejecting=1
-without A5-governance: rejecting=["A5-governance"] count_rejecting=1
-without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
-without A7-domain: rejecting=["A7-domain"] count_rejecting=1
-without A8-decision: rejecting=["A8-decision"] count_rejecting=1
-sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
-seed read by the panel: none (the verdict is a function of the eight bits)
-system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
-== Chapter 14 :: the iron contract ==
-card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
-declared taxonomy: layers=["L1", "L2", "L3"] uncertainties=["aleatory", "epistemic", "knightian", "not-applicable"]
-defect NoSeed: failures=1 gates=Phi1-simulability detail="missing fixed seed or simulable artifact"
-defect NoDefinition: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
-defect NoMarginNoUnit: failures=1 gates=Phi2-independent-unit detail="margin without a declared independent unit"
-defect NoNullModel: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
-defect NoScopeNoPayerNoExit: failures=1 gates=Phi4-scope-and-exit detail="ecological scope, who pays for the error or exit clause missing"
-defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
-defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
-intact graph: validation=[]
-graph with a ghost edge: validation=["edge to absent node: L2_erlang -> L2_ghost"]
-graph with a deductive cycle: validation=["cycle in E_tree: Some(\"L1_queue\")"]
-graph with a one-member hyperedge: validation=["hyperedge with fewer than two members: H2"]
-property test (10.000 simulated cards): violations=0 margin_min=0.00617 margin_max=0.09798
-same seed, two validators: runs that diverge in 0 of 32
-== Chapter 15 :: the vault, the seal and the audit ==
-sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
-  event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
-  event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
-  event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
-  event 3 card=h3.prisoes content=ECE=0.036 hash=4248815bc8f679d9
-  event 4 card=h3.ri content=ECE=0.0048 habilidade=0.019 hash=8059d78760a22282
-tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
-tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
-one extra character in each event: 5 of 5 alterations invalidate the chain
-batch of cards: n=7 merkle_root=17679ce182647dbb
-swapping one card of the batch changes the root in 7 of 7 cases
-== Chapter 16 :: the same mean, two waits ==
+== Chapter 12 :: the same mean, two waits ==
 2000 days of 10 h per world, one attendant, mu = 12 per hour, seed 1909 (+ world index)
 world (patients per hour)    patients    wait  median     p90  >30min   margin/day     margin/pat.
 8 every day (the claim)        159716     9.1     3.7    26.1      8%         0.14            0.03
@@ -816,7 +754,7 @@ null: max |difference| in 2000 splits = 0.664 min
 
 severe test: observed difference = 10.2 min, 49.4 sd of the null, null fraction >= observed = 0.0000
 tail: 8 in 100 patients wait more than 30 min in world 8; 24 in 100 in world 5 or 11
-== Chapter 17 :: volatility drag and the selection bias ==
+== Chapter 13 :: volatility drag and the selection bias ==
 training 1885-1999: 31919 sessions in 115 years; whole series 1885-2023: 37930 sessions
 daily arithmetic mean = 0.000240669 (0.0668 per year), daily sd = 0.010496 (0.1749 per year)
 
@@ -848,7 +786,7 @@ implied selection bias (raw - experiment)     -0.218         -10292
 employment levels in 1978: NSW treated 0.757, NSW controls 0.646, CPS 0.864; in 100 people: 76, 65 and 86
 mean income of 1978 (US$): NSW treated 6349, NSW controls 4555, CPS 14847
 1975 placebo (employment): NSW treated 0.400, NSW controls 0.315, CPS 0.891; raw difference treated - CPS = -0.491
-== Chapter 18 :: the tail, the clean window and the information ==
+== Chapter 14 :: the tail, the clean window and the information ==
 Copenhagen Re fires above 1 M DKK, 1980-1990: 2167 claims in 132 months
 
 period        months        months hit  largest loss
@@ -872,6 +810,68 @@ monthly p of the training tail (published POT/GPD fit: xi = 0.406, sigma = 7.387
   POT/GPD tail       p = 0.04296: P(clean window | dangerous) = 0.2058; likelihood ratio = 4.72 (2.24 bits); clean months for 95% = 69
                      mutual information window x (dangerous vs negligible) = 0.5147 bits
 reference: under the rate that the vault showed (2 months hit in 24, p = 1/12), the same clean window would be worth 4.48 bits (ratio 22.3)
+== Chapter 15 :: the map of knowledge ==
+graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
+topological order = ["L3_manager", "L2_erlang_c", "L1_demand"] | leaves=1 roots=2 | nodes without lens = []
+proof 1 (edge to an absent node): ["edge to absent node: L2_erlang_c -> L2_ghost_node"]
+proof 2 (deductive cycle): ["cycle in E_tree: [\"L1_demand\", \"L2_erlang_c\", \"L3_manager\"]"]
+proof 3 (hyperedge with one member): ["hyperedge with fewer than two members: H4"]
+proof 4 (node outside every lens): ["L2_orphan"] validation=[]
+lenses triggered = ["Chrononomy", "Crisonomy", "Scalonomy"] | not triggered = ["Fluxonomy", "Morphonomy"]
+Scalonomy: hill_alpha(k=250) = 1.8444 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=500) = 1.7901 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=1000) = 1.7949 wild_tail=true values_above_1000=0
+Scalonomy: hill_alpha(k=2000) = 1.8032 wild_tail=true values_above_1000=0
+Crisonomy: act (+10 in a good year, -4 in a bad one) or not act: best without information = 5.8000 | with perfect information = 7.0000 | EVPI = 1.2000
+Crisonomy: only half the stake available: best without information = 2.9000 | with perfect information = 3.5000 | EVPI = 0.6000
+Crisonomy: useless sensor (same payoff in both states): EVPI = 0.0000
+Morphonomy: rule 1 -> marginal slope = 24.37 (treated fraction = 0.474) | by regime = [9.96, 10.09, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 1 with the allocation swapped -> marginal slope = -4.60 | by regime = [10.34, 9.92, 10.15] | invariant(tolerance 0.5) = true
+Morphonomy: rule 2, middle regime with effect 40 -> marginal slope = 40.03 | by regime = [9.96, 40.09, 10.15] | invariant(tolerance 0.5) = false | step within the regime = 30.13
+== Chapter 16 :: the A1-A8 safeguard panel ==
+complete card (card h3.voos): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=1 A6-fairness=1 A7-domain=1 A8-decision=1 | passed=8 of 8 approved=true
+card with A5 and A6 removed (card h3.voos-com-defeito): A1-code=1 A2-data=1 A3-lifecycle=1 A4-inference=1 A5-governance=0 A6-fairness=0 A7-domain=1 A8-decision=1 | passed=6 of 8 approved=false
+without A1-code: rejecting=["A1-code"] count_rejecting=1
+without A2-data: rejecting=["A2-data"] count_rejecting=1
+without A3-lifecycle: rejecting=["A3-lifecycle"] count_rejecting=1
+without A4-inference: rejecting=["A4-inference"] count_rejecting=1
+without A5-governance: rejecting=["A5-governance"] count_rejecting=1
+without A6-fairness: rejecting=["A6-fairness"] count_rejecting=1
+without A7-domain: rejecting=["A7-domain"] count_rejecting=1
+without A8-decision: rejecting=["A8-decision"] count_rejecting=1
+sweep: cards rejected=8 of 8 | rejections per agent=[1, 1, 1, 1, 1, 1, 1, 1]
+seed read by the panel: none (the verdict is a function of the eight bits)
+system 1: label=card-in-order probabilities=[0.06, 0.94] sum=1.0000 outside_[0.01;0.99]=0
+== Chapter 17 :: the iron contract ==
+card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
+declared taxonomy: layers=["L1", "L2", "L3"] uncertainties=["aleatory", "epistemic", "knightian", "not-applicable"]
+defect NoSeed: failures=1 gates=Phi1-simulability detail="missing fixed seed or simulable artifact"
+defect NoDefinition: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
+defect NoMarginNoUnit: failures=1 gates=Phi2-independent-unit detail="margin without a declared independent unit"
+defect NoNullModel: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
+defect NoScopeNoPayerNoExit: failures=1 gates=Phi4-scope-and-exit detail="ecological scope, who pays for the error or exit clause missing"
+defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
+defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
+intact graph: validation=[]
+graph with a ghost edge: validation=["edge to absent node: L2_erlang -> L2_ghost"]
+graph with a deductive cycle: validation=["cycle in E_tree: Some(\"L1_queue\")"]
+graph with a one-member hyperedge: validation=["hyperedge with fewer than two members: H2"]
+property test (10.000 simulated cards): violations=0 margin_min=0.00617 margin_max=0.09798
+same seed, two validators: runs that diverge in 0 of 32
+== Chapter 18 :: the vault, the seal and the audit ==
+sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
+  event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
+  event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
+  event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
+  event 3 card=h3.prisoes content=ECE=0.036 hash=4248815bc8f679d9
+  event 4 card=h3.ri content=ECE=0.0048 habilidade=0.019 hash=8059d78760a22282
+tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
+tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
+one extra character in each event: 5 of 5 alterations invalidate the chain
+batch of cards: n=7 merkle_root=17679ce182647dbb
+swapping one card of the batch changes the root in 7 of 7 cases
 == Chapter 19 :: the gate of the invariant set ==
 seed 2019 | 3 environments x 600 rows | 999 permutations per test | alpha = 0.05
 
@@ -1256,14 +1256,14 @@ test ch11::tests::evsi_matches_the_hand_count_and_never_exceeds_evpi ... ok
 test ch11::tests::gumbel_level_grows_with_the_period ... ok
 test ch11::tests::insurer_growth_rises_with_the_number_of_contracts ... ok
 test ch11::tests::lowering_the_fnr_raises_the_fpr ... ok
-test ch12::tests::valid_graph_passes_and_lenses_agree_with_hypergraph ... ok
-test ch13::tests::panel_approves_complete_card_and_rejects_when_a_concern_is_missing ... ok
-test ch14::tests::complete_card_passes_and_a_defect_triggers_a_gate ... ok
-test ch15::tests::ledger_detects_tampering_in_the_past ... ok
-test ch16::tests::day_margin_is_larger_than_patient_pseudoreplication ... ok
-test ch16::tests::two_nurses_share_one_line_and_one_nurse_is_lindley ... ok
-test ch17::tests::leverage_drag_and_selection_bias_match_stochology_horizons_h1 ... ok
-test ch18::tests::laplace_avoids_zero_and_hill_recovers_tail ... ok
+test ch12::tests::day_margin_is_larger_than_patient_pseudoreplication ... ok
+test ch12::tests::two_nurses_share_one_line_and_one_nurse_is_lindley ... ok
+test ch13::tests::leverage_drag_and_selection_bias_match_stochology_horizons_h1 ... ok
+test ch14::tests::laplace_avoids_zero_and_hill_recovers_tail ... ok
+test ch15::tests::valid_graph_passes_and_lenses_agree_with_hypergraph ... ok
+test ch16::tests::panel_approves_complete_card_and_rejects_when_a_concern_is_missing ... ok
+test ch17::tests::complete_card_passes_and_a_defect_triggers_a_gate ... ok
+test ch18::tests::ledger_detects_tampering_in_the_past ... ok
 test ch19::tests::ols_recovers_a_line_and_kruskal_is_zero_on_identical_groups ... ok
 test ch20::tests::sigmoid_inverts_logit_and_brier_measures_squared_error ... ok
 test ch21::tests::verifier_accepts_a_complete_card_and_rejects_a_generic_decider ... ok
@@ -1754,4 +1754,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **6188 lines** and **84273 words**, sha256 `e6cf1ea44eaba9a666b8f3de31792e641e1aac9f243724ee61867942ce45caaa`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6222 lines** and **84921 words**, sha256 `335b40664d55bb0aab175970b1d9edc4e9a69ba283cdf0122448fb3454ff9dc3`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

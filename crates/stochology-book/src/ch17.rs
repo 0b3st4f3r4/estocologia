@@ -1,442 +1,444 @@
-//! Chapter 17 — H1, part 1: the volatility drag in the Dow Jones and the LaLonde experiment.
+//! Chapter 17 laboratory — cards, prohibitions, invariants Phi1-Phi4 and gates.
 //!
-//! Self-contained, no external dependencies: reads the public datasets of the repository and reproduces
-//! the published numbers of the real H1 — time growth, drag, 20-year cohorts with a monthly start, the
-//! 1987 shock, the resampled-years null and the raw decomposition against the randomised NSW experiment.
-//! Run from the repository root:
-//!     cargo run --release --bin labs -- --chapter 17
-//! (accepts three optional paths when run on its own: the Dow CSV and the NSW and CPS CSVs)
+//! Validate a complete card and a card with one planted defect at a time,
+//! printing the failures by gate, in the spirit of ~portoes --defeito~.
+//!
+//! Fixed seed. No external dependencies. SplitMix64 built in.
 
-const TRAIN_END_YEAR: i32 = 1999; // the training set is 1885-1999; the vault is 2000-2023
-const HORIZON: i32 = 20; // years per cohort ("whoever holds for decades")
-const CLAIMED_LEVERAGE: f64 = 3.0;
-const N_NULL: usize = 2000; // resamplings of years for the claim world
-
-#[derive(Clone)]
-struct Sm64 {
-    state: u64,
+fn splitmix64(state: &mut u64) -> u64 {
+    stochology_core::rng::splitmix64_step(state)
 }
 
-impl Sm64 {
-    fn new(s: u64) -> Self {
-        Sm64 { state: s }
+fn uniform(state: &mut u64, limit: u64) -> u64 {
+    splitmix64(state) % limit
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Gate {
+    Phi1,
+    Phi2,
+    Phi3,
+    Phi4,
+    TypeIII,
+}
+
+impl Gate {
+    fn code(self) -> &'static str {
+        match self {
+            Gate::Phi1 => "Phi1-simulability",
+            Gate::Phi2 => "Phi2-independent-unit",
+            Gate::Phi3 => "Phi3-layers-and-null-model",
+            Gate::Phi4 => "Phi4-scope-and-exit",
+            Gate::TypeIII => "type-III-decider-question",
+        }
     }
-    fn next_u64(&mut self) -> u64 {
-        stochology_core::rng::splitmix64_step(&mut self.state)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Defect {
+    NoSeed,
+    NoDefinition,
+    NoMarginNoUnit,
+    NoNullModel,
+    NoScopeNoPayerNoExit,
+    QuestionWithoutMark,
+    QuestionWithoutAction,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Layer {
+    L1,
+    L2,
+    L3,
+}
+
+impl Layer {
+    fn code(self) -> &'static str {
+        match self {
+            Layer::L1 => "L1",
+            Layer::L2 => "L2",
+            Layer::L3 => "L3",
+        }
     }
-    fn uniform(&mut self) -> f64 {
-        (self.next_u64() >> 11) as f64 * (1.0 / 9007199254740992.0)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum UncertaintyType {
+    Aleatory,
+    Epistemic,
+    Knightian,
+    NotApplicable,
+}
+
+impl UncertaintyType {
+    fn code(self) -> &'static str {
+        match self {
+            UncertaintyType::Aleatory => "aleatory",
+            UncertaintyType::Epistemic => "epistemic",
+            UncertaintyType::Knightian => "knightian",
+            UncertaintyType::NotApplicable => "not-applicable",
+        }
     }
 }
 
-fn quantile(mut v: Vec<f64>, p: f64) -> f64 {
-    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
-    let i = ((p * v.len() as f64).ceil() as usize).max(1).min(v.len()) - 1;
-    v[i]
+#[derive(Debug, Clone)]
+struct Card {
+    id: String,
+    layer: Layer,
+    uncertainty: UncertaintyType,
+    definition: String,
+    simulable_artifact: Option<String>,
+    seed: Option<u64>,
+    independent_unit: Option<String>,
+    margin: Option<f64>,
+    null_model: Option<String>,
+    ecological_scope: bool,
+    who_pays_for_error: Option<String>,
+    exit_clause: Option<String>,
+    decider_question: String,
+    package_action: String,
+    header: [String; 5],
 }
 
-fn mean(x: &[f64]) -> f64 {
-    x.iter().sum::<f64>() / x.len() as f64
+fn complete_card() -> Card {
+    Card {
+        id: "h0.posto-saude".to_string(),
+        layer: Layer::L1,
+        uncertainty: UncertaintyType::Aleatory,
+        definition: "queue with non-linear arrival and convex waiting time".to_string(),
+        simulable_artifact: Some("crates/stochology-book#ch12".to_string()),
+        seed: Some(2026),
+        independent_unit: Some("day".to_string()),
+        margin: Some(0.51),
+        null_model: Some("historical-mean".to_string()),
+        ecological_scope: true,
+        who_pays_for_error: Some("the patient who waits and gives up".to_string()),
+        exit_clause: Some(
+            "stop if the fraction of waits above 30 min passes 0,25".to_string(),
+        ),
+        decider_question: "should we open a second room on the busy days?".to_string(),
+        package_action: "open a second room".to_string(),
+        header: [
+            "generating_process: queue with an arrival rate that oscillates between 5 and 11 per hour and a non-Poisson arrival"
+                .to_string(),
+            "non_linearity: the wait grows on a curve; f(E[X]) is not E[f(X)] near saturation".to_string(),
+            "unit_and_margin: the independent unit is the DAY; 81 days, not 2,65 million calls".to_string(),
+            "noise_physics: the daily demand has Var/mean = 273 (Poisson: 1); no absorbing states".to_string(),
+            "causal_ladder: step 2 do(staffing) simulated over the real demand; untestable premise: the demand does not react to the staffing".to_string(),
+        ],
+    }
 }
 
-fn sd(x: &[f64]) -> f64 {
-    let m = mean(x);
-    (x.iter().map(|v| (v - m) * (v - m)).sum::<f64>() / (x.len() as f64 - 1.0)).sqrt()
+#[derive(Debug, Clone)]
+struct Failure {
+    gate: Gate,
+    detail: String,
 }
 
-/// Days since 1970-01-01 (Howard Hinnant, days_from_civil).
-fn days_since_1970(y0: i64, m: i64, d: i64) -> i64 {
-    let y = if m <= 2 { y0 - 1 } else { y0 };
-    let era = if y >= 0 { y } else { y - 399 } / 400;
-    let yoe = y - era * 400;
-    let mp = (m + 9) % 12;
-    let doy = (153 * mp + 2) / 5 + d - 1;
-    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
-    era * 146097 + doe - 719468
+fn evaluate(f: &Card) -> Vec<Failure> {
+    let mut failures: Vec<Failure> = Vec::new();
+    let mut add = |gate: Gate, detail: &str| {
+        failures.push(Failure {
+            gate,
+            detail: detail.to_string(),
+        });
+    };
+
+    if f.seed.is_none() || f.simulable_artifact.is_none() {
+        add(Gate::Phi1, "missing fixed seed or simulable artifact");
+    }
+    if f.margin.is_none() || f.independent_unit.is_none() {
+        add(Gate::Phi2, "margin without a declared independent unit");
+    }
+    if f.null_model.is_none() || f.definition.trim().is_empty() {
+        add(Gate::Phi3, "no null model or no one-line definition");
+    }
+    if !f.ecological_scope || f.who_pays_for_error.is_none() || f.exit_clause.is_none() {
+        add(
+            Gate::Phi4,
+            "ecological scope, who pays for the error or exit clause missing",
+        );
+    }
+    let question = f.decider_question.trim();
+    let action = f.package_action.trim().to_lowercase();
+    let matches = !action.is_empty() && question.to_lowercase().contains(&action);
+    if !question.ends_with('?') || !matches {
+        add(
+            Gate::TypeIII,
+            "decider_question must end in ? and cite the action of the package",
+        );
+    }
+    if f.header.iter().any(|c| c.trim().is_empty()) {
+        add(Gate::Phi3, "five-question header incomplete");
+    }
+    for (i, c) in f.header.iter().enumerate() {
+        let expected = [
+            "generating_process",
+            "non_linearity",
+            "unit_and_margin",
+            "noise_physics",
+            "causal_ladder",
+        ][i];
+        if !c.starts_with(expected) {
+            add(Gate::Phi3, "header field out of order");
+        }
+    }
+    failures
 }
 
-fn is_leap(y: i64) -> bool {
-    (y % 4 == 0 && y % 100 != 0) || y % 400 == 0
+// ----------------------------------------------- graph, in the spirit of Ch. 15
+
+#[derive(Debug, Clone, PartialEq)]
+struct Node {
+    id: String,
+    definition: String,
 }
 
-fn days_in_month(y: i64, m: i64) -> i64 {
-    match m {
-        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
-        4 | 6 | 9 | 11 => 30,
-        _ => {
-            if is_leap(y) {
-                29
-            } else {
-                28
+#[derive(Debug, Clone, PartialEq)]
+struct Hyperedge {
+    id: String,
+    members: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default)]
+struct Graph {
+    nodes: Vec<Node>,
+    tree: Vec<(String, String)>,
+    hyperedges: Vec<Hyperedge>,
+}
+
+impl Graph {
+    fn validate(&self) -> Vec<String> {
+        let mut p: Vec<String> = Vec::new();
+        let exists = |id: &str| self.nodes.iter().any(|n| n.id == id);
+        for (from, to) in &self.tree {
+            if !exists(from) || !exists(to) {
+                p.push(format!("edge to absent node: {} -> {}", from, to));
             }
         }
-    }
-}
-
-/// Reads the Dow Jones: date labels and closes. Columns: rownames,date,value.
-fn read_dow(path: &str) -> (Vec<String>, Vec<f64>) {
-    let text = std::fs::read_to_string(path).expect("did not read the Dow CSV");
-    let mut labels = Vec::new();
-    let mut values = Vec::new();
-    for (i, line) in text.lines().enumerate() {
-        if i == 0 || line.trim().is_empty() {
-            continue;
+        for h in &self.hyperedges {
+            if h.members.len() < 2 {
+                p.push(format!("hyperedge with fewer than two members: {}", h.id));
+            }
+            for m in &h.members {
+                if !exists(m) {
+                    p.push(format!("hyperedge {} cites absent node: {}", h.id, m));
+                }
+            }
         }
-        let c: Vec<&str> = line.split(',').collect();
-        if c.len() < 3 {
-            continue;
-        }
-        labels.push(c[1].trim().to_string());
-        values.push(c[2].trim().parse().unwrap());
-    }
-    (labels, values)
-}
-
-/// Cumulative log-growth: c[k] is the sum of ln(1 + L r[i]) for i < k.
-fn cumulative(r: &[f64], l: f64) -> Vec<f64> {
-    let mut c = vec![0.0f64; r.len() + 1];
-    for i in 0..r.len() {
-        let y = 1.0 + l * r[i];
-        c[i + 1] = c[i] + if y > 0.0 { y.ln() } else { f64::NEG_INFINITY };
-    }
-    c
-}
-
-/// Cohorts that start on the first trading session of each month and end on the last session before (start + 20 years).
-/// Returns the ln of the final wealth of each cohort. Uses only sessions up to `end` (the training set).
-#[allow(clippy::needless_range_loop)] // explicit indices: the cohort window is the subject of the code
-fn monthly_cohorts(dates: &[i64], labels: &[String], r: &[f64], end: usize, l: f64) -> Vec<f64> {
-    let c = cumulative(r, l);
-    let mut out = Vec::new();
-    for s in 1..end {
-        if labels[s - 1][..7] == labels[s][..7] {
-            continue; // only the first trading session of the month
-        }
-        let year: i64 = labels[s][..4].parse().unwrap();
-        let month: i64 = labels[s][5..7].parse().unwrap();
-        let day: i64 = labels[s][8..10].parse().unwrap();
-        let target_year = year + HORIZON as i64;
-        let target = days_since_1970(
-            target_year,
-            month,
-            day.min(days_in_month(target_year, month)),
-        );
-        if dates[end - 1] < target {
-            continue; // the cohort would not fit in the training set
-        }
-        let mut f = s;
-        for j in s..end {
-            if dates[j] <= target {
-                f = j;
-            } else {
+        let mut colour: Vec<(String, u8)> = Vec::new();
+        let mut cycle: Option<String> = None;
+        for n in &self.nodes {
+            if self.visit(&n.id, &mut colour, &mut cycle) {
+                p.push(format!("cycle in E_tree: {:?}", cycle));
                 break;
             }
         }
-        out.push(c[f] - c[s]);
+        p
     }
-    out
-}
 
-/// 20-year moving sums of an annual series: the cohorts of the severe test.
-fn annual_cohorts(series: &[f64]) -> Vec<f64> {
-    let h = HORIZON as usize;
-    (0..series.len().saturating_sub(h - 1))
-        .map(|s| series[s..s + h].iter().sum())
-        .collect()
-}
-
-fn fraction_above(cohorts: &[f64]) -> f64 {
-    cohorts.iter().filter(|x| **x > 0.0).count() as f64 / cohorts.len() as f64
-}
-
-/// World of the claim: the years of the training set are resampled and wealth grows 3 times the annual
-/// arithmetic sum, without drag. Returns (mean fraction, 1% quantile, p-value against the observed).
-fn claim_world(
-    annual_arithmetic: &[f64],
-    observed: f64,
-    reps: usize,
-    seed: u64,
-) -> (f64, f64, f64) {
-    let mut rng = Sm64::new(seed);
-    let n = annual_arithmetic.len();
-    let mut fracs = Vec::with_capacity(reps);
-    for _ in 0..reps {
-        let series: Vec<f64> = (0..n)
-            .map(|_| CLAIMED_LEVERAGE * annual_arithmetic[(rng.uniform() * n as f64) as usize % n])
-            .collect();
-        fracs.push(fraction_above(&annual_cohorts(&series)));
-    }
-    let p = fracs.iter().filter(|x| **x <= observed).count() as f64 / reps as f64;
-    (mean(&fracs), quantile(fracs, 0.01), p)
-}
-
-/// One person of the NSW or the CPS: the columns used are treat (2), re75 (10) and re78 (11).
-struct Person {
-    treated: bool,
-    re75: f64,
-    re78: f64,
-}
-
-fn read_lalonde(path: &str) -> Vec<Person> {
-    let text = std::fs::read_to_string(path).expect("did not read the NSW/CPS CSV");
-    let mut out = Vec::new();
-    for (i, line) in text.lines().enumerate() {
-        if i == 0 || line.trim().is_empty() {
-            continue;
-        }
-        let c: Vec<&str> = line.split(',').collect();
-        if c.len() < 12 {
-            continue;
-        }
-        out.push(Person {
-            treated: c[2].trim() == "1",
-            re75: c[10].trim().parse().unwrap(),
-            re78: c[11].trim().parse().unwrap(),
-        });
-    }
-    out
-}
-
-fn income(v: &[&Person]) -> f64 {
-    v.iter().map(|p| p.re78).sum::<f64>() / v.len() as f64
-}
-
-fn employment(v: &[&Person], year: u8) -> f64 {
-    let n = v
-        .iter()
-        .filter(|p| {
-            if year == 75 {
-                p.re75 > 0.0
-            } else {
-                p.re78 > 0.0
+    fn visit(&self, id: &str, colour: &mut Vec<(String, u8)>, cycle: &mut Option<String>) -> bool {
+        match colour.iter().find(|(x, _)| x == id).map(|(_, c)| *c) {
+            Some(1) => {
+                *cycle = Some(id.to_string());
+                true
             }
-        })
-        .count();
-    n as f64 / v.len() as f64
+            Some(2) => false,
+            _ => {
+                colour.push((id.to_string(), 1));
+                for (from, to) in &self.tree {
+                    if from == id && self.visit(to, colour, cycle) {
+                        return true;
+                    }
+                }
+                if let Some(e) = colour.iter_mut().find(|(x, _)| x == id) {
+                    e.1 = 2;
+                }
+                false
+            }
+        }
+    }
 }
 
-/// Resolves the data path: optional base in ESTOCOLOGIA_DADOS, otherwise the repository.
-fn data_path(default: &str) -> String {
-    match std::env::var("ESTOCOLOGIA_DADOS") {
-        Ok(base) => format!("{}/{}", base.trim_end_matches('/'), default),
-        Err(_) => default.to_string(),
+fn good_graph() -> Graph {
+    Graph {
+        nodes: vec![
+            Node {
+                id: "L1_queue".to_string(),
+                definition: "wait measured over 81 days".to_string(),
+            },
+            Node {
+                id: "L2_erlang".to_string(),
+                definition: "stationary level of service".to_string(),
+            },
+            Node {
+                id: "L3_manager".to_string(),
+                definition: "staffing decided by the mean".to_string(),
+            },
+        ],
+        tree: vec![
+            ("L1_queue".to_string(), "L2_erlang".to_string()),
+            ("L2_erlang".to_string(), "L3_manager".to_string()),
+        ],
+        hyperedges: vec![Hyperedge {
+            id: "H1".to_string(),
+            members: vec!["L1_queue".to_string(), "L2_erlang".to_string()],
+        }],
     }
+}
+fn with_defect(d: Defect) -> Card {
+    let mut f = complete_card();
+    match d {
+        Defect::NoSeed => f.seed = None,
+        Defect::NoDefinition => f.definition = String::new(),
+        Defect::NoMarginNoUnit => {
+            f.margin = None;
+            f.independent_unit = None;
+        }
+        Defect::NoNullModel => f.null_model = None,
+        Defect::NoScopeNoPayerNoExit => {
+            f.ecological_scope = false;
+            f.who_pays_for_error = None;
+            f.exit_clause = None;
+        }
+        Defect::QuestionWithoutMark => {
+            f.decider_question = "should we open a second room on the busy days".to_string()
+        }
+        Defect::QuestionWithoutAction => {
+            f.decider_question = "should we do something on the busy days?".to_string()
+        }
+    }
+    f
+}
+
+fn names(v: &[Gate]) -> String {
+    v.iter().map(|p| p.code()).collect::<Vec<&str>>().join(",")
 }
 
 pub fn run() {
-    let dow_csv = data_path("data/djia_1885_2023.csv");
-    let nsw_csv = data_path("data/nsw_experimental.csv");
-    let cps_csv = data_path("data/cps_observational.csv");
+    println!("== Chapter 17 :: the iron contract ==");
 
-    println!("== Chapter 17 :: volatility drag and the selection bias ==");
-    let (labels, prices) = read_dow(&dow_csv);
-    let dates: Vec<i64> = labels
-        .iter()
-        .map(|s| {
-            days_since_1970(
-                s[..4].parse().unwrap(),
-                s[5..7].parse().unwrap(),
-                s[8..10].parse().unwrap(),
-            )
-        })
-        .collect();
-    let r: Vec<f64> = (1..prices.len())
-        .map(|i| prices[i] / prices[i - 1] - 1.0)
-        .collect();
-    let years: Vec<i32> = labels[1..]
-        .iter()
-        .map(|s| s[..4].parse().unwrap())
-        .collect();
-    let end = years
-        .iter()
-        .position(|y| *y > TRAIN_END_YEAR)
-        .unwrap_or(years.len());
-    let mut years_u: Vec<i32> = years[..end].to_vec();
-    years_u.dedup();
-    let n_years = years_u.len() as f64;
-    let rt = &r[..end];
-
+    let f = complete_card();
+    let failures = evaluate(&f);
     println!(
-        "training 1885-1999: {} sessions in {:.0} years; whole series 1885-2023: {} sessions",
-        rt.len(),
-        n_years,
-        r.len()
-    );
-    let mu_day = mean(rt);
-    println!(
-        "daily arithmetic mean = {:.9} ({:.4} per year), daily sd = {:.6} ({:.4} per year)",
-        mu_day,
-        mu_day * rt.len() as f64 / n_years,
-        sd(rt),
-        sd(rt) * (rt.len() as f64 / n_years).sqrt()
+        "card {}: layer={} uncertainty={} header={} fields | failures={:?} total={}",
+        f.id,
+        f.layer.code(),
+        f.uncertainty.code(),
+        f.header.len(),
+        failures
+            .iter()
+            .map(|x| x.gate.code())
+            .collect::<Vec<&str>>(),
+        failures.len()
     );
 
-    println!();
-    println!("time growth per year and drag (cohorts and trajectories of the training set)");
-    let mut g = Vec::new();
-    for l in [1.0f64, 2.0, CLAIMED_LEVERAGE] {
-        let gl = rt.iter().map(|x| (1.0 + l * x).ln()).sum::<f64>() / n_years;
-        g.push(gl);
+    // The declared taxonomy: three layers and four uncertainty types.
+    let layers = [Layer::L1, Layer::L2, Layer::L3];
+    let uncertainties = [
+        UncertaintyType::Aleatory,
+        UncertaintyType::Epistemic,
+        UncertaintyType::Knightian,
+        UncertaintyType::NotApplicable,
+    ];
+    println!(
+        "declared taxonomy: layers={:?} uncertainties={:?}",
+        layers.iter().map(|c| c.code()).collect::<Vec<&str>>(),
+        uncertainties
+            .iter()
+            .map(|i| i.code())
+            .collect::<Vec<&str>>()
+    );
+
+    let defects = [
+        Defect::NoSeed,
+        Defect::NoDefinition,
+        Defect::NoMarginNoUnit,
+        Defect::NoNullModel,
+        Defect::NoScopeNoPayerNoExit,
+        Defect::QuestionWithoutMark,
+        Defect::QuestionWithoutAction,
+    ];
+    for d in defects {
+        let fx = with_defect(d);
+        let failures = evaluate(&fx);
+        let gates: Vec<Gate> = {
+            let mut v: Vec<Gate> = failures.iter().map(|x| x.gate).collect();
+            v.sort_by_key(|p| p.code());
+            v.dedup();
+            v
+        };
         println!(
-            "  L={:.0}: the arithmetic sum would give {:.4} per year; the realised growth is {:.4}; drag {:.4}",
-            l,
-            l * mu_day * rt.len() as f64 / n_years,
-            gl,
-            l * mu_day * rt.len() as f64 / n_years - gl
-        );
-    }
-    let (mut worst, mut iworst) = (0.0f64, 0usize);
-    for (i, x) in rt.iter().enumerate() {
-        if *x < worst {
-            worst = *x;
-            iworst = i;
-        }
-    }
-    println!(
-        "worst session: {:.4} ({:.2}%) on {}; loss at L=1 {:.3}, L=2 {:.3}, L=3 {:.3}; daily ruin at L >= {:.2}",
-        worst,
-        100.0 * worst,
-        labels[iworst + 1],
-        -worst,
-        -2.0 * worst,
-        -CLAIMED_LEVERAGE * worst,
-        -1.0 / worst
-    );
-
-    for (name, from, to) in [
-        ("calendar year 1929-1932", "1929-01-01", "1932-12-31"),
-        (
-            "peak to trough, 1929-09-03 to 1932-07-08",
-            "1929-09-03",
-            "1932-07-08",
-        ),
-    ] {
-        let i0 = labels.iter().position(|s| s.as_str() >= from).unwrap();
-        let i1 = labels.iter().rposition(|s| s.as_str() <= to).unwrap();
-        for l in [1.0f64, CLAIMED_LEVERAGE] {
-            let w: f64 = (i0..i1).map(|i| 1.0 + l * r[i]).product();
-            println!(
-                "  {} at L={:.0}: the capital ends at {:.5} of the initial one ({:.1}% destroyed)",
-                name,
-                l,
-                w,
-                100.0 * (1.0 - w)
-            );
-        }
-    }
-
-    println!();
-    println!("20-year cohorts starting on the first trading session of each month (training set):");
-    println!(
-        "{:<6} {:>12} {:>14} {:>14} {:>16}",
-        "L", "cohorts", "median (x)", "mean (x)", "above the start"
-    );
-    for l in [1.0f64, 2.0, CLAIMED_LEVERAGE] {
-        let co = monthly_cohorts(&dates, &labels, &r, end, l);
-        let wealths: Vec<f64> = co.iter().map(|x| x.exp()).collect();
-        let n = co.len();
-        println!(
-            "{:<6.0} {:>12} {:>14.2} {:>14.1} {:>16.4}",
-            l,
-            n,
-            quantile(co.clone(), 0.5).exp(),
-            mean(&wealths),
-            fraction_above(&co)
+            "defect {:?}: failures={} gates={} detail={:?}",
+            d,
+            failures.len(),
+            names(&gates),
+            failures
+                .first()
+                .map(|x| x.detail.clone())
+                .unwrap_or_default()
         );
     }
 
-    // ln-growth per unit-year (calendar year): the unit of the severe test.
-    let mut year_series: Vec<i32> = Vec::new();
-    let mut g1: Vec<f64> = Vec::new();
-    let mut g3: Vec<f64> = Vec::new();
-    let mut a_arith: Vec<f64> = Vec::new();
-    for i in 0..end {
-        if year_series.last() != Some(&years[i]) {
-            year_series.push(years[i]);
-            g1.push(0.0);
-            g3.push(0.0);
-            a_arith.push(0.0);
-        }
-        let j = g1.len() - 1;
-        g1[j] += (1.0 + r[i]).ln();
-        g3[j] += (1.0 + CLAIMED_LEVERAGE * r[i]).ln();
-        a_arith[j] += r[i];
-    }
-    println!();
+    // The two graph invariants, in the spirit of --defeito.
+    let g = good_graph();
+    println!("intact graph: validation={:?}", g.validate());
+    let mut g1 = g.clone();
+    g1.tree
+        .push(("L2_erlang".to_string(), "L2_ghost".to_string()));
+    println!("graph with a ghost edge: validation={:?}", g1.validate());
+    let mut g2 = g.clone();
+    g2.tree
+        .push(("L3_manager".to_string(), "L1_queue".to_string()));
     println!(
-        "cohorts per unit-year ({} years, moving sum of {}): above the start at 1x = {:.4}, at 3x = {:.4} ({} cohorts)",
-        year_series.len(),
-        HORIZON,
-        fraction_above(&annual_cohorts(&g1)),
-        fraction_above(&annual_cohorts(&g3)),
-        annual_cohorts(&g3).len()
+        "graph with a deductive cycle: validation={:?}",
+        g2.validate()
     );
-    let obs = fraction_above(&annual_cohorts(&g3));
-    let (null_mean, q01, p) = claim_world(&a_arith, obs, N_NULL, 17_001);
+    let mut g3 = g.clone();
+    g3.hyperedges.push(Hyperedge {
+        id: "H2".to_string(),
+        members: vec!["L3_manager".to_string()],
+    });
     println!(
-        "claim world (training years resampled, growth 3*annual arithmetic sum, without drag):"
-    );
-    println!(
-        "  {} replicas: mean fraction of the cohorts above the start = {:.4}, 1% quantile = {:.4}, p(fraction <= {:.4}) = {:.4}",
-        N_NULL, null_mean, q01, obs, p
+        "graph with a one-member hyperedge: validation={:?}",
+        g3.validate()
     );
 
-    let nsw = read_lalonde(&nsw_csv);
-    let cps = read_lalonde(&cps_csv);
-    let treated: Vec<&Person> = nsw.iter().filter(|p| p.treated).collect();
-    let control: Vec<&Person> = nsw.iter().filter(|p| !p.treated).collect();
-    let all_cps: Vec<&Person> = cps.iter().collect();
-    println!();
+    // Property test over the function of the Phi2 gate: the simulated margin
+    // can never be negative and can never shrink when the sample grows.
+    let mut rng = 2026u64;
+    let mut violations = 0usize;
+    let mut smallest = f64::MAX;
+    let mut largest = f64::MIN;
+    for _ in 0..10_000 {
+        let n = (uniform(&mut rng, 900) + 100) as f64;
+        let p = (uniform(&mut rng, 99) + 1) as f64 / 100.0;
+        let margin = 1.96 * (p * (1.0 - p) / n).sqrt();
+        smallest = smallest.min(margin);
+        largest = largest.max(margin);
+        if !(0.0..=0.5).contains(&margin) {
+            violations += 1;
+        }
+    }
     println!(
-        "LaLonde: NSW with {} treated and {} randomised controls; CPS with {} observations",
-        treated.len(),
-        control.len(),
-        cps.len()
+        "property test (10.000 simulated cards): violations={} margin_min={:.5} margin_max={:.5}",
+        violations, smallest, largest
     );
+
+    let repetitions = 32usize;
+    let mut different = 0usize;
+    for _ in 0..repetitions {
+        let mut a = 2026u64;
+        let mut b = 2026u64;
+        let va: Vec<u64> = (0..16).map(|_| uniform(&mut a, 1_000_000)).collect();
+        let vb: Vec<u64> = (0..16).map(|_| uniform(&mut b, 1_000_000)).collect();
+        if va != vb {
+            different += 1;
+        }
+    }
     println!(
-        "{:<40} {:>10} {:>14}",
-        "comparison (1978 outcome)", "employment", "income (US$)"
-    );
-    println!(
-        "{:<40} {:>10.3} {:>14.0}",
-        "randomised experiment (NSW treat. - NSW ctrl)",
-        employment(&treated, 78) - employment(&control, 78),
-        income(&treated) - income(&control)
-    );
-    println!(
-        "{:<40} {:>10.3} {:>14.0}",
-        "raw comparison (NSW treat. - CPS)",
-        employment(&treated, 78) - employment(&all_cps, 78),
-        income(&treated) - income(&all_cps)
-    );
-    println!(
-        "{:<40} {:>10.3} {:>14.0}",
-        "implied selection bias (raw - experiment)",
-        (employment(&treated, 78) - employment(&all_cps, 78))
-            - (employment(&treated, 78) - employment(&control, 78)),
-        (income(&treated) - income(&all_cps)) - (income(&treated) - income(&control))
-    );
-    println!(
-        "employment levels in 1978: NSW treated {:.3}, NSW controls {:.3}, CPS {:.3}; in 100 people: {:.0}, {:.0} and {:.0}",
-        employment(&treated, 78),
-        employment(&control, 78),
-        employment(&all_cps, 78),
-        100.0 * employment(&treated, 78),
-        100.0 * employment(&control, 78),
-        100.0 * employment(&all_cps, 78)
-    );
-    println!(
-        "mean income of 1978 (US$): NSW treated {:.0}, NSW controls {:.0}, CPS {:.0}",
-        income(&treated),
-        income(&control),
-        income(&all_cps)
-    );
-    println!(
-        "1975 placebo (employment): NSW treated {:.3}, NSW controls {:.3}, CPS {:.3}; raw difference treated - CPS = {:.3}",
-        employment(&treated, 75),
-        employment(&control, 75),
-        employment(&all_cps, 75),
-        employment(&treated, 75) - employment(&all_cps, 75)
+        "same seed, two validators: runs that diverge in {} of {}",
+        different, repetitions
     );
 }
 
@@ -445,12 +447,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn leverage_drag_and_selection_bias_match_stochology_horizons_h1() {
-        let r = [-0.10, 0.10];
-        let ac1 = cumulative(&r, 1.0);
-        let ac3 = cumulative(&r, 3.0);
-        assert!(ac3.last().unwrap() < ac1.last().unwrap());
-        assert!(stochology_horizons::h1::drag(3.0, &r) > stochology_horizons::h1::drag(1.0, &r));
-        assert!(is_leap(2000) && !is_leap(1900));
+    fn complete_card_passes_and_a_defect_triggers_a_gate() {
+        assert!(evaluate(&complete_card()).is_empty());
+        assert!(!evaluate(&with_defect(Defect::NoSeed)).is_empty());
+        assert!(good_graph().validate().is_empty());
     }
 }

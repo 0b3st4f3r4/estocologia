@@ -32,8 +32,8 @@ everything that remains declared and not yet enforced lives in `docs/DECLARED_PR
 | Invariant | Requirement | Where it lives in code |
 | --- | --- | --- |
 | Phi1 — simulability | fixed seed and executable artifact | `crates/stochology-core/src/invariants.rs` and `rng.rs` |
-| Phi2 — independent unit | margin on the true independent unit, never pseudoreplication | validated in the sheet; measured in `labs --chapter 16` and `labs --bank` |
-| Phi3 — severe test | null model simulated before reading any pattern | validated in the sheet; `labs --chapter 7` and `labs --chapter 14` |
+| Phi2 — independent unit | margin on the true independent unit, never pseudoreplication | validated in the sheet; measured in `labs --chapter 15` and `labs --bank` |
+| Phi3 — severe test | null model simulated before reading any pattern | validated in the sheet; `labs --chapter 7` and `labs --chapter 13` |
 | Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; safeguard panel agent A8 |
 | Phi5 — question resolution | enforced when the unit is a day or coarser: aggregate resolution (R0) fails; finer units remain exempt, as declared | `crates/stochology-core/src/invariants.rs` and `src/resolution.rs` |
 
@@ -136,7 +136,7 @@ signed transcript hash, which does not exist today.
 No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, a
 **divergence declaration** states both values and the cause in Appendix E (provenance of the numbers), chapter by chapter.
 The chapters themselves carry content only: no path, no reference to the book, the repository or the program, and the R-axis
-block, or the slice of it that teaches, only in the chapters that measure a resolution loss or a threshold (5, 8, 10, 16, and 21). This is the owner's rule of 2026-10-18,
+block, or the slice of it that teaches, only in the chapters that measure a resolution loss or a threshold (5, 8, 10, 12, and 21). This is the owner's rule of 2026-10-18,
 which moved the declarations out of the chapters and rewrote the book part by part (`docs/declarations/BOOK_REWRITE.md`); since then,
 `scripts/style/check_pass.py` checks each rewritten file for the ramp markers, the word floor, and number provenance (every number
 in running prose must exist in a source or in an output block of the same file), and `check_labs.py` keeps every block equal to

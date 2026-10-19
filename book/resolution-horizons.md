@@ -16,9 +16,9 @@ variable of the model, with a measurable effect on the number and on the action.
 
 | Level | The question | What it decides | Where it already appears in the book |
 | --- | --- | --- | --- |
-| **R0 aggregated** | "On average, does the service cope?" | sizing by the average day | Erlang C over the average rate (Chapter 16) |
-| **R1 day** | "Each day, does the service cope?" | sizing by the day that exists | the clinic that oscillates between 5 and 11 (Chapters 5 and 16) |
-| **R2 hour** | "Each hour, does the service cope?" | sizing by the peak | the reinforcement at the bank's peaks (Chapter 16) |
+| **R0 aggregated** | "On average, does the service cope?" | sizing by the average day | Erlang C over the average rate (Chapter 12) |
+| **R1 day** | "Each day, does the service cope?" | sizing by the day that exists | the clinic that oscillates between 5 and 11 (Chapters 5 and 12) |
+| **R2 hour** | "Each hour, does the service cope?" | sizing by the peak | the reinforcement at the bank's peaks (Chapter 12) |
 | **R3 sub-question** | "Each hour, and for whom?" | sizing by subgroup, with a declared cost | Chouldechova's trilemma (Chapter 11) |
 
 Comparing resolutions only makes sense when one **refines** the other. R1 answers the question of R0 at a finer grain,
@@ -49,11 +49,11 @@ large; what is measured here is the **difference**, which does not depend on the
 | Case | R0 | R1 or finer | Source |
 | --- | --- | --- | --- |
 | Call centre | Erlang C promises 82% | 57% measured; 26 failed days in 100; with +7.2% of agent-hours at the peaks, fewer than 4 in 100 | `h0-real/README.md` |
-| Health clinic | constant day: 9.1 min | day that oscillates: 19.3 min, with the same mean | `labs --chapter 16` |
+| Health clinic | constant day: 9.1 min | day that oscillates: 19.3 min, with the same mean | `labs --chapter 15` |
 | STAR (education) | grouping by student keeps the area | grouping by the 80 schools brings it down to $\hat S = \emptyset$ | `governance/GRUPOS.md`, Chapter 19 |
 | hERG (pharmacology) | 16 instants per volunteer | grouping by volunteer keeps the area, with skill +0.57 | `h2g/README.md` |
-| Multiplicity | 4 areas before the correction | 3 areas after the grouping | Chapters 15 and 19 |
-| Fires | 36-month window | calendar year 1929 to 1932: the number changes with the window | Chapter 18 |
+| Multiplicity | 4 areas before the correction | 3 areas after the grouping | Chapters 18 and 19 |
+| Fires | 36-month window | calendar year 1929 to 1932: the number changes with the window | Chapter 14 |
 | H3 vault | laboratory: ECE 0.0022 | real vault: ECE 0.0048 | Chapter 20 |
 
 In every case, changing the resolution **did not change the arithmetic**; it changed the question, and with it the number and the

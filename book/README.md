@@ -26,13 +26,13 @@ cargo test --workspace                       # tests of the book crates and of t
 
 ## Real data in the laboratories
 
-The laboratories of chapters 17 and 18 read the bases kept in the repository
+The laboratories of chapters 13 and 14 read the bases kept in the repository
 (~data/djia_1885_2023.csv~, ~nsw_experimental.csv~, ~cps_observational.csv~,
 ~danish_fire.csv~). The default path is relative to the root of the repository; to point to another place,
 use the environment variable:
 
 ```bash
-ESTOCOLOGIA_DADOS=/caminho/para/dados cargo run --release --bin labs -- --chapter 17
+ESTOCOLOGIA_DADOS=/caminho/para/dados cargo run --release --bin labs -- --chapter 16
 ```
 
 ## Rule of new files

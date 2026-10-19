@@ -35,7 +35,7 @@ expected_pt = [
     "# Apêndices",
 ]
 expected_en = [
-    "# Stochology: A Textbook",
+    "# Stochology: Judgement and Decision under Uncertainty",
     "# Part I.",
     "# Part II.",
     "# Part III.",
@@ -83,24 +83,24 @@ if paper.is_file() and bin_labs.is_file() and not use_en:
     # it is reported, not raised, so the rest of the verification list still runs.
     try:
         s_cap5 = run_labs("--chapter", "5")
-        s_cap16 = run_labs("--chapter", "16")
-        s_cap17 = run_labs("--chapter", "17")
-        s_cap18 = run_labs("--chapter", "18")
+        s_cap12 = run_labs("--chapter", "12")
+        s_cap13 = run_labs("--chapter", "13")
+        s_cap14 = run_labs("--chapter", "14")
         s_h3 = run_labs("--h3")
         s_ponte = run_labs("--bridge")
         # Each number is re-derived from the instrument and then looked up in paper/README.md, in both the
         # decimal-comma and the decimal-point spelling.
         recomputed = [
-            ("cap16 constant wait", re.search(r"8 every day \(the claim\)\s+\d+\s+([0-9.]+)", s_cap16).group(1).replace(".", ",")),
-            ("cap16 burst wait", re.search(r"5 or 11\s+\d+\s+([0-9.]+)", s_cap16).group(1).replace(".", ",")),
-            ("cap16 severe diff", re.search(r"observed difference = ([0-9.]+) min", s_cap16).group(1).replace(".", ",")),
+            ("cap12 constant wait", re.search(r"8 every day \(the claim\)\s+\d+\s+([0-9.]+)", s_cap12).group(1).replace(".", ",")),
+            ("cap12 burst wait", re.search(r"5 or 11\s+\d+\s+([0-9.]+)", s_cap12).group(1).replace(".", ",")),
+            ("cap12 severe diff", re.search(r"observed difference = ([0-9.]+) min", s_cap12).group(1).replace(".", ",")),
             ("cap05 burst fraction", re.search(r"\(([0-9.]+%) of the total\)", s_cap5).group(1).replace(".", ",")),
             ("cap05 failed exam", re.search(r"failing \(score < 6\.0\) = ([0-9.]+) per 100", s_cap5).group(1).replace(".", ",") + "%"),
-            ("cap17 3x median", f"{float(re.search(r'^3\s+\d+\s+([0-9.]+)\s+([0-9.]+)', s_cap17, re.M).group(1)):.1f}".replace(".", ",")),
-            ("cap17 3x mean", f"{float(re.search(r'^3\s+\d+\s+([0-9.]+)\s+([0-9.]+)', s_cap17, re.M).group(2)):.0f} times"),
-            ("cap17 LaLonde RCT", f"+{float(re.search(r'randomised experiment \(NSW treat\. - NSW ctrl\)\s+([0-9.]+)', s_cap17).group(1)) * 100:.1f}".replace(".", ",")),
-            ("cap17 LaLonde raw", f"−{float(re.search(r'raw comparison \(NSW treat\. - CPS\)\s+-([0-9.]+)', s_cap17).group(1)) * 100:.1f}".replace(".", ",")),
-            ("cap18 Laplace clean window", re.search(r"or (1 chance in \d+) per month", s_cap18).group(1)),
+            ("cap13 3x median", f"{float(re.search(r'^3\s+\d+\s+([0-9.]+)\s+([0-9.]+)', s_cap13, re.M).group(1)):.1f}".replace(".", ",")),
+            ("cap13 3x mean", f"{float(re.search(r'^3\s+\d+\s+([0-9.]+)\s+([0-9.]+)', s_cap13, re.M).group(2)):.0f} times"),
+            ("cap13 LaLonde RCT", f"+{float(re.search(r'randomised experiment \(NSW treat\. - NSW ctrl\)\s+([0-9.]+)', s_cap13).group(1)) * 100:.1f}".replace(".", ",")),
+            ("cap13 LaLonde raw", f"−{float(re.search(r'raw comparison \(NSW treat\. - CPS\)\s+-([0-9.]+)', s_cap13).group(1)) * 100:.1f}".replace(".", ",")),
+            ("cap14 Laplace clean window", re.search(r"or (1 chance in \d+) per month", s_cap14).group(1)),
             ("h3 naive bias", f"{float(re.search(r'bias of the naive forecaster against exogenous demand: ([0-9.]+)', s_h3).group(1)) * 100:.0f}%"),
             ("bridge blind pilot", re.search(r"flagged the defect: arm X (\d+ of \d+)", s_ponte).group(1)),
         ]

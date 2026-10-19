@@ -6,7 +6,7 @@
 //! alone is forbidden.
 //!
 //! Declared and not implemented: the reading of the five bases in `data/` (lives in the laboratories
-//! of chapters 17 and 18) and the intra-cohort correlation, which remains without an instrument in Rust.
+//! of chapters 13 and 14) and the intra-cohort correlation, which remains without an instrument in Rust.
 
 use stochology_core::Rng;
 

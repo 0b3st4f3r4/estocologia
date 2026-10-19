@@ -1,4 +1,4 @@
-"""Chapter 16: the health post and the bank's call centre, from the text of the book and data/bank_calls.csv.
+"""Chapter 12: the health post and the bank's call centre, from the text of the book and data/bank_calls.csv.
 
 The health post is re-simulated with Python's own generator (seed 1909), not the book's SplitMix64, so its numbers
 are compared within tolerances that cover the seed: the book itself reports the oscillating world between 19.3 and
@@ -89,23 +89,23 @@ for name, draw, servers, book in WORLDS:
     s = summary(world(rng, draw, servers or (lambda lam: 1)))
     results[name] = s
     mean, median, p90, over30, mday, mpat = book
-    check("16", f"post, {name}: mean wait (min)", mean, s["mean"], max(0.08 * mean, 0.3), "simulated")
+    check("12", f"post, {name}: mean wait (min)", mean, s["mean"], max(0.08 * mean, 0.3), "simulated")
     if median > 0:
-        check("16", f"post, {name}: median wait (min)", median, s["median"], 0.12 * median, "simulated")
-    check("16", f"post, {name}: 90th percentile (min)", p90, s["p90"], 0.08 * p90, "simulated")
-    check("16", f"post, {name}: share above 30 min", over30, s["over30"], 0.015, "simulated")
-    check("16", f"post, {name}: margin per day (1 se)", mday, s["margin_day"], max(0.15 * mday, 0.01), "simulated")
-    check("16", f"post, {name}: margin per patient (1 se)", mpat, s["margin_patient"], max(0.25 * mpat, 0.006),
+        check("12", f"post, {name}: median wait (min)", median, s["median"], 0.12 * median, "simulated")
+    check("12", f"post, {name}: 90th percentile (min)", p90, s["p90"], 0.08 * p90, "simulated")
+    check("12", f"post, {name}: share above 30 min", over30, s["over30"], 0.015, "simulated")
+    check("12", f"post, {name}: margin per day (1 se)", mday, s["margin_day"], max(0.15 * mday, 0.01), "simulated")
+    check("12", f"post, {name}: margin per patient (1 se)", mpat, s["margin_patient"], max(0.25 * mpat, 0.006),
           "simulated")
 
 W = lambda lam: lam / (12.0 * (12.0 - lam)) * 60.0  # noqa: E731  minutes
-check("16", "W(8) of the formula (min)", 10.0, W(8.0), 1e-9)
-check("16", "(W(5) + W(11)) / 2 (min)", 29.3, (W(5.0) + W(11.0)) / 2, 0.05)
-check("16", "W(11) of the formula (min)", 55.0, W(11.0), 1e-9)
-check("16", "share of patients on the surge days", 0.70, 11 / 16, 0.02)
+check("12", "W(8) of the formula (min)", 10.0, W(8.0), 1e-9)
+check("12", "(W(5) + W(11)) / 2 (min)", 29.3, (W(5.0) + W(11.0)) / 2, 0.05)
+check("12", "W(11) of the formula (min)", 55.0, W(11.0), 1e-9)
+check("12", "share of patients on the surge days", 0.70, 11 / 16, 0.02)
 surge = summary(world(random.Random(11), lambda r: 11.0, days=1000))
-check("16", "post, surge days only: mean wait (min)", 28.2, surge["mean"], 2.0, "simulated")
-check("16", "severe test: difference between the worlds (min)", 10.2,
+check("12", "post, surge days only: mean wait (min)", 28.2, surge["mean"], 2.0, "simulated")
+check("12", "severe test: difference between the worlds (min)", 10.2,
       results["5 or 11"]["mean"] - results["8 every day"]["mean"], 1.2, "simulated")
 
 # halves null: 4000 days of demand 8, 2000 random splits into two halves of 2000 days
@@ -123,10 +123,10 @@ all_waits = [x for d in days8 for x in d]
 half_a, half_b = days8[:2000], days8[2000:]
 pred_day = math.hypot(ratio_se(half_a), ratio_se(half_b))
 pred_pat = 2 * st.pstdev(all_waits) / math.sqrt(len(all_waits))
-check("16", "halves null: measured sd of the differences (min)", 0.2062, st.stdev(diffs), 0.03, "simulated")
-check("16", "halves null: predicted by the day unit (min)", 0.1928, pred_day, 0.03, "simulated")
-check("16", "halves null: predicted by the patient unit (min)", 0.0473, pred_pat, 0.005, "simulated")
-check("16", "halves null: max |difference| in 2000 splits (min)", 0.664, max(abs(x) for x in diffs), 0.15, "simulated")
+check("12", "halves null: measured sd of the differences (min)", 0.2062, st.stdev(diffs), 0.03, "simulated")
+check("12", "halves null: predicted by the day unit (min)", 0.1928, pred_day, 0.03, "simulated")
+check("12", "halves null: predicted by the patient unit (min)", 0.0473, pred_pat, 0.005, "simulated")
+check("12", "halves null: max |difference| in 2000 splits (min)", 0.664, max(abs(x) for x in diffs), 0.15, "simulated")
 
 # ------------------------------------------------------------------ the bank
 
@@ -174,25 +174,25 @@ days, training, vault = load(cut_2100=True)
 slots = sorted(days[training[0]])
 totals = lambda ks: [sum(days[k].values()) for k in ks]  # noqa: E731
 v_tot, t_tot = totals(vault), totals(training)
-check("16", "bank: training days", 83, len(training))
-check("16", "bank: vault days", 81, len(vault))
-check("16", "bank: calls in the vault (21:00 cut)", 2649354, sum(v_tot), 0)
-check("16", "bank: Var/mean between days, vault", 246.7, st.variance(v_tot) / st.mean(v_tot), 0.05)
-check("16", "bank: Var/mean between days, training", 272.6, st.variance(t_tot) / st.mean(t_tot), 0.05)
-check("16", "bank: Var/mean between days, all", 261.1, st.variance(t_tot + v_tot) / st.mean(t_tot + v_tot), 0.05)
-check("16", "bank: deviation between vault days", 2841, st.stdev(v_tot), 0.5)
-check("16", "bank: Poisson deviation sqrt(mean)", 181, math.sqrt(st.mean(v_tot)), 0.5)
+check("12", "bank: training days", 83, len(training))
+check("12", "bank: vault days", 81, len(vault))
+check("12", "bank: calls in the vault (21:00 cut)", 2649354, sum(v_tot), 0)
+check("12", "bank: Var/mean between days, vault", 246.7, st.variance(v_tot) / st.mean(v_tot), 0.05)
+check("12", "bank: Var/mean between days, training", 272.6, st.variance(t_tot) / st.mean(t_tot), 0.05)
+check("12", "bank: Var/mean between days, all", 261.1, st.variance(t_tot + v_tot) / st.mean(t_tot + v_tot), 0.05)
+check("12", "bank: deviation between vault days", 2841, st.stdev(v_tot), 0.5)
+check("12", "bank: Poisson deviation sqrt(mean)", 181, math.sqrt(st.mean(v_tot)), 0.5)
 
 mean_profile = {s: st.mean(days[d][s] for d in training) for s in slots}
 roster = {s: staff(mean_profile[s]) for s in slots}
-check("16", "bank: peak of the mean-profile roster", 234, max(roster.values()), 0)
-check("16", "bank: agent-hours per day, mean profile (21:00 cut)", 2259, sum(roster.values()) * SLOT / 3600, 0.5)
+check("12", "bank: peak of the mean-profile roster", 234, max(roster.values()), 0)
+check("12", "bank: agent-hours per day, mean profile (21:00 cut)", 2259, sum(roster.values()) * SLOT / 3600, 0.5)
 weight = sum(mean_profile.values())
-check("16", "bank: service level on the mean profile", 0.8193,
+check("12", "bank: service level on the mean profile", 0.8193,
       sum(mean_profile[s] * service_level(roster[s], mean_profile[s]) for s in slots) / weight, 5e-5)
 levels = [sum(days[d][s] * service_level(roster[s], days[d][s]) for s in slots) / sum(days[d].values()) for d in vault]
-check("16", "bank: mean service level of the vault days", 0.5683, st.mean(levels), 5e-5)
-check("16", "bank: share of vault days below the goal", 0.6543, sum(x < GOAL for x in levels) / len(levels), 5e-5)
+check("12", "bank: mean service level of the vault days", 0.5683, st.mean(levels), 5e-5)
+check("12", "bank: share of vault days below the goal", 0.6543, sum(x < GOAL for x in levels) / len(levels), 5e-5)
 
 # halves null on the bank: the sd of the difference between the means of two random halves of the vault days
 bank_rng = random.Random(1909)
@@ -204,8 +204,8 @@ for _ in range(20000):
     bank_diffs.append(st.mean(shuffled[:half]) - st.mean(shuffled[half:]))
 calls_total = sum(v_tot)
 p = st.mean(levels)
-check("16", "bank: halves null per day (sd of the difference)", 0.0743, st.stdev(bank_diffs), 0.006, "simulated")
-check("16", "bank: halves null per call (binomial)", 0.0006, math.sqrt(2 * p * (1 - p) / (calls_total / 2)), 5e-5)
+check("12", "bank: halves null per day (sd of the difference)", 0.0743, st.stdev(bank_diffs), 0.006, "simulated")
+check("12", "bank: halves null per call (binomial)", 0.0006, math.sqrt(2 * p * (1 - p) / (calls_total / 2)), 5e-5)
 
 # the four staffing rules, with the 21:00 interval as a 5-minute slot (the queue instrument keeps it)
 days_q, training_q, vault_q = load(cut_2100=False)
@@ -226,14 +226,14 @@ r2 = {w: {s: staff(profile[w][s] * margin, length(s)) for s in slots_q} for w in
 r3 = {s: r0[s] + 12 for s in slots_q}
 vault_mean = lambda rule: st.mean(agent_hours(rule[weekday(d)]) for d in vault_q)  # noqa: E731
 peak = lambda rule: max(max(v.values()) for v in rule.values())  # noqa: E731
-check("16", "bank: calls in the vault (21:00 kept)", 2654950, sum(sum(days_q[d].values()) for d in vault_q), 0)
-check("16", "bank: residual CV of the day", 0.0598, cv, 5e-5)
-check("16", "bank: margin of R2", 1.0767, margin, 5e-5)
-check("16", "bank: R0 agent-hours per day", 2264, agent_hours(r0), 0.5)
-check("16", "bank: R1 agent-hours per day", 2261, vault_mean(r1), 0.5)
-check("16", "bank: R2 agent-hours per day", 2428, vault_mean(r2), 0.5)
-check("16", "bank: R3 agent-hours per day", 2433, agent_hours(r3), 0.5)
-check("16", "bank: R0 peak", 234, max(r0.values()), 0)
-check("16", "bank: R1 peak", 267, peak(r1), 0)
-check("16", "bank: R2 peak", 287, peak(r2), 0)
-check("16", "bank: R3 peak", 246, max(r3.values()), 0)
+check("12", "bank: calls in the vault (21:00 kept)", 2654950, sum(sum(days_q[d].values()) for d in vault_q), 0)
+check("12", "bank: residual CV of the day", 0.0598, cv, 5e-5)
+check("12", "bank: margin of R2", 1.0767, margin, 5e-5)
+check("12", "bank: R0 agent-hours per day", 2264, agent_hours(r0), 0.5)
+check("12", "bank: R1 agent-hours per day", 2261, vault_mean(r1), 0.5)
+check("12", "bank: R2 agent-hours per day", 2428, vault_mean(r2), 0.5)
+check("12", "bank: R3 agent-hours per day", 2433, agent_hours(r3), 0.5)
+check("12", "bank: R0 peak", 234, max(r0.values()), 0)
+check("12", "bank: R1 peak", 267, peak(r1), 0)
+check("12", "bank: R2 peak", 287, peak(r2), 0)
+check("12", "bank: R3 peak", 246, max(r3.values()), 0)

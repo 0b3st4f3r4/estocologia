@@ -148,7 +148,7 @@ pub fn evpi(payoffs: &[f64], probabilities: &[f64], best_without_info: f64) -> f
 /// (best expected payoff without information, expected payoff with perfect information, EVPI).
 ///
 /// Prefer this to `evpi`, whose caller must pass the best payoff of each state; on 2026-10-19 a
-/// caller passed the payoffs of one act instead, and the EVPI of Chapter 12 came out as zero.
+/// caller passed the payoffs of one act instead, and the EVPI of Chapter 15 came out as zero.
 pub fn evpi_from_actions(actions: &[Vec<f64>], probabilities: &[f64]) -> (f64, f64, f64) {
     let expected =
         |row: &Vec<f64>| -> f64 { row.iter().zip(probabilities).map(|(x, p)| x * p).sum() };
