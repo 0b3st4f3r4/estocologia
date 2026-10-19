@@ -140,7 +140,9 @@ The open items are not of the same nature. Items 3, 5, 9, and 14 depend on **peo
 more code: what is missing is consent, listening, blind judgment, and independent coding. Item 13 depends on **artifact and code**: frozen
 weights with a declared `sha256` and a runner that loads them, which closes with a download, a hash declaration, and an
 implementation. Item 15, desk work, closed on 2026-10-19 with a declaration sealed before the run and `labs --eprocess`;
-item 16 is desk work that shrinks with every recipe written and every number given an instrument. Items 14 and 15, and the second
+item 16 closed the same day: the previous book no longer certifies its own numbers, and the 29 that no instrument,
+code or record carries have a checked row in `book/provenance.tsv`. Item 18 is desk work too: the laboratories and the
+contract changes that the research on models of the world, of agents and of modelling asked for. Items 14 and 15, and the second
 thesis (c′) of item 9, came from an outside review on 2026-10-18 by a language model plausibly of the same family as the
 program's own agents, so they are refinements, not independent judgment.
 
@@ -151,6 +153,7 @@ program's own agents, so they are refinements, not independent judgment.
 | 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases; for thesis (c′), 0 of 12 in each of the seam and classical strata (`registro_c_linha.tsv`, enforced by `labs --bridge`) | **2027-01-14** |
 | 13. The Jev-LLM bridge | **artifact and code** | the weights with a declared `sha256`; the local runner has existed since 2026-10-17 (`crates/stochology-s2/src/runner.rs`) | no date |
 | 14. Can the layers fail? | **people outside the program** | three coders, two from outside, over at least 60 documented errors (`empirical/p21-camadas/`) | no date |
+| 18. What the research on models asks | **desk work** | the laboratories, contract fields and checks listed in `docs/DECLARED_PROPOSALS.md` §1, each laboratory with its declaration sealed before its first run | no date |
 
 Once the listening window expires without minimum coverage, the seven decisions are archived as a sensitivity
 exercise and do not become public policy guidelines. Once the bridge window expires, the thesis becomes **definitively
