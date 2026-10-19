@@ -11,6 +11,7 @@ dependencies = [
  "stochology-hypergraph",
  "stochology-methods",
  "stochology-s2",
+ "stochology-wave",
 ]
 
 [[package]]
