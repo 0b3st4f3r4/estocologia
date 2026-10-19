@@ -902,6 +902,9 @@ paradox of Chapter 2.
 the typical grade?" and does not answer the question "how many fail?". Whoever needs the second question and
 uses the first is swapping the summary for the result, and the swap cannot be repaired by adding more
 students.
+The class of the laboratory is a mixture of two groups: 45 students in every 100 draw their grade from a normal
+curve centred on 4 and 55 from one centred on 8, both with standard deviation 1. The mean is 0.45 × 4 + 0.55 × 8 = 6.2,
+and the share below 6.0 is 0.45 Φ(2) + 0.55 Φ(−2) = 45.2%, which the laboratory measures as 45.1 in a draw of 100,000.
 
 **The unit of the margin.** Every estimate comes with a margin, and the margin only makes sense if
 it is computed on the **unit that is in fact independent**. At the centre, the question is this. Are the 320
@@ -1380,6 +1383,17 @@ contract violated without treatment, and the absence of a named human owner.
 The laboratory measures four things: the garden of models on pure noise, the exact null model of the hot hand,
 the garden of paths and the verdict of the safeguard panel. Run it with `cargo run --release --bin labs -- --chapter 7`.
 
+**The recipe of the laboratory.** *The garden of models*: in each of 200 replicas, 50 predictors and an outcome are
+drawn as independent standard normals for 75 rows, 25 to fit, 25 to validate and 25 fresh; each of 500 candidates
+takes between 1 and 5 predictors at random and is fitted by least squares with an intercept; the winner is the one
+with the smallest mean squared error on validation, and "beating zero" means an error below 1.0, the error of
+predicting zero. *The garden of paths*: in each of 4,000 experiments, two groups of 40 with no effect; two outcomes
+built from correlated normals plus 0.4 of a covariate; tests are two-sample t tests with the normal approximation, or
+a regression of the outcome on the group and covariates. The pre-registered test compares the first 30 of each group
+on the first outcome. Simmons' four freedoms take the smallest p over both outcomes, 20 or 30 per group, with or
+without the first covariate, and the exclusion of the largest value of the treated group. The large family adds
+optional stopping at 10, 20, 30 and 40 per group, up to three covariates, and the two subgroups of a coin-flip sex.
+
 ```text
 == Chapter 7 :: hunting ghosts in the noise ==
 model garden: 200 replicas, 500 candidates over 50 pure-noise predictors, 25 training cases
@@ -1387,11 +1401,11 @@ the validation winner beats predicting zero in 79.5% of the replicas; on fresh d
 mean squared error of the winner: 0.814 on validation (predicting zero: 1.000) and 1.191 on fresh data
 hot hand: mean of the proportions per sequence = 0.4167 (5/12 = 0.4167); pooled proportion = 0.5000
 100 people tossing 20 coins: in 100.0% of the experiments someone strings 6 heads in a row; the longest run averages 9.5
-garden of paths (4000 experiments with no effect at all): with Simmons' four freedoms, someone finds p < 0.05 in 21.5% of them; with the large family, in 47.0%; the pre-registered test flags 5.2%
-Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-positive rate = 0.53 in the garden
+garden of paths (4000 experiments with no effect at all): with Simmons' four freedoms, someone finds p < 0.05 in 20.3% of them; with the large family, in 42.3%; the pre-registered test flags 5.2%
+Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-positive rate = 0.58 in the garden
 Ioannidis with R = 1/1000, power 0.80: PPV = 0.016 with alpha 0.05 and 0.002 with the garden alpha
-Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.146 with the garden alpha
-Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.362 with the garden alpha
+Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.159 with the garden alpha
+Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.387 with the garden alpha
 safeguard panel A1-A8, card with the eight safeguards: bits [1, 1, 1, 1, 1, 1, 1, 1], approved = true
 the same card without one band's safeguard: 7 of 8 bits set, approved = false
 ```
@@ -1402,13 +1416,13 @@ it "beats zero" only 30% of the time when the judge is new. Validation was used 
 poison. **(2)** The exact null model of the hot hand is 0.4167, not 0.5; the mean of the proportions per
 sequence coincides with 5/12 to four decimal places, while the pooled estimator sits at 0.5000.
 The ghost is the difference between the two. **(3)** The four classical freedoms take the false
-positive from 5.2% (pre-registered test) to **21.5%**, and the large family, with optional stopping at
+positive from 5.2% (pre-registered test) to **20.3%**, and the large family, with optional stopping at
 four points, three sets of covariates, exclusion of the extreme case and two subgroups, takes it to
-**47.0%**. **(4)** The Mayo severity of the pre-registered "$p = 0.04$" is 0.96; that of the number that comes
-out of the garden is 0.53, because what produces the number is the procedure. **(5)** The A1–A8 panel sets the
+**42.3%**. **(4)** The Mayo severity of the pre-registered "$p = 0.04$" is 0.96; that of the number that comes
+out of the garden is 0.58, because what produces the number is the procedure. **(5)** The A1–A8 panel sets the
 eight bits on a sheet with the eight safeguards and approves it; one band without its safeguard leaves 7 of 8 bits
 set, and the approval vanishes. The AND of the eight does not forgive. Read the contrast with reading (4): Mayo's
-severity is a probability about a procedure, and it can be 0.96 or 0.53; the panel's verdict is a bit about a
+severity is a probability about a procedure, and it can be 0.96 or 0.58; the panel's verdict is a bit about a
 declaration, and it carries no probability at all.
 
 **Exercises.**
@@ -1590,6 +1604,16 @@ forecast declares 0% or 100%.
 
 The laboratory scores four forecasters, recalibrates all of them with Platt and measures the ECE tolerance at three
 vault sizes. Run it with `cargo run --release --bin labs -- --chapter 8`.
+
+**The recipe of the laboratory.** Each of 4,000 days has a real chance of rain $\sigma(z)$ with
+$z = -1.386 + 1.1\,\varepsilon$, $\varepsilon$ a standard normal (a median of 20%), and it rains with that chance.
+The lazy forecaster says 0.20; the expert says $\sigma(z + 0.6\,\varepsilon_1)$; the overconfident one
+$\sigma(2.2\,(z + 0.6\,\varepsilon_2))$; the noisy one $\sigma(z + 1.6\,\varepsilon_3)$, each $\varepsilon_i$ a fresh
+standard normal. REL, RES and the ECE use ten boxes of equal mass that never split a run of equal forecasts. Platt is
+the logistic regression of the outcome on the logit of the forecast, fitted on days 1 to 2,000 and scored on days
+2,001 to 4,000. The null ECE of a vault draws its forecasts as $\sigma(\operatorname{logit}(r) + s\,\varepsilon)$, with the
+rate $r$ and spread $s$ of each vault (Toronto 0.50 and 1.0, Rhode Island 0.0226 and 1.6, the 2023 flights 0.130 and
+1.3), draws each outcome with the chance its forecast states, and repeats 2,000 times.
 
 ```text
 == Chapter 8 :: the forecaster's thermometer ==
@@ -2741,6 +2765,11 @@ cases, and run the lenses with a measured number. **Scalonomy** enters through t
 **Crisonomy** through the expected value of perfect information (EVPI), and **Morphonomy** through the test of
 invariance across regimes. Run it with `cargo run --release --bin labs -- --chapter 12`.
 
+**The recipe of the laboratory.** The series of Scalonomy is 20,000 draws of a Pareto with $\alpha = 1.81$,
+$(1 - u)^{-1/1.81}$ with $u$ uniform, on which Hill is computed at $k$ = 250, 500, 1,000 and 2,000; Hill is the formula
+of Chapter 18. The EVPI of Crisonomy is that of Chapter 11, $\mathbb{E}_\theta[\max_a U] - \max_a \mathbb{E}_\theta[U]$, on the
+payoff table that the paragraph below states.
+
 ```text
 == Chapter 12 :: the map of knowledge ==
 graph: nodes=3 (L1=1 L2=1 L3=1) E_tree=2 E_graph=4 hyperedges=3 validation=[]
@@ -3046,6 +3075,12 @@ instrument cannot measure stay declared, never guessed.
 Three measurements: run the complete panel over a card with the eight safeguards and over cards with safeguards
 removed; check that the triage of System 1 never leaves the interval between 1% and 99%; and let System 2
 deliberate. Run the first with `cargo run --release --bin labs -- --chapter 13`.
+
+**The recipe of the laboratory.** The panel reads the eight bits of each card and nothing else. The triage of
+System 1 is a deterministic stand-in, not a model: the bytes $b$ of the card's identifier are folded into a state
+$s \leftarrow 1{,}099{,}511{,}628{,}211\,s + b$ (modulo $2^{64}$, starting at 0), one step of the SplitMix64 generator is
+taken from that state, and the probability is $(v \bmod 99 + 1)/100$, held inside $[0.01; 0.99]$. Its only claims are the
+two the line checks: the same card gives the same number, and no number leaves the interval.
 
 ```text
 == Chapter 13 :: the A1-A8 safeguard panel ==
@@ -3360,6 +3395,12 @@ compare a result with a known answer, and with readers who redo the account.
 The laboratory validates a complete card and a card with one planted defect at a time, printing the failures by
 gate. Run it with `cargo run --release --bin labs -- --chapter 14`.
 
+**The recipe of the laboratory.** The property test draws 10,000 cards with a sample size $n$ uniform between
+100 and 999 and a rate $p$ uniform in $\{0.01, 0.02, \ldots, 0.99\}$, and computes the margin $1.96\sqrt{p(1-p)/n}$. It
+checks one property only, that the margin lies in $[0; 0.5]$; by construction it lies between
+$1.96\sqrt{0.01 \cdot 0.99/999} = 0.00617$ and $1.96\sqrt{0.25/100} = 0.098$. That the margin shrinks when $n$ grows is
+true of the formula and is not what this test checks.
+
 ```text
 == Chapter 14 :: the iron contract ==
 card h0.posto-saude: layer=L1 uncertainty=aleatory header=5 fields | failures=[] total=0
@@ -3568,6 +3609,14 @@ Two tasks: build a ledger chained by SHA-256 and prove that changing **one chara
 brings the chain down; and compute the Merkle root of a batch of cards. The code brings SHA-256 written by hand,
 without dependencies, and checks the implementation against the known vectors. Run it with
 `cargo run --release --bin labs -- --chapter 15`.
+
+**The recipe of the laboratory.** Each event of the chain is hashed as
+SHA-256 of the text `session|index|card|content|previous`, with the session `sessao-h3`, the index from 0, and the
+previous hash of the first event written as 64 zeros. The Merkle root pairs the hexadecimal hashes of a level in order,
+hashes the concatenated text of each pair, and repeats the last hash of a level when the level has an odd count, up to a
+single hash. That last rule has a known weakness, declared here: a list and the same list with its last element
+repeated have the same root, so the root alone does not prove how many cards there were (the gates record the count
+beside it).
 
 ```text
 == Chapter 15 :: the vault, the seal and the audit ==
@@ -4001,7 +4050,7 @@ to compare the participants with workers from a national survey (CPS), in 1978:
 Read raw, the table condemns the programme. The participants are 10.7 percentage points **less** employed than the
 population and earn 8.498 dollars less. Read through the randomisation, the table absolves the programme. Among similar
 applicants, those who entered stayed 11.1 points more employed and earned 1.794 dollars more. Between the two
-readings there is a distance of 10.292 dollars per person, and that distance is not an effect of the training. It is the difference
+readings there is a distance of 10,292 dollars per person, and that distance is not an effect of the training. It is the difference
 between whoever applies to a training programme and the average worker of the country.
 
 **The placebo that reveals the difference.** Before the programme existed, in 1975, in every 100 participants 40 had
@@ -4080,11 +4129,32 @@ employment of 1975 as the outcome (an outcome that the programme could not have 
 
 **Hitting the number is not having evidence.** The three numbers bring each one its 95% interval. The raw comparison gives
 −10.7 points [−17.0; −4.5]; the propensity fit gives +9.6 [−0.6; +20.8]; the randomised experiment gives +11.1
-[+2.6; +19.6]. The fit comes close to the experiment and still does not count as evidence. But an **inert** treatment would have given +9.0, inside the band of the null, from −10.3 to +11.9 (p = 0.08). The
-procedure could not have come out grossly wrong, and that is why the hit does not count as evidence (Mayo). The
+[+2.6; +19.6]. The fit comes close to the experiment and still does not count as evidence. Run a treatment with no
+effect at all through the same weighting, keeping who was treated and drawing each person's employment from a model
+fitted on the controls: the weighted difference lands between −10.3 and +11.9 points in 95% of the replicas, centred
+near +0.9. The weighted estimate of the real data, +9.0, sits inside that band (p = 0.08). The
+procedure could not have told a real effect of that size from no effect, and that is why the hit does not count as
+evidence (Mayo). (Until 2026-10-19 this paragraph said that the inert treatment "would have given +9.0"; +9.0 is the
+observed estimate, and the inert one is centred near +0.9.) The
 fit relies on about 103 effective controls, and 72% of the CPS is below the smallest score of the treated. In
 practice, it compares the treated with a handful of CPS people who look like them; those people are
 different in things that the model does not see.
+
+**Where the numbers of the propensity fit come from.** They are not printed by the laboratory; they come from the
+research record (`empirical/p05-prioris/h1-real/README.md`), computed by code retired from the tree on 2026-10-16 and
+kept at commit `1bfec905` (`fundo/p05-prioris/h1-real/projetos/b_real.py`). The recipe, so that a reader can redo it:
+the propensity score is a logistic regression of being treated on the Dehejia–Wahba covariates (age and its square,
+centred at 30 and scaled by 10; education and its square, centred at 11 and scaled by 3; black, Hispanic, married,
+no degree; income of 1974 and of 1975 in tens of thousands, their squares and an indicator of zero income), with a
+ridge of $10^{-3}$ outside the intercept, over the 185 treated and the 15,992 CPS controls; each control weighs
+$e/(1-e)$; the effective number of controls is Kish's $(\sum w)^2 / \sum w^2$. The +9.6 [−0.6; +20.8] is the
+posterior of the effect on the treated, standardised to their racial composition (156 of 185 black), from four
+independent Beta posteriors, one per arm and race, with the weighted controls entering as Kish pseudo-counts and
+Beta(1, 1) priors except for untreated black men, whose prior is a Beta fitted to the quartiles of a simulated
+elicitation (0.433, 0.533, 0.633). The weighted point estimate is +9.0. The placebo removes the 1975 terms from the
+score and uses employment in 1975 as the outcome. The Kelly interval of the market case, the skill in the vault and the
+false negative rates below come from the same record and the same commit (`a_real.py` and `b_real.py`), and their
+recipes are longer than a paragraph; they stay cited, not reproduced in the tree.
 
 **What the vault showed.** With the 260 randomised controls, the skill of the model is +0.18 (it predicted 0.655 of
 employment, the observed was 0.646); the logistic regression stays at +0.09 and the raw counterfactual of the CPS, at −0.002. The
@@ -4150,7 +4220,7 @@ leveraged 3 times, and above 4.42 times it is enough to zero it. **2.10 against 
 doubles while the ensemble mean reaches 19 times. **0.6429 and 0.9286**: in the real index, 64 in every 100 cohorts
 of 20 years end above the starting point; in the world in which the claim is true, 93 in every 100, and the
 difference is the drag. **−0.107 and +0.111**: the question about the programme gives two opposite signs, and the
-difference of −10.292 dollars is the selection bias, measured and not assumed.
+difference of −10,292 dollars is the selection bias, measured and not assumed.
 
 **Exercises.**
 
@@ -4178,8 +4248,9 @@ difference of −10.292 dollars is the selection bias, measured and not assumed.
 - Ensemble mean and typical trajectory separate. The 19.1× of mean coexist with 2.10× of median, and about 35.7 in every 100
   3× cohorts end below the start.
 - A refutation must declare the target: "yields 3 times" and "always wins" fall; "leveraging never pays" does not.
-- Hitting the number is not enough. In LaLonde, the propensity fit gives +9.6 points, and an inert treatment would have given
-  +9.0; the 1975 placebo shows that the selection bias is still there, worth 10.292 dollars per person.
+- Hitting the number is not enough. In LaLonde, the propensity fit gives +9.6 points, inside the band that a treatment
+  with no effect produces through the same weighting; the 1975 placebo (−12.3 points) shows that selection is still
+  there, and the raw comparison of 1978 carries a selection bias of 10,292 dollars per person.
 
 ## Chapter 18. The Danish fires and the art of failing one's own model
 
@@ -4318,11 +4389,19 @@ $$\text{skill} = 1 - \frac{\text{BS}_{\text{forecaster}}}{\text{BS}_{\text{clima
 
 Positive skill means that the forecaster beats the constant; **negative, that it loses to the constant**. The model
 (−0.015), the POT (−0.003) and the Laplace (−0.024) lost; the claim (−0.052) lost more. No forecaster won the
-right to decide, and the record of the analysis says so.
+right to decide, and the record of the analysis says so. The recipe: each forecaster states one monthly chance for
+the 24 months of the vault, two of which were hit; the climatology is the frequency of the training set, 5/108; the
+claim's zero is held at 1%, the floor of the forecast diary; Laplace is 1/38; the POT is the chance of the tail above;
+the model is the mean of the Beta posterior of the monthly chance, with 5 hits in 108 months and a Beta prior fitted to
+the quartiles of a simulated elicitation (0.011, 0.0187 and 0.0283 per month). The trend of the claims is a Poisson
+regression of the monthly count of all claims above 1 M DKK in the training set on time in years, with a likelihood
+ratio test against a constant rate. These come from the research record (`empirical/p05-prioris/h1-real/README.md`;
+the code is at commit `1bfec905`, `fundo/p05-prioris/h1-real/projetos/c_real.py`).
 
 **The same pattern elsewhere.** The insurance seller of Chapter 10 lives the same story. In 37% of the simulated
-histories of 250 weeks not a single loss appears. "I never lost" is worth 1.3 bits of evidence, and a severe test
-would require 14 clean years. The story repeats with another asset, and the clean window remains the most seductive and
+histories of 250 weeks not a single loss appears. "I never lost" is worth 1.3 bits of evidence against a negligible
+world of one loss in 2,500 weeks (0.0004 per week): $0.9996^{250} / 0.996^{250} = 2.46$. A severe test would require
+14 clean years. The story repeats with another asset, and the clean window remains the most seductive and
 weakest argument there is.
 
 **A declared limit of the design.** The retention of 50 million was chosen by looking at the whole series, and not before
@@ -4988,6 +5067,15 @@ expected calibration error and the canary, over simulated forecasts. The logisti
 reweighted least squares, which is deterministic and needs no library. Run it with
 `cargo run --release --bin labs -- --chapter 20`.
 
+**The recipe of the laboratory.** Each stop has three binary covariates, night (chance 0.18), speed (0.28) and
+plate (0.12), and is an arrest with chance $\sigma(\beta_0 + 0.8\,\text{night} + 1.0\,\text{speed} + 0.5\,\text{plate})$, with
+$\beta_0 = -4.005$ in the 120,000 training stops and $-4.42$ in the 58,000 development and the 24,466 vault stops. The
+raw model is a logistic regression fitted by reweighted least squares on the training stops, with a ridge of $10^{-4}$
+outside the intercept; Platt is the logistic regression of the development outcome on the logit of the raw forecast;
+the skill is against the development rate, held fixed. The canary is the label itself with 1% of its values flipped,
+added as a fourth covariate: absent (all zeros) under the honest clock, present in training and vault with the clock
+switched off; the skill gain is that of the model with the canary over the raw model.
+
 The world is a traffic stop. The outcome is "there was an arrest", with three covariates (night, high speed,
 plate of another state) and an additive model in log-odds. The training period (2005–2012) has a higher base
 rate; the development (the period before the vault) and the vault (2013–2015, 24.466 stops) have the same distribution and
@@ -5470,8 +5558,8 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --s1` and `--s2` | System 1 triage and System 2 deliberation (Chapter 13) |
 | `cargo run --release --bin labs -- --resolution` | The resolution axis and its two predictions (Chapters 5, 8, 10, 16 and 21) |
 | `cargo run --release --bin labs -- --genetics` | The design of the second row in the yeast validation (Chapter 19) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 413 tests pass |
-| `python3 -I scripts/reimplementation/run.py` | That 421 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (402), or are marked open where the text does not give the recipe (19) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 415 tests pass |
+| `python3 -I scripts/reimplementation/run.py` | That 462 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (459), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
@@ -5700,6 +5788,24 @@ instruments, and two statements in the text; each is corrected, with a test wher
 | 19 | The 1-NN of the saturation rule | the measure was named, not specified | standardised columns and a rule for ties, written into the text | a reading with factors at distance 1 found 11 of the 16 saturated sets |
 | 5 (R axis) | The day of predictions 3 and 5 | — | declared, not changed | `day_with_agents` keeps the fixed count and the order of the recursion with which predictions 3 and 5 were declared and measured; correcting it is a new specification, counted in K |
 
+### Rectifications of the recipes, 2026-10-19
+
+Of the 19 quantities that the reimplementation left open, the text now states the recipe of 16, in a paragraph beside
+the run of each laboratory (Chapters 5, 7, 8, 12, 13, 14, 15, 17, 18 and 20), and the reimplementation redoes them from
+that paragraph: 462 quantities, 459 in agreement, none divergent and 3 open (the upper end of the Kelly interval, the
+skill of the model in the vault and the false negative rate of Hispanics in Chapter 17, whose recipes are longer than a
+paragraph and stay cited from the research record at commit `1bfec905`). Writing the recipes found one more value
+wrong in an instrument and one statement wrong in the text.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 7 | Garden of paths: Simmons' four freedoms, the large family, the Mayo severity of the garden | 21.5%, 47.0% and 0.53; PPV with the garden alpha 0.146 ($R = 1/10$) and 0.362 ($R = 1/3$) | 20.3%, 42.3% and 0.58; PPV 0.159 and 0.387 | the "exclusion of the extreme case" took the first $2m$ rows of the file, all of one group and part of the other, and split them at $m - 1$; it compared mixed groups. Now the first $m$ of each group, without the largest value of the treated. The direction (the garden multiplies the false positive) does not change |
+| 17 | The inert treatment of LaLonde | "an **inert** treatment would have given +9.0" | a treatment with no effect, through the same weighting, falls between −10.3 and +11.9 in 95% of the replicas, centred near +0.9; +9.0 is the weighted estimate of the real data, inside that band | the text read the observed estimate as the result of the placebo |
+| 17 | Selection bias of 1978 | 10.292 dollars per person, in three places | 10,292 dollars per person, as in Chapter 9 | a decimal point where a thousands separator was due |
+| 15 | Merkle root | — | declared, not changed | repeating the last hash of an odd level gives a list and the same list with its last element repeated the same root; the gates record the count beside the root, and a test fixes the limit |
+| C | Test count | 413 | 415 | the bounds of the garden of paths and the declared limit of the Merkle root |
+| 8 | Brier of the overconfident forecaster | — | declared, not changed | the instrument's own seed spread (seeds 2022 to 2027) is 0.1706 to 0.1914; the printed 0.1712 is the low end, and the reimplementation compares within that spread |
+
 ### Chapter 4
 
 The earlier text (and the course outline) records 11% coverage
@@ -5738,13 +5844,13 @@ value was deleted.
 
 The earlier text records 73% of winners that "look
 better than predicting zero", the 60.7% rate of the Simmons garden and a severity of 0.42 for the
-$p = 0.04$ of the garden. The instrument measures **79.5%**, **21.5%** with the four freedoms (and **47.0%**
-with the large family) and **0.53**. The numbers differ because the full protocol was not published: the
+$p = 0.04$ of the garden. The instrument measures **79.5%**, **20.3%** with the four freedoms (and **42.3%**
+with the large family) and **0.58**. The numbers differ because the full protocol was not published: the
 old garden swept more combinations — two outcomes, two sexes, more covariates, more optional stopping
 points —, and every extra combination pushes the false positive up; in the garden of models, the
 size of the validation and the range of predictors per candidate change the result, and here the winner still
 fails on fresh data (error 1.191 against 1.000). What does not change is the direction: the pre-registered
-test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by nine. The
+test flags 5.2%, close to the nominal 5%, and the garden multiplies that by four or by eight. The
 two values are recorded; none was deleted.
 
 ### Chapter 8

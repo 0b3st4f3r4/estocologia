@@ -85,5 +85,17 @@ to recompute it. Each is a place where the book is still its own source (item 16
 recipe into the chapter, not to copy it from the code. The same limits hold as before: an AI assistant wrote this,
 and agreement is weak evidence where the reimplementer could have absorbed the author's choices from the text.
 
+## The recipes (2026-10-19)
+
+The remedy was then applied: the recipes of 16 of the 19 open quantities were written into the chapters, beside the
+run of each laboratory, and the reimplementation redoes them from those paragraphs. 462 quantities; 459 agree, none
+diverges, 3 are open (the upper end of the Kelly interval, the skill of the model in the vault and the false negative
+rate of Hispanics in Chapter 17, whose recipes are longer than a paragraph and stay cited from the research record at
+commit `1bfec905`). Writing the recipes found one more wrong value (the exclusion freedom of the garden of paths
+compared mixed groups: 21.5% and 47.0% became 20.3% and 42.3%), one statement wrong in the text (Chapter 17 read the
+observed +9.0 as the result of the inert treatment, whose band is centred near +0.9), and a known weakness of the
+Merkle root, now declared with a test. Where a quantity is a simulation, the tolerance is the spread of the book's own
+instrument across seeds, measured and written beside the check, not a number chosen to make it pass.
+
 This file does not make the program audited. It records how an audit from outside would run and what it would need:
 people who are not the authors. Until they exist, item 17 stays open.

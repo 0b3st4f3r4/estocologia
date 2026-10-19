@@ -542,11 +542,11 @@ the validation winner beats predicting zero in 79.5% of the replicas; on fresh d
 mean squared error of the winner: 0.814 on validation (predicting zero: 1.000) and 1.191 on fresh data
 hot hand: mean of the proportions per sequence = 0.4167 (5/12 = 0.4167); pooled proportion = 0.5000
 100 people tossing 20 coins: in 100.0% of the experiments someone strings 6 heads in a row; the longest run averages 9.5
-garden of paths (4000 experiments with no effect at all): with Simmons' four freedoms, someone finds p < 0.05 in 21.5% of them; with the large family, in 47.0%; the pre-registered test flags 5.2%
-Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-positive rate = 0.53 in the garden
+garden of paths (4000 experiments with no effect at all): with Simmons' four freedoms, someone finds p < 0.05 in 20.3% of them; with the large family, in 42.3%; the pre-registered test flags 5.2%
+Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-positive rate = 0.58 in the garden
 Ioannidis with R = 1/1000, power 0.80: PPV = 0.016 with alpha 0.05 and 0.002 with the garden alpha
-Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.146 with the garden alpha
-Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.362 with the garden alpha
+Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.159 with the garden alpha
+Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.387 with the garden alpha
 safeguard panel A1-A8, card with the eight safeguards: bits [1, 1, 1, 1, 1, 1, 1, 1], approved = true
 the same card without one band's safeguard: 7 of 8 bits set, approved = false
 == Chapter 8 :: the forecaster's thermometer ==
@@ -1218,7 +1218,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 90 tests
+running 91 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1239,6 +1239,7 @@ test ch05::tests::jensen_in_the_queue_varies_above_the_constant ... ok
 test ch05::tests::the_uniform_jensen_mean_is_exact ... ok
 test ch06::tests::berkson_induces_negative_correlation_and_persistence_reduces_effective_n ... ok
 test ch07::tests::garden_inflates_false_positive_and_hot_hand_has_negative_bias ... ok
+test ch07::tests::the_garden_of_paths_without_any_effect_stays_inside_its_bounds ... ok
 test ch08::tests::constant_forecaster_has_zero_resolution ... ok
 test ch08::tests::murphy_identity_closes_and_platt_reduces_rel ... ok
 test ch09::tests::icp_recovers_the_cause_and_rejects_the_empty_set ... ok
@@ -1310,17 +1311,18 @@ test segunda::tests::the_priors_reproduction_has_33_domains_and_one_declared_div
 test segunda::tests::the_registry_declares_the_classes ... ok
 test segunda::tests::the_rereading_and_the_opinions_are_counted ... ok
 
-test result: ok. 90 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 91 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 86 tests
+running 87 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
 test agents::tests::safeguard_without_structural_anchor_does_not_pass ... ok
 test agents::tests::the_report_is_a_function_of_the_bits_only ... ok
+test audit::tests::repeating_the_last_hash_keeps_the_root_a_declared_limit ... ok
 test audit::tests::sha256_matches_the_known_vectors ... ok
 test audit::tests::the_chain_detects_tampering ... ok
 test audit::tests::the_merkle_root_is_reproducible ... ok
@@ -1404,7 +1406,7 @@ test schema::tests::the_chain_applies_rename_drop_and_addition ... ok
 test schema::tests::the_chain_does_not_touch_a_document_already_at_the_card_version ... ok
 test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_version ... ok
 
-test result: ok. 86 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 87 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -1752,4 +1754,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 23, of which 5 are declaration 2 or later (declared rectification with both values) | empirical points: 18 | `labs` instruments: 19 (--all,--bank,--bridge,--chapter,--elicitation,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 9
 
-Assembled book: `book/stochology-textbook.md` with **5969 lines** and **79884 words**, sha256 `0b9cf535e59bb85cc02e73f91266f4522cb9611f2b30169e3f21d133c3d560e2`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6075 lines** and **81961 words**, sha256 `a503aa821600a57c198a30222e59b67dc4ed5e6bbca49e609f684403aa8f175f`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
