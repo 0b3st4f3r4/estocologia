@@ -172,6 +172,19 @@ absent. Instrument: `labs --schema`.
 | A budget declared for the health post of Chapter 5, `arrivals=0.42; pace=0.58; covariance=0.00`, is read back; one that does not close (0.420) is refused | `labs --schema` |
 | A dominant event declared for the ship of Chapter 11, `the ship is lost; p=0.05; share=1.0`, is read back | `labs --schema` |
 
+## The multiverse of the health post (2026-10-19)
+
+Declared and sealed before the first run in `empirical/p26-multiverso/` (item 18 (b) of
+`docs/DECLARED_PROPOSALS.md`). The question of Chapter 5 under 3 × 2 × 3 = 18 specifications with 400,000 common draws,
+seed 2026. Verdict: the three rules hold. K = 1.
+
+| Result | Instrument |
+| --- | --- |
+| 8 of 18 specifications ask for the second nurse; P(W > 20) from 0.0003 to 0.3211 | `labs --multiverse` |
+| Between-specification sd 0.1201 against a largest Monte Carlo sd of 0.0007 (ratio 163) | `labs --multiverse` |
+| Shares of the between-specification variance: service cv 0.93, rate law 0.00, correlation 0.06, interaction 0.02 | `labs --multiverse` |
+| The specification of the book reproduces `labs --propagate` draw for draw: P = 0.0499 | `labs --multiverse` |
+
 ## Reliability is not average success (2026-10-19)
 
 Declared and sealed before the first run in `empirical/p25-passk/` (item 18 (a) of `docs/DECLARED_PROPOSALS.md`).
@@ -185,6 +198,17 @@ Synthetic: 200 tasks, 8 runs of each, chances from four declared laws, 2,000 rep
 | World C, Beta(0.3, 0.3): pass^8 0.3100, independent 0.0049, ratio 62.6; band of pass^8 [0.2050; 0.3300]; exact 0.2672 | `labs --passk` |
 | World D, Beta(1.4, 0.6): pass^1 0.7306, pass^8 0.3200, independent 0.0812, ratio 3.9; exact 0.2976 | `labs --passk` |
 | The exact moment lies inside the band of the estimator at every k in every world | `labs --passk` |
+
+## The card contract 1.4 (2026-10-19)
+
+Two more optional fields: the multiverse of the answer and the reliability of an agent. The chain goes on to 1.4; the
+step 1.3 -> 1.4 introduces both absent (`empirical/p17-schema/DECLARACAO_3.md`). Instrument: `labs --schema`.
+
+| Number | Instrument |
+| --- | --- |
+| The multiverse of the health post, `specifications=18; agree=10; shares=service-cv:0.93, rate-law:0.00, correlation:0.06, interaction:0.02`, is read back | `labs --schema` |
+| The reliability of world B of Chapter 16, `k=8; pass1=0.5312; passk=0.0700`, is read back | `labs --schema` |
+| A budget with a share for the specification and no multiverse is refused; a pass^k above pass^1 is refused | `labs --schema` |
 
 ## Recipes of the course examples (2026-10-19)
 

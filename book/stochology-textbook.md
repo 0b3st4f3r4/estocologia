@@ -1124,6 +1124,61 @@ can double the variance or erase it, and leaving it out is a structural assumpti
 linear answer and the simulated one disagree about the probability that decides, by more than the decision can bear,
 the linear answer is not allowed to decide: the laboratory writes that rule into its last line.
 
+**A fourth answer: the multiverse.** The three answers share a specification, and the specification hides three
+choices that the sentence of the question did not make. The service time was taken as exponential, which fixes its
+coefficient of variation at 1; a nurse whose consultations are more regular has a smaller one, and Pollaczek and
+Khinchine give the mean wait of any service law as $W = 60\,\lambda\,(1 + c^2) / (2\,\mu\,(\mu - \lambda))$
+minutes, which is the formula of this chapter at $c = 1$. The rates were taken as normal; a lognormal with the same
+mean and spread is as reasonable, and never negative. And the correlation could be any of the three. Every
+combination is a model someone could defend. The laboratory runs all eighteen with the same 400,000 draws, so that the
+differences between them are differences of choice and not of chance, and splits the variance of the answer between
+the choices (`cargo run --release --bin labs -- --multiverse`):
+
+```text
+== The multiverse of the health post: how much of the answer is the modeller's choice ==
+question: P(W > 20 min), promise <= 0.05 | lambda mean 8 sd 0.6, mu mean 12 sd 0.8 per hour | 18 specifications, 400000 common draws, seed 2026
+  service cv | rate law  | correlation | P(W > 20) | MC sd  | decision
+        0.5 | normal    |        -0.5 |       0.0241 | 0.0002 | promise kept
+        0.5 | normal    |        +0.0 |       0.0081 | 0.0001 | promise kept
+        0.5 | normal    |        +0.5 |       0.0004 | 0.0000 | promise kept
+        0.5 | lognormal |        -0.5 |       0.0234 | 0.0002 | promise kept
+        0.5 | lognormal |        +0.0 |       0.0075 | 0.0001 | promise kept
+        0.5 | lognormal |        +0.5 |       0.0003 | 0.0000 | promise kept
+        1.0 | normal    |        -0.5 |       0.0884 | 0.0004 | second nurse
+        1.0 | normal    |        +0.0 |       0.0499 | 0.0003 | promise kept
+        1.0 | normal    |        +0.5 |       0.0107 | 0.0002 | promise kept
+        1.0 | lognormal |        -0.5 |       0.0875 | 0.0004 | second nurse
+        1.0 | lognormal |        +0.0 |       0.0487 | 0.0003 | promise kept
+        1.0 | lognormal |        +0.5 |       0.0096 | 0.0002 | promise kept
+        1.5 | normal    |        -0.5 |       0.3210 | 0.0007 | second nurse
+        1.5 | normal    |        +0.0 |       0.2849 | 0.0007 | second nurse
+        1.5 | normal    |        +0.5 |       0.2131 | 0.0006 | second nurse
+        1.5 | lognormal |        -0.5 |       0.3211 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.0 |       0.2855 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.5 |       0.2131 | 0.0006 | second nurse
+
+the 18 specifications: 8 say second nurse, 10 say promise kept | P from 0.0003 to 0.3211 | between-specification sd 0.1201, largest Monte Carlo sd 0.0007 (ratio 163)
+between-specification variance of P, by choice: service cv 0.93 | rate law 0.00 | correlation 0.06 | interaction 0.02
+  as a budget of the specification: service-cv=0.93; rate-law=0.00; correlation=0.06; interaction=0.02
+the book's specification (M/M/1, normal rates, no correlation): P = 0.0499, promise kept
+
+-- the rules declared before the run --
+  R1, the 18 specifications do not agree on the decision: holds
+  R2, the service cv carries more of the between-specification variance than the rate law and the correlation together: holds
+  R3, the between-specification sd is more than ten times the largest Monte Carlo sd: holds
+```
+
+Three readings. **The decision is a choice of the modeller.** Eight specifications ask for the second nurse and ten
+keep the promise, and the answer runs from 0.0003 to 0.3211: the spread between reasonable models is 163 times the
+largest error of the simulation. **One choice carries almost all of it.** The coefficient of variation of the service
+explains 0.93 of the variance between specifications; the law of the rates, which looked like a serious decision,
+explains nothing to the second decimal. That is the share the delta budget cannot see, because it lives above the
+formula, not inside it. **The question it asks is cheap to answer.** Nobody measured how regular the consultations
+are, and that one measurement, a stopwatch on a week of consultations, decides the nurse; it is the value of
+information of Chapter 11 pointed at the model instead of at the world. A budget of the uncertainty that stops at the
+inputs reports the uncertainty of one model; the uncertainty of the answer includes the choice of the model, and the
+honest card declares both.
+
 **Exercises.**
 
 1. *(Concept)* For each case, say whether the mean hides a toll and of which sign. (a) The waiting time in a
@@ -1144,6 +1199,8 @@ the linear answer is not allowed to decide: the laboratory writes that rule into
    and brings the mean wait down from 19.6 to 2.5 minutes. Measure that world with reinforcement of 1.5 times
    and 3 times the capacity and say, in natural frequencies, how many patients in each 100 still wait more
    than 30 minutes.
+7. *(Count)* With $\lambda = 8$ and $\mu = 12$, compute the mean wait for $c = 0.5$, $1$ and $1.5$. Which value of
+   $c$ makes the mean wait at the mean rates equal to 20 minutes? What would you measure first at the post, and why?
 
 **Summary.**
 
@@ -1156,6 +1213,8 @@ the linear answer is not allowed to decide: the laboratory writes that rule into
 - The margin is only worth what the independent unit is worth, and the halves null decides which unit is the
   right one.
 - A threshold (failing, overflowing, going bankrupt) is not summarized by any mean.
+- The uncertainty of an answer includes the choice of the model. Run the reasonable specifications with the same
+  draws and split the spread between the choices: one unmeasured quantity can carry almost all of it.
 
 ## Chapter 6. The invisible filter: why do 2.4 million votes count as 7 people?
 
@@ -4356,6 +4415,18 @@ different questions, and the card asks both. The fields are optional: a card tha
 migration from 1.2 brings them in absent rather than inventing a value. A card that declares a budget that does not
 close, or an event with a probability of 0 or 1, is refused when it is read.
 
+**Two more fields: the choice of the model and the tail of an agent.** Version 1.4 adds two. The **multiverse** says
+under how many reasonable specifications the answer was computed, how many of them reach the card's decision, and how
+the variance between them splits by choice; for the health post it reads
+`specifications=18; agree=10; shares=service-cv:0.93, rate-law:0.00, correlation:0.06, interaction:0.02`, and it says
+that the card's decision is kept by ten models of eighteen and turns on a quantity nobody measured. A budget may then
+carry a share for the specification beside its inputs, and a budget that names that share without a multiverse is
+refused, because that share is measured there and nowhere else. The **reliability** is for the card of an agent: the
+number of runs $k$, the average success and the chance that all $k$ runs succeed, as in
+`k=8; pass1=0.5312; passk=0.0700`; a card that declares a $\text{pass}^k$ above its $\text{pass}^1$ is refused,
+because $k$ runs cannot all succeed more often than one does. Both fields are optional and enter absent in the
+migration from 1.3, for the reason of the earlier two.
+
 **The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
 
 | Question | Options | Why it matters |
@@ -4546,6 +4617,8 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
   never fails is not a gate.
 - A property test states a rule that must hold for every input and lets the machine hunt for the
   counterexample.
+- Version 1.4 adds the multiverse of the answer and the reliability of an agent; a share for the specification needs
+  the multiverse that measured it, and no $\text{pass}^k$ may exceed its $\text{pass}^1$.
 
 ## Chapter 18. The vault, the cryptographic seal and the audit against itself
 
@@ -6016,6 +6089,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
+| `cargo run --release --bin labs -- --multiverse` | The same question under eighteen reasonable specifications, and how much of its spread each choice carries (Chapter 5) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
@@ -6461,6 +6535,18 @@ No number changed.
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 17 | The fields of the card | the header and the fields of contract 1.2 | two optional fields, the uncertainty budget and the dominant event, validated when present; the migration from 1.2 introduces them absent | the uncertainty that reaches the decision has a source and a carrier, and the card did not ask for either |
+
+### The research on models of the world, of agents and of modelling, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 2 | The layers | the Model judged by its errors everywhere; the modeller outside the loop | a Model good enough for the decision (value equivalence), an Agent that exploits its Model's errors, and the modeller as an Agent whose World is the space of Models | the research on world models and on many analysts with the same data |
+| 4 | The law of total variance | the two parcels of a parameter | also the ceiling a person sets (a model of a person scored against the person's own consistency) and the simulated sample that loses its within-group parcel | the research on agent models that simulate people |
+| 5 | The health post | three answers under one specification | a fourth: eighteen specifications with common draws, of which eight ask for the second nurse; the service cv carries 0.93 of the spread (`labs --multiverse`, sealed in point 26 before its run) | the uncertainty of an answer includes the choice of the model |
+| 16 | The machine | System 2 woken by margin; agents judged by average success | the value of computation; reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
+| 17 | The card | contract 1.3 | contract 1.4: the multiverse and the reliability, optional, validated when present | the two laboratories measured what the card had no place for |
+| 19 | Invariance | causes across environments | also models of other minds, tested by alterations their mechanism declares irrelevant or decisive | the research on theory of mind in language models |
+| E | Chapter 8 | "the instrument measures 0.1712 → 0.1559, 0.1560 and 0.2119 → 0.1755" | measured until 2026-10-18 in sample; out of the fit it measures 0.1708 → 0.1555, 0.1547 and 0.2147 → 0.1741 | the provenance check that closed item 16 found the paragraph speaking of the old reading in the present |
 
 ### The seed of the simulations, 2026-10-19
 

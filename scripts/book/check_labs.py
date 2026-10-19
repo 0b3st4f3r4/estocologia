@@ -46,6 +46,7 @@ def main() -> int:
         ("labs --mc-error", run_output([str(BIN), "--mc-error"])),
         ("labs --propagate", run_output([str(BIN), "--propagate"])),
         ("labs --passk", run_output([str(BIN), "--passk"])),
+        ("labs --multiverse", run_output([str(BIN), "--multiverse"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
         ("labs --h3", run_output([str(BIN), "--h3"])),
         ("labs --bridge", run_output([str(BIN), "--bridge"])),

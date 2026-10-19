@@ -152,6 +152,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --eprocess` | The H2 gate under the e-process, over the 38 recorded tests (Chapter 19) |
 | `cargo run --release --bin labs -- --mc-error` | How far each simulated number the book reads moves with the seed (C.3) |
 | `cargo run --release --bin labs -- --propagate` | Three answers to the same question, with the uncertainty budget (Chapter 5) |
+| `cargo run --release --bin labs -- --multiverse` | The same question under eighteen reasonable specifications, and how much of its spread each choice carries (Chapter 5) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 407 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 513 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (510), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
@@ -597,6 +598,18 @@ No number changed.
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 17 | The fields of the card | the header and the fields of contract 1.2 | two optional fields, the uncertainty budget and the dominant event, validated when present; the migration from 1.2 introduces them absent | the uncertainty that reaches the decision has a source and a carrier, and the card did not ask for either |
+
+### The research on models of the world, of agents and of modelling, 2026-10-19
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 2 | The layers | the Model judged by its errors everywhere; the modeller outside the loop | a Model good enough for the decision (value equivalence), an Agent that exploits its Model's errors, and the modeller as an Agent whose World is the space of Models | the research on world models and on many analysts with the same data |
+| 4 | The law of total variance | the two parcels of a parameter | also the ceiling a person sets (a model of a person scored against the person's own consistency) and the simulated sample that loses its within-group parcel | the research on agent models that simulate people |
+| 5 | The health post | three answers under one specification | a fourth: eighteen specifications with common draws, of which eight ask for the second nurse; the service cv carries 0.93 of the spread (`labs --multiverse`, sealed in point 26 before its run) | the uncertainty of an answer includes the choice of the model |
+| 16 | The machine | System 2 woken by margin; agents judged by average success | the value of computation; reliability as pass^k, with the laboratory of four worlds (`labs --passk`, sealed in point 25 before its run) | the research on resource rationality and on agent benchmarks |
+| 17 | The card | contract 1.3 | contract 1.4: the multiverse and the reliability, optional, validated when present | the two laboratories measured what the card had no place for |
+| 19 | Invariance | causes across environments | also models of other minds, tested by alterations their mechanism declares irrelevant or decisive | the research on theory of mind in language models |
+| E | Chapter 8 | "the instrument measures 0.1712 → 0.1559, 0.1560 and 0.2119 → 0.1755" | measured until 2026-10-18 in sample; out of the fit it measures 0.1708 → 0.1555, 0.1547 and 0.2147 → 0.1741 | the provenance check that closed item 16 found the paragraph speaking of the old reading in the present |
 
 ### The seed of the simulations, 2026-10-19
 

@@ -1,0 +1,31 @@
+== The multiverse of the health post: how much of the answer is the modeller's choice ==
+question: P(W > 20 min), promise <= 0.05 | lambda mean 8 sd 0.6, mu mean 12 sd 0.8 per hour | 18 specifications, 400000 common draws, seed 2026
+  service cv | rate law  | correlation | P(W > 20) | MC sd  | decision
+        0.5 | normal    |        -0.5 |       0.0241 | 0.0002 | promise kept
+        0.5 | normal    |        +0.0 |       0.0081 | 0.0001 | promise kept
+        0.5 | normal    |        +0.5 |       0.0004 | 0.0000 | promise kept
+        0.5 | lognormal |        -0.5 |       0.0234 | 0.0002 | promise kept
+        0.5 | lognormal |        +0.0 |       0.0075 | 0.0001 | promise kept
+        0.5 | lognormal |        +0.5 |       0.0003 | 0.0000 | promise kept
+        1.0 | normal    |        -0.5 |       0.0884 | 0.0004 | second nurse
+        1.0 | normal    |        +0.0 |       0.0499 | 0.0003 | promise kept
+        1.0 | normal    |        +0.5 |       0.0107 | 0.0002 | promise kept
+        1.0 | lognormal |        -0.5 |       0.0875 | 0.0004 | second nurse
+        1.0 | lognormal |        +0.0 |       0.0487 | 0.0003 | promise kept
+        1.0 | lognormal |        +0.5 |       0.0096 | 0.0002 | promise kept
+        1.5 | normal    |        -0.5 |       0.3210 | 0.0007 | second nurse
+        1.5 | normal    |        +0.0 |       0.2849 | 0.0007 | second nurse
+        1.5 | normal    |        +0.5 |       0.2131 | 0.0006 | second nurse
+        1.5 | lognormal |        -0.5 |       0.3211 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.0 |       0.2855 | 0.0007 | second nurse
+        1.5 | lognormal |        +0.5 |       0.2131 | 0.0006 | second nurse
+
+the 18 specifications: 8 say second nurse, 10 say promise kept | P from 0.0003 to 0.3211 | between-specification sd 0.1201, largest Monte Carlo sd 0.0007 (ratio 163)
+between-specification variance of P, by choice: service cv 0.93 | rate law 0.00 | correlation 0.06 | interaction 0.02
+  as a budget of the specification: service-cv=0.93; rate-law=0.00; correlation=0.06; interaction=0.02
+the book's specification (M/M/1, normal rates, no correlation): P = 0.0499, promise kept
+
+-- the rules declared before the run --
+  R1, the 18 specifications do not agree on the decision: holds
+  R2, the service cv carries more of the between-specification variance than the rate law and the correlation together: holds
+  R3, the between-specification sd is more than ten times the largest Monte Carlo sd: holds

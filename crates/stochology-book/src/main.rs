@@ -1044,6 +1044,43 @@ fn contract() {
         Ok(_) => println!("  a budget that does not close: ACCEPTED (it should not be)"),
         Err(error) => println!("  a budget that does not close is refused: {error}"),
     }
+    println!("\n-- the two fields of contract 1.4: the multiverse and the reliability --");
+    // Contract 1.4. The multiverse of the health post (labs --multiverse): 18 specifications, 10 keep the promise as
+    // the card of Chapter 5 does, and the variance between them by choice. The reliability of an agent in world B of
+    // the laboratory of Chapter 16 (labs --passk): pass^1 0.5312 and pass^8 0.0700 in its first run.
+    let multiverse = "specifications=18; agree=10; shares=service-cv:0.93, rate-law:0.00, correlation:0.06, interaction:0.02";
+    let reliability = "k=8; pass1=0.5312; passk=0.0700";
+    let declared = card
+        .clone()
+        .with_multiverse(multiverse)
+        .with_reliability(reliability);
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&declared)) {
+        Ok(read) => println!(
+            "  declared and read back: multiverse \"{}\" | reliability \"{}\"",
+            read.multiverse.unwrap_or_default(),
+            read.reliability.unwrap_or_default()
+        ),
+        Err(error) => println!("  REJECTED: {error}"),
+    }
+    let unmeasured = card.clone().with_budget(
+        "inputs=0.40; specification=0.60",
+        "the ship is lost; p=0.05; share=1.0",
+    );
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&unmeasured)) {
+        Ok(_) => println!(
+            "  a share for the specification without a multiverse: ACCEPTED (it should not be)"
+        ),
+        Err(error) => {
+            println!("  a share for the specification without a multiverse is refused: {error}")
+        }
+    }
+    let promising = card
+        .clone()
+        .with_reliability("k=8; pass1=0.5312; passk=0.6");
+    match stochology_core::schema::from_text(&stochology_core::schema::text(&promising)) {
+        Ok(_) => println!("  a pass^k above pass^1: ACCEPTED (it should not be)"),
+        Err(error) => println!("  a pass^k above pass^1 is refused: {error}"),
+    }
 }
 
 fn run(cap: usize) {
