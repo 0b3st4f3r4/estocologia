@@ -16,6 +16,12 @@ The inward audit of Chapter 15 had concluded that no number fell by an error of 
 wrong, and the way it was wrong is the argument of this file: the authors of a claim are a weak auditor of it,
 however honest they are. Chapter 15 already said this about signed opinions; it holds for the mathematics too.
 
+The readings of 2026-10-18 themselves have a declared limit. They were made with an AI assistant: the first
+rectification commit is authored by "Claude", and a second review of the same kind added the second table of
+Appendix E (definitions, attributions and readings of formulas that no instrument produces). They stand outside the
+authors' audit, but not outside the tools the authors used, and no person outside the program has checked them.
+They enter the public errata below as its first entries; they do not close item 17.
+
 ## The protocol
 
 Three activities, in increasing order of cost. None of them is run by the program on itself.

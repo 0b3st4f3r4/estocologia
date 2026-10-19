@@ -29,11 +29,11 @@ example. The order is alphabetical.
 | **Circuit breaker** | The mechanism that swaps the model for a safe reserve when it loses over a moving window | The autopilot that switches itself off when the sensor disagrees for too long |
 | **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
 | **ECE (expected calibration error)** | The mean distance between predicted and observed, computed by confidence bands | Estimating the error of a thermometer band by band, from 35 to 42 degrees |
-| **Erlang C** | The classical formula that estimates how many attendants are needed for a queue | How many checkouts to open at the supermarket so that the queue does not exceed five people |
+| **Erlang C** | The classical formula that estimates how many attendants are needed for a queue | How many checkouts to open at the supermarket so that 80% of the customers wait less than 20 seconds |
 | **Type I error** | Raising the alarm when there was nothing | The smoke detector that goes off while the bread is toasting |
 | **Type II error** | Not raising the alarm when there was something | The detector with a weak battery that stays silent in the fire |
 | **Type III error** | Answering with precision a question that was not the decision-maker's | Delivering the average grade when the question was how many students stay for remedial classes |
-| **Type M error** | Getting the size of the effect wrong, too large or too small | "3 centimetres of rain" when it was 3 millimetres |
+| **Type M error** | Getting the size of the effect wrong, too large or too small, typically by a study too small for the effect it seeks | A small trial that only reaches significance when chance doubles the effect, and then reports the doubled effect |
 | **Type S error** | Getting the sign of the effect wrong: saying it improves when it worsens | Recommending a medicine that gets in the way, because of a signal noise |
 | **Scalonomy** | The lens of scale: tail exponent, existence of the mean, effective size | Measuring whether a flood can swallow the historical average of floods |
 | **Proper score** | The score in which declaring one's own sincere belief is the best move | The pool that pays an honest 60% better than a bluffed 100%, so that saying what you believe is what scores |
@@ -44,11 +44,11 @@ example. The order is alphabetical.
 | **Goodhart (law of)** | When the measure becomes the goal, it stops measuring | The school that trains the students for the exam and the grade rises without learning rising |
 | **Brier skill** | How much the model improves, in percentage, over the climatologist who only repeats the base rate | How much the rain forecast gains over "it rains as often as always" |
 | **Typed hypergraph** | A map of knowledge in which the links have a type and can join more than two things | The subway map with named lines, and not only points joined by strokes |
-| **ICP (invariant causal prediction)** | The method that returns the set of variables whose relation to the outcome does not change across environments | The recipe that works in your house and in your grandmother's, with a different oven |
+| **ICP (invariant causal prediction)** | The method that returns the variables common to every set whose relation to the outcome does not change across environments: a conservative estimate of the direct causes, wrong with at most the declared chance | The recipe that works in your house and in your grandmother's, with a different oven |
 | **Meng's identity** | The equation that says how much of the final answer depends on the data that are missing | Assessing the class by measuring only those who came to the exam: the absent ones change the average |
 | **Aleatory uncertainty** | The variability of the world, which more data do not reduce | The outcome of the honest die: rolling ten thousand times does not make the die predictable |
 | **Epistemic uncertainty** | The model's ignorance about the world, which shrinks with data | Not knowing the average height of the class; measuring everyone solves it |
-| **Knightian uncertainty** | A real process outside the hypothesis space, in which more data give false confidence | The turkey that fattens for a thousand days until Christmas Day |
+| **Knightian uncertainty** | In this book, a real process outside the hypothesis space that nobody listed, in which more data give false confidence (Knight's own sense, probabilities that cannot be measured, is its neighbour, Chapter 4) | The turkey that fattens for a thousand days until Christmas Day |
 | **Invariants $\Phi_1$ to $\Phi_5$** | The five boundary conditions every claim must satisfy: simulability ($\Phi_1$), independent unit ($\Phi_2$), severe test ($\Phi_3$), scope and exit clause ($\Phi_4$) and resolution of the question ($\Phi_5$) | The five locks of the sheet that reject a work before the argument |
 | **$\Phi_5$ (resolution of the question)** | The invariant that rejects aggregated decision ($R_0$) when the independent unit is the day or coarser | Scaling by the average day when the clinic alternates between calm and surge |
 | **Jensen (inequality of)** | The mean of a curved function is not the function of the mean | The average waiting time grows when arrivals oscillate, even with the same average arrival |
@@ -62,7 +62,7 @@ example. The order is alphabetical.
 | **World ($L_1$)** | The reality that generates the data and that we never see in full | The real neighbourhood, with the holes the map does not show |
 | **Murphy (decomposition of)** | The account that separates the error of a forecast into reliability, resolution and difficulty of the event | A good student who fails the exam because of difficulty, not because of not knowing the subject |
 | **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
-| **$p$-value** | The frequency with which a world without effect would produce a result as extreme as the one seen | Flipping the coin 100 times and seeing 62 heads: how strange is that in the honest world? |
+| **$p$-value** | The frequency with which a world without effect would produce a result at least as extreme as the one seen | Flipping the coin 100 times and seeing 62 heads: how strange is that in the honest world? |
 | **Pearl (ladder of)** | The three rungs: see, act and imagine what did not happen | Watching the price of tomatoes rise, deciding to buy pineapple, and imagining how things would be without the frost |
 | **Decision-maker's question** | The question the decision uses, with who decides, which action changes and the question mark at the end | "Does reducing the class to 15 students improve reading one year later?" |
 | **Gate** | The automatic test that says yes or no, with exit code 0 or 1 | The subway turnstile: it does not open for whoever has not gone through |
@@ -76,7 +76,7 @@ example. The order is alphabetical.
 | **SHELF** | The protocol for eliciting experts by median, quartiles and extremes | Asking the doctor not for a guess, but for a range and a most probable value |
 | **$t_{\mathrm{disp}}$ (clock)** | The instant at which each datum becomes knowable | The exam result that only exists after it leaves the laboratory |
 | **Scope term** | The declaration of where the conclusion holds and where it does not | "This holds for the morning shift; at the weekend the queue is another one" |
-| **Chouldechova's trilemma** | With different base rates between groups, calibration and equal error rates are incompatible | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
+| **Chouldechova's trilemma** | With different base rates between groups and an imperfect classifier, equal predictive value (PPV) and equal false-positive and false-negative rates cannot hold together. Equal PPV is one kind of calibration; calibration within groups (Kleinberg and colleagues) is a related but distinct one | Two classes with different difficulties cannot have, at the same time, a fair average grade and the same number of failures |
 | **Inspection paradox** | Sampling by arrival over-represents the long intervals, so the experience of the average arrival is worse than the average interval | Asked how long they waited, most patients answer from the busy days, because most of them came on busy days |
 | **Independent unit** | The smallest unit whose observations do not share the same source of variation | The school, and not the student, when students of the same school resemble one another |
 | **Likelihood** | The chance of seeing what was seen, supposing each hypothesis true | "How likely is this stain on the roof if it is rain? And if it is seepage?" |
@@ -96,8 +96,8 @@ example. The order is alphabetical.
 | $\sigma$ or $\mathrm{dp}$ | "Standard deviation: the square root of the variance, in the same unit as $X$" | `let dp = var.sqrt();` |
 | $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_given_b } else { p_a_given_not_b }` |
 | $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = f(x_fixed);` — instead of `let y = f(x_observed);` |
-| $\ln$ | "Natural logarithm: the exponent of Euler's number that returns the value" | `let z = valor.ln();` |
-| $\log_{10}$ | "Logarithm in base 10" | `let d = 10.0 * razao.log10();` (decibans) |
+| $\ln$ | "Natural logarithm: the exponent of Euler's number that returns the value" | `let z = value.ln();` |
+| $\log_{10}$ | "Logarithm in base 10" | `let d = 10.0 * ratio.log10();` (decibans) |
 | $\ge$ | "Is greater than or equal to" | `a >= b` |
 | $\approx$ | "Approximately equal", within a declared tolerance | `(a - b).abs() < 1e-9` |
 | $\sqrt{x}$ | "The square root of $x$" | `x.sqrt()` |
@@ -159,7 +159,9 @@ shocks, and the identical code, run with the same seed, gave 0.5529 and 2,395 sh
 the code. There were two numerical libraries in the interpreter, and the default path imported 2.4.6 before 2.5.1.
 The point of the divergence was isolated. In the two versions, the generator started from the same state, and a
 binomial draw of 248 trials with probability 0.6 returns 171 in one and 150 in the other, because 2.5 fixed the
-Stirling series of the acceptance test of the BTPE algorithm. If you meet a divergence like this, the path is always
+Stirling series of the acceptance test of the BTPE algorithm. What this book measured is the pair of draws, 171
+and 150, under the same state; the account of the upstream fix is the program's reading of the two sources, and
+the citation of the numpy change that made it is still owed (Appendix E, Chapter 20). If you meet a divergence like this, the path is always
 the same. **First the environment, then the code**: record the version of every library next to the number, because
 a number without its environment is a number nobody can audit.
 
@@ -260,6 +262,17 @@ The chapters teach with numbers measured by a fixed-seed instrument. Where a mea
 value an earlier text or the course outline recorded, both values and the cause are kept here, chapter by
 chapter, so that the chapters can teach without carrying the comparison.
 
+**How to read this appendix.** The two rectification tables are for every reader: they show errors that passed
+every gate. The sections by chapter that follow record smaller differences against earlier texts, and the sections
+of Chapters 12 to 15 record differences of naming and of counting between the documents of the repository. Those are
+for whoever audits the repository, and a reader of the book can skip them.
+
+**Who read from outside.** The rectifications of 2026-10-18 were applied by an AI assistant (the rectification commit
+of that day is authored by "Claude"), and the second table below comes from a later review of the same kind. Both
+readings stand outside the authors' own audit of Chapter 15, but neither meets the independence that Chapter 21 asks
+for: no person outside the program has yet checked them. They count as entries in the errata of
+`docs/OUTSIDE_AUDIT.md`, not as its completion.
+
 ### Rectifications of 2026-10-18
 
 A reading from outside, made after the inward audit of Chapter 15, found errors that the instruments reproduced
@@ -299,6 +312,30 @@ that would have caught it, and corrected in the text. The earlier value stays he
 | 20 | Platt parameters | "a = 0.98, b = -0.54" | slope 0.98, intercept $-0.54$ | labels swapped against Chapter 8 |
 | 15, 21 | Inward audit | "no published number fell by an error of arithmetic" | several did; this table lists them | the audit was run by the authors of the claims |
 | C | Test count | 373 | 406 | stale count, plus the tests added with these corrections |
+
+### Rectifications of the text, 2026-10-18 (third review)
+
+A third reading of the same kind, made on the assembled book, found statements that no instrument produces and
+therefore no gate could catch: definitions, attributions and readings of a formula. They are corrected in the text;
+the earlier wording is kept here.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| Preface, 1 | What the seed proves | "an experiment is scientific only if someone else... obtains the same result"; the seed as the basis of the check | a fixed seed makes a computation reproducible, not replicable and not right; the lesson of the first table opens the book | reproducibility, replicability and validity were one word |
+| 1 | Vulcan | the example of a degenerative repair | a progressive proposal whose prediction (transits) failed; degeneration is a trajectory of a programme | Le Verrier's Vulcan predicted observable transits |
+| 8, 21 | "Resolution is not repaired" | stated of the forecaster | stated of recalibration; new information can raise resolution | the asymmetry belongs to the map from $p$ to $p'$ |
+| 11, A | Chouldechova | approvals, errors and calibration "incompatible" | equal PPV, equal FPR and equal FNR incompatible for an imperfect predictor; calibration within groups is a neighbour | approval parity is not part of the identity |
+| 12 | Type of the Erlang C node | Knightian (specification) | epistemic (specification) | its failures are listed and testable; Knightian is the unlisted mechanism |
+| 12 | Pathology "illusion of the dark room" | name | "case for population" | the dark room is another problem of active inference (Chapter 11) |
+| 12 | Bridge "noise as temperature" | a bridge of the same rank as Jensen | marked heuristic | the gradient noise is anisotropic and state-dependent |
+| 13 | Panel score | a severity from 0 to 10 | read as one bit per safeguard | the band is drawn by the seed and never crosses the floor |
+| 13, 21 | Floor of 1% to 99% | a prohibition on every forecast | a convention of System 1's triage; forecasts declare $\varepsilon$ from the base rate | Cromwell's rule forbids 0 and 1, not 0.5% |
+| 14 | Stratonovich and the drag | "the term $-\sigma^2/2$ does not appear" | the gap of $\tfrac12\sigma^2$ appears in both readings; the convention changes what $\mu$ names | Jensen does not depend on the integral |
+| 21 | Physics of the noise | "added (Itô) or dragged (Stratonovich)" | the two readings coincide for additive noise and differ for state-dependent noise | definition |
+| A | Type M error | "3 centimetres of rain when it was 3 millimetres" | a small study that reports a doubled effect | a unit error is not a magnitude error |
+| A | ICP | returns "the set" of invariant variables | returns the intersection of the accepted sets, with a declared error rate | definition |
+| A | Erlang C | "the queue does not exceed five people" | a share of customers served within a time | Erlang C gives the chance of waiting, not a bound on the queue |
+| 1, 2 | Exercise type | *(Calculation)* | *(Count)* | the preface declares three types |
 
 ### Chapter 4
 
@@ -382,12 +419,12 @@ that match those of the real index to the second decimal (see the rectifications
 
 ### Chapter 11
 
-The earlier text records 35,8% of ruin for whoever bets by their own
-history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4,76 m (expected
-value with Gumbel), 6,20 m (mean of the models), 7,46 m (Wald), 5,93 m (Savage) and 9,96 m (precaution),
-with 100-year levels from 3,11 to 4,26 m and 10 000-year levels from 3,81 to 9,96 m. The instrument, with
-$\mu = 1{,}2567$ and $\sigma = 0{,}762$ calibrated so that the 100-year level of the model with $\xi = -0{,}1$
-reaches 4,26 m, measured 3,06 m, 7,82 m, 12,58 m, 9,81 m and 21,49 m until 2026-10-18, when the Gumbel branch was
+The earlier text records 35.8% of ruin for whoever bets by their own
+history and 0% with Laplace (Chapter 10), and a table of dikes with heights of 4.76 m (expected
+value with Gumbel), 6.20 m (mean of the models), 7.46 m (Wald), 5.93 m (Savage) and 9.96 m (precaution),
+with 100-year levels from 3.11 to 4.26 m and 10,000-year levels from 3.81 to 9.96 m. The instrument, with
+$\mu = 1.2567$ and $\sigma = 0.762$ calibrated so that the 100-year level of the model with $\xi = -0.1$
+reaches 4.26 m, measured 3.06 m, 7.82 m, 12.58 m, 9.81 m and 21.49 m until 2026-10-18, when the Gumbel branch was
 corrected (see the rectifications above). The old heights come from a
 set of models calibrated in another way, which this laboratory does not reproduce; the two sets
 stay recorded. In the trilemma, the old value of 1 273 false positives for equalising the FNR is from the
@@ -399,8 +436,8 @@ was erased.
 ### Chapter 12
 
 The earlier text, in Chapter 6, presents the three samples of
-Hill with values close to $1{,}81$; the instrument measures 1,8444 ($k = 250$), 1,7901 ($k = 500$), 1,7949
-($k = 1\,000$) and 1,8032 ($k = 2\,000$). The difference is one of sampling and of cutoff, not of formula — the value
+Hill with values close to $1.81$; the instrument measures 1.8444 ($k = 250$), 1.7901 ($k = 500$), 1.7949
+($k = 1,000$) and 1.8032 ($k = 2,000$). The difference is one of sampling and of cutoff, not of formula — the value
 published in the repository for $k = 500$ with seed 1909 reproduces exactly. It is recorded as well that the
 earlier text and the plan of the repository count gates in different ways: the old book describes
 **five** automatic gates (contracts and seeds; schema and idempotence; convergence; temporal cutoff;
@@ -501,15 +538,15 @@ appear now, with the date of each one.
 
 ### Chapter 18
 
-The report of the fire case records $\hat\alpha = 1{,}81$ with interval [1.41;
+The report of the fire case records $\hat\alpha = 1.81$ with interval [1.41;
 2.56] by bootstrap in blocks; the instrument measures the same **1.8109** at the point (k = 50) and the interval **[1.37;
 2.61]**, besides 1.9625 and 1.4100 for k = 25 and k = 100 — the three points coincide with the published ones up to the fourth
 place, and the difference of the interval comes from the resampling (300 replicas, different generator). The divergence that deserves
 a paragraph is another one: the earlier text and the README say that 36 clean months are worth **2.2 bits** and that a severe test
 would need **69 months**. The instrument confirms the two numbers **exactly** (2.2373 bits and 69 months)
-when it uses the $p$ that the tail of the training set implies, $p = 0{,}04296$, the value of the published POT/GPD fit
-$\xi = 0{,}406$, $\sigma = 7{,}387$, 83 excesses above 10 — and measures **2.42 bits and 64 months** when it uses the
-simple monthly frequency of the training set, $p = 5/108 = 0{,}04630$. The difference is not of account: it is of which world
+when it uses the $p$ that the tail of the training set implies, $p = 0.04296$, the value of the published POT/GPD fit
+$\xi = 0.406$, $\sigma = 7.387$, 83 excesses above 10 — and measures **2.42 bits and 64 months** when it uses the
+simple monthly frequency of the training set, $p = 5/108 = 0.04630$. The difference is not of account: it is of which world
 "dangerous" one places on the other side. The adjusted tail is more pessimistic than the raw count of months, and that is why it
 requires more clean months. The two values stay on the record; none was erased.
 
@@ -517,9 +554,9 @@ requires more clean months. The two values stay on the record; none was erased.
 
 The numbers above are of data **simulated** by this laboratory, and not of the
 research repository; the three simulations show a single mechanism, at toy scale. The values of the
-repository cited in this chapter (128 of 1,024 accepted sets in the light tunnel with $p = 0{,}29$ for
-$\{$vermelho, verde, azul$\}$; 35 of 512 in the FDA trial; 57 accepted sets in STAR in H2d; 2 of 1,024 in
-the yeast with best $p = 0{,}0072$) are not reproduced here, and cannot be: they require the real data and the
+repository cited in this chapter (128 of 1,024 accepted sets in the light tunnel with $p = 0.29$ for
+$\{$red, green, blue$\}$; 35 of 512 in the FDA trial; 57 accepted sets in STAR in H2d; 2 of 1,024 in
+the yeast with best $p = 0.0072$) are not reproduced here, and cannot be: they require the real data and the
 framework in Python of the horizons, whose commands are in Appendix C. The laboratory measures what it can with
 its own data: that the method finds the two causes in world A, that it returns empty in world B and that the rule of
 saturation is the difference between $\emptyset$ and the truth in world C. The design of the validation by intervention of the
@@ -530,13 +567,13 @@ the 40 real genes, which continue without an instrument.
 ### Chapter 20
 
 **The Platt balance.** The record of the live replay says that, in the flights stream of 2023, the
-intercept of the correction varied from $-0{,}52$ to $+0{,}43$ along the year. The diary of 2023 shows that this is the
-interval **inside the vault**; in the whole year, the same intercept goes from $-1{,}01$ to $+1{,}25$. The two values
+intercept of the correction varied from $-0.52$ to $+0.43$ along the year. The diary of 2023 shows that this is the
+interval **inside the vault**; in the whole year, the same intercept goes from $-1.01$ to $+1.25$. The two values
 are right and measure different things: one is the vault, the other is the year. It stays on the record instead of hidden.
 
 **The numpy case.** The published number of the performative loop — estimated effect
-$0{,}5632$ with 2,375 shocks — was contested once, and it is worth telling how it ended. The code, with the seed
-declared, gave $0{,}5529$ and 2,395 shocks when it ran with the standard `python3` of the machine. There were not two versions
+$0.5632$ with 2,375 shocks — was contested once, and it is worth telling how it ended. The code, with the seed
+declared, gave $0.5529$ and 2,395 shocks when it ran with the standard `python3` of the machine. There were not two versions
 of the code. The file is one, and the four copies of the tree bring the identical cryptographic digest. What there was were
 two numeric packages inside a single interpreter: numpy 2.5.1 of the record and numpy 2.4.6 that the standard path
 imports first. The exact point of the divergence was found: with the state of the generator identical, a binomial draw
@@ -549,13 +586,13 @@ environment together with the number, because a number without an environment is
 
 The experiment above is simulated and was calibrated to have the structure of the vault of
 Rhode Island — rate of 2.26%, 24,466 stops, correction fitted in the previous period —, not to reproduce its
-numbers. The values measured here and the ones of the real vault, side by side: bias of the raw model, $+0{,}0132$
-here against $0{,}013$ there; bias with Platt, $+0{,}0002$ here against $0{,}0020$ there; ECE with Platt, 0.0022
-here against **0.0048** there; skill with Platt, $+0{,}0098$ here against **$+0{,}019$** there; excess of the rate by the
+numbers. The values measured here and the ones of the real vault, side by side: bias of the raw model, $+0.0132$
+here against $0.013$ there; bias with Platt, $+0.0002$ here against $0.0020$ there; ECE with Platt, 0.0022
+here against **0.0048** there; skill with Platt, $+0.0098$ here against **$+0.019$** there; excess of the rate by the
 raw model, 60% here against 58% there. The order of magnitude and the sign of all of them coincide, and the reason for the
 differences is the data: the one here is generated by a simple additive model, with three covariates and without the noise of a
-real police record. The gain of the canary with the clock switched off, $+0{,}6521$, falls inside the range measured in the
-real vaults, which goes from $+0{,}55$ (arrests of 2020–2021) to $+0{,}97$ (Rhode Island).
+real police record. The gain of the canary with the clock switched off, $+0.6521$, falls inside the range measured in the
+real vaults, which goes from $+0.55$ (arrests of 2020–2021) to $+0.97$ (Rhode Island).
 
 ### Chapter 21
 

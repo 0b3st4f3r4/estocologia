@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **19 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **9 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **5 831 lines**, **76 919 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **5 925 lines**, **78 717 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 831 lines and 76 919 words, and its 31 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the rectifications of 2026-10-18 it has 5 925 lines and 78 717 words, and its 31 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -215,3 +215,21 @@ the book**: every change is listed with both values in Appendix E, rectification
 What did not change: the data, the seals of the empirical points, the `gates` merkle root, and every verdict of §3 that
 does not rest on a corrected laboratory. The conclusions of Chapters 15 and 21 that no published number had fallen by an
 error of arithmetic are withdrawn in the text, with both statements kept in Appendix E.
+
+## The text rectifications (third outside review, 2026-10-18)
+
+A third reading, made with an AI assistant like the two before it, read the assembled book rather than the code and
+found statements that no instrument produces, so no gate could have caught them: what a fixed seed proves, Vulcan as
+a degenerative repair, Stratonovich as the reading without drag, the 1%-to-99% floor stated as a prohibition on every
+forecast, the Erlang C node typed as Knightian, approval parity inside Chouldechova's identity, and five glossary
+definitions. Each is corrected in the chapter, kept with both wordings in the second rectification table of Appendix E,
+and its old wording enters the guard of `scripts/book/check_book.py`. The book now also states, in Chapters 15 and 21,
+in Appendix E and in `docs/OUTSIDE_AUDIT.md`, that the outside readings of 2026-10-18 were made with an AI assistant
+and do not close item 17. The dated record is `history/estado-2026-10-19T0052Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| laboratories, data, seals of the empirical points, `gates` merkle root, tests | unchanged | unchanged: no Rust file moved |
+| `scripts/book/check_book.py` | refuses 20 retired values | refuses 27 |
+| assembled book, line count | 5 831 (with 76 919 words) | 5 925 (with 78 717 words) |
+| Appendix E | one rectification table | two; a reading note; the declared limit of the outside readings |

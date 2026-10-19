@@ -193,3 +193,13 @@ checked against an authoritative page before entering the text.
 | 4 | Vovk and Wang, *Annals of Statistics* 49(3), 2021 | MATCHES | "E-values: Calibration, combination and applications", v. 49, n. 3 | Project Euclid, DOI 10.1214/20-AOS2020 |
 
 No content divergence. Pages are given only where the source printed them.
+
+## Added with the text rectifications of 2026-10-18 (third review)
+
+Chapter 1 now dates Le Verrier's proposal of Vulcan and its explanation by general relativity. Both entries were
+compared with a catalogue or edition page; the issue and pages of the first are partly from memory, as marked.
+
+| # | as cited | situation | reference | source of the verification |
+|---|---|---|---|---|
+| 1 | Le Verrier, Vulcan, 1859 | MATCHES (volume and pages partly from memory) | LE VERRIER, U. J. J. Lettre de M. Le Verrier à M. Faye sur la théorie de Mercure et sur le mouvement du périhélie de cette planète. *Comptes rendus hebdomadaires des séances de l'Académie des sciences*, v. 49, p. 379–383, 1859 | https://alumni.cam.ac.uk/node/3862972 ; https://www.pbs.org/wgbh/nova/article/hunt-for-vulcan |
+| 2 | Einstein, perihelion of Mercury, 1915 | MATCHES | EINSTEIN, A. Erklärung der Perihelbewegung des Merkur aus der allgemeinen Relativitätstheorie. *Sitzungsberichte der Königlich Preußischen Akademie der Wissenschaften*, p. 831–839, 1915 (Collected Papers, v. 6, doc. 24) | https://einsteinpapers.press.princeton.edu/vol6-doc/271 |
