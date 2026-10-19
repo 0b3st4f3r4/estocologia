@@ -108,6 +108,8 @@ verification suite, because every row in that table cites one of them:
 cargo run --release --bin labs -- --genetics    # fine resolution in genetics
 cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
 cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
+cargo run --release --bin labs -- --mc-error    # how far each simulated number moves with the seed (Appendix C.3)
+cargo run --release --bin labs -- --propagate   # plug-in, delta and Monte Carlo on the health post (Chapter 5)
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale

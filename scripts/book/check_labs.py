@@ -43,6 +43,8 @@ def main() -> int:
         ("labs --genetics", run_output([str(BIN), "--genetics"])),
         ("labs --streams", run_output([str(BIN), "--streams"])),
         ("labs --eprocess", run_output([str(BIN), "--eprocess"])),
+        ("labs --mc-error", run_output([str(BIN), "--mc-error"])),
+        ("labs --propagate", run_output([str(BIN), "--propagate"])),
         ("labs --listening", run_output([str(BIN), "--listening"])),
         ("labs --h3", run_output([str(BIN), "--h3"])),
         ("labs --bridge", run_output([str(BIN), "--bridge"])),

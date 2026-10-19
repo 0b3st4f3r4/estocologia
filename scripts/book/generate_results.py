@@ -136,6 +136,8 @@ def main() -> int:
         "| BTlabs --geneticsBT | Interventional validation resolution: what the second cell line changes |\n"
         "| BTlabs --streamsBT | The real streams of Chapter 20, rebuilt on public data with a declared specification |\n"
         "| BTlabs --eprocessBT | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |\n"
+        "| BTlabs --mc-errorBT | The Monte Carlo error of every simulated number a reading of the book depends on |\n"
+        "| BTlabs --propagateBT | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |\n"
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
@@ -195,6 +197,19 @@ def main() -> int:
         [str(BIN), "--eprocess"],
         "One ledger per area over the 38 recorded tests, the mean of the e-values, two readings as declared in "
         "empirical/p22-parada/DECLARACAO_2.md.",
+    ))
+    parts.append(section_block(
+        "The Monte Carlo error of the simulated numbers",
+        [str(BIN), "--mc-error"],
+        "Each simulated quantile a reading depends on, rerun under twenty other seeds; each simulated share with its "
+        "exact Clopper-Pearson interval (Appendix C.3).",
+    ))
+    parts.append(section_block(
+        "Three answers to the same question",
+        [str(BIN), "--propagate"],
+        "The wait of a day at the health post with uncertain, correlated rates: plug-in, delta method with its "
+        "second-order mean, Monte Carlo, the uncertainty budget, and the rule on when the linear answer may decide "
+        "(Chapter 5).",
     ))
     parts.append(section_block(
         "H3 chain re-executed from the repository tree",

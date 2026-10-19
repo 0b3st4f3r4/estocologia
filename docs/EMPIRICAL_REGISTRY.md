@@ -144,6 +144,22 @@ Point 24: the claim drawn from declaration 2 of point 23, sealed with its data b
 | Rule: Δ < 0 in all three and the interval below zero in two; met: negative in two, below zero in one | `labs --resonance` |
 | Synthetic controls: interaction in resonance Δ −0.00167 [−0.00282; −0.00054]; none Δ −0.00005 [−0.00105; +0.00089] | `labs --resonance` |
 
+## The Monte Carlo error of the simulated numbers (2026-10-19)
+
+Each simulated quantile on which a reading of the book depends, rerun under twenty seeds other than the published
+one; each simulated share, with its exact Clopper-Pearson interval. Instrument: `labs --mc-error`. No reading of the
+book changes; two published values sit at the edge of their seed spread.
+
+| Number | Instrument |
+| --- | --- |
+| Null q95 of the ECE, flights 2013 raw: published 0.0046, twenty seeds 0.0045 to 0.0047; ECE 0.0260 above it under every seed | `labs --mc-error` |
+| Null q95, flights 2023 corrected: published 0.0034, twenty seeds 0.0034 to 0.0035; ECE 0.0177 above it under every seed | `labs --mc-error` |
+| Null q95, cyclones: published 0.0107, twenty seeds 0.0107 to 0.0111 (sd 0.00010); ECE 0.0121 above it under every seed | `labs --mc-error` |
+| Null q95, Toronto: published 0.0315, twenty seeds 0.0313 to 0.0323 (sd 0.00029); ECE 0.0354 above it under every seed | `labs --mc-error` |
+| Chapter 8, simulated null at 1,488 cases: published q95 0.0425; twenty seeds 0.0409 to 0.0424, mean 0.0416 (sd 0.00040): the published seed gave the largest value, and the honest report is about 0.042 | `labs --mc-error` |
+| Chapter 14, bootstrap interval of Hill k=50 (300 replicas): published [1.37; 2.61]; twenty seeds: lower bound 1.34 to 1.46, upper bound 2.43 to 2.60 (mean 2.535); it contains 2 under every seed | `labs --mc-error` |
+| Shares, exact 95% intervals: 20.3% of 4,000 [19.06%; 21.58%]; 42.3% [40.76%; 43.85%]; 5.2% [4.53%; 5.93%]; 45.1% of 2,000 [42.90%; 47.31%]; 36.8% of 10,000 [35.85%; 37.75%]; 1.94% of 10,000 [1.68%; 2.23%]; 0.0140 of 2,000 [0.0093; 0.0202] | `labs --mc-error` |
+
 ## Recipes of the course examples (2026-10-19)
 
 Worked examples that the book cited without a recipe, recomputed from the recipe the text now states. The instrument

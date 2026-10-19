@@ -29,6 +29,8 @@ fn main() {
     let mut genetics_flag = false;
     let mut streams_flag = false;
     let mut eprocess_flag = false;
+    let mut mc_error_flag = false;
+    let mut propagate_flag = false;
     let mut listening_flag = false;
     let mut chain_flag = false;
     let mut bridge_flag = false;
@@ -89,6 +91,8 @@ fn main() {
             "--genetics" => genetics_flag = true,
             "--streams" => streams_flag = true,
             "--eprocess" => eprocess_flag = true,
+            "--mc-error" => mc_error_flag = true,
+            "--propagate" => propagate_flag = true,
             "--listening" => listening_flag = true,
             "--h3" => chain_flag = true,
             "--bridge" => bridge_flag = true,
@@ -109,7 +113,7 @@ fn main() {
     }
     if help {
         println!(
-            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams"
+            "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate"
         );
         println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
@@ -150,6 +154,14 @@ fn main() {
     }
     if streams_flag {
         stochology_book::streams::run();
+        return;
+    }
+    if propagate_flag {
+        stochology_book::propagate::run();
+        return;
+    }
+    if mc_error_flag {
+        stochology_book::mc_error::run();
         return;
     }
     if eprocess_flag {

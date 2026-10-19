@@ -14,6 +14,8 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --genetics` | Interventional validation resolution: what the second cell line changes |
 | `labs --streams` | The real streams of Chapter 20, rebuilt on public data with a declared specification |
 | `labs --eprocess` | The H2 gate under the e-process, over the 38 recorded tests, as declared before the run |
+| `labs --mc-error` | The Monte Carlo error of every simulated number a reading of the book depends on |
+| `labs --propagate` | Three answers to the same question: plug-in, delta method and Monte Carlo, with the uncertainty budget |
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
@@ -253,6 +255,75 @@ One ledger per area over the 38 recorded tests, the mean of the e-values, two re
   Trabalho             2      0         0.5000  does not
   Transporte           2      1         2.9927  does not
   areas that cross: 3 (Educação, Farmacologia, Física) | gate under the e-process: PASSES
+~~~
+
+### The Monte Carlo error of the simulated numbers
+
+Each simulated quantile a reading depends on, rerun under twenty other seeds; each simulated share with its exact Clopper-Pearson interval (Appendix C.3).
+
+~~~bash
+./target/release/labs --mc-error
+~~~
+
+~~~text
+== The Monte Carlo error of the simulated numbers ==
+each simulated quantile rerun under 20 seeds other than the published one; each simulated share with its exact 95% interval
+
+-- the null q95 of the ECE in the rebuilt binary vaults (Chapters 8 and 20; 2000 simulations each) --
+  flights 2013, raw        ECE 0.0260 | published q95 0.0046, order-statistic 95% interval [0.0045; 0.0047] | 20 seeds: mean 0.0046, sd 0.00005, range [0.0045; 0.0047] | ECE above q95 in 20 of 20
+  flights 2023, corrected  ECE 0.0177 | published q95 0.0034, order-statistic 95% interval [0.0034; 0.0035] | 20 seeds: mean 0.0035, sd 0.00003, range [0.0034; 0.0035] | ECE above q95 in 20 of 20
+  cyclones 2015-2022       ECE 0.0121 | published q95 0.0107, order-statistic 95% interval [0.0105; 0.0110] | 20 seeds: mean 0.0109, sd 0.00010, range [0.0107; 0.0111] | ECE above q95 in 20 of 20
+  Toronto 2001-2002        ECE 0.0354 | published q95 0.0315, order-statistic 95% interval [0.0307; 0.0322] | 20 seeds: mean 0.0318, sd 0.00029, range [0.0313; 0.0323] | ECE above q95 in 20 of 20
+
+-- the simulated null at Toronto's size in the laboratory of Chapter 8 (2,000 simulations each) --
+  published q95 0.0425 | 20 seeds: mean 0.0416, sd 0.00040, range [0.0409; 0.0424] | Toronto's real ECE 0.0354 below the simulated q95 in 20 of 20
+
+-- the bootstrap interval of the tail index in Chapter 14 (300 replicas each) --
+  published [1.37; 2.61] | 20 seeds: lower mean 1.395 sd 0.030 range [1.34; 1.46], upper mean 2.535 sd 0.040 range [2.43; 2.60] | the interval contains 2 in 20 of 20
+
+-- shares counted over independent draws, with the exact 95% interval --
+  Chapter  7: garden of paths, Simmons' four freedoms: false positives: 0.2030 of 4000 (about 812) | Monte Carlo sd 0.0064 | exact 95% interval [0.1906; 0.2158]
+  Chapter  7: garden of paths, the large family: false positives: 0.4230 of 4000 (about 1692) | Monte Carlo sd 0.0078 | exact 95% interval [0.4076; 0.4385]
+  Chapter  7: pre-registered test: false positives: 0.0520 of 4000 (about 208) | Monte Carlo sd 0.0035 | exact 95% interval [0.0453; 0.0593]
+  Chapter  8: null ECE above 0.03 at Toronto's size: 0.4510 of 2000 (about 902) | Monte Carlo sd 0.0111 | exact 95% interval [0.4290; 0.4731]
+  Chapter 10: investors with no loss in 250 weeks (all-in under the raw frequency): 0.3680 of 10000 (about 3680) | Monte Carlo sd 0.0048 | exact 95% interval [0.3585; 0.3775]
+  Chapter 10: investors ruined in 1,000 weeks under the raw frequency: 0.0194 of 10000 (about 194) | Monte Carlo sd 0.0014 | exact 95% interval [0.0168; 0.0223]
+  Chapter 13: replicas of the claim world as bad as the real index (p): 0.0140 of 2000 (about 28) | Monte Carlo sd 0.0026 | exact 95% interval [0.0093; 0.0202]
+~~~
+
+### Three answers to the same question
+
+The wait of a day at the health post with uncertain, correlated rates: plug-in, delta method with its second-order mean, Monte Carlo, the uncertainty budget, and the rule on when the linear answer may decide (Chapter 5).
+
+~~~bash
+./target/release/labs --propagate
+~~~
+
+~~~text
+== Three answers to the same question: the wait of a day at the health post ==
+W = 60 lambda / (mu (mu - lambda)) min | lambda ~ N(8, 0.6^2) per hour | mu ~ N(12, 0.8^2) per hour | question: P(W > 20 min), promise <= 0.05 | 400000 draws, seed 2026
+sensitivities at the mean: dW/dlambda = +3.750 min per arrival/h, dW/dmu = -3.333 min per service/h
+
+-- correlation between arrivals and pace: -0.5 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 11.37) | sd 4.26 | P(W > 20) = 0.0095 | decision: promise kept
+  Monte Carlo: mean 12.82 | median 9.99 | sd 165.93 | q95 24.47 | P(W > 20) = 0.0884 (MC sd 0.0004) | days that never clear 199 | decision: second nurse
+  budget of the delta variance 18.17 min^2: arrivals 5.06 (28%), pace 7.11 (39%), covariance +6.00 (+33%)
+  the linear answer may decide: false (delta and Monte Carlo differ by 0.0789, more than half the promise, 0.025)
+
+-- correlation between arrivals and pace: +0.0 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 10.92) | sd 3.49 | P(W > 20) = 0.0021 | decision: promise kept
+  Monte Carlo: mean 11.22 | median 9.99 | sd 9.08 | q95 19.99 | P(W > 20) = 0.0499 (MC sd 0.0003) | days that never clear 14 | decision: promise kept
+  budget of the delta variance 12.17 min^2: arrivals 5.06 (42%), pace 7.11 (58%), covariance -0.00 (-0%)
+  the linear answer may decide: false (delta and Monte Carlo differ by 0.0478, more than half the promise, 0.025)
+
+-- correlation between arrivals and pace: +0.5 --
+  plug-in:     W = 10.00 min | no probability | decision: promise kept
+  delta:       mean 10.00 (second order 10.47) | sd 2.48 | P(W > 20) = 0.0000 | decision: promise kept
+  Monte Carlo: mean 10.52 | median 9.99 | sd 2.98 | q95 15.90 | P(W > 20) = 0.0107 (MC sd 0.0002) | days that never clear 0 | decision: promise kept
+  budget of the delta variance 6.17 min^2: arrivals 5.06 (82%), pace 7.11 (115%), covariance -6.00 (-97%)
+  the linear answer may decide: true (delta and Monte Carlo differ by 0.0107, within half the promise, 0.025)
 ~~~
 
 ### H3 chain re-executed from the repository tree
@@ -1249,7 +1320,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 103 tests
+running 109 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1332,6 +1403,9 @@ test fila::tests::registry_bands_and_declared_divergence ... ok
 test fila::tests::the_r2_margin_is_the_p90_of_the_residual_cv ... ok
 test fila::tests::weekday_of_known_dates ... ok
 test fila::tests::working_print ... ok
+test mc_error::tests::clopper_pearson_matches_known_values ... ok
+test mc_error::tests::the_order_interval_brackets_the_quantile ... ok
+test mc_error::tests::the_seeds_are_twenty_and_none_is_the_published_one ... ok
 test ponte::tests::a_supported_thesis_without_a_fair_test_is_rejected ... ok
 test ponte::tests::the_choice_is_mechanical_deterministic_and_in_proportion ... ok
 test ponte::tests::the_fair_test_registry_declares_what_is_missing ... ok
@@ -1340,6 +1414,9 @@ test ponte::tests::the_pilot_re_derives_the_tie_at_the_ceiling ... ok
 test ponte::tests::the_registry_declares_the_verdict_if_the_window_lapses ... ok
 test ponte::tests::the_status_em_teste_without_the_roles_is_rejected ... ok
 test ponte::tests::with_the_roles_designated_the_test_may_run ... ok
+test propagate::tests::the_covariance_moves_the_spread_and_not_the_plug_in ... ok
+test propagate::tests::the_normal_tail_is_right_at_known_points ... ok
+test propagate::tests::the_wait_at_the_mean_is_ten_minutes_and_the_gradient_matches_differences ... ok
 test segunda::tests::the_bank_is_recounted_in_rust_and_matches_the_published_numbers ... ok
 test segunda::tests::the_bias_of_the_loop_agrees_in_two_sources ... ok
 test segunda::tests::the_multiplicity_thresholds_match_alpha_over_m ... ok
@@ -1354,7 +1431,7 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 103 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 109 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1751,6 +1828,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p23-onda | DECLARACAO_2.md | 62a41e44ecab70006e3bbebd92c91e368f2f8e594c456d3c8ef648dd378b4994 |
 | p24-ressonancia | DECLARACAO.md | 2eee5af36122558ce06b917abd7095b2154e2db10c79676aa9bea61505d8fe19 |
 
-Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 21 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--pretest,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 27, of which 7 are declaration 2 or later (declared rectification with both values) | empirical points: 20 | `labs` instruments: 23 (--all,--bank,--bridge,--chapter,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **6493 lines** and **89505 words**, sha256 `7504cc96de86487e812820f4ea7de4ad4741bed6ac3144f2841b7bf6510ead25`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **6636 lines** and **91896 words**, sha256 `be75fcd4213cdf5cf2cc2649c2fc914d81aaf303162f131128669153f4c4e902`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
