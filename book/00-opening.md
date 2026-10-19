@@ -34,6 +34,19 @@ architecture check form, presence and reproducibility, not correctness. Appendix
 of code that passed every test and every gate of this book until an outside reading found them. Read each number as
 an invitation to check it, not as a certificate.
 
+**What the reader cannot run.** The rule above holds for the simulations and for five real datasets: the bank calls,
+the Dow Jones, the two files of the job-training experiment and the Danish fires. It does not hold for everything the
+book cites. The real cases of Chapters 19 and 20 (the physical chambers, the cardiac trial, the small classes, the
+yeast, the flights, the cyclones, the arrests and the traffic stops), the propensity fit and the Kelly interval of
+Chapter 17, the skills of the forecasters of Chapter 18, and a handful of worked examples in Chapters 3, 7, 10, 11, 13,
+14 and 21 come from records of the research, made with code that does not run beside this book. Appendix E lists them.
+They carry the weight of a citation, not of a check, and the lessons that lean on them lean on a citation.
+
+**The thesis that organises the book.** The bridge thesis of Chapter 2 (most fallacies are a misalignment between the
+world, the model and the agent, not an error of arithmetic) has had one direct test, and it tied at the ceiling
+(Chapter 21). Until a fair test, with cases chosen and judged by people outside the work, is run, the thesis is a
+working hypothesis about where to look first, not a result, and the book should be read that way.
+
 ---
 
 ## The three-step ramp
