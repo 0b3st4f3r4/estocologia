@@ -105,6 +105,23 @@ fn w_formula(lambda: f64, mu: f64) -> f64 {
     60.0 * lambda / (mu * (mu - lambda))
 }
 
+/// Mean wait over a demand that is `low` or `high` with equal chance: the mean of the two waits.
+pub fn mean_wait_two_rates(low: f64, high: f64, mu: f64) -> f64 {
+    0.5 * w_formula(low, mu) + 0.5 * w_formula(high, mu)
+}
+
+/// Exact mean of W over a uniform rate on [a, b]:
+/// 60 / (mu (b - a)) * [(a - b) + mu ln((mu - a)/(mu - b))].
+/// Until 2026-10-19 a six-point midpoint rule gave 14.10 min instead of 14.46; a reimplementation found it.
+pub fn mean_wait_uniform(a: f64, b: f64, mu: f64) -> f64 {
+    60.0 / (mu * (b - a)) * ((a - b) + mu * ((mu - a) / (mu - b)).ln())
+}
+
+/// Second derivative of W in lambda: 120 / (mu - lambda)^3.
+pub fn wait_curvature(lambda: f64, mu: f64) -> f64 {
+    120.0 / (mu - lambda).powi(3)
+}
+
 fn variance(xs: &[f64]) -> f64 {
     let m = xs.iter().sum::<f64>() / xs.len() as f64;
     xs.iter().map(|x| (x - m) * (x - m)).sum::<f64>() / (xs.len() as f64 - 1.0)
@@ -148,14 +165,11 @@ pub fn run() {
         w_formula(11.0, mu)
     );
     let f_mean = w_formula(8.0, mu);
-    let e_f_bimodal = 0.5 * w_formula(5.0, mu) + 0.5 * w_formula(11.0, mu);
+    let e_f_bimodal = mean_wait_two_rates(5.0, 11.0, mu);
     let var_bimodal = 9.0;
     let var_uniform = 3.0;
-    // Exact mean of W over a uniform rate on [5, 11]: 60 / (mu (b - a)) * [(a - b) + mu ln((mu - a)/(mu - b))].
-    // Until 2026-10-19 a six-point midpoint rule gave 14.10 min instead of 14.46; a reimplementation found it.
-    let (a, b) = (5.0_f64, 11.0_f64);
-    let e_f_uniform = 60.0 / (mu * (b - a)) * ((a - b) + mu * ((mu - a) / (mu - b)).ln());
-    let f2 = 120.0 / (mu - 8.0).powi(3);
+    let e_f_uniform = mean_wait_uniform(5.0, 11.0, mu);
+    let f2 = wait_curvature(8.0, mu);
     println!(
         "Jensen: f(E[X]) = {:.2} min | E[f(X)] = {:.2} (5 or 11) and {:.2} (uniform 5..11)",
         f_mean, e_f_bimodal, e_f_uniform

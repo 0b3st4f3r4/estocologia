@@ -1507,7 +1507,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 131 tests
+running 132 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1605,6 +1605,7 @@ test multiverse::tests::the_mg1_wait_is_the_mm1_wait_at_unit_cv ... ok
 test oracles::tests::every_mutant_is_killed ... ok
 test oracles::tests::every_oracle_kills_something_or_is_a_declared_guard ... ok
 test oracles::tests::every_oracle_passes_on_the_instruments ... ok
+test oracles::tests::the_mutants_of_chapter_5_reproduce_the_values_printed_before ... ok
 test oracles::tests::the_old_threshold_reproduces_the_value_chapter_10_printed ... ok
 test oracles::tests::the_reviews_reference_rejects_the_right_formula ... ok
 test passk::tests::jensen_holds_for_the_beta_moments_and_binds_only_without_spread ... ok
@@ -1640,21 +1641,25 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 132 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 102 tests
+running 106 tests
 test agents::tests::a_missing_safeguard_fails_the_agent_of_that_band ... ok
 test agents::tests::eight_agents_approve_a_card_with_safeguards ... ok
 test agents::tests::safeguard_without_structural_anchor_does_not_pass ... ok
 test agents::tests::the_report_is_a_function_of_the_bits_only ... ok
+test audit::tests::a_leaf_cannot_pose_as_an_interior_node ... ok
+test audit::tests::every_leaf_moves_the_separated_root ... ok
 test audit::tests::repeating_the_last_hash_keeps_the_root_a_declared_limit ... ok
 test audit::tests::sha256_matches_the_known_vectors ... ok
 test audit::tests::the_chain_detects_tampering ... ok
 test audit::tests::the_merkle_root_is_reproducible ... ok
+test audit::tests::the_separated_root_is_the_tree_rfc6962_defines ... ok
+test audit::tests::the_separated_root_tells_a_list_from_its_last_element_repeated ... ok
 test audit::vault::tests::a_single_opening_and_the_second_failure_is_recorded ... ok
 test audit::vault::tests::degenerate_cut_empty_series_and_unordered_series_are_refused ... ok
 test audit::vault::tests::erring_after_the_opening_requires_a_new_vault_and_not_an_adjustment ... ok
@@ -1750,7 +1755,7 @@ test schema::tests::the_chain_of_the_file_is_continuous_and_ends_at_the_card_ver
 test schema::tests::the_conduct_fields_survive_the_round_trip_and_each_refusal_names_its_field ... ok
 test schema::tests::the_multiverse_and_the_reliability_survive_the_round_trip_and_are_checked ... ok
 
-test result: ok. 102 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 106 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 3 tests
 test tests::defect_in_h3_voos23_fails_gate_g6 ... ok
@@ -2063,4 +2068,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 29 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7066 lines** and **99741 words**, sha256 `29ea73ba3144ff10277527a4c28b8029a55a1d10df4bb7703a89c06b4425c6cf`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7080 lines** and **100122 words**, sha256 `21696f15dce8f41ed0f886c398c1111089e83c57e39165e8a049c37f9a3b6aa1`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
