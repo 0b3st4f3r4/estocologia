@@ -189,7 +189,7 @@ assistant, from the chapters as they stand; it is part of the book's errata like
 
 ## Chapter 9. The ladder of cause and effect
 
-1. *(Concept)* Association (seeing), intervention (acting, a $\operatorname{do}$), counterfactual (imagining a
+1. *(Concept)* Association (seeing), intervention (acting, a $\mathrm{do}$), counterfactual (imagining a
    parallel world).
 2. *(Concept)* $X \to Z \leftarrow Y$: $Z$ is a collider. Conditioning on it (looking only at the admitted, the hired,
    the selected) opens an association between two independent causes; Berkson's inpatients and the chapter's

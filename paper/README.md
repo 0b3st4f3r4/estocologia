@@ -95,7 +95,7 @@ Claim (b) is the operational version: each bias of the classical catalogue corre
 Each layer has its type of uncertainty, and confusing them is a classical error. The assignment of a type to a layer, however, is relative to a description, and the paper reads it that way. **Aleatory** uncertainty belongs to the World: it is the chance of the next toss of a known coin, and no amount of data eliminates it. **Epistemic** uncertainty belongs to the Model: it is our ignorance about the bias of the coin, and it shrinks with each toss. The law of total variance separates the two with precision, once θ is chosen:
 
 $$
-\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{random (World)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}
+\mathrm{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\mathrm{Var}(Y \mid \theta)\right]}_{\text{random (World)}} + \underbrace{\mathrm{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}
 $$
 
 The split depends on what is put inside θ. A tossed coin is a deterministic mechanical system: with the initial conditions measured, the face is predictable, and Diaconis, Holmes, and Montgomery (2007) found that a vigorously flipped coin lands on the side it started about 51% of the time. Whoever conditions only on the coin sees aleatory uncertainty; whoever conditions on the hand sees epistemic uncertainty. The line between the two is a choice of coarse-graining, like entropy in statistical mechanics. The layers are therefore roles in an inference, relative to a declared partition, and not regions of reality; the architecture asks that the partition be declared because the type of the uncertainty is not a property of the World alone.
@@ -114,7 +114,7 @@ The third, **Knightian** uncertainty, is the most dangerous because it does not 
 The mathematical tool that crosses the three layers is modest: Jensen's inequality. For a convex function f, the average result is not the result of the average case:
 
 $$
-\mathbb{E}[f(X)] \;\ge\; f(\mathbb{E}[X]), \qquad \mathbb{E}[f(X)] - f(\mathbb{E}[X]) \approx \tfrac{1}{2} f''(\mu)\,\operatorname{Var}(X)
+\mathbb{E}[f(X)] \;\ge\; f(\mathbb{E}[X]), \qquad \mathbb{E}[f(X)] - f(\mathbb{E}[X]) \approx \tfrac{1}{2} f''(\mu)\,\mathrm{Var}(X)
 $$
 
 In words: when the system reacts nonlinearly, the variability of the World does not cancel out in the average; it charges a price proportional to its variance. Planning by the average case is ignoring that bill. Section 5 shows how much it costs in a health clinic.
@@ -226,7 +226,7 @@ Each row of the table hides a craft. The data agent (F2) begins with a decision 
 The frontier agent (F4) knows that, when the posterior has no closed form, the computer returns a sample, not an answer. The convergence diagnosis measures whether several chains agree among themselves, not whether the model is right. The strongest test is calibration by simulation: a parameter is drawn from the prior, data are simulated with it, and the sampler is run. If the algorithm is honest, the position of the true value among the L samples of the posterior is uniform:
 
 $$
-\operatorname{rank}\big(\tilde\theta;\,\theta^{(1)},\dots,\theta^{(L)}\big)\sim \operatorname{Uniform}\{0,\dots,L\}
+\mathrm{rank}\big(\tilde\theta;\,\theta^{(1)},\dots,\theta^{(L)}\big)\sim \mathrm{Uniform}\{0,\dots,L\}
 $$
 
 For black-box models, conformal prediction gives a guaranteed coverage without supposing the shape of the distribution, P(Y ∈ C(X)) ≥ 1 − α; it was an adaptive version of it that H3 used under drift.
