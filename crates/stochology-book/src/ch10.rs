@@ -554,16 +554,22 @@ fn wild_tail() {
     println!();
 }
 
+/// The per-session drift and volatility calibrated by the two numbers of the Dow
+/// (h1-real/README.md): a drag of 0.14 per year at 3x and a growth of 0.051 per year at 1x,
+/// with d = 252 sessions per year.
+///   3x: 1/2 * 9 * sigma^2 * d = 0.14 -> sigma^2 = 0.14 / 1134 -> sigma = 0.01111 per session;
+///   1x: (m - 1/2 sigma^2) d = 0.051 -> m d = 0.0666 -> m = 0.000264 per session.
+/// Rectified 2026-10-18: the earlier calibration used sigma = 0.01518 and m = 0.000317, which
+/// inflated the drag and put 3x above 2x. Its comment wrote 4.5 sigma^2 = 0.14 -> 0.01518, but
+/// that equation gives 0.1764 and, with d, 0.01111: the earlier sigma follows from neither, and
+/// its origin is declared not reconstructable (Appendix E, 2026-10-20).
+pub fn dow_calibration() -> (f64, f64) {
+    (0.000264, 0.01111)
+}
+
 fn dow_leverage() {
     println!("== Chapter 10 :: volatility drag at 1x, 2x and 3x ==");
-    // Calibration by the two numbers of the Dow (h1-real/README.md): a drag of 0.14 per year
-    // at 3x and a growth of 0.051 per year at 1x, with d = 252 sessions per year.
-    //   3x: 1/2 * 9 * sigma^2 * d = 0.14 -> sigma^2 = 0.14 / 1134 -> sigma = 0.01111 per session;
-    //   1x: (m - 1/2 sigma^2) d = 0.051 -> m d = 0.0666 -> m = 0.000264 per session.
-    // (Rectified 2026-10-18: the earlier calibration dropped the factor d in the first line and
-    // used sigma = 0.01518 and m = 0.000317, which inflated the drag and put 3x above 2x.)
-    let mu = 0.000264;
-    let sigma = 0.01111;
+    let (mu, sigma) = dow_calibration();
     let sessions = 100_000;
     for c in long_leverage(2026, sessions, mu, sigma) {
         println!(

@@ -157,7 +157,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --seed-spread` | Thirteen laboratories rerun under twenty other seeds, line by line: which numbers move, and whether a verdict moves with them (C.3; minutes long) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 439 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 444 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -677,6 +677,20 @@ audit and is not the independent audit of Chapter 21.
 | C | An oracle with a wrong reference | — | the review's reference $60\lambda/(\mu - \lambda)$ rejects the right wait by up to 1265.00 min | an oracle is a claim too; when it fails on an instrument, the closed form decides which of the two is wrong |
 | 10 | The threshold of Hill | $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$, and the laboratory used $x_{(k)}$: at $k$ = 100, 500, 1,000 and 5,000 the estimate was 1.083, 1.063, 1.100 and 1.101, with interval $[1.032; 1.168]$ at $k = 1,000$ | $x_{(k+1)}$, as in Chapter 14, the horizon H1 and the tail lens: 1.080, 1.059, 1.099 and 1.100, with $[1.031; 1.167]$ at $k = 1,000$; at $k = 20,000$ the value 1.095 does not move | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divided a sum of $k - 1$ terms; the oracles found the two definitions, and the old threshold is now a mutant they kill. The reading (Hill recovers the exponent) does not change |
 | C | Test count | 434 | 439 | the five tests of the oracles |
+
+### The oracles of Chapter 5, the calibration of Chapter 10 and the separated root, 2026-10-20
+
+The same review was carried three steps further. A mutant now has to reproduce the value it stands for: the six-point
+rule of Chapter 5 gives 14.10 min against the closed form's 14.46, as recorded, and the threshold $x_{(k)}$ gives the
+1.083 that Chapter 10 printed. Applied to the calibration of the synthetic market, the rule found that the cause
+recorded above did not produce the value recorded above. No published number changed.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| C | The oracles | 19 identities, 17 of 17 mutants killed | 23 identities (the exact toll of Jensen with two demands, the uniform mean as an integral, the curvature of the wait, the round trip of the market's calibration) and 21 of 21 mutants killed | the formulas of Chapter 5 and the calibration of Chapter 10 had no identity of their own |
+| 10 | Cause of the earlier calibration | "the calibration dropped the factor of 252 sessions" | the earlier $\sigma = 0.01518$ solves $4.5\,\sigma^2 d = 0.14$ with $d = 135.0$ sessions, not 252, and gives a drag at $3\times$ of 0.2613 per year; the equation without $d$ gives 0.1764, and with 252 gives 0.01111 | the recorded cause did not reproduce the recorded value; the research record also counts 135 calendar days of the closure of 1914, and whether the two are related is not known |
+| 18 | Merkle root | a level with an odd count repeats its last hash; a list and the same list with its last element repeated share a root | the legacy root stays, and every root published is still computed by it; beside it, a root with domain separation (leaf $\mathrm{SHA256}(0\mathrm{x}00 \Vert x)$, node $\mathrm{SHA256}(0\mathrm{x}01 \Vert l \Vert r)$, the lone node moved up), checked against the definition of RFC 6962 for 1 to 33 leaves | the declared limit of 2026-10-19; switching the gates to the new root is the owner's decision, since it changes the root that Appendix C cites |
+| C | Test count | 439 | 444 | four tests of the separated root and one of the oracles |
 
 ### Numbers cited without an instrument in this book
 

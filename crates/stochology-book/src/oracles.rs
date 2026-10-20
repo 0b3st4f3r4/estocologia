@@ -12,7 +12,7 @@
 //! the run prints one with a wrong reference and shows that it rejects the right formula.
 
 use crate::ch11::TwoActs;
-use crate::{ch08, ch10, ch11, multiverse, propagate};
+use crate::{ch05, ch08, ch10, ch11, multiverse, propagate};
 use stochology_core::erlang::{erlang_b, erlang_c};
 
 /// The formulas under test, as function pointers so that a mutant can replace one of them.
@@ -24,6 +24,14 @@ pub struct Formulas {
     pub wait_mm1: fn(f64, f64) -> f64,
     /// Gradient of the M/M/1 wait in (lambda, mu).
     pub gradient_mm1: fn(f64, f64) -> (f64, f64),
+    /// Mean M/M/1 wait over a demand that is low or high with equal chance (Chapter 5).
+    pub wait_two_rates: fn(f64, f64, f64) -> f64,
+    /// Mean M/M/1 wait over a uniform demand on [a, b] (Chapter 5).
+    pub wait_uniform: fn(f64, f64, f64) -> f64,
+    /// Second derivative of the M/M/1 wait in lambda (Chapter 5).
+    pub wait_curvature: fn(f64, f64) -> f64,
+    /// Per-session drift and volatility of the synthetic market (Chapter 10).
+    pub dow_calibration: fn() -> (f64, f64),
     /// Erlang C: probability of waiting with c servers and load a.
     pub erlang_c: fn(u32, f64) -> f64,
     /// Kelly fraction of a bet that gains b with chance p and loses a otherwise.
@@ -63,6 +71,10 @@ impl Formulas {
             wait_mg1: multiverse::wait,
             wait_mm1: propagate::wait,
             gradient_mm1: propagate::gradient,
+            wait_two_rates: ch05::mean_wait_two_rates,
+            wait_uniform: ch05::mean_wait_uniform,
+            wait_curvature: ch05::wait_curvature,
+            dow_calibration: ch10::dow_calibration,
             erlang_c,
             kelly: ch10::kelly_binary,
             gev_level: ch11::gev_level,
@@ -199,6 +211,67 @@ fn mm1_gradient(f: &Formulas) -> f64 {
                 [relative(dl, nl), relative(dm, nm)]
             }),
     )
+}
+
+fn mm1(l: f64, m: f64) -> f64 {
+    60.0 * l / (m * (m - l))
+}
+
+fn jensen_two_state(f: &Formulas) -> f64 {
+    // With demand lambda - delta or lambda + delta, the toll of Jensen is exact:
+    // E[W] - W(lambda) = W(lambda) mu delta^2 / (lambda ((mu - lambda)^2 - delta^2)); zero without spread.
+    let mut errors = Vec::new();
+    for (l, m) in [(8.0, 12.0), (4.0, 6.0), (10.0, 20.0)] {
+        errors.push(relative((f.wait_two_rates)(l, l, m), mm1(l, m)));
+        for share in [0.25, 0.5, 0.75, 0.95] {
+            let d: f64 = share * (m - l).min(l);
+            let toll = mm1(l, m) * m * d * d / (l * ((m - l) * (m - l) - d * d));
+            errors.push(relative(
+                (f.wait_two_rates)(l - d, l + d, m) - mm1(l, m),
+                toll,
+            ));
+        }
+    }
+    worst(errors.into_iter())
+}
+
+fn uniform_mean_is_an_integral(f: &Formulas) -> f64 {
+    // (b - a) E[W] is the integral of W from a to b, so its derivative in b is W(b) and in a is -W(a).
+    let h = 1e-5;
+    let integral = |a: f64, b: f64, m: f64| (b - a) * (f.wait_uniform)(a, b, m);
+    worst(
+        [(5.0, 11.0, 12.0), (1.0, 4.0, 6.0), (2.0, 15.0, 20.0)]
+            .into_iter()
+            .flat_map(|(a, b, m)| {
+                let db = (integral(a, b + h, m) - integral(a, b - h, m)) / (2.0 * h);
+                let da = (integral(a + h, b, m) - integral(a - h, b, m)) / (2.0 * h);
+                [relative(db, mm1(b, m)), relative(-da, mm1(a, m))]
+            }),
+    )
+}
+
+fn curvature_matches_wait(f: &Formulas) -> f64 {
+    // The curvature that the second-order account uses is the second difference of W.
+    let h = 1e-3;
+    worst(
+        [(8.0, 12.0), (4.0, 6.0), (10.0, 20.0)]
+            .into_iter()
+            .map(|(l, m)| {
+                let second = (mm1(l + h, m) - 2.0 * mm1(l, m) + mm1(l - h, m)) / (h * h);
+                relative((f.wait_curvature)(l, m), second)
+            }),
+    )
+}
+
+fn dow_calibration_round_trip(f: &Formulas) -> f64 {
+    // The per-session constants give back the two annual numbers they were fitted to, with
+    // d = 252 sessions: a drag of 0.14 at 3x and a growth of 0.051 at 1x. The tolerance is the
+    // rounding of the printed constants.
+    let (m, s) = (f.dow_calibration)();
+    let d = 252.0;
+    let drag3 = 0.5 * 9.0 * s * s * d;
+    let growth1 = (m - 0.5 * s * s) * d;
+    relative(drag3, 0.14).max(relative(growth1, 0.051))
 }
 
 fn erlang_c_single_server(f: &Formulas) -> f64 {
@@ -533,6 +606,34 @@ pub fn catalogue() -> Vec<Oracle> {
             check: mm1_gradient,
         },
         Oracle {
+            id: "jensen_two_state",
+            chapter: "5",
+            statement: "E[W] - W(lambda) = W mu delta^2 / (lambda ((mu - lambda)^2 - delta^2))",
+            tolerance: 1e-12,
+            check: jensen_two_state,
+        },
+        Oracle {
+            id: "uniform_mean_is_an_integral",
+            chapter: "5",
+            statement: "d/db [(b - a) E[W]] = W(b), d/da = -W(a)",
+            tolerance: 1e-7,
+            check: uniform_mean_is_an_integral,
+        },
+        Oracle {
+            id: "curvature_matches_wait",
+            chapter: "5",
+            statement: "W''(lambda) = second difference of W",
+            tolerance: 1e-5,
+            check: curvature_matches_wait,
+        },
+        Oracle {
+            id: "dow_calibration_round_trip",
+            chapter: "10",
+            statement: "4.5 sigma^2 d = 0.14 and (m - sigma^2/2) d = 0.051, d = 252",
+            tolerance: 1e-3,
+            check: dow_calibration_round_trip,
+        },
+        Oracle {
             id: "erlang_c_single_server",
             chapter: "12, 15",
             statement: "C(1, rho) = rho",
@@ -677,6 +778,41 @@ fn m_gradient_drops_two(f: &mut Formulas) {
         (60.0 / (gap * gap), -60.0 * l * (m - l) / (m * gap).powi(2))
     }
     f.gradient_mm1 = g;
+}
+
+/// Chapter 5's uniform mean until 2026-10-19: a six-point midpoint rule.
+pub fn uniform_six_point_midpoint(a: f64, b: f64, mu: f64) -> f64 {
+    (0..6)
+        .map(|i| mm1(a + (b - a) * (i as f64 + 0.5) / 6.0, mu))
+        .sum::<f64>()
+        / 6.0
+}
+
+fn m_uniform_six_points(f: &mut Formulas) {
+    f.wait_uniform = uniform_six_point_midpoint;
+}
+
+fn m_two_rates_at_the_mean(f: &mut Formulas) {
+    fn w(low: f64, high: f64, m: f64) -> f64 {
+        mm1(0.5 * (low + high), m)
+    }
+    f.wait_two_rates = w;
+}
+
+fn m_curvature_wrong_power(f: &mut Formulas) {
+    fn c(l: f64, m: f64) -> f64 {
+        120.0 / (m - l).powi(2)
+    }
+    f.wait_curvature = c;
+}
+
+/// Chapter 10's calibration until 2026-10-18.
+pub fn earlier_dow_calibration() -> (f64, f64) {
+    (0.000317, 0.01518)
+}
+
+fn m_earlier_dow_calibration(f: &mut Formulas) {
+    f.dow_calibration = earlier_dow_calibration;
 }
 
 fn m_erlang_c_is_b(f: &mut Formulas) {
@@ -826,6 +962,26 @@ pub fn mutants() -> Vec<Mutant> {
             apply: m_gradient_drops_two,
         },
         Mutant {
+            id: "uniform_six_points",
+            record: "E, 2026-10-19, ch. 5: a six-point midpoint rule for the uniform mean",
+            apply: m_uniform_six_points,
+        },
+        Mutant {
+            id: "two_rates_at_the_mean",
+            record: "not recorded: the lesson of Chapter 5, W at the mean demand",
+            apply: m_two_rates_at_the_mean,
+        },
+        Mutant {
+            id: "curvature_wrong_power",
+            record: "not recorded: (mu - lambda)^2 for the cube in W''",
+            apply: m_curvature_wrong_power,
+        },
+        Mutant {
+            id: "earlier_dow_calibration",
+            record: "E, 2026-10-18, ch. 10: sigma = 0.01518 and m = 0.000317",
+            apply: m_earlier_dow_calibration,
+        },
+        Mutant {
             id: "erlang_c_is_b",
             record: "not recorded: the loss formula in place of the delay formula",
             apply: m_erlang_c_is_b,
@@ -968,6 +1124,29 @@ pub fn run() {
     println!(
         "reading: an oracle that fails on the instrument convicts one of the two; the closed form decides which"
     );
+
+    println!();
+    println!("== A mutant must reproduce the value it stands for ==");
+    let (m0, s0) = earlier_dow_calibration();
+    println!(
+        "earlier calibration (m = {m0}, sigma = {s0}): drag at 3x = {:.4}/year, growth at 1x = {:.4}/year (fitted to 0.14 and 0.051)",
+        0.5 * 9.0 * s0 * s0 * 252.0,
+        (m0 - 0.5 * s0 * s0) * 252.0
+    );
+    println!(
+        "its stated equation 4.5 sigma^2 = 0.14 gives sigma = {:.4}; with d = 252, {:.5}: the earlier {s0} follows from neither",
+        (0.14_f64 / 4.5).sqrt(),
+        (0.14_f64 / (4.5 * 252.0)).sqrt()
+    );
+    println!(
+        "the earlier sigma solves 4.5 sigma^2 d = 0.14 with d = {:.1} sessions, not 252",
+        0.14 / (4.5 * s0 * s0)
+    );
+    println!(
+        "uniform mean on [5, 11] at mu = 12: six-point rule {:.2} min, closed form {:.2} min",
+        uniform_six_point_midpoint(5.0, 11.0, 12.0),
+        ch05::mean_wait_uniform(5.0, 11.0, 12.0)
+    );
 }
 
 #[cfg(test)]
@@ -1030,6 +1209,18 @@ mod tests {
         // With lambda = 8 and mu = 12 the right wait is 10 min; the reference without /mu says 120.
         assert!((multiverse::wait(8.0, 12.0, 1.0) - 10.0).abs() < 1e-12);
         assert!(wrong_reference_gap() > 100.0);
+    }
+
+    #[test]
+    fn the_mutants_of_chapter_5_reproduce_the_values_printed_before() {
+        assert_eq!(
+            format!("{:.2}", uniform_six_point_midpoint(5.0, 11.0, 12.0)),
+            "14.10"
+        );
+        assert_eq!(
+            format!("{:.2}", ch05::mean_wait_uniform(5.0, 11.0, 12.0)),
+            "14.46"
+        );
     }
 
     #[test]

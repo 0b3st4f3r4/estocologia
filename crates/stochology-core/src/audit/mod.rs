@@ -184,6 +184,17 @@ impl Ledger {
         true
     }
 
+    /// The root of the chain with domain separation (`merkle_root_separated`), over the bytes of
+    /// each event hash. The gates still publish the legacy root.
+    pub fn merkle_root_separated(&self) -> String {
+        let leaves: Vec<&[u8]> = self
+            .events
+            .iter()
+            .map(|e| e.current_hash.as_bytes())
+            .collect();
+        merkle_root_separated(&leaves)
+    }
+
     pub fn merkle_root(&self) -> String {
         merkle_root(
             &self
@@ -222,6 +233,53 @@ pub fn merkle_root(hashes: &[String]) -> String {
         level = next_level;
     }
     level[0].clone()
+}
+
+/// Merkle root with domain separation, as in RFC 6962: a leaf hashes as SHA-256(0x00 || leaf), an
+/// interior node as SHA-256(0x01 || left || right), and a node left alone on an odd level moves up
+/// unchanged instead of being paired with itself. A list and the same list with its last element
+/// repeated no longer share a root, and a leaf cannot pose as an interior node. Pairing from the
+/// left and promoting the lone node builds the tree that RFC 6962 defines by splitting at the
+/// largest power of two below the count (a test checks it for 1 to 33 leaves).
+///
+/// It lives beside `merkle_root` and does not replace it: every root published so far, and the one
+/// the book cites, was computed by the legacy rule (2026-10-20).
+pub fn merkle_root_separated(leaves: &[&[u8]]) -> String {
+    hex(&merkle_root_separated_bytes(leaves))
+}
+
+fn leaf_hash(leaf: &[u8]) -> [u8; 32] {
+    let mut buf = Vec::with_capacity(1 + leaf.len());
+    buf.push(0x00);
+    buf.extend_from_slice(leaf);
+    sha256(&buf)
+}
+
+fn node_hash(left: &[u8; 32], right: &[u8; 32]) -> [u8; 32] {
+    let mut buf = [0u8; 65];
+    buf[0] = 0x01;
+    buf[1..33].copy_from_slice(left);
+    buf[33..65].copy_from_slice(right);
+    sha256(&buf)
+}
+
+fn merkle_root_separated_bytes(leaves: &[&[u8]]) -> [u8; 32] {
+    if leaves.is_empty() {
+        return sha256(b"");
+    }
+    let mut level: Vec<[u8; 32]> = leaves.iter().map(|l| leaf_hash(l)).collect();
+    while level.len() > 1 {
+        let mut next = Vec::with_capacity(level.len().div_ceil(2));
+        let mut pairs = level.chunks_exact(2);
+        for pair in &mut pairs {
+            next.push(node_hash(&pair[0], &pair[1]));
+        }
+        if let [lone] = pairs.remainder() {
+            next.push(*lone);
+        }
+        level = next;
+    }
+    level[0]
 }
 
 #[cfg(test)]
@@ -266,6 +324,67 @@ mod tests {
         let mut others = hashes.clone();
         others[4] = sha256_hex(b"swapped");
         assert_ne!(merkle_root(&hashes), merkle_root(&others));
+    }
+
+    /// RFC 6962, section 2.1, written as the definition: split at the largest power of two below n.
+    fn rfc6962_mth(leaves: &[&[u8]]) -> [u8; 32] {
+        match leaves.len() {
+            0 => sha256(b""),
+            1 => leaf_hash(leaves[0]),
+            n => {
+                let mut k = 1;
+                while k * 2 < n {
+                    k *= 2;
+                }
+                node_hash(&rfc6962_mth(&leaves[..k]), &rfc6962_mth(&leaves[k..]))
+            }
+        }
+    }
+
+    #[test]
+    fn the_separated_root_is_the_tree_rfc6962_defines() {
+        let payloads: Vec<String> = (0..33).map(|i| format!("card-{i}")).collect();
+        for n in 0..=33 {
+            let leaves: Vec<&[u8]> = payloads[..n].iter().map(|p| p.as_bytes()).collect();
+            assert_eq!(
+                merkle_root_separated_bytes(&leaves),
+                rfc6962_mth(&leaves),
+                "n = {n}"
+            );
+        }
+    }
+
+    #[test]
+    fn the_separated_root_tells_a_list_from_its_last_element_repeated() {
+        let three: [&[u8]; 3] = [b"a", b"b", b"c"];
+        let four: [&[u8]; 4] = [b"a", b"b", b"c", b"c"];
+        assert_ne!(merkle_root_separated(&three), merkle_root_separated(&four));
+    }
+
+    #[test]
+    fn a_leaf_cannot_pose_as_an_interior_node() {
+        // Without the prefixes, a single leaf holding the two child hashes would hash like their parent.
+        let (a, b): (&[u8], &[u8]) = (b"A", b"B");
+        let mut forged = Vec::new();
+        forged.extend_from_slice(&leaf_hash(a));
+        forged.extend_from_slice(&leaf_hash(b));
+        assert_ne!(
+            merkle_root_separated(&[forged.as_slice()]),
+            merkle_root_separated(&[a, b])
+        );
+    }
+
+    #[test]
+    fn every_leaf_moves_the_separated_root() {
+        let payloads: Vec<Vec<u8>> = (0..7).map(|i| format!("card-{i}").into_bytes()).collect();
+        let base: Vec<&[u8]> = payloads.iter().map(|p| p.as_slice()).collect();
+        let root = merkle_root_separated(&base);
+        for i in 0..7 {
+            let mut changed = payloads.clone();
+            changed[i][0] ^= 1;
+            let leaves: Vec<&[u8]> = changed.iter().map(|p| p.as_slice()).collect();
+            assert_ne!(merkle_root_separated(&leaves), root, "leaf {i}");
+        }
     }
 
     #[test]
