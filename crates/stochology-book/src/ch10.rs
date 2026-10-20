@@ -319,16 +319,24 @@ pub fn pareto_samples(seed: u64, n: usize, alpha: f64, repetitions: usize) -> Pa
     }
 }
 
-/// Hill estimator with the `k` largest values: alpha_hat = k / sum of the logarithms.
+/// Hill estimator with the `k` largest values over the threshold x_(k+1):
+/// alpha_hat = k / sum ln(x_(i) / x_(k+1)), the definition of Chapter 14 and of the tail lens.
+/// Until 2026-10-20 the threshold was x_(k), whose own term is ln(1) = 0, so k divided a sum of
+/// k - 1 terms (`labs --oracles`, Appendix E).
 pub fn hill(xs: &[f64], k: usize) -> f64 {
-    stochology_core::hill_at_cutoff(xs, k, k.saturating_sub(1))
+    stochology_core::hill_at_cutoff(xs, k, k)
+}
+
+/// The Pareto sample on which the laboratory reads Hill.
+pub fn hill_sample(seed: u64, n: usize, alpha: f64) -> Vec<f64> {
+    let mut rng = SplitMix64::new(seed);
+    (0..n).map(|_| rng.pareto(alpha)).collect()
 }
 
 /// Generates a Pareto sample and returns Hill for several k, with the asymptotic
 /// interval alpha_hat (1 +- 1.96/sqrt(k)).
 pub fn hill_by_k(seed: u64, n: usize, alpha: f64, ks: &[usize]) -> Vec<(usize, f64, f64, f64)> {
-    let mut rng = SplitMix64::new(seed);
-    let xs: Vec<f64> = (0..n).map(|_| rng.pareto(alpha)).collect();
+    let xs = hill_sample(seed, n, alpha);
     ks.iter()
         .map(|k| {
             let h = hill(&xs, *k);

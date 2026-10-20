@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 066 lines**, **99 675 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 066 lines**, **99 741 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 066 lines and 99 675 words, and its 39 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 066 lines and 99 741 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -585,3 +585,19 @@ record is `history/estado-2026-10-20T1518Z.md`.
 | recorded errors that a suite would have caught | not measured | 16 of 16 mutants killed |
 | `cargo test --workspace` | 434 | **439** |
 | assembled book, line count | 7 050 (with 99 294 words) | 7 066 (with 99 675 words) |
+
+## The threshold of Hill in Chapter 10 (2026-10-20, later)
+
+By the owner's go-ahead, the divergence that the oracles found is corrected: Chapter 10 now computes Hill over the
+threshold $x_{(k+1)}$, as Chapter 14, the horizon H1 and the tail lens do, and its text writes the same definition. Four
+printed estimates move in the third decimal (1.083, 1.063, 1.100 and 1.101 become 1.080, 1.059, 1.099 and 1.100); the
+value at $k = 20,000$ and the reading do not change. The old threshold enters `labs --oracles` as a mutant, killed by a
+new oracle that asks one definition of Hill across the chapters, and a test fixes that it reproduces the value the
+chapter printed before. The dated record is `history/estado-2026-10-20T1828Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| definitions of Hill in the book | 2 ($x_{(k)}$ in Chapter 10, $x_{(k+1)}$ elsewhere) | 1 |
+| oracles / mutants killed | 18 / 16 of 16 | 19 / 17 of 17 |
+| `cargo test --workspace` | 439 | 439 (one test replaced) |
+| assembled book, line count | 7 066 (with 99 675 words) | 7 066 (with 99 741 words) |
