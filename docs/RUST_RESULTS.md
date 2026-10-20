@@ -998,10 +998,10 @@ share of each sample's sum that comes from its single largest value (n = 1 000 0
 in the median, 27.55% of the true mean comes from values above the maximum of a sample of one million (median maximum 397420)
 
 Hill estimator with alpha = 1.1 and n = 200 000:
-  k =    100  alpha_hat = 1.083  95% CI approx [0.870; 1.295]
-  k =    500  alpha_hat = 1.063  95% CI approx [0.970; 1.157]
-  k =   1000  alpha_hat = 1.100  95% CI approx [1.032; 1.168]
-  k =   5000  alpha_hat = 1.101  95% CI approx [1.070; 1.131]
+  k =    100  alpha_hat = 1.080  95% CI approx [0.869; 1.292]
+  k =    500  alpha_hat = 1.059  95% CI approx [0.966; 1.152]
+  k =   1000  alpha_hat = 1.099  95% CI approx [1.031; 1.167]
+  k =   5000  alpha_hat = 1.100  95% CI approx [1.070; 1.131]
   k =  20000  alpha_hat = 1.095  95% CI approx [1.080; 1.111]
 reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
@@ -1602,10 +1602,10 @@ test multiverse::tests::the_books_specification_reproduces_the_propagation_lab_d
 test multiverse::tests::the_lognormal_keeps_the_mean_and_the_sd ... ok
 test multiverse::tests::the_main_effects_of_a_balanced_design_add_up_to_one_and_find_a_pure_effect ... ok
 test multiverse::tests::the_mg1_wait_is_the_mm1_wait_at_unit_cv ... ok
-test oracles::tests::chapter_10_hill_drops_the_kth_term ... ok
 test oracles::tests::every_mutant_is_killed ... ok
 test oracles::tests::every_oracle_kills_something_or_is_a_declared_guard ... ok
 test oracles::tests::every_oracle_passes_on_the_instruments ... ok
+test oracles::tests::the_old_threshold_reproduces_the_value_chapter_10_printed ... ok
 test oracles::tests::the_reviews_reference_rejects_the_right_formula ... ok
 test passk::tests::jensen_holds_for_the_beta_moments_and_binds_only_without_spread ... ok
 test passk::tests::the_estimator_is_exact_on_known_counts ... ok
@@ -2063,4 +2063,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 29 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7066 lines** and **99675 words**, sha256 `6d040999aafb225644440736f29369d143c2faecfe437803756ec8aaefacc545`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7066 lines** and **99741 words**, sha256 `29ea73ba3144ff10277527a4c28b8029a55a1d10df4bb7703a89c06b4425c6cf`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

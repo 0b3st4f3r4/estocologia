@@ -44,6 +44,8 @@ pub struct Formulas {
     pub evsi: fn(&TwoActs, f64, f64) -> f64,
     /// Hill estimator over the k largest values.
     pub hill: fn(&[f64], usize) -> f64,
+    /// Hill estimator as the laboratory of Chapter 10 computes it.
+    pub hill_ch10: fn(&[f64], usize) -> f64,
     /// Median of the maximum of n draws of a Pareto(alpha).
     pub median_maximum: fn(u64, f64) -> f64,
     /// Resolution term of Murphy's decomposition.
@@ -71,6 +73,7 @@ impl Formulas {
             evpi: evpi_of,
             evsi: ch11::evsi,
             hill: stochology_horizons::h1::hill,
+            hill_ch10: ch10::hill,
             median_maximum: ch10::median_maximum,
             resolution: ch08::resolution,
         }
@@ -453,6 +456,22 @@ fn hill_definition(f: &Formulas) -> f64 {
     }))
 }
 
+fn hill_one_threshold(f: &Formulas) -> f64 {
+    // Chapter 10 computes Hill with the same definition as Chapter 14, so on the same sample the two
+    // implementations agree, and on known spacings they return the definition.
+    let xs = pareto_quantiles(200_000, 1.1);
+    let mut d = worst(
+        [100usize, 1_000, 20_000]
+            .into_iter()
+            .map(|k| relative((f.hill_ch10)(&xs, k), (f.hill)(&xs, k))),
+    );
+    for k in [5usize, 25, 100] {
+        let (ys, expected) = known_log_spacings(k);
+        d = d.max(relative((f.hill_ch10)(&ys, k), expected));
+    }
+    d
+}
+
 fn median_maximum_solves(f: &Formulas) -> f64 {
     // The median maximum m solves (1 - m^-alpha)^n = 1/2.
     let mut errors = Vec::new();
@@ -598,6 +617,13 @@ pub fn catalogue() -> Vec<Oracle> {
             check: hill_definition,
         },
         Oracle {
+            id: "hill_one_threshold",
+            chapter: "10, 14",
+            statement: "the Hill of Chapter 10 is the Hill of Chapter 14",
+            tolerance: 1e-12,
+            check: hill_one_threshold,
+        },
+        Oracle {
             id: "median_maximum_solves",
             chapter: "10",
             statement: "(1 - m^-alpha)^n = 1/2",
@@ -740,6 +766,15 @@ fn m_hill_log_levels(f: &mut Formulas) {
     f.hill = hill;
 }
 
+/// Chapter 10's Hill until 2026-10-20: threshold x_(k), whose own term is ln(1) = 0.
+pub fn hill_threshold_xk(xs: &[f64], k: usize) -> f64 {
+    stochology_core::hill_at_cutoff(xs, k, k.saturating_sub(1))
+}
+
+fn m_hill_threshold_xk(f: &mut Formulas) {
+    f.hill_ch10 = hill_threshold_xk;
+}
+
 fn m_median_maximum_at_n(f: &mut Formulas) {
     fn m(n: u64, _alpha: f64) -> f64 {
         n as f64
@@ -841,6 +876,11 @@ pub fn mutants() -> Vec<Mutant> {
             apply: m_hill_log_levels,
         },
         Mutant {
+            id: "hill_threshold_xk",
+            record: "E, 2026-10-20, ch. 10: the threshold x_(k), found by these oracles",
+            apply: m_hill_threshold_xk,
+        },
+        Mutant {
             id: "median_maximum_at_n",
             record: "E, 2026-10-19, ch. 10: n^(1 - alpha) placed the maximum at n",
             apply: m_median_maximum_at_n,
@@ -871,18 +911,6 @@ pub fn wrong_reference_gap() -> f64 {
         let wrong_reference = 60.0 * l / (m - l);
         (multiverse::wait(l, m, 1.0) - wrong_reference).abs()
     }))
-}
-
-/// A divergence the oracles found between the book's own implementations of Hill.
-/// Chapter 10 (and its text) take x_(k) as the threshold; Chapter 14, the horizon H1 and the
-/// Scalonomy lens take x_(k+1). In the first the k-th term is ln(1) = 0, so it divides by k a sum
-/// of k-1 terms, an upward bias of k/(k-1) in expectation. Returns (chapter 10, chapter 14, ratio)
-/// on a deterministic Pareto(1.1) tail of 200,000 expected quantiles.
-pub fn hill_threshold_divergence(k: usize) -> (f64, f64, f64) {
-    let xs = pareto_quantiles(200_000, 1.1);
-    let ch10 = ch10::hill(&xs, k);
-    let ch14 = stochology_horizons::h1::hill(&xs, k);
-    (ch10, ch14, ch10 / ch14)
 }
 
 pub fn run() {
@@ -939,19 +967,6 @@ pub fn run() {
     );
     println!(
         "reading: an oracle that fails on the instrument convicts one of the two; the closed form decides which"
-    );
-
-    println!();
-    println!("== Finding: two thresholds for Hill in the same book ==");
-    for k in [100usize, 1_000, 20_000] {
-        let (a, b, r) = hill_threshold_divergence(k);
-        println!(
-            "k = {k:>6}: threshold x_(k) (ch. 10) = {a:.4}  threshold x_(k+1) (ch. 14) = {b:.4}  ratio = {r:.6}  k/(k-1) = {:.6}",
-            k as f64 / (k as f64 - 1.0)
-        );
-    }
-    println!(
-        "reading: Chapter 10 divides by k a sum of k-1 non-zero terms, a bias of k/(k-1) in expectation; declared, not changed"
     );
 }
 
@@ -1018,17 +1033,11 @@ mod tests {
     }
 
     #[test]
-    fn chapter_10_hill_drops_the_kth_term() {
-        for k in [5usize, 25, 100] {
-            let (xs, expected) = known_log_spacings(k);
-            let ch14 = stochology_horizons::h1::hill(&xs, k);
-            assert!(relative(ch14, expected) < 1e-12);
-            // Chapter 10's threshold is x_(k), the smallest of the k: its own term is ln(1) = 0.
-            let logs: Vec<f64> = xs[..k].iter().map(|x| x.ln()).collect();
-            let smallest = logs.iter().copied().fold(f64::INFINITY, f64::min);
-            let sum: f64 = logs.iter().map(|c| c - smallest).sum();
-            let ch10 = ch10::hill(&xs, k);
-            assert!(relative(ch10, k as f64 / sum) < 1e-12);
-        }
+    fn the_old_threshold_reproduces_the_value_chapter_10_printed() {
+        // The sample of the Chapter 10 laboratory: seed 7, n = 200,000, alpha = 1.1. With the
+        // threshold x_(k) it printed 1.083 at k = 100; with x_(k+1) it prints 1.080.
+        let xs = ch10::hill_sample(7, 200_000, 1.1);
+        assert_eq!(format!("{:.3}", hill_threshold_xk(&xs, 100)), "1.083");
+        assert_eq!(format!("{:.3}", ch10::hill(&xs, 100)), "1.080");
     }
 }

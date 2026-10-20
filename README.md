@@ -61,7 +61,7 @@ real-world data.
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 066 lines and 99 675 words assembled from `book/` |
+| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 066 lines and 99 741 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
 | `crates/` | The Rust workspace, **eight crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (book laboratories, binary `labs`), and `-wasm` (WebAssembly playground); the wave engine left on 2026-10-19 (`docs/declarations/REMOVED_WAVE.md`) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
@@ -92,7 +92,7 @@ Measurement of this tree on **2026-10-19**, each row with the command that produ
 | Instruments | **29** in `labs` (one, `--seed-spread`, takes minutes and is recorded in `docs/SEED_SPREAD.md` rather than run by the suite) (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--eprocess`, `--mc-error`, `--propagate`, `--passk`, `--multiverse`, `--oracles`, `--stacking`, `--discrepancy`, `--h3`, `--second-opinion`, `--bridge`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `9716e28a87bec9cf…` and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **7 066 lines**, **99 675 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **7 066 lines**, **99 741 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **39**, none divergent (48 counted the R-axis lines before the book was rewritten as content only) | `scripts/book/check_labs.py` |
 | Seals | **36 files**, **143 verified targets**, 18 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 

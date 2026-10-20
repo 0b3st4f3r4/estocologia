@@ -668,14 +668,14 @@ A review made with AI assistants proposed that every formula of a decision pass 
 it runs on data. The review's own reference for the M/M/1 wait left out the division by $\mu$, the same kind of error as
 the Kelly row of the first table, so the oracles were built with a second rule: each recorded error of this appendix is
 rewritten as a mutant with the signature of the instrument it lived in, and an oracle counts only if a mutant fails it.
-`labs --oracles` runs both. No published number changed. Like the readings above, this one is outside the authors'
+`labs --oracles` runs both. The oracles found one wrong definition, in Chapter 10, corrected in the last row. Like the readings above, this one is outside the authors'
 audit and is not the independent audit of Chapter 21.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| C | The check of a formula | one test per error, written after it was found | 18 identities at limit cases (Pollaczek–Khinchine at $c_v = 1$ and $c_v = 0$, $C(1, \rho) = \rho$, $g'(f^*) = 0$, $F(\text{level}) = 1 - 1/T$, the round trip of the Chouldechova identity, $0 \le \text{EVSI} \le \text{EVPI}$, the scale invariance of Hill, RES of a constant forecaster, and others); all pass on the instruments, and 16 of 16 mutants die | a test written after an error catches that error; an oracle is measured by the errors it would have caught |
+| C | The check of a formula | one test per error, written after it was found | 19 identities at limit cases (Pollaczek–Khinchine at $c_v = 1$ and $c_v = 0$, $C(1, \rho) = \rho$, $g'(f^*) = 0$, $F(\text{level}) = 1 - 1/T$, the round trip of the Chouldechova identity, $0 \le \text{EVSI} \le \text{EVPI}$, the scale invariance of Hill, RES of a constant forecaster, one definition of Hill across chapters, and others); all pass on the instruments, and 17 of 17 mutants die | a test written after an error catches that error; an oracle is measured by the errors it would have caught |
 | C | An oracle with a wrong reference | — | the review's reference $60\lambda/(\mu - \lambda)$ rejects the right wait by up to 1265.00 min | an oracle is a claim too; when it fails on an instrument, the closed form decides which of the two is wrong |
-| 10, 14 | The threshold of Hill | Chapter 10 writes $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$ and its laboratory uses $x_{(k)}$; Chapter 14, the horizon H1 and the tail lens use $x_{(k+1)}$ | declared, not changed | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divides a sum of $k - 1$ terms, a bias of $k/(k-1)$ in expectation: 1.010101 at $k = 100$, 1.000050 at $k = 20,000$; correcting it moves the printed estimates of Chapter 10 and is the owner's decision |
+| 10 | The threshold of Hill | $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$, and the laboratory used $x_{(k)}$: at $k$ = 100, 500, 1,000 and 5,000 the estimate was 1.083, 1.063, 1.100 and 1.101, with interval $[1.032; 1.168]$ at $k = 1,000$ | $x_{(k+1)}$, as in Chapter 14, the horizon H1 and the tail lens: 1.080, 1.059, 1.099 and 1.100, with $[1.031; 1.167]$ at $k = 1,000$; at $k = 20,000$ the value 1.095 does not move | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divided a sum of $k - 1$ terms; the oracles found the two definitions, and the old threshold is now a mutant they kill. The reading (Hill recovers the exponent) does not change |
 | C | Test count | 434 | 439 | the five tests of the oracles |
 
 ### Numbers cited without an instrument in this book

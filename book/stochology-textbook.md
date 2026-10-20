@@ -2361,7 +2361,7 @@ and a heavy tail puts it far beyond: the distribution of the maxima is fitted to
 Taleb called the first Mediocristan and the last Extremistan, and added the type of
 consequence. The "fourth quadrant", where the tail is wild and the loss depends on the size of the event, is
 where models fail most and cost most. The Hill estimator estimates the tail exponent from the
-$k$ largest values, $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$. The Danish fires, with
+$k$ largest values, $\hat\alpha = k / \sum_{i=1}^{k} \ln(x_{(i)} / x_{(k+1)})$. The Danish fires, with
 $\alpha$ estimated at 1.81 (interval from 1.41 to 2.56), are in that territory (Chapter 14).
 
 ---
@@ -2409,10 +2409,10 @@ share of each sample's sum that comes from its single largest value (n = 1 000 0
 in the median, 27.55% of the true mean comes from values above the maximum of a sample of one million (median maximum 397420)
 
 Hill estimator with alpha = 1.1 and n = 200 000:
-  k =    100  alpha_hat = 1.083  95% CI approx [0.870; 1.295]
-  k =    500  alpha_hat = 1.063  95% CI approx [0.970; 1.157]
-  k =   1000  alpha_hat = 1.100  95% CI approx [1.032; 1.168]
-  k =   5000  alpha_hat = 1.101  95% CI approx [1.070; 1.131]
+  k =    100  alpha_hat = 1.080  95% CI approx [0.869; 1.292]
+  k =    500  alpha_hat = 1.059  95% CI approx [0.966; 1.152]
+  k =   1000  alpha_hat = 1.099  95% CI approx [1.031; 1.167]
+  k =   5000  alpha_hat = 1.100  95% CI approx [1.070; 1.131]
   k =  20000  alpha_hat = 1.095  95% CI approx [1.080; 1.111]
 reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
@@ -2464,7 +2464,7 @@ whoever used Laplace in none, and the median of the Laplace investors ($4.077$) 
 **(4) The wild tail.** With a Pareto of $\alpha = 1.1$, whose true mean is 11, the sample mean
 of a million observations has median 8.39 and falls below 11 in 95% of the samples, and the 95%
 interval covers the true value in 26% of them. The Hill estimator recovers the exponent. With $k = 1,000$
-it gives $\hat\alpha = 1.100$, with approximate interval $[1.032; 1.168]$; with $k = 20,000$ it gives
+it gives $\hat\alpha = 1.099$, with approximate interval $[1.031; 1.167]$; with $k = 20,000$ it gives
 $1.095$ with $[1.080; 1.111]$. A Gaussian model fitted to that tail underestimates the loss in
 every repetition.
 
@@ -6727,14 +6727,14 @@ A review made with AI assistants proposed that every formula of a decision pass 
 it runs on data. The review's own reference for the M/M/1 wait left out the division by $\mu$, the same kind of error as
 the Kelly row of the first table, so the oracles were built with a second rule: each recorded error of this appendix is
 rewritten as a mutant with the signature of the instrument it lived in, and an oracle counts only if a mutant fails it.
-`labs --oracles` runs both. No published number changed. Like the readings above, this one is outside the authors'
+`labs --oracles` runs both. The oracles found one wrong definition, in Chapter 10, corrected in the last row. Like the readings above, this one is outside the authors'
 audit and is not the independent audit of Chapter 21.
 
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
-| C | The check of a formula | one test per error, written after it was found | 18 identities at limit cases (Pollaczek–Khinchine at $c_v = 1$ and $c_v = 0$, $C(1, \rho) = \rho$, $g'(f^*) = 0$, $F(\text{level}) = 1 - 1/T$, the round trip of the Chouldechova identity, $0 \le \text{EVSI} \le \text{EVPI}$, the scale invariance of Hill, RES of a constant forecaster, and others); all pass on the instruments, and 16 of 16 mutants die | a test written after an error catches that error; an oracle is measured by the errors it would have caught |
+| C | The check of a formula | one test per error, written after it was found | 19 identities at limit cases (Pollaczek–Khinchine at $c_v = 1$ and $c_v = 0$, $C(1, \rho) = \rho$, $g'(f^*) = 0$, $F(\text{level}) = 1 - 1/T$, the round trip of the Chouldechova identity, $0 \le \text{EVSI} \le \text{EVPI}$, the scale invariance of Hill, RES of a constant forecaster, one definition of Hill across chapters, and others); all pass on the instruments, and 17 of 17 mutants die | a test written after an error catches that error; an oracle is measured by the errors it would have caught |
 | C | An oracle with a wrong reference | — | the review's reference $60\lambda/(\mu - \lambda)$ rejects the right wait by up to 1265.00 min | an oracle is a claim too; when it fails on an instrument, the closed form decides which of the two is wrong |
-| 10, 14 | The threshold of Hill | Chapter 10 writes $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$ and its laboratory uses $x_{(k)}$; Chapter 14, the horizon H1 and the tail lens use $x_{(k+1)}$ | declared, not changed | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divides a sum of $k - 1$ terms, a bias of $k/(k-1)$ in expectation: 1.010101 at $k = 100$, 1.000050 at $k = 20,000$; correcting it moves the printed estimates of Chapter 10 and is the owner's decision |
+| 10 | The threshold of Hill | $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$, and the laboratory used $x_{(k)}$: at $k$ = 100, 500, 1,000 and 5,000 the estimate was 1.083, 1.063, 1.100 and 1.101, with interval $[1.032; 1.168]$ at $k = 1,000$ | $x_{(k+1)}$, as in Chapter 14, the horizon H1 and the tail lens: 1.080, 1.059, 1.099 and 1.100, with $[1.031; 1.167]$ at $k = 1,000$; at $k = 20,000$ the value 1.095 does not move | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divided a sum of $k - 1$ terms; the oracles found the two definitions, and the old threshold is now a mutant they kill. The reading (Hill recovers the exponent) does not change |
 | C | Test count | 434 | 439 | the five tests of the oracles |
 
 ### Numbers cited without an instrument in this book
