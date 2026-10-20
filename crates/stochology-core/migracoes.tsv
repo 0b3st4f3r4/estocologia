@@ -10,3 +10,9 @@
 1.4	1.5	introduz	autoria	-	quem escreveu cada campo, cada um no papel do especialista a que pertence; um documento anterior nao declarou autoria e a migracao nao inventa autores
 1.4	1.5	introduz	achados	-	os achados registrados, os usados e os nao usados com a razao; a migracao nao inventa achados
 1.4	1.5	introduz	regra_de_decisao	-	a desigualdade em que a acao se apoia, p contra C/L, recalculada a partir do proprio cartao; a migracao nao inventa a regra
+1.5	1.6	introduz	correlacao_de_selecao	-	a correlacao de selecao de Meng por estimando, com o erro e o tamanho efetivo recalculados de rho, f e sigma; um documento anterior nao declarou e a migracao nao inventa
+1.5	1.6	introduz	corte_de_ece	-	o corte de ECE acima do q95 do nulo para o n declarado, com a origem das previsoes do nulo; a migracao nao inventa o corte
+1.5	1.6	introduz	modo_de_deriva	-	o modo da deriva declarada: covariavel, rotulo, conceito ou publico, com a deteccao exigida no rotulo; a migracao nao inventa o modo
+1.5	1.6	introduz	mecanismo_de_ausentes	-	o mecanismo dos ausentes: MCAR, MAR ou MNAR, com a analise de sensibilidade exigida no MNAR; a migracao nao inventa o mecanismo
+1.5	1.6	introduz	auditoria_de_subgrupos	-	a taxa igualada, a familia de subgrupos e quem paga; a migracao nao inventa a auditoria
+1.5	1.6	introduz	grafo_causal	-	o grafo causal declarado, aciclico, de onde se leem os colisores; a migracao nao inventa o grafo

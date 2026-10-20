@@ -96,6 +96,88 @@ pub fn moving_coin(seed: u64, steps: usize, repetitions: usize, discount: f64) -
     }
 }
 
+/// A survey population: groups with a share of the population and a probability of answering yes.
+/// Within a group, people differ: each one answers yes with the probability of the group.
+pub const SURVEY_SHARES: [f64; 5] = [0.25, 0.25, 0.20, 0.15, 0.15];
+pub const SURVEY_YES: [f64; 5] = [0.10, 0.30, 0.45, 0.60, 0.85];
+
+/// The law of total variance for the answers of a survey: Var(Y) = E[Var(Y | group)] + Var(E[Y | group]).
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct VarianceSplit {
+    /// The aleatory parcel: the disagreement inside the groups.
+    pub within: f64,
+    /// The parcel of the groups: how far their means lie from each other.
+    pub between: f64,
+    pub total: f64,
+    pub yes_rate: f64,
+}
+
+/// Closed form of the split for a yes/no answer.
+pub fn variance_split(shares: &[f64], yes: &[f64]) -> VarianceSplit {
+    let yes_rate: f64 = shares.iter().zip(yes).map(|(w, p)| w * p).sum();
+    let within: f64 = shares.iter().zip(yes).map(|(w, p)| w * p * (1.0 - p)).sum();
+    let between: f64 = shares
+        .iter()
+        .zip(yes)
+        .map(|(w, p)| w * (p - yes_rate) * (p - yes_rate))
+        .sum();
+    VarianceSplit {
+        within,
+        between,
+        total: within + between,
+        yes_rate,
+    }
+}
+
+/// How a simulated respondent answers on behalf of a group.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Respondent {
+    /// A person drawn from the group: yes with the probability of the group.
+    Person,
+    /// A simulated respondent that returns the most common answer of the group, always.
+    MostCommon,
+}
+
+/// The split measured on a simulated sample of `n` answers.
+pub fn simulated_split(seed: u64, n: usize, who: Respondent) -> VarianceSplit {
+    let mut rng = Rng::new(seed);
+    let k = SURVEY_SHARES.len();
+    let (mut count, mut yes) = (vec![0usize; k], vec![0usize; k]);
+    for _ in 0..n {
+        let u = (rng.next_u64() as f64) / (u64::MAX as f64);
+        let mut acc = 0.0;
+        let mut g = k - 1;
+        for (i, w) in SURVEY_SHARES.iter().enumerate() {
+            acc += w;
+            if u < acc {
+                g = i;
+                break;
+            }
+        }
+        let answer = match who {
+            Respondent::Person => (rng.next_u64() as f64) / (u64::MAX as f64) < SURVEY_YES[g],
+            Respondent::MostCommon => SURVEY_YES[g] > 0.5,
+        };
+        count[g] += 1;
+        yes[g] += usize::from(answer);
+    }
+    let nf = n as f64;
+    let rate: f64 = yes.iter().sum::<usize>() as f64 / nf;
+    let (mut within, mut between) = (0.0, 0.0);
+    for g in 0..k {
+        let w = count[g] as f64 / nf;
+        let m = yes[g] as f64 / count[g] as f64;
+        within += w * m * (1.0 - m);
+        between += w * (m - rate) * (m - rate);
+    }
+    VarianceSplit {
+        within,
+        between,
+        total: within + between,
+        yes_rate: rate,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -126,5 +208,43 @@ mod tests {
     fn the_bias_moves_from_two_tenths_to_six_tenths() {
         assert!((bias_at(0, 3_200) - 0.2).abs() < 1e-12);
         assert!((bias_at(3_200, 3_200) - 0.6).abs() < 1e-12);
+    }
+
+    /// A mutant of the split: it keeps only the variance between the groups and calls it the total.
+    fn total_without_the_aleatory_parcel(shares: &[f64], yes: &[f64]) -> f64 {
+        variance_split(shares, yes).between
+    }
+
+    #[test]
+    fn the_split_obeys_the_law_of_total_variance() {
+        let s = variance_split(&SURVEY_SHARES, &SURVEY_YES);
+        // Oracle: for a yes/no answer the total variance is rate (1 - rate), whatever the groups.
+        assert!((s.total - s.yes_rate * (1.0 - s.yes_rate)).abs() < 1e-12);
+        // Limit cases: identical groups have no variance between them; groups of certain answers
+        // have none inside them.
+        let same = variance_split(&[0.5, 0.5], &[0.3, 0.3]);
+        assert!(same.between.abs() < 1e-15 && (same.within - 0.21).abs() < 1e-15);
+        let certain = variance_split(&[0.5, 0.5], &[0.0, 1.0]);
+        assert!(certain.within.abs() < 1e-15 && (certain.between - 0.25).abs() < 1e-15);
+    }
+
+    #[test]
+    fn a_most_common_answer_respondent_erases_the_aleatory_parcel_and_moves_the_rate() {
+        let real = simulated_split(2026, 200_000, Respondent::Person);
+        let sim = simulated_split(2026, 200_000, Respondent::MostCommon);
+        let exact = variance_split(&SURVEY_SHARES, &SURVEY_YES);
+        assert!((real.within - exact.within).abs() < 0.005);
+        assert!((real.yes_rate - exact.yes_rate).abs() < 0.005);
+        assert!(sim.within < 1e-12, "within {}", sim.within);
+        // The simulated sample answers yes only for the groups above one half: 0.15 + 0.15.
+        assert!((sim.yes_rate - 0.30).abs() < 0.005, "rate {}", sim.yes_rate);
+        assert!(sim.total < exact.total);
+    }
+
+    #[test]
+    fn the_mutant_that_drops_the_aleatory_parcel_is_killed() {
+        let exact = variance_split(&SURVEY_SHARES, &SURVEY_YES);
+        let mutant = total_without_the_aleatory_parcel(&SURVEY_SHARES, &SURVEY_YES);
+        assert!((mutant - exact.yes_rate * (1.0 - exact.yes_rate)).abs() > 0.05);
     }
 }

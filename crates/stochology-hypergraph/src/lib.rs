@@ -1,7 +1,9 @@
 //! Typed hypergraph G = (V, E_tree, E_graph, H, Phi) and the five lenses.
 
 pub mod lenses;
+pub mod pathology;
 
+use pathology::PathologyKind;
 use stochology_core::{Layer, UncertaintyType};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -24,7 +26,8 @@ pub enum EdgeKind {
     Deductive,
     MathematicalBridge,
     Causal,
-    Pathology,
+    /// A structural misalignment between the Model and the World, typed by the pathology it marks.
+    Pathology(PathologyKind),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

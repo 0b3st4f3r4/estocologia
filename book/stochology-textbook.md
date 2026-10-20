@@ -507,6 +507,8 @@ Run `cargo run --release --bin labs -- --chapter 2`.
 prevalence 1e-2: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.0001  swap factor=99.0
 prevalence 1e-3: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.0010  swap factor=998.0
 prevalence 1e-6: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.5000  swap factor=499999.7
+coin, 1000000 sequences of 6 tosses: after 5 heads in a row (31013 cases) the next toss is heads in 50.0%; betting on tails at even odds gains +0.000 per bet
+urn of 10 red and 10 blue balls, without replacement: after 5 reds in a row (16040 cases) the next ball is red in 32.7% (exact 33.3%); betting on blue at even odds gains +0.345 per bet
 ```
 
 - **The first column does not move: 0.000001.** It is the likelihood, the number the prosecutor quotes.
@@ -516,6 +518,13 @@ prevalence 1e-6: P(evidence|innocent)=0.00000100  P(innocent|evidence)=0.5000  s
   499,999.7 times in the last.
 
 The arithmetic is never wrong. The error is answering a question about the World with a number from the Model.
+
+**The same bridge, with a memory.** The last two lines are the gambler's fallacy, which gives memory to a process that
+has none. After five heads in a row, a fair coin still gives heads half the time, and betting on tails at even odds
+gains nothing. After five red balls drawn from an urn of ten red and ten blue, without putting them back, the urn
+really has changed: a red ball is now one chance in three, and betting on blue gains about a third of a unit per bet.
+The intuition of the gambler, that a streak will reverse, is a correct law of an urn that is being emptied. The error is
+to carry it to a process whose Model has no memory, which is a mistake about the Model and not about the arithmetic.
 
 **Exercises.**
 
@@ -685,7 +694,12 @@ mammography: 100 sick, 90 sick positives, 9900 healthy, 891 false positives, 981
 P(sick|positive) = 0.0917  (one in every 10.9 positives)
 second test: independent = 10.0 dB, correlated (effective ratio 4.2) = 6.23 dB
 posterior with two positives: independent = 0.5025, correlated = 0.2979
+Dutch book: prices 0.60 + 0.50 -> certain profit of the bookmaker = 0.1000
+made coherent: 0.5455 + 0.4545 -> certain profit = 0.0000
+against a world that rains 0.25 of the time: edge of who knows it = 0.3500 with the original rain price, 0.2955 after coherence, 0.0000 if calibrated
 ```
+
+**The book and the world, in numbers.** The laboratory takes the friend's prices, 0.60 and 0.50, and enumerates the two states: in each, exactly one ticket pays 1, so the bookmaker keeps $0.60+0.50-1=0.10$ with certainty. Dividing both prices by their sum, 0.5455 and 0.4545, removes that book to the last decimal. Now let the world rain a quarter of the time, a number this laboratory chooses and that the friend does not know. Someone who knows it sells the rain ticket at 0.5455 and pays 1 in one round of four: an expected edge of 0.2955 per round, three times the certain 0.10 that coherence had just erased. With the original rain price of 0.60 the edge is 0.35, and only the price equal to the frequency leaves nothing. A test checks the 0.10, the vanishing book, the 0.2955 and the zero of the calibrated price, and a mutant that divides only one price leaves a book of 0.0545. The numbers are the laboratory's own, new recipe for an argument whose old numbers (0.05, 0.60 and 0.55) were cut in Appendix E.
 
 Three lessons in three lines. **(1)** The tree gives 981 positives, of which 90 are sick. That is 0.0917, or
 1 in every 10.9, and not 90%. **(2)** The second test is worth 10 decibans if it is independent of the first
@@ -844,12 +858,24 @@ bias climbs from 0.2 to 0.6 in 6400 steps, 200 repetitions, discount 0.99
 coverage of the 95% interval: fixed model = 0.1199, model with forgetting = 0.9398
 width of the fixed interval at step 100 = 0.1564, at step 6400 = 0.0240
 width of the interval with forgetting at step 6400 = 0.1360 (ratio 5.7x the final fixed one)
+survey of 5 groups, closed form: total variance 0.2414 = inside the groups 0.1796 + between the groups 0.0618; yes rate 0.4075
+200000 people drawn from the groups: inside 0.1795 (74.4% of the total), yes rate 0.4059
+200000 simulated respondents answering the most common answer of their group: inside 0.0000 (0.0% of the total), yes rate 0.2979
 ```
 
 The fixed model declares "95% confidence" and **covers the truth in 12% of the steps**. The interval shrinks
 from 0.1564 to 0.0240 while the bias walks out of it. The model that forgets the past, with an interval
 **5.7 times wider**, covers 93.98%, close to the nominal value. The price of honesty is the width of the
 interval; the price of stubbornness is false confidence.
+
+The last three lines are a second laboratory, on the law of total variance. A survey has five groups, with shares of
+25, 25, 20, 15 and 15% and chances of saying yes of 10, 30, 45, 60 and 85%; inside each group people differ, because
+each one answers yes with the chance of the group. The total variance of the answers, 0.2414, is the yes rate times its
+complement, and it splits into **0.1796 inside the groups** (74% of the total) and 0.0618 between them. Two hundred
+thousand people drawn from the groups reproduce the split. A simulated respondent asked to answer as "a member of
+group X" and that returns the most common answer of the group does not: it answers yes only for the two groups
+above one half, so the variance inside the groups is exactly zero and the yes rate falls from 0.41 to 0.30. The sample
+lost its aleatory parcel and, with it, the rate. It is another population, and not a cheaper copy of this one.
 
 **Exercises.**
 
@@ -1248,6 +1274,11 @@ answering that depends on the vote, the simulation gives:
 - of Landon's supporters, **35.2 in every 100** answered;
 - taken together, 24 in every 100 answered — 2.4 million ballots.
 
+Three numbers will appear for the same poll, and they are not the same thing. **2.38 million** is the historical
+count of ballots. **2,400,031** is the number of simulated respondents in the laboratory below, out of 10 million
+voters, which the chapter rounds to 2.4 million. And **7.2 people** is the continuous size of a random sample with the
+same error, which the title and the text round to 7, the whole number of people one can draw in the street.
+
 The result is simple arithmetic, 0.608 × 0.168 = 10.2% for Roosevelt against 0.392 × 0.352 = 13.8% for
 Landon among the respondents. Roosevelt gets 10.2 out of 24, that is, **42.6%**, and Landon 57.4%.
 The poll received millions of votes and measured the magazine's audience; it did not measure the country.
@@ -1397,7 +1428,7 @@ two-state chain with persistence 0.235: variance of the mean of 100 letters = 0.
 ```
 
 Four readings. **(1)** The measured error (−18.2 points) coincides with Meng's identity (−18.24) and is worth
-the standard deviation of a sample of **7.2 people**. The agreement to the third decimal is not evidence: Meng's
+the standard deviation of a sample of **7.2 people** (the laboratory draws 2,000 samples of 7, a whole number, and gets 18.4 points). The agreement to the third decimal is not evidence: Meng's
 identity is algebraic, so it holds for any sample, and the two response rates were chosen to reproduce the
 known result of 1936. What the simulation shows is the mechanism, not that it was the cause; historians still
 weigh the frame (telephones and subscribers) against the non-response of whoever did not mail the ballot back. **(2)** The margin of error of the poll (0.0276 point) is no margin at all against a poison of
@@ -1613,6 +1644,8 @@ hot hand: mean of the proportions per sequence = 0.4167 (5/12 = 0.4167); pooled 
 100 people tossing 20 coins: in 100.0% of the experiments someone strings 6 heads in a row; the longest run averages 9.5
 garden of paths (4000 experiments with no effect at all): with Simmons' four freedoms, someone finds p < 0.05 in 20.3% of them; with the large family, in 42.3%; the pre-registered test flags 5.2%
 Mayo severity: 1 - p = 0.96 in the pre-registered test with p = 0.04; 1 - false-positive rate = 0.58 in the garden
+type S and M, effect 2 points, standard error 8.1: power 0.057, sign wrong in 24.0% of the significant, exaggeration 9.54x | simulated 0.057, 23.9%, 9.53x
+type S and M, effect 2 points, standard error 0.7: power 0.815, sign wrong in 0.0% of the significant, exaggeration 1.11x | simulated 0.815, 0.0%, 1.11x
 Ioannidis with R = 1/1000, power 0.80: PPV = 0.016 with alpha 0.05 and 0.002 with the garden alpha
 Ioannidis with R = 1/10, power 0.80: PPV = 0.615 with alpha 0.05 and 0.159 with the garden alpha
 Ioannidis with R = 1/3, power 0.80: PPV = 0.842 with alpha 0.05 and 0.387 with the garden alpha
@@ -1620,7 +1653,7 @@ safeguard panel A1-A8, card with the eight safeguards: bits [1, 1, 1, 1, 1, 1, 1
 the same card without one band's safeguard: 7 of 8 bits set, approved = false
 ```
 
-Five readings. **(1)** The winner of the garden of models has error 0.814 on validation, against 1.000 for
+Six readings. **(1)** The winner of the garden of models has error 0.814 on validation, against 1.000 for
 "predicting zero". It looks great, and the error rises to **1.191 on fresh data**. It is worse than zero, and that is why
 it "beats zero" only 30% of the time when the judge is new. Validation was used as a target, and the target turned into
 poison. **(2)** The exact null model of the hot hand is 0.4167, not 0.5; the mean of the proportions per
@@ -1634,6 +1667,13 @@ eight bits on a sheet with the eight safeguards and approves it; one band withou
 set, and the approval vanishes. The AND of the eight does not forgive. Read the contrast with reading (4): Mayo's
 severity is a probability about a procedure, and it can be 0.96 or 0.58; the panel's verdict is a bit about a
 declaration, and it carries no probability at all.
+**(6)** Types S and M, in closed form: a study that estimates a true effect of 2 points
+with a standard error of 8.1 has power 0.057. Among its significant results the sign is wrong in 24% and the mean
+estimate is **9.5 times** the true effect; a simulation of two million studies agrees to the second decimal (9.53).
+With a standard error of 0.7 the power is 0.815, the sign error is below one in a million and the exaggeration is 1.11.
+The problem is not that the small study is noisy; it is that the filter of significance keeps the draws that chance
+inflated. The example is the one Gelman and Carlin (2014) reanalyse, who report a factor of 9.7; the exact value, in
+closed form, is 9.54.
 
 **Exercises.**
 
@@ -1854,9 +1894,14 @@ the raw forecast has Brier 0.1569462; pooling into 10 boxes costs 1.49e-3, and t
 n = 1 488, spread 0.4: null q50 0.0320, null q95 0.0456
 n = 1 488, spread 1.0: null q50 0.0291, null q95 0.0419
 n = 1 488, spread 2.0: null q50 0.0243, null q95 0.0349
+belief 0.70 under hit rate: best report from 0.51 to 0.99 (49 of 99 reports tie)
+belief 0.70 under absolute error: best report from 0.99 to 0.99 (1 of 99 reports tie)
+belief 0.70 under Brier: best report from 0.70 to 0.70 (1 of 99 reports tie)
+belief 0.70 under log: best report from 0.70 to 0.70 (1 of 99 reports tie)
+100000 days, honest against rounded to 1% or 99%: hit rate 0.7016 and 0.7016 | Brier 0.1963 and 0.2925 | log loss 0.5772 and 1.3811
 ```
 
-Five readings. **(1)** Murphy's identity closes to $3.5\times10^{-15}$ when the forecasts are
+Six readings. **(1)** Murphy's identity closes to $3.5\times10^{-15}$ when the forecasts are
 pooled into the ten boxes; the raw forecast has Brier 0.1569, and the pooling costs 0.0015. **(2)** The
 lazy one has REL 0.0018 and RES 0.0000. It is nearly calibrated and remains useless. **(3)** Out of the fit, the
 overconfident one falls from 0.1708 to 0.1555, close to the recalibrated expert (0.1547), because it was mostly
@@ -1866,6 +1911,13 @@ signal does not come back. **(4)** The tolerance of
 when $n$ is 24,466 or 104,489. In the large vaults it almost prohibits nothing. **(5)** The null depends on the
 forecasts, not only on $n$. With $n = 1,488$, the q50 of the null ECE goes from 0.0320 with concentrated forecasts
 to 0.0243 with spread forecasts.
+**(6)** The last five lines ask what each rule requests of someone who believes 70%. The hit rate is
+satisfied by any report from 0.51 to 0.99, 49 of the 99 values on the grid, so it cannot tell 51% from 99%. The
+absolute error $|r - y|$ looks like a score of the error of the probability, and it is improper: it asks for 0.99, the
+extreme, and not for the belief. Brier and the logarithm each have a single best report, 0.70, which is what
+"proper" means. Over 100,000 days, a forecaster who knows the chance and one who rounds it to 1% or 99% have the same hit rate,
+0.7016, because they take the same decisions; the Brier score separates them (0.1963 against 0.2925) and so does the log loss
+(0.5772 against 1.3811). A rule that cannot see the difference between them also cannot punish the one who lies.
 
 **Calibration has a grain too.** The resolution of the question, met in Chapter 5, raises the same problem
 of sample size. A light oscillation of demand, between 7 and 9, costs little to ignore:
@@ -2112,6 +2164,11 @@ fraction of hard cases in the open surgery = 0.7514, in the new one = 0.2286
   [ 2. intervention] if we double policing, does crime fall?
   [3. counterfactual] would this robbery have happened with a patrol car on the corner?
 
+== Chapter 9 :: the jump between the steps (U confounds X and Y, true effect 1.0) ==
+  step 1, seen:   slope of Y on X in the rows        = 2.017
+  step 2, done:   slope of Y on X when X is assigned = 1.005
+  step 3, unit:   change of Y for X + 1, structural 1.000, by the seen slope 2.017
+
 == Chapter 9 :: a minimal ICP, three sites, three candidates ==
 rows = 12000 (4000 per site), X -> Y with coefficient 2, X -> Z (child) with noise different per site, W pure noise
 naive correlation with Y: corr(X,Y) = 0.9314  corr(Z,Y) = 0.7208  corr(W,Y) = 0.0055
@@ -2150,6 +2207,15 @@ mean naive slope (all sites together): X = 2.0001  Z = 0.6013
   {x+z+w}  mean F =  3000.74  rejection rate = 1.000
   intersection = {x} in 0.000 of the rounds | contains z in 0.000 | contains w in 0.000 | empty in 1.000
 ```
+
+**The jump, in numbers.** The lab builds one world with a confounder $U$ that pushes both $X$ and $Y$, and a true
+effect of $X$ on $Y$ equal to 1. The first step, the slope seen in the rows, answers 2.017: twice the effect, because
+$\mathrm{cov}(X,2U)/\mathrm{var}(X) = 2\cdot 1/2 = 1$ is added to it. The second step, the same slope when $X$ is assigned
+by a coin, answers 1.005, which is the effect. The data are of the same kind and the same size; what changed is
+that the assignment cut the arrow from $U$ to $X$, and that is a fact about the world, not about the sample. The
+third step asks about one unit: with the structural equation and the noise recovered from that unit, the change
+of $Y$ for one more point of $X$ is 1.000; with the seen slope it would be 2.017. A test kills the version in
+which the coin does not cut the arrow.
 
 **What each line says.**
 
@@ -2258,7 +2324,7 @@ $1.322 \times 10^{-23}$ of the starting capital. Step 2 shows why the mean of th
 
 The name of this is **non-ergodicity**, and it forces a simple question. *Whose mean is it?* The mean of 10,000 people at an instant is not the mean of one person over 10,000
 rounds. Whoever lives one trajectory needs the second; whoever manages a fund with many holders
-can live off the first, and the first is precisely the one that does not pay the bill of whoever bets.
+can live off the first, and the first is precisely the one that does not pay the bill of whoever bets. Lawson (arXiv:2212.09617, 2022) states necessary and sufficient conditions under which preferences are represented by an ergodic transformation of wealth, that is, by the maximisation of the time-average growth rate; this book uses the growth rate, not the axioms, and does not claim that the conditions hold for any given agent.
 
 **The same bet, two answers.** That bet is not bad in itself. It is good for the
 crowd (the expectation grows 5% per round) and terrible for the typical trajectory (the median falls). What
@@ -2416,6 +2482,11 @@ Hill estimator with alpha = 1.1 and n = 200 000:
   k =  20000  alpha_hat = 1.095  95% CI approx [1.080; 1.111]
 reading: a Gaussian model fitted to this tail underestimates the loss in every repetition
 
+== Chapter 10 :: the 1-in-100-year loss, extremes against the Gaussian (alpha = 3, 2 520 days, 200 repetitions) ==
+  exact level: 29.32; Gaussian with the exact moments: 4.92
+  Gaussian fitted to each sample: median 4.62, below the exact level in 100% of the samples
+  extremes (Hill k = 100, Weissman): median 27.23, quartiles [24.11; 32.45], below the exact level in 62% of the samples
+
 == Chapter 10 :: volatility drag at 1x, 2x and 3x ==
 L = 1x: arithmetic mean = +0.000299/session, measured growth = +0.000237/session, drag = +0.000062/session (+0.0156/year), wealth in 100000 sessions = 1.903e10
 L = 2x: arithmetic mean = +0.000597/session, measured growth = +0.000350/session, drag = +0.000247/session (+0.0623/year), wealth in 100000 sessions = 1.551e15
@@ -2434,6 +2505,10 @@ with a -22.6% crash in one day and 40 days of -3% (20 thousand sessions):
   L = 2x: measured growth = +0.000155/session, final wealth = 2.222e1
   L = 3x: measured growth = +0.000033/session, final wealth = 1.944e0
 ```
+
+**The line that was not measured.** The "reading" printed after the Hill table says that a Gaussian underestimates the loss in every repetition. For $\alpha=1.1$ that sentence is true but not measured, because there is no variance to fit. The block above measures it in a tail where the Gaussian has all its parameters, $\alpha=3$, with the daily loss $P(X>x)=x^{-3}$ and ten years of days (2 520) per repetition. The 1-in-100-year level is the loss with chance $1/(100\times252)$ per day, and for this tail it is exactly $25\,200^{1/3}=29.32$. A Gaussian with the exact mean and variance of the same tail puts it at 4.92, six times lower; fitted to each sample, it lands at a median of 4.62 and below the exact level in all 200 repetitions. The extremes method, Hill's $\hat\alpha$ at $k=100$ and the extrapolation $x_{(k+1)}(k/(np))^{1/\hat\alpha}$ of Weissman, has a median of 27.23 and quartiles of 24.11 and 32.45. It also falls below the exact level in 62% of the samples: it is not right in each sample, it is right in order of magnitude, and it says how wrong it may be. The test checks the exact level, the factor of five between it and the Gaussian, the median of the extremes within a quarter of the exact level, and a mutant that leaves out the ratio $k/(np)$ and returns the threshold itself, which sits far below.
+
+The numbers are the laboratory's own and do not restore the 17.4% and 3.9% cut in Appendix E. The far-tail quantile of the normal used here is the rational approximation of Acklam, because the erf of Abramowitz and Stegun used by the laboratory of Chapter 11 has an absolute error of $1.5\times10^{-7}$, which is larger than the chance $4\times10^{-5}$ being inverted.
 
 **What each line says.**
 
@@ -2691,7 +2766,7 @@ this?"; it does not answer "who was asked?". Chapter 21 returns to this point.
 chance" does not say 30% of what; "of every 100 people like you, 30" does. The rules are fixed
 denominators, absolute risk before relative and an explicit reference class. Hypothetical outcome plots
 (HOPs), which show simulated outcomes one after another, make the reader feel the variation
-that an error bar hides. The recommendation declares the point at which the action changes, act if $p > C/L$,
+that an error bar hides; Hullman, Resnick and Adar (2015) found that people judged two and three quantities much more accurately with HOPs than with error bars or violin plots. The recommendation declares the point at which the action changes, act if $p > C/L$,
 and an objective clause for when it stops holding.
 
 ---
@@ -2703,6 +2778,16 @@ and the EVSI in a two-act case, the four tail models of the dike with five decis
 trilemma table with the Chouldechova identity. Run it with `cargo run --release --bin labs -- --chapter 11`.
 
 ```text
+== Chapter 11 :: the two-route app (highway 20 + 30 x, avenue 35) ==
+  naive app, 20 days: everybody on the highway in 10 of them, mean gap between told and got = 15.00 min
+  equalising app, avenue believed at 35.0: highway share 0.500, told 35.0, mean time got 35.00, mean gap 0.00 min
+  equalising app, avenue believed at 30.0: highway share 0.333, told 30.0, mean time got 33.33, mean gap 3.33 min
+
+== Chapter 11 :: learning or deforming (belief 22 C, room 18 C, sigma 1.0) ==
+  minimum surprise at sigma 1.0: 0.9189
+  thermostat that learns: belief 18.000, room 18.000, surprise with the action 0.9189, without the action 0.9189
+  thermostat that heats: belief 22.000, room 22.000, surprise with the action 0.9189, without the action 8.9189
+
 == Chapter 11 :: the Bernoulli ship (C = 1,800, L = 34,000, p = 0.05) ==
 threshold p > C/L: p* = 0.05294 (5.294%)  ->  p = 0.050 does not pass the threshold
 in expectation: expected loss without insurance = 1700, insurance result = +100 per month
@@ -2763,6 +2848,12 @@ White          0.1050           0.1050       -2.8e-17
 Black          0.1960           0.1960       -2.8e-17
 the trilemma: with PPV 0.3491 and FNR 0.240 in BOTH groups, the identity forces FPR 0.1050 for White and 0.1769 for Black
 ```
+
+**The two-route app, in numbers.** The laboratory takes the traffic app of Step 1 and gives it a highway that takes 20 minutes empty and $20+30x$ with a share $x$ of the drivers, and an avenue that always takes 35. The naive app sends everybody to the route that was faster yesterday: on the empty highway, 20 against 35, so everybody goes there, finds 50, and the next day everybody goes to the avenue. In 20 days it fills the highway in 10 of them, and on those days the time it told (20) and the time they got (50) differ by 30; the mean gap is 15.00 minutes. The app that equalises the times puts half of the drivers on each route and tells 35 to everybody, who get 35: gap 0.00. It is performatively stable because its forecast is true on the distribution it induces.
+
+The stability is conditional on the belief. If the app believes that the avenue takes 30 and equalises to that, it sends two thirds of the drivers to the avenue, instead of half, and those drivers get 35 after being told 30. The mean gap is 3.33 minutes, and the mean time got is 33.33, lower than 35 because the highway is less full. A metric that looked only at the mean time would give this app a better mark; the error lives in the gap between told and got, and in who bears it: the drivers of the avenue. This is the avenue of exercise 7 of Chapter 2, and the layer that failed is the Model, tested where it was most wrong. The numbers belong to the laboratory and do not restore the 41.0, 36.8, 35.0 and 0.3 minutes cut in Appendix E.
+
+**Two thermostats, one surprise.** The second block of the laboratory puts the example of the thermostat in numbers. Both start believing in 22 °C in a room at 18 °C, with $\sigma=1$, and both run 30 steps. One moves the belief to the room and ends at 18 °C; the other moves the room to the belief and ends at 22 °C. With the action as it was taken, both read 0.9189, which is $\tfrac12\ln(2\pi)$, the floor of the surprise, and no audit of that quantity can tell them apart. Taking the action away, that is, leaving the room as it was, the one that learned still reads 0.9189 and the one that heated reads 8.9189: the excess of exactly $4^2/2=8$ is the price of a belief that was never corrected and only made true. The test checks the floor, the equality with the action and the excess of 8. The audit that this chapter asks for is the one that runs the model with and without the action, because the surprise reduced is the same and what was learned is not.
 
 **What each line says.**
 
@@ -3525,7 +3616,7 @@ heavy, and with $\alpha$ below 4 the kurtosis of the population does not even ex
 is why this chapter reads the tail through quantiles, the months hit and the Hill index at several $k$, and not
 through a sample kurtosis, and why the three Hill values above differ so much. It is also why an extreme observation
 is never removed because it is extreme: in this series the month that decides the fate of the insurer is exactly the
-one an automatic cleaning would throw away.
+one an automatic cleaning would throw away. Rules for choosing the threshold automatically exist: Bladt, Albrecher and Beirlant (arXiv:1903.07942, 2019) trim the lowest order statistics of the Hill estimator and look for the flat stretch of the trimmed plot, which would be one more reading to set beside the three values of $k$ above, and not a reason to drop the month.
 
 **The Laplace rule of succession.** After $s$ successes in $n$ trials, the probability of the next
 success is
@@ -3619,6 +3710,10 @@ months hit and value: 1980-07 263.3; 1981-05 56.2; 1981-12 50.1; 1982-10 65.7; 1
 training 1980-1988: 1714 claims in 108 months
 Hill on the training set: k=25 alpha=1.9625 k=50 alpha=1.8109 k=100 alpha=1.4100
 Hill k=50, 95% CI by bootstrap of monthly blocks (300 replicas): [1.37; 2.61]
+
+Hill k=50 with the extreme taken out:
+  all 1714 claims: alpha = 1.8109; without the largest claim: 1.9915; without the 3 largest: 2.0888
+  without the month of the largest claim (1980-07, 13 claims): alpha = 1.9915
 simulated Pareto with alpha = 1.81, n = 1500, 200 repetitions: mean Hill k=50 = 1.900 (sd 0.265), 90% of the repetitions between 1.51 and 2.39
 
 window of 36 months without a claim on the layer:
@@ -3631,6 +3726,8 @@ monthly p of the training tail (published POT/GPD fit: xi = 0.406, sigma = 7.387
                      mutual information window x (dangerous vs negligible) = 0.5147 bits
 reference: under the rate that the vault showed (2 months hit in 24, p = 1/12), the same clean window would be worth 4.48 bits (ratio 22.3)
 ```
+
+**One claim and the line at 2.** The estimate $\hat\alpha=1.81$ puts the tail below 2, where the variance does not exist. Taking out the single largest claim (263.3 million, July 1980) moves it to 1.99, and taking out the three largest, to 2.09, on the other side of the line. The other 12 claims of that month are all below the 51 largest, so excluding the whole month gives the same 1.99. The verdict "infinite variance" therefore hangs on one observation, and the exclusion is a choice that cannot be defended by looking at the result: the analyst who drops the extreme because it "looks like an outlier" has chosen the answer. The bootstrap interval [1.37; 2.61] already said as much; the exclusion shows where it comes from.
 
 Read it line by line. **4, 1, 0**: the months hit in each three-year block of the training set; the clean window that the claim
 read was real, surrounded by years with four and one month hit. **1.9625 / 1.8109 / 1.4100**: the series gives
@@ -3811,6 +3908,18 @@ which the Agent applies a Model incompatible with the World.
 | Transposition of the conditional | $P(E \mid I)$ read as $P(I \mid E)$ — the prosecutor's fallacy |
 | Russell's turkey | The real process is outside the hypothesis space, and more data only increase confidence in the wrong place |
 | Case for population | One looks for the cause of the case, not the cause of the frequency (Rose's sick individuals and sick populations) |
+
+**What the code knows of the pathologies.** The six names above and ten more from the literature review (selection
+correlation of Meng, overbetting, a calibration error read without its null, the ensemble mean taken for the time
+average, the wild tail, pseudoreplication, the question at the aggregate, the performative loop, adjustment for a
+collider and dependent decibans) are now sixteen kinds of one type, `PathologyKind`, and the graph edge carries
+it: `EdgeKind::Pathology(kind)`. The validator therefore sees which pathology an edge marks. What the code can
+*detect* on a card is a smaller set, and the code says so: a table, `reach`, labels each kind as visible on today's card,
+as having its field in the card since contract 1.6 but no predicate yet, as needing a field that does not exist, or as living in the data and not in the card. Only two kinds have a
+predicate today, both syntactic like the type III lock: the question at the average (R0) against a declared
+independent unit, and a margin declared on a unit named as a record, a row or an hour. The other fourteen return no
+finding, and a test pins that a card that cannot show them is not reported. The search of Chapter 16 still weighs
+the edge as it weighs a deductive one: the weighting by edge type is declared and not done.
 
 **The mathematical bridges.** The transversal edges link distant modules by an explicit relation,
 navigable in both directions. Four of them recur across the whole theory.
@@ -4039,6 +4148,8 @@ that they see better than the others.
 | Domain | Translates problems from other areas | The parameter that does not come from the data comes from someone | Glossary, structured elicitation, scope term |
 | Decision | Converts the result into action | A number without a natural frequency decides nothing | Natural frequencies, HOPs, the C/L tree, exit clause |
 | Orchestrator | Coordinates and convenes the panel | No step approves its own result | The model-critique card and the attack on the artifact before approval |
+
+**Many analysts are many universes.** When the analysts are language models, the choice of model and of persona shifts the conclusion: Bertran, Fogliato and Wu (arXiv:2602.18710, 2026) had autonomous agents analyse the same dataset and hypothesis, found conclusions that vary widely, and propose reporting them as a distribution, in the manner of a multiverse analysis, with the prompts disclosed. The card's `autoria` field records which role wrote each field, but not which model or which persona played that role; that is the reason to extend it, and the extension is planned for the next contract, not in force.
 
 **The craft of each specialist, in one case.** The data specialist begins with a decision that nobody sees:
 **what a row is**. One row per person, per day or per event changes the mean, the variance and the margin, and for
@@ -4486,6 +4597,11 @@ questions.
 | `noise_physics` | What noise is this (gaussian or with jumps)? Are there absorbing states? Is the agent passive or does it deform the world? |
 | `causal_ladder` | At which step of Pearl is the statement, with which identification strategy and which untestable premise? |
 
+**What the code enforces of the header.** Only the laboratory of this chapter reads the five fields: it checks that
+all five are present, in this order. The card schema of the core (`stochology-core`) does not carry them, so no gate
+checks that a header is true, or that it exists on a card that circulates between specialists. The header is a
+discipline of the reader and of the review, not yet a lock.
+
 The header of a real claim about a bank call centre, abbreviated:
 
 ```yaml
@@ -4547,6 +4663,20 @@ $p = 0.05$, so the act must be not to insure, as Chapter 11 found, and a card th
 is refused, because its action departs from its own reasoning. The three are optional, and they check what the card
 declares about the exchanges, not the exchanges: a finding that was never logged is still invisible.
 
+**Six fields for what the literature review found missing.** Version 1.6 adds six optional fields. The **selection
+correlation** gives, by estimand, the correlation $\rho$ between being observed and the value, the fraction $f$ of the
+population that is observed and the standard deviation $\sigma$; the contract recomputes Meng's error of the mean,
+$\rho\sqrt{(1-f)/f}\,\sigma$, and the effective size, $f/((1-f)\rho^2)$, and refuses the card whose declared values depart by
+more than 1%. With $\rho=-0.21$, $f=0.24$ and $\sigma=0.488$ the error is $-0.1824$ and the effective size 7.16. The
+**ECE cut** must be at or above the 95th percentile of the null for the declared $n$, and must say whether the null's
+predictions are the real ones or simulated. The **drift mode** names covariate, label, concept or audience, and a label drift
+must name its detection. The **missing mechanism** is MCAR, MAR or MNAR, and MNAR asks for a sensitivity analysis. The
+**subgroup audit** names the rate equalised, the family of subgroups and who pays. The **causal graph** lists the edges
+`A->B`, refuses a cycle, and lets the colliders be read from it. Two older fields were extended without a new field: the
+authorship accepts `role@model/persona`, and the decision rule accepts `faixa=lo:hi`, the range of $C/L$ over which the net
+benefit was read, which must contain the $C/L$ of the rule. All of this checks what the card declares and not whether it
+is true: a selection correlation can be declared wrong, and the card will accept it if its own arithmetic closes.
+
 **The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
 
 | Question | Options | Why it matters |
@@ -4595,6 +4725,12 @@ locks. The first four are required from the beginning; the fifth entered with th
 | $\Phi_3$ Layers and severe test | Audit the filter of the sample, draw the causal graph and confront the hypothesis with a simulated null model | Pattern read before the null, collider, Simpson |
 | $\Phi_4$ Ecological scope | Judge the decision in the environment in which it will operate, with a scope term and an objective exit clause | A recommendation without a validity date |
 | $\Phi_5$ Resolution of the question | The declared action has to be at the same grain as the independent unit: with the datum at the day or coarser, aggregate resolution (R0) is rejected | An action by day with an account at the aggregate. A unit finer than the day stays outside this lock, and that is declared |
+
+**What the code enforces of $\Phi_3$ in contracts 1.5 and 1.6.** The invariant asks for the filter audit, the causal graph and the
+simulated null model. The validator of the core checks two things: that a null model is declared and that the
+one-line definition is not empty. From contract 1.6 the card has a field that carries a causal graph, and the core checks that it
+is acyclic and can name its colliders, but $\Phi_3$ does not yet read it, so the collider and Simpson in the last column are
+still blocked by the reader and not by the lock. The test of the independences the graph implies is the declared next step.
 
 **Testing a property, not an example.** An ordinary test checks one case: with these inputs, this output. A
 **property test** states a rule that must hold for every input, and lets the machine search for a counterexample.
@@ -4676,8 +4812,8 @@ defect NoDefinition: failures=1 gates=Phi3-layers-and-null-model detail="no null
 defect NoMarginNoUnit: failures=1 gates=Phi2-independent-unit detail="margin without a declared independent unit"
 defect NoNullModel: failures=1 gates=Phi3-layers-and-null-model detail="no null model or no one-line definition"
 defect NoScopeNoPayerNoExit: failures=1 gates=Phi4-scope-and-exit detail="ecological scope, who pays for the error or exit clause missing"
-defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
-defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question must end in ? and cite the action of the package"
+defect QuestionWithoutMark: failures=1 gates=type-III-decider-question detail="decider_question does not end in ?"
+defect QuestionWithoutAction: failures=1 gates=type-III-decider-question detail="decider_question does not quote the package action"
 intact graph: validation=[]
 graph with a ghost edge: validation=["edge to absent node: L2_erlang -> L2_ghost"]
 graph with a deductive cycle: validation=["cycle in E_tree: Some(\"L1_queue\")"]
@@ -4697,9 +4833,10 @@ lock is **literal**, and the question has to end in an interrogation mark **and*
 contamination. Without a seed it falls at $\Phi_1$; without a margin or unit it falls at $\Phi_2$; without a definition or without a
 null model it falls at $\Phi_3$; without scope, without who pays or without an exit clause it falls at $\Phi_4$. The two
 defects of the question of the decider both fall at the type III lock, but for different reasons. One loses the
-interrogation mark, the other loses the action. **The message is identical in the two cases.** The validator
-states the requirement of the rule, without saying which part was missing. It is a small detail that exercise 4 asks
-to improve.
+interrogation mark, the other loses the action. **The messages differ in the two cases.** The validator
+says which part was missing: "does not end in ?" in one, "does not quote the package action" in the other, and a third
+message when both are missing. What it still cannot say is whether the question is the decider's: a question that ends
+in a question mark and quotes the action passes, whatever it asks. Exercise 4 asks for such a question.
 
 **The structural validator crosses the chapters.** The three refusals of Chapter 15 reappear here:
 an edge to a ghost node, a deductive cycle and a hyperedge with a single member. That is on purpose. A lock that only
@@ -4718,9 +4855,9 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
    insurance?" in an insurer that is not going to change the product?
 3. *(Count)* Why do 25 days of exponential growth identify $\beta - \gamma$ and not $\beta/\gamma$?
    Show that two pairs $(\beta, \gamma)$ with equal differences generate identical initial curves.
-4. *(Laboratory)* Improve the message of the type III lock to distinguish "the interrogation mark is missing"
-   from "the question does not cite the action". Make the two defects fall into different messages and reproduce the
-   table.
+4. *(Laboratory)* Write a third planted defect: a question that ends in a question mark and quotes the action of the
+   package, and yet is not the question the decider needs. Show that the lock accepts it, and say which field of the
+   card, other than the question, could expose it.
 5. *(Laboratory)* Write a property test that verifies that the simulated wait of a queue is always
    non-negative and does not decrease when the service time increases, keeping the arrivals fixed.
 6. *(Concept)* Explain, in three sentences, why G5 is stronger than a test that only checks whether the chain
@@ -4741,6 +4878,8 @@ seed diverge in **0 of 32** runs, the reproducibility that Chapter 1 requires.
   the multiverse that measured it, and no $\text{pass}^k$ may exceed its $\text{pass}^1$.
 - Version 1.5 adds the authorship of each field, the findings used and not used, and the decision rule, recomputed from
   the card's own numbers.
+- Version 1.6 adds the selection correlation, the ECE cut, the drift mode, the missing mechanism, the subgroup audit and
+  the causal graph, and extends the authorship and the decision rule.
 
 ## Chapter 18. The vault, the cryptographic seal and the audit against itself
 
@@ -5160,7 +5299,7 @@ intervention confirmed.
 "run another round until three areas pass" is a stopping rule that was never declared. An **e-process** closes that
 gap: each test contributes an e-value (here, a calibrated form of its per-domain p-value), the evidence accumulates
 by a rule fixed before looking, and by Ville's inequality the chance that it ever reaches $1/\alpha$ under the null is
-at most $\alpha$, whatever the stopping rule. Applied to the 38 recorded tests under a declaration written before the
+at most $\alpha$, whatever the stopping rule (Ramdas, Grünwald, Vovk and Shafer, 2023, survey this anytime-valid line; Vovk and Wang, 2021, treat the calibration and combination of e-values). Applied to the 38 recorded tests under a declaration written before the
 computation (one ledger per area, the mean of the e-values because the rounds reuse data, a test with no non-empty set
 counting as a p-value of 1), the reading is this:
 
@@ -6255,17 +6394,18 @@ is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and
 Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
 simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
-The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 27 modules of the
+The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 28 modules of the
 laboratories that draw random numbers, 4 print their own spread (the propagation, the multiverse, the reliability and
 the stacking laboratories), 6 are audited number by number by `--mc-error`, 4 are of another kind (Chapter 1, which
 is about seeds; the discrepancy, which averages over a thousand datasets; the choice of cases of the bridge, a
-selection and not an estimate; the triage of Chapter 16, a hash and not a draw), and the other 13 are rerun whole by
+selection and not an estimate; the triage of Chapter 16, a hash and not a draw), 1 is not audited (the gambler's fallacy of Chapter 2, added on 2026-10-20: its shares are checked by a test against the exact
+value, within one point, and not under other seeds), and the other 13 are rerun whole by
 `labs --seed-spread` under twenty other seeds, line by line against the published run. Numbers move, as they should;
 a word that moves is a verdict that depends on the draw. Of 312 lines, three have words that move, and their
 chapters now say so: one set of Chapter 9 accepted under one seed and rejected under another (the intersection the
 method reports does not move), the tail of Chapter 15 read as not wild at the edge of the cutoff under 2 of 20
 seeds, and an invariance test of Chapter 15 that fails its tolerance under 2 of 20 seeds although the effect does not
-change. A register of the 27 is kept in the code, and a test refuses a new module that draws random numbers without
+change. A register of the 28 is kept in the code, and a test refuses a new module that draws random numbers without
 saying where its spread is measured. The run of `--seed-spread` takes minutes, so it is recorded with its commit and
 not repeated by the verification suite.
 
@@ -6418,6 +6558,28 @@ Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata chec
 | **[checked]** Cemri, M.; Pan, M. Z.; Yang, S. et al. "Why Do Multi-Agent LLM Systems Fail?", arXiv:2503.13657, 2025 | The failures of teams of agents, against the panel (Chapter 16) |
 | **[checked]** Kennedy, M. C.; O'Hagan, A. "Bayesian Calibration of Computer Models", *JRSS B* 63(3):425–464, 2001. DOI: 10.1111/1467-9868.00294 | Simulator, discrepancy and noise (Chapter 14) |
 | **[checked]** Brynjarsdóttir, J.; O'Hagan, A. "Learning about physical parameters: the importance of model discrepancy", *Inverse Problems* 30(11):114007, 2014. DOI: 10.1088/0266-5611/30/11/114007 | What the discrepancy may not do, and why the parameter needs it (Chapter 14) |
+
+### D.8 Added on 2026-10-20
+
+Each line was checked against a source that prints its metadata. The Crossref API could not be reached from the working
+environment on that day, so the lines below were checked against arXiv, the Project Euclid page, the IDEAS/RePEc
+record, the publisher's page of RAND and the earlier record in `references/VERIFICATION.md`; where a volume or page was not
+printed by the source it is left out and not completed from memory.
+
+| Reference | Where it enters |
+| --- | --- |
+| **[checked]** Hullman, J.; Resnick, P.; Adar, E. "Hypothetical Outcome Plots Outperform Error Bars and Violin Plots for Inferences about Reliability of Variable Ordering", *PLOS ONE* 10(11), 2015. DOI: 10.1371/journal.pone.0142444 (IDEAS gives pages 1–25 and no article number) | HOPs in the communication of a result (Chapters 11 and 16) |
+| **[checked]** Bladt, M.; Albrecher, H.; Beirlant, J. "Threshold selection and trimming in extremes", arXiv:1903.07942, 2019 (arXiv listing; the journal data were not checked) | Automatic threshold for the Hill estimator (Chapter 14) |
+| **[checked]** Lawson, J. "Expected Growth Criterion: An Axiomatization", arXiv:2212.09617, 2022 | Conditions for an ergodic transformation of wealth (Chapter 10) |
+| **[checked]** Ramdas, A.; Grünwald, P.; Vovk, V.; Shafer, G. "Game-Theoretic Statistics and Safe Anytime-Valid Inference", *Statistical Science* 38(4), 2023. DOI: 10.1214/23-STS894 | Anytime-valid inference and the e-process (Chapter 19) |
+| **[checked]** Vovk, V.; Wang, R. "E-values: Calibration, combination and applications", *Annals of Statistics* 49(3), 2021. DOI: 10.1214/20-AOS2020 | E-values (Chapter 19) |
+| **[checked]** Bertran, M.; Fogliato, R.; Wu, Z. S. "Many AI Analysts, One Dataset: Navigating the Agentic Data Science Multiverse", arXiv:2602.18710 (v2), 2026 | The team of analysts as a multiverse (Chapter 16) |
+| **[checked]** Lempert, R. J.; Popper, S. W.; Bankes, S. C. *Shaping the Next One Hundred Years: New Methods for Quantitative, Long-Term Policy Analysis*, RAND, MR-1626-RPC, 2003 (publisher's page) | Robust decision methods, to be weighed against the turkey and the M-open case (Chapter 4; not yet cited in the text) |
+
+Two references of the review remain unchecked and are not in the list: the "Metel (2017)" on the limits of the half Kelly, which
+no source found on 2026-10-20 matches (the nearest are Hsieh and Barmish, "On Kelly Betting: Some Limitations", arXiv:1710.01787, 2017, and
+Peterson, arXiv:1710.00431, 2017, neither confirmed as the intended one), and the generalized Bayes of Frazier and colleagues
+(the nearest is Frazier, Drovandi and Kohn, "Calibrated Generalized Bayesian Inference", arXiv:2311.15485, whose identity with the intended work is also unconfirmed).
 
 ### D.7 How to use this list
 
@@ -6614,12 +6776,12 @@ registry; no instrument changed.
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 3 | Null paths reaching 20 decibans | 0.85% "in simulation", no horizon | 0.87% over paths of 500 tosses, exact | the simulation had no declared horizon; the exact count needs one |
-| 3 | Dutch book and calibration | 0.05, 0.60 and 0.55 | the argument without the numbers | no recipe in any source |
+| 3 | Dutch book and calibration | 0.05, 0.60 and 0.55 | the argument without the numbers | no recipe in any source; the Chapter 3 laboratory now carries a recipe of its own (0.60 + 0.50, a world at 0.25), which does not restore these numbers |
 | 7 | Brier of the base-rate heuristic in a referral clinic | 0.084 | 0.085, with the recipe (mammography test, prior one half) | the recipe gives 0.0851 |
 | 10 | Horizon of the ensemble mean | about 12 rounds for 10 trajectories and 112 for a million | 23 and 136, by ln N over the gap of the two growth rates | the earlier pair does not grow like ln N, which the sentence claimed |
 | 10 | Full Kelly on an estimated chance | 16% | 15%, from 18 of 25, exact binomial | the recipe gives 15.4% |
-| 10 | Extremes against Gaussian | 17.4% against 3.9% | the argument without the numbers | no recipe in any source |
-| 11 | Two-route app; Phillips curve | 41.0, 36.8, 35.0 and 0.3 min; 4.59% and 5.88% | the argument without the numbers | no recipe in any source |
+| 10 | Extremes against Gaussian | 17.4% against 3.9% | the argument without the numbers | no recipe in any source; the Chapter 10 laboratory carries a recipe of its own (Pareto with alpha = 3, 2 520 days), which does not restore these numbers |
+| 11 | Two-route app; Phillips curve | 41.0, 36.8, 35.0 and 0.3 min; 4.59% and 5.88% | the argument without the numbers | no recipe in any source; the Chapter 11 laboratory carries a two-route recipe of its own, which does not restore these numbers (the Phillips curve is not touched) |
 | 17 | Kramers jumps; identifiability of R0 | 591 jumps, 99%; 1.38 to 5.90, 2.00 to 2.24, 1.81 to 2.11 | the argument without the numbers | no recipe in any source |
 | 13, 14 | Paths of the research record | written in the chapter | moved to the sections of Chapters 13 and 14 below | the chapters carry content only |
 | 14 | Floor of the claim's forecast | "the floor of the forecast diary" | points to Chapter 18, where the diary is defined | the reordering put the diary after the chapter |
@@ -6701,6 +6863,15 @@ No number changed.
 | 16 | The failures of teams of agents | four caught, seven in part, three not seen | four caught, ten in part, none unseen, with the three that passed between the specialists now declared in the card | the audit of the panel found three failures nothing saw |
 | 17 | The fields of the card | contract 1.4 | contract 1.5: authorship by role, the findings used and not used, and the decision rule recomputed from the card | the same |
 
+### The card contract 1.6, 2026-10-20
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 17 | The fields of the card | contract 1.5 | contract 1.6: selection correlation recomputed by Meng's identity, ECE cut above the null, drift mode, missing mechanism, subgroup audit and causal graph; authorship with model and persona; decision rule with a range | the review of the literature found them missing; declaration 5 of point 17 |
+| 17 | $\Phi_3$ and $\Phi_2$ | graph and recomputation declared next | the graph is a field, acyclic and with readable colliders; $\Phi_3$ does not yet test the independences it implies and $\Phi_2$ does not yet recompute the margin, because both need data the card does not carry | the same |
+
+The Merkle root of the gates stayed `0a9636fac5eb1c5e…` after the change.
+
 ### The seed over whole laboratories, 2026-10-19
 
 | Chapter | What | Earlier | Corrected | Cause |
@@ -6778,7 +6949,7 @@ numbers of the six that could not be reconstructed, keeping the argument.
 
 | Chapter | Number | Where it comes from | Status |
 | --- | --- | --- | --- |
-| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | not reconstructable from the text; the numbers were cut and the argument kept |
+| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | not reconstructable from the text; the numbers were cut and the argument kept. The Chapter 3 laboratory gives the argument numbers of its own and does not claim these |
 | 3 | 229 tosses to separate a 0.6 coin with odds of 100 to 1 | Kullback-Leibler | recomputed: 228.7 |
 | 3 | Maximum entropy with mean 4.5: about 5% on face 1 and 35% on face 6 | Jaynes | recomputed: 5.4% and 34.7% |
 | 3 | 0.85% of null paths reach 20 decibans | course simulation in the paper | recipe written: paths of 500 tosses, exact count 0.87% |
@@ -6786,8 +6957,8 @@ numbers of the six that could not be reconstructed, keeping the argument.
 | 10 | Mean of N trajectories follows the expectation for about 12 rounds (N = 10) and 112 (a million) | course example | recipe written: ln N over the gap of the two growth rates, 23 and 136; a simulation of the median ensemble mean agrees |
 | 10 | Full Kelly negative in 16% of estimates from 25 rounds | course example | recipe written: even odds, chance 0.6, exact binomial, 15% |
 | 10 | Three players who pool grow 1.6% per round | course example | recipe written: exact over the eight outcomes, 1.6% |
-| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
-| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
+| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | not reconstructable; the numbers were cut and the argument kept. The Chapter 10 laboratory gives the argument numbers of its own and does not claim these |
+| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | not reconstructable; the numbers were cut and the argument kept. The Chapter 11 laboratory gives the argument numbers of its own and does not claim these |
 | 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 13 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
 | 14 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
@@ -6829,7 +7000,8 @@ The earlier text records, for the same Berkson simulation,
 a correlation of $+0.002$ in the population and $−0.669$ among the selected; the instrument measures
 $+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
 from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
-million ballots, 57.4% for Landon against the published 57%, and the equivalence of 7 people. No old
+million simulated ballots (2,400,031 of 10 million voters, against 2.38 million in the historical count), 57.4% for
+Landon against the published 57%, and the equivalence of 7.2 people, rounded to 7 in the title and the text. No old
 value was deleted.
 
 ### Chapter 7

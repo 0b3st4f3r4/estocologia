@@ -79,6 +79,18 @@ pub struct Card {
     pub findings: Option<String>,
     /// Contract 1.5: the inequality the action rests on, `p=P; C=C; L=L; act=protect|do not protect`.
     pub decision_rule: Option<String>,
+    /// Contract 1.6: Meng's selection correlation by estimand, `estimando=NAME; rho=R; f=F; sigma=S; erro=E; n_efetivo=N | ...`.
+    pub selection_correlation: Option<String>,
+    /// Contract 1.6: the ECE cut above the null's 95th percentile, `corte=C; q95_nulo=Q; n=N; previsoes=reais|simuladas`.
+    pub ece_cut: Option<String>,
+    /// Contract 1.6: the mode of the declared drift, `modo=covariavel|rotulo|conceito|publico[; deteccao=...]`.
+    pub drift_mode: Option<String>,
+    /// Contract 1.6: the missing-data mechanism, `mecanismo=MCAR|MAR|MNAR[; sensibilidade=...]`.
+    pub missing_mechanism: Option<String>,
+    /// Contract 1.6: the subgroup audit, `taxa=FNR|FPR|PPV|TPR; familia=...; paga=...`.
+    pub subgroup_audit: Option<String>,
+    /// Contract 1.6: the causal graph, `A->B, B->C`.
+    pub causal_graph: Option<String>,
 }
 
 impl Card {
@@ -113,6 +125,12 @@ impl Card {
             authorship: None,
             findings: None,
             decision_rule: None,
+            selection_correlation: None,
+            ece_cut: None,
+            drift_mode: None,
+            missing_mechanism: None,
+            subgroup_audit: None,
+            causal_graph: None,
         }
     }
 

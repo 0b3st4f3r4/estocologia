@@ -46,7 +46,7 @@ impl Version {
 }
 
 /// Version that this crate emits.
-pub const SCHEMA_VERSION: Version = Version::new(1, 5);
+pub const SCHEMA_VERSION: Version = Version::new(1, 6);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SchemaError {
@@ -142,6 +142,15 @@ pub fn document(card: &Card) -> BTreeMap<String, String> {
         ("autoria", optional(&card.authorship)),
         ("achados", optional(&card.findings)),
         ("regra_de_decisao", optional(&card.decision_rule)),
+        (
+            "correlacao_de_selecao",
+            optional(&card.selection_correlation),
+        ),
+        ("corte_de_ece", optional(&card.ece_cut)),
+        ("modo_de_deriva", optional(&card.drift_mode)),
+        ("mecanismo_de_ausentes", optional(&card.missing_mechanism)),
+        ("auditoria_de_subgrupos", optional(&card.subgroup_audit)),
+        ("grafo_causal", optional(&card.causal_graph)),
     ] {
         if let Some(v) = value {
             doc.insert(name.into(), v);
@@ -293,7 +302,31 @@ pub fn card_from_document(doc: &BTreeMap<String, String>) -> Result<Card, Schema
     let decision_rule = checked("regra_de_decisao", |v| {
         crate::conduct::parse_decision_rule(v).map(|_| ())
     })?;
+    let selection_correlation = checked("correlacao_de_selecao", |v| {
+        crate::contract16::parse_selection(v).map(|_| ())
+    })?;
+    let ece_cut = checked("corte_de_ece", |v| {
+        crate::contract16::parse_ece_cut(v).map(|_| ())
+    })?;
+    let drift_mode = checked("modo_de_deriva", |v| {
+        crate::contract16::parse_drift_mode(v).map(|_| ())
+    })?;
+    let missing_mechanism = checked("mecanismo_de_ausentes", |v| {
+        crate::contract16::parse_missing_mechanism(v).map(|_| ())
+    })?;
+    let subgroup_audit = checked("auditoria_de_subgrupos", |v| {
+        crate::contract16::parse_subgroup_audit(v).map(|_| ())
+    })?;
+    let causal_graph = checked("grafo_causal", |v| {
+        crate::contract16::parse_causal_graph(v).map(|_| ())
+    })?;
     let mut card = Card::new(&require(doc, "id")?, layer, uncertainty);
+    card.selection_correlation = selection_correlation;
+    card.ece_cut = ece_cut;
+    card.drift_mode = drift_mode;
+    card.missing_mechanism = missing_mechanism;
+    card.subgroup_audit = subgroup_audit;
+    card.causal_graph = causal_graph;
     card.authorship = authorship;
     card.findings = findings;
     card.decision_rule = decision_rule;
@@ -641,7 +674,7 @@ mod tests {
     #[test]
     fn a_version_1_2_document_migrates_with_the_new_fields_absent() {
         let current = text(&full_card());
-        let old = current.replacen("versao = 1.5", "versao = 1.2", 1);
+        let old = current.replacen("versao = 1.6", "versao = 1.2", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(migrated.uncertainty_budget, None);
         assert_eq!(migrated.dominant_event, None);
@@ -677,7 +710,7 @@ mod tests {
     #[test]
     fn a_version_1_3_document_migrates_with_the_fields_of_1_4_absent() {
         let current = text(&full_card());
-        let old = current.replacen("versao = 1.5", "versao = 1.3", 1);
+        let old = current.replacen("versao = 1.6", "versao = 1.3", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(
             (migrated.multiverse.clone(), migrated.reliability.clone()),
@@ -712,10 +745,68 @@ mod tests {
 
     #[test]
     fn a_version_1_4_document_migrates_with_the_fields_of_1_5_absent() {
-        let old = text(&full_card()).replacen("versao = 1.5", "versao = 1.4", 1);
+        let old = text(&full_card()).replacen("versao = 1.6", "versao = 1.4", 1);
         let migrated = from_text(&old).expect("migrates");
         assert_eq!(migrated, full_card());
         assert_eq!(migrated.decision_rule, None);
+    }
+
+    #[test]
+    fn a_version_1_5_document_migrates_with_the_fields_of_1_6_absent() {
+        let old = text(&full_card()).replacen("versao = 1.6", "versao = 1.5", 1);
+        let migrated = from_text(&old).expect("migrates");
+        assert_eq!(migrated, full_card());
+        assert_eq!(migrated.selection_correlation, None);
+        assert_eq!(migrated.causal_graph, None);
+        assert!(
+            DECLARED_CHAIN
+                .description()
+                .iter()
+                .any(|d| d.contains("introduces grafo_causal"))
+        );
+    }
+
+    #[test]
+    fn the_fields_of_1_6_round_trip_and_are_refused_when_they_depart() {
+        let mut f = full_card();
+        f.selection_correlation = Some(
+            "estimando=media; rho=-0.21; f=0.24; sigma=0.488; erro=-0.1824; n_efetivo=7.16".into(),
+        );
+        f.ece_cut = Some("corte=0.0425; q95_nulo=0.0425; n=1488; previsoes=simuladas".into());
+        f.drift_mode = Some("modo=rotulo; deteccao=BBSE".into());
+        f.missing_mechanism = Some("mecanismo=MNAR; sensibilidade=delta de -0.2 a 0.2".into());
+        f.subgroup_audit =
+            Some("taxa=FNR; familia=sexo x faixa etaria; paga=o paciente nao triado".into());
+        f.causal_graph = Some("U->X, U->Y, X->Y".into());
+        assert_eq!(from_text(&text(&f)).expect("round trip"), f);
+        for (field, bad) in [
+            (
+                "correlacao_de_selecao",
+                "estimando=media; rho=-0.21; f=0.24; sigma=0.488; erro=0.1; n_efetivo=7.16",
+            ),
+            (
+                "corte_de_ece",
+                "corte=0.03; q95_nulo=0.0425; n=1488; previsoes=reais",
+            ),
+            ("modo_de_deriva", "modo=rotulo"),
+            ("mecanismo_de_ausentes", "mecanismo=MNAR"),
+            ("auditoria_de_subgrupos", "taxa=FNR; familia=sexo"),
+            ("grafo_causal", "A->B, B->A"),
+        ] {
+            let mut g = f.clone();
+            match field {
+                "correlacao_de_selecao" => g.selection_correlation = Some(bad.into()),
+                "corte_de_ece" => g.ece_cut = Some(bad.into()),
+                "modo_de_deriva" => g.drift_mode = Some(bad.into()),
+                "mecanismo_de_ausentes" => g.missing_mechanism = Some(bad.into()),
+                "auditoria_de_subgrupos" => g.subgroup_audit = Some(bad.into()),
+                _ => g.causal_graph = Some(bad.into()),
+            }
+            match from_text(&text(&g)) {
+                Err(SchemaError::InvalidValue { field: got, .. }) => assert_eq!(got, field),
+                other => panic!("{field} not refused: {other:?}"),
+            }
+        }
     }
 
     #[test]
@@ -830,7 +921,7 @@ mod tests {
         let versions: Vec<String> = DECLARED_CHAIN.versions().iter().map(|v| v.text()).collect();
         assert_eq!(
             versions,
-            vec!["1.0", "1.1", "1.2", "1.3", "1.4", "1.5"],
+            vec!["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6"],
             "the chain declared in the file"
         );
         assert_eq!(

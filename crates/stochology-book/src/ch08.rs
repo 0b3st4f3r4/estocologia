@@ -200,6 +200,76 @@ pub(crate) fn toronto_like_forecasts() -> Vec<f64> {
         .collect()
 }
 
+/// Rules for scoring one probability forecast `r` of an event that happens with chance `q`.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Rule {
+    /// Brier: (r - y)^2. Strictly proper.
+    Brier,
+    /// Logarithmic loss: -ln of the probability given to what happened. Strictly proper.
+    Log,
+    /// Hit rate: lost when the forecast is on the wrong side of one half (a tie counts half).
+    Accuracy,
+    /// Absolute error: |r - y|. Looks like a score of the error of the probability; it is not proper.
+    Absolute,
+}
+
+/// Expected loss of declaring `r` when the event has chance `q`.
+pub fn expected_loss(rule: Rule, q: f64, r: f64) -> f64 {
+    match rule {
+        Rule::Brier => q * (1.0 - r) * (1.0 - r) + (1.0 - q) * r * r,
+        Rule::Log => -(q * r.ln() + (1.0 - q) * (1.0 - r).ln()),
+        Rule::Accuracy => {
+            let said_yes = if (r - 0.5).abs() < 1e-12 {
+                0.5
+            } else if r > 0.5 {
+                1.0
+            } else {
+                0.0
+            };
+            q * (1.0 - said_yes) + (1.0 - q) * said_yes
+        }
+        Rule::Absolute => q * (1.0 - r) + (1.0 - q) * r,
+    }
+}
+
+/// The reports on the grid 0.01..0.99 that minimise the expected loss for someone who believes `q`:
+/// (lowest, highest, how many tie). A proper rule has the single minimum r = q.
+pub fn best_reports(rule: Rule, q: f64) -> (f64, f64, usize) {
+    let grid: Vec<f64> = (1..=99).map(|k| k as f64 / 100.0).collect();
+    let losses: Vec<f64> = grid.iter().map(|r| expected_loss(rule, q, *r)).collect();
+    let best = losses.iter().cloned().fold(f64::INFINITY, f64::min);
+    let tied: Vec<f64> = grid
+        .iter()
+        .zip(&losses)
+        .filter(|(_, l)| **l <= best + 1e-12)
+        .map(|(r, _)| *r)
+        .collect();
+    (tied[0], tied[tied.len() - 1], tied.len())
+}
+
+/// A forecaster who knows the chance and one who rounds it to 1% or 99%, over `n` days.
+/// Returns (hit rate honest, hit rate rounded, Brier honest, Brier rounded, log honest, log rounded).
+pub fn honest_against_rounded(seed: u64, n: usize) -> [f64; 6] {
+    let mut rng = SplitMix64::new(seed);
+    let mut acc = [0.0_f64; 6];
+    for _ in 0..n {
+        let q = 0.1 + 0.8 * rng.uniform();
+        let y = rng.bernoulli(q);
+        let honest = q;
+        let rounded = if q > 0.5 { 0.99 } else { 0.01 };
+        let hit = |r: f64| f64::from(u8::from((r > 0.5) == y));
+        let brier = |r: f64| (r - f64::from(u8::from(y))).powi(2);
+        let log = |r: f64| if y { -r.ln() } else { -(1.0 - r).ln() };
+        acc[0] += hit(honest);
+        acc[1] += hit(rounded);
+        acc[2] += brier(honest);
+        acc[3] += brier(rounded);
+        acc[4] += log(honest);
+        acc[5] += log(rounded);
+    }
+    acc.map(|s| s / n as f64)
+}
+
 pub fn run() {
     println!("== Chapter 8 :: the forecaster's thermometer ==");
 
@@ -308,6 +378,24 @@ pub fn run() {
             spread, q50, q95
         );
     }
+
+    // A rule that scores belief: what each rule asks of someone who believes 70%.
+    for (name, rule) in [
+        ("hit rate", Rule::Accuracy),
+        ("absolute error", Rule::Absolute),
+        ("Brier", Rule::Brier),
+        ("log", Rule::Log),
+    ] {
+        let (low, high, ties) = best_reports(rule, 0.70);
+        println!(
+            "belief 0.70 under {name}: best report from {low:.2} to {high:.2} ({ties} of 99 reports tie)"
+        );
+    }
+    let h = honest_against_rounded(2026, 100_000);
+    println!(
+        "100000 days, honest against rounded to 1% or 99%: hit rate {:.4} and {:.4} | Brier {:.4} and {:.4} | log loss {:.4} and {:.4}",
+        h[0], h[1], h[2], h[3], h[4], h[5]
+    );
 }
 
 #[cfg(test)]
@@ -332,5 +420,28 @@ mod tests {
         let d = decompose(&p, &y);
         assert_eq!(d.res, 0.0);
         assert!((d.rel - d.res + d.unc - d.brier_box).abs() < 1e-12);
+    }
+
+    #[test]
+    fn proper_rules_ask_for_the_belief_and_the_others_do_not() {
+        for q in [0.1, 0.3, 0.5, 0.7, 0.9] {
+            for rule in [Rule::Brier, Rule::Log] {
+                let (low, high, ties) = best_reports(rule, q);
+                assert!((low - q).abs() < 1e-9 && (high - q).abs() < 1e-9 && ties == 1);
+            }
+        }
+        // Hit rate cannot tell 51% from 99%: every report on the right side ties.
+        let (low, high, ties) = best_reports(Rule::Accuracy, 0.7);
+        assert!((low - 0.51).abs() < 1e-9 && (high - 0.99).abs() < 1e-9 && ties == 49);
+        // Absolute error is the improper mutant: it asks for the extreme, not the belief.
+        let (low, high, ties) = best_reports(Rule::Absolute, 0.7);
+        assert!((low - 0.99).abs() < 1e-9 && (high - 0.99).abs() < 1e-9 && ties == 1);
+    }
+
+    #[test]
+    fn rounding_the_belief_keeps_the_hit_rate_and_loses_the_proper_scores() {
+        let h = honest_against_rounded(7, 50_000);
+        assert!((h[0] - h[1]).abs() < 1e-12, "same decisions, same hit rate");
+        assert!(h[2] < h[3] && h[4] < h[5]);
     }
 }

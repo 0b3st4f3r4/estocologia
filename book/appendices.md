@@ -195,17 +195,18 @@ is the largest of twenty-one seeds (the others range from 0.0409 to 0.0424), and
 Chapter 14 is above every other seed's (from 2.43 to 2.60). Neither changes a conclusion. Both are the reason a
 simulated number is reported with the precision its draws allow, and not with the four decimals the printer allows.
 
-The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 27 modules of the
+The audit did not cover every draw, and on 2026-10-19 the rest was audited by brute force. Of the 28 modules of the
 laboratories that draw random numbers, 4 print their own spread (the propagation, the multiverse, the reliability and
 the stacking laboratories), 6 are audited number by number by `--mc-error`, 4 are of another kind (Chapter 1, which
 is about seeds; the discrepancy, which averages over a thousand datasets; the choice of cases of the bridge, a
-selection and not an estimate; the triage of Chapter 16, a hash and not a draw), and the other 13 are rerun whole by
+selection and not an estimate; the triage of Chapter 16, a hash and not a draw), 1 is not audited (the gambler's fallacy of Chapter 2, added on 2026-10-20: its shares are checked by a test against the exact
+value, within one point, and not under other seeds), and the other 13 are rerun whole by
 `labs --seed-spread` under twenty other seeds, line by line against the published run. Numbers move, as they should;
 a word that moves is a verdict that depends on the draw. Of 312 lines, three have words that move, and their
 chapters now say so: one set of Chapter 9 accepted under one seed and rejected under another (the intersection the
 method reports does not move), the tail of Chapter 15 read as not wild at the edge of the cutoff under 2 of 20
 seeds, and an invariance test of Chapter 15 that fails its tolerance under 2 of 20 seeds although the effect does not
-change. A register of the 27 is kept in the code, and a test refuses a new module that draws random numbers without
+change. A register of the 28 is kept in the code, and a test refuses a new module that draws random numbers without
 saying where its spread is measured. The run of `--seed-spread` takes minutes, so it is recorded with its commit and
 not repeated by the verification suite.
 
@@ -358,6 +359,28 @@ Cited in Chapter 21 and, the next three, in Chapters 5, 11 and 14; metadata chec
 | **[checked]** Cemri, M.; Pan, M. Z.; Yang, S. et al. "Why Do Multi-Agent LLM Systems Fail?", arXiv:2503.13657, 2025 | The failures of teams of agents, against the panel (Chapter 16) |
 | **[checked]** Kennedy, M. C.; O'Hagan, A. "Bayesian Calibration of Computer Models", *JRSS B* 63(3):425–464, 2001. DOI: 10.1111/1467-9868.00294 | Simulator, discrepancy and noise (Chapter 14) |
 | **[checked]** Brynjarsdóttir, J.; O'Hagan, A. "Learning about physical parameters: the importance of model discrepancy", *Inverse Problems* 30(11):114007, 2014. DOI: 10.1088/0266-5611/30/11/114007 | What the discrepancy may not do, and why the parameter needs it (Chapter 14) |
+
+### D.8 Added on 2026-10-20
+
+Each line was checked against a source that prints its metadata. The Crossref API could not be reached from the working
+environment on that day, so the lines below were checked against arXiv, the Project Euclid page, the IDEAS/RePEc
+record, the publisher's page of RAND and the earlier record in `references/VERIFICATION.md`; where a volume or page was not
+printed by the source it is left out and not completed from memory.
+
+| Reference | Where it enters |
+| --- | --- |
+| **[checked]** Hullman, J.; Resnick, P.; Adar, E. "Hypothetical Outcome Plots Outperform Error Bars and Violin Plots for Inferences about Reliability of Variable Ordering", *PLOS ONE* 10(11), 2015. DOI: 10.1371/journal.pone.0142444 (IDEAS gives pages 1–25 and no article number) | HOPs in the communication of a result (Chapters 11 and 16) |
+| **[checked]** Bladt, M.; Albrecher, H.; Beirlant, J. "Threshold selection and trimming in extremes", arXiv:1903.07942, 2019 (arXiv listing; the journal data were not checked) | Automatic threshold for the Hill estimator (Chapter 14) |
+| **[checked]** Lawson, J. "Expected Growth Criterion: An Axiomatization", arXiv:2212.09617, 2022 | Conditions for an ergodic transformation of wealth (Chapter 10) |
+| **[checked]** Ramdas, A.; Grünwald, P.; Vovk, V.; Shafer, G. "Game-Theoretic Statistics and Safe Anytime-Valid Inference", *Statistical Science* 38(4), 2023. DOI: 10.1214/23-STS894 | Anytime-valid inference and the e-process (Chapter 19) |
+| **[checked]** Vovk, V.; Wang, R. "E-values: Calibration, combination and applications", *Annals of Statistics* 49(3), 2021. DOI: 10.1214/20-AOS2020 | E-values (Chapter 19) |
+| **[checked]** Bertran, M.; Fogliato, R.; Wu, Z. S. "Many AI Analysts, One Dataset: Navigating the Agentic Data Science Multiverse", arXiv:2602.18710 (v2), 2026 | The team of analysts as a multiverse (Chapter 16) |
+| **[checked]** Lempert, R. J.; Popper, S. W.; Bankes, S. C. *Shaping the Next One Hundred Years: New Methods for Quantitative, Long-Term Policy Analysis*, RAND, MR-1626-RPC, 2003 (publisher's page) | Robust decision methods, to be weighed against the turkey and the M-open case (Chapter 4; not yet cited in the text) |
+
+Two references of the review remain unchecked and are not in the list: the "Metel (2017)" on the limits of the half Kelly, which
+no source found on 2026-10-20 matches (the nearest are Hsieh and Barmish, "On Kelly Betting: Some Limitations", arXiv:1710.01787, 2017, and
+Peterson, arXiv:1710.00431, 2017, neither confirmed as the intended one), and the generalized Bayes of Frazier and colleagues
+(the nearest is Frazier, Drovandi and Kohn, "Calibrated Generalized Bayesian Inference", arXiv:2311.15485, whose identity with the intended work is also unconfirmed).
 
 ### D.7 How to use this list
 
@@ -554,12 +577,12 @@ registry; no instrument changed.
 | Chapter | What | Earlier | Corrected | Cause |
 | --- | --- | --- | --- | --- |
 | 3 | Null paths reaching 20 decibans | 0.85% "in simulation", no horizon | 0.87% over paths of 500 tosses, exact | the simulation had no declared horizon; the exact count needs one |
-| 3 | Dutch book and calibration | 0.05, 0.60 and 0.55 | the argument without the numbers | no recipe in any source |
+| 3 | Dutch book and calibration | 0.05, 0.60 and 0.55 | the argument without the numbers | no recipe in any source; the Chapter 3 laboratory now carries a recipe of its own (0.60 + 0.50, a world at 0.25), which does not restore these numbers |
 | 7 | Brier of the base-rate heuristic in a referral clinic | 0.084 | 0.085, with the recipe (mammography test, prior one half) | the recipe gives 0.0851 |
 | 10 | Horizon of the ensemble mean | about 12 rounds for 10 trajectories and 112 for a million | 23 and 136, by ln N over the gap of the two growth rates | the earlier pair does not grow like ln N, which the sentence claimed |
 | 10 | Full Kelly on an estimated chance | 16% | 15%, from 18 of 25, exact binomial | the recipe gives 15.4% |
-| 10 | Extremes against Gaussian | 17.4% against 3.9% | the argument without the numbers | no recipe in any source |
-| 11 | Two-route app; Phillips curve | 41.0, 36.8, 35.0 and 0.3 min; 4.59% and 5.88% | the argument without the numbers | no recipe in any source |
+| 10 | Extremes against Gaussian | 17.4% against 3.9% | the argument without the numbers | no recipe in any source; the Chapter 10 laboratory carries a recipe of its own (Pareto with alpha = 3, 2 520 days), which does not restore these numbers |
+| 11 | Two-route app; Phillips curve | 41.0, 36.8, 35.0 and 0.3 min; 4.59% and 5.88% | the argument without the numbers | no recipe in any source; the Chapter 11 laboratory carries a two-route recipe of its own, which does not restore these numbers (the Phillips curve is not touched) |
 | 17 | Kramers jumps; identifiability of R0 | 591 jumps, 99%; 1.38 to 5.90, 2.00 to 2.24, 1.81 to 2.11 | the argument without the numbers | no recipe in any source |
 | 13, 14 | Paths of the research record | written in the chapter | moved to the sections of Chapters 13 and 14 below | the chapters carry content only |
 | 14 | Floor of the claim's forecast | "the floor of the forecast diary" | points to Chapter 18, where the diary is defined | the reordering put the diary after the chapter |
@@ -641,6 +664,15 @@ No number changed.
 | 16 | The failures of teams of agents | four caught, seven in part, three not seen | four caught, ten in part, none unseen, with the three that passed between the specialists now declared in the card | the audit of the panel found three failures nothing saw |
 | 17 | The fields of the card | contract 1.4 | contract 1.5: authorship by role, the findings used and not used, and the decision rule recomputed from the card | the same |
 
+### The card contract 1.6, 2026-10-20
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| 17 | The fields of the card | contract 1.5 | contract 1.6: selection correlation recomputed by Meng's identity, ECE cut above the null, drift mode, missing mechanism, subgroup audit and causal graph; authorship with model and persona; decision rule with a range | the review of the literature found them missing; declaration 5 of point 17 |
+| 17 | $\Phi_3$ and $\Phi_2$ | graph and recomputation declared next | the graph is a field, acyclic and with readable colliders; $\Phi_3$ does not yet test the independences it implies and $\Phi_2$ does not yet recompute the margin, because both need data the card does not carry | the same |
+
+The Merkle root of the gates stayed `0a9636fac5eb1c5e…` after the change.
+
 ### The seed over whole laboratories, 2026-10-19
 
 | Chapter | What | Earlier | Corrected | Cause |
@@ -718,7 +750,7 @@ numbers of the six that could not be reconstructed, keeping the argument.
 
 | Chapter | Number | Where it comes from | Status |
 | --- | --- | --- | --- |
-| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | not reconstructable from the text; the numbers were cut and the argument kept |
+| 3 | Dutch book: 0.05 per round, 0.60 to the world, 0.55 after coherence | course example in the paper | not reconstructable from the text; the numbers were cut and the argument kept. The Chapter 3 laboratory gives the argument numbers of its own and does not claim these |
 | 3 | 229 tosses to separate a 0.6 coin with odds of 100 to 1 | Kullback-Leibler | recomputed: 228.7 |
 | 3 | Maximum entropy with mean 4.5: about 5% on face 1 and 35% on face 6 | Jaynes | recomputed: 5.4% and 34.7% |
 | 3 | 0.85% of null paths reach 20 decibans | course simulation in the paper | recipe written: paths of 500 tosses, exact count 0.87% |
@@ -726,8 +758,8 @@ numbers of the six that could not be reconstructed, keeping the argument.
 | 10 | Mean of N trajectories follows the expectation for about 12 rounds (N = 10) and 112 (a million) | course example | recipe written: ln N over the gap of the two growth rates, 23 and 136; a simulation of the median ensemble mean agrees |
 | 10 | Full Kelly negative in 16% of estimates from 25 rounds | course example | recipe written: even odds, chance 0.6, exact binomial, 15% |
 | 10 | Three players who pool grow 1.6% per round | course example | recipe written: exact over the eight outcomes, 1.6% |
-| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
-| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
+| 10 | 1-in-100-year loss 17.4% by extremes against 3.9% Gaussian | course example in the paper | not reconstructable; the numbers were cut and the argument kept. The Chapter 10 laboratory gives the argument numbers of its own and does not claim these |
+| 11 | Two-route app: 41.0, 36.8 and 35.0 minutes, error 0.3 | course example in the paper | not reconstructable; the numbers were cut and the argument kept. The Chapter 11 laboratory gives the argument numbers of its own and does not claim these |
 | 11 | Phillips curve: 4.59% promised, 5.88% delivered | course example in the paper | not reconstructable; the numbers were cut and the argument kept |
 | 13 | Propensity fit, Kelly interval, skill in the vault, false negative rates | research record, retired code | recipe in the text for the propensity fit; the rest cited |
 | 14 | Skills of the four forecasters in the vault; trend of 4.6% per year | research record, retired code | recipe in the text; data of the vault not beside the book |
@@ -769,7 +801,8 @@ The earlier text records, for the same Berkson simulation,
 a correlation of $+0.002$ in the population and $−0.669$ among the selected; the instrument measures
 $+0.0012$ and $−0.679$ with cutoff 1.5 (and $−0.617$ with cutoff 1.0). The difference is one hundredth and comes
 from the selection cutoff, which the old text does not declare. The 1936 numbers converge without adjustment. They are 2.4
-million ballots, 57.4% for Landon against the published 57%, and the equivalence of 7 people. No old
+million simulated ballots (2,400,031 of 10 million voters, against 2.38 million in the historical count), 57.4% for
+Landon against the published 57%, and the equivalence of 7.2 people, rounded to 7 in the title and the text. No old
 value was deleted.
 
 ### Chapter 7

@@ -1222,6 +1222,23 @@ fn ch02() {
             ch02::swap_factor(prevalence, 1.0, false_positive)
         );
     }
+
+    // The gambler's fallacy: a streak says something about an urn and nothing about a coin.
+    let coin = ch02::coin_after_streak(2026, 1_000_000, 5);
+    println!(
+        "coin, 1000000 sequences of 6 tosses: after 5 heads in a row ({} cases) the next toss is heads in {:.1}%; betting on tails at even odds gains {:+.3} per bet",
+        coin.cases,
+        100.0 * coin.repeats,
+        2.0 * (1.0 - coin.repeats) - 1.0
+    );
+    let urn = ch02::urn_after_streak(2026, 1_000_000, 5, 10, 10);
+    println!(
+        "urn of 10 red and 10 blue balls, without replacement: after 5 reds in a row ({} cases) the next ball is red in {:.1}% (exact {:.1}%); betting on blue at even odds gains {:+.3} per bet",
+        urn.cases,
+        100.0 * urn.repeats,
+        100.0 * ch02::urn_exact(10, 10, 5),
+        2.0 * (1.0 - urn.repeats) - 1.0
+    );
 }
 
 fn ch03() {
@@ -1245,6 +1262,23 @@ fn ch03() {
         "posterior with two positives: independent = {:.4}, correlated = {:.4}",
         ch03::posterior_by_odds(0.01, &[10.0, 10.0]),
         ch03::posterior_by_odds(0.01, &[10.0, 4.2])
+    );
+    // The book and the world: coherence removes the first and leaves the second.
+    let (rain, dry, q) = (0.60, 0.50, 0.25);
+    let (cr, cd) = ch03::make_coherent(rain, dry);
+    println!(
+        "Dutch book: prices {rain:.2} + {dry:.2} -> certain profit of the bookmaker = {:.4}",
+        ch03::dutch_book_profit(rain, dry)
+    );
+    println!(
+        "made coherent: {cr:.4} + {cd:.4} -> certain profit = {:.4}",
+        ch03::dutch_book_profit(cr, cd)
+    );
+    println!(
+        "against a world that rains {q:.2} of the time: edge of who knows it = {:.4} with the original rain price, {:.4} after coherence, {:.4} if calibrated",
+        ch03::edge_over_the_agent(rain, q),
+        ch03::edge_over_the_agent(cr, q),
+        ch03::edge_over_the_agent(q, q)
     );
 }
 
@@ -1272,5 +1306,26 @@ fn ch04() {
         c.steps,
         c.discounted_width_final,
         c.discounted_width_final / c.static_width_final
+    );
+
+    // The law of total variance and the simulated respondent.
+    let exact = ch04::variance_split(&ch04::SURVEY_SHARES, &ch04::SURVEY_YES);
+    let person = ch04::simulated_split(2026, 200_000, ch04::Respondent::Person);
+    let simulated = ch04::simulated_split(2026, 200_000, ch04::Respondent::MostCommon);
+    println!(
+        "survey of 5 groups, closed form: total variance {:.4} = inside the groups {:.4} + between the groups {:.4}; yes rate {:.4}",
+        exact.total, exact.within, exact.between, exact.yes_rate
+    );
+    println!(
+        "200000 people drawn from the groups: inside {:.4} ({:.1}% of the total), yes rate {:.4}",
+        person.within,
+        100.0 * person.within / person.total,
+        person.yes_rate
+    );
+    println!(
+        "200000 simulated respondents answering the most common answer of their group: inside {:.4} ({:.1}% of the total), yes rate {:.4}",
+        simulated.within,
+        100.0 * simulated.within / simulated.total,
+        simulated.yes_rate
     );
 }

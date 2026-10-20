@@ -646,7 +646,160 @@ fn trilemma_block() {
     println!();
 }
 
+// ------------------------------------------- learning or deforming (active inference)
+
+pub const AMBIENT: f64 = 18.0;
+pub const TARGET: f64 = 22.0;
+const SIGMA: f64 = 1.0;
+
+/// Surprise of the observation `o` under the belief N(mu, sigma^2): -ln p(o).
+pub fn surprise(mu: f64, sigma: f64, o: f64) -> f64 {
+    0.5 * (2.0 * std::f64::consts::PI * sigma * sigma).ln()
+        + (o - mu).powi(2) / (2.0 * sigma * sigma)
+}
+
+#[derive(Clone, Copy, PartialEq)]
+pub enum Route {
+    /// Change the belief toward what is observed.
+    Learn,
+    /// Change the world toward what is believed.
+    Deform,
+}
+
+pub struct Thermostat {
+    pub belief: f64,
+    pub world: f64,
+    /// Surprise at the end, with the action as it was taken.
+    pub surprise_with_action: f64,
+    /// Surprise of the same final belief when the world is left as it was before any action.
+    pub surprise_without_action: f64,
+}
+
+/// Starts believing `TARGET` in a room at `AMBIENT` and reduces surprise by one route, `steps` times.
+pub fn thermostat(route: Route, steps: usize, rate: f64) -> Thermostat {
+    let (mut belief, mut world) = (TARGET, AMBIENT);
+    for _ in 0..steps {
+        match route {
+            Route::Learn => belief += rate * (world - belief),
+            Route::Deform => world += rate * (belief - world),
+        }
+    }
+    Thermostat {
+        belief,
+        world,
+        surprise_with_action: surprise(belief, SIGMA, world),
+        surprise_without_action: surprise(belief, SIGMA, AMBIENT),
+    }
+}
+
+fn learn_or_deform() {
+    println!(
+        "== Chapter 11 :: learning or deforming (belief {TARGET:.0} C, room {AMBIENT:.0} C, sigma {SIGMA:.1}) =="
+    );
+    println!(
+        "  minimum surprise at sigma {SIGMA:.1}: {:.4}",
+        surprise(0.0, SIGMA, 0.0)
+    );
+    for (name, route) in [("learns", Route::Learn), ("heats", Route::Deform)] {
+        let t = thermostat(route, 30, 0.3);
+        println!(
+            "  thermostat that {name}: belief {:.3}, room {:.3}, surprise with the action {:.4}, without the action {:.4}",
+            t.belief, t.world, t.surprise_with_action, t.surprise_without_action
+        );
+    }
+    println!();
+}
+
+// ------------------------------------------- the two-route app (a forecast that moves what it forecasts)
+
+/// Time on the highway when a share `x` of the drivers takes it: 20 empty, 50 full.
+pub fn highway_time(x: f64) -> f64 {
+    20.0 + 30.0 * x
+}
+
+/// Time on the avenue, which does not depend on the share (it is long, not narrow).
+pub const AVENUE_TIME: f64 = 35.0;
+
+pub struct Day {
+    pub highway_share: f64,
+    pub predicted: f64,
+    pub actual: f64,
+}
+
+/// The naive app: everyone takes the route that was faster yesterday and is told yesterday's time for it.
+pub fn naive_app(days: usize) -> Vec<Day> {
+    let (mut hw, mut av) = (highway_time(0.0), AVENUE_TIME);
+    let mut out = Vec::new();
+    for _ in 0..days {
+        let to_highway = hw < av;
+        let x = if to_highway { 1.0 } else { 0.0 };
+        let (predicted, actual) = if to_highway {
+            (hw, highway_time(x))
+        } else {
+            (av, AVENUE_TIME)
+        };
+        out.push(Day {
+            highway_share: x,
+            predicted,
+            actual,
+        });
+        // sensors report both routes under today's flow: yesterday's times for tomorrow
+        hw = highway_time(x);
+        av = AVENUE_TIME;
+    }
+    out
+}
+
+pub struct Equalised {
+    pub highway_share: f64,
+    pub told: f64,
+    /// Mean over the drivers of the gap between the time they were told and the time they got.
+    pub mean_gap: f64,
+    pub actual_mean: f64,
+}
+
+/// The app that splits the drivers to equalise the times it believes: the highway takes the
+/// share x with 20 + 30 x = `believed_avenue`, and everybody is told `believed_avenue`.
+pub fn equalising_app(believed_avenue: f64) -> Equalised {
+    let x = ((believed_avenue - 20.0) / 30.0).clamp(0.0, 1.0);
+    let hw = highway_time(x);
+    Equalised {
+        highway_share: x,
+        told: believed_avenue,
+        mean_gap: x * (hw - believed_avenue).abs()
+            + (1.0 - x) * (AVENUE_TIME - believed_avenue).abs(),
+        actual_mean: x * hw + (1.0 - x) * AVENUE_TIME,
+    }
+}
+
+fn two_route_app() {
+    println!("== Chapter 11 :: the two-route app (highway 20 + 30 x, avenue 35) ==");
+    let days = naive_app(20);
+    let gap = days
+        .iter()
+        .map(|d| (d.actual - d.predicted).abs())
+        .sum::<f64>()
+        / days.len() as f64;
+    let on_highway = days.iter().filter(|d| d.highway_share > 0.5).count();
+    println!(
+        "  naive app, 20 days: everybody on the highway in {on_highway} of them, mean gap between told and got = {gap:.2} min"
+    );
+    for (name, belief) in [
+        ("avenue believed at 35.0", 35.0),
+        ("avenue believed at 30.0", 30.0),
+    ] {
+        let e = equalising_app(belief);
+        println!(
+            "  equalising app, {name}: highway share {:.3}, told {:.1}, mean time got {:.2}, mean gap {:.2} min",
+            e.highway_share, e.told, e.actual_mean, e.mean_gap
+        );
+    }
+    println!();
+}
+
 pub fn run() {
+    two_route_app();
+    learn_or_deform();
     bernoulli_ship();
     value_of_information();
     dikes();
@@ -656,6 +809,44 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Oracle: the naive app alternates, 30 minutes off on the highway days and 0 on the avenue days
+    /// (mean 15); the equalising app with the exact belief has share 0.5 and no gap; believing the
+    /// avenue at 30 puts 2/3 of the drivers on it, who get 35: a mean gap of 2/3 * 5 = 3.33.
+    #[test]
+    fn the_equalising_app_is_stable_only_where_its_belief_is_true() {
+        let days = naive_app(20);
+        let gap: f64 = days
+            .iter()
+            .map(|d| (d.actual - d.predicted).abs())
+            .sum::<f64>()
+            / 20.0;
+        assert!((gap - 15.0).abs() < 1e-12);
+        let exact = equalising_app(35.0);
+        assert!((exact.highway_share - 0.5).abs() < 1e-12 && exact.mean_gap.abs() < 1e-12);
+        let off = equalising_app(30.0);
+        assert!((1.0 - off.highway_share - 2.0 / 3.0).abs() < 1e-12);
+        assert!((off.mean_gap - 10.0 / 3.0).abs() < 1e-12);
+        // mutant: an app that ignores its own effect (told the empty-highway time) is off by 30 on the highway
+        assert!((highway_time(1.0) - highway_time(0.0) - 30.0).abs() < 1e-12);
+    }
+
+    /// Oracle: the minimum is 1/2 ln(2 pi) = 0.9189. With the action both routes sit on it;
+    /// without the action the belief of the one that deformed is 4 C off, a surplus of 4^2/2 = 8.
+    /// Mutant: an audit that reads only the surprise with the action cannot tell the routes apart.
+    #[test]
+    fn surprise_with_the_action_does_not_separate_learning_from_deforming() {
+        let floor = 0.5 * (2.0 * std::f64::consts::PI).ln();
+        let (l, d) = (
+            thermostat(Route::Learn, 30, 0.3),
+            thermostat(Route::Deform, 30, 0.3),
+        );
+        assert!((l.surprise_with_action - floor).abs() < 1e-3);
+        assert!((d.surprise_with_action - floor).abs() < 1e-3);
+        assert!((l.surprise_with_action - d.surprise_with_action).abs() < 1e-3);
+        assert!((l.surprise_without_action - floor).abs() < 1e-3);
+        assert!((d.surprise_without_action - floor - 8.0).abs() < 1e-2);
+    }
 
     #[test]
     fn dike_gev_underestimates_with_gumbel_and_chouldechova_closes() {

@@ -9,6 +9,7 @@
 
 use std::collections::BTreeMap;
 use stochology_core::{Layer, UncertaintyType};
+use stochology_hypergraph::pathology::PathologyKind;
 use stochology_hypergraph::{EdgeKind, Graph, GraphEdge, Hyperedge, Lens, Node, TreeEdge};
 
 use crate::lats::{Lats, World};
@@ -32,7 +33,7 @@ fn type_name(edge_type: EdgeKind) -> &'static str {
         EdgeKind::Deductive => "deductive",
         EdgeKind::MathematicalBridge => "bridge",
         EdgeKind::Causal => "causal",
-        EdgeKind::Pathology => "pathology",
+        EdgeKind::Pathology(_) => "pathology",
     }
 }
 
@@ -250,7 +251,12 @@ pub fn sample_graph() -> Graph {
         ],
         graph_edges: vec![
             graph_edge("h3.mesh", "r.resolution", EdgeKind::Causal),
-            graph_edge("s1.triage", "h0.queue", EdgeKind::Pathology),
+            // a fixed triage rule imposed on a queue whose load oscillates
+            graph_edge(
+                "s1.triage",
+                "h0.queue",
+                EdgeKind::Pathology(PathologyKind::FallacyOfTheStableWorld),
+            ),
         ],
         hyperedges: vec![
             hyperedge(

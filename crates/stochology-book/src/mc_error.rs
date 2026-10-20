@@ -258,7 +258,11 @@ pub fn run() {
 /// How the Monte Carlo error of each module that draws random numbers is reported (item 18 (g), 2026-10-19). A test
 /// reads every source file of the crate and refuses one that draws random numbers and is not listed here, so that a new
 /// stochastic laboratory cannot enter without saying where its spread is measured, or that it is not.
-pub const SEED_REGISTER: [(&str, &str); 27] = [
+pub const SEED_REGISTER: [(&str, &str); 28] = [
+    (
+        "ch02.rs",
+        "not audited: shares over some 16,000 to 31,000 cases of one seed; a test checks them against the exact value within one point",
+    ),
     (
         "banco.rs",
         "whole run rerun under twenty seeds in --seed-spread (docs/SEED_SPREAD.md)",
@@ -293,7 +297,7 @@ pub const SEED_REGISTER: [(&str, &str); 27] = [
     ),
     (
         "ch10.rs",
-        "shares of the investors: exact interval in --mc-error",
+        "shares of the investors: exact interval in --mc-error; the extremes-against-Gaussian lab prints medians and fractions of 200 repetitions of one seed, not audited",
     ),
     (
         "ch11.rs",

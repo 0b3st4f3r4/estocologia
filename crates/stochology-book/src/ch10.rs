@@ -632,16 +632,200 @@ fn dow_leverage() {
     println!();
 }
 
+// ------------------------------------------- extremes against the Gaussian
+
+/// Standard normal quantile by the rational approximation of Acklam (relative error below 1.2e-9),
+/// accurate in the far tail where the erf of Abramowitz and Stegun, used elsewhere, is not.
+#[allow(clippy::excessive_precision)]
+pub fn normal_quantile_tail(p: f64) -> f64 {
+    const A: [f64; 6] = [
+        -3.969683028665376e+01,
+        2.209460984245205e+02,
+        -2.759285104469687e+02,
+        1.383577518672690e+02,
+        -3.066479806614716e+01,
+        2.506628277459239e+00,
+    ];
+    const B: [f64; 5] = [
+        -5.447609879822406e+01,
+        1.615858368580409e+02,
+        -1.556989798598866e+02,
+        6.680131188771972e+01,
+        -1.328068155288572e+01,
+    ];
+    const C: [f64; 6] = [
+        -7.784894002430293e-03,
+        -3.223964580411365e-01,
+        -2.400758277161838e+00,
+        -2.549732539343734e+00,
+        4.374664141464968e+00,
+        2.938163982698783e+00,
+    ];
+    const D: [f64; 4] = [
+        7.784695709041462e-03,
+        3.224671290700398e-01,
+        2.445134137142996e+00,
+        3.754408661907416e+00,
+    ];
+    let q_poly = |q: f64| {
+        (((((C[0] * q + C[1]) * q + C[2]) * q + C[3]) * q + C[4]) * q + C[5])
+            / ((((D[0] * q + D[1]) * q + D[2]) * q + D[3]) * q + 1.0)
+    };
+    if p < 0.02425 {
+        q_poly((-2.0 * p.ln()).sqrt())
+    } else if p > 1.0 - 0.02425 {
+        -q_poly((-2.0 * (1.0 - p).ln()).sqrt())
+    } else {
+        let q = p - 0.5;
+        let r = q * q;
+        (((((A[0] * r + A[1]) * r + A[2]) * r + A[3]) * r + A[4]) * r + A[5]) * q
+            / (((((B[0] * r + B[1]) * r + B[2]) * r + B[3]) * r + B[4]) * r + 1.0)
+    }
+}
+
+pub const DAYS_PER_YEAR: f64 = 252.0;
+
+/// The 1-in-100-year daily loss of a loss with P(X > x) = x^(-alpha), x >= 1, exact.
+pub fn exact_hundred_year_loss(alpha: f64) -> f64 {
+    (100.0 * DAYS_PER_YEAR).powf(1.0 / alpha)
+}
+
+/// The same level for a Gaussian with the exact moments of that Pareto (alpha > 2).
+pub fn gaussian_hundred_year_loss_exact(alpha: f64) -> f64 {
+    let mean = alpha / (alpha - 1.0);
+    let sd = (alpha / ((alpha - 1.0).powi(2) * (alpha - 2.0))).sqrt();
+    mean + sd * normal_quantile_tail(1.0 - 1.0 / (100.0 * DAYS_PER_YEAR))
+}
+
+pub struct HundredYear {
+    pub gaussian: f64,
+    pub extremes: f64,
+    /// The threshold itself, which is what the extrapolation gives when its ratio is left out.
+    pub threshold: f64,
+}
+
+/// One sample of `n` daily losses: the Gaussian fitted by mean and standard deviation, and the
+/// extremes level of Weissman, x_(k+1) * (k / (n p))^(1/alpha_hat), with Hill's alpha_hat at k.
+pub fn hundred_year_from_sample(xs: &[f64], k: usize) -> HundredYear {
+    let n = xs.len() as f64;
+    let mean = xs.iter().sum::<f64>() / n;
+    let sd = (xs.iter().map(|x| (x - mean).powi(2)).sum::<f64>() / (n - 1.0)).sqrt();
+    let mut v = xs.to_vec();
+    v.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    let alpha_hat = hill(xs, k);
+    let p = 1.0 / (100.0 * DAYS_PER_YEAR);
+    let threshold = v[k];
+    HundredYear {
+        gaussian: mean + sd * normal_quantile_tail(1.0 - p),
+        extremes: threshold * (k as f64 / (n * p)).powf(1.0 / alpha_hat),
+        threshold,
+    }
+}
+
+pub struct ExtremesRun {
+    pub truth: f64,
+    pub gaussian_exact: f64,
+    pub gaussian_median: f64,
+    pub gaussian_below: f64,
+    pub extremes_median: f64,
+    pub extremes_q25: f64,
+    pub extremes_q75: f64,
+    pub extremes_below: f64,
+}
+
+fn quantile_of(v: &mut [f64], q: f64) -> f64 {
+    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    v[((v.len() - 1) as f64 * q).round() as usize]
+}
+
+/// `repetitions` samples of ten years (2 520 days) of Pareto losses with tail alpha.
+pub fn extremes_run(seed: u64, alpha: f64, repetitions: usize, k: usize) -> ExtremesRun {
+    let mut rng = SplitMix64::new(seed);
+    let truth = exact_hundred_year_loss(alpha);
+    let (mut g, mut e) = (Vec::new(), Vec::new());
+    for _ in 0..repetitions {
+        let xs: Vec<f64> = (0..2_520).map(|_| rng.pareto(alpha)).collect();
+        let h = hundred_year_from_sample(&xs, k);
+        g.push(h.gaussian);
+        e.push(h.extremes);
+    }
+    let below = |v: &[f64]| v.iter().filter(|x| **x < truth).count() as f64 / v.len() as f64;
+    ExtremesRun {
+        truth,
+        gaussian_exact: gaussian_hundred_year_loss_exact(alpha),
+        gaussian_below: below(&g),
+        extremes_below: below(&e),
+        gaussian_median: quantile_of(&mut g, 0.5),
+        extremes_median: quantile_of(&mut e, 0.5),
+        extremes_q25: quantile_of(&mut e, 0.25),
+        extremes_q75: quantile_of(&mut e, 0.75),
+    }
+}
+
+fn extremes_against_gaussian() {
+    println!(
+        "== Chapter 10 :: the 1-in-100-year loss, extremes against the Gaussian (alpha = 3, 2 520 days, 200 repetitions) =="
+    );
+    let r = extremes_run(1010, 3.0, 200, 100);
+    println!(
+        "  exact level: {:.2}; Gaussian with the exact moments: {:.2}",
+        r.truth, r.gaussian_exact
+    );
+    println!(
+        "  Gaussian fitted to each sample: median {:.2}, below the exact level in {:.0}% of the samples",
+        r.gaussian_median,
+        100.0 * r.gaussian_below
+    );
+    println!(
+        "  extremes (Hill k = 100, Weissman): median {:.2}, quartiles [{:.2}; {:.2}], below the exact level in {:.0}% of the samples",
+        r.extremes_median,
+        r.extremes_q25,
+        r.extremes_q75,
+        100.0 * r.extremes_below
+    );
+    println!();
+}
+
 pub fn run() {
     peters_coin();
     insurance_seller();
     wild_tail();
+    extremes_against_gaussian();
     dow_leverage();
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Oracle: z(1 - 1/25200) = 3.946309 (reference value of the inverse normal).
+    #[test]
+    fn the_tail_quantile_is_accurate_where_the_erf_is_not() {
+        assert!((normal_quantile_tail(1.0 - 1.0 / 25_200.0) - 3.946_309_3).abs() < 1e-6);
+        assert!(normal_quantile_tail(0.5).abs() < 1e-9);
+        assert!((normal_quantile_tail(0.975) - 1.959_963_985).abs() < 1e-6);
+    }
+
+    /// Oracle: P(X > x) = x^-alpha at the exact level equals 1/25200; the Gaussian with the same
+    /// moments sits more than five times lower; the extremes level is on target in the median.
+    /// Mutant: dropping the ratio k/(n p) returns the threshold, far below the level, and is killed.
+    #[test]
+    fn extremes_find_the_hundred_year_loss_and_the_gaussian_does_not() {
+        let truth = exact_hundred_year_loss(3.0);
+        assert!((truth.powf(-3.0) - 1.0 / 25_200.0).abs() < 1e-12);
+        assert!(gaussian_hundred_year_loss_exact(3.0) < truth / 5.0);
+        let r = extremes_run(5, 3.0, 200, 100);
+        assert!(
+            (r.extremes_median / truth - 1.0).abs() < 0.25,
+            "{}",
+            r.extremes_median
+        );
+        assert!(r.gaussian_below > 0.99);
+        assert!(r.extremes_below > 0.2 && r.extremes_below < 0.8);
+        let mut rng = SplitMix64::new(5);
+        let xs: Vec<f64> = (0..2_520).map(|_| rng.pareto(3.0)).collect();
+        assert!(hundred_year_from_sample(&xs, 100).threshold < truth / 5.0);
+    }
 
     #[test]
     fn peters_coin_grows_in_the_ensemble_and_decays_in_time() {

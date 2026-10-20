@@ -162,11 +162,19 @@ fn evaluate(f: &Card) -> Vec<Failure> {
     let question = f.decider_question.trim();
     let action = f.package_action.trim().to_lowercase();
     let matches = !action.is_empty() && question.to_lowercase().contains(&action);
-    if !question.ends_with('?') || !matches {
-        add(
+    // Same four-way split as the core lock (`stochology-core/src/invariants.rs`): the message
+    // names which part of the question is missing.
+    match (question.ends_with('?'), matches) {
+        (true, true) => {}
+        (false, true) => add(Gate::TypeIII, "decider_question does not end in ?"),
+        (true, false) => add(
             Gate::TypeIII,
-            "decider_question must end in ? and cite the action of the package",
-        );
+            "decider_question does not quote the package action",
+        ),
+        (false, false) => add(
+            Gate::TypeIII,
+            "decider_question neither ends in ? nor quotes the package action",
+        ),
     }
     if f.header.iter().any(|c| c.trim().is_empty()) {
         add(Gate::Phi3, "five-question header incomplete");

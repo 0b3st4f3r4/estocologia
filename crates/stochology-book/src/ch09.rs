@@ -534,6 +534,81 @@ fn pearl_ladder() {
     println!();
 }
 
+// ------------------------------------------- the jump on the ladder
+
+/// The three answers about the same world: U -> X, U -> Y, X -> Y with a true effect of
+/// `EFFECT`. U is the confounder; X = U + noise; Y = EFFECT * X + 2 U + noise.
+pub const EFFECT: f64 = 1.0;
+
+pub struct Ladder {
+    /// Step 1: slope of Y on X seen in the observed rows (U not used).
+    pub seen: f64,
+    /// Step 2: slope of Y on X when X is assigned by a coin, ignoring U (do(X)).
+    pub done: f64,
+    /// Step 3: counterfactual change of Y for one unit if X were one point higher,
+    /// by abduction of its noise, with the structural equation and with the seen slope.
+    pub unit_structural: f64,
+    pub unit_from_slope: f64,
+}
+
+/// `assign_x = false` draws X from U (the observed world); `true` draws X apart from U.
+fn confounded_slope(seed: u64, n: usize, assign_x: bool) -> f64 {
+    let mut rng = SplitMix64::new(seed);
+    let (mut sx, mut sy, mut sxy, mut sxx) = (0.0, 0.0, 0.0, 0.0);
+    for _ in 0..n {
+        let u = rng.normal();
+        let x = if assign_x {
+            rng.normal() * 2f64.sqrt()
+        } else {
+            u + rng.normal()
+        };
+        let y = EFFECT * x + 2.0 * u + rng.normal();
+        sx += x;
+        sy += y;
+        sxy += x * y;
+        sxx += x * x;
+    }
+    let nf = n as f64;
+    (sxy - sx * sy / nf) / (sxx - sx * sx / nf)
+}
+
+pub fn ladder(seed: u64, n: usize) -> Ladder {
+    let seen = confounded_slope(seed, n, false);
+    let done = confounded_slope(seed ^ 0x5eed, n, true);
+    // One unit: u, x and the noise of Y are known by abduction from (x, y) and the equation.
+    let (u, x, eps) = (0.7, 1.2, -0.4);
+    let y = EFFECT * x + 2.0 * u + eps;
+    let recovered = y - EFFECT * x - 2.0 * u; // = eps: the noise this very unit carried
+    let unit_structural = EFFECT * (x + 1.0) + 2.0 * u + recovered - y;
+    let unit_from_slope = seen;
+    Ladder {
+        seen,
+        done,
+        unit_structural,
+        unit_from_slope,
+    }
+}
+
+fn the_jump() {
+    println!(
+        "== Chapter 9 :: the jump between the steps (U confounds X and Y, true effect {EFFECT:.1}) =="
+    );
+    let l = ladder(2026, 40_000);
+    println!(
+        "  step 1, seen:   slope of Y on X in the rows        = {:.3}",
+        l.seen
+    );
+    println!(
+        "  step 2, done:   slope of Y on X when X is assigned = {:.3}",
+        l.done
+    );
+    println!(
+        "  step 3, unit:   change of Y for X + 1, structural {:.3}, by the seen slope {:.3}",
+        l.unit_structural, l.unit_from_slope
+    );
+    println!();
+}
+
 fn one_round() {
     println!("== Chapter 9 :: a minimal ICP, three sites, three candidates ==");
     let rows = generate(2026, &THREE_SITES, 0.0);
@@ -670,6 +745,7 @@ fn many_rounds(repetitions: usize, instability: f64, label: &str) {
 pub fn run() {
     kidney_stones();
     pearl_ladder();
+    the_jump();
     one_round();
     many_rounds(200, 0.0, "stable mechanism: Y = 2X + noise at every site");
     many_rounds(
@@ -682,6 +758,23 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Oracle: seen slope = EFFECT + cov(X,2U)/var(X) = 1 + 2*1/2 = 2; assigned slope = EFFECT.
+    #[test]
+    fn the_jump_between_steps_matches_the_closed_form() {
+        let l = ladder(2026, 40_000);
+        assert!((l.seen - 2.0).abs() < 0.03, "{}", l.seen);
+        assert!((l.done - EFFECT).abs() < 0.03, "{}", l.done);
+        assert!((l.unit_structural - EFFECT).abs() < 1e-12);
+        assert!((l.unit_from_slope - l.unit_structural).abs() > 0.9);
+    }
+
+    /// Mutant: if the "assigned" arm still draws X from U, step 2 collapses into step 1.
+    #[test]
+    fn the_mutant_that_does_not_assign_x_is_killed() {
+        let same = confounded_slope(9, 40_000, false);
+        assert!((same - EFFECT).abs() > 0.9);
+    }
 
     #[test]
     fn pearl_steps_and_icp_intersection_work() {

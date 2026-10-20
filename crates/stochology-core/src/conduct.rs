@@ -31,16 +31,19 @@ pub const ROLES: [&str; 8] = [
 pub fn role_of(field: &str) -> Option<&'static str> {
     Some(match field {
         "artefato_simulavel" | "semente" | "teste_de_propriedade" => "code",
-        "unidade_independente" | "trata_ausentes" => "data",
-        "deriva_declarada" => "lifecycle",
+        "unidade_independente" | "trata_ausentes" | "mecanismo_de_ausentes" => "data",
+        "deriva_declarada" | "modo_de_deriva" => "lifecycle",
         "modelo_nulo"
         | "margem"
         | "patologias_cobertas"
         | "orcamento_de_incerteza"
         | "multiverso"
-        | "confiabilidade" => "inference",
+        | "confiabilidade"
+        | "correlacao_de_selecao"
+        | "corte_de_ece"
+        | "grafo_causal" => "inference",
         "trilha_integra" => "governance",
-        "subgrupos_auditados" | "quem_paga_pelo_erro" => "fairness",
+        "subgrupos_auditados" | "quem_paga_pelo_erro" | "auditoria_de_subgrupos" => "fairness",
         "definicao" | "priori_elicitada" | "pergunta_do_decisor" | "escopo_ecologico" => "domain",
         "acao_do_pacote" | "clausula_de_saida" | "evento_dominante" | "regra_de_decisao"
         | "resolucao" => "decision",
@@ -56,6 +59,18 @@ pub fn parse_authorship(text: &str) -> Result<Vec<(String, String)>, String> {
             .split_once(':')
             .ok_or_else(|| format!("'{part}' is not field:role"))?;
         let (field, role) = (field.trim(), role.trim());
+        // contract 1.6: the role may carry who played it, `role@model/persona`
+        let role = match role.split_once('@') {
+            Some((r, agent)) => {
+                match agent.split_once('/') {
+                    Some((model, persona))
+                        if !model.trim().is_empty() && !persona.trim().is_empty() => {}
+                    _ => return Err(format!("'{agent}' is not model/persona")),
+                }
+                r.trim()
+            }
+            None => role,
+        };
         if !ROLES.contains(&role) {
             return Err(format!("'{role}' is not a role of the team"));
         }
@@ -139,6 +154,7 @@ pub const ACTS: [&str; 2] = ["protect", "do not protect"];
 /// Reads a decision rule and recomputes its act: (p, C, L, act).
 pub fn parse_decision_rule(text: &str) -> Result<(f64, f64, f64, String), String> {
     let (mut p, mut c, mut l, mut act) = (None, None, None, None);
+    let mut range: Option<String> = None;
     for part in text.split(';').map(str::trim).filter(|p| !p.is_empty()) {
         let (key, value) = part
             .split_once('=')
@@ -154,6 +170,8 @@ pub fn parse_decision_rule(text: &str) -> Result<(f64, f64, f64, String), String
             "C" => c = Some(number()?),
             "L" => l = Some(number()?),
             "act" => act = Some(value.to_string()),
+            // contract 1.6: the range of C/L over which the net benefit was read (decision curve)
+            "faixa" => range = Some(value.to_string()),
             other => return Err(format!("unknown key '{other}'")),
         }
     }
@@ -173,6 +191,22 @@ pub fn parse_decision_rule(text: &str) -> Result<(f64, f64, f64, String), String
         ));
     }
     let threshold = c / l;
+    if let Some(r) = &range {
+        let (lo, hi) = r
+            .split_once(':')
+            .and_then(|(a, b)| Some((a.trim().parse::<f64>().ok()?, b.trim().parse::<f64>().ok()?)))
+            .ok_or_else(|| format!("'faixa={r}' is not lo:hi"))?;
+        if !(0.0 < lo && lo < hi && hi < 1.0) {
+            return Err(format!(
+                "the range {lo}:{hi} is not inside (0, 1) and ordered"
+            ));
+        }
+        if !(lo <= threshold && threshold <= hi) {
+            return Err(format!(
+                "the range {lo}:{hi} does not contain C/L = {threshold:.4}: the curve does not cover the point of the rule"
+            ));
+        }
+    }
     let implied = if p > threshold {
         "protect"
     } else {
@@ -189,6 +223,27 @@ pub fn parse_decision_rule(text: &str) -> Result<(f64, f64, f64, String), String
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn authorship_may_name_who_played_the_role_and_the_rule_may_name_its_range() {
+        assert!(
+            parse_authorship("modelo_nulo:inference@claude-sonnet-5-5/analista cetico").is_ok()
+        );
+        assert!(parse_authorship("modelo_nulo:inference@claude-sonnet-5-5").is_err());
+        assert!(parse_authorship("clausula_de_saida:inference@m/p").is_err());
+        assert!(
+            parse_decision_rule("p=0.05; C=1800; L=34000; act=do not protect; faixa=0.02:0.10")
+                .is_ok()
+        );
+        assert!(
+            parse_decision_rule("p=0.05; C=1800; L=34000; act=do not protect; faixa=0.06:0.10")
+                .is_err()
+        );
+        assert!(
+            parse_decision_rule("p=0.05; C=1800; L=34000; act=do not protect; faixa=0.10:0.02")
+                .is_err()
+        );
+    }
 
     #[test]
     fn a_field_written_outside_its_role_is_refused() {

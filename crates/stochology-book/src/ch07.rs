@@ -420,6 +420,78 @@ fn garden_of_paths(seed: u64, replicas: usize) -> Paths {
     }
 }
 
+/// Upper tail of the standard normal, 1 - Phi(z), with relative error below 2e-7 on the whole line
+/// (Numerical Recipes `erfcc`). The tails matter here: the sign error of a well-powered study is
+/// of the order of 1e-6, which the absolute error of `erf` above cannot resolve.
+fn normal_upper_tail(z: f64) -> f64 {
+    let x = z.abs() / 2f64.sqrt();
+    let t = 1.0 / (1.0 + 0.5 * x);
+    let poly = -1.265_512_23
+        + t * (1.000_023_68
+            + t * (0.374_091_96
+                + t * (0.096_784_18
+                    + t * (-0.186_288_06
+                        + t * (0.278_868_07
+                            + t * (-1.135_203_98
+                                + t * (1.488_515_87 + t * (-0.822_152_23 + t * 0.170_872_77))))))));
+    let erfc = t * (-x * x + poly).exp();
+    if z >= 0.0 {
+        0.5 * erfc
+    } else {
+        1.0 - 0.5 * erfc
+    }
+}
+
+fn normal_pdf(z: f64) -> f64 {
+    (-0.5 * z * z).exp() / (2.0 * std::f64::consts::PI).sqrt()
+}
+
+/// Design analysis of Gelman and Carlin (2014): a study estimates a true effect `d` with standard
+/// error `s` and calls an estimate significant when |estimate| > z s.
+pub struct Retrodesign {
+    /// Probability that the estimate is significant.
+    pub power: f64,
+    /// Among the significant estimates, the share with the sign opposite to the true effect.
+    pub type_s: f64,
+    /// Among the significant estimates, the mean of |estimate| divided by the true effect.
+    pub exaggeration: f64,
+}
+
+/// Exact Type S and Type M of a normal estimate, in closed form.
+pub fn retrodesign(d: f64, s: f64, z: f64) -> Retrodesign {
+    let lam = d / s;
+    let hi = normal_upper_tail(z - lam);
+    let lo = normal_upper_tail(z + lam);
+    let power = hi + lo;
+    let truncated_mean = lam * (hi - lo) + normal_pdf(z - lam) + normal_pdf(z + lam);
+    Retrodesign {
+        power,
+        type_s: lo / power,
+        exaggeration: truncated_mean / (power * lam),
+    }
+}
+
+/// The same quantities by simulation, with the filter of significance applied to each draw.
+fn retrodesign_simulated(d: f64, s: f64, z: f64, seed: u64, draws: usize) -> Retrodesign {
+    let mut rng = SplitMix64::new(seed);
+    let (mut significant, mut wrong, mut sum_abs) = (0usize, 0usize, 0.0f64);
+    for _ in 0..draws {
+        let estimate = d + s * rng.normal();
+        if estimate.abs() > z * s {
+            significant += 1;
+            if estimate.signum() != d.signum() {
+                wrong += 1;
+            }
+            sum_abs += estimate.abs();
+        }
+    }
+    Retrodesign {
+        power: significant as f64 / draws as f64,
+        type_s: wrong as f64 / significant as f64,
+        exaggeration: sum_abs / significant as f64 / d,
+    }
+}
+
 /// Predictive value of a positive finding (Ioannidis, 2005).
 fn ppv(power: f64, odds: f64, alpha: f64) -> f64 {
     (power * odds) / (odds - (1.0 - power) * odds + alpha)
@@ -474,6 +546,25 @@ pub fn run() {
         1.0 - c.large / 100.0
     );
 
+    // Type S and Type M (Gelman and Carlin, 2014): the same study at low and at high power.
+    let z = 1.959_963_984_540_054;
+    for (label, d, s) in [
+        ("effect 2 points, standard error 8.1", 2.0, 8.1),
+        ("effect 2 points, standard error 0.7", 2.0, 0.7),
+    ] {
+        let exact = retrodesign(d, s, z);
+        let sim = retrodesign_simulated(d, s, z, 2026, 2_000_000);
+        println!(
+            "type S and M, {label}: power {:.3}, sign wrong in {:.1}% of the significant, exaggeration {:.2}x | simulated {:.3}, {:.1}%, {:.2}x",
+            exact.power,
+            100.0 * exact.type_s,
+            exact.exaggeration,
+            sim.power,
+            100.0 * sim.type_s,
+            sim.exaggeration
+        );
+    }
+
     for odds in [1.0 / 1000.0, 1.0 / 10.0, 1.0 / 3.0] {
         println!(
             "Ioannidis with R = 1/{:.0}, power 0.80: PPV = {:.3} with alpha 0.05 and {:.3} with the garden alpha",
@@ -522,5 +613,73 @@ mod tests {
             c.pre_registered
         );
         assert!(c.small > c.pre_registered && c.large > c.small);
+    }
+
+    /// A mutant of the design analysis: it forgets to keep only the significant estimates, so the
+    /// exaggeration it reports is E|estimate| / effect over every estimate, about 3.3 at low power
+    /// and not the 9.5 of the significant ones.
+    fn exaggeration_without_the_filter(d: f64, s: f64) -> f64 {
+        let lam = d / s;
+        // E|X| for X ~ N(d, s^2), divided by d.
+        (lam * (1.0 - 2.0 * normal_upper_tail(lam)) + 2.0 * normal_pdf(lam)) / lam
+    }
+
+    #[test]
+    fn the_design_analysis_matches_its_closed_form_limits() {
+        // With enormous power every estimate is significant with the right sign: no sign error and
+        // no exaggeration.
+        let r = retrodesign(10.0, 1.0, 1.96);
+        assert!((r.power - 1.0).abs() < 1e-9 && r.type_s < 1e-12);
+        assert!((r.exaggeration - 1.0).abs() < 1e-4, "{}", r.exaggeration);
+        // At the effect that is exactly zero in the limit, a significant estimate has the wrong
+        // sign half of the time.
+        let r = retrodesign(1e-6, 1.0, 1.96);
+        assert!((r.type_s - 0.5).abs() < 1e-4, "{}", r.type_s);
+        // The tail function against known values of the normal.
+        assert!((normal_upper_tail(1.959_963_984_5) - 0.025).abs() < 1e-7);
+        assert!((normal_upper_tail(0.0) - 0.5).abs() < 1e-7);
+        assert!((normal_upper_tail(-1.0) + normal_upper_tail(1.0) - 1.0).abs() < 1e-12);
+    }
+
+    #[test]
+    fn the_design_analysis_agrees_with_simulation_at_low_and_high_power() {
+        let z = 1.959_963_984_540_054;
+        for (d, s) in [(2.0, 8.1), (2.0, 0.7)] {
+            let exact = retrodesign(d, s, z);
+            let sim = retrodesign_simulated(d, s, z, 7, 1_000_000);
+            assert!((exact.power - sim.power).abs() < 0.003, "power {d} {s}");
+            assert!(
+                (exact.exaggeration / sim.exaggeration - 1.0).abs() < 0.02,
+                "exaggeration {d} {s}: {} against {}",
+                exact.exaggeration,
+                sim.exaggeration
+            );
+        }
+        // At 0.06 of power the sign is wrong in about a quarter of the significant results and the
+        // estimate is about ninefold too large; at 0.80 neither matters.
+        let low = retrodesign(2.0, 8.1, z);
+        assert!((0.05..0.07).contains(&low.power) && (0.22..0.26).contains(&low.type_s));
+        assert!(
+            (9.0..10.0).contains(&low.exaggeration),
+            "{}",
+            low.exaggeration
+        );
+        let high = retrodesign(2.8, 1.0, z);
+        assert!((0.78..0.82).contains(&high.power) && high.type_s < 1e-5);
+        assert!(
+            (1.10..1.14).contains(&high.exaggeration),
+            "{}",
+            high.exaggeration
+        );
+    }
+
+    #[test]
+    fn the_mutant_without_the_significance_filter_is_killed() {
+        let z = 1.959_963_984_540_054;
+        let honest = retrodesign(2.0, 8.1, z).exaggeration;
+        let mutant = exaggeration_without_the_filter(2.0, 8.1);
+        // The mutant reports an exaggeration far below the honest one; the oracle of 9 to 10 rejects it.
+        assert!(!(9.0..10.0).contains(&mutant), "mutant survives: {mutant}");
+        assert!(honest > 2.5 * mutant, "{honest} against {mutant}");
     }
 }

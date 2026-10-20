@@ -41,6 +41,32 @@ fn hill(x: &[f64], k: usize) -> f64 {
     stochology_horizons::h1::hill(x, k.min(n_pos.saturating_sub(1)))
 }
 
+/// Hill alpha at `k` after taking the `m` largest observations out of the sample.
+fn hill_without_top(x: &[f64], k: usize, m: usize) -> f64 {
+    let mut v: Vec<f64> = x.iter().cloned().filter(|u| *u > 0.0).collect();
+    v.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    let kept: Vec<f64> = v.into_iter().skip(m).collect();
+    hill(&kept, k)
+}
+
+/// Hill alpha at `k` without the claims of the month that holds the largest claim.
+fn hill_without_top_month(d: &Data, k: usize) -> (usize, f64, f64) {
+    let (worst, _) = d
+        .by_month
+        .iter()
+        .enumerate()
+        .map(|(i, m)| (i, m.iter().cloned().fold(0.0f64, f64::max)))
+        .fold((0, 0.0), |a, b| if b.1 > a.1 { b } else { a });
+    let rest: Vec<f64> = d
+        .by_month
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| *i != worst)
+        .flat_map(|(_, m)| m.iter().cloned())
+        .collect();
+    (worst, d.by_month[worst].len() as f64, hill(&rest, k))
+}
+
 fn quantile(mut v: Vec<f64>, p: f64) -> f64 {
     v.sort_by(|a, b| a.partial_cmp(b).unwrap());
     let i = ((p * v.len() as f64).ceil() as usize).max(1).min(v.len()) - 1;
@@ -249,6 +275,28 @@ pub fn run() {
         quantile(rep, 0.975)
     );
 
+    // (2b) the same estimate with the largest observation taken out
+    println!();
+    println!("Hill k=50 with the extreme taken out:");
+    let all_train = hill(&train, 50);
+    let no_top = hill_without_top(&train, 50, 1);
+    let no_three = hill_without_top(&train, 50, 3);
+    let (idx, n_in_month, no_month) = hill_without_top_month(&d, 50);
+    println!(
+        "  all {} claims: alpha = {:.4}; without the largest claim: {:.4}; without the 3 largest: {:.4}",
+        train.len(),
+        all_train,
+        no_top,
+        no_three
+    );
+    println!(
+        "  without the month of the largest claim ({}-{:02}, {} claims): alpha = {:.4}",
+        1980 + idx / 12,
+        idx % 12 + 1,
+        n_in_month as usize,
+        no_month
+    );
+
     // (3) the same estimator on a simulated tail with the estimated alpha
     let alpha = 1.81f64;
     let sim = simulated_tail(alpha, 1500, 50, 200, 18_002);
@@ -312,5 +360,18 @@ mod tests {
         assert!((bits - 2.42).abs() < 0.02);
         let xs = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
         assert!(hill(&xs, 3).is_finite());
+    }
+
+    /// Oracle by hand: [1,2,4,8,64] at k=2 uses 64,8,4 -> gamma = (ln 16 + ln 2)/2 = 2.5 ln 2;
+    /// without 64 it uses 8,4,2 -> gamma = 1.5 ln 2. Taking out the smallest instead keeps the 64.
+    #[test]
+    fn taking_out_the_extreme_moves_hill_as_computed_by_hand() {
+        let xs = [1.0, 2.0, 4.0, 8.0, 64.0];
+        let ln2 = 2f64.ln();
+        assert!((hill_without_top(&xs, 2, 0) - 1.0 / (2.5 * ln2)).abs() < 1e-9);
+        assert!((hill_without_top(&xs, 2, 1) - 1.0 / (1.5 * ln2)).abs() < 1e-9);
+        // mutant: dropping the smallest keeps the extreme and leaves alpha at the full-sample value
+        let drop_smallest = hill(&xs[1..], 2);
+        assert!((drop_smallest - hill_without_top(&xs, 2, 1)).abs() > 0.05);
     }
 }

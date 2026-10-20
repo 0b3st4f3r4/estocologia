@@ -52,6 +52,33 @@ pub fn posterior_by_odds(prior: f64, ratios: &[f64]) -> f64 {
     odds / (1.0 + odds)
 }
 
+// ------------------------------------------- the Dutch book and the world
+
+/// Certain profit of the bookmaker who sells the agent both tickets (one pays 1 if it rains,
+/// the other if it does not), found by enumerating the two states: in each, exactly one ticket pays.
+pub fn dutch_book_profit(price_rain: f64, price_dry: f64) -> f64 {
+    let mut worst = f64::INFINITY;
+    for rain in [true, false] {
+        let paid = if rain { 1.0 } else { 0.0 } + if rain { 0.0 } else { 1.0 };
+        worst = worst.min(price_rain + price_dry - paid);
+    }
+    worst
+}
+
+/// The nearest coherent prices: both divided by their sum.
+pub fn make_coherent(price_rain: f64, price_dry: f64) -> (f64, f64) {
+    let total = price_rain + price_dry;
+    (price_rain / total, price_dry / total)
+}
+
+/// Expected profit per round of a bettor who knows that it rains with frequency `q`, against an agent
+/// that quotes `price_rain` for the rain ticket: sells it when it is dear, buys it when it is cheap.
+pub fn edge_over_the_agent(price_rain: f64, q: f64) -> f64 {
+    let sold = price_rain - q; // receives the price, pays 1 with chance q
+    let bought = q - price_rain;
+    sold.max(bought)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -82,5 +109,29 @@ mod tests {
         let correlated = posterior_by_odds(0.01, &[10.0, 4.2]);
         assert!((independent - 0.5025).abs() < 0.002, "{}", independent);
         assert!((correlated - 0.2977).abs() < 0.002, "{}", correlated);
+    }
+
+    /// Oracle: 0.60 + 0.50 - 1 = 0.10 certain; after coherence the book is gone (to rounding) and,
+    /// against a world that rains 25% of the time, the edge is 0.6/1.1 - 0.25 = 0.2955, three times the book.
+    #[test]
+    fn coherence_removes_the_book_and_leaves_the_distance_to_the_world() {
+        assert!((dutch_book_profit(0.60, 0.50) - 0.10).abs() < 1e-12);
+        let (r, d) = make_coherent(0.60, 0.50);
+        assert!(dutch_book_profit(r, d).abs() < 1e-12);
+        let q = 0.25;
+        assert!((edge_over_the_agent(r, q) - (0.6 / 1.1 - 0.25)).abs() < 1e-12);
+        assert!(edge_over_the_agent(r, q) > 2.5 * dutch_book_profit(0.60, 0.50));
+        // a calibrated agent leaves nothing to the bettor who knows the world
+        assert!(edge_over_the_agent(q, q).abs() < 1e-12);
+    }
+
+    /// Mutant: a "coherence" that divides only the dry price by the sum leaves a book of 0.0545.
+    #[test]
+    fn the_mutant_that_fixes_one_price_still_has_a_book() {
+        let (total, rain, dry) = (1.10, 0.60, 0.50);
+        let left = dutch_book_profit(rain, dry / total);
+        assert!(left > 0.05);
+        let (r, d) = make_coherent(rain, dry);
+        assert!(dutch_book_profit(r, d) < 1e-12);
     }
 }
