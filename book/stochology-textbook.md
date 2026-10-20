@@ -4882,17 +4882,18 @@ without dependencies, and checks the implementation against the known vectors. R
 
 **The recipe of the laboratory.** Each event of the chain is hashed as
 SHA-256 of the text `session|index|card|content|previous`, with the session `sessao-h3`, the index from 0, and the
-previous hash of the first event written as 64 zeros. The Merkle root pairs the hexadecimal hashes of a level in order,
-hashes the concatenated text of each pair, and repeats the last hash of a level when the level has an odd count, up to a
-single hash. That last rule has a known weakness, declared here: a list and the same list with its last element
-repeated have the same root, so the root alone does not prove how many cards there were (the gates record the count
-beside it).
+previous hash of the first event written as 64 zeros. The Merkle root takes each hexadecimal hash, as text, as a leaf and
+hashes it with the byte 0x00 in front; it then pairs the nodes of a level in order and hashes each pair with the byte
+0x01 in front, and a node left alone on a level with an odd count moves up unchanged, up to a single hash. The two marks
+keep a leaf from posing as a node, and moving the lone node up, instead of pairing it with itself, keeps a list and the
+same list with its last element repeated from sharing a root, so the root also proves how many cards there were. It is
+the tree of RFC 6962, the standard of the public logs of certificates.
 
 ```text
 == Chapter 18 :: the vault, the seal and the audit ==
 sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
+chain: events=5 intact=true merkle_root=e81457d50006a7c8
   event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
   event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
   event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
@@ -4901,7 +4902,7 @@ chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
 tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
 tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
 one extra character in each event: 5 of 5 alterations invalidate the chain
-batch of cards: n=7 merkle_root=17679ce182647dbb
+batch of cards: n=7 merkle_root=ed9aa4bbae23f748
 swapping one card of the batch changes the root in 7 of 7 cases
 ```
 
@@ -4923,7 +4924,7 @@ heart of the chapter. The trail becomes inviolable by the hash published **befor
 keeps only the chain keeps a document that can be rewritten in its entirety; whoever keeps the root keeps the
 seal.
 
-**The Merkle root always changes.** The batch of seven cards has root `17679ce1...`. Swapping any one of the
+**The Merkle root always changes.** The batch of seven cards has root `ed9aa4bb...`. Swapping any one of the
 seven for an altered version, the root changes in **7 of 7** cases. That is what allows sealing a whole batch with
 64 characters instead of 64 per file.
 
@@ -6218,7 +6219,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
 | `cargo test --workspace` | That the types and the gates of the architecture work: 444 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
-| `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
+| `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `0a9636fac5eb1c5e1313dc73c709f2d5b0729703f004ab9cb9764b60fda4e12a` (and, by the rule in force until 2026-10-20, `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`) |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
 
 ### C.2 The environment is part of the number
@@ -6751,6 +6752,22 @@ recorded above did not produce the value recorded above. No published number cha
 | 18 | Merkle root | a level with an odd count repeats its last hash; a list and the same list with its last element repeated share a root | the legacy root stays, and every root published is still computed by it; beside it, a root with domain separation (leaf $\mathrm{SHA256}(0\mathrm{x}00 \Vert x)$, node $\mathrm{SHA256}(0\mathrm{x}01 \Vert l \Vert r)$, the lone node moved up), checked against the definition of RFC 6962 for 1 to 33 leaves | the declared limit of 2026-10-19; switching the gates to the new root is the owner's decision, since it changes the root that Appendix C cites |
 | C | Test count | 439 | 444 | four tests of the separated root and one of the oracles |
 
+### The root with domain separation in force, 2026-10-20
+
+By the owner's decision, the root with domain separation replaces the legacy rule wherever a root is computed: the
+gates, the ledger of the vault and the laboratory of Chapter 18. The legacy rule stays as a function, and the gates print
+both roots, so that every root published before can still be reproduced. No verdict changed: seven gates pass, the
+negative proof still fails G6, and G1 now checks that both roots repeat.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| C, 17 | Root of the gates, horizon `todos` | `9716e28a87bec9cf...` | `0a9636fac5eb1c5e...`; the legacy root is printed beside it | the rule changed; the cards did not |
+| C | Root of the negative proof | `802e84b6...` | `8dfb949d...` | the same |
+| C | Hash of the report | `bb7edf13...` (`todos`), `93565e65...` (negative proof) | `49427021...`, `fbbbf27c...` | the report carries both roots |
+| 18 | Root of the textbook chain | `92f2ab76eb6485ab` | `e81457d50006a7c8` | the same |
+| 18 | Root of the batch of seven cards | `17679ce1...` | `ed9aa4bb...`; the swap of any card still changes it in 7 of 7 cases | the same |
+| 18 | The declared limit | a list and the same list with its last element repeated share a root; the gates record the count beside it | they no longer share a root | the lone node moves up instead of being paired with itself |
+
 ### Numbers cited without an instrument in this book
 
 The preface promises that every number comes from an instrument the reader can run or from a cited source. These do
@@ -7001,7 +7018,7 @@ gate G4, in the horizon `todos`, reproduces here.
 Two points stay recorded. (1) The plan publishes, for the
 horizon `todos`, the Merkle root `9716e28a87bec9cf...` over the 12 cards of the four
 horizons, and a hash of the report `08e7c8f0...`; the laboratory uses its **own** chain of
-five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one. The two
+five textbook events, and for that reason the root measured here is `92f2ab76...`, not that one (since 2026-10-20, with the separated root, `0a9636fa...` and `e81457d5...`). The two
 accounts are correct for their contents; comparing the two only makes sense if the input is the same, and it is
 exactly in that way that the clean reproduction of G1 works. (2) The previous book says that the first run of the
 support desk hung because the Erlang C written with factorials overflowed at large loads; the swap for the stable

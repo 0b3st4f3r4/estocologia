@@ -184,17 +184,7 @@ impl Ledger {
         true
     }
 
-    /// The root of the chain with domain separation (`merkle_root_separated`), over the bytes of
-    /// each event hash. The gates still publish the legacy root.
-    pub fn merkle_root_separated(&self) -> String {
-        let leaves: Vec<&[u8]> = self
-            .events
-            .iter()
-            .map(|e| e.current_hash.as_bytes())
-            .collect();
-        merkle_root_separated(&leaves)
-    }
-
+    /// The root of the chain, with domain separation (`merkle_root`).
     pub fn merkle_root(&self) -> String {
         merkle_root(
             &self
@@ -204,15 +194,33 @@ impl Ledger {
                 .collect::<Vec<_>>(),
         )
     }
+
+    /// The root of the chain by the rule in force until 2026-10-20 (`merkle_root_legacy`).
+    pub fn merkle_root_legacy(&self) -> String {
+        merkle_root_legacy(
+            &self
+                .events
+                .iter()
+                .map(|e| e.current_hash.clone())
+                .collect::<Vec<_>>(),
+        )
+    }
 }
 
-/// Merkle root over a list of hex hashes.
-///
-/// Declared limit: a level with an odd count repeats its last hash, so a list and the same list with
-/// its last element repeated share a root. The root proves the content of a known list, not its length;
-/// the gates record the count of cards beside the root. Changing the rule would change every root
-/// already published, so it is declared rather than changed.
+/// Merkle root over a list of hex hashes, with domain separation: each hash, as text, is a leaf of
+/// `merkle_root_separated`. In force since 2026-10-20, by the owner's decision; the gates publish it.
 pub fn merkle_root(hashes: &[String]) -> String {
+    let leaves: Vec<&[u8]> = hashes.iter().map(|h| h.as_bytes()).collect();
+    merkle_root_separated(&leaves)
+}
+
+/// Merkle root over a list of hex hashes by the rule in force until 2026-10-20, kept so that the
+/// roots published before that date can still be reproduced (Appendix E keeps both values).
+///
+/// Its declared limit: a level with an odd count repeats its last hash, so a list and the same list
+/// with its last element repeated share a root, and a pair of hex texts is hashed with no mark that
+/// tells a leaf from a node. The root proved the content of a known list, not its length.
+pub fn merkle_root_legacy(hashes: &[String]) -> String {
     if hashes.is_empty() {
         return sha256_hex(b"");
     }
@@ -242,8 +250,7 @@ pub fn merkle_root(hashes: &[String]) -> String {
 /// left and promoting the lone node builds the tree that RFC 6962 defines by splitting at the
 /// largest power of two below the count (a test checks it for 1 to 33 leaves).
 ///
-/// It lives beside `merkle_root` and does not replace it: every root published so far, and the one
-/// the book cites, was computed by the legacy rule (2026-10-20).
+/// Since 2026-10-20 it is the rule of `merkle_root`; the earlier rule is `merkle_root_legacy`.
 pub fn merkle_root_separated(leaves: &[&[u8]]) -> String {
     hex(&merkle_root_separated_bytes(leaves))
 }
@@ -395,10 +402,12 @@ mod tests {
             .collect();
         let mut four = three.clone();
         four.push(three[2].clone());
-        assert_eq!(merkle_root(&three), merkle_root(&four));
+        assert_eq!(merkle_root_legacy(&three), merkle_root_legacy(&four));
         // Changing any element still changes the root.
         let mut changed = three.clone();
         changed[1] = sha256_hex(b"b!");
-        assert_ne!(merkle_root(&three), merkle_root(&changed));
+        assert_ne!(merkle_root_legacy(&three), merkle_root_legacy(&changed));
+        // The rule in force tells the two lists apart.
+        assert_ne!(merkle_root(&three), merkle_root(&four));
     }
 }

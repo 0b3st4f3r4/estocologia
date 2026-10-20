@@ -103,24 +103,27 @@ for i, (card, content) in enumerate(events):
     hashes.append(previous)
 
 
-def merkle(level: list[str]) -> str:
+def merkle(hex_leaves: list[str]) -> str:
+    # As the text writes it since 2026-10-20: leaf 0x00 || text, node 0x01 || left || right, lone node moves up.
+    level = [hashlib.sha256(b"\x00" + h.encode()).digest() for h in hex_leaves]
     while len(level) > 1:
-        level = [sha(level[i] + (level[i + 1] if i + 1 < len(level) else level[i])) for i in range(0, len(level), 2)]
-    return level[0]
+        level = [hashlib.sha256(b"\x01" + level[i] + level[i + 1]).digest() if i + 1 < len(level) else level[i]
+                 for i in range(0, len(level), 2)]
+    return level[0].hex()
 
 
 check("18", "event 0 hash (first 8 hex digits as integer)", int("902e82d6", 16), int(hashes[0][:8], 16), 0)
-check("18", "Merkle root of the textbook chain (first 8 hex digits as integer)", int("92f2ab76", 16),
+check("18", "Merkle root of the textbook chain (first 8 hex digits as integer)", int("e81457d5", 16),
       int(merkle(hashes)[:8], 16), 0)
 corpus = ["ficha=h0.posto-saude|decisao=abrir uma segunda sala", "ficha=h0.banco-2003|decisao=reforcar o atendimento",
           "ficha=h1.a-multiplicativo|decisao=reduzir a alavancagem", "ficha=h1.b-lalonde|decisao=manter o programa",
           "ficha=h1.c-incendios|decisao=triplicar a aposta", "ficha=h3.voos23|decisao=manter o modelo",
           "ficha=h3.prisoes|decisao=trocar o cofre"]
 leaves = [sha(c) for c in corpus]
-check("18", "Merkle root of the batch of 7 cards (first 8 hex digits as integer)", int("17679ce1", 16),
+check("18", "Merkle root of the batch of 7 cards (first 8 hex digits as integer)", int("ed9aa4bb", 16),
       int(merkle(leaves)[:8], 16), 0)
-check("18", "declared limit: repeating the last card keeps the root (1 if so)", 1,
-      int(merkle(leaves) == merkle(leaves + leaves[-1:])), 0)
+check("18", "repeating the last card changes the root (1 if so)", 1,
+      int(merkle(leaves) != merkle(leaves + leaves[-1:])), 0)
 
 # Chapter 20: the canary, with the covariates grouped into cells (they are binary)
 rng = random.Random(2021)
