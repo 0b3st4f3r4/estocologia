@@ -120,6 +120,7 @@ cargo run --release --bin labs -- --listening      # the voice of those who pay 
 cargo run --release --bin labs -- --schema      # the contract migration chain
 cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
 cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 and 5
+cargo run --release --bin labs -- --oracles      # analytic oracles at limit cases, and the mutants of Appendix E they must kill
 ~~~
 
 The wave engine (`crates/stochology-wave`) left the tree on 2026-10-19, with its three instruments, after its sealed

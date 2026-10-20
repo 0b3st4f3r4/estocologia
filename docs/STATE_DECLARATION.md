@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 050 lines**, **99 294 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 066 lines**, **99 675 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 050 lines and 99 294 words, and its 39 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 066 lines and 99 675 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -567,3 +567,21 @@ installed in this session (the CI does not build it either); the bridge compiles
 | repository | `0b3st4f3r4/estocologia` | `0b3st4f3r4/stochology` |
 | paths of the author's machine in the tree | 10 lines in 6 files | none: replaced by paths relative to the repository root or to the home directory (`~`); the earlier values remain in the git history |
 | `cargo test --workspace` | 433 | **434** |
+
+## The analytic oracles (2026-10-20)
+
+A review made with AI assistants proposed oracles at limit cases for the formulas of the decision laboratories. Its own
+reference for the M/M/1 wait omitted the division by $\mu$, so the oracles enter with the mutants of Appendix E: each
+recorded error rewritten with the signature of its instrument, and an oracle counts only if a mutant fails it.
+`labs --oracles` (`crates/stochology-book/src/oracles.rs`, five tests) runs 18 identities: all pass on the instruments
+and 16 of 16 mutants die. It found one divergence, declared and not changed: Chapter 10 takes $x_{(k)}$ as the
+threshold of Hill and Chapters 14 and 15 take $x_{(k+1)}$, a bias of $k/(k-1)$. No published number changed. The dated
+record is `history/estado-2026-10-20T1518Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| instruments in `labs` | 28 | 29 (`--oracles`, run by `scripts/verify.sh`) |
+| identities checked at limit cases | 0 as a suite | 18 |
+| recorded errors that a suite would have caught | not measured | 16 of 16 mutants killed |
+| `cargo test --workspace` | 434 | **439** |
+| assembled book, line count | 7 050 (with 99 294 words) | 7 066 (with 99 675 words) |

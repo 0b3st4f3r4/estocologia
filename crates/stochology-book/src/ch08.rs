@@ -107,6 +107,11 @@ fn decompose(forecasts: &[f64], outcomes: &[f64]) -> Decomposition {
     }
 }
 
+/// The resolution term of the decomposition above, exposed for the analytic oracles.
+pub fn resolution(forecasts: &[f64], outcomes: &[f64]) -> f64 {
+    decompose(forecasts, outcomes).res
+}
+
 /// Platt scaling: logistic regression of y on the logit of the forecast.
 fn platt(forecasts: &[f64], outcomes: &[f64]) -> (f64, f64) {
     // The logit enters standardised: without this Newton blows up when the

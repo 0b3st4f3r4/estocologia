@@ -34,6 +34,7 @@ pub mod fila;
 pub mod genetica;
 pub mod mc_error;
 pub mod multiverse;
+pub mod oracles;
 pub mod passk;
 pub mod ponte;
 pub mod propagate;

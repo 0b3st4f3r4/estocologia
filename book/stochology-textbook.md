@@ -6216,7 +6216,7 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --seed-spread` | Thirteen laboratories rerun under twenty other seeds, line by line: which numbers move, and whether a verdict moves with them (C.3; minutes long) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 434 tests pass |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 439 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81` |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -6720,6 +6720,22 @@ seed spread, and the chapters now say so.
 | 8 | The null q95 at 1,488 cases | 0.0425, as if exact | 0.0425, the largest of twenty-one seeds; about 0.042 | a simulated quantile carries the error of its draws |
 | 14 | The bootstrap interval of the tail index | [1.37; 2.61], as if exact | the same, with its upper bound above every other seed's | the same |
 | C | Reproduction | the environment is part of the number | also the seed: C.3 | the same |
+
+### The analytic oracles, 2026-10-20
+
+A review made with AI assistants proposed that every formula of a decision pass identities known in closed form before
+it runs on data. The review's own reference for the M/M/1 wait left out the division by $\mu$, the same kind of error as
+the Kelly row of the first table, so the oracles were built with a second rule: each recorded error of this appendix is
+rewritten as a mutant with the signature of the instrument it lived in, and an oracle counts only if a mutant fails it.
+`labs --oracles` runs both. No published number changed. Like the readings above, this one is outside the authors'
+audit and is not the independent audit of Chapter 21.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| C | The check of a formula | one test per error, written after it was found | 18 identities at limit cases (Pollaczek–Khinchine at $c_v = 1$ and $c_v = 0$, $C(1, \rho) = \rho$, $g'(f^*) = 0$, $F(\text{level}) = 1 - 1/T$, the round trip of the Chouldechova identity, $0 \le \text{EVSI} \le \text{EVPI}$, the scale invariance of Hill, RES of a constant forecaster, and others); all pass on the instruments, and 16 of 16 mutants die | a test written after an error catches that error; an oracle is measured by the errors it would have caught |
+| C | An oracle with a wrong reference | — | the review's reference $60\lambda/(\mu - \lambda)$ rejects the right wait by up to 1265.00 min | an oracle is a claim too; when it fails on an instrument, the closed form decides which of the two is wrong |
+| 10, 14 | The threshold of Hill | Chapter 10 writes $\hat\alpha = k / \sum \ln(x_i / x_{(k)})$ and its laboratory uses $x_{(k)}$; Chapter 14, the horizon H1 and the tail lens use $x_{(k+1)}$ | declared, not changed | with $x_{(k)}$ the $k$-th term is $\ln 1 = 0$, so $k$ divides a sum of $k - 1$ terms, a bias of $k/(k-1)$ in expectation: 1.010101 at $k = 100$, 1.000050 at $k = 20,000$; correcting it moves the printed estimates of Chapter 10 and is the owner's decision |
+| C | Test count | 434 | 439 | the five tests of the oracles |
 
 ### Numbers cited without an instrument in this book
 

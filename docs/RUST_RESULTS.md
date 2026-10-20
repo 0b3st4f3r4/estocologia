@@ -1507,7 +1507,7 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 126 tests
+running 131 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
@@ -1602,6 +1602,11 @@ test multiverse::tests::the_books_specification_reproduces_the_propagation_lab_d
 test multiverse::tests::the_lognormal_keeps_the_mean_and_the_sd ... ok
 test multiverse::tests::the_main_effects_of_a_balanced_design_add_up_to_one_and_find_a_pure_effect ... ok
 test multiverse::tests::the_mg1_wait_is_the_mm1_wait_at_unit_cv ... ok
+test oracles::tests::chapter_10_hill_drops_the_kth_term ... ok
+test oracles::tests::every_mutant_is_killed ... ok
+test oracles::tests::every_oracle_kills_something_or_is_a_declared_guard ... ok
+test oracles::tests::every_oracle_passes_on_the_instruments ... ok
+test oracles::tests::the_reviews_reference_rejects_the_right_formula ... ok
 test passk::tests::jensen_holds_for_the_beta_moments_and_binds_only_without_spread ... ok
 test passk::tests::the_estimator_is_exact_on_known_counts ... ok
 test passk::tests::the_gamma_sampler_has_the_right_mean_below_and_above_one ... ok
@@ -1635,7 +1640,7 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 126 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -2056,6 +2061,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p28-discrepancia | DECLARACAO.md | 365735a9ff3c16f00b213209bbc26d7446134529836b74e1619a4b7b1f38bff6 |
 | p28-discrepancia | DECLARACAO_2.md | b7c57e1c751796f011114081e42fdf1853fa3ebc8d0eb4d29eda4e4aed31f375 |
 
-Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 28 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 29 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7050 lines** and **99294 words**, sha256 `eb8f121e284391a41c3c078c3d5610b352a5fea3faecceabeffa5ae1545e32f4`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7066 lines** and **99675 words**, sha256 `6d040999aafb225644440736f29369d143c2faecfe437803756ec8aaefacc545`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
