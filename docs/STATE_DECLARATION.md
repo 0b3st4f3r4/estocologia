@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 080 lines**, **100 122 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 097 lines**, **100 405 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 080 lines and 100 122 words, and its 39 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 097 lines and 100 405 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -618,3 +618,20 @@ publish the legacy root. The dated record is `history/estado-2026-10-20T1907Z.md
 | Merkle roots in the audit module | 1 (legacy, odd level repeats its last hash) | 2 (legacy, published; separated, RFC 6962) |
 | `cargo test --workspace` | 439 | **444** |
 | assembled book, line count | 7 066 (with 99 741 words) | 7 080 (with 100 122 words) |
+
+## The root with domain separation in force (2026-10-20, later)
+
+By the owner's decision, `audit::merkle_root` and `Ledger::merkle_root` compute the root with domain separation
+(RFC 6962), and the earlier rule stays as `merkle_root_legacy`. The gates print both roots and G1 checks that both
+repeat; the verdicts do not change. The gates root for the horizon `todos` moves from `9716e28a87bec9cf...` to
+`0a9636fac5eb1c5e...`, the negative proof from `802e84b6...` to `8dfb949d...`, and the two roots of Chapter 18 from
+`92f2ab76...` and `17679ce1...` to `e81457d5...` and `ed9aa4bb...`; Chapter 18 writes the new recipe and the
+reimplementation recomputes it from the text. The declared limit of the Merkle root (a list and its last element
+repeated) is closed. The dated record is `history/estado-2026-10-20T1930Z.md`.
+
+| What | Before | After |
+| --- | --- | --- |
+| root published by the gates, `todos` | `9716e28a87bec9cf...` | `0a9636fac5eb1c5e...` (legacy printed beside it) |
+| declared limits of the Merkle root | 1 | 0 |
+| `cargo test --workspace` | 444 | **444** |
+| assembled book, line count | 7 080 (with 100 122 words) | 7 097 (with 100 405 words) |

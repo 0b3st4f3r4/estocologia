@@ -1207,7 +1207,7 @@ same seed, two validators: runs that diverge in 0 of 32
 == Chapter 18 :: the vault, the seal and the audit ==
 sha256("")=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 sha256("abc")=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
+chain: events=5 intact=true merkle_root=e81457d50006a7c8
   event 0 card=h3.voos content=ECE=0.0048 hash=902e82d6ca6cf280
   event 1 card=h3.bolsa content=mediana=2.1x hash=a9c54b2c488f0397
   event 2 card=h3.energia content=canario=ok hash=fbbcfbdbd5970a6c
@@ -1216,7 +1216,7 @@ chain: events=5 intact=true merkle_root=92f2ab76eb6485ab
 tampering in event 2 (canario=ok -> canario=nok, event hash recalculated): intact=false root_changed=true
 tampering + rewrite of 3 following events: intact=true but it changes the published root (true)
 one extra character in each event: 5 of 5 alterations invalidate the chain
-batch of cards: n=7 merkle_root=17679ce182647dbb
+batch of cards: n=7 merkle_root=ed9aa4bbae23f748
 swapping one card of the batch changes the root in 7 of 7 cases
 == Chapter 19 :: the gate of the invariant set ==
 seed 2019 | 3 environments x 600 rows | 999 permutations per test | alpha = 0.05
@@ -1343,16 +1343,17 @@ horizon=all cards=12 defect=none
   card h3.energia checks_passed=8/8 failing=[] approved=true
   card h3.prisoes checks_passed=8/8 failing=[] approved=true
   lenses: hill_alpha=1.7901 wild_tail=true median_log_wealth=-10.5361 ruined=0.892 murphy_rel=0.0375 res=0.1719 unc=0.2344
-merkle_root=9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81
-reproduction: second run identical = true (root 9716e28a87bec9cf)
-G1 ok       root determinism 9716e28a87bec9cf
+merkle_root=0a9636fac5eb1c5e1313dc73c709f2d5b0729703f004ab9cb9764b60fda4e12a
+merkle_root_legacy=9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81
+reproduction: second run identical = true (root 0a9636fac5eb1c5e)
+G1 ok       root determinism 0a9636fac5eb1c5e
 G2 ok       fixed seed in 12 cards
 G3 ok       declared scope: simulated artifact only
 G4 ok       Phi1-Phi5 and type III (failures=0)
 G5 ok       SHA-256 chain intact and tampering detected
 G6 ok       panel A1-A8: 96 of 96 checks declared and anchored
 G7 ok       declared exit clause and A8 declared and anchored
-report_hash=bb7edf1318bf68edb01b585c544c72f7975fabbb46824b4870ab2924363ae5d9
+report_hash=494270217f86a3dd5ee61adf5d763a6c104fae05ace0f467546568ee096a1319
 verdict: 7 gates ok
 ~~~
 
@@ -1372,15 +1373,16 @@ horizon=h3 cards=4 defect=h3.voos23
   card h3.energia checks_passed=8/8 failing=[] approved=true
   card h3.prisoes checks_passed=8/8 failing=[] approved=true
   lenses: hill_alpha=1.7901 wild_tail=true median_log_wealth=-10.5361 ruined=0.892 murphy_rel=0.0375 res=0.1719 unc=0.2344
-merkle_root=802e84b64e432c259582d4d1322d602ea9634b8a05f8421e8205f3f9672252d2
-G1 ok       root determinism 802e84b64e432c25
+merkle_root=8dfb949d28998ba06e3d5ab6316e499253820c9bec32b65c14e992bb738b94e9
+merkle_root_legacy=802e84b64e432c259582d4d1322d602ea9634b8a05f8421e8205f3f9672252d2
+G1 ok       root determinism 8dfb949d28998ba0
 G2 ok       fixed seed in 4 cards
 G3 ok       declared scope: simulated artifact only
 G4 ok       Phi1-Phi5 and type III (failures=0)
 G5 ok       SHA-256 chain intact and tampering detected
 G6 failed   panel A1-A8: 30 of 32 checks declared and anchored
 G7 ok       declared exit clause and A8 declared and anchored
-report_hash=93565e652be85d38a1283f19bcaa2af7352a6057af866cc46e47c75360afeccd
+report_hash=fbbbf27c2047b79bc3f6b9118f0f915e53cc80628680a43b283b16beb68a5cec
 verdict: 1 gates failed
 ~~~
 
@@ -2068,4 +2070,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 29 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7080 lines** and **100122 words**, sha256 `21696f15dce8f41ed0f886c398c1111089e83c57e39165e8a049c37f9a3b6aa1`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7097 lines** and **100405 words**, sha256 `41e5f4c1fc3d7dffbb92f7ed09e0e26b7c1558a35e4d6bdb4899c66ffb2eb1d1`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

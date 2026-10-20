@@ -7,8 +7,9 @@
 //! Frozen data, kept byte-identical on purpose: the card identifiers, the one-line
 //! definitions of the registered cards, the "sessao-" session prefix and the data tokens
 //! ("dia", "media-historica", "decisor-declarado", "parar-se-ECE>0.10"). They are hashed
-//! into the published Merkle root 9716e28a87bec9cf... or matched by keyword lists inside
-//! stochology-core, so translating them would move the root and break the Phi5 grain check.
+//! into the published Merkle root 0a9636fac5eb1c5e... (9716e28a87bec9cf... by the legacy rule,
+//! until 2026-10-20) or matched by keyword lists inside stochology-core, so translating them
+//! would move the root and break the Phi5 grain check.
 
 use stochology_core::audit::{Ledger, sha256_hex};
 use stochology_core::{AgentA, Card, Layer, OrchestratorM, Rng, UncertaintyType, evaluate};
@@ -256,6 +257,8 @@ struct Execution {
     report: Vec<String>,
     gates: Vec<(String, bool, String)>,
     root: String,
+    /// The root by the rule in force until 2026-10-20, so the roots published before can be reproduced.
+    legacy_root: String,
     failures: usize,
 }
 
@@ -338,7 +341,8 @@ fn run(cfg: &Config) -> Execution {
 
     // G1 determinism: same input, same root.
     let mirror = run_without_gates(cfg);
-    let deterministic = mirror.root == ledger.merkle_root();
+    let deterministic =
+        mirror.root == ledger.merkle_root() && mirror.legacy_root == ledger.merkle_root_legacy();
 
     // G2 fixed seed.
     let seed_ok = list.iter().all(|c| c.seed.is_some());
@@ -433,11 +437,14 @@ fn run(cfg: &Config) -> Execution {
     let failures = gates.iter().filter(|(_, ok, _)| !ok).count();
     // The root enters the report so that two runs can be compared byte by byte.
     report.push(format!("merkle_root={}", root));
+    let legacy_root = ledger.merkle_root_legacy();
+    report.push(format!("merkle_root_legacy={}", legacy_root));
 
     Execution {
         report,
         gates,
         root,
+        legacy_root,
         failures,
     }
 }
@@ -453,10 +460,12 @@ fn run_without_gates(cfg: &Config) -> Execution {
         ledger.record(&c.id, &format!("{}|{}", c.definition, verdict.approved));
     }
     let root = ledger.merkle_root();
+    let legacy_root = ledger.merkle_root_legacy();
     Execution {
         report: Vec::new(),
         gates: Vec::new(),
         root,
+        legacy_root,
         failures: 0,
     }
 }
@@ -516,7 +525,9 @@ mod tests {
         assert_eq!(a.gates.len(), 7);
         assert_eq!(a.report, b.report);
         assert_eq!(a.root, b.root);
-        assert!(a.root.starts_with("9716e28a87bec9cf"));
+        assert!(a.root.starts_with("0a9636fac5eb1c5e"));
+        // The legacy rule still reproduces the root published until 2026-10-20.
+        assert!(a.legacy_root.starts_with("9716e28a87bec9cf"));
     }
 
     #[test]
