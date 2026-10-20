@@ -12,7 +12,7 @@ divergência**, seção 9.7, frases curtas que fecham argumento de propósito).
 ## Como medir
 
 ```bash
-cd /home/silvano-neto/Documents/estocologia && python3 scripts/style/dois_pontos.py book/capNN.md
+python3 scripts/style/dois_pontos.py book/capNN.md   # from the root of the repository
 ```
 
 A primeira linha dá três números: **prosa**, tabela e cerca de código. Tabela e cerca não entram na
