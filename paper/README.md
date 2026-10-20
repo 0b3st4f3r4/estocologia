@@ -647,7 +647,7 @@ What the repository demonstrates today is narrower than the name of the program 
 - [docs/PLAN.md](https://docs.google.com/document/d/1hXvDuJyckooL1_qx9gspkSkBqgjyhAUVQvQ3F-Crinc/edit): horizons H0 to H3 and research funnel.
 - [AGENTS.md](https://docs.google.com/document/d/1hniAsjLqgNVGqR1wZ1845GVkS5lZTEjhlH7MaI3U2Xk/edit): contract of the agents and invariants Φ1 to Φ5.
 - [Stochology: Foundation, Three Layers, and Inference under Uncertainty](https://docs.google.com/document/d/1L5ittj7-RiSacEvNrkR4IS6yrQUyhusFpcDIWazINLI/edit): layers, taxonomy of uncertainty, modules M0 to M5.
-- Results: project repository, 0b3st4f3r4/estocologia (h0-lab0, h0-real, h1-real, h2 to h2g, and h3, each with README.md and outputs); real databases with SHA-256 in [data/SOURCES.md](../data/SOURCES.md).
+- Results: project repository, 0b3st4f3r4/stochology (renamed from 0b3st4f3r4/estocologia on 2026-10-20; h0-lab0, h0-real, h1-real, h2 to h2g, and h3, each with README.md and outputs); real databases with SHA-256 in [data/SOURCES.md](../data/SOURCES.md).
 - The book: `book/` in the repository, twenty-one chapters, appendices with the provenance of every number (Appendix E) and the answer key of the 126 exercises (`book/answers.md`); the instruments, `cargo run --release --bin labs -- --chapter N`, `--streams` and `--eprocess`.
 - Course *Critical Thinking and Stochastic Models*: public repository 0b3st4f3r4/pensamento-critico-modelos-estocasticos, with the M0 to M16 scripts, the ME01 to ME25 special modules, the MB01 to MB08 panels, the laboratories, and documentacao.md. The numbers attributed to the course or to course simulations come from those scripts and laboratories.
 
