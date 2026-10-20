@@ -32,6 +32,7 @@ fn main() {
     let mut mc_error_flag = false;
     let mut propagate_flag = false;
     let mut passk_flag = false;
+    let mut oracles_flag = false;
     let mut multiverse_flag = false;
     let mut stacking_flag = false;
     let mut discrepancy_flag = false;
@@ -99,6 +100,7 @@ fn main() {
             "--mc-error" => mc_error_flag = true,
             "--propagate" => propagate_flag = true,
             "--passk" => passk_flag = true,
+            "--oracles" => oracles_flag = true,
             "--multiverse" => multiverse_flag = true,
             "--stacking" => stacking_flag = true,
             "--discrepancy" => discrepancy_flag = true,
@@ -125,7 +127,9 @@ fn main() {
         println!(
             "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk | --multiverse | --stacking | --discrepancy | --seed-spread"
         );
-        println!("            | --listening | --bridge | --schema | --second-opinion | --jev");
+        println!(
+            "            | --listening | --bridge | --schema | --second-opinion | --jev | --oracles"
+        );
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
         println!("            | --rehearsal-shelf | --rehearsal-listening | --rehearsal-bridge]");
         return;
@@ -180,6 +184,10 @@ fn main() {
     }
     if multiverse_flag {
         stochology_book::multiverse::run();
+        return;
+    }
+    if oracles_flag {
+        stochology_book::oracles::run();
         return;
     }
     if passk_flag {
