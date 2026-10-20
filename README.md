@@ -15,7 +15,7 @@ that produces every number in it.
   the same number on your machine:
 
   ~~~bash
-  git clone https://github.com/0b3st4f3r4/estocologia && cd estocologia
+  git clone https://github.com/0b3st4f3r4/stochology && cd stochology
   cargo run --release --bin labs -- --chapter 5      # the health post: when the mean lies
   cargo run --release --bin labs -- --streams        # six real streams on public data
   ~~~
@@ -41,7 +41,7 @@ them. They do not count as the independent audit the book asks for.
 Attribution 4.0 International licence (CC BY 4.0, `LICENSE-TEXT`): the book (`book/`), the paper with its figures
 (`paper/`), the site's text (`site/home.md`) and the prose documents of the repository (the Markdown files outside
 `crates/` and `scripts/`). Anyone may copy, adapt, translate and reuse it, commercially or not, crediting
-"Silvano Neto, *Stochology*, github.com/0b3st4f3r4/estocologia", linking the licence and saying what was changed.
+"Silvano Neto, *Stochology*, github.com/0b3st4f3r4/stochology", linking the licence and saying what was changed.
 The **code** (`crates/`, `scripts/`, `site/index.html`, `site/build.sh`) is under the MIT licence (`LICENSE`). The
 **datasets** in `data/` keep the licences of their sources, declared one by one in `data/SOURCES.md`; neither
 licence above covers them.
