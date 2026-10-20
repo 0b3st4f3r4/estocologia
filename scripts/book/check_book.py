@@ -175,6 +175,16 @@ RETIRED = [
     ("**was not decisive** for passing", "in the rebuild the 2023 correction is decisive"),
     ("Its ECE of 0.0363 sits", "the rebuilt Toronto vault has ECE 0.0354"),
 ]
+# Macros the site's renderer refuses (reported by the owner on 2026-10-20): the formula shows as an error on the page.
+REFUSED_MACROS = [("\\operatorname", "write \\mathrm{Var}, not \\operatorname{Var}")]
+for source in sorted((ROOT / "book").glob("*.md")):
+    if source.name == "stochology-textbook.md":
+        continue
+    text = source.read_text(encoding="utf-8")
+    for macro, how in REFUSED_MACROS:
+        if macro in text:
+            problems.append(f"{source.name}: {macro} is refused by the renderer ({how})")
+
 for chapter in sorted((ROOT / "book").glob("ch*.md")):
     body = chapter.read_text(encoding="utf-8")
     for needle, why in RETIRED:
