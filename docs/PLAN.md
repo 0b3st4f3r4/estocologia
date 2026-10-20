@@ -69,7 +69,7 @@ $$\mathcal{G} = (V, E_{\text{tree}}, E_{\text{graph}}, H, \Phi)$$
 - **Vertices ($V$):** nodes storing ID, layer, uncertainty type (*aleatory*, *epistemic*, or
   *Knightian*), a one-line formal definition, and a pointer to the simulable artifact.
 - **Trees and edges ($E_{\text{tree}}, E_{\text{graph}}$):** deductive prerequisites, mathematical
-  bridges, causal edges $\operatorname{do}(x)$, and pathology edges that expose misalignments (flaw of
+  bridges, causal edges $\mathrm{do}(x)$, and pathology edges that expose misalignments (flaw of
   averages, inspection paradox, Russell's turkey).
 - **Hyperedges / the five lenses ($H$):** cross-cutting tools that inspect the problem from specific
   perspectives:
@@ -489,7 +489,7 @@ fill out `ficha.yaml`, simulate the world, and defend the conclusion.
 - **Appendix A — visual dictionary of Stochology:** every term (from *abduction* and *Brier* to
   *severity* and *independent unit*) in a single plain sentence, with an everyday example.
 - **Appendix B — pocket guide to formulas:** how to read every symbol
-  ($\sum, \mathbb{E}, \operatorname{Var}, \mid, \operatorname{do}(x), \ln$) without fear, translated into
+  ($\sum, \mathbb{E}, \mathrm{Var}, \mid, \mathrm{do}(x), \ln$) without fear, translated into
   plain language and code.
 - **Appendix C — reproduction guide (`stochology-rs` and Python):** exact commands to run the 21
   laboratories and verify the SHA-256 hashes on one's own machine.

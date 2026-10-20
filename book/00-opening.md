@@ -157,6 +157,6 @@ cargo run --release --bin labs -- --all           # every laboratory
 The exercises come in three types: *(Concept)* requires words; *(Count)* requires a number; *(Laboratory)*
 requires code that reproduces the result.
 
-**Notation.** $L_1$ is the World, $L_2$ is the Model, $L_3$ is the Agent. $\operatorname{do}(x)$ is the
-intervention. $\mathbb{E}$ is the long-run mean, $\operatorname{Var}$ is the dispersion around it. Appendix B
+**Notation.** $L_1$ is the World, $L_2$ is the Model, $L_3$ is the Agent. $\mathrm{do}(x)$ is the
+intervention. $\mathbb{E}$ is the long-run mean, $\mathrm{Var}$ is the dispersion around it. Appendix B
 translates every symbol of the book into English and into code.

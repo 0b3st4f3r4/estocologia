@@ -157,8 +157,8 @@ cargo run --release --bin labs -- --all           # every laboratory
 The exercises come in three types: *(Concept)* requires words; *(Count)* requires a number; *(Laboratory)*
 requires code that reproduces the result.
 
-**Notation.** $L_1$ is the World, $L_2$ is the Model, $L_3$ is the Agent. $\operatorname{do}(x)$ is the
-intervention. $\mathbb{E}$ is the long-run mean, $\operatorname{Var}$ is the dispersion around it. Appendix B
+**Notation.** $L_1$ is the World, $L_2$ is the Model, $L_3$ is the Agent. $\mathrm{do}(x)$ is the
+intervention. $\mathbb{E}$ is the long-run mean, $\mathrm{Var}$ is the dispersion around it. Appendix B
 translates every symbol of the book into English and into code.
 
 # Part I. The Art of Aiming in the Dark
@@ -759,7 +759,7 @@ turkey's.
 
 **The law of total variance.** The total dispersion of a result decomposes into two parcels:
 
-$$\operatorname{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\operatorname{Var}(Y \mid \theta)\right]}_{\text{aleatory (World)}} + \underbrace{\operatorname{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}$$
+$$\mathrm{Var}(Y) = \underbrace{\mathbb{E}_\theta\left[\mathrm{Var}(Y \mid \theta)\right]}_{\text{aleatory (World)}} + \underbrace{\mathrm{Var}_\theta\left(\mathbb{E}[Y \mid \theta]\right)}_{\text{epistemic (Model)}}$$
 
 The first parcel is born from the draw and persists when the parameter is known. The second is born from
 ignorance about the parameter and disappears when you identify it and have data.
@@ -949,7 +949,7 @@ For a concave function, the inequality reverses: $\mathbb{E}[f(X)] \le f(\mathbb
 **What the toll costs.** If $X$ stays near its mean $\mu$, the difference is approximately proportional to
 the **curvature** and to the **variance**:
 
-$$\mathbb{E}[f(X)] - f(\mathbb{E}[X]) \;\approx\; \tfrac{1}{2}\, f''(\mu)\,\operatorname{Var}(X)$$
+$$\mathbb{E}[f(X)] - f(\mathbb{E}[X]) \;\approx\; \tfrac{1}{2}\, f''(\mu)\,\mathrm{Var}(X)$$
 
 The formula reads like a price, **curvature times dispersion**. The condition under which it holds is that the
 variance be small enough for the curve to look like a parabola in that neighbourhood. It **fails** when the
@@ -1186,7 +1186,7 @@ honest card declares both.
    every round; (d) the grade of a class with a pass cut-off.
 2. *(Count)* With $W(\lambda)$ and $\mu = 12$, compute $W(6)$, $W(8)$ and $W(10)$. Then compute
    $f(\mathbb{E}[X])$ and $\mathbb{E}[f(X)]$ for a world alternating between 6 and 10, and compare the true
-   toll with $\tfrac{1}{2}f''(8)\operatorname{Var}(X)$.
+   toll with $\tfrac{1}{2}f''(8)\mathrm{Var}(X)$.
 3. *(Count)* In the laboratory, the margin per day in the oscillating world is 0.563 minute and the margin per
    patient is 0.097. By how many times does one underestimate the other? If a report published the margin per
    patient to claim that the 10.6 minute difference is significant, what would it have got wrong?
@@ -1331,7 +1331,7 @@ dependence changes what the sample is worth. Since letters tend to alternate, a 
 about 330 independent letters; in a "sticky" chain, with each state tending to repeat, 100
 observations are worth much less than 100.
 
-$$n_{\text{ef}} \;=\; \frac{p(1-p)}{\operatorname{Var}(\bar X)}$$
+$$n_{\text{ef}} \;=\; \frac{p(1-p)}{\mathrm{Var}(\bar X)}$$
 
 In words, compare the spread that the sample mean **actually has** with the one it would have if the
 observations were independent. Two different numbers hide in that sentence and must not be confused. The
@@ -1347,7 +1347,7 @@ patients of one day, or the calls of one hour, as independent observations is
 
 **One formula behind all of them.** The variance of a sum is the sum of the variances **plus twice every covariance**:
 
-$$\operatorname{Var}\Big(\sum_i X_i\Big) \;=\; \sum_i \operatorname{Var}(X_i) \;+\; 2\sum_{i<j} \operatorname{Cov}(X_i, X_j)$$
+$$\mathrm{Var}\Big(\sum_i X_i\Big) \;=\; \sum_i \mathrm{Var}(X_i) \;+\; 2\sum_{i<j} \mathrm{Cov}(X_i, X_j)$$
 
 Every effective size in this book is this line. The patients of a day share its demand, so their covariances are
 positive and the margin per patient forgets them (Chapter 5); the letters of *Onegin* alternate, so theirs are
@@ -1834,7 +1834,7 @@ The lazy forecaster says 0.20; the expert says $\sigma(z + 0.6\,\varepsilon_1)$;
 $\sigma(2.2\,(z + 0.6\,\varepsilon_2))$; the noisy one $\sigma(z + 1.6\,\varepsilon_3)$, each $\varepsilon_i$ a fresh
 standard normal. REL, RES and the ECE use ten boxes of equal mass that never split a run of equal forecasts. Platt is
 the logistic regression of the outcome on the logit of the forecast, fitted on days 1 to 2,000 and scored on days
-2,001 to 4,000. The null ECE of a vault draws its forecasts as $\sigma(\operatorname{logit}(r) + s\,\varepsilon)$, with the
+2,001 to 4,000. The null ECE of a vault draws its forecasts as $\sigma(\mathrm{logit}(r) + s\,\varepsilon)$, with the
 rate $r$ and spread $s$ of each vault (Toronto 0.50 and 1.0, Rhode Island 0.0226 and 1.6, the 2023 flights 0.130 and
 1.3), draws each outcome with the chance its forecast states, and repeats 2,000 times.
 
@@ -2022,7 +2022,7 @@ effect, adjusting a collider manufactures it and adjusting an instrument amplifi
 it blocks all the paths that enter $X$ from behind, without containing any descendant
 of $X$. When that holds, the observed distribution answers the intervention question:
 
-$$P(y \mid \operatorname{do}(x)) = \sum_z P(y \mid x, z)\,P(z)$$
+$$P(y \mid \mathrm{do}(x)) = \sum_z P(y \mid x, z)\,P(z)$$
 
 The canonical worked case is hormone therapy. In 1991, the cohort of the Nurses' Health Study, with
 about 48 thousand women, reported a relative risk of **0.56** of serious coronary disease among
@@ -2163,8 +2163,8 @@ against 23% in the other technique**.
 
 **(2) Naive correlation cannot separate the cause from the symptom.** With 12,000 rows across three
 sites, the outcome $Y$ was generated by $Y = 2X + \text{noise}$, the symptom $Z$ by $Z = 2X +
-\text{site noise}$ and $W$ is pure noise. Looking at everything together, $\operatorname{corr}(X,Y) =
-0.9314$ and $\operatorname{corr}(Z,Y) = 0.7208$. The cause and the symptom look like two explanatory
+\text{site noise}$ and $W$ is pure noise. Looking at everything together, $\mathrm{corr}(X,Y) =
+0.9314$ and $\mathrm{corr}(Z,Y) = 0.7208$. The cause and the symptom look like two explanatory
 variables, and the naive regression gives slope **1.9885** for $X$ and **0.6003** for $Z$. If the
 analyst stopped here, they would attribute to the alarm an effect of 0.6.
 
@@ -2963,7 +2963,7 @@ days. It is a type III error. The answer is right for the wrong question (Chapte
 any convex function:
 
 $$\mathbb{E}\big[W(\lambda)\big] \;\ge\; W\big(\mathbb{E}[\lambda]\big), \qquad
-\mathbb{E}[W(\lambda)] - W(\mathbb{E}[\lambda]) \approx \tfrac{1}{2} W''(\mu)\,\operatorname{Var}(\lambda).$$
+\mathbb{E}[W(\lambda)] - W(\mathbb{E}[\lambda]) \approx \tfrac{1}{2} W''(\mu)\,\mathrm{Var}(\lambda).$$
 
 The left-hand side is the wait that whoever arrives actually feels; the right-hand side is the wait of the average day. The larger the
 oscillation of demand, the larger the bill, because the gain and the loss are not symmetric. Five worlds with the same mean 8
@@ -3765,7 +3765,7 @@ $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
 | --- | --- | --- |
 | $V$, nodes | Concepts, hypotheses, variables, data sets | `L1_demand`: call counts every 5 minutes |
 | $E_{\mathrm{tree}}$, tree | What depends on what: deductive prerequisites | `L1_demanda` $\to$ `L2_erlang_c`, with the label "input of the model" |
-| $E_{\mathrm{graph}}$, transversal | Mathematical bridges, causal edges $\operatorname{do}(x)$ and pathology edges | Jensen links the mean function to information and to ergodicity |
+| $E_{\mathrm{graph}}$, transversal | Mathematical bridges, causal edges $\mathrm{do}(x)$ and pathology edges | Jensen links the mean function to information and to ergodicity |
 | $H$, hyperedges | The five lenses, which wrap whole groups of nodes | The time lens over `L1_demanda` and `L2_erlang_c`: "the demand has a calendar" |
 | $\Phi$, invariants | The invariants that every claim fulfils to enter the graph | $\Phi_2$: the margin on the independent unit |
 
@@ -6112,7 +6112,7 @@ example. The order is alphabetical.
 | **Natural frequencies** | Stating the risk as "x in every 100", with a fixed denominator | "In every 100 patients, 25 wait more than half an hour" instead of "25% risk" |
 | **Non-ergodicity** | When the average of one trajectory in time is not the average of many trajectories | The average of the people who crossed the river on foot does not describe whoever was carried away by the current |
 | **Null model** | The simulation of what chance alone would produce, to compare with what was observed | Drawing groups by an honest lottery a thousand times before believing in the effect of the medicine |
-| **$\operatorname{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
+| **$\mathrm{do}(x)$ (intervention)** | Fixing a variable by decision, and not merely observing who already has it | Drawing lots for who receives the medicine, instead of comparing those who were already taking it with those who were not |
 | **$p$-value** | The frequency with which a world without effect would produce a result at least as extreme as the one seen | Flipping the coin 100 times and seeing 62 heads: how strange is that in the honest world? |
 | **Pathology edge** | The mark, on the map of knowledge, of a misalignment between the layers of the world, the model and the agent | Two folders of the same client with different phone numbers, and nobody knows which one counts |
 | **Pearl (ladder of)** | The three rungs: see, act and imagine what did not happen | Watching the price of tomatoes rise, deciding to buy pineapple, and imagining how things would be without the frost |
@@ -6151,10 +6151,10 @@ example. The order is alphabetical.
 | --- | --- | --- |
 | $\sum_{k=1}^{n} a_k$ | "Add up everything that comes after, from $k$ equal to 1 to $n$" | `let sum: f64 = a.iter().sum();` |
 | $\mathbb{E}[X]$ | "The long-run mean of $X$" | `let mean = x.iter().sum::<f64>() / x.len() as f64;` |
-| $\operatorname{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - mean).powi(2)).sum::<f64>() / x.len() as f64;` |
+| $\mathrm{Var}(X)$ | "The mean dispersion of $X$ around its mean, squared" | `let var = x.iter().map(\|v\| (v - mean).powi(2)).sum::<f64>() / x.len() as f64;` |
 | $\sigma$ or $\mathrm{dp}$ | "Standard deviation: the square root of the variance, in the same unit as $X$" | `let dp = var.sqrt();` |
 | $P(A \mid B)$ | "Probability of $A$ **given that** $B$ happened" | `if b { p_a_given_b } else { p_a_given_not_b }` |
-| $\operatorname{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = f(x_fixed);` — instead of `let y = f(x_observed);` |
+| $\mathrm{do}(x)$ | "Fixing $x$ by decision, and not merely observing who already has $x$" | `let y = f(x_fixed);` — instead of `let y = f(x_observed);` |
 | $\ln$ | "Natural logarithm: the exponent of Euler's number that returns the value" | `let z = value.ln();` |
 | $\log_{10}$ | "Logarithm in base 10" | `let d = 10.0 * ratio.log10();` (decibans) |
 | $\ge$ | "Is greater than or equal to" | `a >= b` |
@@ -6177,8 +6177,8 @@ example. The order is alphabetical.
 | --- | --- | --- |
 | $P(H \mid E) = \frac{P(E \mid H)P(H)}{P(E)}$ | Today's belief is yesterday's multiplied by the strength of the evidence | posterior odds $=$ prior odds $\times$ likelihood ratio |
 | $10\log_{10}\text{RV}$ | The strength of the evidence in decibans: every 10 dB is a factor of 10 | `10.0 * rv.log10()` |
-| $\operatorname{Brier} = \frac{1}{n}\sum (p_i - y_i)^2$ | The mean of the squared error of a probabilistic forecast | `p.iter().zip(y).map(\|(a,b)\| (a-b).powi(2)).sum::<f64>() / n as f64` |
-| $\text{skill} = 1 - \operatorname{Brier}/\operatorname{Brier}_{\text{clim}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
+| $\mathrm{Brier} = \frac{1}{n}\sum (p_i - y_i)^2$ | The mean of the squared error of a probabilistic forecast | `p.iter().zip(y).map(\|(a,b)\| (a-b).powi(2)).sum::<f64>() / n as f64` |
+| $\text{skill} = 1 - \mathrm{Brier}/\mathrm{Brier}_{\text{clim}}$ | How much the model gains over the climatologist | `1.0 - brier / brier_ref` |
 | $\mathrm{ECE} = \sum_k \frac{n_k}{n}\lvert \bar{p}_k - \bar{y}_k\rvert$ | The mean distance between predicted and observed, band by band | 10 boxes of equal mass, summing the weighted absolute difference |
 | $f^* = 2p - 1$ | The Kelly fraction for a bet that pays the same as it risks | `let f = 2.0 * p - 1.0;` |
 | $\frac{s+1}{n+2}$ | The rule of Laplace: one imaginary success and one imaginary failure | `(s + 1.0) / (n + 2.0)` |
