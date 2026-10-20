@@ -1,7 +1,7 @@
 //! stochology-wasm — the playground: the instruments in the browser, with no server.
 //!
-//! The crate exports the pure function in `api` and the C bridge in `estocologia_*`, the only thing
-//! the browser needs. No external dependency: the target is `wasm32-unknown-unknown`.
+//! The crate exports the pure function in `api` and the C bridge in `stochology_*`, the only thing
+//! the browser needs; the historical `estocologia_*` symbols stay as aliases. No external dependency: the target is `wasm32-unknown-unknown`.
 //!
 //! Declared command:
 //! `cargo build --release --target wasm32-unknown-unknown -p stochology-wasm`
@@ -59,36 +59,68 @@ pub mod api {
     }
 }
 
-// The exported ABI symbol names stay in the historical form on purpose: the playground page and
-// any external caller link against them, so they are part of the contract, not of the source prose.
+// The C bridge carries the name of the repository since 2026-10-20 (`stochology_*`, in English like the rest of the
+// tree). The historical symbols (`estocologia_*`) were part of the contract, because the playground page and any
+// external caller link against them, so they stay as aliases that call the same functions: nothing that linked before
+// breaks, and the playground uses the new names.
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_versao() -> u32 {
+pub extern "C" fn stochology_version() -> u32 {
     api::version()
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_moeda(seed: u64, tosses: u32, heads_hundredths: u64) -> u64 {
+pub extern "C" fn stochology_coin(seed: u64, tosses: u32, heads_hundredths: u64) -> u64 {
     api::coin(seed, tosses, heads_hundredths)
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn estocologia_erlang_c(agents: u32, load_hundredths: u64) -> u64 {
+pub extern "C" fn stochology_erlang_c(agents: u32, load_hundredths: u64) -> u64 {
     api::erlang_c_ten_thousandths(agents, load_hundredths)
 }
 
+#[unsafe(no_mangle)]
+pub extern "C" fn stochology_null_dispersion(seed: u64, steps: u32, mean_hundredths: u64) -> u64 {
+    api::null_dispersion(seed, steps, mean_hundredths)
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn stochology_trapped_probability(hundredths: u64) -> u64 {
+    api::trapped_probability(hundredths)
+}
+
+/// Historical alias of [`stochology_version`].
+#[unsafe(no_mangle)]
+pub extern "C" fn estocologia_versao() -> u32 {
+    stochology_version()
+}
+
+/// Historical alias of [`stochology_coin`].
+#[unsafe(no_mangle)]
+pub extern "C" fn estocologia_moeda(seed: u64, tosses: u32, heads_hundredths: u64) -> u64 {
+    stochology_coin(seed, tosses, heads_hundredths)
+}
+
+/// Historical alias of [`stochology_erlang_c`].
+#[unsafe(no_mangle)]
+pub extern "C" fn estocologia_erlang_c(agents: u32, load_hundredths: u64) -> u64 {
+    stochology_erlang_c(agents, load_hundredths)
+}
+
+/// Historical alias of [`stochology_null_dispersion`].
 #[unsafe(no_mangle)]
 pub extern "C" fn estocologia_dispersao_do_nulo(
     seed: u64,
     steps: u32,
     mean_hundredths: u64,
 ) -> u64 {
-    api::null_dispersion(seed, steps, mean_hundredths)
+    stochology_null_dispersion(seed, steps, mean_hundredths)
 }
 
+/// Historical alias of [`stochology_trapped_probability`].
 #[unsafe(no_mangle)]
 pub extern "C" fn estocologia_probabilidade_presa(hundredths: u64) -> u64 {
-    api::trapped_probability(hundredths)
+    stochology_trapped_probability(hundredths)
 }
 
 #[cfg(test)]
@@ -115,6 +147,25 @@ mod tests {
         assert!(
             (990..=1010).contains(&dispersion),
             "Poisson sits at 1000: {dispersion}"
+        );
+    }
+
+    #[test]
+    fn the_new_symbols_and_the_historical_aliases_give_the_same_numbers() {
+        use super::*;
+        assert_eq!(stochology_version(), estocologia_versao());
+        assert_eq!(
+            stochology_coin(2026, 1000, 50),
+            estocologia_moeda(2026, 1000, 50)
+        );
+        assert_eq!(stochology_erlang_c(10, 500), estocologia_erlang_c(10, 500));
+        assert_eq!(
+            stochology_null_dispersion(7, 2000, 400),
+            estocologia_dispersao_do_nulo(7, 2000, 400)
+        );
+        assert_eq!(
+            stochology_trapped_probability(0),
+            estocologia_probabilidade_presa(0)
         );
     }
 

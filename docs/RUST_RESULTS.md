@@ -1977,12 +1977,13 @@ test without_arguments_the_ingestor_prints_the_usage_and_exits_with_1 ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 3 tests
+running 4 tests
 test tests::coin_matches_the_probability_and_does_not_depend_on_the_clock ... ok
 test tests::probability_never_hits_the_extremes ... ok
 test tests::the_bridge_delivers_the_same_numbers_as_the_pure_function ... ok
+test tests::the_new_symbols_and_the_historical_aliases_give_the_same_numbers ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -2057,4 +2058,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 28 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7050 lines** and **99294 words**, sha256 `997ce6875e31ae9c269d526c111e367ed6b918fb4754bc1c660fb85639f4d914`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7050 lines** and **99294 words**, sha256 `0f9749e421cd4815bf4970f40be5e6f282383f65465f71d177cf7fd93a2f5623`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

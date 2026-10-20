@@ -122,7 +122,7 @@ When a claim fails a gate, the verdict is **"unsupported under this test"**, nev
 
 ### The apparatus
 
-All of this runs in Rust: eight crates, 433 tests, seven gates able to fail a claim, 21 laboratories with a fixed seed,
+All of this runs in Rust: eight crates, 434 tests, seven gates able to fail a claim, 21 laboratories with a fixed seed,
 one per chapter of the book, and instruments that read ten public datasets. Every output block quoted in the book is
 checked against the instrument that produces it, and a reimplementation in Python redoes 513 of the book's
 quantities from the text alone. What the gates check is form, presence and reproducibility, not correctness: in

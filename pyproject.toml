@@ -1,9 +1,9 @@
-# As ferramentas de conferencia do livro sao stdlib puro: nenhuma dependencia, e isso fica
-# declarado em vez de descoberto. Sem rede no CI, sem lock para manter.
+# The checking tools of the book are pure standard library: no dependency, and that is declared rather than
+# discovered. No network in CI, no lock to maintain. Named estocologia-ferramentas until 2026-10-20.
 [project]
-name = "estocologia-ferramentas"
+name = "stochology-tools"
 version = "0.0.0"
-description = "Conferidores do livro e do registro: rampa, blocos, lacres e prosa"
+description = "Checkers of the book and the registry: ramp, blocks, seals and prose"
 requires-python = ">=3.13"
 dependencies = []
 

@@ -46,7 +46,7 @@ Every output is deterministic: the same seed gives the same number.</p>
 serve the repository root with <code>python3 -m http.server</code>, and open this page.</p>
 
 <script>
-// The export names in `ex.` are the historical ABI symbols; they are deliberately unchanged.
+// The export names in `ex.` are the stochology_* symbols; the historical estocologia_* ones remain as aliases.
 const wasmModule = fetch("../../../target/wasm32-unknown-unknown/release/stochology_wasm.wasm")
   .then(r => { if (!r.ok) throw new Error("missing wasm: build it first"); return r.arrayBuffer(); })
   .then(b => WebAssembly.instantiate(b, {}))
@@ -57,16 +57,16 @@ const value = id => Number(document.getElementById(id).value);
 wasmModule.then(ex => {
   const refresh = () => {
     document.getElementById("out-coin").textContent =
-      ex.estocologia_moeda(value("seed"), value("tosses"), value("heads"));
-    const tenThousandths = ex.estocologia_erlang_c(value("agents"), value("load"));
+      ex.stochology_coin(value("seed"), value("tosses"), value("heads"));
+    const tenThousandths = ex.stochology_erlang_c(value("agents"), value("load"));
     document.getElementById("out-erlang").textContent =
       (tenThousandths / 10000).toFixed(4);
     document.getElementById("out-dispersion").textContent =
-      ex.estocologia_dispersao_do_nulo(value("seed"), value("steps"), value("mean"));
+      ex.stochology_null_dispersion(value("seed"), value("steps"), value("mean"));
   };
   document.querySelectorAll("input").forEach(i => i.addEventListener("input", refresh));
   refresh();
-  document.title = "Stochology — playground (contract v" + ex.estocologia_versao() + ")";
+  document.title = "Stochology — playground (contract v" + ex.stochology_version() + ")";
 }).catch(error => {
   document.body.insertAdjacentHTML("beforeend", "<p>no wasm: " + error.message + "</p>");
 });

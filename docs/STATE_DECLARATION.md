@@ -84,7 +84,7 @@ the runner is already written; what is missing is the file. The criterion for ea
 ## 5. Reproduction
 
 ~~~bash
-cargo test --workspace                                  # 433 tests passed, none failed
+cargo test --workspace                                  # 434 tests passed, none failed
 cargo run --release --bin labs -- --all               # the 21 laboratories
 cargo run --release --bin gates -- --horizon all --reproduction
 cargo run --release --bin gates -- --horizon h3 --defect h3.voos23   # exits with 1, as declared
@@ -552,3 +552,17 @@ moves with the draw, and Chapters 9 and 15 say so. The dated record is `history/
 | modules that draw random numbers without an audit of their seed | 14 | 0 |
 | failure modes of teams of agents that nothing sees | 3 | 0 (moved to "partly") |
 | assembled book, line count | 7 004 (with 98 402 words) | 7 050 (with 99 294 words) |
+
+## The repository renamed (2026-10-20)
+
+The repository was renamed from `0b3st4f3r4/estocologia` to `0b3st4f3r4/stochology`. The URLs in `CITATION.cff`, the
+README and the paper follow it; the C bridge of the WebAssembly crate exports `stochology_*` and keeps the historical
+`estocologia_*` symbols as aliases, so nothing that linked before breaks (one test); the tool package is
+`stochology-tools`. No number of the book, no seal of an empirical point and no verdict changed. The site is served
+from its own domain and did not move. Not run here: the `wasm32-unknown-unknown` build, whose target could not be
+installed in this session (the CI does not build it either); the bridge compiles and its tests pass on the host.
+
+| What | Before | After |
+| --- | --- | --- |
+| repository | `0b3st4f3r4/estocologia` | `0b3st4f3r4/stochology` |
+| `cargo test --workspace` | 433 | **434** |
