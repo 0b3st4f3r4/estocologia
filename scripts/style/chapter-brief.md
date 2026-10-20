@@ -5,7 +5,7 @@ que você conserta é a **repetição**. Formal, porém mais humano quer dizer: 
 explícito, maneirismo previsível cortado, a frase respirando. Não quer dizer coloquial, e não quer dizer
 empolado.
 
-Trabalhe em `/home/silvano-neto/Documents/estocologia`. Leia **antes de tocar em qualquer linha**:
+Trabalhe na raiz do repositório. Leia **antes de tocar em qualquer linha**:
 
 - `scripts/style/style-sheet.md` — as decisões fixadas, os termos consagrados e os alvos.
 - `scripts/style/repetition-index.md` — a contagem de antes, do capítulo inteiro e do livro.
@@ -37,7 +37,7 @@ corta repetição, não informação.
 Meça o seu arquivo antes de começar:
 
 ```bash
-cd /home/silvano-neto/Documents/estocologia && python3 scripts/style/varredura.py book/capNN.md
+python3 scripts/style/varredura.py book/capNN.md   # na raiz do repositório
 ```
 
 | Padrão | O que fazer | Alvo |

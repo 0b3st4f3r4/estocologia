@@ -10,7 +10,7 @@ them an entire front and one step of another do not reproduce here:** `statsmode
 (one step of p08, the conversion of the `.rda` of new flights). The installation commands are below and stayed
 commented in `requirements.txt`.
 
-Interpreter: **Python 3.13.7** (`/home/silvano-neto/.pyenv/versions/3.13.7/bin/python3`, GCC 15.2.0), pip 25.2.
+Interpreter: **Python 3.13.7** (`~/.pyenv/versions/3.13.7/bin/python3`, GCC 15.2.0), pip 25.2.
 Nothing was installed in this front: what is written here is the snapshot of what the machine has.
 
 **numpy has two copies on the path, and it is the only package in this situation.** **2.5.1** is the one from `pyenv` and only

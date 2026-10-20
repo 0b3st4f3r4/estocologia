@@ -2,7 +2,7 @@
  "declaracao": "../DECLARACAO_2.md",
  "declaracao_sha256": "dbcb13f8b6c66d06fcae417769ba61611adcfbe0070adc79364af0e374c75a3f",
  "parquet": {
-  "caminho": "/home/silvano-neto/Documents/estocologia/dados-reais/h2f/kemmeren2014_obs_int.parquet",
+  "caminho": "dados-reais/h2f/kemmeren2014_obs_int.parquet",
   "sha256": "f152937f6ab6974de5f65857a94a941926af07cad04da89c318bea4b9a2138e2"
  },
  "n_linhas": 1741,
