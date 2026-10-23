@@ -1,0 +1,21 @@
+[package]
+name = "stochology-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Executable CLI laboratories (`labs`) and epistemological gates (`gates`) for the Stochology Protocol v1.0"
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }
+stochology-lenses = { path = "../stochology-lenses" }
+stochology-siga = { path = "../stochology-siga" }
+stochology-governance = { path = "../stochology-governance" }
+
+[[bin]]
+name = "labs"
+path = "src/bin/labs.rs"
+
+[[bin]]
+name = "gates"
+path = "src/bin/gates.rs"

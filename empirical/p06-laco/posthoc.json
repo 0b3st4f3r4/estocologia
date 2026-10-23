@@ -1,8 +1,0 @@
-{
- "P(fila | pedido de atendente), geral": 0.6332698503545015,
- "P(fila | pedido nos 15 min depois de uma desistência índice)": 0.8884697573522075,
- "P(customer_id gravado | fila, atendido)": 0.838882055628482,
- "P(customer_id gravado | sem fila, atendido)": 2.018068439427676e-05,
- "r_IV_15min": 0.1446378859145094,
- "r_IV / P(fila depois da desistência) (correção grosseira, supõe novas chamadas como pedidos comuns)": 0.16279438294619636
-}

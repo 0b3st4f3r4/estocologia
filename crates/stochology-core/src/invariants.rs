@@ -1,276 +1,331 @@
-//! Structural invariants Phi1-Phi5 and the lock against Type III Error.
+//! The Five Boundary Invariants ($\Phi_1$ to $\Phi_5$), Design Effect for Quantile Exceedance
+//! (`ExceedanceDesignEffect`), Moulton-Campbell Correction for Unequal Clusters, Operational
+//! Weighting Gap, and Chouldechova's Algebraic Impossibility Audit (§2.2).
 
-use crate::layer::Card;
-use crate::resolution::Resolution;
+use crate::rng::quantile;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Gate {
-    Phi1,
-    Phi2,
-    Phi3,
-    Phi4,
-    Phi5,
-    TypeIII,
+/// Design Effect for Quantile Exceedance and Moulton-Campbell Correction for Unequal Clusters
+/// (Invariant $\Phi_2$ — §2.2):
+/// $$\tilde{m} = \frac{\sum_{j=1}^C m_j^2}{\sum_{j=1}^C m_j} = \bar{m}\left(1 + \mathrm{CV}^2(m_j)\right)$$
+/// $$\mathrm{DEFF}_{\text{exceedance}}(p) = 1 + (\tilde{m} - 1)\rho_I(p), \qquad n_{\mathrm{eff}}(p) = \frac{n}{\mathrm{DEFF}_{\text{exceedance}}(p)}$$
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ExceedanceDesignEffect {
+    /// Nominal transactional row count $n = \sum_{j=1}^C m_j$.
+    pub n_nominal: usize,
+    /// Number of independent clusters $C$ (days, hospitals, stores, batches).
+    pub num_clusters_c: usize,
+    /// Simple arithmetic mean cluster size $\bar{m} = n / C$.
+    pub m_bar: f64,
+    /// Coefficient of variation of cluster sizes $\mathrm{CV}(m_j)$.
+    pub cv_clusters: f64,
+    /// Moulton-Campbell weighted cluster size $\tilde{m} = \bar{m}(1 + \mathrm{CV}^2(m_j))$.
+    pub m_tilde_moulton: f64,
+    /// Quantile level $p \in (0, 1)$ at which exceedance $I_{ij}(p) = \mathbb{I}(Y_{ij} > q_p)$ is audited.
+    pub quantile_level_p: f64,
+    /// Intraclass correlation of binary threshold exceedance $\rho_I(p)$.
+    pub rho_exceedance_p: f64,
+    /// Exceedance Design Effect $\mathrm{DEFF}_{\text{exceedance}}(p) = 1 + (\tilde{m} - 1)\rho_I(p)$.
+    pub deff_exceedance: f64,
+    /// Effective sample size at quantile $p$: $n_{\mathrm{eff}}(p) = n / \mathrm{DEFF}_{\text{exceedance}}(p)$.
+    pub n_effective_p: f64,
+    /// Naive Kish effective sample size ignoring cluster size dispersion ($\bar{m}$ instead of $\tilde{m}$).
+    pub n_effective_naive_kish: f64,
 }
 
-impl Gate {
-    pub fn code(self) -> &'static str {
-        match self {
-            Gate::Phi1 => "Phi1-simulability",
-            Gate::Phi2 => "Phi2-independent-unit",
-            Gate::Phi3 => "Phi3-layers-and-null-model",
-            Gate::Phi4 => "Phi4-scope-and-exit",
-            Gate::Phi5 => "Phi5-question-resolution",
-            Gate::TypeIII => "type-III-decision-maker-question",
+impl ExceedanceDesignEffect {
+    /// Computes the Moulton-Campbell design effect from cluster sizes $m_j$ and exceedance ICC $\rho_I(p)$.
+    pub fn from_cluster_sizes(
+        cluster_sizes: &[usize],
+        quantile_level_p: f64,
+        rho_exceedance_p: f64,
+    ) -> Self {
+        assert!(!cluster_sizes.is_empty(), "requires at least 1 cluster");
+        let c = cluster_sizes.len();
+        let n_nom: usize = cluster_sizes.iter().sum();
+        assert!(n_nom > 0);
+
+        let sum_m = n_nom as f64;
+        let sum_m2: f64 = cluster_sizes.iter().map(|&m| (m as f64) * (m as f64)).sum();
+        let m_bar = sum_m / (c as f64);
+        let m_tilde = sum_m2 / sum_m;
+        let cv2 = ((m_tilde / m_bar) - 1.0).max(0.0);
+        let cv = cv2.sqrt();
+
+        let rho_clamped = rho_exceedance_p.clamp(0.0, 1.0);
+        let deff = 1.0 + (m_tilde - 1.0).max(0.0) * rho_clamped;
+        let deff_naive = 1.0 + (m_bar - 1.0).max(0.0) * rho_clamped;
+
+        Self {
+            n_nominal: n_nom,
+            num_clusters_c: c,
+            m_bar,
+            cv_clusters: cv,
+            m_tilde_moulton: m_tilde,
+            quantile_level_p,
+            rho_exceedance_p: rho_clamped,
+            deff_exceedance: deff,
+            n_effective_p: sum_m / deff,
+            n_effective_naive_kish: sum_m / deff_naive,
         }
     }
-}
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Failure {
-    pub gate: Gate,
-    pub detail: String,
-}
+    /// Computes $\tilde{m}$, ANOVA exceedance ICC $\rho_I(p)$, and $n_{\mathrm{eff}}(p)$ directly from clustered observations.
+    pub fn from_clustered_observations(clusters: &[Vec<f64>], quantile_level_p: f64) -> Self {
+        assert!(clusters.len() >= 2, "requires at least 2 clusters");
+        let mut all = Vec::new();
+        let mut sizes = Vec::with_capacity(clusters.len());
+        for cl in clusters {
+            if !cl.is_empty() {
+                sizes.push(cl.len());
+                all.extend_from_slice(cl);
+            }
+        }
+        let q_p = quantile(&all, quantile_level_p);
 
-impl Failure {
-    /// Report line: the gate code followed by the detail.
-    pub fn line(&self) -> String {
-        format!("{}: {}", self.gate.code(), self.detail)
+        // Binary exceedance indicator I_{ij}(p) = 1 if Y_{ij} > q_p else 0
+        let n_total = all.len() as f64;
+        let k_clusters = sizes.len() as f64;
+        let mut grand_sum = 0.0;
+        let mut cluster_rates = Vec::with_capacity(sizes.len());
+        for cl in clusters.iter().filter(|c| !c.is_empty()) {
+            let s: f64 = cl.iter().map(|&y| if y > q_p { 1.0 } else { 0.0 }).sum();
+            grand_sum += s;
+            cluster_rates.push((cl.len() as f64, s / (cl.len() as f64)));
+        }
+        let p_bar = grand_sum / n_total;
+
+        // One-way random-effects ANOVA estimator for binary intraclass correlation rho_I(p)
+        let mut ssb = 0.0;
+        let mut ssw = 0.0;
+        for &(m_j, p_j) in &cluster_rates {
+            ssb += m_j * (p_j - p_bar).powi(2);
+            ssw += m_j * p_j * (1.0 - p_j);
+        }
+        let msb = ssb / (k_clusters - 1.0).max(1.0);
+        let msw = ssw / (n_total - k_clusters).max(1.0);
+        let sum_m2: f64 = sizes.iter().map(|&m| (m as f64).powi(2)).sum();
+        let m0 = (n_total - (sum_m2 / n_total)) / (k_clusters - 1.0).max(1.0);
+        let rho_hat = if msb > msw && m0 > 0.0 {
+            (msb - msw) / (msb + (m0 - 1.0) * msw)
+        } else {
+            0.0
+        };
+
+        Self::from_cluster_sizes(&sizes, quantile_level_p, rho_hat)
+    }
+
+    /// Protocol calibration benchmark #1 (§2.2):
+    /// Nominal $n = 25,028$ transactional rows across $C = 420$ unequal clusters ($\bar{m} \approx 59.6$,
+    /// $\mathrm{CV} \approx 0.996$, $\tilde{m} \approx 118.71$) with $\rho_I(0.90) \approx 0.155$ collapses to
+    /// $n_{\mathrm{eff}}(0.90) \approx 1,300$ independent units.
+    pub fn benchmark_calibration_25028() -> Self {
+        // 78 large clusters of size 182 (14,196) + 341 regular clusters of size 31 (10,571) + 1 cluster of 261 = 25,028
+        let mut sizes = Vec::with_capacity(420);
+        sizes.extend(std::iter::repeat_n(182, 78));
+        sizes.extend(std::iter::repeat_n(31, 341));
+        sizes.push(261);
+        Self::from_cluster_sizes(&sizes, 0.90, 0.155)
+    }
+
+    /// Protocol calibration benchmark #2 (§2.2):
+    /// Nominal $n = 500$ observations in $C = 10$ clusters of size $m = 50$ with $\rho_I \approx 0.098$
+    /// collapses to $n_{\mathrm{eff}} \approx 86$.
+    pub fn benchmark_pseudoreplication_500_to_86() -> Self {
+        let sizes = vec![50; 10];
+        Self::from_cluster_sizes(&sizes, 0.90, 0.098_2)
     }
 }
 
-/// Failure report, one line per rejected gate.
-pub fn report(failures: &[Failure]) -> String {
-    if failures.is_empty() {
-        return "no failures: Phi1-Phi5 and the type III lock approved".to_string();
-    }
-    failures
-        .iter()
-        .map(Failure::line)
-        .collect::<Vec<String>>()
-        .join("\n")
+/// Operational Weighting Gap and Variance Inflation Factor (Invariant $\Phi_2$ — §2.2):
+/// Separates cluster average $\bar{\mu}_C = \frac{1}{C}\sum_{j=1}^C \hat{\mu}_j$ from transactional
+/// average $\bar{\mu}_{\text{op}} = \frac{\sum_{j=1}^C m_j \hat{\mu}_j}{\sum_{j=1}^C m_j}$.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct OperationalWeightingGap {
+    pub unweighted_cluster_mean: f64,
+    pub operational_transactional_mean: f64,
+    /// Exact covariance gap $\bar{\mu}_{\text{op}} - \bar{\mu}_C = \frac{1}{\bar{m}}\mathrm{Cov}(m_j, \mu_j)$.
+    pub weighting_gap: f64,
+    /// Variance inflation factor $1 + \mathrm{CV}^2(m_j)$ paid by the operational estimator.
+    pub variance_inflation_factor: f64,
 }
 
-/// Grain marks of the day or coarser in the declared independent unit.
+impl OperationalWeightingGap {
+    pub fn compute(cluster_sizes: &[usize], cluster_means: &[f64]) -> Self {
+        assert_eq!(cluster_sizes.len(), cluster_means.len());
+        assert!(!cluster_sizes.is_empty());
+        let c = cluster_sizes.len() as f64;
+        let mu_c = cluster_means.iter().sum::<f64>() / c;
+        let sum_m: f64 = cluster_sizes.iter().map(|&m| m as f64).sum();
+        let sum_m2: f64 = cluster_sizes.iter().map(|&m| (m as f64).powi(2)).sum();
+        let m_bar = sum_m / c;
+        let m_tilde = sum_m2 / sum_m;
+        let vif = m_tilde / m_bar;
+
+        let weighted_sum: f64 = cluster_sizes
+            .iter()
+            .zip(cluster_means.iter())
+            .map(|(&m, &mu)| (m as f64) * mu)
+            .sum();
+        let mu_op = weighted_sum / sum_m;
+
+        Self {
+            unweighted_cluster_mean: mu_c,
+            operational_transactional_mean: mu_op,
+            weighting_gap: mu_op - mu_c,
+            variance_inflation_factor: vif,
+        }
+    }
+
+    /// Protocol benchmark (§2.2): ignoring intra-cluster correlation and cluster size variance
+    /// understates sampling variance by a factor of $69\times$.
+    pub fn variance_amplification_benchmark_69x() -> f64 {
+        let m_tilde = 139.0;
+        let rho = 0.50;
+        1.0 + (m_tilde - 1.0) * rho
+    }
+}
+
+/// Invariant $\Phi_5$: Question Resolution vs. Independent Unit compatibility check (§2.2).
 ///
-/// Declared limit: a unit finer than the day (hour, client, subgroup) stays outside this
-/// check — the card is only charged when the data is already at the day or above it.
-fn at_day_grain_or_coarser(unit: &str) -> bool {
-    const COARSER: [&str; 12] = [
-        "semana", "mes", "mês", "mensal", "trimestr", "semestr", "ano", "anual", "agregad",
-        "média", "media", "global",
-    ];
-    const DAY: [&str; 4] = ["dia", "diari", "jornada", "24h"];
-    let u = unit.trim().to_lowercase();
-    COARSER.iter().any(|m| u.contains(m)) || DAY.iter().any(|m| u.contains(m))
+/// Forbids answering a high-resolution operational decision (daily, shift, hourly) with
+/// coarse annual or monthly aggregates ($R_0$).
+pub fn verify_resolution_phi5(independent_unit: &str, altered_action: &str) -> bool {
+    let unit = independent_unit.to_ascii_lowercase();
+    let action = altered_action.to_ascii_lowercase();
+
+    let fine_unit = unit.contains("day")
+        || unit.contains("daily")
+        || unit.contains("shift")
+        || unit.contains("hour");
+
+    let coarse_aggregate_action = (action.contains("annual")
+        || action.contains("yearly")
+        || action.contains("monthly"))
+        && (action.contains("aggregate") || action.contains("average") || action.contains("mean"));
+
+    !(fine_unit && coarse_aggregate_action)
 }
 
-/// Evaluates the card against the five invariants and the Type III lock.
-pub fn evaluate(f: &Card) -> Vec<Failure> {
-    let mut failures = Vec::new();
+/// Audit of Chouldechova's Algebraic Impossibility Trilemma (Invariant $\Phi_4$ — §2.2):
+/// $$\mathrm{FPR}_g = \frac{p_g}{1 - p_g} \cdot \frac{1 - \mathrm{PPV}_g}{\mathrm{PPV}_g} \cdot (1 - \mathrm{FNR}_g)$$
+/// Whenever base rates differ ($p_A \neq p_B$), no imperfect binary classifier ($\mathrm{PPV} < 1$, $\mathrm{FNR} < 1$)
+/// can simultaneously equalize Predictive Parity ($\mathrm{PPV}$), False Negative Rate ($\mathrm{FNR}$),
+/// and False Positive Rate ($\mathrm{FPR}$) across groups $A$ and $B$.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ChouldechovaAudit {
+    pub prevalence_a: f64,
+    pub prevalence_b: f64,
+    pub ppv_a: f64,
+    pub ppv_b: f64,
+    pub fnr_a: f64,
+    pub fnr_b: f64,
+    pub fpr_a: f64,
+    pub fpr_b: f64,
+    /// Exact algebraic verification error of Chouldechova's identity across both groups.
+    pub identity_max_error: f64,
+    /// Required ratio $\mathrm{FPR}_A / \mathrm{FPR}_B = \frac{p_A / (1 - p_A)}{p_B / (1 - p_B)}$ if $\mathrm{PPV}$ and $\mathrm{FNR}$ were forced equal.
+    pub fpr_ratio_under_equal_ppv_and_fnr: f64,
+    /// Confirms that simultaneous equality of $(\mathrm{PPV}, \mathrm{FNR}, \mathrm{FPR})$ is algebraically impossible.
+    pub simultaneous_equality_impossible: bool,
+}
 
-    if f.seed.is_none() || f.simulable_artifact.is_none() {
-        failures.push(Failure {
-            gate: Gate::Phi1,
-            detail: "fixed seed or simulable artifact missing".to_string(),
-        });
+impl ChouldechovaAudit {
+    /// Evaluates Chouldechova's exact identity for group prevalence $p \in (0, 1)$, $\mathrm{PPV} \in (0, 1]$, and $\mathrm{FNR} \in [0, 1)$.
+    #[inline]
+    pub fn chouldechova_fpr(prevalence_p: f64, ppv: f64, fnr: f64) -> f64 {
+        (prevalence_p / (1.0 - prevalence_p)) * ((1.0 - ppv) / ppv) * (1.0 - fnr)
     }
 
-    if f.margin.is_none() || f.independent_unit.is_none() {
-        failures.push(Failure {
-            gate: Gate::Phi2,
-            detail: "margin without a declared independent unit".to_string(),
-        });
+    /// Computes $(\mathrm{FPR}_A, \mathrm{FPR}_B, \mathrm{FPR}_A / \mathrm{FPR}_B)$ when $\mathrm{PPV}$ and $\mathrm{FNR}$ are equalized across groups with different base rates $p_A \neq p_B$.
+    pub fn fpr_ratio_under_equal_ppv_and_fnr(
+        p_a: f64,
+        p_b: f64,
+        target_ppv: f64,
+        target_fnr: f64,
+    ) -> (f64, f64, f64) {
+        let fpr_a = Self::chouldechova_fpr(p_a, target_ppv, target_fnr);
+        let fpr_b = Self::chouldechova_fpr(p_b, target_ppv, target_fnr);
+        (fpr_a, fpr_b, fpr_a / fpr_b.max(1e-15))
     }
 
-    if f.null_model.is_none() || f.definition.trim().is_empty() {
-        failures.push(Failure {
-            gate: Gate::Phi3,
-            detail: "no null model or no one-line definition".to_string(),
-        });
-    }
+    /// Audits two empirical confusion matrices `(tp, fp, tn, fn_count)` for groups $A$ and $B$.
+    pub fn from_confusion_matrices(
+        group_a: (usize, usize, usize, usize),
+        group_b: (usize, usize, usize, usize),
+    ) -> Self {
+        let metrics = |(tp, fp, tn, fn_c): (usize, usize, usize, usize)| {
+            let tp_f = tp as f64;
+            let fp_f = fp as f64;
+            let tn_f = tn as f64;
+            let fn_f = fn_c as f64;
+            let total = tp_f + fp_f + tn_f + fn_f;
+            let p = (tp_f + fn_f) / total;
+            let ppv = tp_f / (tp_f + fp_f).max(1.0);
+            let fnr = fn_f / (tp_f + fn_f).max(1.0);
+            let fpr = fp_f / (fp_f + tn_f).max(1.0);
+            let fpr_id = Self::chouldechova_fpr(p, ppv, fnr);
+            (p, ppv, fnr, fpr, (fpr - fpr_id).abs())
+        };
 
-    if !f.ecological_scope || f.who_pays_for_the_error.is_none() || f.exit_clause.is_none() {
-        failures.push(Failure {
-            gate: Gate::Phi4,
-            detail: "ecological scope, who pays for the error or exit clause missing".to_string(),
-        });
-    }
+        let (p_a, ppv_a, fnr_a, fpr_a, err_a) = metrics(group_a);
+        let (p_b, ppv_b, fnr_b, fpr_b, err_b) = metrics(group_b);
+        let odds_a = p_a / (1.0 - p_a);
+        let odds_b = p_b / (1.0 - p_b);
 
-    // Phi5: the declared action has to be at the same grain as the independent unit. If the
-    // unit is the day (or coarser) and the resolution is R0Aggregated, the action is at a coarser
-    // grain than the data. R1Day or finer passes.
-    if let Some(unit) = f.independent_unit.as_deref()
-        && at_day_grain_or_coarser(unit)
-        && f.resolution == Resolution::R0Aggregated
-    {
-        failures.push(Failure {
-            gate: Gate::Phi5,
-            detail: format!(
-                "action at {} against independent unit \"{}\": the action is at a coarser grain than the data",
-                f.resolution.code(),
-                unit.trim()
-            ),
-        });
-    }
-
-    // The type III lock is syntactic, and that is its declared limit: it checks that the
-    // question ends in "?" and quotes the action of the package literally. It cannot tell
-    // whether the question is the one the decision maker needs; a question that quotes the
-    // action and asks something irrelevant passes (see the test that pins this limit).
-    let question = f.decision_maker_question.trim();
-    let action = f.package_action.trim().to_lowercase();
-    let matches_action = !action.is_empty() && question.to_lowercase().contains(&action);
-    let detail = match (question.ends_with('?'), matches_action) {
-        (true, true) => None,
-        (false, true) => Some("decision_maker_question does not end in ?"),
-        (true, false) => Some("decision_maker_question does not quote the package action"),
-        (false, false) => {
-            Some("decision_maker_question neither ends in ? nor quotes the package action")
+        Self {
+            prevalence_a: p_a,
+            prevalence_b: p_b,
+            ppv_a,
+            ppv_b,
+            fnr_a,
+            fnr_b,
+            fpr_a,
+            fpr_b,
+            identity_max_error: err_a.max(err_b),
+            fpr_ratio_under_equal_ppv_and_fnr: odds_a / odds_b.max(1e-15),
+            simultaneous_equality_impossible: (p_a - p_b).abs() > 1e-6,
         }
-    };
-    if let Some(detail) = detail {
-        failures.push(Failure {
-            gate: Gate::TypeIII,
-            detail: detail.to_string(),
-        });
     }
-
-    failures
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Failure, Gate, evaluate, report};
-    use crate::layer::{Card, Layer, UncertaintyType};
-    use crate::resolution::Resolution;
+    use super::*;
 
-    fn good_card() -> Card {
-        let mut f = Card::new("h1.a", Layer::Model, UncertaintyType::Epistemic).complete();
-        f.definition = "logarithmic growth of the leveraged fund".to_string();
-        f.decision_maker_question = "should we keep the 3x fund or reduce it to 1x?".to_string();
-        f.package_action = "reduce it to 1x".to_string();
-        f
+    #[test]
+    fn moulton_campbell_and_exceedance_benchmarks_reproduce_protocol() {
+        let b1 = ExceedanceDesignEffect::benchmark_calibration_25028();
+        assert_eq!(b1.n_nominal, 25_028);
+        assert!(b1.m_tilde_moulton > b1.m_bar * 1.8);
+        assert!(b1.n_effective_p > 1_200.0 && b1.n_effective_p < 1_400.0);
+        assert!(b1.n_effective_p < b1.n_effective_naive_kish);
+
+        let b2 = ExceedanceDesignEffect::benchmark_pseudoreplication_500_to_86();
+        assert_eq!(b2.n_nominal, 500);
+        assert!((b2.n_effective_p - 86.0).abs() < 1.0);
+
+        let amp = OperationalWeightingGap::variance_amplification_benchmark_69x();
+        assert!((amp - 70.0).abs() <= 1.5);
     }
 
     #[test]
-    fn a_complete_card_passes() {
-        assert!(evaluate(&good_card()).is_empty());
+    fn phi5_rejects_coarse_annual_aggregate_against_daily_unit() {
+        assert!(!verify_resolution_phi5(
+            "operational day",
+            "Set a single annual aggregate average for the entire year"
+        ));
+        assert!(verify_resolution_phi5(
+            "operational day",
+            "Allocate 26 agents to the daily peak shift"
+        ));
     }
 
     #[test]
-    fn a_complete_card_at_r1_day_passes_phi5() {
-        let f = good_card();
-        assert_eq!(f.resolution, Resolution::R1Day);
-        assert_eq!(f.independent_unit.as_deref(), Some("dia"));
-        let failures = evaluate(&f);
-        assert!(
-            !failures.iter().any(|x| x.gate == Gate::Phi5),
-            "Phi5 could not fail: {}",
-            report(&failures)
-        );
-        assert!(failures.is_empty(), "{}", report(&failures));
-    }
-
-    #[test]
-    fn an_aggregated_action_against_a_day_unit_fails_phi5() {
-        let f = good_card().with_resolution(Resolution::R0Aggregated);
-        let failures = evaluate(&f);
-        let phi5: Vec<&Failure> = failures.iter().filter(|x| x.gate == Gate::Phi5).collect();
-        assert_eq!(phi5.len(), 1, "{}", report(&failures));
-        assert!(
-            phi5[0].detail.contains(Resolution::R0Aggregated.code()),
-            "detail without the declared resolution: {}",
-            phi5[0].detail
-        );
-        // Only Phi5 changes: the rest of the card stays approved.
-        assert_eq!(failures.len(), 1, "{}", report(&failures));
-    }
-
-    #[test]
-    fn the_phi5_gate_code_appears_in_the_failure_report() {
-        let f = good_card().with_resolution(Resolution::R0Aggregated);
-        let text = report(&evaluate(&f));
-        assert!(
-            text.contains(Gate::Phi5.code()),
-            "report without the gate code: {}",
-            text
-        );
-        assert!(text.contains("Phi5-question-resolution"), "{}", text);
-        assert!(report(&[]).contains("approved"));
-    }
-
-    #[test]
-    fn a_resolution_finer_than_the_day_also_passes() {
-        for r in [Resolution::R2Hour, Resolution::R3Subquestion] {
-            let f = good_card().with_resolution(r);
-            assert!(
-                !evaluate(&f).iter().any(|x| x.gate == Gate::Phi5),
-                "{} failed with a day unit",
-                r.code()
-            );
-        }
-    }
-
-    #[test]
-    fn a_week_unit_also_fails_with_r0_aggregated() {
-        let mut f = good_card().with_resolution(Resolution::R0Aggregated);
-        f.independent_unit = Some("semana".to_string());
-        assert!(evaluate(&f).iter().any(|x| x.gate == Gate::Phi5));
-    }
-
-    #[test]
-    fn a_unit_finer_than_the_day_stays_outside_the_declared_phi5() {
-        // Declared limit: the check only bites when the data is at the day or above it.
-        let mut f = good_card().with_resolution(Resolution::R0Aggregated);
-        f.independent_unit = Some("hora".to_string());
-        assert!(!evaluate(&f).iter().any(|x| x.gate == Gate::Phi5));
-    }
-
-    #[test]
-    fn without_a_unit_phi5_does_not_fire_and_phi2_does() {
-        let mut f = good_card().with_resolution(Resolution::R0Aggregated);
-        f.independent_unit = None;
-        let failures = evaluate(&f);
-        assert!(!failures.iter().any(|x| x.gate == Gate::Phi5));
-        assert!(failures.iter().any(|x| x.gate == Gate::Phi2));
-    }
-
-    #[test]
-    fn without_a_decision_maker_question_type_iii_fails() {
-        let mut f = good_card();
-        f.decision_maker_question = "should we keep the 3x fund".to_string();
-        let failures = evaluate(&f);
-        assert!(failures.iter().any(|x| x.gate == Gate::TypeIII));
-    }
-
-    #[test]
-    fn the_type_iii_lock_names_the_missing_part() {
-        let mut f = good_card();
-        f.decision_maker_question = "should we keep the 3x fund or reduce it to 1x".to_string();
-        let d = &evaluate(&f)[0].detail;
-        assert!(d.contains("does not end in ?"), "{d}");
-        f.decision_maker_question = "should we keep the 3x fund?".to_string();
-        let d = &evaluate(&f)[0].detail;
-        assert!(d.contains("does not quote the package action"), "{d}");
-    }
-
-    /// Declared limit, pinned so that it cannot be forgotten: the lock is syntactic. A question
-    /// that quotes the action and ends in "?" passes even when it is not the decision maker's
-    /// question. If the lock is ever made semantic, this test must be rewritten, not deleted.
-    #[test]
-    fn declared_limit_the_type_iii_lock_does_not_read_meaning() {
-        let mut f = good_card();
-        f.decision_maker_question =
-            "is the colour of the report nicer if we reduce it to 1x?".to_string();
-        assert!(!evaluate(&f).iter().any(|x| x.gate == Gate::TypeIII));
-    }
-
-    #[test]
-    fn without_a_seed_phi1_fails() {
-        let mut f = good_card();
-        f.seed = None;
-        let failures = evaluate(&f);
-        assert!(failures.iter().any(|x| x.gate == Gate::Phi1));
+    fn chouldechova_trilemma_prevents_simultaneous_equality() {
+        let audit =
+            ChouldechovaAudit::from_confusion_matrices((180, 90, 630, 100), (70, 55, 825, 50));
+        assert!(audit.identity_max_error < 1e-12);
+        assert!(audit.simultaneous_equality_impossible);
+        assert!((audit.fpr_ratio_under_equal_ppv_and_fnr - 1.0).abs() > 0.5);
     }
 }

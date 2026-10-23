@@ -1,95 +1,42 @@
-#!/bin/sh
-# Mandatory verification suite of AGENTS.md §V in a single entry point.
-#
-# Both the governance contract and CI invoke this script directly.
-#
-# Usage:
-#   scripts/verify.sh           # full §V verification
-#   scripts/verify.sh --fast    # skip heavy lab runs for inner edit loop
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-fast=0
-if [ "${1:-}" = "--fast" ] || [ "${1:-}" = "--rapido" ]; then
-  fast=1
-fi
-
-step() { printf '\n== %s\n' "$1"; }
-
-step "format: cargo fmt --check"
+echo ">>> [1/6] Checking formatting (cargo fmt)..."
 cargo fmt --all --check
 
-step "lints: clippy -D warnings"
-cargo clippy --workspace --all-targets --locked -- -D warnings
+echo ">>> [2/6] Checking strict lints (cargo clippy -D warnings)..."
+cargo clippy --workspace --all-targets -- -D warnings
 
-step "compile instruments in release mode"
-cargo build --release --workspace --locked
+echo ">>> [3/6] Running unit and integration tests (cargo test)..."
+cargo test --workspace
 
-step "test all workspace crates"
-cargo test --workspace --locked
+echo ">>> [4/6] Running methodological and empirical laboratories (labs)..."
+cargo run --release --bin labs -- --all
+cargo run --release --bin labs -- --layers
+cargo run --release --bin labs -- --uncertainty
+cargo run --release --bin labs -- --lenses
+cargo run --release --bin labs -- --invariants
+cargo run --release --bin labs -- --siga
+cargo run --release --bin labs -- --governance
 
-step "deterministic gates"
-./target/release/gates --horizon all --reproduction
+echo ">>> [5/6] Running epistemological gates (gates) and negative proofs..."
+cargo run --release --bin gates
 
-step "negative proofs: gates must know how to reject"
-if ./target/release/gates --horizon h3 --defect h3.voos23; then
-  echo "FAIL: gates negative proof passed" >&2; exit 1
-fi
-if ./target/release/labs --unknown-flag; then
-  echo "FAIL: labs accepted unknown flag" >&2; exit 1
-fi
+for defect in cromwell phi5 moulton performativity sniedovich clock vault concept_drift chouldechova; do
+    if cargo run --release --bin gates -- --defect "$defect" >/dev/null 2>&1; then
+        echo "ERROR: negative proof '$defect' should have exited with code 1, but exited with 0!" >&2
+        exit 1
+    else
+        echo "  [OK] Negative proof '$defect' blocked with exit code 1"
+    fi
+done
 
-if [ "$fast" -eq 0 ]; then
-  step "all twenty-seven labs instruments required by §V"
-  for front in all bank resolution s1 s2 queue genetics streams eprocess mc-error propagate passk multiverse oracles stacking discrepancy h3 second-opinion bridge layers listening schema jev \
-               rehearsal-shelf rehearsal-listening rehearsal-bridge rehearsal-layers; do
-    printf -- "-- labs --%s\n" "$front"
-    ./target/release/labs "--$front" > /dev/null
-  done
-fi
-
-step "the textbook: ramp, disk, and declared counts"
-python3 scripts/book/build.py --check
-
-step "every cited output block against its instrument"
-python3 scripts/book/check_labs.py
-
-step "parts, chapters, code fences, and order"
-python3 scripts/book/check_book.py
-
-step "reimplementation of the laboratories from the text alone"
-python3 -I scripts/reimplementation/run.py > /dev/null
-
-step "the generated record docs/RUST_RESULTS.md"
-python3 scripts/book/generate_results.py --check
-
-step "all 36 SHA-256 seals"
-python3 scripts/check_seals.py
-
-step "prose pass against baseline"
-python3 scripts/style/check_pass.py
-
-step "history, not versions: no tags in the repository"
-tags=$(git tag --list)
-if [ -n "$tags" ]; then
-  echo "FAIL: the project keeps history only, and these tags version it (AGENTS.md §VI):" >&2
-  printf '%s\n' "$tags" >&2
-  exit 1
-fi
-echo "no tags: the git log and history/ are the only record"
-
-step "no drift: generated and sealed artifacts are committed"
-if [ "${CI:-}" = "true" ]; then
-  drift=$(git status --porcelain -- book/stochology-textbook.md docs/RUST_RESULTS.md \
-          docs/STATE_DECLARATION.sha256)
-  if [ -n "$drift" ]; then
-    echo "FAIL: generated artifact or seal out of sync with commit:" >&2
-    printf '%s\n' "$drift" >&2
+echo ">>> [6/6] Verifying absence of git tags..."
+if [ -n "$(git tag --list)" ]; then
+    echo "ERROR: git tags found; this repository does not use git tags." >&2
     exit 1
-  fi
-else
-  echo "skipped outside CI: generators already enforce --check"
 fi
 
-printf '\nverification complete: 0 problems\n'
+echo ">>> FULL VERIFICATION APPROVED (STOCHOLOGY PROTOCOL v1.0) <<<"

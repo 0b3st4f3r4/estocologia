@@ -1,199 +1,104 @@
-# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology, in Rust)
+# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology Protocol v1.0)
 
-Binding contract for any agent or contributor operating in this repository. The machine described here is
-an **auditable epistemological machine**: claim, generative process, null model, and severe test in the same place, with
-a fixed seed and a gate capable of failing a claim. The reader of the output is **human** — student, instructor, or decision-maker.
+Binding contract for any agent or contributor operating in this repository. The system implemented here is an **auditable epistemological machine**: claim, generating process, executable null model, and severe test in the same place, with a fixed seed (`seed = 2026`), a structured Epistemological Card (`contract_version: "1.0"`), and algorithmic gates capable of rejecting a flawed claim. The final reader of the output is **human** — decision-maker, student, instructor, or auditor.
 
-This file replaces the Python version of the contract, integrated on 2026-10-16. What changed: the apparatus is
-**Rust**; the Python simulation code has been retired; the course that provided the internal numbering has been obsoleted; and
-everything that remains declared and not yet enforced lives in `docs/DECLARED_PROPOSALS.md`.
+This repository implements the **Stochology Protocol v1.0** in **pure Rust (zero external dependencies)**:
+- Full specification and architectural mapping: [`docs/PROTOCOL.md`](docs/PROTOCOL.md)
 
 ---
 
 ## I. Golden Rules — The Four Prohibitions
 
-1. **No free-form natural language between agents.** Communication passes through structured specification sheets
-   (`Ficha`, in `crates/stochology-core/src/layer.rs`), carrying an identifier, layer, uncertainty type,
-   one-line definition, simulable artifact, seed, independent unit, null model, scope, who pays
-   for the error, and an exit clause; since contract 1.3 (2026-10-19) it may also declare the uncertainty budget and
-   the dominant event of the expected cost, since contract 1.4 (the same day) the multiverse of the answer and the
-   reliability of an agent, and since contract 1.5 the authorship of each field, the findings used and not used, and
-   the decision rule recomputed from the card, all validated when present and not demanded.
-2. **No solitary mean.** Wherever the function is nonlinear, the dynamics are multiplicative, or the tail is
-   heavy, reporting only the mean is prohibited: report the evaluation at the mean $f(E[X])$, the simulated expectation $E[f(X)]$, the
-   median, the quantiles, and the cumulative distribution curve. Chapter 5 of the book measures the Jensen toll; the instrument
-   `labs --chapter 5` reproduces it.
-3. **No confusing learning with performativity.** Small prediction error does not prove that a model is
-   true. Run with and without the intervention (`do(a)` versus passive observation) and declare the feedback loop: the measured Goodhart effect
-   is in Chapter 20 and equals 0.145, four times smaller than the declared 0.6.
-4. **No dogmatic extremes and no omission of trials.** No probability may be 0% or 100%;
-   every forecast is scored by a strictly proper scoring rule (Brier or log) out of sample; and the number of specifications
-   tried must be declared — formerly the counter K, now recorded in the registry (`K = 38` at the H2 gate).
+1. **Ban on unstructured free natural language between agents (`PROHIBITION_1`).** All communication between agents or modules transits exclusively through structured **Epistemological Cards** (`EpistemologicalCard`, in `crates/stochology-core/src/card.rs`, `contract_version: "1.0"`), serialized in YAML (`cards/*.yaml`) and validated by `EpistemologicalCard::audit()`.
+2. **Ban on the lone mean (`PROHIBITION_2`).** Whenever the loss/payoff function is nonlinear, dynamics are multiplicative, or the tail is heavy, reporting only the mean is forbidden: one must report the evaluation at the mean $f(\mathbb{E}[X])$, the simulated expectation $\mathbb{E}[f(X)]$, Jensen's Gap $\Delta_J = \mathbb{E}[f(X)] - f(\mathbb{E}[X])$, the median, tail quantiles ($q_{05}, q_{95}$), and the *Continuous Ranked Probability Score* ($\mathrm{CRPS}$, in `crates/stochology-core/src/layers.rs`).
+3. **Ban on confusing learning with performativity (`PROHIBITION_3`).** Small predictive error does not prove that a model is true. On Bridge $L_3 \to L_1$, one must distinguish **Performative Stability** ($\theta_{\mathrm{PS}}$) from **Performative Optimality** ($\theta_{\mathrm{PO}}$, Stackelberg equilibrium), measure Wasserstein-1 sensitivity ($\varepsilon$), and audit the strict contraction condition of Repeated Risk Minimization ($\frac{\varepsilon \beta}{\gamma} < 1$, in `PerformativeSystem`).
+4. **Ban on dogmatic extremes and omitted attempts (`PROHIBITION_4`).** No probability may be $0\%$ or $100\%$ (Cromwell's Rule: $p \in [\varepsilon_{\text{floor}}, 1 - \varepsilon_{\text{floor}}]$); every forecast is evaluated out-of-sample via the isotonic **CORP-Murphy** decomposition using *Pool-Adjacent-Violators* ($\mathrm{BS} = \mathrm{REL}_{\mathrm{CORP}} - \mathrm{RES}_{\mathrm{CORP}} + \mathrm{UNC}_0$, in `crates/stochology-lenses/src/decision.rs`); and the counter of attempted specifications $K \ge 1$ plus the evidence process (*e-process* $E_t$) and discarded findings must be declared and validated.
 
-## II. Boundary Invariants
+---
 
-| Invariant | Requirement | Where it lives in code |
+## II. Boundary Invariants ($\Phi_1$ to $\Phi_5$)
+
+| Invariant | Formal Requirement | Code Location |
 | --- | --- | --- |
-| Phi1 — simulability | fixed seed and executable artifact | `crates/stochology-core/src/invariants.rs` and `rng.rs` |
-| Phi2 — independent unit | margin on the true independent unit, never pseudoreplication | validated in the sheet; measured in `labs --chapter 15` and `labs --bank` |
-| Phi3 — severe test | null model simulated before reading any pattern | validated in the sheet; `labs --chapter 7` and `labs --chapter 13` |
-| Phi4 — scope and exit | who pays for the error and an objective exit clause | validated in the sheet; safeguard panel agent A8 |
-| Phi5 — question resolution | enforced when the unit is a day or coarser: aggregate resolution (R0) fails; finer units remain exempt, as declared | `crates/stochology-core/src/invariants.rs` and `src/resolution.rs` |
+| $\Phi_1$ — Simulability | Fixed seed (`seed = 2026`, `SplitMix64`) and executable null model before any fitting | `crates/stochology-core/src/rng.rs` & `card.rs` |
+| $\Phi_2$ — Independent Unit | Margin over the true independent unit; Moulton-Campbell correction for unequal clusters $\tilde{m} = \bar{m}(1 + \mathrm{CV}^2)$, threshold exceedance ICC $\rho_I(p)$, and $n_{\mathrm{eff}}(p) = \frac{n}{1 + (\tilde{m}-1)\rho_I(p)}$ | `crates/stochology-core/src/invariants.rs` (`ExceedanceDesignEffect`, `OperationalWeightingGap`) |
+| $\Phi_3$ — Severe Test & Missingness | Explicit Rubin missingness classification (`MCAR`, `MAR`, `MNAR`), Meng's Identity ($\rho_{R,Y}$), non-parametric Manski bounds, SHA-256 pre-registration, and Pearl's Ladder rung | `crates/stochology-core/src/layers.rs`, `sha256.rs` & `card.rs` |
+| $\Phi_4$ — Scope, Fairness & Exit | Economic boundary $p^* = \frac{C}{\eta L}$, algebraic audit of Chouldechova's trilemma ($\mathrm{FPR}_A / \mathrm{FPR}_B$ under unequal base rates), and automatic numeric exit clause | `crates/stochology-core/src/invariants.rs` (`ChouldechovaAudit`) & `card.rs` |
+| $\Phi_5$ — Question Resolution | Ban on answering a daily/shift operational decision with coarse annual/monthly aggregates ($R_0$) | `crates/stochology-core/src/invariants.rs` (`verify_resolution_phi5`) |
 
-The `gates` binary enforces the invariants and the safeguard panel across seven gates (G1 to G7) and exits with code 0 or 1.
+The `gates` binary enforces invariants $\Phi_1$–$\Phi_5$ and methodological locks across seven gates (`G1` to `G7`) and exits with code `0` (approved) or `1` (blocked).
 
-## III. Ontology and the Five Lenses
+---
 
-Knowledge is represented as a typed hypergraph G = (V, E_tree, E_graph, H, Phi). Each node has a layer (L1 World, L2 Model,
-L3 Agent), an uncertainty type (aleatory, epistemic, Knightian), a definition, and a pointer to its artifact.
-Pathology edges mark misalignments across layers. The five lenses — **Fluxonomy, Chrononomy,
-Scalonomy, Morphonomy, Crisonomy** — live in `crates/stochology-hypergraph/src/lenses.rs`, with tests.
+## III. The Five Transversal Lenses and Severe Uncertainty
 
-## IV. Safeguard Panel, Orchestrator, and Cycle
+The five transversal lenses reside in `crates/stochology-lenses`:
+1. **Information Lens (`information.rs`):** Data Processing Inequality (DPI), exact hierarchy of strong contraction constants ($\eta_{\chi^2}(W) = \rho_m^2 \le \eta_{\mathrm{KL}}(W) \le \eta_{\mathrm{TV}}(W)$), amplitude-constrained bound, and Fano's error floor.
+2. **Time Lens (`time.rs`):** Itô variance drain ($g_{\text{time}} = \mu - \frac{1}{2}\sigma^2$), optimal Kelly fraction under asymmetric returns ($f^* = \frac{p}{a} - \frac{1-p}{b}$), absorbing ruin barriers, and Langevin/MCMC mixing time under Log-Sobolev Inequality.
+3. **Scale and Tail Lens (`tail.rs`):** Hill estimator ($\hat{\alpha}_{k,n}$), moment existence regime classification ($\alpha \le 1$, $1 < \alpha \le 2$, $\alpha > 2$), and quantiles with effective tail sample size.
+4. **Structure and Invariance Lens (`invariance.rs`):** Invariant Causal Prediction (ICP by intersection across environments $e \in \mathcal{E}$), *Nonlinear Invariant Risk Minimization* (NILE) penalty, 2nd-order worst-case loss, and critical hidden confounding threshold $\Lambda^*$.
+5. **Decision and Calibration Lens (`decision.rs`):** Cost-loss rule $p^* = \frac{C}{\eta L}$, Expected Value of Perfect Information ($\mathrm{EVPI}$), quantile score (pinball loss), and isotonic **CORP-Murphy** decomposition via the PAV algorithm.
 
-The eight agents of the safeguard panel (called the adversarial review board until 2026-10-19) are A1 to A8 (code,
-data, lifecycle, inference, governance, fairness, domain, decision), in `crates/stochology-core/src/agents.rs`,
-governed by the condition
+Structural and severe uncertainty modeling resides in `crates/stochology-core/src/uncertainty.rs`:
+- **Kennedy-O'Hagan Structural Discrepancy (`KennedyOHaganDiscrepancy`):** Gaussian Process $\delta(x) \sim \mathcal{GP}(0, k(x, x'))$ with anchoring constraint to prevent parameter pseudo-convergence and extrapolation overconfidence.
+- **Info-Gap Decision Theory with Sniedovich's Safeguard (`InfoGapOption`):** Robustness horizon $\hat{\alpha}(q, r_c)$, opportuneness horizon $\hat{\beta}(q, r_w)$, *zero-ing* property, and Wald's global Maximin safeguard against "No-Man's Land".
 
-    Approved(X) = AND_{i=1..8} C_i(X),  C_i(X) = safeguard_i(X) AND anchor_i(X).
+---
 
-The panel reads two bits per agent and no seed; it runs no attack (the attacks that run live in the gates).
+## IV. 4-Filter Funnel, 8-Step SIGA Roadmap, and Production Governance
 
-Legacy records use the labels MB1–MB8: it is the same list. The orchestrator M
-(`crates/stochology-core/src/orchestrator.rs`) drives the six-stage cycle: translation and scope, ingestion
-and grain, simulation and null model, projection onto the five lenses, safeguard panel and gate, decision and closure. Of the two
-modes, **System 1** lives in `crates/stochology-core/src/s1.rs`, with the filter funnel alongside it, and
-**System 2** lives in `crates/stochology-s2`: LATS, belief-state engine, Metropolis inference, and
-deliberative board stress-testing, with code synthesis (F1) declared and not implemented. See
-`docs/DECLARED_PROPOSALS.md`.
+- **Eliminatory Funnel and SIGA Roadmap (`crates/stochology-siga`):**
+  - `funnel.rs`: Evaluates the **4 Eliminatory Filters** in strict sequence (Filter 1: $\mathrm{EVPI}$ and $\Phi_5$; Filter 2: Moulton-Campbell $n_{\mathrm{eff}}(p)$, Markov Blanket, and Berkson collider ban; Filter 3: Simulation-Based Calibration SBC $\chi^2$ and SHELF elicitation; Filter 4: SHA-256 pre-registration, independent cross-authorship, and exit clause).
+  - `roadmap.rs`: Executes the **8-Step SIGA Roadmap** (**S**urvey the Layer & Bridge; **I**nterrogate the Decision-Maker; **G**enerate the Null & Noise Physics; **A**ct with Threshold, Memory & Exit), cumulative evidence processes (*e-processes* $E_t = \prod L_i$), and executive memoranda in integer natural frequencies.
+- **Bitemporal Governance, Vault, and Drift (`crates/stochology-governance`):**
+  - `clock.rs`: Bitemporal Clock ($t_{\text{disp}} \ge t_{\text{ev}}$) and synthetic canary column ($I(\text{Canary}; Y) = 0$).
+  - `vault.rs`: Single-opening Temporal Vault (`TemporalVault`) with SHA-256 seal and automatic downgrade to exploratory status on failure.
+  - `drift.rs`: Murphy-CORP Circuit Breaker (`MurphyCorpCircuitBreaker`), adaptation to *Covariate Drift* via exponential tilt and *ExTRA-WCP-T* with Lei & Candès bound ($1 - \alpha - d_{\mathrm{TV}}$), and adaptation to *Label Shift* via the 4 canonical estimators (**BBSE**, **MLLS/SLD**, **DFM**, and **OTTER**).
+
+---
 
 ## V. Mandatory Verification Before Consolidation
 
-One command, and it is the list:
+A single command executes the entire mandatory verification suite of the repository:
 
 ~~~bash
-scripts/verify.sh            # all of §V: formatting, lints, tests, instruments, and verifiers
-scripts/verify.sh --rapido   # the same without the heavy laboratories, for the editing loop
+scripts/verify.sh
 ~~~
 
-The list lives in `scripts/verify.sh` and CI invokes **this file**, not a copy. While it lived in two
-places, the contract required 29 commands and CI ran 11 — the divergence that this paragraph closes. Below is the
-reading of the list, with what each line enforces:
+The script `scripts/verify.sh` enforces the following list without exception:
 
 ~~~bash
-cargo fmt --all --check                             # formatting belongs to rustfmt, not personal taste
-cargo clippy --workspace --all-targets -- -D warnings   # zero warnings tolerated across all eight crates
-cargo test --workspace                              # all eight crates
-cargo run --release --bin labs -- --all           # the 21 book laboratories
-cargo run --release --bin labs -- --bank           # real H0, reading data/bank_calls.csv
-cargo run --release --bin labs -- --resolution       # the R horizon
-cargo run --release --bin labs -- --s1              # System 1 triage
-cargo run --release --bin labs -- --s2              # System 2: hypergraph, belief, inference, and R-axis
-cargo run --release --bin labs -- --queue            # queue with abandonment and the R0-to-R3 table
-cargo run --release --bin gates -- --horizon all --reproduction   # the seven gates
-cargo run --release --bin gates -- --horizon h3 --defect h3.voos23  # negative proof: exits with 1
-cargo run --release --bin labs -- --rehearsal-shelf      # synthetic floor of the SHELF panel
-cargo run --release --bin labs -- --rehearsal-listening     # coverage arithmetic and boundary of the listening gate
-cargo run --release --bin labs -- --rehearsal-bridge      # roles, cases, and status in the bridge gate
-cargo run --release --bin labs -- --rehearsal-layers     # synthetic floor of Fleiss' kappa across three model-family coders
-python3 scripts/book/build.py --check               # the ramp AND the disk: the file must match the assembled book
-python3 scripts/book/check_labs.py                  # every cited block checked against its instrument
-python3 scripts/book/check_book.py                  # parts, chapters, fences, and ordering
-python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
-python3 scripts/check_seals.py                      # the 36 SHA-256 seals, paths relative to root
-python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
-git tag --list                                      # must be empty: history only, no versions (§VI)
+cargo fmt --all --check                                         # rustfmt check
+cargo clippy --workspace --all-targets -- -D warnings           # zero warnings tolerated across all 5 crates
+cargo test --workspace                                          # all unit and integration tests
+cargo run --release --bin labs -- --all                         # all 6 methodological and empirical laboratories
+cargo run --release --bin labs -- --layers                      # Lab 1: Meng, Manski, Jensen, and Performativity
+cargo run --release --bin labs -- --uncertainty                 # Lab 2: Kennedy-O'Hagan GP and Info-Gap + Sniedovich
+cargo run --release --bin labs -- --lenses                      # Lab 3: The Five Transversal Lenses on real data
+cargo run --release --bin labs -- --invariants                  # Lab 4: Phi1-Phi5, Moulton-Campbell, Exceedance, and Chouldechova
+cargo run --release --bin labs -- --siga                        # Lab 5: 4-Filter Funnel and SIGA Roadmap on the 3 YAML Cards
+cargo run --release --bin labs -- --governance                  # Lab 6: Bitemporal Clock, Vault, and 4 Regimes of Drift
+cargo run --release --bin gates                                 # The 7 Epistemological Gates (G1-G7): exits with 0
+cargo run --release --bin gates -- --defect cromwell            # Negative proof (Cromwell's Rule): exits with 1
+cargo run --release --bin gates -- --defect phi5                # Negative proof (Phi5 Resolution): exits with 1
+cargo run --release --bin gates -- --defect moulton             # Negative proof (Moulton Pseudoreplication): exits with 1
+cargo run --release --bin gates -- --defect performativity      # Negative proof (RRM Divergence): exits with 1
+cargo run --release --bin gates -- --defect sniedovich          # Negative proof (Info-Gap No-Man's Land): exits with 1
+cargo run --release --bin gates -- --defect clock               # Negative proof (Canary Temporal Intrusion): exits with 1
+cargo run --release --bin gates -- --defect vault               # Negative proof (Vault Reopening): exits with 1
+cargo run --release --bin gates -- --defect concept_drift       # Negative proof (Concept Drift Circuit Breaker): exits with 1
+cargo run --release --bin gates -- --defect chouldechova        # Negative proof (Chouldechova Impossibility): exits with 1
+git tag --list                                                  # Must be empty
 ~~~
 
-The instruments that prove what the items in `docs/DECLARED_PROPOSALS.md` §2 closed also enter the
-verification suite, because every row in that table cites one of them:
+---
 
-~~~bash
-cargo run --release --bin labs -- --genetics    # fine resolution in genetics
-cargo run --release --bin labs -- --streams     # the real streams of Chapter 20, rebuilt on public data
-cargo run --release --bin labs -- --eprocess    # the H2 gate under the e-process, retroactively (item 15)
-cargo run --release --bin labs -- --mc-error    # how far each simulated number moves with the seed (Appendix C.3)
-cargo run --release --bin labs -- --propagate   # plug-in, delta and Monte Carlo on the health post (Chapter 5)
-cargo run --release --bin labs -- --h3          # the H3 chain
-cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
-cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
-cargo run --release --bin labs -- --layers       # can the layers fail: 60-error external catalogue and falsifier gate
-cargo run --release --bin labs -- --listening      # the voice of those who pay for the error
-cargo run --release --bin labs -- --schema      # the contract migration chain
-cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
-cargo run --release --bin labs -- --resolution   # the R-axis and predictions 3 and 5
-cargo run --release --bin labs -- --oracles      # analytic oracles at limit cases, and the mutants of Appendix E they must kill
-~~~
+## VI. Project Status (Protocol v1.0)
 
-The wave engine (`crates/stochology-wave`) left the tree on 2026-10-19, with its three instruments, after its sealed
-tests on catalogued data (points 23 and 24) did not support its claims; the records stay in `empirical/` and the
-recovery commit is in `docs/declarations/REMOVED_WAVE.md`.
-
-The three dry-run rehearsals (`--rehearsal-*`) are rehearsals, not coverage: they run the instruments of points 12, 13, and 16 over synthetic
-records to measure the floor of a fluent uncalibrated respondent and to expose what the gate cannot
-distinguish. No line in them counts a heard group, a selected case, or an assigned role, and their output carries the
-`SYNTHETIC` label. The panel rehearsal measured two things that remain declared: the fluent respondent (p = 0.75
-without information) has negative skill, and the perfect oracle fails the skill guard because with
-perfect accuracy the climatological variance is zero and the 0/0 ratio evaluates to 0. The listening rehearsal measured the boundary of the gate:
-it checks fields rather than provenance, so seven fabricated records open the box — true coverage requires a
-signed transcript hash, which does not exist today.
-
-No number enters the book without coming from one of these commands. Whenever a value diverges from the legacy registry, a
-**divergence declaration** states both values and the cause in Appendix E (provenance of the numbers), chapter by chapter.
-The chapters themselves carry content only: no path, no reference to the book, the repository or the program, and the R-axis
-block, or the slice of it that teaches, only in the chapters that measure a resolution loss or a threshold (5, 8, 10, 12, and 21). This is the owner's rule of 2026-10-18,
-which moved the declarations out of the chapters and rewrote the book part by part (`docs/declarations/BOOK_REWRITE.md`); since then,
-`scripts/style/check_pass.py` checks each rewritten file for the ramp markers, the word floor, and number provenance (every number
-in running prose must exist in an output block of the same file, in an instrument's output, the code, a record or another
-declared source, or in a row of `book/provenance.tsv` that the script checks; since 2026-10-19 the previous book is no
-longer a source), and `check_labs.py` keeps every block equal to
-its instrument.
-
-## VI. Rule on New Files
-
-New working files — intermediate copies, one-off scripts, drafts — are **deleted after
-integration**. Only artifacts with an ongoing function (`scripts/book/build.py`, the two book verifiers,
-the results generator, the seal verifier, the style tooling, the crates) or permanent records
-(chapters, declarations, manifests, reports) remain in the repository.
-
-**History, not versions** (owner's rule, 2026-10-18). The project has no versions: no numbered editions, no
-version tags or releases, no "v2" of a document, and no second copy of a file kept alongside the first. What
-changes is recorded as history only — the git log and the dated records in `history/` — and a correction is a
-dated rectification in the file it corrects, with both values. `scripts/verify.sh` fails if the repository
-carries any tag. Three things keep a number because they are not versions of the project: the Rust language
-edition and the crate `version` fields that Cargo requires; the card schema version (1.0 to 1.5), which is a data
-contract whose migration chain is itself its history; and the labels v1 to v4 in `empirical/p03-multiplicidade/`,
-which name the specifications that were tried and are the record that the counter $K$ counts.
-
-## VII. Project State
-
-| Layer | Location | State |
+| Layer | Location | Status |
 | --- | --- | --- |
-| Book | `book/stochology-textbook.md`, authored in `book/` | 21 chapters, 5 parts, assembled and verified |
-| Site | `site/` (the Docsify page, the landing text `home.md` and `build.sh`), published by `.github/workflows/pages.yml` at obestafera.com | assembled from `book/` on each push to `main`, with the sidebar generated from the headings; apart from the landing text, the site keeps no copy of the book in the tree |
-| Apparatus | `crates/stochology-*` | eight live crates since 2026-10-19 (nine after the consolidation of 2026-10-17, until the wave engine left: `docs/declarations/REMOVED_WAVE.md`): `-core` (with the `audit` and `schema` modules), `-hypergraph`, `-methods` (ICP, drift, fairness), `-horizons` (H0 to H3), `-s2`, `-gates`, `-book` and `-wasm`; no name from the roadmap was left behind, and every name that disappeared lives on as a module of the crate that absorbed it (`docs/declarations/CRATE_CONSOLIDATION.md`) |
-| Results | `docs/RUST_RESULTS.md` | registry generated directly from the instruments |
-| Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
-| Language | every layer | **English migration of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |
-| Retired | commit `1bfec905` | the Python simulation code and artifacts not significant to the theory |
-| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **five live items since 2026-10-23** (item 15 closed on 2026-10-19 with `labs --eprocess`, item 16 by the provenance ledger, and items 18 and 19 with contract 1.5; on 2026-10-20 item 13 sealed its 32 real outcomes and the `tensor-v1` 96-parameter numerical MLP baseline — Brier `0.293988`, ECE `0.338131` — and item 14 sealed its 60-error external catalogue `erros.tsv`, instrument `labs --layers`, and synthetic rehearsal `labs --rehearsal-layers`; on 2026-10-23 item 13 closed with the frozen open-weights GGUF model `Qwen/Qwen2.5-0.5B-Instruct-GGUF` `q4_k_m` — `sha256` `74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db` — run locally at `temperature = 0` and `seed = 2026` both without and with `grammar/ficha_jev.gbnf` over the 32 real outcomes, yielding `32/32` `OutOfSchema` abstentions in single-stage without grammar, `3/32` `DogmaticExtreme` abstentions in two-stage without grammar, and `0/32` abstentions, Brier `0.276413`, and ECE `0.270562` in two-stage with `grammar/ficha_jev.gbnf`, `K = 2`) — see §1 and §2 of that file. All five remaining items (**3** human SHELF elicitation, **5** the voice of those who pay for the error, **9** the bridge thesis at scale, **14** whether the layers can fail, and **17** an audit from outside) depend on **people outside the program** — consent, listening, blind judgment, independent coding, and outside review, which no line of code can replace. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
-
-## VIII. What Does Not Enter This Repository
-
-- **Simulation Python:** retired on 2026-10-16 (`docs/declarations/REMOVED_PYTHON.md`). What remains in Python
-  are the verification tools for the book and the registry, and nothing else: `scripts/book/build.py`, the two book
-  verifiers, `scripts/book/generate_results.py`, `scripts/check_seals.py`, and the style tooling in `scripts/style/`. The
-  style tooling is authorized here because the prose pass is part of the continuous verification cycle,
-  is declared in `scripts/style/decisions.md`, and is part of the mandatory verification in §V. Any verification tool
-  that does not enter §V does not stay in the tree: the four tools remaining outside the direct command list either run through it
-  (`scripts/style/scan.py` is imported by `scripts/style/check_pass.py`) or serve the rereading declared in
-  `scripts/style/decisions.md`, and what did not serve — the three manifests and two transcripts — moved to `history/`.
-- **The legacy course and its numbering:** the course *Critical Thinking and Stochastic Models* has been obsoleted; the labels
-  M0–M15, ME1–ME24, and MB1–MB8 are historical and are not current nomenclature.
-- **Python operator tool:** `scripts/generate_fire_sources.py` is authorized here because it prepares the
-  raw inputs for item 13 outside the tree — case catalog, frozen inference, and newline-escaped
-  serialization —, and the input it produces enters through the ramp of `ingest-jev`, which is Rust and enforces the schema. It
-  computes no published number: what it writes is a raw source, and a source only becomes a number after the seals and the
-  instrument. Any synthetic source it generates is labeled as synthetic.
-- **Artifacts without significance for the theory:** the criterion lives in `book/significant-results.md`, and its
-  latest application is recorded in `docs/declarations/REMOVED_NON_SIGNIFICANT.md`.
+| Protocol Specification | `docs/PROTOCOL.md` | Consolidated v1.0 specification and code mapping |
+| Rust Apparatus | `crates/stochology-core`, `crates/stochology-lenses`, `crates/stochology-siga`, `crates/stochology-governance`, `crates/stochology-cli` | 5 pure-Rust crates (zero external dependencies), 2021 edition |
+| Epistemological Cards | `cards/card_01_sepsis_triage.yaml`, `cards/card_02_bank_queue_staffing.yaml`, `cards/card_03_performative_credit_scoring.yaml` | 3 canonical cards (`contract_version: "1.0"`) audited in `gates` and `labs --siga` |
+| Empirical Datasets | `data/*.csv` (`danish_fire.csv`, `bank_calls.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `djia_1885_2023.csv`, `atlantic_storms.csv`, `toronto_arrests.csv`, `nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `vic_elec.csv`) | Preserved and exercised by the laboratories |
+| Verification | `scripts/verify.sh` | Complete positive and negative test suite |

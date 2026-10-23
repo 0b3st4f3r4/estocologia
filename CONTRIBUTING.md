@@ -1,43 +1,23 @@
 # Contributing
 
-Three ways in, in increasing order of cost. None requires permission; all go through the verification in `AGENTS.md`.
+All contributions must comply with the governance and verification contract defined in [`AGENTS.md`](AGENTS.md) and [`docs/PROTOCOL.md`](docs/PROTOCOL.md).
 
-## 1. Report an error
+## 1. Epistemological Contract (`contract_version: "1.0"`)
 
-Open an issue with the **errata** template. The protocol is `docs/OUTSIDE_AUDIT.md`, activity 1: a report is
-confirmed by a test that fails on the old code and passes on the corrected one, or by a source when there is no
-executable account, and it enters Appendix E of the book with both values. Every number in the book comes from a
-command you can run (Appendix C), and the ones that do not are listed in Appendix E, "Numbers cited without an
-instrument".
+- Every inter-module or inter-agent claim must be represented as a structured [`EpistemologicalCard`](crates/stochology-core/src/card.rs) (`cards/*.yaml`) and pass `EpistemologicalCard::audit()`.
+- Zero external crate dependencies are permitted across the 5 workspace crates (`stochology-core`, `stochology-lenses`, `stochology-siga`, `stochology-governance`, `stochology-cli`).
+- Deterministic simulations must use [`SplitMix64`](crates/stochology-core/src/rng.rs) with `DEFAULT_SEED = 2026`.
 
-## 2. Reimplement a laboratory without reading the Rust
+## 2. Mandatory Verification
 
-Pick a chapter, read only its text (the recipe paragraph beside each laboratory states the choices), and recompute
-its printed quantities in a language of your choice. `scripts/reimplementation/` holds the ones done so far, in
-Python with the standard library only; a new module registers its checks through `common.py` and is added to
-`run.py`. A divergence beyond the tolerance is an errata; agreement is weak evidence where the text leaves a choice
-open, so say which choices you had to make.
+Before submitting any change, run the full verification suite:
 
-## 3. Change the tree
+```bash
+scripts/verify.sh
+```
 
-- Read `AGENTS.md` first. It is the contract: the four prohibitions, the invariants, and the mandatory verification.
-- Run `scripts/verify.sh` before opening a pull request. CI runs the same file.
-- No number enters the book without an instrument that prints it; no path, repository reference or metacommentary
-  enters a chapter (they belong in Appendix E).
-- A correction keeps both values: the earlier one goes to Appendix E with the cause, and its retired value to the
-  guard in `scripts/book/check_book.py`.
-- The project keeps history, not versions: no tags, no "v2" files. A change of state is a dated record in `history/`.
-- Rust 1.97.1 is pinned in `rust-toolchain.toml`; Python tooling is standard library only (Python 3.13).
+It enforces `cargo fmt --all --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, all 6 laboratories (`labs`), the 7 positive epistemological gates (`gates`), and all 9 negative defect proofs (`gates --defect <...>`).
 
-## Licence of what you contribute
+## 3. Licensing
 
-What goes in comes out under the same terms: a contribution to the text (the book, the paper, the documents) is
-offered under CC BY 4.0 (`LICENSE-TEXT`), and a contribution to the code under MIT (`LICENSE`). A dataset enters
-only with its licence declared in `data/SOURCES.md`.
-
-## What outside participation is waiting for
-
-Four items depend on people who are not the authors, and no code closes them (`docs/DECLARED_PROPOSALS.md`): the
-listening sessions with the groups affected by the seven decisions on people, the blind test of the bridge thesis
-with cases and judges chosen from outside, independent coders for the layers, and an audit from outside. If you can be
-one of those people, open an issue saying which.
+Contributions to documentation are licensed under CC BY 4.0 ([`LICENSE-TEXT`](LICENSE-TEXT)) and contributions to code under MIT ([`LICENSE`](LICENSE)). Datasets in [`data/`](data/) retain their original licenses documented in [`data/SOURCES.md`](data/SOURCES.md).

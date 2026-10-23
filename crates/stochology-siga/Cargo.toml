@@ -1,0 +1,11 @@
+[package]
+name = "stochology-siga"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "4-Filter Eliminatory Funnel and 8-Step SIGA Operational Roadmap (Survey, Interrogate, Generate, Act) with SBC, SHELF, e-processes, and integer natural frequency memoranda"
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }
+stochology-lenses = { path = "../stochology-lenses" }

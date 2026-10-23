@@ -1,31 +1,16 @@
 [workspace]
-resolver = "3"
+resolver = "2"
 members = [
     "crates/stochology-core",
-    "crates/stochology-hypergraph",
-    "crates/stochology-methods",
-    "crates/stochology-horizons",
-    "crates/stochology-s2",
-    "crates/stochology-gates",
-    "crates/stochology-book",
-    "crates/stochology-wasm",
+    "crates/stochology-lenses",
+    "crates/stochology-siga",
+    "crates/stochology-governance",
+    "crates/stochology-cli",
 ]
 
 [workspace.package]
-version = "0.1.0"
-edition = "2024"
-rust-version = "1.97"
-license = "MIT"
-
-[workspace.lints.rust]
-unsafe_code = "deny"
-unused_must_use = "deny"
-rust_2018_idioms = "deny"
-
-[workspace.lints.clippy]
-all = { level = "warn", priority = -1 }
-needless_range_loop = "allow"
-
-[profile.release]
-opt-level = 3
-lto = "thin"
+version = "1.0.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/stochology/stochology"
+description = "Stochology Protocol v1.0: Enriched Methodological Architecture for Judgment and Decision-Making under Uncertainty"

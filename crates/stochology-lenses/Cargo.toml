@@ -1,0 +1,10 @@
+[package]
+name = "stochology-lenses"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "The Five Transversal Lenses of the Stochology Protocol v1.0: Information (SDPI/Fano/Meng), Time (Ito/Kelly/Mixing), Scale & Tail (Hill), Structure & Invariance (Pearl/ICP/NILE/Lambda*), and Decision (Cost-Loss/EVPI/CORP-Murphy PAV)"
+
+[dependencies]
+stochology-core = { path = "../stochology-core" }

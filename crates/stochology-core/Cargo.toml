@@ -2,10 +2,8 @@
 name = "stochology-core"
 version.workspace = true
 edition.workspace = true
-rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+description = "Core primitives of the Stochology Protocol v1.0: L1/L2/L3 layers, bridge mechanics, performativity, Kennedy-O'Hagan GP, Info-Gap + Sniedovich, Phi1-Phi5 invariants, Moulton-Campbell, Chouldechova, and Epistemological Card"
 
 [dependencies]
-
-[lints]
-workspace = true

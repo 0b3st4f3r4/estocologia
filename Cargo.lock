@@ -3,65 +3,38 @@
 version = 4
 
 [[package]]
-name = "stochology-book"
-version = "0.1.0"
+name = "stochology-cli"
+version = "1.0.0"
 dependencies = [
  "stochology-core",
- "stochology-horizons",
- "stochology-hypergraph",
- "stochology-methods",
- "stochology-s2",
+ "stochology-governance",
+ "stochology-lenses",
+ "stochology-siga",
 ]
 
 [[package]]
 name = "stochology-core"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
-name = "stochology-gates"
-version = "0.1.0"
+name = "stochology-governance"
+version = "1.0.0"
 dependencies = [
  "stochology-core",
- "stochology-horizons",
- "stochology-hypergraph",
- "stochology-methods",
+ "stochology-lenses",
 ]
 
 [[package]]
-name = "stochology-horizons"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-methods",
-]
-
-[[package]]
-name = "stochology-hypergraph"
-version = "0.1.0"
+name = "stochology-lenses"
+version = "1.0.0"
 dependencies = [
  "stochology-core",
 ]
 
 [[package]]
-name = "stochology-methods"
-version = "0.1.0"
+name = "stochology-siga"
+version = "1.0.0"
 dependencies = [
  "stochology-core",
-]
-
-[[package]]
-name = "stochology-s2"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-horizons",
- "stochology-hypergraph",
-]
-
-[[package]]
-name = "stochology-wasm"
-version = "0.1.0"
-dependencies = [
- "stochology-core",
- "stochology-horizons",
+ "stochology-lenses",
 ]

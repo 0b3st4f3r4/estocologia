@@ -1,0 +1,83 @@
+id: "clinical_sepsis_triage_icu_shift"
+contract_version: "1.0"
+layer: "L2"
+uncertainty: "epistemic_specification"
+
+decision_maker_question:
+  who_decides: "On-Duty ICU Attending Physician"
+  altered_action: "Trigger early sepsis bundle within 1h for patients on the shift above threshold p*"
+  question: "Does the calibrated probability of septic shock within the 12h shift exceed the cost-loss threshold p* = 0.05294?"
+
+epistemological_header:
+  generating_process: "Hierarchical log-logistic hazard with hospital-shift random effects and Kennedy-O'Hagan GP discrepancy"
+  nonlinearity: "f(E[X])=1420.0, E[f(X)]=1890.0, Jensen gap Delta_J=+470.0, median=1510.0, q05=820.0, q95=4120.0, CRPS=215.4"
+  unit_and_margin:
+    independent_unit: "12h clinical ICU shift (cluster of bed-hours)"
+    nominal_sample_size_n: 25028
+    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.992 = 118.71 (Moulton-Campbell)"
+    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.25"
+    effective_sample_size_n_eff: 1300
+    unit_margin_of_error: "+/- 1.4 percentage points over 1,300 effective shifts"
+  noise_physics:
+    stochastic_regime: "Non-ergodic multiplicative organ-failure cascade with sub-exponential tail (alpha_Hill = 1.60)"
+    absorbing_states: "Irreversible refractory septic shock / clinical mortality barrier"
+    bridge_L3_L1_performativity:
+      agent_type: "performative"
+      wasserstein_sensitivity_epsilon: 0.18
+      rrm_convergence_condition: "eps * beta / gamma = 0.18 * 1.50 / 1.00 = 0.27 < 1 (strict contraction)"
+      stability_optimality_divergence: "theta_PS = 1.2195 vs Stackelberg theta_PO = 1.5625 (audited)"
+  causal_ladder:
+    pearl_rung: "2-Act"
+    identification_strategy: "Invariant Causal Prediction (ICP) + NILE across 3 hospital shift regimes; Markov blanket verified without collider"
+    untestable_assumption: "Hidden confounding bounded by sensitivity threshold Lambda* <= 1.50"
+
+uncertainty_budget_and_authorship:
+  variance_budget:
+    inputs: 0.45
+    parameters: 0.35
+    covariance: 0.20
+    structural_discrepancy_gp: "Gaussian Process delta(x) ~ GP(0, k_anchored(x,x')) per Kennedy-O'Hagan"
+  dominant_event:
+    description: "Refractory septic shock within the first 12h shift"
+    probability_p: 0.05
+    base_rate_floor_epsilon: 0.001
+    cost_share: 1.00
+  info_gap_robustness:
+    critical_requirement_rc: "Operational shift survival rate above 92% (robust satisficing)"
+    robustness_horizon_alpha_hat: "alpha_hat = 3.50 structural standard deviations tolerated without violating r_c"
+    opportuneness_horizon_beta_hat: "beta_hat = 1.20 deviations for windfall mortality reduction r_w"
+    global_maximin_safeguard: "Wald global Maximin bound >= 85% outside U(alpha, u_hat) with reversible escalation protocol"
+  field_authorship:
+    null_model: "inference"
+    decision_rule: "decision"
+    adversarial_reviewer: "independent_adversarial_auditor"
+
+data_and_audit_contract:
+  missingness_mechanism: "MAR (arterial lactate 4.2% missing; Meng correlation rho_R_Y = 0.003; Manski bounds verified)"
+  seed_and_environment: "seed=2026; rustc=1.97; linux-x86_64; container_sha256=ba7816bf"
+  null_model: "crates/stochology-cli#exact_cluster_null_m_tilde_seed_2026"
+  preregistration_hash: "4f2594bc68198e8114f9677943498c4812466280bc82513a32ad6afed2b30a31"
+  attempt_counter_K: 1
+  e_process_multiplicity: "Cumulative e-process E_1 = 24.8 (threshold 1/alpha = 20.0 for alpha = 0.05)"
+  murphy_corp_decomposition:
+    total_score_brier_or_crps: 0.046
+    miscalibration_REL_MCB: 0.002
+    resolution_RES_DSC: 0.004
+    base_uncertainty_UNC0: 0.048
+  findings:
+    registered: 2
+    used: 1
+    unused:
+      - "Three-way interaction discarded due to insufficient tail n_eff(0.90) in Filter 2"
+
+decision_rule_and_scope:
+  event_probability_p: 0.05
+  base_rate_floor_epsilon: 0.001
+  protection_cost_C: 1800.0
+  event_loss_L: 34000.0
+  mitigation_efficacy_eta: 1.0
+  critical_threshold_p_star: 0.05294
+  declared_act: "do_not_protect"
+  scope_statement: "Valid for adult inpatient wards under standardized triage; does not apply to pediatric or neonatal ICU"
+  who_pays_for_error: "Chouldechova trilemma audit: base rates p_A=0.06 vs p_B=0.04; equalizing PPV at 0.72 implies monitored ratio FPR_A/FPR_B = 1.53"
+  exit_clause: "Immediately suspend the model if REL_CORP > 0.015 or RES_CORP < 0.002 over a 14-day rolling window"

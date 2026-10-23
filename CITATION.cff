@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: >-
-  The project keeps history, not versions: cite the commit you read, by its hash and date, and the repository
-  URL. There are no releases or tags by rule (AGENTS.md, section VI). The text (book, paper, site, documents)
-  is under CC BY 4.0 and the code under MIT; the datasets keep their own licences (data/SOURCES.md).
-title: "Stochology: Judgement and Decision under Uncertainty"
+  Cite the commit you read, by its hash and date, and the repository URL.
+  The documentation is licensed under CC BY 4.0 and the code under MIT;
+  the datasets keep their own licenses (data/SOURCES.md).
+title: "Stochology Protocol (v1.0): Judgment and Decision-Making under Uncertainty"
 type: software
 authors:
   - family-names: Neto
@@ -15,12 +15,16 @@ license:
   - CC-BY-4.0
   - MIT
 abstract: >-
-  A working text and an apparatus in Rust on judgement and decision under uncertainty: 21 chapters with
-  fixed-seed laboratories, instruments over ten public datasets, seven gates able to fail a claim, and a
-  public record of the errors found in the text and the code, with both values.
+  A pure-Rust auditable epistemological machine implementing the Stochology Protocol v1.0:
+  three ontological layers and bridge mechanics (Meng, Manski, Jensen, Performative Prediction),
+  Kennedy-O'Hagan Gaussian Process discrepancy, Info-Gap with Sniedovich's global Maximin safeguard,
+  the five transversal lenses, boundary invariants Phi1-Phi5, Moulton-Campbell exceedance design effects,
+  Chouldechova's impossibility audit, the 4-Filter Funnel and 8-Step SIGA Roadmap, bitemporal governance,
+  and formal adaptation to the four regimes of production drift.
 keywords:
   - decision under uncertainty
   - calibration
+  - performative prediction
   - causal invariance
   - non-ergodicity
   - reproducibility
