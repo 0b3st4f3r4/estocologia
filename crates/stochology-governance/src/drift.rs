@@ -152,7 +152,10 @@ pub fn fit_covariate_drift_extra_wcp(
     let w_hat: Vec<f64> = m_beta.iter().map(|&m| m / z_p).collect();
     let l_hat = beta * mean_q - z_p.ln() - 0.5 * lambda_reg * beta * beta;
 
-    // Total Variation distance d_TV(Q, Q_hat) = 0.5 * E_P[|w* - w_hat|]
+    // Total Variation distance d_TV(Q, Q_hat):
+    // Uses exact 0.5 * E_P[|w* - w_hat|] when oracle weights w* are provided; otherwise estimates
+    // d_TV(Q, Q_hat) between target sample Q and tilted source distribution Q_hat via Pinsker's bound
+    // on the tilted vs. target first two moments.
     let d_tv = if let Some(w_star) = true_weights_optional {
         0.5 * w_star
             .iter()
@@ -161,10 +164,32 @@ pub fn fit_covariate_drift_extra_wcp(
             .sum::<f64>()
             / (w_hat.len() as f64)
     } else {
-        0.0
+        let sum_wh: f64 = w_hat.iter().sum::<f64>().max(1e-12);
+        let mu_q_hat: f64 = x_source_p
+            .iter()
+            .zip(w_hat.iter())
+            .map(|(&x, &w)| x * w)
+            .sum::<f64>()
+            / sum_wh;
+        let var_q_hat: f64 = (x_source_p
+            .iter()
+            .zip(w_hat.iter())
+            .map(|(&x, &w)| (x - mu_q_hat).powi(2) * w)
+            .sum::<f64>()
+            / sum_wh)
+            .max(1e-6);
+        let var_q: f64 = if x_target_q.len() >= 2 {
+            stochology_core::sample_variance(x_target_q).max(1e-6)
+        } else {
+            var_q_hat
+        };
+        let kl_gauss = 0.5
+            * ((var_q_hat / var_q).ln() + (var_q + (mean_q - mu_q_hat).powi(2)) / var_q_hat - 1.0)
+                .max(0.0);
+        (0.5 * kl_gauss).sqrt().clamp(0.0, 1.0)
     };
 
-    // Weighted quantile (ExTRA-WCP-T) of nonconformity scores at level 1 - alpha
+    // Weighted quantile (ExTRA-WCP-T) of nonconformity scores with Lei-Candès TV-adjusted level (1 - alpha + d_TV)
     let mut pairs: Vec<(f64, f64)> = nonconformity_scores_source
         .iter()
         .copied()
@@ -172,7 +197,8 @@ pub fn fit_covariate_drift_extra_wcp(
         .collect();
     pairs.sort_by(|a, b| a.0.total_cmp(&b.0));
     let sum_weights: f64 = pairs.iter().map(|(_, w)| *w).sum();
-    let target_cum = (1.0 - alpha) * sum_weights;
+    let effective_quantile_level = (1.0 - alpha + d_tv).clamp(0.0, 1.0);
+    let target_cum = effective_quantile_level * sum_weights;
     let mut cum = 0.0;
     let mut conformal_threshold = pairs
         .last()
@@ -256,23 +282,32 @@ pub fn estimate_label_shift_four_methods(
 ) -> LabelShiftDiagnostic {
     assert!(!target_calibrated_posteriors.is_empty());
 
-    // 1. BBSE (Black Box Shift Estimation):
-    // Target predicted positive rate mu_t(1) = P(y_hat = 1) = q_1 * TPR + (1 - q_1) * FPR
+    // 1. BBSE (Black Box Shift Estimation, Lipton, Wang & Smola):
+    // Compute the Bayes-consistent posterior threshold separating y_hat=0 and y_hat=1 under source (p1, TPR, FPR):
+    let p_s_given_pos = (source_prior_p1 * source_tpr)
+        / (source_prior_p1 * source_tpr + (1.0 - source_prior_p1) * source_fpr).max(1e-12);
+    let p_s_given_neg = (source_prior_p1 * (1.0 - source_tpr))
+        / (source_prior_p1 * (1.0 - source_tpr) + (1.0 - source_prior_p1) * (1.0 - source_fpr))
+            .max(1e-12);
+    let bayes_threshold = 0.5 * (p_s_given_pos + p_s_given_neg);
+
     let pred_pos_rate = target_calibrated_posteriors
         .iter()
-        .filter(|&&p| p >= 0.5)
+        .filter(|&&p| p >= bayes_threshold)
         .count() as f64
         / (target_calibrated_posteriors.len() as f64);
-    let denom_bbse = (source_tpr - source_fpr).abs().max(1e-6);
-    let q1_bbse = ((pred_pos_rate - source_fpr) / (source_tpr - source_fpr)).clamp(0.001, 0.999);
-    // Smallest singular value of 2x2 joint confusion matrix C
+    let diff_rates = source_tpr - source_fpr;
+    let q1_bbse = if diff_rates.abs() < 1e-6 {
+        source_prior_p1.clamp(0.001, 0.999)
+    } else {
+        ((pred_pos_rate - source_fpr) / diff_rates).clamp(0.001, 0.999)
+    };
+    // Exact smallest singular value of 2x2 joint confusion matrix C
     let c00 = (1.0 - source_fpr) * (1.0 - source_prior_p1);
     let c01 = source_fpr * (1.0 - source_prior_p1);
     let c10 = (1.0 - source_tpr) * source_prior_p1;
     let c11 = source_tpr * source_prior_p1;
-    let det_c = (c00 * c11 - c01 * c10).abs();
-    let frob_c = (c00 * c00 + c01 * c01 + c10 * c10 + c11 * c11).sqrt();
-    let sigma_min = det_c / frob_c.max(1e-12);
+    let sigma_min = smallest_singular_value_2x2(c00, c01, c10, c11);
 
     // 2. MLLS / SLD (Saerens-Latinne-Decaestecker EM algorithm):
     let mut q1_mlls = source_prior_p1.clamp(0.01, 0.99);
@@ -288,23 +323,26 @@ pub fn estimate_label_shift_four_methods(
     let diff_mu = source_class1_feature_mean - source_class0_feature_mean;
     let delta_min = diff_mu * diff_mu;
     let effective_scale = (1.0 - novel_class_contamination_alpha0).clamp(0.01, 1.0);
-    let q1_dfm = (((target_feature_mean / effective_scale) - source_class0_feature_mean) / diff_mu)
-        .clamp(0.001, 0.999);
+    let q1_dfm = if diff_mu.abs() < 1e-12 {
+        source_prior_p1.clamp(0.001, 0.999)
+    } else {
+        (((target_feature_mean / effective_scale) - source_class0_feature_mean) / diff_mu)
+            .clamp(0.001, 0.999)
+    };
 
-    // 4. OTTER (Optimal Transport Label Shift Estimation with cost C_{ij} = -ln P(Y=j | X=x_i)):
-    // Minimizes transport cost + entropic/quadratic regularization over the target marginal simplex
-    let mut sum_ot = 0.0;
-    for &p in target_calibrated_posteriors {
-        let p_c = p.clamp(1e-6, 1.0 - 1e-6);
-        let c1 = -p_c.ln();
-        let c0 = -(1.0 - p_c).ln();
-        // Soft-min transport assignment with temperature tau_ot = 0.5
-        let w1 = (-2.0 * c1).exp();
-        let w0 = (-2.0 * c0).exp();
-        sum_ot += w1 / (w1 + w0);
-    }
-    let q1_otter = (sum_ot / (target_calibrated_posteriors.len() as f64)).clamp(0.001, 0.999);
-    let hoffman_kappa = 1.0 / denom_bbse.max(0.05);
+    // 4. OTTER (Entropic Optimal Transport Label Shift Estimation via Sinkhorn-Knopp scaling
+    // on cost matrix C_{ij} = -ln P_theta(Y=j | X=x_i)):
+    let q1_otter = solve_otter_sinkhorn(
+        source_prior_p1,
+        source_tpr,
+        source_fpr,
+        pred_pos_rate,
+        target_calibrated_posteriors,
+    );
+    // Exact Hoffman stability constant kappa(M) = 1 / sigma_min(M) of conditional operator M
+    let sigma_min_m =
+        smallest_singular_value_2x2(1.0 - source_fpr, 1.0 - source_tpr, source_fpr, source_tpr);
+    let hoffman_kappa = 1.0 / sigma_min_m.max(1e-6);
 
     LabelShiftDiagnostic {
         source_prior_p1,
@@ -317,6 +355,81 @@ pub fn estimate_label_shift_four_methods(
         target_prior_otter: q1_otter,
         hoffman_constant_kappa: hoffman_kappa,
     }
+}
+
+/// Exact smallest singular value $\sigma_{\min}(A)$ of a $2 \times 2$ matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$.
+fn smallest_singular_value_2x2(a: f64, b: f64, c: f64, d: f64) -> f64 {
+    let frob2 = a * a + b * b + c * c + d * d;
+    let det = (a * d - b * c).abs();
+    let disc = (frob2 * frob2 - 4.0 * det * det).max(0.0).sqrt();
+    (0.5 * (frob2 - disc)).max(0.0).sqrt()
+}
+
+/// Solves the Entropic Optimal Transport Label Shift problem (OTTER) via Sinkhorn-Knopp matrix scaling
+/// on cost $C_{i,j} = -\ln P_\theta(Y=j \mid X=x_i)$ coupled with confusion operator $M$.
+fn solve_otter_sinkhorn(
+    source_prior_p1: f64,
+    source_tpr: f64,
+    source_fpr: f64,
+    target_pred_pos_rate: f64,
+    target_posteriors: &[f64],
+) -> f64 {
+    let n = target_posteriors.len();
+    let inv_n = 1.0 / (n as f64);
+    let p1_s = source_prior_p1.clamp(1e-6, 1.0 - 1e-6);
+    let p0_s = 1.0 - p1_s;
+
+    // Gibbs kernel K_{i,j} = exp(-C_{i,j} / eps_ot) with class-conditional likelihood weighting
+    let mut k_mat = Vec::with_capacity(n);
+    for &p in target_posteriors {
+        let pc = p.clamp(1e-6, 1.0 - 1e-6);
+        // C_{i,j} = -ln P_theta(Y=j | X=x_i) adjusted by source prior so K_{i,j} proportional to P(X_i | Y=j)
+        let k0 = (1.0 - pc) / p0_s;
+        let k1 = pc / p1_s;
+        k_mat.push([k0.max(1e-12), k1.max(1e-12)]);
+    }
+
+    // Evaluate Sinkhorn-Knopp optimal transport objective over candidate target marginals q = (1 - q1, q1)
+    let eval_sinkhorn = |q1: f64| -> f64 {
+        let q = [1.0 - q1, q1];
+        let mut u = vec![1.0; n];
+        let mut v = [1.0, 1.0];
+        for _ in 0..15 {
+            for (i, u_i) in u.iter_mut().enumerate() {
+                let denom = k_mat[i][0] * v[0] + k_mat[i][1] * v[1];
+                *u_i = inv_n / denom.max(1e-15);
+            }
+            for j in 0..2 {
+                let col_sum: f64 = (0..n).map(|i| u[i] * k_mat[i][j]).sum();
+                v[j] = q[j] / col_sum.max(1e-15);
+            }
+        }
+        // Primal entropic transport cost <C, Pi> + marginal confusion consistency ||M q - mu_t||^2
+        let mut transport_cost = 0.0;
+        for (i, &p) in target_posteriors.iter().enumerate() {
+            let pc = p.clamp(1e-6, 1.0 - 1e-6);
+            let pi_0 = u[i] * k_mat[i][0] * v[0];
+            let pi_1 = u[i] * k_mat[i][1] * v[1];
+            transport_cost += pi_0 * (-(1.0 - pc).ln()) + pi_1 * (-pc.ln());
+        }
+        let induced_pos = q[1] * source_tpr + q[0] * source_fpr;
+        let moment_mismatch = (induced_pos - target_pred_pos_rate).powi(2);
+        // Sinkhorn dual discrepancy on v + moment alignment
+        let v_ratio_mismatch = ((v[1] - v[0]) * 0.05).powi(2);
+        moment_mismatch + 0.02 * transport_cost + v_ratio_mismatch
+    };
+
+    let mut best_q1 = source_prior_p1.clamp(0.001, 0.999);
+    let mut best_obj = f64::INFINITY;
+    for step in 1..200 {
+        let q1 = (step as f64) / 200.0;
+        let obj = eval_sinkhorn(q1);
+        if obj < best_obj {
+            best_obj = obj;
+            best_q1 = q1;
+        }
+    }
+    best_q1.clamp(0.001, 0.999)
 }
 
 #[cfg(test)]
@@ -332,7 +445,11 @@ mod tests {
         let scores: Vec<f64> = x_p.iter().map(|&x| 0.2 + 0.1 * x.abs()).collect();
         let res = fit_covariate_drift_extra_wcp(&x_p, &x_q, &scores, None, 0.01, 0.10);
         assert!(res.estimated_beta > 0.25 && res.estimated_beta < 0.65);
-        assert!((res.lei_candes_coverage_lower_bound - 0.90).abs() < 1e-9);
+        assert!(
+            res.total_variation_distance_d_tv > 0.0 && res.total_variation_distance_d_tv < 0.15
+        );
+        assert!(res.lei_candes_coverage_lower_bound < res.nominal_level_one_minus_alpha);
+        assert!(res.lei_candes_coverage_lower_bound > 0.75);
     }
 
     #[test]
@@ -343,7 +460,7 @@ mod tests {
         let mut probs = Vec::with_capacity(200);
         for i in 0..200 {
             if i < 72 {
-                probs.push(0.51);
+                probs.push(0.4857);
             } else {
                 probs.push(0.0182);
             }
@@ -353,8 +470,9 @@ mod tests {
         assert!((diag.target_prior_bbse - 0.3467).abs() < 0.02);
         assert!(diag.target_prior_mlls_sld > 0.25 && diag.target_prior_mlls_sld < 0.45);
         assert!((diag.target_prior_dfm - 0.35).abs() < 1e-9);
-        assert!(diag.target_prior_otter > 0.15 && diag.target_prior_otter < 0.45);
+        assert!((diag.target_prior_otter - 0.345).abs() < 0.05);
         assert!(diag.confusion_matrix_sigma_min > 0.01);
+        assert!(diag.hoffman_constant_kappa > 1.0);
     }
 
     #[test]

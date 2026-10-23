@@ -15,7 +15,7 @@ pub use information::{
 };
 pub use invariance::{
     hidden_confounding_threshold_lambda_star, run_icp, second_order_worst_case_loss,
-    CausalEnvironment, IcpResult, PearlRung,
+    second_order_worst_case_loss_full, CausalEnvironment, IcpResult, PearlRung,
 };
 pub use tail::{hill_estimator, HillTailDiagnostic, TailMomentRegime};
 pub use time::{

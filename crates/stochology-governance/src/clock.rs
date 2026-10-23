@@ -147,4 +147,3 @@ mod tests {
         assert!(mutated.canary_mutual_information_nats > 0.5);
     }
 }
-

@@ -54,30 +54,67 @@ pub struct IcpResult {
 }
 
 /// Executes Invariant Causal Prediction (ICP, Peters, Bühlmann & Meinshausen)
-/// coupled with the NILE score (Christiansen et al.) across the provided environments.
+/// coupled with the NILE instrumental invariance penalty (Christiansen et al.) across the provided environments.
 pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) -> IcpResult {
     assert!(
         environments.len() >= 2,
         "ICP requires at least 2 distinct environments"
+    );
+    assert!(
+        !environments[0].x.is_empty(),
+        "environments must contain observations"
     );
     let p = environments[0].x[0].len();
     assert!(
         (1..=12).contains(&p),
         "dimension p for subset search must be in 1..=12"
     );
+    for env in environments {
+        assert!(
+            env.x.len() >= 2 && env.x.len() == env.y.len(),
+            "each environment must have at least 2 observations and matching x and y lengths"
+        );
+        assert!(
+            env.x.iter().all(|row| row.len() == p),
+            "all rows across all environments must have uniform feature dimension p"
+        );
+    }
 
-    // Individual NILE score per variable j: cross-environment variance of OLS slope + residual SD
+    // NILE instrumental invariance penalty per variable j (Christiansen et al.):
+    // Fits the pooled structural candidate on variable j, then evaluates the environment-projected
+    // Wald / two-stage residual shift and slope divergence across environments e in E.
     let mut nile_scores = vec![0.0; p];
     for (j, score_slot) in nile_scores.iter_mut().enumerate() {
+        let mut pooled_xj = Vec::new();
+        let mut pooled_y = Vec::new();
+        for env in environments {
+            for (row, &yi) in env.x.iter().zip(env.y.iter()) {
+                pooled_xj.push(row[j]);
+                pooled_y.push(yi);
+            }
+        }
+        let (beta_pool, alpha_pool, _) = univariate_ols_fit(&pooled_xj, &pooled_y);
         let mut betas = Vec::with_capacity(environments.len());
         let mut res_sds = Vec::with_capacity(environments.len());
+        let mut env_proj_penalty = 0.0;
         for env in environments {
             let col_j: Vec<f64> = env.x.iter().map(|row| row[j]).collect();
-            let (b, sd) = univariate_ols_slope_and_residual_sd(&col_j, &env.y);
+            let (b, _, sd) = univariate_ols_fit(&col_j, &env.y);
+            let mean_res_e: f64 = col_j
+                .iter()
+                .zip(env.y.iter())
+                .map(|(&xi, &yi)| yi - (alpha_pool + beta_pool * xi))
+                .sum::<f64>()
+                / (col_j.len() as f64);
+            let var_x_e = sample_variance(&col_j);
+            env_proj_penalty +=
+                mean_res_e * mean_res_e + (b - beta_pool) * (b - beta_pool) * var_x_e;
             betas.push(b);
             res_sds.push(sd);
         }
-        *score_slot = sample_variance(&betas) + sample_variance(&res_sds);
+        *score_slot = (env_proj_penalty / (environments.len() as f64))
+            + sample_variance(&betas)
+            + sample_variance(&res_sds);
     }
 
     let mut invariant_subsets = Vec::new();
@@ -107,7 +144,7 @@ pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) ->
     }
 }
 
-fn univariate_ols_slope_and_residual_sd(x: &[f64], y: &[f64]) -> (f64, f64) {
+fn univariate_ols_fit(x: &[f64], y: &[f64]) -> (f64, f64, f64) {
     let mx = mean(x);
     let my = mean(y);
     let mut num = 0.0;
@@ -124,7 +161,7 @@ fn univariate_ols_slope_and_residual_sd(x: &[f64], y: &[f64]) -> (f64, f64) {
         .map(|(&xi, &yi)| yi - (alpha + beta * xi))
         .collect();
     let sd = sample_variance(&res).sqrt();
-    (beta, sd)
+    (beta, alpha, sd)
 }
 
 fn is_subset_invariant(environments: &[CausalEnvironment], subset: &[usize], tol: f64) -> bool {
@@ -235,8 +272,8 @@ fn fit_ols_multi(x: &[Vec<f64>], y: &[f64]) -> Vec<f64> {
     aug.into_iter().map(|r| r[d]).collect()
 }
 
-/// Second-order Taylor expansion of worst-case interventional loss (§1.3.4):
-/// $$L_{\mathrm{wc}}(\theta) \approx L_0 + \nabla_\theta L^\top \theta + \frac{1}{2}\theta^\top H_\theta \theta$$
+/// Second-order Taylor expansion of worst-case interventional loss with diagonal Hessian (§1.3.4):
+/// $$L_{\mathrm{wc}}(\theta) \approx L_0 + \nabla_\theta L^\top \theta + \frac{1}{2}\sum_{i=1}^d H_{ii} \theta_i^2$$
 pub fn second_order_worst_case_loss(
     base_loss_l0: f64,
     gradient: &[f64],
@@ -255,6 +292,32 @@ pub fn second_order_worst_case_loss(
         .zip(theta.iter())
         .map(|(&h, &t)| 0.5 * h * t * t)
         .sum();
+    base_loss_l0 + lin + quad
+}
+
+/// Second-order Taylor expansion of worst-case interventional loss with a full $d \times d$ Hessian matrix (§1.3.4):
+/// $$L_{\mathrm{wc}}(\theta) \approx L_0 + \nabla_\theta L^\top \theta + \frac{1}{2}\theta^\top H_\theta \theta$$
+pub fn second_order_worst_case_loss_full(
+    base_loss_l0: f64,
+    gradient: &[f64],
+    hessian_matrix: &[Vec<f64>],
+    theta: &[f64],
+) -> f64 {
+    let d = theta.len();
+    assert_eq!(gradient.len(), d);
+    assert_eq!(hessian_matrix.len(), d);
+    assert!(hessian_matrix.iter().all(|row| row.len() == d));
+    let lin: f64 = gradient
+        .iter()
+        .zip(theta.iter())
+        .map(|(&g, &t)| g * t)
+        .sum();
+    let mut quad = 0.0;
+    for i in 0..d {
+        for j in 0..d {
+            quad += 0.5 * theta[i] * hessian_matrix[i][j] * theta[j];
+        }
+    }
     base_loss_l0 + lin + quad
 }
 

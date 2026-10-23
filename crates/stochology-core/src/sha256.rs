@@ -102,9 +102,11 @@ pub fn sha256_hex(data: &[u8]) -> String {
     s
 }
 
-/// Validates whether `s` is a valid 64-character hexadecimal SHA-256 string.
+/// Validates whether `s` is a valid 64-character lowercase hexadecimal SHA-256 string.
 pub fn is_valid_sha256_hex(s: &str) -> bool {
-    s.len() == 64 && s.bytes().all(|b| b.is_ascii_hexdigit())
+    s.len() == 64
+        && s.bytes()
+            .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
 }
 
 #[cfg(test)]
@@ -112,13 +114,27 @@ mod tests {
     use super::*;
 
     #[test]
-    fn fips_180_4_official_vector_abc() {
+    fn fips_180_4_official_vectors_empty_abc_and_two_block() {
+        // Empty input ""
+        assert_eq!(
+            sha256_hex(b""),
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        );
+        // Single-block input "abc"
         assert_eq!(
             sha256_hex(b"abc"),
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
         );
+        // Two-block NIST FIPS 180-4 vector (448 bits)
+        assert_eq!(
+            sha256_hex(b"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"),
+            "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"
+        );
         assert!(is_valid_sha256_hex(
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        ));
+        assert!(!is_valid_sha256_hex(
+            "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
         ));
     }
 }

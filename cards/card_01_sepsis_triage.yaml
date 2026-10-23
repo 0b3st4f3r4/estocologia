@@ -14,10 +14,10 @@ epistemological_header:
   unit_and_margin:
     independent_unit: "12h clinical ICU shift (cluster of bed-hours)"
     nominal_sample_size_n: 25028
-    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.992 = 118.71 (Moulton-Campbell)"
-    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.25"
-    effective_sample_size_n_eff: 1300
-    unit_margin_of_error: "+/- 1.4 percentage points over 1,300 effective shifts"
+    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.998 = 119.05 (Moulton-Campbell, CV = 0.999)"
+    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.30"
+    effective_sample_size_n_eff: 1297
+    unit_margin_of_error: "+/- 1.4 percentage points over 1,297 effective shifts"
   noise_physics:
     stochastic_regime: "Non-ergodic multiplicative organ-failure cascade with sub-exponential tail (alpha_Hill = 1.60)"
     absorbing_states: "Irreversible refractory septic shock / clinical mortality barrier"
@@ -25,7 +25,7 @@ epistemological_header:
       agent_type: "performative"
       wasserstein_sensitivity_epsilon: 0.18
       rrm_convergence_condition: "eps * beta / gamma = 0.18 * 1.50 / 1.00 = 0.27 < 1 (strict contraction)"
-      stability_optimality_divergence: "theta_PS = 1.2195 vs Stackelberg theta_PO = 1.5625 (audited)"
+      stability_optimality_divergence: "theta_PS = 1.8293 vs Stackelberg theta_PO = 1.9631 (audited)"
   causal_ladder:
     pearl_rung: "2-Act"
     identification_strategy: "Invariant Causal Prediction (ICP) + NILE across 3 hospital shift regimes; Markov blanket verified without collider"

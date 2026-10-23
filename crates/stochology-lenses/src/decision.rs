@@ -122,14 +122,14 @@ impl CorpPavDecomposition {
                 .then_with(|| outcomes_y[i].total_cmp(&outcomes_y[j]))
         });
 
-        // Group identical forecast values into initial blocks before running PAV
+        // Step 1: Group identical forecast values into initial blocks before running PAV.
         // Each block stores: (start_pos_in_sorted, end_pos_in_sorted, sum_y, count)
-        let mut blocks: Vec<(usize, usize, f64, usize)> = Vec::new();
+        let mut initial_blocks: Vec<(usize, usize, f64, usize)> = Vec::new();
         for pos in 0..n {
             let orig = idx[pos];
             let p_val = forecasts_p[orig];
             let y_val = outcomes_y[orig];
-            if let Some(last) = blocks.last_mut() {
+            if let Some(last) = initial_blocks.last_mut() {
                 let prev_orig = idx[last.1];
                 if (forecasts_p[prev_orig] - p_val).abs() < 1e-15 {
                     last.1 = pos;
@@ -138,9 +138,13 @@ impl CorpPavDecomposition {
                     continue;
                 }
             }
-            blocks.push((pos, pos, y_val, 1));
+            initial_blocks.push((pos, pos, y_val, 1));
+        }
 
-            // Pool adjacent violators whenever block average violates monotonicity
+        // Step 2: Pool adjacent violators over the tied initial blocks whenever block average violates monotonicity
+        let mut blocks: Vec<(usize, usize, f64, usize)> = Vec::with_capacity(initial_blocks.len());
+        for blk in initial_blocks {
+            blocks.push(blk);
             while blocks.len() >= 2 {
                 let len = blocks.len();
                 let mean_prev = blocks[len - 2].2 / (blocks[len - 2].3 as f64);
@@ -203,5 +207,17 @@ mod tests {
         assert!(c2.identity_error < 1e-14);
         assert!((c1.res_resolution - c2.res_resolution).abs() < 1e-14);
         assert!(c2.rel_miscalibration > c1.rel_miscalibration);
+    }
+
+    #[test]
+    fn corp_pav_preserves_isotonicity_for_tied_forecasts() {
+        let forecasts = [0.75, 0.0, 0.25, 0.75, 0.0];
+        let outcomes = [0.0, 1.0, 1.0, 0.0, 0.0];
+        let corp = CorpPavDecomposition::compute(&forecasts, &outcomes);
+        assert!(corp.identity_error < 1e-14);
+        for &q in &corp.recalibrated_probabilities_q {
+            assert!((q - 0.4).abs() < 1e-12, "expected constant 0.4, got {q}");
+        }
+        assert!(corp.res_resolution < 1e-14);
     }
 }

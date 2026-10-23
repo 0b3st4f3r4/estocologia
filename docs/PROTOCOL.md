@@ -25,7 +25,7 @@ $$\mathrm{PR}(\theta) \triangleq \mathbb{E}_{Z \sim \mathcal{D}(\theta)}[\ell(Z;
 
 - **Performative Stability ($\theta_{\mathrm{PS}}$):** $\theta_{\mathrm{PS}} = \arg\min_{\phi \in \Theta} \mathrm{DPR}(\theta_{\mathrm{PS}}, \phi)$ — fixed point of Repeated Risk Minimization ($\mathrm{RRM}$).
 - **Performative Optimality ($\theta_{\mathrm{PO}}$):** $\theta_{\mathrm{PO}} = \arg\min_{\theta \in \Theta} \mathrm{PR}(\theta)$ — Stackelberg equilibrium anticipating the strategic reaction of the population.
-- **Canonical Linear Benchmark:** Under $Y(\theta) = \mu + \varepsilon \theta + \xi$, passive learning yields $\theta_{\mathrm{SL}} = \mu$, retraining converges to $\theta_{\mathrm{PS}} = \frac{\mu}{1 - \varepsilon}$, whereas the true Stackelberg optimum is $\theta_{\mathrm{PO}} = \frac{\mu}{1 - 2\varepsilon}$. Under Wasserstein-1 sensitivity $W_1(\mathcal{D}(\theta), \mathcal{D}(\theta')) \le \varepsilon \|\theta - \theta'\|_2$, $\gamma$-strong convexity, and $\beta$-smoothness, $\mathrm{RRM}$ contracts linearly if and only if $\frac{\varepsilon \beta}{\gamma} < 1$.
+- **Canonical Linear Benchmark:** Under $Y(\theta) = \mu + \varepsilon \theta + \xi$ and loss $\ell(z; \phi) = \frac{\gamma}{2}(y - \phi)^2 - \alpha \phi$, passive learning yields $\theta_{\mathrm{SL}} = \mu + \frac{\alpha}{\gamma}$, retraining converges to $\theta_{\mathrm{PS}} = \frac{\mu + \alpha / \gamma}{1 - \varepsilon}$ (reducing to $\frac{\mu}{1 - \varepsilon}$ when $\alpha = 0$), whereas the true Stackelberg optimum minimizing $\mathrm{PR}(\theta) = \frac{\gamma}{2}[(1 - \varepsilon)\theta - \mu]^2 + \frac{\gamma}{2}\sigma^2 - \alpha\theta$ is $\theta_{\mathrm{PO}} = \frac{\mu}{1 - \varepsilon} + \frac{\alpha}{\gamma(1 - \varepsilon)^2}$. Under Wasserstein-1 sensitivity $W_1(\mathcal{D}(\theta), \mathcal{D}(\theta')) \le \varepsilon \|\theta - \theta'\|_2$, $\gamma$-strong convexity, and $\beta$-smoothness, $\mathrm{RRM}$ contracts linearly if and only if $\frac{\varepsilon \beta}{\gamma} < 1$.
 
 ### 1.2. Uncertainty Typing: Kennedy-O'Hagan Discrepancy and Info-Gap + Sniedovich Safeguard
 
@@ -75,9 +75,47 @@ $$\mathrm{PR}(\theta) \triangleq \mathbb{E}_{Z \sim \mathcal{D}(\theta)}[\ell(Z;
 - **$\Phi_4$ (Scope, Fairness & Exit):** Chouldechova's algebraic impossibility identity $\mathrm{FPR}_g = \frac{p_g}{1-p_g}\frac{1-\mathrm{PPV}_g}{\mathrm{PPV}_g}(1-\mathrm{FNR}_g)$, scope statement, and numeric exit clause.
 - **$\Phi_5$ (Question Resolution):** Ban on answering daily/shift operational decisions with coarse annual/monthly aggregates.
 
+### 2.3. Epistemological Card Schema (`EpistemologicalCard`)
+Every claim is serialized in YAML (`cards/*.yaml`) and validated by `EpistemologicalCard::audit()`, carrying:
+- `metadata`: `card_id`, `claim_id`, `timestamp_utc`, and `contract_version: "1.0"`.
+- `ontology_and_uncertainty`: `primary_layer` (`L1`, `L2`, `L3`), `critical_bridge`, `uncertainty_class`, `koh_discrepancy`, and `infogap_horizon`.
+- `five_lenses_audit`: `information`, `time`, `scale_tail`, `structure_invariance` (including `pearl_ladder_rung`), and `decision_calibration` (including `corp_pav_brier_rel_res_unc`).
+- `prohibitions_compliance`: structured numeric and empirical compliance records for Prohibitions 1–4.
+- `boundary_invariants`: structured verification records for $\Phi_1$–$\Phi_5$, including the SHA-256 pre-registration hash and numeric exit clause.
+- `siga_and_governance`: funnel filter approval, natural-frequency memorandum, bitemporal clock and canary status, single-opening vault status, and drift regime classification.
+
 ---
 
-## 3. Architectural Mapping to Rust Crates
+## 3. Eliminatory Funnel and 8-Step SIGA Operational Roadmap
+
+### 3.1. The 4 Eliminatory Filters (`stochology_siga::funnel`)
+Evaluated in strict sequence with immediate short-circuiting on failure:
+1. **Filter 1 (Economic & Resolution):** Requires $\mathrm{EVPI} > 0$, non-degenerate $p^* = \frac{C}{\eta L} \in (0, 1)$, and $\Phi_5$ temporal resolution alignment ($R_{\text{data}} \ge R_{\text{decision}}$).
+2. **Filter 2 (Cluster Independence & Causal Structure):** Requires Moulton-Campbell tail-exceedance effective sample size $n_{\mathrm{eff}}(p) \ge n_{\min}$, mapped Markov Blanket, and zero conditioning on a Berkson collider.
+3. **Filter 3 (Simulation-Based Calibration & Elicitation):** Requires Simulation-Based Calibration (SBC) rank uniformity ($\chi^2 \le \chi^2_{\text{crit}}$) and SHELF quartile consistency ($L_{\text{phys}} < q_{25} < q_{50} < q_{75} < U_{\text{phys}}$).
+4. **Filter 4 (Pre-Registration, Cross-Authorship & Exit):** Requires valid 64-character lowercase SHA-256 pre-registration hash, distinct modeler and verifier IDs, and an explicit numeric exit clause.
+
+### 3.2. The 8-Step SIGA Roadmap, Evidence Processes, and Natural Frequencies (`stochology_siga::roadmap`)
+- **8-Step SIGA Execution:** Executes **S**urvey the Layer & Bridge (Steps 1–2), **I**nterrogate the Decision-Maker (Steps 3–4), **G**enerate the Null & Noise Physics (Steps 5–6), and **A**ct with Threshold, Memory & Exit (Steps 7–8).
+- **Anytime-Valid Evidence Process (*e-process*):** Computes $E_t = \prod_{i=1}^t L_i$ with optional Ville's inequality threshold $E_t / K \ge 1 / \alpha$.
+- **Gigerenzer Natural Frequencies:** Translates prevalence, sensitivity, and false-positive rate into integer natural trees ($N = 1000$ or $10000$) to eliminate base-rate neglect.
+
+---
+
+## 4. Bitemporal Production Governance, Vault, and Drift Adaptation
+
+### 4.1. Bitemporal Clock, Synthetic Canary, and Single-Opening Vault (`stochology_governance::{clock, vault}`)
+- **Bitemporal Asymmetry ($t_{\text{disp}} \ge t_{\text{ev}}$):** Filters feature records strictly by system availability timestamp $t_{\text{disp}} \le \tau$ rather than event timestamp $t_{\text{ev}}$, and injects a high-cardinality synthetic canary column ($I(\text{Canary}; Y) = 0$) whose non-zero importance triggers an immediate look-ahead intrusion alarm.
+- **Single-Opening Temporal Vault (`TemporalVault`):** Enforces a cryptographic SHA-256 pre-registration seal and an immutable single-opening lock (`opened_count: 0 -> 1`). Any non-positive confirmation outcome automatically downgrades the study to `ExploratoryHypothesisGenerating`, and any second opening attempt is blocked.
+
+### 4.2. Murphy-CORP Circuit Breaker, Covariate Drift (ExTRA-WCP-T), and Label Shift (`stochology_governance::drift`)
+- **Murphy-CORP Circuit Breaker:** Separates pure Covariate/Target Shift ($\Delta\mathrm{REL}_{\mathrm{CORP}} > \tau_{\mathrm{REL}}, \Delta\mathrm{RES}_{\mathrm{CORP}} \approx 0$) from Concept Drift ($\Delta\mathrm{RES}_{\mathrm{CORP}} < -\tau_{\mathrm{RES}}$), halting automated predictions under concept breakdown.
+- **Covariate Drift Adaptation (`ExTRA-WCP-T`):** Fits exponential tilt density ratios $\hat{w}(x) = \exp(\hat{\theta}^\top \phi(x) - \hat{\psi})$ and computes weighted conformal intervals with Lei & Candès coverage lower bound $1 - \alpha - d_{\mathrm{TV}}(P_X, Q_X)$.
+- **Label Shift Adaptation (4 Canonical Estimators):** Simultaneously estimates target class priors $q_Y$ via **BBSE** ($q = C^{-1}\mu$), **MLLS/SLD** (EM fixed point), **DFM** (characteristic-function kernel matching with condition number $\kappa(M)$), and **OTTER** (Sinkhorn-Knopp optimal transport scaling).
+
+---
+
+## 5. Architectural Mapping to Rust Crates
 
 | Protocol Section | Concept / Equation | Rust Module & Symbol | Verification Command |
 | --- | --- | --- | --- |

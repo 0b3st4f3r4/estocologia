@@ -213,6 +213,13 @@ fn run_negative_proof(defect: &str) -> ! {
     std::process::exit(0);
 }
 
+fn print_usage() {
+    println!(
+        "Usage: gates [--help | --write-cards | --defect <defect_name>]\n\
+         Defects: cromwell, phi5, moulton, performativity, sniedovich, clock, vault, concept_drift, chouldechova"
+    );
+}
+
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -220,21 +227,37 @@ fn main() {
         .and_then(|p| p.parent())
         .expect("workspace root");
 
-    if args.first().map(String::as_str) == Some("--write-cards") {
-        let suite = build_v1_card_suite();
-        for (rel_path, _, card) in &suite {
-            let path = root.join(rel_path);
-            if let Some(parent) = path.parent() {
-                fs::create_dir_all(parent).expect("create cards/ directory");
-            }
-            fs::write(&path, card.to_yaml()).expect("write card yaml");
-            println!("Written: {}", path.display());
+    match args.as_slice() {
+        [] => {}
+        [flag] if flag == "--help" || flag == "-h" => {
+            print_usage();
+            return;
         }
-        return;
-    }
-
-    if args.len() >= 2 && args[0] == "--defect" {
-        run_negative_proof(&args[1]);
+        [flag] if flag == "--write-cards" => {
+            let suite = build_v1_card_suite();
+            for (rel_path, _, card) in &suite {
+                let path = root.join(rel_path);
+                if let Some(parent) = path.parent() {
+                    fs::create_dir_all(parent).expect("create cards/ directory");
+                }
+                fs::write(&path, card.to_yaml()).expect("write card yaml");
+                println!("Written: {}", path.display());
+            }
+            return;
+        }
+        [flag] if flag == "--defect" => {
+            eprintln!("Missing defect name after '--defect'.");
+            print_usage();
+            std::process::exit(2);
+        }
+        [flag, defect] if flag == "--defect" => {
+            run_negative_proof(defect);
+        }
+        other => {
+            eprintln!("Unknown arguments: {other:?}");
+            print_usage();
+            std::process::exit(2);
+        }
     }
 
     match run_positive_gates(root) {

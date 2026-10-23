@@ -25,8 +25,12 @@ echo ">>> [5/6] Running epistemological gates (gates) and negative proofs..."
 cargo run --release --bin gates
 
 for defect in cromwell phi5 moulton performativity sniedovich clock vault concept_drift chouldechova; do
-    if cargo run --release --bin gates -- --defect "$defect" >/dev/null 2>&1; then
-        echo "ERROR: negative proof '$defect' should have exited with code 1, but exited with 0!" >&2
+    set +e
+    cargo run --release --bin gates -- --defect "$defect" >/dev/null 2>&1
+    rc=$?
+    set -e
+    if [ "$rc" -ne 1 ]; then
+        echo "ERROR: negative proof '$defect' should have exited with code 1, but exited with $rc!" >&2
         exit 1
     else
         echo "  [OK] Negative proof '$defect' blocked with exit code 1"

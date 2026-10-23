@@ -120,4 +120,3 @@ mod tests {
         assert_eq!(r2.final_state, VaultState::DowngradedToExploratory);
     }
 }
-

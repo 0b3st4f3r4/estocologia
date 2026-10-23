@@ -64,11 +64,11 @@ pub struct FunnelResult {
 /// Evaluates the uniformity of Simulation-Based Calibration (SBC) rank counts via Pearson's $\chi^2$.
 pub fn sbc_rank_chi2(rank_bins: &[usize]) -> f64 {
     assert!(!rank_bins.is_empty());
-    let total: usize = rank_bins.iter().sum();
-    if total == 0 {
+    let total: f64 = rank_bins.iter().map(|&obs| obs as f64).sum();
+    if total <= 0.0 {
         return f64::INFINITY;
     }
-    let expected = (total as f64) / (rank_bins.len() as f64);
+    let expected = total / (rank_bins.len() as f64);
     rank_bins
         .iter()
         .map(|&obs| {
@@ -250,4 +250,3 @@ mod tests {
         assert_eq!(r4.pruned_at_filter, Some(4));
     }
 }
-

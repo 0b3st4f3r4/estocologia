@@ -130,12 +130,14 @@ pub fn quantile_sorted(sorted: &[f64], q: f64) -> f64 {
         !sorted.is_empty(),
         "quantile_sorted requires a non-empty slice"
     );
+    assert!((0.0..=1.0).contains(&q), "quantile q must be in [0, 1]");
     if sorted.len() == 1 {
         return sorted[0];
     }
-    let pos = q * ((sorted.len() - 1) as f64);
-    let lo = pos.floor() as usize;
-    let hi = pos.ceil() as usize;
+    let max_idx = sorted.len() - 1;
+    let pos = (q * (max_idx as f64)).clamp(0.0, max_idx as f64);
+    let lo = (pos.floor() as usize).min(max_idx);
+    let hi = (pos.ceil() as usize).min(max_idx);
     let frac = pos - (lo as f64);
     sorted[lo] * (1.0 - frac) + sorted[hi] * frac
 }

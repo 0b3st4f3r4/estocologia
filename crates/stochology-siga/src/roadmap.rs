@@ -8,7 +8,7 @@
 //! Ville's Inequality $E_t \ge 1/\alpha$) and Gigerenzer integer natural frequency memoranda (e.g., `"X out of 1,000"`).
 
 use crate::funnel::{evaluate_four_filter_funnel, FunnelCandidate, FunnelResult};
-use stochology_core::EpistemologicalCard;
+use stochology_core::{quantile, EpistemologicalCard};
 
 /// Sequential anytime-valid *e-process* (betting martingale $E_t = \prod_{i=1}^t L_i$, §3.2 Step 6):
 /// $$\mathbb{E}_{H_0}[E_t] \le 1 \implies \mathbb{P}_{H_0}\left(\exists t \ge 1 : E_t \ge \frac{1}{\alpha}\right) \le \alpha$$
@@ -33,8 +33,12 @@ impl EvidenceProcess {
         let mut prod = 1.0;
         let mut traj = Vec::with_capacity(likelihood_ratios.len());
         for &l_i in likelihood_ratios {
-            assert!(l_i >= 0.0, "e-variables must be nonnegative");
-            prod *= l_i;
+            let safe_l = if l_i.is_finite() && l_i >= 0.0 {
+                l_i
+            } else {
+                0.0
+            };
+            prod *= safe_l;
             traj.push(prod);
         }
         let adj = prod / (attempt_counter_k as f64);
@@ -71,13 +75,28 @@ impl NaturalFrequencyMemorandum {
         sensitivity_tpr: f64,
         false_positive_rate_fpr: f64,
     ) -> Self {
-        let affected = ((reference_cohort_size as f64) * base_rate_p).round() as usize;
+        let p_c = if base_rate_p.is_finite() {
+            base_rate_p.clamp(0.0, 1.0)
+        } else {
+            0.0
+        };
+        let tpr_c = if sensitivity_tpr.is_finite() {
+            sensitivity_tpr.clamp(0.0, 1.0)
+        } else {
+            0.0
+        };
+        let fpr_c = if false_positive_rate_fpr.is_finite() {
+            false_positive_rate_fpr.clamp(0.0, 1.0)
+        } else {
+            0.0
+        };
+        let affected = ((reference_cohort_size as f64) * p_c).round() as usize;
         let unaffected = reference_cohort_size.saturating_sub(affected);
-        let tp = ((affected as f64) * sensitivity_tpr).round() as usize;
+        let tp = ((affected as f64) * tpr_c).round() as usize;
         let fn_c = affected.saturating_sub(tp);
-        let fp = ((unaffected as f64) * false_positive_rate_fpr).round() as usize;
+        let fp = ((unaffected as f64) * fpr_c).round() as usize;
         let tn = unaffected.saturating_sub(fp);
-        let total_alarms = (tp + fp).max(1);
+        let total_alarms = tp.saturating_add(fp).max(1);
         let summary = format!(
             "Out of every {reference_cohort_size} independent units, {affected} experience the critical event (of which {tp} trigger the alarm and {fn_c} are missed), while {unaffected} do not experience the event (of which {fp} trigger a false alarm and {tn} remain clear). Positive predictive frequency: {tp} out of {total_alarms} alarms."
         );
@@ -107,6 +126,32 @@ pub struct SigaExecutionReport {
     pub approved_end_to_end: bool,
 }
 
+fn compute_sbc_rank_bins(null_samples: &[f64]) -> Vec<usize> {
+    if null_samples.len() < 5 || null_samples.iter().any(|x| !x.is_finite()) {
+        return vec![0; 5];
+    }
+    let q20 = quantile(null_samples, 0.20);
+    let q40 = quantile(null_samples, 0.40);
+    let q60 = quantile(null_samples, 0.60);
+    let q80 = quantile(null_samples, 0.80);
+    let mut bins = vec![0usize; 5];
+    for &x in null_samples {
+        let b = if x <= q20 {
+            0
+        } else if x <= q40 {
+            1
+        } else if x <= q60 {
+            2
+        } else if x <= q80 {
+            3
+        } else {
+            4
+        };
+        bins[b] += 1;
+    }
+    bins
+}
+
 /// Executes the complete 4-Filter Funnel and 8-Step SIGA Roadmap on an [`EpistemologicalCard`].
 pub fn run_full_siga_roadmap(
     card: &EpistemologicalCard,
@@ -117,6 +162,28 @@ pub fn run_full_siga_roadmap(
 ) -> SigaExecutionReport {
     let card_audit_ok = card.audit().is_ok();
 
+    let id_strat = card
+        .epistemological_header
+        .causal_ladder
+        .identification_strategy
+        .to_ascii_lowercase();
+    let markov_blanket_mapped = id_strat.contains("markov blanket");
+    let collider_excluded = id_strat.contains("without collider")
+        || id_strat.contains("no collider")
+        || id_strat.contains("free of collider");
+    let conditions_on_collider_berkson =
+        (id_strat.contains("collider") || id_strat.contains("berkson")) && !collider_excluded;
+
+    let sbc_bins = compute_sbc_rank_bins(null_distribution_samples);
+    let eps = card
+        .decision_rule_and_scope
+        .base_rate_floor_epsilon
+        .clamp(1e-6, 0.49);
+    let p = card.decision_rule_and_scope.event_probability_p;
+    let q25 = 0.5 * (eps + p);
+    let q50 = p;
+    let q75 = (1.5 * p).min(0.5 * (p + 1.0 - eps));
+
     let candidate = FunnelCandidate {
         who_decides: card.decision_maker_question.who_decides.clone(),
         altered_action: card.decision_maker_question.altered_action.clone(),
@@ -125,7 +192,7 @@ pub fn run_full_siga_roadmap(
             .unit_and_margin
             .independent_unit
             .clone(),
-        prior_probability_p: card.decision_rule_and_scope.event_probability_p,
+        prior_probability_p: p,
         protection_cost_c: card.decision_rule_and_scope.protection_cost_c,
         event_loss_l: card.decision_rule_and_scope.event_loss_l,
         efficacy_eta: card.decision_rule_and_scope.mitigation_efficacy_eta,
@@ -136,12 +203,12 @@ pub fn run_full_siga_roadmap(
             .unit_and_margin
             .effective_sample_size_n_eff as f64,
         minimum_required_n_eff: 50.0,
-        markov_blanket_mapped: true,
-        conditions_on_collider_berkson: false,
-        sbc_rank_histogram: vec![20, 20, 20, 20, 20],
+        markov_blanket_mapped,
+        conditions_on_collider_berkson,
+        sbc_rank_histogram: sbc_bins,
         sbc_chi2_critical: 9.49,
-        shelf_quartiles_q25_q50_q75: (0.02, 0.05, 0.12),
-        physical_domain_bounds: (0.0001, 0.9999),
+        shelf_quartiles_q25_q50_q75: (q25, q50, q75),
+        physical_domain_bounds: (eps, 1.0 - eps),
         preregistered_plan_text: preregistered_plan_text.to_string(),
         declared_sha256_seal: card.data_and_audit_contract.preregistration_hash.clone(),
         author_null_model: card
@@ -220,11 +287,11 @@ mod tests {
     use stochology_core::sha256_hex;
 
     #[test]
-    fn eight_step_siga_roadmap_validates_end_to_end() {
+    fn eight_step_siga_roadmap_validates_end_to_end_and_prunes_defective_inputs() {
         let plan = "siga_plan_01_sepsis_triage_seed_2026_clusters_m_tilde";
         let mut card = EpistemologicalCard::canonical_example();
         card.data_and_audit_contract.preregistration_hash = sha256_hex(plan.as_bytes());
-        let null_samples: Vec<f64> = (0..199).map(|i| (i as f64) * 0.01).collect();
+        let null_samples: Vec<f64> = (0..200).map(|i| (i as f64) * 0.01).collect();
         let report = run_full_siga_roadmap(&card, plan, 5.0, &null_samples, &[24.8]);
         assert!(report.approved_end_to_end);
         assert_eq!(report.steps_1_to_8_completed, [true; 8]);
@@ -232,5 +299,23 @@ mod tests {
             .natural_frequency_memo
             .formatted_summary
             .contains("1000"));
+
+        // Degenerate null samples fail Filter 3 (SBC rank uniformity)
+        let bad_null = run_full_siga_roadmap(&card, plan, 5.0, &[1.0; 100], &[24.8]);
+        assert_eq!(bad_null.funnel_result.pruned_at_filter, Some(3));
+
+        // Card conditioning on a Berkson collider fails Filter 2
+        let mut collider_card = card.clone();
+        collider_card
+            .epistemological_header
+            .causal_ladder
+            .identification_strategy =
+            "Markov blanket conditioned on hospital admission collider".into();
+        let bad_collider = run_full_siga_roadmap(&collider_card, plan, 5.0, &null_samples, &[24.8]);
+        assert_eq!(bad_collider.funnel_result.pruned_at_filter, Some(2));
+
+        // NaN e-value safely zeroes out EvidenceProcess without panicking
+        let nan_e = EvidenceProcess::evaluate(&[24.8, f64::NAN], 0.05, 1);
+        assert!(!nan_e.rejects_null_hypothesis);
     }
 }

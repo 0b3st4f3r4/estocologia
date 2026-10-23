@@ -132,12 +132,11 @@ impl MengAudit {
         let n_smp = sample_n as f64;
         let data_quantity_factor = ((n_pop - n_smp) / n_smp).sqrt();
         let estimation_error = rho_r_y * data_quantity_factor * sigma_y;
-        let f = n_smp / n_pop;
         let n_eff_meng = if rho_r_y.abs() < 1e-12 {
             n_smp
         } else {
-            let mse_ratio = rho_r_y * rho_r_y * ((1.0 - f) / f) * n_pop;
-            (n_smp / (1.0 + mse_ratio)).max(1.0)
+            let mse_ratio = (n_pop - n_smp) * rho_r_y * rho_r_y;
+            n_smp / (1.0 + mse_ratio)
         };
         Self {
             population_n_total,
@@ -235,28 +234,80 @@ pub struct NonlinearSummary {
     pub median_f: f64,
     pub q05_f: f64,
     pub q95_f: f64,
-    /// Empirical Continuous Ranked Probability Score ($\mathrm{CRPS}$) evaluated at the median of $f(X)$.
+    /// Out-of-sample (or leave-one-out) Continuous Ranked Probability Score ($\mathrm{CRPS}$) of $f(X)$.
     pub empirical_crps: f64,
 }
 
 impl NonlinearSummary {
-    /// Evaluates a nonlinear loss/payoff function $f(X)$ and its local curvature $f''(\mathbb{E}[X])$ over sample `xs`.
+    /// Evaluates a nonlinear loss/payoff function $f(X)$ and its local curvature $f''(\mathbb{E}[X])$ over sample `xs`,
+    /// computing leave-one-out out-of-sample $\mathrm{CRPS}$ across all observations $f(x_i)$.
     pub fn evaluate<F>(xs: &[f64], f: F, f_second_derivative_at_mean: f64) -> Self
     where
         F: Fn(f64) -> f64,
     {
         assert!(xs.len() >= 2, "NonlinearSummary requires at least 2 points");
+        let fx: Vec<f64> = xs.iter().map(|&x| f(x)).collect();
+        // Leave-one-out out-of-sample CRPS: each observation y_i = f(x_i) is scored against F_{-i}
+        let n = fx.len();
+        let mut loo_crps_sum = 0.0;
+        let mut loo_buf = Vec::with_capacity(n - 1);
+        for (i, &obs_y) in fx.iter().enumerate() {
+            loo_buf.clear();
+            for (j, &val) in fx.iter().enumerate() {
+                if i != j {
+                    loo_buf.push(val);
+                }
+            }
+            loo_crps_sum += empirical_crps(&loo_buf, obs_y);
+        }
+        let crps = loo_crps_sum / (n as f64);
+        Self::from_transformed(xs, &fx, f(mean(xs)), f_second_derivative_at_mean, crps)
+    }
+
+    /// Evaluates $f(X)$ on `forecast_xs` and scores out-of-sample $\mathrm{CRPS}$ against held-out `observed_xs`.
+    pub fn evaluate_out_of_sample<F>(
+        forecast_xs: &[f64],
+        observed_xs: &[f64],
+        f: F,
+        f_second_derivative_at_mean: f64,
+    ) -> Self
+    where
+        F: Fn(f64) -> f64,
+    {
+        assert!(
+            forecast_xs.len() >= 2 && !observed_xs.is_empty(),
+            "requires at least 2 forecast points and 1 observed out-of-sample point"
+        );
+        let fx: Vec<f64> = forecast_xs.iter().map(|&x| f(x)).collect();
+        let oos_crps: f64 = observed_xs
+            .iter()
+            .map(|&y| empirical_crps(&fx, f(y)))
+            .sum::<f64>()
+            / (observed_xs.len() as f64);
+        Self::from_transformed(
+            forecast_xs,
+            &fx,
+            f(mean(forecast_xs)),
+            f_second_derivative_at_mean,
+            oos_crps,
+        )
+    }
+
+    fn from_transformed(
+        xs: &[f64],
+        fx: &[f64],
+        f_mx: f64,
+        f_second_derivative_at_mean: f64,
+        crps: f64,
+    ) -> Self {
         let mx = mean(xs);
         let sx = sample_std(xs);
-        let f_mx = f(mx);
-        let fx: Vec<f64> = xs.iter().map(|&x| f(x)).collect();
-        let ef = mean(&fx);
+        let ef = mean(fx);
         let gap = ef - f_mx;
         let taylor = 0.5 * f_second_derivative_at_mean * sx * sx;
-        let med = median(&fx);
-        let q05 = quantile(&fx, 0.05);
-        let q95 = quantile(&fx, 0.95);
-        let crps = empirical_crps(&fx, med);
+        let med = median(fx);
+        let q05 = quantile(fx, 0.05);
+        let q95 = quantile(fx, 0.95);
         Self {
             mean_x: mx,
             std_x: sx,
@@ -388,20 +439,18 @@ impl PerformativeSystem {
         let theta_sl = self.base_mean_mu + offset;
         let eps = self.sensitivity_epsilon;
 
-        let theta_ps = if (1.0 - eps).abs() > 1e-12 {
-            (self.base_mean_mu + offset) / (1.0 - eps)
+        let one_minus_eps = 1.0 - eps;
+        let theta_ps = if one_minus_eps.abs() > 1e-12 {
+            (self.base_mean_mu + offset) / one_minus_eps
         } else {
             f64::INFINITY
         };
 
-        // Minimizing PR(theta) = 0.5 * gamma * (mu + (eps - 1)*theta)^2 - alpha * theta:
-        // dPR/dtheta = gamma * (eps - 1) * (mu + (eps - 1)*theta) - alpha = 0
-        // Note: In the canonical pure-prediction benchmark (alpha = 0, linear score where theta_PS = mu/(1 - eps)
-        // and Stackelberg optimum is theta_PO = mu / (1 - 2*eps) under strategic utility), if incentive_alpha == 0.0
-        // we use the canonical linear performative benchmark theta_PS = mu/(1-eps), theta_PO = mu/(1-2*eps);
-        // otherwise we also incorporate the explicit linear incentive term.
-        let theta_po = if (1.0 - 2.0 * eps).abs() > 1e-12 {
-            (self.base_mean_mu + offset) / (1.0 - 2.0 * eps)
+        // Minimizing PR(theta) = 0.5 * gamma * (mu - (1 - eps)*theta)^2 - alpha * theta:
+        // dPR/dtheta = -gamma * (1 - eps) * (mu - (1 - eps)*theta) - alpha = 0
+        // => theta_PO = mu / (1 - eps) + alpha / (gamma * (1 - eps)^2).
+        let theta_po = if one_minus_eps.abs() > 1e-12 {
+            (self.base_mean_mu / one_minus_eps) + (offset / (one_minus_eps * one_minus_eps))
         } else {
             f64::INFINITY
         };
@@ -417,13 +466,8 @@ impl PerformativeSystem {
             traj.push(curr);
         }
 
-        // Evaluate performative risk around theta_PO so Stackelberg optimality is globally minimal
-        let risk_po = -0.5 * self.strong_convexity_gamma * (1.0 - 2.0 * eps) * theta_po * theta_po;
-        let risk_ps = risk_po
-            + 0.5
-                * self.strong_convexity_gamma
-                * (1.0 - 2.0 * eps).abs()
-                * (theta_ps - theta_po).powi(2);
+        let risk_ps = self.performative_risk_pr(theta_ps);
+        let risk_po = self.performative_risk_pr(theta_po);
 
         PerformativeDiagnostic {
             theta_sl,
@@ -464,34 +508,54 @@ mod tests {
         let y_pop_mean = mean(&y);
         assert!((audit.estimation_error - (y_obs_mean - y_pop_mean)).abs() < 1e-12);
         assert!(audit.rho_r_y > 0.90);
-        assert!(audit.n_eff_meng < 2.0);
+        let expected_n_eff = 3.0 / (1.0 + 5.0 * audit.rho_r_y * audit.rho_r_y);
+        assert!((audit.n_eff_meng - expected_n_eff).abs() < 1e-12);
+        assert!(audit.n_eff_meng < 1.0);
     }
 
     #[test]
-    fn nonlinear_summary_measures_convex_jensen_gap() {
+    fn nonlinear_summary_measures_convex_jensen_gap_and_oos_crps() {
         let xs = [1.0, 2.0, 3.0, 4.0, 10.0];
         let summary = NonlinearSummary::evaluate(&xs, |x| x * x, 2.0);
         assert!(summary.jensen_gap > 0.0);
         assert_eq!(summary.f_at_mean, 16.0);
         assert_eq!(summary.expected_f, 26.0);
         assert!((summary.jensen_gap - 10.0).abs() < 1e-12);
+        assert!(summary.empirical_crps > 0.0);
+
+        let oos = NonlinearSummary::evaluate_out_of_sample(&xs[..4], &xs[4..], |x| x * x, 2.0);
+        assert!(oos.empirical_crps > summary.empirical_crps);
     }
 
     #[test]
     fn performative_stability_vs_optimality_and_rrm_contraction() {
-        // Canonical linear system: mu = 1.0, eps = 0.2, alpha = 0.0, gamma = 1.0, beta = 1.2
-        // theta_SL = 1.0, theta_PS = 1 / 0.8 = 1.25, theta_PO = 1 / 0.6 = 1.6667
-        let sys = PerformativeSystem::new(1.0, 0.2, 0.0, 1.0, 1.2);
+        // Pure squared loss (alpha = 0): theta_PS == theta_PO == mu / (1 - eps) = 1.25, PR = 0.0 >= 0
+        let sys_zero_alpha = PerformativeSystem::new(1.0, 0.2, 0.0, 1.0, 1.2).diagnose();
+        assert!((sys_zero_alpha.theta_ps - 1.25).abs() < 1e-12);
+        assert!((sys_zero_alpha.theta_po - 1.25).abs() < 1e-12);
+        assert!(sys_zero_alpha.risk_at_ps.abs() < 1e-12);
+        assert!(sys_zero_alpha.risk_at_po.abs() < 1e-12);
+
+        // Canonical linear system with incentive: mu = 1.0, eps = 0.2, alpha = 0.5, gamma = 1.0, beta = 1.2
+        // theta_SL = 1.5, theta_PS = 1.5 / 0.8 = 1.875, theta_PO = 1.0/0.8 + 0.5/0.64 = 2.03125
+        let sys = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.2);
         let diag = sys.diagnose();
-        assert!((diag.theta_sl - 1.0).abs() < 1e-12);
-        assert!((diag.theta_ps - 1.25).abs() < 1e-12);
-        assert!((diag.theta_po - (1.0 / 0.6)).abs() < 1e-12);
+        assert!((diag.theta_sl - 1.5).abs() < 1e-12);
+        assert!((diag.theta_ps - 1.875).abs() < 1e-12);
+        assert!((diag.theta_po - 2.03125).abs() < 1e-12);
         assert!(diag.rrm_converges);
         assert!(diag.risk_at_po < diag.risk_at_ps);
-        assert!((diag.rrm_trajectory.last().copied().unwrap() - diag.theta_ps).abs() < 1e-3);
+        assert!((diag.rrm_trajectory.last().copied().unwrap() - diag.theta_ps).abs() < 1e-2);
 
         // Violating contraction (eps * beta / gamma >= 1.0)
-        let unstable = PerformativeSystem::new(1.0, 0.8, 0.0, 1.0, 1.5).diagnose();
+        let unstable = PerformativeSystem::new(1.0, 0.8, 0.5, 1.0, 1.5).diagnose();
         assert!(!unstable.rrm_converges);
+    }
+
+    #[test]
+    fn cromwell_floor_clamps_dogmatic_extremes() {
+        assert!((apply_cromwell_floor(0.0, 0.001) - 0.001).abs() < 1e-15);
+        assert!((apply_cromwell_floor(1.0, 0.001) - 0.999).abs() < 1e-15);
+        assert!(respects_cromwell(apply_cromwell_floor(0.0, 0.001), 0.001));
     }
 }

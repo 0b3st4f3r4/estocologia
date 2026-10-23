@@ -53,13 +53,21 @@ pub fn hill_estimator(xs: &[f64], k: usize) -> f64 {
         .map(|&x| (x / threshold).ln())
         .sum::<f64>()
         / (k as f64);
-    1.0 / mean_log_excess.max(1e-12)
+    if mean_log_excess <= 0.0 {
+        f64::INFINITY
+    } else {
+        1.0 / mean_log_excess
+    }
 }
 
 impl HillTailDiagnostic {
     /// Audits the tail behavior of `xs` using `k_opt` (or default $k = \lfloor \sqrt{n} \rfloor$).
     pub fn audit(xs: &[f64], k_opt: Option<usize>) -> Self {
-        let mut pos: Vec<f64> = xs.iter().copied().filter(|&x| x > 0.0).collect();
+        let mut pos: Vec<f64> = xs
+            .iter()
+            .copied()
+            .filter(|&x| x.is_finite() && x > 0.0)
+            .collect();
         pos.sort_by(|a, b| a.total_cmp(b));
         let n = pos.len();
         assert!(n >= 10, "Hill audit requires at least 10 positive points");
@@ -69,7 +77,11 @@ impl HillTailDiagnostic {
 
         let threshold = pos[n - k - 1];
         let alpha = hill_estimator(&pos, k);
-        let se = alpha / (k as f64).sqrt();
+        let se = if alpha.is_finite() {
+            alpha / (k as f64).sqrt()
+        } else {
+            0.0
+        };
         let regime = if alpha <= 1.0 {
             TailMomentRegime::InfiniteMeanAndVariance
         } else if alpha <= 2.0 {
@@ -117,6 +129,6 @@ mod tests {
         assert!((diag.alpha_hill - true_alpha).abs() < 0.20);
         assert_eq!(diag.regime, TailMomentRegime::FiniteMeanInfiniteVariance);
         assert!(diag.quantile_99 > diag.quantile_90 * 2.0);
+        assert_eq!(hill_estimator(&[5.0; 20], 5), f64::INFINITY);
     }
 }
-

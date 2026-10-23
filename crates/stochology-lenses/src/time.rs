@@ -90,6 +90,9 @@ pub fn simulate_absorbing_trajectories(
     exposure_fraction: f64,
     ruin_barrier_fraction: f64,
 ) -> (f64, f64, f64) {
+    if trajectories == 0 {
+        return (1.0, 1.0, 0.0);
+    }
     let mut rng = Rng::new(seed);
     let mut final_wealth = Vec::with_capacity(trajectories);
     let mut ruined = 0usize;
@@ -127,7 +130,8 @@ pub struct MixingTimeAudit {
     /// Tail profile mass $H_R = \pi(w > R)$ outside the warm-start truncation ball.
     pub tail_profile_h_r: f64,
     pub initial_kl: f64,
-    /// Minimum number of steps $t$ required to reach total variation tolerance $\varepsilon$.
+    /// Minimum number of steps $t$ required to reach total variation tolerance $\varepsilon$
+    /// (or `usize::MAX` if $\varepsilon \le H_R$ renders the tolerance unreachable).
     pub mixing_steps: usize,
 }
 
@@ -139,14 +143,19 @@ impl MixingTimeAudit {
         tolerance_eps: f64,
     ) -> Self {
         assert!(local_eta_kl > 0.0 && local_eta_kl < 1.0);
-        assert!(tolerance_eps > 0.0);
+        assert!(tolerance_eps > 0.0 && tail_profile_h_r >= 0.0);
         let alpha_lsi = -0.5 * local_eta_kl.ln();
-        let steps = if 0.5 * initial_kl <= tolerance_eps * tolerance_eps {
-            0
+        let steps = if tolerance_eps <= tail_profile_h_r {
+            usize::MAX
         } else {
-            let num = (2.0 * tolerance_eps * tolerance_eps / initial_kl).ln();
-            let den = local_eta_kl.ln();
-            (num / den).ceil() as usize
+            let eff_eps = tolerance_eps - tail_profile_h_r;
+            if 0.5 * initial_kl <= eff_eps * eff_eps {
+                0
+            } else {
+                let num = (2.0 * eff_eps * eff_eps / initial_kl).ln();
+                let den = local_eta_kl.ln();
+                (num / den).ceil() as usize
+            }
         };
         Self {
             local_eta_kl,
@@ -181,13 +190,20 @@ mod tests {
             ruin_overbet > 0.80 && ruin_kelly < 0.05,
             "ruin_overbet={ruin_overbet}, ruin_kelly={ruin_kelly}"
         );
+        assert_eq!(
+            simulate_absorbing_trajectories(2026, 10, 0, 0.5, 0.5, 0.4, 0.25, 0.05),
+            (1.0, 1.0, 0.0)
+        );
     }
 
     #[test]
-    fn mixing_time_grows_as_contraction_weakens() {
+    fn mixing_time_grows_as_contraction_weakens_and_respects_tail_mass_h_r() {
         let fast = MixingTimeAudit::compute(0.80, 0.001, 5.0, 0.05);
+        let heavier_tail = MixingTimeAudit::compute(0.80, 0.03, 5.0, 0.05);
         let slow = MixingTimeAudit::compute(0.98, 0.01, 5.0, 0.05);
+        let unreachable = MixingTimeAudit::compute(0.80, 0.06, 5.0, 0.05);
+        assert!(heavier_tail.mixing_steps > fast.mixing_steps);
         assert!(slow.mixing_steps > fast.mixing_steps * 5);
+        assert_eq!(unreachable.mixing_steps, usize::MAX);
     }
 }
-

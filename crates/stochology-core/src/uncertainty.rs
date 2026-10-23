@@ -43,6 +43,15 @@ impl KennedyOHaganDiscrepancy {
     ) -> Self {
         assert_eq!(x_obs.len(), y_obs.len());
         assert_eq!(x_extrapolation.len(), y_extrapolation_true.len());
+        assert!(
+            !x_obs.is_empty() && !x_extrapolation.is_empty(),
+            "calibration and extrapolation slices must be non-empty"
+        );
+        assert!(
+            length_scale.is_finite() && length_scale > 0.0,
+            "length_scale must be finite and positive"
+        );
+        let ell2 = (length_scale * length_scale).max(1e-12);
         let n = x_obs.len();
 
         // 1. Naive calibration without structural discrepancy: argmin_theta sum (y_i - theta * x_i)^2
@@ -77,9 +86,7 @@ impl KennedyOHaganDiscrepancy {
         for i in 0..n {
             for j in 0..n {
                 let d = x_obs[i] - x_obs[j];
-                let k_ij = sigma_delta
-                    * sigma_delta
-                    * (-0.5 * (d * d) / (length_scale * length_scale)).exp();
+                let k_ij = sigma_delta * sigma_delta * (-0.5 * (d * d) / ell2).exp();
                 c_mat[i][j] = k_ij
                     + if i == j {
                         sigma_noise * sigma_noise
@@ -101,9 +108,7 @@ impl KennedyOHaganDiscrepancy {
             let mut k_star = vec![0.0; n];
             for i in 0..n {
                 let d = x_star - x_obs[i];
-                k_star[i] = sigma_delta
-                    * sigma_delta
-                    * (-0.5 * (d * d) / (length_scale * length_scale)).exp();
+                k_star[i] = sigma_delta * sigma_delta * (-0.5 * (d * d) / ell2).exp();
             }
             let delta_mean: f64 = k_star
                 .iter()

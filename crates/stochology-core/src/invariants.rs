@@ -41,10 +41,13 @@ impl ExceedanceDesignEffect {
     ) -> Self {
         assert!(!cluster_sizes.is_empty(), "requires at least 1 cluster");
         let c = cluster_sizes.len();
-        let n_nom: usize = cluster_sizes.iter().sum();
+        let n_nom: usize = cluster_sizes
+            .iter()
+            .copied()
+            .fold(0usize, usize::saturating_add);
         assert!(n_nom > 0);
 
-        let sum_m = n_nom as f64;
+        let sum_m: f64 = cluster_sizes.iter().map(|&m| m as f64).sum();
         let sum_m2: f64 = cluster_sizes.iter().map(|&m| (m as f64) * (m as f64)).sum();
         let m_bar = sum_m / (c as f64);
         let m_tilde = sum_m2 / sum_m;
@@ -115,9 +118,9 @@ impl ExceedanceDesignEffect {
     }
 
     /// Protocol calibration benchmark #1 (§2.2):
-    /// Nominal $n = 25,028$ transactional rows across $C = 420$ unequal clusters ($\bar{m} \approx 59.6$,
-    /// $\mathrm{CV} \approx 0.996$, $\tilde{m} \approx 118.71$) with $\rho_I(0.90) \approx 0.155$ collapses to
-    /// $n_{\mathrm{eff}}(0.90) \approx 1,300$ independent units.
+    /// Nominal $n = 25,028$ transactional rows across $C = 420$ unequal clusters ($\bar{m} \approx 59.59$,
+    /// $\mathrm{CV} \approx 0.999$, $\tilde{m} \approx 119.05$) with $\rho_I(0.90) \approx 0.155$ collapses to
+    /// $n_{\mathrm{eff}}(0.90) \approx 1,297$ independent units ($\mathrm{DEFF}_{\text{exceedance}} \approx 19.30$).
     pub fn benchmark_calibration_25028() -> Self {
         // 78 large clusters of size 182 (14,196) + 341 regular clusters of size 31 (10,571) + 1 cluster of 261 = 25,028
         let mut sizes = Vec::with_capacity(420);
@@ -233,7 +236,19 @@ impl ChouldechovaAudit {
     /// Evaluates Chouldechova's exact identity for group prevalence $p \in (0, 1)$, $\mathrm{PPV} \in (0, 1]$, and $\mathrm{FNR} \in [0, 1)$.
     #[inline]
     pub fn chouldechova_fpr(prevalence_p: f64, ppv: f64, fnr: f64) -> f64 {
-        (prevalence_p / (1.0 - prevalence_p)) * ((1.0 - ppv) / ppv) * (1.0 - fnr)
+        if !prevalence_p.is_finite()
+            || !ppv.is_finite()
+            || !fnr.is_finite()
+            || prevalence_p <= 0.0
+            || ppv >= 1.0
+            || fnr >= 1.0
+        {
+            return 0.0;
+        }
+        let p_safe = prevalence_p.clamp(1e-12, 1.0 - 1e-12);
+        let ppv_safe = ppv.clamp(1e-12, 1.0);
+        let fnr_safe = fnr.clamp(0.0, 1.0);
+        (p_safe / (1.0 - p_safe)) * ((1.0 - ppv_safe) / ppv_safe) * (1.0 - fnr_safe)
     }
 
     /// Computes $(\mathrm{FPR}_A, \mathrm{FPR}_B, \mathrm{FPR}_A / \mathrm{FPR}_B)$ when $\mathrm{PPV}$ and $\mathrm{FNR}$ are equalized across groups with different base rates $p_A \neq p_B$.
@@ -258,7 +273,7 @@ impl ChouldechovaAudit {
             let fp_f = fp as f64;
             let tn_f = tn as f64;
             let fn_f = fn_c as f64;
-            let total = tp_f + fp_f + tn_f + fn_f;
+            let total = (tp_f + fp_f + tn_f + fn_f).max(1.0);
             let p = (tp_f + fn_f) / total;
             let ppv = tp_f / (tp_f + fp_f).max(1.0);
             let fnr = fn_f / (tp_f + fn_f).max(1.0);
@@ -269,8 +284,10 @@ impl ChouldechovaAudit {
 
         let (p_a, ppv_a, fnr_a, fpr_a, err_a) = metrics(group_a);
         let (p_b, ppv_b, fnr_b, fpr_b, err_b) = metrics(group_b);
-        let odds_a = p_a / (1.0 - p_a);
-        let odds_b = p_b / (1.0 - p_b);
+        let p_a_safe = p_a.clamp(1e-12, 1.0 - 1e-12);
+        let p_b_safe = p_b.clamp(1e-12, 1.0 - 1e-12);
+        let odds_a = p_a_safe / (1.0 - p_a_safe);
+        let odds_b = p_b_safe / (1.0 - p_b_safe);
 
         Self {
             prevalence_a: p_a,

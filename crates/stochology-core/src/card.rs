@@ -4,6 +4,7 @@
 
 use crate::invariants::verify_resolution_phi5;
 use crate::layers::{respects_cromwell, Layer, UncertaintyClass};
+use crate::rng::DEFAULT_SEED;
 use crate::sha256::is_valid_sha256_hex;
 use std::collections::BTreeMap;
 
@@ -216,10 +217,10 @@ impl EpistemologicalCard {
                 unit_and_margin: UnitAndMargin {
                     independent_unit: "12h clinical ICU shift (cluster of bed-hours)".into(),
                     nominal_sample_size_n: 25_028,
-                    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.992 = 118.71 (Moulton-Campbell)".into(),
-                    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.25".into(),
-                    effective_sample_size_n_eff: 1_300,
-                    unit_margin_of_error: "+/- 1.4 percentage points over 1,300 effective shifts".into(),
+                    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.998 = 119.05 (Moulton-Campbell, CV = 0.999)".into(),
+                    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.30".into(),
+                    effective_sample_size_n_eff: 1_297,
+                    unit_margin_of_error: "+/- 1.4 percentage points over 1,297 effective shifts".into(),
                 },
                 noise_physics: NoisePhysics {
                     stochastic_regime: "Non-ergodic multiplicative organ-failure cascade with sub-exponential tail (alpha_Hill = 1.60)".into(),
@@ -228,7 +229,7 @@ impl EpistemologicalCard {
                         agent_type: "performative".into(),
                         wasserstein_sensitivity_epsilon: 0.18,
                         rrm_convergence_condition: "eps * beta / gamma = 0.18 * 1.50 / 1.00 = 0.27 < 1 (strict contraction)".into(),
-                        stability_optimality_divergence: "theta_PS = 1.2195 vs Stackelberg theta_PO = 1.5625 (audited)".into(),
+                        stability_optimality_divergence: "theta_PS = 1.8293 vs Stackelberg theta_PO = 1.9631 (audited)".into(),
                     },
                 },
                 causal_ladder: CausalLadder {
@@ -340,15 +341,17 @@ impl EpistemologicalCard {
             });
         }
 
-        // Prohibition 2: Ban on the lone mean
+        // Prohibition 2: Ban on the lone mean (keywords + numeric validation)
         let nl = self
             .epistemological_header
             .nonlinearity
             .to_ascii_lowercase();
+        let mut nl_missing_term = false;
         for term in [
             "f(e[x])", "e[f(x)]", "jensen", "median", "q05", "q95", "crps",
         ] {
             if !nl.contains(term) {
+                nl_missing_term = true;
                 v.push(ContractViolation {
                     gate_code: "PROHIBITION_2_LONE_MEAN",
                     description: format!(
@@ -356,6 +359,30 @@ impl EpistemologicalCard {
                         term
                     ),
                 });
+            }
+        }
+        if !nl_missing_term {
+            let f_ex = extract_number_after(&nl, "f(e[x])");
+            let e_fx = extract_number_after(&nl, "e[f(x)]");
+            let delta_j = extract_number_after(&nl, "delta_j")
+                .or_else(|| extract_number_after(&nl, "jensen"));
+            let med = extract_number_after(&nl, "median");
+            let q05 = extract_number_after(&nl, "q05");
+            let q95 = extract_number_after(&nl, "q95");
+            let crps = extract_number_after(&nl, "crps");
+            match (f_ex, e_fx, delta_j, med, q05, q95, crps) {
+                (Some(f_ex), Some(e_fx), Some(dj), Some(med), Some(q05), Some(q95), Some(crps))
+                    if ((e_fx - f_ex) - dj).abs() <= 0.1
+                        && q05 <= med
+                        && med <= q95
+                        && q05 < q95
+                        && crps > 0.0 => {}
+                _ => {
+                    v.push(ContractViolation {
+                        gate_code: "PROHIBITION_2_LONE_MEAN",
+                        description: "nonlinearity numeric values fail Jensen gap identity (Delta_J = E[f(X)] - f(E[X])), quantile ordering (q05 <= median <= q95), or CRPS > 0".into(),
+                    });
+                }
             }
         }
 
@@ -370,23 +397,52 @@ impl EpistemologicalCard {
                 description: "agent_type must be 'passive' or 'performative'".into(),
             });
         }
+        if !perf.wasserstein_sensitivity_epsilon.is_finite()
+            || perf.wasserstein_sensitivity_epsilon < 0.0
+            || (perf.agent_type == "performative"
+                && (perf.wasserstein_sensitivity_epsilon <= 0.0
+                    || perf.wasserstein_sensitivity_epsilon >= 1.0))
+        {
+            v.push(ContractViolation {
+                gate_code: "PROHIBITION_3_EPSILON",
+                description: "wasserstein_sensitivity_epsilon must be finite and in (0, 1) for performative agents (or >= 0 for passive)".into(),
+            });
+        }
+        if !validate_rrm_contraction_string(
+            &perf.rrm_convergence_condition,
+            perf.wasserstein_sensitivity_epsilon,
+        ) {
+            v.push(ContractViolation {
+                gate_code: "PROHIBITION_3_RRM_CONTRACTION",
+                description:
+                    "rrm_convergence_condition must numerically satisfy eps * beta / gamma < 1"
+                        .into(),
+            });
+        }
         if perf.agent_type == "performative" {
             let div = perf.stability_optimality_divergence.to_ascii_lowercase();
-            if !div.contains("theta_ps") || !div.contains("theta_po") {
-                v.push(ContractViolation {
-                    gate_code: "PROHIBITION_3_PS_VS_PO",
-                    description: "performative agent must explicitly report theta_PS and theta_PO"
-                        .into(),
-                });
+            let theta_ps = extract_number_after(&div, "theta_ps");
+            let theta_po = extract_number_after(&div, "theta_po");
+            match (theta_ps, theta_po) {
+                (Some(ps), Some(po)) if (ps - po).abs() > 1e-6 => {}
+                _ => {
+                    v.push(ContractViolation {
+                        gate_code: "PROHIBITION_3_PS_VS_PO",
+                        description: "performative agent must explicitly report distinct numeric theta_PS and theta_PO"
+                            .into(),
+                    });
+                }
             }
         }
 
         // Invariant Φ1: Simulability (seed=2026 and executable null model)
         let seed_env = &self.data_and_audit_contract.seed_and_environment;
-        if !seed_env.contains("seed=") {
+        if parse_seed_from_env(seed_env) != Some(DEFAULT_SEED) {
             v.push(ContractViolation {
                 gate_code: "PHI1_SEED",
-                description: "seed_and_environment must declare 'seed=...'".into(),
+                description: format!(
+                    "seed_and_environment must declare canonical 'seed={DEFAULT_SEED}'"
+                ),
             });
         }
         if self.data_and_audit_contract.null_model.trim().is_empty() {
@@ -465,10 +521,38 @@ impl EpistemologicalCard {
         // Variance budget and Info-Gap + Sniedovich safeguard
         let vb = &self.uncertainty_budget_and_authorship.variance_budget;
         let sum_var = vb.inputs + vb.parameters + vb.covariance;
-        if (sum_var - 1.0).abs() > 1e-6 {
+        if !vb.inputs.is_finite()
+            || !vb.parameters.is_finite()
+            || !vb.covariance.is_finite()
+            || vb.inputs < 0.0
+            || vb.parameters < 0.0
+            || vb.covariance < 0.0
+            || (sum_var - 1.0).abs() > 1e-6
+        {
             v.push(ContractViolation {
                 gate_code: "VARIANCE_BUDGET",
-                description: format!("variance_budget sums to {sum_var:.4}, must equal 1.0"),
+                description: format!("variance_budget sums to {sum_var:.4}, must be finite nonnegative and equal 1.0"),
+            });
+        }
+        let dom = &self.uncertainty_budget_and_authorship.dominant_event;
+        if !dom.probability_p.is_finite()
+            || !dom.base_rate_floor_epsilon.is_finite()
+            || !respects_cromwell(dom.probability_p, dom.base_rate_floor_epsilon)
+        {
+            v.push(ContractViolation {
+                gate_code: "PROHIBITION_4_CROMWELL",
+                description: format!(
+                    "dominant_event.probability_p ({}) violates Cromwell interval [{}, {}]",
+                    dom.probability_p,
+                    dom.base_rate_floor_epsilon,
+                    1.0 - dom.base_rate_floor_epsilon
+                ),
+            });
+        }
+        if !dom.cost_share.is_finite() || dom.cost_share <= 0.0 || dom.cost_share > 1.0 {
+            v.push(ContractViolation {
+                gate_code: "DOMINANT_EVENT_COST_SHARE",
+                description: "dominant_event.cost_share must be finite and in (0, 1]".into(),
             });
         }
         let ig = &self.uncertainty_budget_and_authorship.info_gap_robustness;
@@ -500,9 +584,12 @@ impl EpistemologicalCard {
             });
         }
 
-        // Prohibition 4: Cromwell, attempt counter K >= 1, Murphy-CORP decomposition, and findings
+        // Prohibition 4: Cromwell, attempt counter K >= 1, e-process E_t, Murphy-CORP decomposition, and findings
         let dr = &self.decision_rule_and_scope;
-        if !respects_cromwell(dr.event_probability_p, dr.base_rate_floor_epsilon) {
+        if !dr.event_probability_p.is_finite()
+            || !dr.base_rate_floor_epsilon.is_finite()
+            || !respects_cromwell(dr.event_probability_p, dr.base_rate_floor_epsilon)
+        {
             v.push(ContractViolation {
                 gate_code: "PROHIBITION_4_CROMWELL",
                 description: format!(
@@ -519,10 +606,24 @@ impl EpistemologicalCard {
                 description: "attempt_counter_K must be >= 1".into(),
             });
         }
+        if !validate_e_process_string(
+            &self.data_and_audit_contract.e_process_multiplicity,
+            self.data_and_audit_contract.attempt_counter_k,
+        ) {
+            v.push(ContractViolation {
+                gate_code: "PROHIBITION_4_E_PROCESS",
+                description:
+                    "e_process_multiplicity must declare finite E_t with E_t / K >= 1/alpha".into(),
+            });
+        }
         let mc = &self.data_and_audit_contract.murphy_corp_decomposition;
         let bs_reconstructed =
             mc.miscalibration_rel_mcb - mc.resolution_res_dsc + mc.base_uncertainty_unc0;
-        if mc.miscalibration_rel_mcb < 0.0
+        if !mc.total_score_brier_or_crps.is_finite()
+            || !mc.miscalibration_rel_mcb.is_finite()
+            || !mc.resolution_res_dsc.is_finite()
+            || !mc.base_uncertainty_unc0.is_finite()
+            || mc.miscalibration_rel_mcb < 0.0
             || mc.resolution_res_dsc < 0.0
             || mc.base_uncertainty_unc0 < 0.0
             || (mc.total_score_brier_or_crps - bs_reconstructed).abs() > 1e-4
@@ -536,7 +637,7 @@ impl EpistemologicalCard {
             });
         }
         let fnd = &self.data_and_audit_contract.findings;
-        if fnd.used + fnd.unused.len() != fnd.registered
+        if fnd.used.saturating_add(fnd.unused.len()) != fnd.registered
             || fnd.unused.iter().any(|s| s.trim().is_empty())
         {
             v.push(ContractViolation {
@@ -547,14 +648,18 @@ impl EpistemologicalCard {
         }
 
         // Lens 5 and Invariant Φ4: Economic boundary p* = C / (eta * L), Chouldechova, and exit clause
-        if dr.protection_cost_c <= 0.0
+        if !dr.protection_cost_c.is_finite()
+            || !dr.event_loss_l.is_finite()
+            || !dr.mitigation_efficacy_eta.is_finite()
+            || !dr.critical_threshold_p_star.is_finite()
+            || dr.protection_cost_c <= 0.0
             || dr.event_loss_l <= 0.0
             || dr.mitigation_efficacy_eta <= 0.0
             || dr.mitigation_efficacy_eta > 1.0
         {
             v.push(ContractViolation {
                 gate_code: "LENS5_COST_LOSS_PARAMETERS",
-                description: "C > 0, L > 0, and eta in (0, 1] are mandatory".into(),
+                description: "finite C > 0, L > 0, and eta in (0, 1] are mandatory".into(),
             });
         } else {
             let expected_p_star =
@@ -624,7 +729,7 @@ impl EpistemologicalCard {
                 .findings
                 .unused
                 .iter()
-                .map(|item| format!("      - \"{}\"", item.replace('"', "\\\"")))
+                .map(|item| format!("      - \"{}\"", escape_yaml_str(item)))
                 .collect::<Vec<_>>()
                 .join("\n")
         };
@@ -714,67 +819,86 @@ decision_rule_and_scope:
   who_pays_for_error: "{who_pays_for_error}"
   exit_clause: "{exit_clause}"
 "#,
-            id = self.id,
-            version = self.contract_version,
+            id = escape_yaml_str(&self.id),
+            version = escape_yaml_str(&self.contract_version),
             layer = self.layer.code(),
             uncertainty = self.uncertainty.code(),
-            who_decides = self.decision_maker_question.who_decides,
-            altered_action = self.decision_maker_question.altered_action,
-            question = self.decision_maker_question.question,
-            generating_process = self.epistemological_header.generating_process,
-            nonlinearity = self.epistemological_header.nonlinearity,
-            independent_unit = self.epistemological_header.unit_and_margin.independent_unit,
+            who_decides = escape_yaml_str(&self.decision_maker_question.who_decides),
+            altered_action = escape_yaml_str(&self.decision_maker_question.altered_action),
+            question = escape_yaml_str(&self.decision_maker_question.question),
+            generating_process = escape_yaml_str(&self.epistemological_header.generating_process),
+            nonlinearity = escape_yaml_str(&self.epistemological_header.nonlinearity),
+            independent_unit =
+                escape_yaml_str(&self.epistemological_header.unit_and_margin.independent_unit),
             nominal_sample_size_n = self
                 .epistemological_header
                 .unit_and_margin
                 .nominal_sample_size_n,
-            weighted_cluster_mean_m_tilde = self
-                .epistemological_header
-                .unit_and_margin
-                .weighted_cluster_mean_m_tilde,
-            threshold_exceedance_icc = self
-                .epistemological_header
-                .unit_and_margin
-                .threshold_exceedance_icc,
+            weighted_cluster_mean_m_tilde = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .unit_and_margin
+                    .weighted_cluster_mean_m_tilde
+            ),
+            threshold_exceedance_icc = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .unit_and_margin
+                    .threshold_exceedance_icc
+            ),
             effective_sample_size_n_eff = self
                 .epistemological_header
                 .unit_and_margin
                 .effective_sample_size_n_eff,
-            unit_margin_of_error = self
-                .epistemological_header
-                .unit_and_margin
-                .unit_margin_of_error,
-            stochastic_regime = self.epistemological_header.noise_physics.stochastic_regime,
-            absorbing_states = self.epistemological_header.noise_physics.absorbing_states,
-            agent_type = self
-                .epistemological_header
-                .noise_physics
-                .bridge_l3_l1_performativity
-                .agent_type,
+            unit_margin_of_error = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .unit_and_margin
+                    .unit_margin_of_error
+            ),
+            stochastic_regime =
+                escape_yaml_str(&self.epistemological_header.noise_physics.stochastic_regime),
+            absorbing_states =
+                escape_yaml_str(&self.epistemological_header.noise_physics.absorbing_states),
+            agent_type = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .noise_physics
+                    .bridge_l3_l1_performativity
+                    .agent_type
+            ),
             wasserstein_sensitivity_epsilon = self
                 .epistemological_header
                 .noise_physics
                 .bridge_l3_l1_performativity
                 .wasserstein_sensitivity_epsilon,
-            rrm_convergence_condition = self
-                .epistemological_header
-                .noise_physics
-                .bridge_l3_l1_performativity
-                .rrm_convergence_condition,
-            stability_optimality_divergence = self
-                .epistemological_header
-                .noise_physics
-                .bridge_l3_l1_performativity
-                .stability_optimality_divergence,
-            pearl_rung = self.epistemological_header.causal_ladder.pearl_rung,
-            identification_strategy = self
-                .epistemological_header
-                .causal_ladder
-                .identification_strategy,
-            untestable_assumption = self
-                .epistemological_header
-                .causal_ladder
-                .untestable_assumption,
+            rrm_convergence_condition = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .noise_physics
+                    .bridge_l3_l1_performativity
+                    .rrm_convergence_condition
+            ),
+            stability_optimality_divergence = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .noise_physics
+                    .bridge_l3_l1_performativity
+                    .stability_optimality_divergence
+            ),
+            pearl_rung = escape_yaml_str(&self.epistemological_header.causal_ladder.pearl_rung),
+            identification_strategy = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .causal_ladder
+                    .identification_strategy
+            ),
+            untestable_assumption = escape_yaml_str(
+                &self
+                    .epistemological_header
+                    .causal_ladder
+                    .untestable_assumption
+            ),
             inputs = self
                 .uncertainty_budget_and_authorship
                 .variance_budget
@@ -787,14 +911,18 @@ decision_rule_and_scope:
                 .uncertainty_budget_and_authorship
                 .variance_budget
                 .covariance,
-            structural_discrepancy_gp = self
-                .uncertainty_budget_and_authorship
-                .variance_budget
-                .structural_discrepancy_gp,
-            ev_description = self
-                .uncertainty_budget_and_authorship
-                .dominant_event
-                .description,
+            structural_discrepancy_gp = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .variance_budget
+                    .structural_discrepancy_gp
+            ),
+            ev_description = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .dominant_event
+                    .description
+            ),
             ev_prob = self
                 .uncertainty_budget_and_authorship
                 .dominant_event
@@ -807,40 +935,58 @@ decision_rule_and_scope:
                 .uncertainty_budget_and_authorship
                 .dominant_event
                 .cost_share,
-            critical_requirement_rc = self
-                .uncertainty_budget_and_authorship
-                .info_gap_robustness
-                .critical_requirement_rc,
-            robustness_horizon_alpha_hat = self
-                .uncertainty_budget_and_authorship
-                .info_gap_robustness
-                .robustness_horizon_alpha_hat,
-            opportuneness_horizon_beta_hat = self
-                .uncertainty_budget_and_authorship
-                .info_gap_robustness
-                .opportuneness_horizon_beta_hat,
-            global_maximin_safeguard = self
-                .uncertainty_budget_and_authorship
-                .info_gap_robustness
-                .global_maximin_safeguard,
-            auth_null = self
-                .uncertainty_budget_and_authorship
-                .field_authorship
-                .null_model,
-            auth_decision = self
-                .uncertainty_budget_and_authorship
-                .field_authorship
-                .decision_rule,
-            auth_reviewer = self
-                .uncertainty_budget_and_authorship
-                .field_authorship
-                .adversarial_reviewer,
-            missingness_mechanism = self.data_and_audit_contract.missingness_mechanism,
-            seed_and_environment = self.data_and_audit_contract.seed_and_environment,
-            null_model = self.data_and_audit_contract.null_model,
-            preregistration_hash = self.data_and_audit_contract.preregistration_hash,
+            critical_requirement_rc = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .info_gap_robustness
+                    .critical_requirement_rc
+            ),
+            robustness_horizon_alpha_hat = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .info_gap_robustness
+                    .robustness_horizon_alpha_hat
+            ),
+            opportuneness_horizon_beta_hat = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .info_gap_robustness
+                    .opportuneness_horizon_beta_hat
+            ),
+            global_maximin_safeguard = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .info_gap_robustness
+                    .global_maximin_safeguard
+            ),
+            auth_null = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .field_authorship
+                    .null_model
+            ),
+            auth_decision = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .field_authorship
+                    .decision_rule
+            ),
+            auth_reviewer = escape_yaml_str(
+                &self
+                    .uncertainty_budget_and_authorship
+                    .field_authorship
+                    .adversarial_reviewer
+            ),
+            missingness_mechanism =
+                escape_yaml_str(&self.data_and_audit_contract.missingness_mechanism),
+            seed_and_environment =
+                escape_yaml_str(&self.data_and_audit_contract.seed_and_environment),
+            null_model = escape_yaml_str(&self.data_and_audit_contract.null_model),
+            preregistration_hash =
+                escape_yaml_str(&self.data_and_audit_contract.preregistration_hash),
             attempt_counter_k = self.data_and_audit_contract.attempt_counter_k,
-            e_process_multiplicity = self.data_and_audit_contract.e_process_multiplicity,
+            e_process_multiplicity =
+                escape_yaml_str(&self.data_and_audit_contract.e_process_multiplicity),
             total_score = self
                 .data_and_audit_contract
                 .murphy_corp_decomposition
@@ -866,10 +1012,10 @@ decision_rule_and_scope:
             dr_l = self.decision_rule_and_scope.event_loss_l,
             dr_eta = self.decision_rule_and_scope.mitigation_efficacy_eta,
             dr_p_star = self.decision_rule_and_scope.critical_threshold_p_star,
-            declared_act = self.decision_rule_and_scope.declared_act,
-            scope_statement = self.decision_rule_and_scope.scope_statement,
-            who_pays_for_error = self.decision_rule_and_scope.who_pays_for_error,
-            exit_clause = self.decision_rule_and_scope.exit_clause,
+            declared_act = escape_yaml_str(&self.decision_rule_and_scope.declared_act),
+            scope_statement = escape_yaml_str(&self.decision_rule_and_scope.scope_statement),
+            who_pays_for_error = escape_yaml_str(&self.decision_rule_and_scope.who_pays_for_error),
+            exit_clause = escape_yaml_str(&self.decision_rule_and_scope.exit_clause),
         )
     }
 
@@ -922,9 +1068,13 @@ decision_rule_and_scope:
                 .ok_or_else(|| format!("missing mandatory YAML field: '{k}'"))
         };
         let req_f64 = |k: &str| -> Result<f64, String> {
-            req(k)?
+            let v = req(k)?
                 .parse::<f64>()
-                .map_err(|e| format!("invalid numeric value in '{k}': {e}"))
+                .map_err(|e| format!("invalid numeric value in '{k}': {e}"))?;
+            if !v.is_finite() {
+                return Err(format!("non-finite numeric value in '{k}': {v}"));
+            }
+            Ok(v)
         };
         let req_usize = |k: &str| -> Result<usize, String> {
             req(k)?
@@ -1100,15 +1250,122 @@ decision_rule_and_scope:
     }
 }
 
+fn escape_yaml_str(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '\\' => out.push_str("\\\\"),
+            '"' => out.push_str("\\\""),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c => out.push(c),
+        }
+    }
+    out
+}
+
 fn unquote(s: &str) -> String {
     let t = s.trim();
     if t.len() >= 2
         && ((t.starts_with('"') && t.ends_with('"')) || (t.starts_with('\'') && t.ends_with('\'')))
     {
-        t[1..t.len() - 1].replace("\\\"", "\"")
+        let inner = &t[1..t.len() - 1];
+        let mut out = String::with_capacity(inner.len());
+        let mut chars = inner.chars();
+        while let Some(ch) = chars.next() {
+            if ch == '\\' {
+                match chars.next() {
+                    Some('\\') => out.push('\\'),
+                    Some('"') => out.push('"'),
+                    Some('n') => out.push('\n'),
+                    Some('r') => out.push('\r'),
+                    Some('t') => out.push('\t'),
+                    Some(other) => {
+                        out.push('\\');
+                        out.push(other);
+                    }
+                    None => out.push('\\'),
+                }
+            } else {
+                out.push(ch);
+            }
+        }
+        out
     } else {
         t.to_string()
     }
+}
+
+fn extract_number_after(text_lower: &str, marker_lower: &str) -> Option<f64> {
+    let idx = text_lower.find(marker_lower)?;
+    let rest = &text_lower[idx + marker_lower.len()..];
+    let after_eq = if let Some(eq_idx) = rest.find('=') {
+        &rest[eq_idx + 1..]
+    } else {
+        rest
+    };
+    let trimmed = after_eq.trim_start();
+    let end = trimmed
+        .find(|c: char| !(c.is_ascii_digit() || c == '.' || c == '+' || c == '-'))
+        .unwrap_or(trimmed.len());
+    if end == 0 {
+        return None;
+    }
+    let val = trimmed[..end].parse::<f64>().ok()?;
+    val.is_finite().then_some(val)
+}
+
+fn parse_seed_from_env(seed_env: &str) -> Option<u64> {
+    for part in seed_env.split(';') {
+        let t = part.trim();
+        if let Some(rest) = t.strip_prefix("seed=") {
+            return rest.trim().parse::<u64>().ok();
+        }
+    }
+    None
+}
+
+fn validate_rrm_contraction_string(cond: &str, declared_eps: f64) -> bool {
+    if !declared_eps.is_finite() || declared_eps < 0.0 || !cond.contains("< 1") {
+        return false;
+    }
+    let before_lt = cond.split("< 1").next().unwrap_or("");
+    let nums: Vec<f64> = before_lt
+        .split(|c: char| !(c.is_ascii_digit() || c == '.' || c == '+' || c == '-'))
+        .filter(|s| !s.is_empty())
+        .filter_map(|s| s.parse::<f64>().ok())
+        .filter(|v| v.is_finite())
+        .collect();
+    if nums.len() >= 4 {
+        let eps = nums[0];
+        let beta = nums[1];
+        let gamma = nums[2];
+        let ratio = nums[3];
+        (eps - declared_eps).abs() <= 1e-4
+            && gamma > 0.0
+            && beta >= gamma
+            && ((eps * beta / gamma) - ratio).abs() <= 1e-2
+            && (0.0..1.0).contains(&ratio)
+    } else if let Some(&ratio) = nums.last() {
+        (0.0..1.0).contains(&ratio)
+    } else {
+        false
+    }
+}
+
+fn validate_e_process_string(e_str: &str, k: usize) -> bool {
+    if k < 1 {
+        return false;
+    }
+    let lower = e_str.to_ascii_lowercase();
+    let Some(e_val) = extract_number_after(&lower, "e_") else {
+        return false;
+    };
+    let threshold = extract_number_after(&lower, "1/alpha")
+        .or_else(|| extract_number_after(&lower, "threshold"))
+        .unwrap_or(20.0);
+    e_val > 0.0 && threshold > 1.0 && (e_val / (k as f64)) >= threshold
 }
 
 #[cfg(test)]
@@ -1142,5 +1399,47 @@ mod tests {
             .iter()
             .any(|e| e.gate_code == "FILTER4_CROSS_AUTHORSHIP"));
         assert!(errs.iter().any(|e| e.gate_code == "LENS5_MURPHY_CORP"));
+    }
+
+    #[test]
+    fn card_audit_enforces_numeric_values_for_seed_jensen_rrm_eprocess_and_nan() {
+        let mut c = EpistemologicalCard::canonical_example();
+        c.data_and_audit_contract.seed_and_environment = "seed=42; rustc=1.97".into();
+        c.epistemological_header.nonlinearity =
+            "f(E[X])=1420.0, E[f(X)]=1890.0, Jensen gap Delta_J=+999.0, median=1510.0, q05=820.0, q95=4120.0, CRPS=215.4".into();
+        c.epistemological_header
+            .noise_physics
+            .bridge_l3_l1_performativity
+            .rrm_convergence_condition =
+            "eps * beta / gamma = 0.80 * 1.50 / 1.00 = 1.20 < 1".into();
+        c.data_and_audit_contract.e_process_multiplicity =
+            "Cumulative e-process E_1 = 5.0 (threshold 1/alpha = 20.0 for alpha = 0.05)".into();
+        c.uncertainty_budget_and_authorship.variance_budget.inputs = f64::NAN;
+
+        let errs = c.audit().expect_err("must reject numeric violations");
+        assert!(errs.iter().any(|e| e.gate_code == "PHI1_SEED"));
+        assert!(errs
+            .iter()
+            .any(|e| e.gate_code == "PROHIBITION_2_LONE_MEAN"));
+        assert!(errs
+            .iter()
+            .any(|e| e.gate_code == "PROHIBITION_3_RRM_CONTRACTION"));
+        assert!(errs
+            .iter()
+            .any(|e| e.gate_code == "PROHIBITION_4_E_PROCESS"));
+        assert!(errs.iter().any(|e| e.gate_code == "VARIANCE_BUDGET"));
+    }
+
+    #[test]
+    fn yaml_escapes_quotes_colons_backslashes_and_newlines_and_rejects_nan() {
+        let mut c = EpistemologicalCard::canonical_example();
+        c.decision_maker_question.altered_action =
+            "Action with \"quotes\", colon: value, backslash \\ and\nnewline".into();
+        let yaml = c.to_yaml();
+        let parsed = EpistemologicalCard::from_yaml(&yaml).expect("escaped YAML must parse");
+        assert_eq!(parsed, c);
+
+        let nan_yaml = yaml.replace("inputs: 0.45", "inputs: NaN");
+        assert!(EpistemologicalCard::from_yaml(&nan_yaml).is_err());
     }
 }

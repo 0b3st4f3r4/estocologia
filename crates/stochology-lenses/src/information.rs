@@ -31,6 +31,11 @@ impl SdpiHierarchy {
         assert!(!p_x.is_empty() && p_x.len() == channel_w.len());
         let nx = p_x.len();
         let ny = channel_w[0].len();
+        assert!(ny > 0, "channel must have at least 1 output symbol");
+        assert!(
+            channel_w.iter().all(|row| row.len() == ny),
+            "channel_w rows must all have length ny"
+        );
 
         let mut p_y = vec![0.0; ny];
         for i in 0..nx {
@@ -65,33 +70,43 @@ impl SdpiHierarchy {
             }
         }
 
-        // Chi-square contraction = second largest eigenvalue squared of the divergence transition operator
-        // For a 2x2 channel or general channel via power iteration on the centered operator:
+        // Chi-square contraction = largest squared singular value of the centered divergence transition operator
         let eta_chi2 = compute_chi2_contraction(p_x, &p_y, channel_w);
 
-        // KL contraction: supremum over perturbations + grid of distributions
+        // KL contraction: supremum of D_KL(PW || QW) / D_KL(P || Q) and sup_Q eta_chi2(Q, W)
+        // over 2-symbol mixtures (Anantharam et al. extremality) and full-support simplex perturbations.
         let mut eta_kl = eta_chi2;
-        if nx == 2 {
-            for step in 1..100 {
-                let p0 = (step as f64) / 100.0;
-                for q_step in 1..100 {
-                    if step == q_step {
-                        continue;
-                    }
-                    let q0 = (q_step as f64) / 100.0;
-                    let p_in = [p0, 1.0 - p0];
-                    let q_in = [q0, 1.0 - q0];
-                    let kl_in = kl_divergence(&p_in, &q_in);
-                    if kl_in > 1e-12 {
-                        let p_out = push_forward(&p_in, channel_w);
-                        let q_out = push_forward(&q_in, channel_w);
-                        let kl_out = kl_divergence(&p_out, &q_out);
-                        eta_kl = eta_kl.max(kl_out / kl_in);
+        for i in 0..nx {
+            for k in (i + 1)..nx {
+                for step in 1..50 {
+                    let p0 = (step as f64) / 50.0;
+                    let mut dist_q = vec![0.0; nx];
+                    dist_q[i] = p0;
+                    dist_q[k] = 1.0 - p0;
+                    let q_y = push_forward(&dist_q, channel_w);
+                    eta_kl = eta_kl.max(compute_chi2_contraction(&dist_q, &q_y, channel_w));
+
+                    for q_step in 1..50 {
+                        if step == q_step {
+                            continue;
+                        }
+                        let q0 = (q_step as f64) / 50.0;
+                        let mut p_in = vec![0.0; nx];
+                        let mut q_in = vec![0.0; nx];
+                        p_in[i] = p0;
+                        p_in[k] = 1.0 - p0;
+                        q_in[i] = q0;
+                        q_in[k] = 1.0 - q0;
+                        let kl_in = kl_divergence(&p_in, &q_in);
+                        if kl_in > 1e-12 {
+                            let p_out = push_forward(&p_in, channel_w);
+                            let q_out = push_forward(&q_in, channel_w);
+                            let kl_out = kl_divergence(&p_out, &q_out);
+                            eta_kl = eta_kl.max(kl_out / kl_in);
+                        }
                     }
                 }
             }
-        } else {
-            eta_kl = eta_kl.max(eta_chi2);
         }
 
         let valid = eta_chi2 <= eta_kl + 1e-9 && eta_kl <= eta_tv + 1e-9 && eta_tv <= 1.0 + 1e-9;
@@ -110,6 +125,9 @@ fn push_forward(dist: &[f64], w: &[Vec<f64>]) -> Vec<f64> {
     let ny = w[0].len();
     let mut out = vec![0.0; ny];
     for (i, &pi) in dist.iter().enumerate() {
+        if pi <= 0.0 {
+            continue;
+        }
         for (j, out_j) in out.iter_mut().enumerate() {
             *out_j += pi * w[i][j];
         }
@@ -134,22 +152,85 @@ fn compute_chi2_contraction(p_x: &[f64], p_y: &[f64], w: &[Vec<f64>]) -> f64 {
     let nx = p_x.len();
     let ny = p_y.len();
     if nx == 2 && ny == 2 {
-        // Exact closed-form for 2x2 binary channel: (W_{00} - W_{10})^2 * p_x0 * p_x1 / (p_y0 * p_y1)
         let det = w[0][0] - w[1][0];
         let denom = (p_y[0] * p_y[1]).max(1e-15);
         return (det * det * p_x[0] * p_x[1] / denom).clamp(0.0, 1.0);
     }
-    // General case: Frobenius norm of the centered normalized transition matrix B_{ij} = sqrt(p_x[i]) * (W[i][j] - p_y[j]) / sqrt(p_y[j])
-    let mut sum_sq = 0.0;
+    // General case: spectral norm squared (largest eigenvalue of B * B^T) where
+    // B_{ij} = sqrt(p_x[i]) * (W[i][j] - p_y[j]) / sqrt(p_y[j]) is the centered transition operator.
+    let mut b = vec![vec![0.0; ny]; nx];
     for i in 0..nx {
+        if p_x[i] <= 0.0 {
+            continue;
+        }
+        let sx = p_x[i].sqrt();
         for j in 0..ny {
             if p_y[j] > 1e-15 {
-                let b_ij = p_x[i].sqrt() * (w[i][j] - p_y[j]) / p_y[j].sqrt();
-                sum_sq += b_ij * b_ij;
+                b[i][j] = sx * (w[i][j] - p_y[j]) / p_y[j].sqrt();
             }
         }
     }
-    sum_sq.clamp(0.0, 1.0)
+    let mut m = vec![vec![0.0; nx]; nx];
+    for i in 0..nx {
+        for k in i..nx {
+            let dot: f64 = (0..ny).map(|j| b[i][j] * b[k][j]).sum();
+            m[i][k] = dot;
+            m[k][i] = dot;
+        }
+    }
+    jacobi_largest_eigenvalue(&mut m).clamp(0.0, 1.0)
+}
+
+/// Computes the largest eigenvalue of a real symmetric matrix `a` via the classical Jacobi rotation algorithm.
+fn jacobi_largest_eigenvalue(a: &mut [Vec<f64>]) -> f64 {
+    let n = a.len();
+    if n == 0 {
+        return 0.0;
+    }
+    for _ in 0..(n * n * 15).max(30) {
+        let mut p = 0;
+        let mut q = 0;
+        let mut max_off = 0.0_f64;
+        for (i, row) in a.iter().enumerate() {
+            for (j, &val) in row.iter().enumerate().skip(i + 1) {
+                if val.abs() > max_off {
+                    max_off = val.abs();
+                    p = i;
+                    q = j;
+                }
+            }
+        }
+        if max_off < 1e-14 {
+            break;
+        }
+        let app = a[p][p];
+        let aqq = a[q][q];
+        let apq = a[p][q];
+        let tau = (aqq - app) / (2.0 * apq);
+        let t = if tau >= 0.0 {
+            1.0 / (tau + (1.0 + tau * tau).sqrt())
+        } else {
+            -1.0 / (-tau + (1.0 + tau * tau).sqrt())
+        };
+        let c = 1.0 / (1.0 + t * t).sqrt();
+        let s = t * c;
+        a[p][p] = app - t * apq;
+        a[q][q] = aqq + t * apq;
+        a[p][q] = 0.0;
+        a[q][p] = 0.0;
+        #[allow(clippy::needless_range_loop)]
+        for r in 0..n {
+            if r != p && r != q {
+                let arp = a[r][p];
+                let arq = a[r][q];
+                a[r][p] = c * arp - s * arq;
+                a[p][r] = a[r][p];
+                a[r][q] = s * arp + c * arq;
+                a[q][r] = a[r][q];
+            }
+        }
+    }
+    (0..n).map(|i| a[i][i]).fold(0.0_f64, f64::max)
 }
 
 /// Mutual information upper bound for an amplitude-constrained input $|X| \le A$ over an additive channel
@@ -211,7 +292,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn binary_symmetric_channel_sdpi_hierarchy_closes_exactly() {
+    fn binary_and_ternary_symmetric_channel_sdpi_hierarchy_closes_exactly() {
         // BSC with crossover delta = 0.15 -> eta_TV = 1 - 2*0.15 = 0.70, eta_chi2 = (1 - 2*0.15)^2 = 0.49
         let p_x = [0.5, 0.5];
         let w = vec![vec![0.85, 0.15], vec![0.15, 0.85]];
@@ -220,6 +301,19 @@ mod tests {
         assert!((h.eta_tv - 0.70).abs() < 1e-12);
         assert!((h.eta_chi2 - 0.49).abs() < 1e-12);
         assert!(h.eta_kl >= h.eta_chi2 - 1e-9 && h.eta_kl <= h.eta_tv + 1e-9);
+
+        // 3-ary symmetric channel with d = 0.10 -> eta_chi2 = (1 - 3*0.10)^2 = 0.49, eta_TV = 0.70
+        let p_x3 = [1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0];
+        let w3 = vec![
+            vec![0.80, 0.10, 0.10],
+            vec![0.10, 0.80, 0.10],
+            vec![0.10, 0.10, 0.80],
+        ];
+        let h3 = SdpiHierarchy::compute(&p_x3, &w3);
+        assert!(h3.hierarchy_valid);
+        assert!((h3.eta_chi2 - 0.49).abs() < 1e-12);
+        assert!((h3.eta_tv - 0.70).abs() < 1e-12);
+        assert!(h3.eta_kl > h3.eta_chi2 && h3.eta_kl <= h3.eta_tv + 1e-9);
     }
 
     #[test]

@@ -1,4 +1,4 @@
 # O formato e do `cargo fmt`, nao do gosto: `cargo fmt --check` roda no CI e reprova.
-edition = "2024"
+edition = "2021"
 max_width = 100
 newline_style = "Unix"

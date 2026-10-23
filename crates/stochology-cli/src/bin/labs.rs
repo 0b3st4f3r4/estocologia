@@ -6,7 +6,7 @@ use std::path::Path;
 use stochology_cli::{
     build_v1_card_suite, load_atlantic_storms_forecasts, load_bank_call_clusters, load_danish_fire,
     load_djia_returns, load_lalonde_nsw_cps, load_nyc_flights_2013_2023,
-    load_toronto_arrests_prevalences,
+    load_toronto_arrests_prevalences, load_vic_elec_demand,
 };
 use stochology_core::{
     mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect, InfoGapOption,
@@ -53,10 +53,16 @@ fn lab_layers(root: &Path) {
 
     let clusters = load_bank_call_clusters(root);
     let daily_totals: Vec<f64> = clusters.iter().map(|c| c.iter().sum::<f64>()).collect();
-    // Convex congestion cost f(x) = x^2
-    let jensen = NonlinearSummary::evaluate(&daily_totals, |x| x * x, 2.0);
+    let split_idx = daily_totals.len() * 4 / 5;
+    // Convex congestion cost f(x) = x^2 evaluated with out-of-sample CRPS on held-out days
+    let jensen = NonlinearSummary::evaluate_out_of_sample(
+        &daily_totals[..split_idx],
+        &daily_totals[split_idx..],
+        |x| x * x,
+        2.0,
+    );
     println!(
-        "  [Bridge L2->L3] Jensen Gap (bank_calls, {} days): f(E[X])={:.2}, E[f(X)]={:.2}, Delta_J={:+.2}, median={:.2}, q05={:.2}, q95={:.2}, CRPS={:.2}",
+        "  [Bridge L2->L3] Jensen Gap (bank_calls, {} days): f(E[X])={:.2}, E[f(X)]={:.2}, Delta_J={:+.2}, median={:.2}, q05={:.2}, q95={:.2}, OOS_CRPS={:.2}",
         daily_totals.len(),
         jensen.f_at_mean,
         jensen.expected_f,
@@ -67,7 +73,7 @@ fn lab_layers(root: &Path) {
         jensen.empirical_crps
     );
 
-    let perf = PerformativeSystem::new(1.0, 0.2, 0.0, 1.0, 1.5).diagnose();
+    let perf = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.5).diagnose();
     let osc = PerformativeSystem::simulate_rrm_oscillation(5);
     println!(
         "  [Bridge L3->L1] Performative Prediction: theta_SL={:.4}, theta_PS={:.4}, theta_PO={:.4}, PR(PS)={:.4} vs PR(PO)={:.4}, r_RRM={:.3} (converges={}), oscillation_violated={:?}",
@@ -162,11 +168,13 @@ fn lab_lenses(root: &Path) {
         mix.mixing_steps
     );
 
-    // 3. Scale & Tail Lens (Danish Fire)
+    // 3. Scale & Tail Lens (Danish Fire + Victoria Electricity Demand)
     let fire_losses = load_danish_fire(root);
     let hill = HillTailDiagnostic::audit(&fire_losses, Some(100));
+    let vic_demand = load_vic_elec_demand(root);
+    let hill_vic = HillTailDiagnostic::audit(&vic_demand, Some(100));
     println!(
-        "  [Lens 3: Tail] Danish Fire (n={}): Hill alpha_k={:.4} (+/- {:.4}), regime={:?}, median={:.3}, MAD={:.3}, q99={:.2}, tail_n_eff={:.1}",
+        "  [Lens 3: Tail] Danish Fire (n={}): Hill alpha_k={:.4} (+/- {:.4}), regime={:?}, median={:.3}, MAD={:.3}, q99={:.2}, tail_n_eff={:.1} | VicElec (n={}): q99={:.1} MW",
         hill.sample_size_n,
         hill.alpha_hill,
         hill.asymptotic_se_alpha,
@@ -174,7 +182,9 @@ fn lab_lenses(root: &Path) {
         hill.median,
         hill.mad,
         hill.quantile_99,
-        hill.penalized_tail_n_eff
+        hill.penalized_tail_n_eff,
+        hill_vic.sample_size_n,
+        hill_vic.quantile_99
     );
 
     // 4. Invariance Lens (ICP + NILE + Lambda*)
@@ -380,8 +390,19 @@ fn lab_governance(root: &Path) {
     );
 }
 
+fn print_usage() {
+    println!(
+        "Usage: labs [--help | --all | --layers | --uncertainty | --lenses | --invariants | --siga | --governance]"
+    );
+}
+
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
+    if args.len() > 1 {
+        eprintln!("Too many arguments: {args:?}");
+        print_usage();
+        std::process::exit(2);
+    }
     let mode = args.first().map(|s| s.as_str()).unwrap_or("--all");
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
@@ -389,6 +410,7 @@ fn main() {
         .expect("workspace root");
 
     match mode {
+        "--help" | "-h" => print_usage(),
         "--layers" | "--bridges" => lab_layers(root),
         "--uncertainty" => lab_uncertainty(),
         "--lenses" => lab_lenses(root),
@@ -404,10 +426,9 @@ fn main() {
             lab_governance(root);
         }
         other => {
-            eprintln!(
-                "Unknown option: '{other}'. Use --all, --layers, --uncertainty, --lenses, --invariants, --siga, or --governance."
-            );
-            std::process::exit(1);
+            eprintln!("Unknown option: '{other}'.");
+            print_usage();
+            std::process::exit(2);
         }
     }
 }
