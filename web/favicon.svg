@@ -1,10 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#0b101b"/>
-  <path d="M32 10L52 46H12L32 10Z" stroke="#38bdf8" stroke-width="3.5" stroke-linejoin="round"/>
-  <circle cx="32" cy="12" r="4.5" fill="#38bdf8"/>
-  <circle cx="51" cy="45" r="4.5" fill="#a78bfa"/>
-  <circle cx="13" cy="45" r="4.5" fill="#34d399"/>
-  <circle cx="32" cy="33" r="3.5" fill="#f59e0b"/>
-  <path d="M32 17V29M20 41L29 35M44 41L35 35" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg-shield" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="55%" stop-color="#090e1a"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+    <linearGradient id="ring-grad" x1="20" y1="18" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="tail-fill" x1="64" y1="38" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.03"/>
+    </linearGradient>
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
 
+  <!-- Outer Epistemological Vault Squircle -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg-shield)" stroke="#1e293b" stroke-width="2"/>
+  <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#ring-grad)" stroke-opacity="0.28" stroke-width="1.2"/>
+
+  <!-- Subtle Radial Field -->
+  <circle cx="64" cy="66" r="46" fill="url(#core-glow)"/>
+
+  <!-- 7 Gate Calibration Ticks on Outer Compass Ring (G1-G7) -->
+  <g stroke="#475569" stroke-width="1.6" stroke-linecap="round" opacity="0.75">
+    <line x1="64" y1="13" x2="64" y2="17"/>
+    <line x1="101" y1="29" x2="98" y2="32"/>
+    <line x1="115" y1="66" x2="111" y2="66"/>
+    <line x1="99" y1="101" x2="96" y2="98"/>
+    <line x1="29" y1="101" x2="32" y2="98"/>
+    <line x1="13" y1="66" x2="17" y2="66"/>
+    <line x1="27" y1="29" x2="30" y2="32"/>
+  </g>
+
+  <!-- Directed Cyclic Bridges (Exact C=(64,66), R=42, 120-deg symmetric tangent-aligned arrowheads) -->
+  <!-- Bridge L1 (bottom-left) -> L2 (top) -->
+  <path d="M 23.43 76.87 A 42 42 0 0 1 52.99 25.47" stroke="#34d399" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M 49.02 30.60 L 53.84 25.25 L 46.80 23.75" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bridge L2 (top) -> L3 (bottom-right) -->
+  <path d="M 74.87 25.43 A 42 42 0 0 1 104.61 76.73" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M 102.15 70.73 L 104.37 77.58 L 109.19 72.23" stroke="#38bdf8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bridge L3 (bottom-right) -> L1 (bottom-left) -->
+  <path d="M 93.70 95.70 A 42 42 0 0 1 34.41 95.80" stroke="#a78bfa" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M 40.83 96.67 L 33.79 95.18 L 36.01 102.02" stroke="#a78bfa" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Inner Geodesic Triangle (Structural Invariance Skeleton) -->
+  <polygon points="64,24 100.37,87 27.63,87" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.55"/>
+
+  <!-- Heavy-Tailed Stochastic Density Curve inside the Triad -->
+  <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84 L 96 86 L 31 86 Z" fill="url(#tail-fill)"/>
+  <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84" stroke="#e2e8f0" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Critical Economic & Jensen Threshold Axis (p* = C / eta*L) -->
+  <line x1="72" y1="39" x2="72" y2="86" stroke="#fbbf24" stroke-width="2.2" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <circle cx="72" cy="72" r="3.6" fill="#fbbf24" stroke="#090e1a" stroke-width="1.4"/>
+
+  <!-- Ontological Layer Nodes (Exact 120-deg on R=42: L2 Top, L1 Bottom-Left, L3 Bottom-Right) -->
+  <!-- L2: Model (Top Apex, -90 deg) -->
+  <circle cx="64" cy="24" r="7.5" fill="#090e1a" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="64" cy="24" r="3" fill="#38bdf8"/>
+
+  <!-- L1: World (Bottom-Left Apex, +150 deg) -->
+  <circle cx="27.63" cy="87" r="7.5" fill="#090e1a" stroke="#34d399" stroke-width="3"/>
+  <circle cx="27.63" cy="87" r="3" fill="#34d399"/>
+
+  <!-- L3: Agent (Bottom-Right Apex, +30 deg) -->
+  <circle cx="100.37" cy="87" r="7.5" fill="#090e1a" stroke="#a78bfa" stroke-width="3"/>
+  <circle cx="100.37" cy="87" r="3" fill="#a78bfa"/>
+</svg>

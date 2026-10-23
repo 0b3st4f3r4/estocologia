@@ -34,6 +34,7 @@ jobs:
           test -f web/styles.css
           test -f web/app.js
           test -f web/favicon.svg
+          test -f web/logo.svg
           test -f web/.nojekyll
           grep -qx "obestafera.com" web/CNAME
           mkdir -p web/cards

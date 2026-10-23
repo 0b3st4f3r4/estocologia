@@ -26,10 +26,51 @@
   <!-- Top Sticky Header -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#" class="brand-lockup">
-        <img src="favicon.svg" alt="" class="brand-mark" width="30" height="30">
-        <span>STOCHOLOGY</span>
-        <span class="version-pill">v1.0 · seed=2026</span>
+      <a href="#" class="brand-lockup" aria-label="Stochology Protocol v1.0 — Início">
+        <svg class="brand-mark" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="hdr-shield" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0f172a"/>
+              <stop offset="55%" stop-color="#090e1a"/>
+              <stop offset="100%" stop-color="#050811"/>
+            </linearGradient>
+            <linearGradient id="hdr-ring" x1="20" y1="18" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#34d399"/>
+            </linearGradient>
+            <linearGradient id="hdr-tail" x1="64" y1="38" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.04"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#hdr-shield)" stroke="#1e293b" stroke-width="2.5"/>
+          <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#hdr-ring)" stroke-opacity="0.35" stroke-width="1.5"/>
+          <g class="mark-orbit">
+            <path d="M 23.43 76.87 A 42 42 0 0 1 52.99 25.47" stroke="#34d399" stroke-width="3.6" stroke-linecap="round"/>
+            <path d="M 49.02 30.60 L 53.84 25.25 L 46.80 23.75" stroke="#34d399" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 74.87 25.43 A 42 42 0 0 1 104.61 76.73" stroke="#38bdf8" stroke-width="3.6" stroke-linecap="round"/>
+            <path d="M 102.15 70.73 L 104.37 77.58 L 109.19 72.23" stroke="#38bdf8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 93.70 95.70 A 42 42 0 0 1 34.41 95.80" stroke="#a78bfa" stroke-width="3.6" stroke-linecap="round"/>
+            <path d="M 40.83 96.67 L 33.79 95.18 L 36.01 102.02" stroke="#a78bfa" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <polygon points="64,24 100.37,87 27.63,87" stroke="#64748b" stroke-width="1.3" stroke-dasharray="3 3" opacity="0.6"/>
+          <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84 L 96 86 L 31 86 Z" fill="url(#hdr-tail)"/>
+          <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84" stroke="#e2e8f0" stroke-width="2.4" stroke-linecap="round"/>
+          <line class="mark-needle" x1="72" y1="39" x2="72" y2="86" stroke="#fbbf24" stroke-width="2.4" stroke-dasharray="4 3" stroke-linecap="round"/>
+          <circle class="mark-needle" cx="72" cy="72" r="3.8" fill="#fbbf24" stroke="#090e1a" stroke-width="1.5"/>
+          <circle cx="64" cy="24" r="7.5" fill="#090e1a" stroke="#38bdf8" stroke-width="3.2"/>
+          <circle cx="64" cy="24" r="3.2" fill="#38bdf8"/>
+          <circle cx="27.63" cy="87" r="7.5" fill="#090e1a" stroke="#34d399" stroke-width="3.2"/>
+          <circle cx="27.63" cy="87" r="3.2" fill="#34d399"/>
+          <circle cx="100.37" cy="87" r="7.5" fill="#090e1a" stroke="#a78bfa" stroke-width="3.2"/>
+          <circle cx="100.37" cy="87" r="3.2" fill="#a78bfa"/>
+        </svg>
+        <span class="brand-text-stack">
+          <span class="brand-wordmark">STOCHOLOGY</span>
+          <span class="brand-subline">L₁→L₂→L₃ · PROTOCOL v1.0</span>
+        </span>
+        <span class="version-pill">seed=2026</span>
       </a>
 
       <nav class="site-nav" aria-label="Primary Navigation">
@@ -801,14 +842,18 @@ decision_rule_and_scope:
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div>
-        <strong>Stochology Protocol v1.0</strong> — <span data-i18n-pt="Máquina Epistemológica Auditável em Rust Puro" data-i18n-en="Pure-Rust Auditable Epistemological Machine">Máquina Epistemológica Auditável em Rust Puro</span>.<br>
-        <span style="color: var(--text-muted);" data-i18n-pt="Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026" data-i18n-en="Author: Silvano Neto · Code licensed under MIT · Documentation under CC BY 4.0 · Canonical Seed: 2026">
-          Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026
-        </span>
+      <div style="display: flex; align-items: safe center; gap: 0.85rem;">
+        <img src="favicon.svg" alt="" width="36" height="36" style="display: block; border-radius: 0.5rem; flex-shrink: 0;">
+        <div>
+          <strong>Stochology Protocol v1.0</strong> — <span data-i18n-pt="Máquina Epistemológica Auditável em Rust Puro" data-i18n-en="Pure-Rust Auditable Epistemological Machine">Máquina Epistemológica Auditável em Rust Puro</span>.<br>
+          <span style="color: var(--text-muted);" data-i18n-pt="Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026" data-i18n-en="Author: Silvano Neto · Code licensed under MIT · Documentation under CC BY 4.0 · Canonical Seed: 2026">
+            Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026
+          </span>
+        </div>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
         <a href="https://obestafera.com">obestafera.com</a>
+        <a href="logo.svg">Logo SVG</a>
         <a href="https://github.com/0b3st4f3r4/stochology" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://github.com/0b3st4f3r4/stochology/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md</a>
         <a href="https://github.com/0b3st4f3r4/stochology/blob/main/docs/PROTOCOL.md" target="_blank" rel="noopener noreferrer">PROTOCOL.md</a>
