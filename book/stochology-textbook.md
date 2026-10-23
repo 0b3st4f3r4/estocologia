@@ -6230,7 +6230,10 @@ same output, because no laboratory reads the system clock or draws an unseeded r
 | `cargo run --release --bin labs -- --seed-spread` | Thirteen laboratories rerun under twenty other seeds, line by line: which numbers move, and whether a verdict moves with them (C.3; minutes long) |
 | `cargo run --release --bin labs -- --discrepancy` | A physical parameter learnt with and without a model of the discrepancy (Chapter 14) |
 | `cargo run --release --bin labs -- --passk` | Reliability against average success: pass^k over the tasks of four worlds, with the band of 2,000 repetitions (Chapter 16) |
-| `cargo test --workspace` | That the types and the gates of the architecture work: 444 tests pass |
+| `cargo run --release --bin labs -- --oracles` | Analytic oracles at limit cases and the 21 mutants of Appendix E they kill (Appendix C) |
+| `cargo run --release --bin labs -- --jev` | The Jev-LLM bridge on the 32 sealed real outcomes, with the 96-parameter numerical baseline `tensor-v1` and what awaits an open-weights GGUF run (Chapter 16) |
+| `cargo run --release --bin labs -- --layers` | Can the layers fail: the 60 external errors, the lexical gate, Fleiss' kappa, and the falsifier rule (Chapter 2) |
+| `cargo test --workspace` | That the types and the gates of the architecture work: 449 tests pass |
 | `python3 -I scripts/reimplementation/run.py` | That 573 quantities of 20 chapters, recomputed from the text and the data files alone in another language, agree with the book (570), or are marked open where the recipe is longer than a paragraph and stays cited (3) |
 | `cargo run --release --bin gates -- --horizon all --reproduction` | That the gates run twice and give the same result, with the Merkle root `0a9636fac5eb1c5e1313dc73c709f2d5b0729703f004ab9cb9764b60fda4e12a` (and, by the rule in force until 2026-10-20, `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`) |
 | `cargo run --release --bin gates -- --horizon h3 --defect h3.voos23` | That a gate **knows how to reject**: with the defect planted, the command exits with code 1 and says which gate fell |
@@ -6780,6 +6783,14 @@ negative proof still fails G6, and G1 now checks that both roots repeat.
 | 18 | Root of the textbook chain | `92f2ab76eb6485ab` | `e81457d50006a7c8` | the same |
 | 18 | Root of the batch of seven cards | `17679ce1...` | `ed9aa4bb...`; the swap of any card still changes it in 7 of 7 cases | the same |
 | 18 | The declared limit | a list and the same list with its last element repeated share a root; the gates record the count beside it | they no longer share a root | the lone node moves up instead of being paired with itself |
+
+### The Jev-LLM baseline and the external error catalogue, 2026-10-20
+
+Two open items of the research record received their sealed machine layers, audited by four subagents and recorded with their exact scope. On the Jev-LLM bridge (`empirical/p20-jev/`), 32 real outcomes from the Danish fire series and the Atlantic storm series were sealed before the run (`calibracao/desfechos.tsv`), together with a 96-parameter, 2-layer numerical MLP baseline (`tensor-v1`, in `pesos/pesos.tensor` and `pesos/modelo.congelado`) whose Rust template decoder emits valid cards by construction (`Brier = 0.293988`, `ECE = 0.338131`, `G1 identical: true`, `0` abstentions); the open-weights GGUF comparison with and without the GBNF grammar remains open. On whether the three layers can fail (`empirical/p21-camadas/`), 60 documented analytical and institutional errors across 45 domains were sealed (`erros.tsv`) with the lexical gate (`27` forbidden tokens), the instrument `labs --layers` (`0` human coders), and the synthetic rehearsal `labs --rehearsal-layers` (`Fleiss' kappa = 0.6405`, 90% CI `[0.5447; 0.7255]`); the item remains open until three human coders, two from outside, code the 60 errors.
+
+| Chapter | What | Earlier | Corrected | Cause |
+| --- | --- | --- | --- | --- |
+| C | Test count | 444 | 449 | one test in `runner.rs` (`tensor-v1` round-trip and card decoding) and four tests in `camadas.rs` (catalogue seal, lexical gate, Fleiss' kappa, and synthetic rehearsal) |
 
 ### Numbers cited without an instrument in this book
 
