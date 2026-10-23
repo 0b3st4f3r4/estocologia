@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- MANDATORY: Declare support for both light and dark themes before rendering -->
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      document.querySelector('meta[name="color-scheme"]').content = localStorage.getItem("color-scheme") ?? "light dark";
+    } catch (_) {}
+  </script>
+  <title>Stochology Protocol v1.0 — Auditable Epistemological Machine | obestafera.com</title>
+  <meta name="description" content="Pure-Rust auditable epistemological machine implementing the Stochology Protocol v1.0: three ontological layers (L1, L2, L3), five transversal lenses, Phi1-Phi5 boundary invariants, 4-Filter Funnel, 8-Step SIGA Roadmap, and bitemporal drift governance.">
+  <link rel="canonical" href="https://obestafera.com/">
+  <meta property="og:title" content="Stochology Protocol v1.0 — Auditable Epistemological Machine">
+  <meta property="og:description" content="Claim, generating process, executable null model (seed = 2026), and severe test in pure Rust with zero external dependencies.">
+  <meta property="og:url" content="https://obestafera.com/">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link" data-i18n-pt="Pular para o conteúdo principal" data-i18n-en="Skip to main content">Pular para o conteúdo principal</a>
+
+  <!-- Top Sticky Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-lockup">
+        <img src="favicon.svg" alt="" class="brand-mark" width="30" height="30">
+        <span>STOCHOLOGY</span>
+        <span class="version-pill">v1.0 · seed=2026</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary Navigation">
+        <a href="#layers" data-i18n-pt="Camadas & Proibições" data-i18n-en="Layers & Prohibitions">Camadas &amp; Proibições</a>
+        <a href="#simulators" data-i18n-pt="Simuladores" data-i18n-en="Simulators">Simuladores</a>
+        <a href="#lenses" data-i18n-pt="5 Lentes" data-i18n-en="5 Lenses">5 Lentes</a>
+        <a href="#cards" data-i18n-pt="Cartas YAML" data-i18n-en="YAML Cards">Cartas YAML</a>
+        <a href="#architecture" data-i18n-pt="Invariantes & Crates" data-i18n-en="Invariants & Crates">Invariantes &amp; Crates</a>
+      </nav>
+
+      <div class="header-controls">
+        <button type="button" id="lang-toggle" class="icon-btn" aria-label="Mudar idioma para Inglês">PT / EN</button>
+        <button type="button" id="theme-toggle" class="icon-btn" aria-label="Alternar tema claro ou escuro">
+          <span aria-hidden="true">◐</span>
+          <span id="theme-toggle-label">AUTO</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section (Above the Fold) -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow-row">
+            <span class="badge ok">CONTRACT v1.0 APPROVED</span>
+            <span class="badge">Pure Rust · 0 Dependencies</span>
+            <span class="badge">SplitMix64 (seed = 2026)</span>
+          </div>
+
+          <h1 data-i18n-pt="Máquina Epistemológica Auditável para Decisão sob Incerteza" data-i18n-en="Auditable Epistemological Machine for Decision under Uncertainty">
+            Máquina Epistemológica Auditável para Decisão sob Incerteza
+          </h1>
+
+          <p class="hero-lead" data-i18n-pt="Implementação em Rust puro (zero dependências externas) do Protocolo Stochology v1.0: afirmação, processo gerador, modelo nulo executável e teste severo no mesmo lugar — com Cartas Epistemológicas em YAML e portões algorítmicos capazes de bloquear afirmações defeituosas." data-i18n-en="Pure-Rust implementation (zero external dependencies) of the Stochology Protocol v1.0: claim, generating process, executable null model, and severe test in the same place — with structured YAML Epistemological Cards and algorithmic gates capable of rejecting flawed claims.">
+            Implementação em Rust puro (zero dependências externas) do Protocolo Stochology v1.0: afirmação, processo gerador, modelo nulo executável e teste severo no mesmo lugar — com Cartas Epistemológicas em YAML e portões algorítmicos capazes de bloquear afirmações defeituosas.
+          </p>
+
+          <div class="cta-group">
+            <a href="https://github.com/0b3st4f3r4/stochology" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+              <span data-i18n-pt="Repositório no GitHub" data-i18n-en="GitHub Repository">Repositório no GitHub</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a href="#simulators" class="btn btn-secondary" data-i18n-pt="Explorar Simuladores e Portões" data-i18n-en="Explore Simulators & Gates">
+              Explorar Simuladores e Portões
+            </a>
+            <a href="https://github.com/0b3st4f3r4/stochology/blob/main/docs/PROTOCOL.md" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" data-i18n-pt="Especificação PROTOCOL.md" data-i18n-en="PROTOCOL.md Specification">
+              Especificação PROTOCOL.md
+            </a>
+          </div>
+
+          <div class="telemetry-strip">
+            <div class="stat-box">
+              <span class="stat-value">5 Crates</span>
+              <span class="stat-label" data-i18n-pt="Rust 2021 · 0 deps externas" data-i18n-en="Rust 2021 · 0 external deps">Rust 2021 · 0 deps externas</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value">Φ₁ – Φ₅</span>
+              <span class="stat-label" data-i18n-pt="5 Invariantes de Fronteira" data-i18n-en="5 Boundary Invariants">5 Invariantes de Fronteira</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value">G1 – G7</span>
+              <span class="stat-label" data-i18n-pt="7 Portões + 9 Provas Negativas" data-i18n-en="7 Gates + 9 Negative Proofs">7 Portões + 9 Provas Negativas</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value">6 Labs</span>
+              <span class="stat-label" data-i18n-pt="13 Datasets Empíricos Reais" data-i18n-en="13 Real Empirical Datasets">13 Datasets Empíricos Reais</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Verification Terminal -->
+        <div class="hero-terminal" aria-label="Terminal Verification Suite">
+          <div class="terminal-bar">
+            <span class="dot red"></span>
+            <span class="dot amber"></span>
+            <span class="dot green"></span>
+            <span class="terminal-title">scripts/verify.sh — stochology v1.0</span>
+            <button type="button" class="terminal-copy" data-copy-target="hero-cmd-block" data-i18n-pt="Copiar" data-i18n-en="Copy">Copiar</button>
+          </div>
+          <pre class="terminal-body" id="hero-cmd-block"><code><span class="t-cmd">$ scripts/verify.sh</span>
+<span class="t-dim">&gt;&gt;&gt; [1/6] Checking formatting (cargo fmt --all --check)...</span>
+<span class="t-dim">&gt;&gt;&gt; [2/6] Checking strict lints (cargo clippy -D warnings)...</span>
+<span class="t-dim">&gt;&gt;&gt; [3/6] Running unit and integration tests (cargo test)...</span>
+<span class="t-dim">&gt;&gt;&gt; [4/6] Running 6 empirical laboratories (labs --all)...</span>
+  [Bridge L1-&gt;L2] Meng: rho_R_Y=+0.1334, n_eff=2842.70 | Manski=[5463.2, 13835.3]
+  [Bridge L2-&gt;L3] Jensen Gap (bank_calls): Delta_J=+9.03e6, OOS_CRPS=9.05e7
+  [Bridge L3-&gt;L1] Performative: theta_PS=1.8750 vs Stackelberg theta_PO=2.0312 (r=0.300 &lt; 1)
+  [Lens 3: Tail]  Danish Fire (n=2167): Hill alpha_k=1.6009, tail_n_eff=17.3
+  [Lens 5: CORP]  Atlantic Storms (n=3000): BS=0.23802 = REL - RES + UNC0 [err=1.75e-15]
+<span class="t-dim">&gt;&gt;&gt; [5/6] Running epistemological gates (G1-G7) &amp; 9 negative proofs...</span>
+<span class="t-ok">  [G1-G7] ALL 7 EPISTEMOLOGICAL GATES APPROVED (EXIT CODE 0)</span>
+<span class="t-ok">  [OK] 9/9 negative proofs blocked with exit code 1 (cromwell..chouldechova)</span>
+<span class="t-ok">&gt;&gt;&gt; FULL VERIFICATION APPROVED (STOCHOLOGY PROTOCOL v1.0) &lt;&lt;&lt;</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Ontological Layers & Golden Rules -->
+    <section id="layers" class="section deferred-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n-pt="§1 · Diagnóstico Estrutural e Pontes" data-i18n-en="§1 · Structural Diagnosis & Bridges">§1 · Diagnóstico Estrutural e Pontes</span>
+          <h2 data-i18n-pt="As Três Camadas Ontológicas (L₁ → L₂ → L₃ → L₁) e as Quatro Proibições" data-i18n-en="The Three Ontological Layers (L₁ → L₂ → L₃ → L₁) & The Four Prohibitions">
+            As Três Camadas Ontológicas (L₁ → L₂ → L₃ → L₁) e as Quatro Proibições
+          </h2>
+          <p data-i18n-pt="Antes de ajustar qualquer parâmetro ou estimar distribuições, toda afirmação técnica deve localizar em qual camada ontológica o sistema pode falhar, qual ponte está exposta e qual teste severo sustenta a inferência." data-i18n-en="Before fitting any parameter or estimating distributions, every technical claim must locate in which ontological layer the system can fail, which bridge is exposed, and which severe test supports inference.">
+            Antes de ajustar qualquer parâmetro ou estimar distribuições, toda afirmação técnica deve localizar em qual camada ontológica o sistema pode falhar, qual ponte está exposta e qual teste severo sustenta a inferência.
+          </p>
+        </div>
+
+        <div class="subgrid-cards">
+          <!-- Layer L1 -->
+          <article class="epistemic-card">
+            <div>
+              <div class="card-meta">
+                <span class="badge ok">WORLD · L₁</span>
+                <span class="badge">Bridge L₁ → L₂</span>
+              </div>
+              <h3 data-i18n-pt="Mundo (L₁) e o Filtro Invisível" data-i18n-en="World (L₁) & The Invisible Filter">Mundo (L₁) e o Filtro Invisível</h3>
+            </div>
+            <p data-i18n-pt="Realidade física, biológica ou socioeconômica que gera os dados, jamais observada integralmente. O erro típico na Ponte L₁ → L₂ é o viés de seleção, censura ou sobrevivência. Auditado via Identidade de Meng, taxonomia de Rubin (MCAR, MAR, MNAR) e limites não-paramétricos de Manski." data-i18n-en="Physical, biological, or socioeconomic reality generating the data, never observed in its entirety. The typical outbound error on Bridge L₁ → L₂ is selection, censoring, or survivorship bias. Audited via Meng's Identity, Rubin's taxonomy (MCAR, MAR, MNAR), and Manski's non-parametric bounds.">
+              Realidade física, biológica ou socioeconômica que gera os dados, jamais observada integralmente. O erro típico na Ponte L₁ → L₂ é o viés de seleção, censura ou sobrevivência. Auditado via Identidade de Meng, taxonomia de Rubin (MCAR, MAR, MNAR) e limites não-paramétricos de Manski.
+            </p>
+            <div class="formula-box">
+              Ȳₙ − Ȳ_N = ρ_{R,Y} · √((N − n)/n) · σ_Y &nbsp;|&nbsp; CPS n=15992 → n_eff = 2842.7
+            </div>
+          </article>
+
+          <!-- Layer L2 -->
+          <article class="epistemic-card">
+            <div>
+              <div class="card-meta">
+                <span class="badge warn">MODEL · L₂</span>
+                <span class="badge">Bridge L₂ → L₃</span>
+              </div>
+              <h3 data-i18n-pt="Modelo (L₂) e a Proibição da Média Solitária" data-i18n-en="Model (L₂) & Ban on the Lone Mean">Modelo (L₂) e a Proibição da Média Solitária</h3>
+            </div>
+            <p data-i18n-pt="Representação matemática formal e simulável do processo. Na Ponte L₂ → L₃ (Leitura Incorreta), tratar E[X] como resumo suficiente de um payoff não-linear f(X) viola a Proibição 2. Exige o reporte explícito do Gap de Jensen Δ_J, mediana, quantis de cauda (q₀₅, q₉₅) e CRPS fora da amostra." data-i18n-en="Formal, computationally simulable mathematical representation of the process. On Bridge L₂ → L₃ (Misreading), treating E[X] as a sufficient summary of a nonlinear payoff f(X) violates Prohibition 2. Requires reporting Jensen's Gap Δ_J, median, tail quantiles (q₀₅, q₉₅), and out-of-sample CRPS.">
+              Representação matemática formal e simulável do processo. Na Ponte L₂ → L₃ (Leitura Incorreta), tratar E[X] como resumo suficiente de um payoff não-linear f(X) viola a Proibição 2. Exige o reporte explícito do Gap de Jensen Δ_J, mediana, quantis de cauda (q₀₅, q₉₅) e CRPS fora da amostra.
+            </p>
+            <div class="formula-box">
+              Δ_J = E[f(X)] − f(E[X]) &nbsp;|&nbsp; Kennedy-O'Hagan δ(x) ~ GP(0, k(x,x'))
+            </div>
+          </article>
+
+          <!-- Layer L3 -->
+          <article class="epistemic-card">
+            <div>
+              <div class="card-meta">
+                <span class="badge err">AGENT · L₃</span>
+                <span class="badge">Bridge L₃ → L₁</span>
+              </div>
+              <h3 data-i18n-pt="Agente (L₃) e Predição Performativa" data-i18n-en="Agent (L₃) & Performative Prediction">Agente (L₃) e Predição Performativa</h3>
+            </div>
+            <p data-i18n-pt="Decisor humano, comitê institucional ou controlador algorítmico. Na Ponte L₃ → L₁ (Performatividade), agir sobre o modelo deforma a própria distribuição D(θ). A Proibição 3 separa Estabilidade Performativa (θ_PS) de Otimalidade de Stackelberg (θ_PO) e exige contração estrita no RRM." data-i18n-en="Human decision-maker, institutional committee, or algorithmic controller. On Bridge L₃ → L₁ (Performativity), acting on the model deforms the very distribution D(θ) being measured. Prohibition 3 separates Performative Stability (θ_PS) from Stackelberg Optimality (θ_PO) and enforces strict RRM contraction.">
+              Decisor humano, comitê institucional ou controlador algorítmico. Na Ponte L₃ → L₁ (Performatividade), agir sobre o modelo deforma a própria distribuição D(θ). A Proibição 3 separa Estabilidade Performativa (θ_PS) de Otimalidade de Stackelberg (θ_PO) e exige contração estrita no RRM.
+            </p>
+            <div class="formula-box">
+              PR(θ) = E_{Z~D(θ)}[ℓ(Z; θ)] &nbsp;|&nbsp; Contração RRM: (ε · β) / γ &lt; 1
+            </div>
+          </article>
+        </div>
+
+        <!-- The 4 Prohibitions -->
+        <div class="subgrid-cards" style="margin-block-start: 1.25rem;">
+          <article class="epistemic-card">
+            <div>
+              <span class="badge">PROHIBITION_1</span>
+              <h3 data-i18n-pt="1. Proibição de Prosa Livre entre Agentes" data-i18n-en="1. Ban on Unstructured Free Prose">1. Proibição de Prosa Livre entre Agentes</h3>
+            </div>
+            <p data-i18n-pt="Toda comunicação entre módulos ou agentes transita exclusivamente por Cartas Epistemológicas estruturadas (EpistemologicalCard, contract_version: &quot;1.0&quot;), serializadas em YAML e auditadas por EpistemologicalCard::audit()." data-i18n-en="All communication between agents or modules transits exclusively through structured Epistemological Cards (EpistemologicalCard, contract_version: &quot;1.0&quot;), serialized in YAML and validated by EpistemologicalCard::audit().">
+              Toda comunicação entre módulos ou agentes transita exclusivamente por Cartas Epistemológicas estruturadas (<code>EpistemologicalCard</code>, <code>contract_version: "1.0"</code>), serializadas em YAML e auditadas por <code>EpistemologicalCard::audit()</code>.
+            </p>
+            <div class="formula-box">crates/stochology-core/src/card.rs · cards/*.yaml</div>
+          </article>
+
+          <article class="epistemic-card">
+            <div>
+              <span class="badge">PROHIBITION_2</span>
+              <h3 data-i18n-pt="2. Proibição da Média Solitária" data-i18n-en="2. Ban on the Lone Mean">2. Proibição da Média Solitária</h3>
+            </div>
+            <p data-i18n-pt="Sob perda não-linear, dinâmica multiplicativa ou cauda pesada, reportar apenas a média é proibido: exige-se f(E[X]), E[f(X)], Gap de Jensen Δ_J, mediana, quantis q₀₅/q₉₅ e CRPS." data-i18n-en="Under nonlinear loss, multiplicative dynamics, or heavy tails, reporting only the mean is forbidden: one must report f(E[X]), E[f(X)], Jensen's Gap Δ_J, median, q₀₅/q₉₅ quantiles, and CRPS.">
+              Sob perda não-linear, dinâmica multiplicativa ou cauda pesada, reportar apenas a média é proibido: exige-se <code>f(E[X])</code>, <code>E[f(X)]</code>, Gap de Jensen <code>Δ_J</code>, mediana, quantis <code>q₀₅/q₉₅</code> e <code>CRPS</code>.
+            </p>
+            <div class="formula-box">stochology_core::layers::NonlinearSummary</div>
+          </article>
+
+          <article class="epistemic-card">
+            <div>
+              <span class="badge">PROHIBITION_3</span>
+              <h3 data-i18n-pt="3. Aprendizado vs. Performatividade" data-i18n-en="3. Learning vs. Performativity">3. Aprendizado vs. Performatividade</h3>
+            </div>
+            <p data-i18n-pt="Erro preditivo pequeno não prova validade causal. Na Ponte L₃ → L₁, deve-se distinguir θ_PS de θ_PO (Stackelberg), medir sensibilidade Wasserstein-1 (ε) e auditar εβ/γ &lt; 1." data-i18n-en="Small predictive error does not prove causal truth. On Bridge L₃ → L₁, one must distinguish θ_PS from θ_PO (Stackelberg), measure Wasserstein-1 sensitivity (ε), and audit εβ/γ &lt; 1.">
+              Erro preditivo pequeno não prova validade causal. Na Ponte L₃ → L₁, deve-se distinguir <code>θ_PS</code> de <code>θ_PO</code> (Stackelberg), medir sensibilidade Wasserstein-1 (<code>ε</code>) e auditar <code>εβ/γ &lt; 1</code>.
+            </p>
+            <div class="formula-box">stochology_core::layers::PerformativeSystem</div>
+          </article>
+
+          <article class="epistemic-card">
+            <div>
+              <span class="badge">PROHIBITION_4</span>
+              <h3 data-i18n-pt="4. Regra de Cromwell & Tentativas (K ≥ 1)" data-i18n-en="4. Cromwell's Rule & Omitted Attempts">4. Regra de Cromwell &amp; Tentativas (K ≥ 1)</h3>
+            </div>
+            <p data-i18n-pt="Nenhuma probabilidade pode ser 0% ou 100% (p ∈ [ε_floor, 1 − ε_floor]). Toda previsão é decomposta via CORP-Murphy isotônico (PAV) e declara o contador de tentativas K ≥ 1 e o e-processo E_t." data-i18n-en="No probability may be 0% or 100% (p ∈ [ε_floor, 1 − ε_floor]). Every forecast is decomposed via isotonic CORP-Murphy (PAV) and declares the attempt counter K ≥ 1 and e-process E_t.">
+              Nenhuma probabilidade pode ser 0% ou 100% (<code>p ∈ [ε_floor, 1 − ε_floor]</code>). Toda previsão é decomposta via CORP-Murphy isotônico (PAV) e declara o contador de tentativas <code>K ≥ 1</code> e o <em>e-processo</em> <code>E_t</code>.
+            </p>
+            <div class="formula-box">BS = REL_CORP − RES_CORP + UNC₀ (PAV)</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Interactive Epistemological Simulators -->
+    <section id="simulators" class="section deferred-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n-pt="Laboratório Interativo · Tempo Real" data-i18n-en="Interactive Workbench · Real-Time">Laboratório Interativo · Tempo Real</span>
+          <h2 data-i18n-pt="Simuladores de Fronteira Econômica, Performatividade e Portões G1–G7" data-i18n-en="Economic Boundary, Performativity & Gates G1–G7 Simulators">
+            Simuladores de Fronteira Econômica, Performatividade e Portões G1–G7
+          </h2>
+          <p data-i18n-pt="Experimente diretamente no navegador os motores matemáticos implementados nas 5 crates Rust: regra custo-perda p*, árvores de frequências naturais de Gigerenzer, equilíbrio de Stackelberg e provas negativas de bloqueio." data-i18n-en="Experiment directly in the browser with the mathematical engines implemented across the 5 Rust crates: cost-loss rule p*, Gigerenzer natural frequency trees, Stackelberg equilibrium, and negative blocking proofs.">
+            Experimente diretamente no navegador os motores matemáticos implementados nas 5 crates Rust: regra custo-perda <code>p*</code>, árvores de frequências naturais de Gigerenzer, equilíbrio de Stackelberg e provas negativas de bloqueio.
+          </p>
+        </div>
+
+        <div class="simulator-grid">
+          <!-- Simulator 1: Cost-Loss & EVPI -->
+          <div class="sim-panel">
+            <h3 data-i18n-pt="Simulador 1: Fronteira Custo-Perda (p* = C / ηL), EVPI & Frequências Naturais" data-i18n-en="Simulator 1: Cost-Loss Boundary (p* = C / ηL), EVPI & Natural Frequencies">
+              Simulador 1: Fronteira Custo-Perda (p* = C / ηL), EVPI &amp; Frequências Naturais
+            </h3>
+            <div class="preset-row" role="group" aria-label="Card Presets">
+              <button type="button" class="preset-btn" data-card-preset="sepsis" aria-pressed="true">Card 01 · Sepsis ICU</button>
+              <button type="button" class="preset-btn" data-card-preset="queue" aria-pressed="false">Card 02 · Bank Queue</button>
+              <button type="button" class="preset-btn" data-card-preset="credit" aria-pressed="false">Card 03 · Credit Stackelberg</button>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-cost" data-i18n-pt="Custo de Proteção (C)" data-i18n-en="Protection Cost (C)">Custo de Proteção (C)</label>
+                  <span class="slider-val" id="val-cost">1800</span>
+                </div>
+                <input type="range" id="sim-cost" min="200" max="8000" step="100" value="1800">
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-loss" data-i18n-pt="Perda do Evento (L)" data-i18n-en="Event Loss (L)">Perda do Evento (L)</label>
+                  <span class="slider-val" id="val-loss">34000</span>
+                </div>
+                <input type="range" id="sim-loss" min="5000" max="60000" step="1000" value="34000">
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-eta" data-i18n-pt="Eficácia da Mitigação (η)" data-i18n-en="Mitigation Efficacy (η)">Eficácia da Mitigação (η)</label>
+                  <span class="slider-val" id="val-eta">1.00</span>
+                </div>
+                <input type="range" id="sim-eta" min="0.20" max="1.00" step="0.05" value="1.00">
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-prob" data-i18n-pt="Probabilidade Calibrada (p)" data-i18n-en="Calibrated Probability (p)">Probabilidade Calibrada (p)</label>
+                  <span class="slider-val" id="val-prob">0.050</span>
+                </div>
+                <input type="range" id="sim-prob" min="0.000" max="0.350" step="0.005" value="0.050">
+              </div>
+            </div>
+
+            <div class="sim-readout">
+              <div class="readout-item">
+                <span class="readout-label" data-i18n-pt="Limiar Crítico p*" data-i18n-en="Critical Threshold p*">Limiar Crítico p*</span>
+                <span class="readout-value" id="out-pstar">0.05294</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">EVPI (Filter 1)</span>
+                <span class="readout-value" id="out-evpi">1700.0</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label" data-i18n-pt="Ato Declarado" data-i18n-en="Declared Act">Ato Declarado</span>
+                <span class="readout-value" id="out-act">NÃO PROTEGER</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">Cromwell / Φ₄</span>
+                <span class="readout-value" id="out-cromwell">APPROVED (Φ4)</span>
+              </div>
+            </div>
+
+            <svg id="cost-loss-svg" class="svg-chart" viewBox="0 0 520 210" role="img" aria-label="Cost-Loss Threshold Chart"></svg>
+            <p id="out-natural-memo" class="formula-box" style="margin-block-start: 0.85rem; margin-block-end: 0;"></p>
+          </div>
+
+          <!-- Simulator 2: Performative Prediction (Bridge L3 -> L1) -->
+          <div class="sim-panel">
+            <h3 data-i18n-pt="Simulador 2: Ponte L₃ → L₁ Predição Performativa (θ_SL, θ_PS, θ_PO)" data-i18n-en="Simulator 2: Bridge L₃ → L₁ Performative Prediction (θ_SL, θ_PS, θ_PO)">
+              Simulador 2: Ponte L₃ → L₁ Predição Performativa (θ_SL, θ_PS, θ_PO)
+            </h3>
+            <p style="font-size: 0.86rem; margin-block-end: 1rem;" data-i18n-pt="Sob Y(θ) = μ + εθ + ξ e perda ℓ(z; φ) = (γ/2)(y − φ)² − αφ, o retreinamento ingênuo converge para θ_PS apenas se r_RRM = εβ/γ &lt; 1, mas permanece subótimo frente ao equilíbrio de Stackelberg θ_PO." data-i18n-en="Under Y(θ) = μ + εθ + ξ and loss ℓ(z; φ) = (γ/2)(y − φ)² − αφ, naive retraining converges to θ_PS iff r_RRM = εβ/γ &lt; 1, yet remains suboptimal compared to the Stackelberg optimum θ_PO.">
+              Sob <code>Y(θ) = μ + εθ + ξ</code> e perda <code>ℓ(z; φ) = (γ/2)(y − φ)² − αφ</code>, o retreinamento ingênuo converge para <code>θ_PS</code> apenas se <code>r_RRM = εβ/γ &lt; 1</code>, mas permanece subótimo frente ao equilíbrio de Stackelberg <code>θ_PO</code>.
+            </p>
+
+            <div class="control-group">
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-eps" data-i18n-pt="Sensibilidade Wasserstein-1 (ε)" data-i18n-en="Wasserstein-1 Sensitivity (ε)">Sensibilidade Wasserstein-1 (ε)</label>
+                  <span class="slider-val" id="val-eps">0.20</span>
+                </div>
+                <input type="range" id="sim-eps" min="0.02" max="0.85" step="0.02" value="0.20">
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-beta" data-i18n-pt="Suavidade do Gradiente (β)" data-i18n-en="Gradient Smoothness (β)">Suavidade do Gradiente (β)</label>
+                  <span class="slider-val" id="val-beta">1.50</span>
+                </div>
+                <input type="range" id="sim-beta" min="0.50" max="2.50" step="0.05" value="1.50">
+              </div>
+
+              <div class="slider-field">
+                <div class="slider-label-row">
+                  <label for="sim-gamma" data-i18n-pt="Convexidade Forte (γ)" data-i18n-en="Strong Convexity (γ)">Convexidade Forte (γ)</label>
+                  <span class="slider-val" id="val-gamma">1.00</span>
+                </div>
+                <input type="range" id="sim-gamma" min="0.50" max="2.00" step="0.05" value="1.00">
+              </div>
+            </div>
+
+            <div class="sim-readout">
+              <div class="readout-item">
+                <span class="readout-label">Passive θ_SL</span>
+                <span class="readout-value" id="out-theta-sl">1.5000</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">Stability θ_PS</span>
+                <span class="readout-value" id="out-theta-ps">1.8750</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">Stackelberg θ_PO</span>
+                <span class="readout-value" id="out-theta-po">2.0312</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">Raio RRM (εβ/γ)</span>
+                <span class="readout-value" id="out-rrm-radius">0.300</span>
+              </div>
+              <div class="readout-item">
+                <span class="readout-label">Status Ponte L₃→L₁</span>
+                <span class="readout-value" id="out-rrm-status">CONTRAI (r &lt; 1)</span>
+              </div>
+            </div>
+
+            <svg id="performative-svg" class="svg-chart" viewBox="0 0 520 210" role="img" aria-label="Performative Risk Curve"></svg>
+          </div>
+        </div>
+
+        <!-- Simulator 3: Interactive Gates & Negative Proofs -->
+        <div class="sim-panel" style="margin-block-start: 1.5rem;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: safe center; gap: 0.75rem; margin-block-end: 0.75rem;">
+            <h3 style="margin: 0;" data-i18n-pt="Simulador 3: Portões Epistemológicos (G1–G7) e as 9 Provas Negativas (--defect)" data-i18n-en="Simulator 3: Epistemological Gates (G1–G7) & The 9 Negative Proofs (--defect)">
+              Simulador 3: Portões Epistemológicos (G1–G7) e as 9 Provas Negativas (--defect)
+            </h3>
+            <span id="gate-exit-badge" class="badge ok">EXIT CODE: 0 (APPROVED)</span>
+          </div>
+          <p style="font-size: 0.88rem; margin-block-end: 1rem;" data-i18n-pt="Clique em qualquer patologia metodológica abaixo para inspecionar como o binário gates bloqueia a violação com código de saída 1:" data-i18n-en="Click any methodological pathology below to inspect how the gates binary blocks the violation with exit code 1:">
+            Clique em qualquer patologia metodológica abaixo para inspecionar como o binário <code>gates</code> bloqueia a violação com código de saída <code>1</code>:
+          </p>
+
+          <div class="preset-row" role="group" aria-label="Gate Defect Triggers">
+            <button type="button" class="preset-btn" data-gate-defect="positive" aria-pressed="true">✓ gates (Positive G1–G7)</button>
+            <button type="button" class="preset-btn" data-gate-defect="cromwell">--defect cromwell</button>
+            <button type="button" class="preset-btn" data-gate-defect="phi5">--defect phi5</button>
+            <button type="button" class="preset-btn" data-gate-defect="moulton">--defect moulton</button>
+            <button type="button" class="preset-btn" data-gate-defect="performativity">--defect performativity</button>
+            <button type="button" class="preset-btn" data-gate-defect="sniedovich">--defect sniedovich</button>
+            <button type="button" class="preset-btn" data-gate-defect="clock">--defect clock</button>
+            <button type="button" class="preset-btn" data-gate-defect="vault">--defect vault</button>
+            <button type="button" class="preset-btn" data-gate-defect="concept_drift">--defect concept_drift</button>
+            <button type="button" class="preset-btn" data-gate-defect="chouldechova">--defect chouldechova</button>
+          </div>
+
+          <div class="hero-terminal">
+            <pre class="terminal-body" id="gate-console-output"><code><span class="t-cmd">$ cargo run --release --bin gates</span>
+<span class="t-ok">=== EPISTEMOLOGICAL GATES G1-G7 (STOCHOLOGY PROTOCOL v1.0) ===</span>
+<span class="t-ok">  [G1-G5] YAML Cards v1.0 (3/3): Phi1 Simulability, Phi2 Moulton-Campbell/Exceedance, Phi3 Null/Missingness, Phi4 Chouldechova/Exit, Phi5 Resolution -&gt; APPROVED</span>
+<span class="t-ok">  [G6] Prohibitions 1-4, Performativity (PS vs PO), Info-Gap + Sniedovich, SDPI, and CORP-PAV -&gt; APPROVED</span>
+<span class="t-ok">  [G7] Bitemporal Clock (t_disp), Canary Column, Single-Opening Vault, and Murphy-CORP Circuit Breaker -&gt; APPROVED</span>
+<span class="t-ok">=== ALL 7 EPISTEMOLOGICAL GATES APPROVED (EXIT CODE 0) ===</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The Five Transversal Lenses (Mutually Exclusive Searchable <details name="...">) -->
+    <section id="lenses" class="section deferred-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n-pt="§1.3 · crates/stochology-lenses" data-i18n-en="§1.3 · crates/stochology-lenses">§1.3 · crates/stochology-lenses</span>
+          <h2 data-i18n-pt="As Cinco Lentes Transversais e Incerteza Severa" data-i18n-en="The Five Transversal Lenses & Severe Uncertainty">
+            As Cinco Lentes Transversais e Incerteza Severa
+          </h2>
+          <p data-i18n-pt="Cada lente inspeciona uma dimensão irredutível do processo estocástico. Os blocos abaixo utilizam elementos nativos <details> para permanecerem totalmente indexáveis e pesquisáveis via localizar na página (Ctrl+F / Cmd+F)." data-i18n-en="Each lens inspects an irreducible dimension of the stochastic process. The disclosures below use native <details> elements so all hidden equations and benchmarks remain searchable via Find-in-Page (Ctrl+F / Cmd+F).">
+            Cada lente inspeciona uma dimensão irredutível do processo estocástico. Os blocos abaixo utilizam elementos nativos <code>&lt;details&gt;</code> para permanecerem totalmente indexáveis e pesquisáveis via localizar na página (<code>Ctrl+F</code> / <code>Cmd+F</code>).
+          </p>
+        </div>
+
+        <div class="accordion-stack">
+          <details class="lens-disclosure" name="lenses-accordion" open>
+            <summary>
+              <span class="badge ok">LENS 1</span>
+              <span data-i18n-pt="Informação (information.rs) — Hierarquia SDPI, Piso de Fano e Identidade de Meng" data-i18n-en="Information (information.rs) — SDPI Hierarchy, Fano's Floor & Meng's Identity">Informação (information.rs) — Hierarquia SDPI, Piso de Fano e Identidade de Meng</span>
+              <span class="summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p data-i18n-pt="Verifica a Desigualdade de Processamento de Dados I(W; Z) ≤ I(W; Y) ≤ I(W; X) e a hierarquia exata das constantes de contração forte de informação em canais ruidosos, além do limite inferior de erro de Fano." data-i18n-en="Verifies the Data Processing Inequality I(W; Z) ≤ I(W; Y) ≤ I(W; X) and the exact hierarchy of strong data processing contraction constants across noisy channels, alongside Fano's error floor.">
+                Verifica a Desigualdade de Processamento de Dados <code>I(W; Z) ≤ I(W; Y) ≤ I(W; X)</code> e a hierarquia exata das constantes de contração forte de informação em canais ruidosos, além do limite inferior de erro de Fano.
+              </p>
+              <div class="formula-box">
+                η_{χ²}(W) = ρ_m²(X; Y) = 0.4900 ≤ η_{KL}(W) = 0.4900 ≤ η_{TV}(W) = 0.7000 &nbsp;|&nbsp; Fano P_e ≥ 0.1156
+              </div>
+            </div>
+          </details>
+
+          <details class="lens-disclosure" name="lenses-accordion">
+            <summary>
+              <span class="badge ok">LENS 2</span>
+              <span data-i18n-pt="Tempo (time.rs) — Dreno de Variância de Itô, Fração de Kelly Assimétrica e Mistura LSI" data-i18n-en="Time (time.rs) — Itô Variance Drain, Asymmetric Kelly Fraction & LSI Mixing">Tempo (time.rs) — Dreno de Variância de Itô, Fração de Kelly Assimétrica e Mistura LSI</span>
+              <span class="summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p data-i18n-pt="Em dinâmicas multiplicativas não-ergódicas, a taxa de crescimento temporal diverge da média do ensemble pelo dreno de variância de Itô. Exercitado sobre 37.930 pregões históricos do índice Dow Jones (1885–2023)." data-i18n-en="In non-ergodic multiplicative dynamics, the time-average growth rate diverges from the ensemble average by the Itô variance drain. Exercised over 37,930 historical trading days of the Dow Jones index (1885–2023).">
+                Em dinâmicas multiplicativas não-ergódicas, a taxa de crescimento temporal diverge da média do ensemble pelo dreno de variância de Itô. Exercitado sobre 37.930 pregões históricos do índice Dow Jones (1885–2023).
+              </p>
+              <div class="formula-box">
+                g_time = μ − ½σ² = 0.0322 &lt; g_ensemble = 0.0467 (drain = 0.0145) &nbsp;|&nbsp; Kelly f* = p/a − (1−p)/b = 0.8600 &nbsp;|&nbsp; Mixing = 13 steps
+              </div>
+            </div>
+          </details>
+
+          <details class="lens-disclosure" name="lenses-accordion">
+            <summary>
+              <span class="badge warn">LENS 3</span>
+              <span data-i18n-pt="Escala e Cauda (tail.rs) — Estimador de Hill, Regimes de Momento e n_eff de Cauda" data-i18n-en="Scale & Tail (tail.rs) — Hill Estimator, Moment Regimes & Tail n_eff">Escala e Cauda (tail.rs) — Estimador de Hill, Regimes de Momento e n_eff de Cauda</span>
+              <span class="summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p data-i18n-pt="Estima o índice de cauda de Pareto α̂_{k,n} de Hill e classifica o regime de existência de momentos (α ≤ 1 sem média; 1 &lt; α ≤ 2 média finita e variância infinita; α &gt; 2 variância finita). Avaliado nos sinistros de incêndio da Copenhagen Re (danish_fire.csv) e demanda elétrica de Victoria (vic_elec.csv)." data-i18n-en="Estimates Hill's Pareto tail index α̂_{k,n} and classifies the moment existence regime (α ≤ 1 no mean; 1 &lt; α ≤ 2 finite mean, infinite variance; α &gt; 2 finite variance). Evaluated on Copenhagen Re fire losses (danish_fire.csv) and Victoria electricity demand (vic_elec.csv).">
+                Estima o índice de cauda de Pareto <code>α̂_{k,n}</code> de Hill e classifica o regime de existência de momentos (<code>α ≤ 1</code> sem média; <code>1 &lt; α ≤ 2</code> média finita e variância infinita; <code>α &gt; 2</code> variância finita). Avaliado nos sinistros de incêndio da Copenhagen Re (<code>danish_fire.csv</code>) e demanda elétrica de Victoria (<code>vic_elec.csv</code>).
+              </p>
+              <div class="formula-box">
+                Danish Fire (n=2167): α̂_Hill = 1.6009 (±0.1601) · FiniteMeanInfiniteVariance · q₉₉ = 26.04M DKK · tail_n_eff = 17.3
+              </div>
+            </div>
+          </details>
+
+          <details class="lens-disclosure" name="lenses-accordion">
+            <summary>
+              <span class="badge ok">LENS 4</span>
+              <span data-i18n-pt="Estrutura e Invariância (invariance.rs) — Escada de Pearl, ICP, NILE e Limiar Λ*" data-i18n-en="Structure & Invariance (invariance.rs) — Pearl's Ladder, ICP, NILE & Threshold Λ*">Estrutura e Invariância (invariance.rs) — Escada de Pearl, ICP, NILE e Limiar Λ*</span>
+              <span class="summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p data-i18n-pt="Identifica preditores causais estruturalmente invariantes por interseção entre múltiplos regimes ambientais e ∈ E (Invariant Causal Prediction), penaliza variações não-lineares (NILE) e calcula o limiar crítico de confundimento oculto Λ*." data-i18n-en="Identifies structurally invariant causal predictors by intersection across multiple environmental regimes e ∈ E (Invariant Causal Prediction), penalizes nonlinear variations (NILE), and computes the critical hidden confounding threshold Λ*.">
+                Identifica preditores causais estruturalmente invariantes por interseção entre múltiplos regimes ambientais <code>e ∈ E</code> (<em>Invariant Causal Prediction</em>), penaliza variações não-lineares (NILE) e calcula o limiar crítico de confundimento oculto <code>Λ*</code>.
+              </p>
+              <div class="formula-box">
+                Ŝ* = ⋂_{S:invariant} S = [0] &nbsp;|&nbsp; NILE = [0.0001, 6.0603] &nbsp;|&nbsp; Critical Confounding Λ* = 4.752
+              </div>
+            </div>
+          </details>
+
+          <details class="lens-disclosure" name="lenses-accordion">
+            <summary>
+              <span class="badge ok">LENS 5</span>
+              <span data-i18n-pt="Decisão e Calibração (decision.rs) — Decomposição CORP-Murphy Isotônica (PAV) e Info-Gap + Sniedovich" data-i18n-en="Decision & Calibration (decision.rs) — Isotonic CORP-Murphy (PAV) & Info-Gap + Sniedovich">Decisão e Calibração (decision.rs) — Decomposição CORP-Murphy Isotônica (PAV) e Info-Gap + Sniedovich</span>
+              <span class="summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p data-i18n-pt="Substitui histogramas arbitrários pela decomposição isotônica exata CORP-Murphy via algoritmo Pool-Adjacent-Violators (PAV). Acopla a Teoria de Decisão Info-Gap (α̂, β̂, propriedade zero-ing) à Salvaguarda Global Maximin de Sniedovich (Wald) para impedir colapso na Terra de Ninguém." data-i18n-en="Replaces arbitrary binning with the exact isotonic CORP-Murphy decomposition via the Pool-Adjacent-Violators (PAV) algorithm. Couples Info-Gap Decision Theory (α̂, β̂, zero-ing property) with Sniedovich's Global Maximin Safeguard (Wald) to prevent collapse in No-Man's Land.">
+                Substitui histogramas arbitrários pela decomposição isotônica exata CORP-Murphy via algoritmo <em>Pool-Adjacent-Violators</em> (PAV). Acopla a Teoria de Decisão Info-Gap (<code>α̂</code>, <code>β̂</code>, propriedade <em>zero-ing</em>) à Salvaguarda Global Maximin de Sniedovich (Wald) para impedir colapso na Terra de Ninguém.
+              </p>
+              <div class="formula-box">
+                Atlantic Storms (n=3000): BS = 0.23802 = REL(0.18018) − RES(0.13911) + UNC₀(0.19695) &nbsp;[id_err = 1.75e-15]
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The 3 Canonical Epistemological Cards (hidden="until-found" + beforematch) -->
+    <section id="cards" class="section deferred-section">
+      <div class="container" id="epistemic-cards-tabs">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n-pt="§2.3 · cards/*.yaml · Funil de 4 Filtros & Roteiro SIGA" data-i18n-en="§2.3 · cards/*.yaml · 4-Filter Funnel & SIGA Roadmap">§2.3 · cards/*.yaml · Funil de 4 Filtros &amp; Roteiro SIGA</span>
+          <h2 data-i18n-pt="As 3 Cartas Epistemológicas Canônicas (contract_version: &quot;1.0&quot;)" data-i18n-en="The 3 Canonical Epistemological Cards (contract_version: &quot;1.0&quot;)">
+            As 3 Cartas Epistemológicas Canônicas (contract_version: "1.0")
+          </h2>
+          <p data-i18n-pt="Auditadas byte a byte pelos portões G1–G5 e pelo Roteiro SIGA de 8 Passos. Os painéis ocultos usam hidden=&quot;until-found&quot; com sincronização beforematch: pesquisar qualquer termo (ex.: Stackelberg, Erlang-C, lactate) na página revela automaticamente a carta correspondente." data-i18n-en="Audited byte-for-byte by Gates G1–G5 and the 8-Step SIGA Roadmap. Hidden panels use hidden=&quot;until-found&quot; with beforematch synchronization: searching for any term (e.g., Stackelberg, Erlang-C, lactate) via Find-in-Page automatically reveals the matching card.">
+            Auditadas byte a byte pelos portões <code>G1–G5</code> e pelo Roteiro SIGA de 8 Passos. Os painéis ocultos usam <code>hidden="until-found"</code> com sincronização <code>beforematch</code>: pesquisar qualquer termo (ex.: <code>Stackelberg</code>, <code>Erlang-C</code>, <code>lactate</code>) na página revela automaticamente a carta correspondente.
+          </p>
+        </div>
+
+        <div class="tab-toolbar" role="group" aria-label="Canonical Epistemological Cards">
+          <button type="button" class="tab-btn" aria-expanded="true" aria-controls="panel-card-01" id="tab-card-01">
+            card_01_sepsis_triage.yaml (L₂ · Epistemic)
+          </button>
+          <button type="button" class="tab-btn" aria-expanded="false" aria-controls="panel-card-02" id="tab-card-02">
+            card_02_bank_queue_staffing.yaml (L₁ · Aleatory)
+          </button>
+          <button type="button" class="tab-btn" aria-expanded="false" aria-controls="panel-card-03" id="tab-card-03">
+            card_03_performative_credit_scoring.yaml (L₃ · Knightian)
+          </button>
+        </div>
+
+        <!-- Card 01 Panel (Visible by default) -->
+        <div id="panel-card-01" class="card-tab-panel">
+          <div class="card-panel-inner">
+            <div class="yaml-split">
+              <div>
+                <div class="eyebrow-row">
+                  <span class="badge ok">APPROVED · EVPI = 161,000.0</span>
+                  <span class="badge">Layer L₂ · Pearl 2-Act</span>
+                  <span class="badge">E₁ = 24.8 &gt; 20.0</span>
+                </div>
+                <h3>clinical_sepsis_triage_icu_shift</h3>
+                <p data-i18n-pt="Decisor: Médico Intensivista de Plantão na UTI. Ação: Disparar pacote precoce de sepse em até 1h para pacientes no turno de 12h acima do limiar econômico p* = 0.05294." data-i18n-en="Decision-Maker: On-Duty ICU Attending Physician. Action: Trigger early sepsis bundle within 1h for patients on the 12h shift above economic threshold p* = 0.05294.">
+                  <strong>Decisor:</strong> Médico Intensivista de Plantão na UTI. <strong>Ação:</strong> Disparar pacote precoce de sepse em até 1h para pacientes no turno de 12h acima do limiar econômico <code>p* = 0.05294</code>.
+                </p>
+                <ul>
+                  <li><strong>Φ₂ Moulton-Campbell:</strong> <code>n = 25,028</code> leitos-hora → <code>m̃ = 119.05</code>, <code>ρ_I(0.90) = 0.155</code>, <code>DEFF = 19.30</code> → <code>n_eff = 1,297</code> turnos efetivos.</li>
+                  <li><strong>Φ₃ Missingness &amp; SHA-256:</strong> <code>MAR</code> (lactato arterial 4.2% ausente, <code>ρ_{R,Y} = 0.003</code>); hash <code>4f2594bc..fed2b30a31</code>.</li>
+                  <li><strong>Φ₄ Chouldechova &amp; Exit:</strong> Igualar <code>PPV = 0.72</code> entre <code>p_A = 0.06</code> e <code>p_B = 0.04</code> implica <code>FPR_A / FPR_B = 1.53</code>. Suspender se <code>REL_CORP &gt; 0.015</code> em 14 dias.</li>
+                </ul>
+              </div>
+              <pre class="yaml-code-block"><code>id: "clinical_sepsis_triage_icu_shift"
+contract_version: "1.0"
+layer: "L2"
+uncertainty: "epistemic_specification"
+decision_maker_question:
+  who_decides: "On-Duty ICU Attending Physician"
+  altered_action: "Trigger early sepsis bundle within 1h for patients on the shift above threshold p*"
+  question: "Does the calibrated probability of septic shock within the 12h shift exceed p* = 0.05294?"
+epistemological_header:
+  generating_process: "Hierarchical log-logistic hazard with hospital-shift random effects and Kennedy-O'Hagan GP discrepancy"
+  nonlinearity: "f(E[X])=1420.0, E[f(X)]=1890.0, Jensen gap Delta_J=+470.0, median=1510.0, q05=820.0, q95=4120.0, CRPS=215.4"
+  unit_and_margin:
+    independent_unit: "12h clinical ICU shift (cluster of bed-hours)"
+    nominal_sample_size_n: 25028
+    effective_sample_size_n_eff: 1297
+decision_rule_and_scope:
+  event_probability_p: 0.05
+  protection_cost_C: 1800.0
+  event_loss_L: 34000.0
+  critical_threshold_p_star: 0.05294
+  declared_act: "do_not_protect"</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 02 Panel (Hidden via hidden="until-found") -->
+        <div id="panel-card-02" class="card-tab-panel" hidden="until-found">
+          <div class="card-panel-inner">
+            <div class="yaml-split">
+              <div>
+                <div class="eyebrow-row">
+                  <span class="badge ok">APPROVED · EVPI = 205,200.0</span>
+                  <span class="badge">Layer L₁ · Pearl 2-Act</span>
+                  <span class="badge">E₁ = 31.4 &gt; 20.0</span>
+                </div>
+                <h3>daily_bank_queue_shift_staffing</h3>
+                <p data-i18n-pt="Decisor: Superintendente de Operações de Call Center. Ação: Alocar 26 agentes no turno diário de pico em vez da média agregada de 20 quando p = 0.145 &gt; p* = 0.08000." data-i18n-en="Decision-Maker: Call Center Operations Superintendent. Action: Allocate 26 agents to the daily peak shift instead of the aggregate average of 20 when p = 0.145 &gt; p* = 0.08000.">
+                  <strong>Decisor:</strong> Superintendente de Operações de Call Center. <strong>Ação:</strong> Alocar 26 agentes no turno diário de pico em vez da média agregada de 20 quando <code>p = 0.145 &gt; p* = 0.08000</code>.
+                </p>
+                <ul>
+                  <li><strong>Processo Gerador:</strong> Chegadas Poisson não-homogêneas por partes com congestionamento Erlang-C e amplificação de fila de Kingman <code>E[W] ~ ρ/(1−ρ)</code> (<code>α_Hill = 2.15</code>).</li>
+                  <li><strong>Φ₂ Moulton-Campbell:</strong> <code>n = 27,716</code> janelas de 5 min → <code>164</code> dias operacionais efetivos (<code>DEFF = 169.00</code>).</li>
+                  <li><strong>CORP-Murphy:</strong> <code>BS = 0.108 = REL(0.004) − RES(0.020) + UNC₀(0.124)</code>. Hash SHA-256: <code>f9488c54..c285aeee</code>.</li>
+                </ul>
+              </div>
+              <pre class="yaml-code-block"><code>id: "daily_bank_queue_shift_staffing"
+contract_version: "1.0"
+layer: "L1"
+uncertainty: "aleatory"
+decision_maker_question:
+  who_decides: "Call Center Operations Superintendent"
+  altered_action: "Allocate 26 agents to the daily peak shift instead of the aggregate average of 20"
+  question: "Does the probability of waiting-time exceedance above 30 minutes on the operational day exceed p* = 0.08000?"
+epistemological_header:
+  generating_process: "Piecewise non-homogeneous Poisson arrival process with Erlang-C queue congestion"
+  nonlinearity: "f(E[X])=740.0, E[f(X)]=1120.0, Jensen gap Delta_J=+380.0, median=810.0, q05=310.0, q95=2640.0, CRPS=142.5"
+  unit_and_margin:
+    independent_unit: "call center operational day (cluster of 5-minute windows)"
+    nominal_sample_size_n: 27716
+    effective_sample_size_n_eff: 164
+decision_rule_and_scope:
+  event_probability_p: 0.145
+  protection_cost_C: 2400.0
+  event_loss_L: 30000.0
+  critical_threshold_p_star: 0.08000
+  declared_act: "protect"</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 03 Panel (Hidden via hidden="until-found") -->
+        <div id="panel-card-03" class="card-tab-panel" hidden="until-found">
+          <div class="card-panel-inner">
+            <div class="yaml-split">
+              <div>
+                <div class="eyebrow-row">
+                  <span class="badge ok">APPROVED · EVPI = 135,750.0</span>
+                  <span class="badge">Layer L₃ · Pearl 3-Imagine</span>
+                  <span class="badge">E₁ = 28.5 &gt; 20.0</span>
+                </div>
+                <h3>performative_credit_policy_stackelberg</h3>
+                <p data-i18n-pt="Decisor: Comitê Executivo de Risco de Crédito e Liquidez. Ação: Adotar o limiar ótimo de Stackelberg θ_PO = 2.0313 com buffer de capital de Kelly e salvaguarda Maximin de Wald no ciclo diário." data-i18n-en="Decision-Maker: Executive Credit and Liquidity Risk Committee. Action: Adopt Stackelberg optimal threshold θ_PO = 2.0313 with Kelly capital buffer and Wald Maximin safeguard in the daily cycle.">
+                  <strong>Decisor:</strong> Comitê Executivo de Risco de Crédito e Liquidez. <strong>Ação:</strong> Adotar o limiar ótimo de Stackelberg <code>θ_PO = 2.0313</code> com buffer de capital de Kelly e salvaguarda Maximin de Wald no ciclo diário.
+                </p>
+                <ul>
+                  <li><strong>Ponte L₃ → L₁:</strong> Sensibilidade Wasserstein-1 <code>ε = 0.20</code>, raio RRM <code>εβ/γ = 0.24 &lt; 1</code>, divergência auditada <code>θ_PS = 1.8750</code> vs <code>θ_PO = 2.0313</code>.</li>
+                  <li><strong>Φ₃ MNAR &amp; Manski:</strong> Proponentes rejeitados sem desfecho observado (<code>ρ_{R,Y} = −0.140</code>); limites não-paramétricos de Manski verificados.</li>
+                  <li><strong>Info-Gap + Sniedovich:</strong> Horizonte de robustez <code>α̂ = 2.80</code> desvios estruturais; piso global Maximin de Wald <code>≥ 6.0%</code> índice Tier-1.</li>
+                </ul>
+              </div>
+              <pre class="yaml-code-block"><code>id: "performative_credit_policy_stackelberg"
+contract_version: "1.0"
+layer: "L3"
+uncertainty: "knightian"
+decision_maker_question:
+  who_decides: "Executive Credit and Liquidity Risk Committee"
+  altered_action: "Adopt Stackelberg threshold theta_PO with Kelly capital buffer and Wald Maximin safeguard in the daily cycle"
+  question: "Does performative risk under the Stackelberg equilibrium keep tail default loss below r_c?"
+epistemological_header:
+  generating_process: "Performative structural default hazard D(theta) with strategic borrower feature gaming"
+  nonlinearity: "f(E[X])=2100.0, E[f(X)]=3450.0, Jensen gap Delta_J=+1350.0, median=2480.0, q05=950.0, q95=8900.0, CRPS=410.2"
+  unit_and_margin:
+    independent_unit: "daily regional credit underwriting cohort"
+    nominal_sample_size_n: 18400
+    effective_sample_size_n_eff: 1842
+decision_rule_and_scope:
+  event_probability_p: 0.095
+  protection_cost_C: 1500.0
+  event_loss_L: 25000.0
+  critical_threshold_p_star: 0.06000
+  declared_act: "protect"</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Boundary Invariants, 6 Empirical Labs & Rust Crate Mapping -->
+    <section id="architecture" class="section deferred-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n-pt="§2.2 & §5 · Invariantes Φ₁–Φ₅, Governança Bitemporal e Mapeamento Rust" data-i18n-en="§2.2 & §5 · Invariants Φ₁–Φ₅, Bitemporal Governance & Rust Mapping">§2.2 &amp; §5 · Invariantes Φ₁–Φ₅, Governança Bitemporal e Mapeamento Rust</span>
+          <h2 data-i18n-pt="Invariantes de Fronteira e Arquitetura das 5 Crates em Rust Puro" data-i18n-en="Boundary Invariants & Architecture of the 5 Pure-Rust Crates">
+            Invariantes de Fronteira e Arquitetura das 5 Crates em Rust Puro
+          </h2>
+          <p data-i18n-pt="As tabelas abaixo possuem cabeçalhos fixos (sticky) e adaptam-se automaticamente por Container Queries (@container) em telas estreitas." data-i18n-en="The tables below feature sticky headers and automatically adapt into stacked cards via CSS Container Queries (@container) in narrow viewports.">
+            As tabelas abaixo possuem cabeçalhos fixos (<em>sticky</em>) e adaptam-se automaticamente por <em>Container Queries</em> (<code>@container</code>) em telas estreitas.
+          </p>
+        </div>
+
+        <!-- Responsive Table 1: Boundary Invariants Phi1-Phi5 -->
+        <div tabindex="0" role="region" aria-labelledby="invariants-table-caption" class="table-wrapper" style="margin-block-end: 2rem;">
+          <table class="data-table" style="--label-2: 'Requisito Formal'; --label-3: 'Resultado Empírico (labs)'; --label-4: 'Módulo Rust &amp; Portão';">
+            <caption id="invariants-table-caption" data-i18n-pt="Tabela 1 — Os Cinco Invariantes de Fronteira (Φ₁ a Φ₅) e Provas de Bloqueio" data-i18n-en="Table 1 — The Five Boundary Invariants (Φ₁ to Φ₅) & Blocking Proofs">
+              Tabela 1 — Os Cinco Invariantes de Fronteira (Φ₁ a Φ₅) e Provas de Bloqueio
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n-pt="Invariante" data-i18n-en="Invariant">Invariante</th>
+                <th scope="col" data-i18n-pt="Requisito Formal" data-i18n-en="Formal Requirement">Requisito Formal</th>
+                <th scope="col" data-i18n-pt="Resultado Empírico (labs)" data-i18n-en="Empirical Benchmark (labs)">Resultado Empírico (labs)</th>
+                <th scope="col" data-i18n-pt="Módulo Rust & Portão" data-i18n-en="Rust Module & Gate">Módulo Rust &amp; Portão</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Φ₁ · Simulability</th>
+                <td data-i18n-pt="Semente fixa (seed = 2026, SplitMix64) e modelo nulo gerador executável antes de qualquer ajuste." data-i18n-en="Fixed seed (seed = 2026, SplitMix64) and executable generative null model before any fitting.">Semente fixa (<code>seed = 2026</code>, <code>SplitMix64</code>) e modelo nulo gerador executável antes de qualquer ajuste.</td>
+                <td><code>p_null = 0.0050</code> · <code>SBC χ² = 0.02</code></td>
+                <td><code>stochology_core::rng</code> · Gate <code>G1</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Φ₂ · Independent Unit</th>
+                <td data-i18n-pt="Correção de Moulton-Campbell m̃ = m̄(1 + CV²) para clusters desiguais, ICC de excedência ρ_I(p) e n_eff(p)." data-i18n-en="Moulton-Campbell unequal-cluster correction m̃ = m̄(1 + CV²), exceedance ICC ρ_I(p), and n_eff(p).">Correção de Moulton-Campbell <code>m̃ = m̄(1 + CV²)</code> para clusters desiguais, ICC de excedência <code>ρ_I(p)</code> e <code>n_eff(p)</code>.</td>
+                <td><code>bank_calls.csv</code>: <code>n = 27,716</code> → <code>DEFF = 28.26</code> → <code>n_eff(0.90) = 980.7</code></td>
+                <td><code>ExceedanceDesignEffect</code> · <code>--defect moulton</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Φ₃ · Severe Test &amp; Missingness</th>
+                <td data-i18n-pt="Classificação explícita de Rubin (MCAR, MAR, MNAR), Identidade de Meng (ρ_{R,Y}), limites de Manski e lacre SHA-256." data-i18n-en="Explicit Rubin classification (MCAR, MAR, MNAR), Meng's Identity (ρ_{R,Y}), Manski bounds, and SHA-256 seal.">Classificação explícita de Rubin (<code>MCAR</code>, <code>MAR</code>, <code>MNAR</code>), Identidade de Meng (<code>ρ_{R,Y}</code>), limites de Manski e lacre SHA-256.</td>
+                <td>LaLonde NSW vs CPS: <code>ρ_{R,Y} = +0.1334</code>, Manski <code>[5463.2, 13835.3]</code></td>
+                <td><code>MengAudit</code>, <code>ManskiBounds</code>, <code>TemporalVault</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Φ₄ · Scope, Fairness &amp; Exit</th>
+                <td data-i18n-pt="Fronteira econômica p* = C/(ηL), auditoria algébrica do trilema de Chouldechova (FPR_A/FPR_B) e cláusula numérica de saída." data-i18n-en="Economic boundary p* = C/(ηL), algebraic audit of Chouldechova's trilemma (FPR_A/FPR_B), and numeric exit clause.">Fronteira econômica <code>p* = C/(ηL)</code>, auditoria algébrica do trilema de Chouldechova (<code>FPR_A/FPR_B</code>) e cláusula numérica de saída.</td>
+                <td><code>toronto_arrests.csv</code>: igualar <code>PPV=0.65, FNR=0.25</code> força <code>FPR_A/FPR_B = 3.42x</code></td>
+                <td><code>ChouldechovaAudit</code> · <code>--defect chouldechova</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Φ₅ · Question Resolution</th>
+                <td data-i18n-pt="Proibição de responder a uma decisão operacional diária/turno com agregados anuais ou mensais grosseiros (R₀)." data-i18n-en="Ban on answering a daily/shift operational decision with coarse annual or monthly aggregates (R₀).">Proibição de responder a uma decisão operacional diária/turno com agregados anuais ou mensais grosseiros (<code>R₀</code>).</td>
+                <td><code>R_data ≥ R_decision</code> verificado no Filtro 1 do Funil SIGA</td>
+                <td><code>verify_resolution_phi5</code> · <code>--defect phi5</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Responsive Table 2: Architectural Mapping of the 5 Crates & 6 Labs -->
+        <div tabindex="0" role="region" aria-labelledby="crates-table-caption" class="table-wrapper">
+          <table class="data-table" style="--label-2: 'Módulos &amp; Símbolos Principais'; --label-3: 'Datasets &amp; Métricas Auditadas'; --label-4: 'Comando de Verificação';">
+            <caption id="crates-table-caption" data-i18n-pt="Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 6 Laboratórios Empíricos" data-i18n-en="Table 2 — Architectural Mapping of the 5 Rust Crates & 6 Empirical Laboratories">
+              Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 6 Laboratórios Empíricos
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Crate / Lab</th>
+                <th scope="col" data-i18n-pt="Módulos & Símbolos Principais" data-i18n-en="Core Modules & Symbols">Módulos &amp; Símbolos Principais</th>
+                <th scope="col" data-i18n-pt="Datasets & Métricas Auditadas" data-i18n-en="Datasets & Audited Metrics">Datasets &amp; Métricas Auditadas</th>
+                <th scope="col" data-i18n-pt="Comando de Verificação" data-i18n-en="Verification Command">Comando de Verificação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">stochology-core<br><span class="badge">Lab 1 &amp; Lab 2 &amp; Lab 4</span></th>
+                <td><code>layers</code>, <code>uncertainty</code>, <code>invariants</code>, <code>card</code>, <code>rng</code>, <code>sha256</code></td>
+                <td><code>nsw_experimental.csv</code>, <code>cps_observational.csv</code>, <code>bank_calls.csv</code>, <code>toronto_arrests.csv</code> · GP Kennedy-O'Hagan bias <code>0.1546 → 0.0127</code></td>
+                <td><code>cargo run --release --bin labs -- --layers</code><br><code>cargo run --release --bin labs -- --uncertainty</code></td>
+              </tr>
+              <tr>
+                <th scope="row">stochology-lenses<br><span class="badge">Lab 3</span></th>
+                <td><code>information</code>, <code>time</code>, <code>tail</code>, <code>invariance</code>, <code>decision</code></td>
+                <td><code>djia_1885_2023.csv</code>, <code>danish_fire.csv</code>, <code>vic_elec.csv</code>, <code>atlantic_storms.csv</code> · CORP-PAV identity error <code>1.75e-15</code></td>
+                <td><code>cargo run --release --bin labs -- --lenses</code></td>
+              </tr>
+              <tr>
+                <th scope="row">stochology-siga<br><span class="badge">Lab 5</span></th>
+                <td><code>funnel::evaluate_four_filter_funnel</code>, <code>roadmap::run_full_siga_roadmap</code></td>
+                <td><code>cards/card_01..03.yaml</code> · 4 Filtros Eliminatórios, 8 Passos SIGA, <em>e-process</em> <code>E₁ = 24.8..31.4</code>, Frequências Naturais</td>
+                <td><code>cargo run --release --bin labs -- --siga</code></td>
+              </tr>
+              <tr>
+                <th scope="row">stochology-governance<br><span class="badge">Lab 6</span></th>
+                <td><code>clock</code>, <code>vault</code>, <code>drift</code> (<code>ExTRA-WCP-T</code>, <code>BBSE</code>, <code>MLLS/SLD</code>, <code>DFM</code>, <code>OTTER</code>)</td>
+                <td><code>nyc_flights_2013.csv</code> → <code>nyc_flights_2023.csv</code> · Lei &amp; Candès bound <code>≥ 0.889</code> · Cofre SHA-256 de abertura única</td>
+                <td><code>cargo run --release --bin labs -- --governance</code></td>
+              </tr>
+              <tr>
+                <th scope="row">stochology-cli<br><span class="badge ok">bins: labs &amp; gates</span></th>
+                <td><code>src/bin/labs.rs</code>, <code>src/bin/gates.rs</code>, <code>scripts/verify.sh</code></td>
+                <td>Executa os 6 laboratórios, audita os 7 portões positivos (<code>exit 0</code>) e bloqueia as 9 provas negativas (<code>exit 1</code>).</td>
+                <td><code>scripts/verify.sh</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Stochology Protocol v1.0</strong> — <span data-i18n-pt="Máquina Epistemológica Auditável em Rust Puro" data-i18n-en="Pure-Rust Auditable Epistemological Machine">Máquina Epistemológica Auditável em Rust Puro</span>.<br>
+        <span style="color: var(--text-muted);" data-i18n-pt="Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026" data-i18n-en="Author: Silvano Neto · Code licensed under MIT · Documentation under CC BY 4.0 · Canonical Seed: 2026">
+          Autor: Silvano Neto · Código sob licença MIT · Documentação sob CC BY 4.0 · Semente Canônica: 2026
+        </span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+        <a href="https://obestafera.com">obestafera.com</a>
+        <a href="https://github.com/0b3st4f3r4/stochology" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/0b3st4f3r4/stochology/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md</a>
+        <a href="https://github.com/0b3st4f3r4/stochology/blob/main/docs/PROTOCOL.md" target="_blank" rel="noopener noreferrer">PROTOCOL.md</a>
+        <a href="https://github.com/0b3st4f3r4/stochology/blob/main/CITATION.cff" target="_blank" rel="noopener noreferrer">CITATION.cff</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,64 @@
+name: Deploy Site to GitHub Pages (obestafera.com)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    paths: ["web/**", "cards/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Audit Protocol & Stage Web Artifact
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Toolchain pinned in rust-toolchain.toml
+        run: rustup show
+
+      - name: Mandatory verification (AGENTS.md §V)
+        run: ./scripts/verify.sh
+
+      - name: Verify web/ bundle and stage cards
+        run: |
+          test -f web/index.html
+          test -f web/styles.css
+          test -f web/app.js
+          test -f web/favicon.svg
+          test -f web/.nojekyll
+          grep -qx "obestafera.com" web/CNAME
+          mkdir -p web/cards
+          cp cards/*.yaml web/cards/
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact (web/)
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./web
+
+  deploy:
+    name: Publish to obestafera.com
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

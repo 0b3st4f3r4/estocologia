@@ -35,6 +35,7 @@ The repository unifies within a single verifiable apparatus:
 │   ├── stochology-siga/                           # 4-Filter Eliminatory Funnel and 8-Step SIGA Roadmap
 │   ├── stochology-governance/                     # Bitemporal Clock, Single-Opening Vault, and Drift (ExTRA-WCP-T, BBSE, MLLS, DFM, OTTER)
 │   └── stochology-cli/                            # CLI binaries `labs` and `gates`
+├── web/                                           # Interactive static site published at https://obestafera.com (GitHub Pages CI)
 └── scripts/
     └── verify.sh                                  # Complete positive and negative verification suite
 ```
