@@ -41,9 +41,9 @@ if ./target/release/labs --unknown-flag; then
 fi
 
 if [ "$fast" -eq 0 ]; then
-  step "all twenty-five labs instruments required by §V"
-  for front in all bank resolution s1 s2 queue genetics streams eprocess mc-error propagate passk multiverse oracles stacking discrepancy h3 second-opinion bridge listening schema jev \
-               rehearsal-shelf rehearsal-listening rehearsal-bridge; do
+  step "all twenty-seven labs instruments required by §V"
+  for front in all bank resolution s1 s2 queue genetics streams eprocess mc-error propagate passk multiverse oracles stacking discrepancy h3 second-opinion bridge layers listening schema jev \
+               rehearsal-shelf rehearsal-listening rehearsal-bridge rehearsal-layers; do
     printf -- "-- labs --%s\n" "$front"
     ./target/release/labs "--$front" > /dev/null
   done

@@ -8,8 +8,8 @@ unfolding is §9 of `docs/PLAN.md`.
 | --- | --- |
 | `00-opening.md` | preface, three-step ramp, map of the 21 chapters, reading tracks and conventions |
 | `ch01.md` … `ch21.md` | one file per chapter |
-| `appendices.md` | appendices A to D |
-| — | the laboratories live directly in the crate: `crates/stochology-book/src/capNN.rs` |
+| `appendices.md` | appendices A to E |
+| — | the laboratories live directly in the crate: `crates/stochology-book/src/chNN.rs` |
 | `scripts/book/build.py` | assembles the book and checks the ramp |
 
 ## Commands
@@ -60,9 +60,9 @@ reason. No old value is deleted.
 | I. The art of aiming in the dark | 1 to 4 | written; laboratories in the crate and output blocks checked |
 | II. The traps of the world and of data | 5 to 8 | written; laboratories in the crate and output blocks checked |
 | III. Cause, time, and survival | 9 to 11 | written; laboratories in the crate and output blocks checked |
-| IV. Building the auditable machine | 12 to 15 | written; laboratories in the crate and output blocks checked |
-| V. The machine in the real world | 16 to 21 | written; laboratories in the crate and output blocks checked |
-| Appendices A to D | — | written; checked against the earlier text (the old Appendix C, selected answers, became material embedded in Step 3) |
+| IV. The method on real data | 12 to 14 | written; laboratories in the crate and output blocks checked |
+| V. The auditable machine, built and put to work | 15 to 21 | written; laboratories in the crate and output blocks checked |
+| Appendices A to E | — | written; checked against the earlier text (the old Appendix C, selected answers, became material embedded in Step 3) |
 
 The edition in `book/stochology-textbook.md` is already the 21-chapter one, assembled from here, and `scripts/book/build.py --check`
 demands two things: that the 21 chapters be on the ramp and that the file on disk be, character by

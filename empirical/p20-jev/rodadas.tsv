@@ -1,0 +1,2 @@
+date	weights_hash	model_hash	requests	abstentions	n_pairs	tokens_per_call	ms_per_call	brier	ece
+2026-10-20	e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b	4ab811adb5f0a07dfe01f61d43a852ca68acdf34a9e17536740f8988f912aaf3	32	0	32	88.0	0.0	0.293988	0.338131

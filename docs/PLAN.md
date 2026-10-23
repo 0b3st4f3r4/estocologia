@@ -94,9 +94,12 @@ The machine's cognition operates in coupled modes under central governance:
   deterministic suffix trees, emitting probabilities restricted to the epistemological interval
   $p \in [0.01,\ 0.99]$. The name *LLM-as-Jev* covers two recipes, and their status is not the same: the
   **deterministic Jev** exists in `crates/stochology-core/src/s1.rs` (877 lines, 12 tests, `labs --s1`),
-  with the LLM's slot occupied by a silent judge because an unconstrained LLM fails gate G1; the
-  frozen open-weights **LLM-as-Jev** remains declared and unimplemented, as item 13 of
-  `docs/DECLARED_PROPOSALS.md`, and the verification of the transcript that proposed it is in
+  with the LLM's slot occupied by a silent judge because an unconstrained LLM fails gate G1; for the
+  frozen open-weights **LLM-as-Jev** (item 13 of `docs/DECLARED_PROPOSALS.md`), the local runner
+  (`crates/stochology-s2/src/runner.rs`), the strict GBNF grammar (`grammar/ficha_jev.gbnf`), and the
+  ingestion and calibration pipeline (`ingest-jev` and `labs --jev`) exist since 2026-10-17, while the
+  frozen weights file with a declared `sha256` and labeled outcomes remain pending operator execution,
+  and the verification of the transcript that proposed it is in
   `docs/JEV_INTEGRATION.md`.
 - **System 2 Mode (deliberative):** tree search (*LATS* + *Belief-State Engine* over the hypergraph
   $\mathcal{G}$) for deep code synthesis ($F_1$), MCMC inference, and adversarial stress testing. It
@@ -307,8 +310,8 @@ grouped into 5 parts**, following the 3-step architecture:
 | **I. The art of aiming in the dark** | 1 to 4 | Separate World, Model, and Agent; master counting trees (Bayes) and distinguish luck, ignorance, and blind spots |
 | **II. The traps of the world and of data** | 5 to 8 | Why the average lies (curves and Jensen), how massive samples deceive (Meng), and how to measure good forecasters (Brier) |
 | **III. Cause, time, and survival** | 9 to 11 | Climb the ladder of causation (Pearl/ICP), compound interest with random draws (Kelly, non-ergodicity), and Goodhart |
-| **IV. Building the auditable machine** | 12 to 15 | Turn science into engineering: hypergraph and 5 lenses, agents $F_1$–$F_8$, panel $A_1$–$A_8$, cards, vault, and hash |
-| **V. The machine in the real world** | 16 to 21 | The real tests of the research, from $H_0$ to $H_3$, through the final audit and the student's project |
+| **IV. The method on real data** | 12 to 14 (12 to 15 before the reordering) | The real tests of $H_0$ and $H_1$: queues, bank calls, stock leverage, LaLonde, and the Danish fires |
+| **V. The auditable machine, built and put to work** | 15 to 21 (16 to 21 before the reordering) | Turn science into engineering (hypergraph, 5 lenses, agents $F_1$–$F_8$, panel $A_1$–$A_8$, cards, vault, hash) and run $H_2$, $H_3$, and the final audit |
 
 ### 9.3 Part I — The art of aiming in the dark
 
@@ -393,14 +396,14 @@ performativity (Goodhart and the Lucas critique); Chouldechova's trilemma and th
 **who pays for the error**; honest communication with natural frequencies, HOPs, and exit clauses.
 *Laboratory:* cost/loss calculator on Bernoulli's ship problem and the trilemma in a decision table.
 
-### 9.6 Part IV — Building the auditable machine
+### 9.6 Part V (Part IV before the reordering) — Building the auditable machine
 
 **Chapter 15. The map of knowledge: the typed hypergraph and the five lenses.** Long texts hide errors;
 the card (node) required to declare identifier, layer, uncertainty type, formula, and executable code;
 pathology edges in red; the five lenses (Fluxonomy, Chrononomy, Scalonomy, Morphonomy, Crisonomy).
 *Laboratory:* the first mini-hypergraph, with the validator rejecting incomplete cards.
 
-**Chapter 16. The team of specialists ($F_1$ to $F_8$), the safeguard panel, and AI under control.**
+**Chapter 16. The team of specialists, the safeguard panel and the two systems of thought ($F_1$ to $F_8$).**
 How to use AI in science without being fooled: each lane covers a blind spot ($F_1$ simulation, $F_2$
 grain and missingness, $F_3$ clock and drift, $F_4$ statistics and SBC, $F_5$ privacy and SHA-256,
 $F_6$ fairness, $F_7$ SHELF priors, $F_8$ communication and exit); the six-stage cycle and the panel
@@ -420,7 +423,7 @@ the Brier and Kelly logbook and the 21 signed opinions; the spirit of the backgr
 tests against the machine itself). *Laboratory:* SHA-256 hash chain where altering a single comma in the
 past invalidates the report — exactly what `LivroRazao::verificar()` performs.
 
-### 9.7 Part V — The machine in the real world ($H_0$ to $H_3$ and stocktaking)
+### 9.7 Part IV and Part V — The method on real data and the machine in the real world ($H_0$ to $H_3$ and stocktaking)
 
 **Chapter 12. $H_0$: the health clinic and the 2.65 million bank calls.** Clinic with 12 consultations/hour
 and average arrival of 8: a constant day yields a 9.1-minute wait; a day alternating between 5 and 11
@@ -521,12 +524,12 @@ The book is authored in `book/`, one file per chapter, and assembled into
 | Part | Chapters | Status |
 | --- | --- | --- |
 | I. The art of aiming in the dark | 1 to 4 | written, with measured laboratories |
-| — | 21 chapters | book assembled in `book/stochology-textbook.md` (7 097 lines, 100 405 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
+| — | 21 chapters | book assembled in `book/stochology-textbook.md` (7 110 lines, 101 535 words, verified character by character against `book/` and against the declared count by `scripts/book/build.py --check`) |
 | II. The traps of the world and of data | 5 to 8 | written, with measured laboratories |
 | III. Cause, time, and survival | 9 to 11 | written, with measured laboratories |
-| IV. Building the auditable machine | 12 to 15 | written, with measured laboratories |
-| V. The machine in the real world | 16 to 21 | written, with measured laboratories (17 and 18 read the datasets from `data/`) |
-| Appendices A to D | — | written (A with 73 entries) |
+| IV. The method on real data | 12 to 14 (12 to 15 before the reordering) | written, with measured laboratories |
+| V. The auditable machine, built and put to work | 15 to 21 (16 to 21 before the reordering) | written, with measured laboratories (17 and 18 read the datasets from `data/`) |
+| Appendices A to E (A to D before Appendix E) | — | written (A with 73 entries) |
 
 ```bash
 python3 scripts/book/build.py --check    # requires, per chapter: title, three steps, exercises, and summary

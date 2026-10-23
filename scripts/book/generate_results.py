@@ -145,6 +145,7 @@ def main() -> int:
         "| BTlabs --listeningBT | Seal of the seven decisions affecting people: who was heard |\n"
         "| BTlabs --h3BT | H3 chain: what is re-measured, what is re-derived, and what remains a record |\n"
         "| BTlabs --bridgeBT | Bridge thesis at scale: re-derived pilot and fair-test gate |\n"
+        "| BTlabs --layersBT | Can the layers fail: 60-error external catalogue, lexical gate, Fleiss' kappa, and falsifier rule |\n"
         "| BTlabs --schemaBT | Card contract: schema version and file-backed migration chain |\n"
         "| BTlabs --second-opinionBT | Second opinion on results marked P |\n"
         "| BTlabs --jevBT | Jev-LLM bridge: bridge gates and what requires frozen weights |\n"
@@ -153,6 +154,7 @@ def main() -> int:
         "| BTlabs --rehearsal-shelfBT | Synthetic floor of the SHELF panel: four declared respondents on real items |\n"
         "| BTlabs --rehearsal-listeningBT | Coverage arithmetic and gate boundary for affected-group listening |\n"
         "| BTlabs --rehearsal-bridgeBT | Roles, cases, and status in the scale bridge gate |\n"
+        "| BTlabs --rehearsal-layersBT | Synthetic floor of Fleiss' kappa across three model-family coders on the 60 external errors |\n"
         "| BTcargo test --workspaceBT | Test suite across all workspace crates |\n"
     )
     parts.append("## 1. Real H0 and Empirical Instruments in Rust\n")
@@ -266,6 +268,11 @@ def main() -> int:
         "Re-derives pilot P01 from blind judge scores and checks the scale bridge gate.",
     ))
     parts.append(section_block(
+        "Can the layers fail: 60-error external catalogue and falsifier gate",
+        [str(BIN), "--layers"],
+        "Checks BTempirical/p21-camadas/erros.tsvBT (60 external errors, zero layer-vocabulary leaks), BTempirical/p21-camadas/registro.tsvBT, and the Fleiss' kappa decision rule.",
+    ))
+    parts.append(section_block(
         "Seal of the seven decisions affecting people",
         [str(BIN), "--listening"],
         "Reads BTempirical/p13-escuta/registro.tsvBT and checks affected-group listening coverage.",
@@ -302,6 +309,11 @@ def main() -> int:
         "Synthetic trial: scale bridge",
         [str(BIN), "--rehearsal-bridge"],
         "Four synthetic records testing role assignment, case count, and declared status.",
+    ))
+    parts.append(section_block(
+        "Synthetic trial: can the layers fail (three model-family coders)",
+        [str(BIN), "--rehearsal-layers"],
+        "Three model-family coders over the 60 external errors of BTempirical/p21-camadas/erros.tsvBT, measuring the synthetic floor of Fleiss' kappa and the ARIT/FORA falsifiers.",
     ))
     parts.append("## 4. Workspace Tests\n")
     parts.append(section_block("All crates", ["cargo", "test", "--workspace"], "Unit and integration tests across the workspace."))

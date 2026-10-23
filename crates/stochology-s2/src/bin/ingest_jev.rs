@@ -27,6 +27,9 @@ fn usage_and_abort(program: &str) -> ! {
     eprintln!("  {program} --check <source_inferences.tsv> <source_outcomes.tsv>");
     eprintln!("  {program} --record <measure.txt> <rounds.tsv> --date YYYY-MM-DD");
     eprintln!(
+        "  {program} --from-data <data_dir> <weights_dir> <calibration_dir> <rounds.tsv> --date YYYY-MM-DD"
+    );
+    eprintln!(
         "  {program} <weights_dir> <source_inferences.tsv> <calibration_dir> <source_outcomes.tsv>"
     );
     eprintln!();
@@ -312,8 +315,217 @@ fn record(card: &Path, rounds: &Path, date: &str) {
     println!("  written to {}", rounds.display());
 }
 
+/// Builds the 32 audited real cases from `data/danish_fire.csv` (16 windows) and `data/atlantic_storms.csv` (16 seasons),
+/// runs the frozen tensor weights at temperature 0, rehearses through the gates, persists the sealed artifacts, and records the round.
+fn build_from_data(
+    data_dir: &Path,
+    weights_dir: &Path,
+    calibration_dir: &Path,
+    rounds: &Path,
+    date: &str,
+) {
+    let fire_path = data_dir.join("danish_fire.csv");
+    let fire_txt = std::fs::read_to_string(&fire_path)
+        .unwrap_or_else(|e| die(format!("Error reading {}: {e}", fire_path.display())));
+    let mut fire_losses: Vec<(String, f64)> = Vec::new();
+    for line in fire_txt.lines().skip(1) {
+        let l = line.trim();
+        if l.is_empty() {
+            continue;
+        }
+        if let Some((dt, val)) = l.split_once(',')
+            && let Ok(loss) = val.trim().parse::<f64>()
+        {
+            fire_losses.push((dt.trim().to_string(), loss));
+        }
+    }
+    if fire_losses.len() < 16 * 135 {
+        die(format!(
+            "danish_fire.csv has {} rows, expected at least {}",
+            fire_losses.len(),
+            16 * 135
+        ));
+    }
+
+    let storm_path = data_dir.join("atlantic_storms.csv");
+    let storm_txt = std::fs::read_to_string(&storm_path)
+        .unwrap_or_else(|e| die(format!("Error reading {}: {e}", storm_path.display())));
+    // Collect (wind, pressure) per year for 1990..=2005
+    let mut storm_years: std::collections::BTreeMap<u32, Vec<(f64, f64)>> =
+        std::collections::BTreeMap::new();
+    for line in storm_txt.lines().skip(1) {
+        let fields: Vec<&str> = line.split(',').collect();
+        if fields.len() < 12 {
+            continue;
+        }
+        let Ok(year) = fields[2].trim().parse::<u32>() else {
+            continue;
+        };
+        if !(1990..=2005).contains(&year) {
+            continue;
+        }
+        let wind = fields[10].trim().parse::<f64>().unwrap_or(0.0);
+        let pressure = fields[11].trim().parse::<f64>().unwrap_or(1013.0);
+        storm_years.entry(year).or_default().push((wind, pressure));
+    }
+    if storm_years.len() != 16 {
+        die(format!(
+            "atlantic_storms.csv yielded {} seasons in 1990..=2005, expected 16",
+            storm_years.len()
+        ));
+    }
+
+    let tensor = runner::TensorWeights::canonical();
+    let tensor_bytes = tensor.to_bytes();
+    let tensor_sha = tensor.sha256();
+    let model = runner::ModelFile::new(&tensor_sha, runner::TENSOR_REVISION)
+        .unwrap_or_else(|e| die(format!("Invalid tensor model metadata: {e:?}")));
+
+    let mut inferences: Vec<(String, String)> = Vec::with_capacity(32);
+    let mut outcomes: Vec<(String, f64, bool, String)> = Vec::with_capacity(32);
+
+    // 16 Danish fire windows (135 events each: 100 baseline, 35 evaluation for > 9.0M DKK tail claim)
+    for w in 0..16usize {
+        let start = w * 135;
+        let split = start + 100;
+        let end = start + 135;
+        let base = &fire_losses[start..split];
+        let eval = &fire_losses[split..end];
+        let mean_loss = base.iter().map(|(_, x)| *x).sum::<f64>() / 100.0;
+        let tail_5m = base.iter().filter(|(_, x)| *x > 5.0).count() as f64 / 100.0;
+        let max_loss = base.iter().map(|(_, x)| *x).fold(0.0f64, f64::max);
+        let cluster = base
+            .windows(2)
+            .filter(|pair| pair[0].1 > 3.0 && pair[1].1 > 3.0)
+            .count() as f64
+            / 99.0;
+        let features = [
+            (mean_loss - 3.0) / 2.0,
+            (tail_5m - 0.12) * 5.0,
+            (max_loss - 15.0) / 20.0,
+            (cluster - 0.08) * 6.0,
+        ];
+        let observed = eval.iter().any(|(_, x)| *x > 9.0);
+        let case_id = format!("DF-{:02}", w + 1);
+        let question = format!(
+            "Danish fire window {case_id} ({} to {}): does the next 35-claim subwindow exceed 9.0M DKK?",
+            base.first().map(|x| x.0.as_str()).unwrap_or(""),
+            eval.last().map(|x| x.0.as_str()).unwrap_or("")
+        );
+        let (req, card_text, prob) = tensor.decode_case(
+            &case_id,
+            &question,
+            features,
+            "claim-window",
+            "reinsurance-pool",
+            &format!("crates/stochology-s2#jev.{}", case_id.to_lowercase()),
+        );
+        let source = format!("data/danish_fire.csv#rows-{}-{}", start + 2, end + 1);
+        inferences.push((req, card_text));
+        outcomes.push((case_id, prob, observed, source));
+    }
+
+    // 16 Atlantic storm seasons (1990..=2005: first half baseline, second half evaluation for >= 105 kt intense hurricane)
+    for (&year, records) in &storm_years {
+        let mid = (records.len() / 2).max(1);
+        let (base, eval) = records.split_at(mid);
+        let mean_wind = base.iter().map(|(w, _)| *w).sum::<f64>() / base.len() as f64;
+        let max_wind = base.iter().map(|(w, _)| *w).fold(0.0f64, f64::max);
+        let min_press = base.iter().map(|(_, p)| *p).fold(1013.0f64, f64::min);
+        let ts_share = base.iter().filter(|(w, _)| *w >= 50.0).count() as f64 / base.len() as f64;
+        let features = [
+            (mean_wind - 45.0) / 15.0,
+            (max_wind - 75.0) / 30.0,
+            (990.0 - min_press) / 25.0,
+            (ts_share - 0.35) * 3.0,
+        ];
+        let observed = eval.iter().any(|(w, _)| *w >= 105.0);
+        let case_id = format!("AS-{year}");
+        let question = format!(
+            "Atlantic storm season {year} ({} observations): does the second half reach 105 kt?",
+            records.len()
+        );
+        let (req, card_text, prob) = tensor.decode_case(
+            &case_id,
+            &question,
+            features,
+            "storm-season",
+            "coastal-municipalities",
+            &format!("crates/stochology-s2#jev.as.{year}"),
+        );
+        let source = format!("data/atlantic_storms.csv#season-{year}");
+        inferences.push((req, card_text));
+        outcomes.push((case_id, prob, observed, source));
+    }
+
+    let rehearsal_weights = rehearsal_dir("from-data-weights");
+    let rehearsal_cal = rehearsal_dir("from-data-cal");
+    runner::write_artifact_with_model(&rehearsal_weights, &inferences, Some(&model))
+        .unwrap_or_else(|e| die(format!("Failure writing rehearsal artifact: {e}")));
+    let _ = runner::LocalRunner::load(&rehearsal_weights.to_string_lossy())
+        .unwrap_or_else(|e| die(format!("Rehearsal artifact failed gate: {e:?}")));
+    for (i, (_, ans)) in inferences.iter().enumerate() {
+        if let Err(r) = validate_output(ans) {
+            die(format!("Case {} failed card schema: {r:?}", i + 1));
+        }
+    }
+    calibration::write_outcomes(&rehearsal_cal, &outcomes)
+        .unwrap_or_else(|e| die(format!("Failure writing rehearsal outcomes: {e}")));
+    let _ = calibration::load(&rehearsal_cal.to_string_lossy(), 0, calibration::MIN_SAMPLE)
+        .unwrap_or_else(|e| die(format!("Rehearsal outcomes failed gate: {e:?}")));
+    std::fs::remove_dir_all(&rehearsal_weights).ok();
+    std::fs::remove_dir_all(&rehearsal_cal).ok();
+
+    std::fs::create_dir_all(weights_dir)
+        .unwrap_or_else(|e| die(format!("Failure creating {}: {e}", weights_dir.display())));
+    let tensor_path = weights_dir.join(runner::TENSOR_FILE_NAME);
+    std::fs::write(&tensor_path, &tensor_bytes)
+        .unwrap_or_else(|e| die(format!("Failure writing {}: {e}", tensor_path.display())));
+    let weights_hash = runner::write_artifact_with_model(weights_dir, &inferences, Some(&model))
+        .unwrap_or_else(|e| die(format!("Failure writing artifact: {e}")));
+    let cal_hash = calibration::write_outcomes(calibration_dir, &outcomes)
+        .unwrap_or_else(|e| die(format!("Failure writing outcomes: {e}")));
+
+    println!("== Frozen Tensor Execution & Ingestion (item 13) ==");
+    println!("  tensor file: {} ({tensor_sha})", tensor_path.display());
+    println!(
+        "  artifact:    {}/modelo.congelado ({weights_hash})",
+        weights_dir.display()
+    );
+    println!(
+        "  outcomes:    {}/desfechos.tsv ({cal_hash})",
+        calibration_dir.display()
+    );
+
+    let m = stochology_s2::bridge::measure();
+    let card_txt = stochology_s2::bridge::measure_card(&m);
+    let tmp_card = rehearsal_dir("card").join("measure.txt");
+    std::fs::write(&tmp_card, card_txt.as_bytes()).expect("writes measure card");
+    let existing = std::fs::read_to_string(rounds).unwrap_or_default();
+    let line = stochology_s2::bridge::registry_line(&m, date)
+        .unwrap_or_else(|e| die(format!("Record refused: {e}")));
+    if !existing.contains(&line) {
+        record(&tmp_card, rounds, date);
+    } else {
+        println!("record already present in {}: {line}", rounds.display());
+    }
+    if let Some(parent) = tmp_card.parent() {
+        std::fs::remove_dir_all(parent).ok();
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args.len() == 8 && args[1] == "--from-data" && args[6] == "--date" {
+        build_from_data(
+            Path::new(&args[2]),
+            Path::new(&args[3]),
+            Path::new(&args[4]),
+            Path::new(&args[5]),
+            &args[7],
+        );
+        return;
+    }
     if args.len() == 6 && args[1] == "--record" {
         record(Path::new(&args[2]), Path::new(&args[3]), &args[5]);
         return;

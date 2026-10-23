@@ -3,7 +3,7 @@
 //! Usage: ~cargo run --release --bin labs -- --chapter 4~
 //!        ~cargo run --release --bin labs -- --all~
 
-use stochology_book::{banco, chain, ensaio, escuta, fila, genetica, jev, ponte, segunda};
+use stochology_book::{banco, camadas, chain, ensaio, escuta, fila, genetica, jev, ponte, segunda};
 use stochology_book::{
     ch01, ch02, ch03, ch04, ch05, ch06, ch07, ch08, ch09, ch10, ch11, ch12, ch13, ch14, ch15, ch16,
     ch17, ch18, ch19, ch20, ch21,
@@ -43,10 +43,12 @@ fn main() {
     let mut schema_flag = false;
     let mut second_opinion_flag = false;
     let mut jev_flag = false;
+    let mut layers_flag = false;
     let mut measure_flag = false;
     let mut rehearsal_shelf = false;
     let mut rehearsal_listening = false;
     let mut rehearsal_bridge = false;
+    let mut rehearsal_layers = false;
     let mut help = false;
     let mut i = 0;
     while i < args.len() {
@@ -111,10 +113,12 @@ fn main() {
             "--schema" => schema_flag = true,
             "--second-opinion" => second_opinion_flag = true,
             "--jev" => jev_flag = true,
+            "--layers" => layers_flag = true,
             "--measure" => measure_flag = true,
             "--rehearsal-shelf" => rehearsal_shelf = true,
             "--rehearsal-listening" => rehearsal_listening = true,
             "--rehearsal-bridge" => rehearsal_bridge = true,
+            "--rehearsal-layers" => rehearsal_layers = true,
             "--help" => help = true,
             other => {
                 eprintln!("unknown flag: {other} (usage: labs --chapter N (1..21) or --all)");
@@ -128,10 +132,12 @@ fn main() {
             "usage: labs [--chapter N | --all | --bank | --queue | --resolution | --genetics | --streams | --mc-error | --propagate | --passk | --multiverse | --stacking | --discrepancy | --seed-spread"
         );
         println!(
-            "            | --listening | --bridge | --schema | --second-opinion | --jev | --oracles"
+            "            | --listening | --bridge | --layers | --schema | --second-opinion | --jev | --oracles"
         );
         println!("            | --h3 | --s1 | --s2 | --measure | --pretest | --elicitation Q5");
-        println!("            | --rehearsal-shelf | --rehearsal-listening | --rehearsal-bridge]");
+        println!(
+            "            | --rehearsal-shelf | --rehearsal-listening | --rehearsal-bridge | --rehearsal-layers]"
+        );
         return;
     }
     if resolution {
@@ -218,6 +224,10 @@ fn main() {
         ponte::run(ponte::REGISTRY, ponte::JUDGE_NOTES);
         return;
     }
+    if layers_flag {
+        camadas::run(camadas::REGISTRY, camadas::CATALOGUE);
+        return;
+    }
     if schema_flag {
         contract();
         return;
@@ -259,6 +269,16 @@ fn main() {
             Ok(text) => print!("{text}"),
             Err(e) => {
                 eprintln!("bridge rehearsal did not run: {e}");
+                std::process::exit(1);
+            }
+        }
+        return;
+    }
+    if rehearsal_layers {
+        match ensaio::layers() {
+            Ok(text) => print!("{text}"),
+            Err(e) => {
+                eprintln!("layers rehearsal did not run: {e}");
                 std::process::exit(1);
             }
         }

@@ -1,5 +1,5 @@
 # Rust: o alvo de build nao entra.
-/target/
+target/
 
 # Python: bytecode fora, sempre (as ferramentas sao stdlib puro, ver pyproject.toml).
 __pycache__/

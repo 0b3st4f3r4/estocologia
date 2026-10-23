@@ -4,9 +4,9 @@
 
 | file | SHA-256 | what it is |
 | --- | --- | --- |
-| `empirical/p20-jev/registro.tsv` | `909c1ad75ffe17791427c8a982ecd1a23c4ca0de1762c7360b973a20bc7b5ed9` (historical: `27596bdf…`, `b777a213…`) | the state of the bridge, item by item, in machine form |
+| `empirical/p20-jev/registro.tsv` | `b97ef5032c93479dc20ae28112089809788ab5cce40e230c912fba41bf0c78c7` (historical: `27596bdf…`, `b777a213…`, `909c1ad7…`, `92c0d1b0…`) | the state of the bridge, item by item, in machine form |
 | `DECLARACAO.md` (this one) | — | the five declarations; its own hash comes out in `DECLARACAO.sha256` |
-| `README.md` | `c18ddc5e1f7689bacb5a45de8caf1bfd6005a8bf64749ac05c576acbb47dfcd4` (historical: `e4c3fe9f…`) | the result in one page |
+| `README.md` | `daaf0fc853924680e09cf65a1835d2fa5f35d06cb60684adaba746c3b09639ef` (historical: `e4c3fe9f…`, `c18ddc5e…`, `c6b2798e…`) | the result in one page |
 | `DECLARACAO.sha256` | — | the seven hashes of the folder and of the grammar, in `sha256sum` form |
 
 ## Declaration 1 — what the item asks and what the tree has
@@ -81,6 +81,20 @@ ones being the line inside the seal, the four malformed or misplaced lines, the 
 the ingestor carrying the line and aborting on a bad one. The line names the file and does not prove the operator ran it; that
 stays with whoever repeats the round with the same file. No threshold of the four criteria changed, and the record gained a
 condition of provenance, not of decision, so the K stays 1. The seal of this folder was redone again.
+
+**Note of 2026-10-20: 32 real outcomes and a deterministic tensor baseline are sealed; the open-weights LLM round remains open.**
+`crates/stochology-s2/src/runner.rs` gained `TensorWeights` (revision `stochology-s2/tensor-v1 2026-10-20`, serialized in
+`pesos/pesos.tensor` with `sha256` `4ab811adb5f0a07dfe01f61d43a852ca68acdf34a9e17536740f8988f912aaf3`) and `ingest-jev`
+gained `--from-data`, which reads the 16 five-year windows of `data/danish_fire.csv` and the 16 ten-year seasons of
+`data/atlantic_storms.csv`, runs the frozen tensor forward pass, stages and verifies both gates, and writes
+`pesos/modelo.congelado` (`sha256` `e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b`), `pesos/SHA256`,
+`calibracao/desfechos.tsv` (`sha256` `265fcf6e91573b97f9c9aceb2eb02947af58c2720fd15f96a690ed826d38e5ab`), `calibracao/SHA256`,
+and the round in `rodadas.tsv` (32 requests, 0 abstentions, 32 pairs, 88.0 tokens/call, 0.0% abstention rate, Brier
+`0.293988`, ECE `0.338131`, `K = 1`). **Declared boundary (audit of 2026-10-20):** `pesos.tensor` is a 388-byte, 96-parameter
+numerical MLP whose `decode_case` method formats the card via a Rust template, **not** an open-weights language model (GGUF):
+its `0.0%` abstention rate holds by template construction rather than measuring unconstrained LLM output. The 32 real outcomes
+and the tensor baseline are sealed in this folder (13 files), while item 13 remains open in `docs/DECLARED_PROPOSALS.md` §1
+until an open-weights LLM (GGUF) is run with and without `grammar/ficha_jev.gbnf`.
 
 ## Verification
 

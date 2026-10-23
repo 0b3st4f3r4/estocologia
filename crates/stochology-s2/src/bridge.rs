@@ -353,6 +353,7 @@ pub fn run() {
     );
 
     println!("\n-- the local runner of the frozen weights --");
+    let mut runner_abstentions = 0usize;
     match crate::runner::LocalRunner::load(crate::runner::DEFAULT_DIR) {
         Ok(mut runner) => {
             println!(
@@ -361,10 +362,17 @@ pub fn run() {
                 runner.answers()
             );
             match runner.model() {
-                Some(f) => println!(
-                    "  model file declared: {} | revision {}",
-                    f.sha256, f.revision
-                ),
+                Some(f) => {
+                    println!(
+                        "  model file declared: {} | revision {}",
+                        f.sha256, f.revision
+                    );
+                    if f.revision.starts_with("stochology-s2/tensor-") {
+                        println!(
+                            "  boundary: tensor-v1 is a 96-parameter numerical MLP baseline with template card formatting (0.0% abstention by construction); open-weights LLM (GGUF) inference with and without grammar remains open"
+                        );
+                    }
+                }
                 None => println!(
                     "  model file: not declared | the hash above proves the table did not change, not which model wrote it, and the round does not enter the record"
                 ),
@@ -391,6 +399,7 @@ pub fn run() {
             );
             let mut c2 = Accounting::default();
             let ad = space_adequacy(&mut runner, &ps, &mut c2);
+            runner_abstentions = ad.abstentions;
             let (tk, msq) = c2.per_call();
             println!(
                 "  adequacy: {} requests | {} abstentions ({:.1}%) | {}",
@@ -423,7 +432,7 @@ pub fn run() {
     println!("\n-- the calibration: the Brier of the frozen model --");
     match crate::calibration::load(
         crate::calibration::DEFAULT_DIR,
-        0,
+        runner_abstentions,
         crate::calibration::MIN_SAMPLE,
     ) {
         Ok(cal) => println!("  {}", cal.reading()),

@@ -95,11 +95,12 @@ cargo run --release --bin gates -- --horizon h3 --defect h3.voos23  # negative p
 cargo run --release --bin labs -- --rehearsal-shelf      # synthetic floor of the SHELF panel
 cargo run --release --bin labs -- --rehearsal-listening     # coverage arithmetic and boundary of the listening gate
 cargo run --release --bin labs -- --rehearsal-bridge      # roles, cases, and status in the bridge gate
+cargo run --release --bin labs -- --rehearsal-layers     # synthetic floor of Fleiss' kappa across three model-family coders
 python3 scripts/book/build.py --check               # the ramp AND the disk: the file must match the assembled book
 python3 scripts/book/check_labs.py                  # every cited block checked against its instrument
 python3 scripts/book/check_book.py                  # parts, chapters, fences, and ordering
 python3 scripts/book/generate_results.py --check    # the docs/RUST_RESULTS.md registry
-python3 scripts/check_seals.py                      # the 32 SHA-256 seals, paths relative to root
+python3 scripts/check_seals.py                      # the 36 SHA-256 seals, paths relative to root
 python3 scripts/style/check_pass.py                 # prose pass against HEAD:book/, file by file
 git tag --list                                      # must be empty: history only, no versions (§VI)
 ~~~
@@ -116,6 +117,7 @@ cargo run --release --bin labs -- --propagate   # plug-in, delta and Monte Carlo
 cargo run --release --bin labs -- --h3          # the H3 chain
 cargo run --release --bin labs -- --second-opinion     # second opinion on the registry
 cargo run --release --bin labs -- --bridge       # the bridge thesis at scale
+cargo run --release --bin labs -- --layers       # can the layers fail: 60-error external catalogue and falsifier gate
 cargo run --release --bin labs -- --listening      # the voice of those who pay for the error
 cargo run --release --bin labs -- --schema      # the contract migration chain
 cargo run --release --bin labs -- --jev         # the Jev-LLM bridge
@@ -174,7 +176,7 @@ which name the specifications that were tried and are the record that the counte
 | Empirical registry | `docs/EMPIRICAL_REGISTRY.md`, `empirical/`, `governance/`, `data/` | every number tagged with the instrument that reproduces it; the Python scaffolding left on 2026-10-16 |
 | Language | every layer | **English migration of 2026-10-17**: crates, binaries, tooling, book, archives, and paper; the declared contract changes and what stayed frozen in Portuguese are in `docs/declarations/ENGLISH_MIGRATION.md` |
 | Retired | commit `1bfec905` | the Python simulation code and artifacts not significant to the theory |
-| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **seven live items since 2026-10-19** (eight from 2026-10-18, until item 15 closed with `labs --eprocess`), when the outside review added **14** (whether the layers can fail, which depends on people) and **15** (the H2 gate under an e-process, desk work), and the second outside review of the same day added **16** (the book as its own source, desk work) and **17** (an audit from outside, `docs/OUTSIDE_AUDIT.md`, which depends on people) — see §3 of that file. The original **four live items, held at their synthetic rehearsals by the owner's decision of 2026-10-18** (the next step is sharing with outside specialists), and they are not of the same nature: **3** human SHELF elicitation (the full panel), **5** the voice of those who pay for the error (0 of 7 groups heard, deadline 2026-12-15), and **9** the bridge thesis at scale (0 of 12 cases, window 2027-01-14) depend on **people outside the program** — consent, listening, and blind judgment, which no line of code can replace; **13** the Jev-LLM bridge depends on **artifact and code** — open weights frozen with a declared `sha256` and a local runner to load them —, and the runner has existed in `crates/stochology-s2/src/runner.rs` since 2026-10-17, with the operator manual in `empirical/p20-jev/RUNNER.md`; what is missing is the weights file and the hash declaration, which is a machine and operator operation rather than a panel. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
+| Declared and not enforced | `docs/DECLARED_PROPOSALS.md` | **six live items since 2026-10-19** (item 15 closed on 2026-10-19 with `labs --eprocess`, item 16 by the provenance ledger, and items 18 and 19 with contract 1.5; on 2026-10-20 item 13 sealed its 32 real outcomes and the `tensor-v1` 96-parameter numerical MLP baseline — Brier `0.293988`, ECE `0.338131` — while remaining open for an open-weights LLM GGUF with and without grammar, and item 14 sealed its 60-error external catalogue `erros.tsv`, instrument `labs --layers`, and synthetic rehearsal `labs --rehearsal-layers` while remaining open for three human coders, two from outside) — see §1 and §3 of that file. Five items (**3** human SHELF elicitation, **5** the voice of those who pay for the error, **9** the bridge thesis at scale, **14** whether the layers can fail, and **17** an audit from outside) depend on **people outside the program** — consent, listening, blind judgment, independent coding, and outside review, which no line of code can replace — while **13** (the Jev-LLM bridge) awaits a real open-weights LLM (GGUF) run over the 32 sealed outcomes. Items 1, 2, 4, 6, 7, 8, 10, 11, and 12 left the list on 2026-10-16, with proof in §2 of the same file; Phi5, the resolution field, System 1, the funnel, the holdout vault, the queue, and System 2 left earlier upon implementation |
 
 ## VIII. What Does Not Enter This Repository
 

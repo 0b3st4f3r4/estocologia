@@ -432,6 +432,84 @@ pub fn bridge() -> Result<String, String> {
     Ok(out)
 }
 
+/// Deterministic bootstrap index generator for resampling `n` items `replicas` times with a fixed seed.
+pub fn bootstrap_samples(n: usize, replicas: usize, seed: u64) -> Vec<Vec<usize>> {
+    let mut g = stochology_core::Rng::new(seed);
+    let mut out = Vec::with_capacity(replicas);
+    for _ in 0..replicas {
+        let mut sample = Vec::with_capacity(n);
+        for _ in 0..n {
+            sample.push(g.uniform(n as u64) as usize);
+        }
+        out.push(sample);
+    }
+    out
+}
+
+/// The Point 21 rehearsal (`DECLARACAO.md` §7): three model coders of different families over the 60 external errors.
+pub fn layers() -> Result<String, String> {
+    use crate::camadas;
+    let root = root();
+    let cases = camadas::parse_catalogue(&read(&root.join(camadas::CATALOGUE))?)?;
+    let reg = camadas::parse_registry(&read(&root.join(camadas::REGISTRY))?)?;
+    let codings_rows = camadas::parse_codings(&read(&root.join(camadas::REHEARSAL_CODINGS))?)?;
+    if codings_rows.len() != cases.len() {
+        return Err(format!(
+            "rehearsal codings have {} rows, catalogue has {}",
+            codings_rows.len(),
+            cases.len()
+        ));
+    }
+    let items: Vec<Vec<usize>> = codings_rows.into_iter().map(|(_, c)| c).collect();
+    let eval = camadas::evaluate_codings(&items, reg.bootstrap_replicas, reg.bootstrap_seed);
+
+    let mut out = String::new();
+    out.push_str("== synthetic rehearsal :: can the layers fail? (three model-family coders) ==\n");
+    out.push_str(
+        "label: SYNTHETIC. As declared in empirical/p21-camadas/DECLARACAO.md §7, this run measures\n\
+         only the floor of Fleiss' kappa across three model coders on the 60 external errors; it counts\n\
+         zero human coders and does not open the governance box.\n\n",
+    );
+    out.push_str(&format!(
+        "catalogue: {} errors | coders: {} (synthetic model families) | bootstrap: {} replicas (seed {})\n",
+        eval.n_errors, eval.n_coders, reg.bootstrap_replicas, reg.bootstrap_seed
+    ));
+    out.push_str(&format!(
+        "overall Fleiss' kappa: {:.4} | 90% bootstrap CI [{:.4}; {:.4}] -> synthetic floor: {}\n\n",
+        eval.overall_kappa,
+        eval.overall_ci90.0,
+        eval.overall_ci90.1,
+        eval.frame_verdict.as_str()
+    ));
+    out.push_str(&format!(
+        "{:<8} {:>10} {:>10} {:>22}\n",
+        "code", "mentions", "kappa", "90% bootstrap CI"
+    ));
+    for (name, kc, ci, mentions) in &eval.per_code_kappa {
+        out.push_str(&format!(
+            "{:<8} {:>10} {:>10.4} [{:>7.4}; {:>7.4}]\n",
+            name, mentions, kc, ci.0, ci.1
+        ));
+    }
+    out.push_str(&format!(
+        "\nfalsifier shares (majority >= 2 of 3 coders):\n  ARIT majority share: {:.4} [{:.4}; {:.4}]\n  FORA majority share: {:.4} [{:.4}; {:.4}]\n  ARIT + FORA share:   {:.4} [{:.4}; {:.4}] (ceiling 0.5000)\n",
+        eval.arit_majority_share,
+        eval.arit_ci90.0,
+        eval.arit_ci90.1,
+        eval.fora_majority_share,
+        eval.fora_ci90.0,
+        eval.fora_ci90.1,
+        eval.falsifier_sum_share,
+        eval.falsifier_sum_ci90.0,
+        eval.falsifier_sum_ci90.1
+    ));
+    out.push_str(&format!(
+        "synthetic thesis (a) floor: {} (real human verdict stays LOCKED at BOX CLOSED in labs --layers)\n",
+        eval.thesis_a_verdict.as_str()
+    ));
+    Ok(out)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -511,6 +589,7 @@ mod tests {
             shelf().expect("shelf"),
             listening().expect("listening"),
             bridge().expect("bridge"),
+            layers().expect("layers"),
         ] {
             assert!(
                 out.contains("SYNTHETIC"),

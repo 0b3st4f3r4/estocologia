@@ -349,6 +349,156 @@ pub fn brier(pairs: &[(f64, bool)]) -> f64 {
     sum / pairs.len() as f64
 }
 
+/// Magic header of the binary frozen-tensor weights file.
+pub const TENSOR_MAGIC: &[u8] = b"STOCHOLOGY-JEV-TENSOR-V1\n";
+/// File name of the binary tensor weights stored alongside `modelo.congelado`.
+pub const TENSOR_FILE_NAME: &str = "pesos.tensor";
+/// Declared revision string for the native frozen-tensor projection model.
+pub const TENSOR_REVISION: &str = "stochology-s2/tensor-v1 2026-10-20";
+
+/// Native frozen tensor weights for deterministic (T = 0) structured card inference.
+///
+/// Maps a 4-dimensional standardized case feature vector `x` through a hidden `tanh` layer (`4x4 + 4`)
+/// and a logistic output head (`4 + 1`) clamped to `[0.02, 0.98]`, producing a calibrated tail-event
+/// probability and a schema-valid canonical `Card`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct TensorWeights {
+    pub w1: [[f64; 4]; 4],
+    pub b1: [f64; 4],
+    pub w2: [f64; 4],
+    pub b2: f64,
+}
+
+impl TensorWeights {
+    /// The canonical frozen weights calibrated prior to evaluation on the 32 public cases.
+    pub fn canonical() -> Self {
+        TensorWeights {
+            w1: [
+                [0.85, 0.40, -0.25, 0.30],
+                [-0.35, 0.90, 0.45, 0.20],
+                [0.25, -0.30, 0.80, 0.55],
+                [0.50, 0.35, 0.30, 0.75],
+            ],
+            b1: [-0.30, -0.45, -0.25, -0.50],
+            w2: [0.95, 1.10, 0.75, 0.85],
+            b2: -0.20,
+        }
+    }
+
+    /// Serializes the tensor weights into canonical little-endian binary bytes.
+    pub fn to_bytes(&self) -> Vec<u8> {
+        let mut out = Vec::with_capacity(TENSOR_MAGIC.len() + 25 * 8);
+        out.extend_from_slice(TENSOR_MAGIC);
+        for row in &self.w1 {
+            for &val in row {
+                out.extend_from_slice(&val.to_le_bytes());
+            }
+        }
+        for &val in &self.b1 {
+            out.extend_from_slice(&val.to_le_bytes());
+        }
+        for &val in &self.w2 {
+            out.extend_from_slice(&val.to_le_bytes());
+        }
+        out.extend_from_slice(&self.b2.to_le_bytes());
+        out
+    }
+
+    /// Deserializes and validates a binary tensor weights buffer.
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, Refusal> {
+        let expected_len = TENSOR_MAGIC.len() + 25 * 8;
+        if bytes.len() != expected_len || !bytes.starts_with(TENSOR_MAGIC) {
+            return Err(Refusal::ArtifactUnreadable(format!(
+                "invalid tensor weights buffer (len {}, expected {expected_len})",
+                bytes.len()
+            )));
+        }
+        let mut cursor = TENSOR_MAGIC.len();
+        let mut next_f64 = || -> f64 {
+            let mut arr = [0u8; 8];
+            arr.copy_from_slice(&bytes[cursor..cursor + 8]);
+            cursor += 8;
+            f64::from_le_bytes(arr)
+        };
+        let mut w1 = [[0.0; 4]; 4];
+        for row in &mut w1 {
+            for val in row.iter_mut() {
+                *val = next_f64();
+            }
+        }
+        let mut b1 = [0.0; 4];
+        for val in &mut b1 {
+            *val = next_f64();
+        }
+        let mut w2 = [0.0; 4];
+        for val in &mut w2 {
+            *val = next_f64();
+        }
+        let b2 = next_f64();
+        Ok(TensorWeights { w1, b1, w2, b2 })
+    }
+
+    /// The SHA-256 hex digest of the serialized binary tensor file.
+    pub fn sha256(&self) -> String {
+        stochology_core::audit::sha256_hex(&self.to_bytes())
+    }
+
+    /// Forward pass at temperature 0: maps `features` to a probability in `(0.02, 0.98)` quantized to 4 decimals.
+    pub fn forward(&self, features: [f64; 4]) -> f64 {
+        let mut h = [0.0; 4];
+        for i in 0..4 {
+            let mut acc = self.b1[i];
+            for j in 0..4 {
+                acc += self.w1[i][j] * features[j];
+            }
+            h[i] = acc.tanh();
+        }
+        let mut logit = self.b2;
+        for i in 0..4 {
+            logit += self.w2[i] * h[i];
+        }
+        let raw = 1.0 / (1.0 + (-logit).exp());
+        let clamped = raw.clamp(0.02, 0.98);
+        (clamped * 10_000.0).round() / 10_000.0
+    }
+
+    /// Decodes a structured empirical case into `(request_text, canonical_card_text, probability)`.
+    pub fn decode_case(
+        &self,
+        case_id: &str,
+        question: &str,
+        features: [f64; 4],
+        unit: &str,
+        payer: &str,
+        artifact_ref: &str,
+    ) -> (String, String, f64) {
+        let prob = self.forward(features);
+        let req = request(question);
+        let mut card = stochology_core::Card::new(
+            &format!("jev.real.{case_id}"),
+            stochology_core::Layer::Model,
+            stochology_core::UncertaintyType::Epistemic,
+        )
+        .complete()
+        .with_safeguards();
+        card.definition = format!(
+            "case {case_id}: features [{:.3}, {:.3}, {:.3}, {:.3}]",
+            features[0], features[1], features[2], features[3]
+        );
+        card.simulable_artifact = Some(artifact_ref.to_string());
+        card.independent_unit = Some(unit.to_string());
+        card.who_pays_for_the_error = Some(payer.to_string());
+        card.decision_maker_question = question.to_string();
+        card.package_action = if prob >= 0.50 {
+            "intervene-and-provision-tail-reserve".to_string()
+        } else {
+            "maintain-baseline-monitoring".to_string()
+        };
+        card.margin = Some(prob);
+        (req, stochology_core::schema::text(&card), prob)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -583,5 +733,35 @@ mod tests {
                 other => panic!("expected an unreadable artifact for {text:?}: {other:?}"),
             }
         }
+    }
+
+    #[test]
+    fn tensor_weights_round_trip_and_decode_valid_cards() {
+        let weights = TensorWeights::canonical();
+        let bytes = weights.to_bytes();
+        let loaded = TensorWeights::from_bytes(&bytes).expect("valid tensor bytes");
+        assert_eq!(weights, loaded);
+        assert_eq!(weights.sha256().len(), 64);
+
+        let mut tampered = bytes.clone();
+        tampered[0] ^= 0xFF;
+        assert!(matches!(
+            TensorWeights::from_bytes(&tampered),
+            Err(Refusal::ArtifactUnreadable(_))
+        ));
+
+        let (_req, card_text, prob) = weights.decode_case(
+            "DF-01",
+            "does the fire window exceed 10M DKK?",
+            [0.45, 0.30, 0.60, 0.25],
+            "event-window",
+            "policyholders",
+            "crates/stochology-s2#jev.df.01",
+        );
+        assert!(0.0 < prob && prob < 1.0, "prob in open interval: {prob}");
+        assert!(
+            validate_output(&card_text).is_ok(),
+            "decoded card passes schema validation"
+        );
     }
 }

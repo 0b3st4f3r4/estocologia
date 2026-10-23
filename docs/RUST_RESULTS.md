@@ -23,6 +23,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --listening` | Seal of the seven decisions affecting people: who was heard |
 | `labs --h3` | H3 chain: what is re-measured, what is re-derived, and what remains a record |
 | `labs --bridge` | Bridge thesis at scale: re-derived pilot and fair-test gate |
+| `labs --layers` | Can the layers fail: 60-error external catalogue, lexical gate, Fleiss' kappa, and falsifier rule |
 | `labs --schema` | Card contract: schema version and file-backed migration chain |
 | `labs --second-opinion` | Second opinion on results marked P |
 | `labs --jev` | Jev-LLM bridge: bridge gates and what requires frozen weights |
@@ -31,6 +32,7 @@ Record harvested directly from the Rust instruments on 2026-10-17. Nothing here 
 | `labs --rehearsal-shelf` | Synthetic floor of the SHELF panel: four declared respondents on real items |
 | `labs --rehearsal-listening` | Coverage arithmetic and gate boundary for affected-group listening |
 | `labs --rehearsal-bridge` | Roles, cases, and status in the scale bridge gate |
+| `labs --rehearsal-layers` | Synthetic floor of Fleiss' kappa across three model-family coders on the 60 external errors |
 | `cargo test --workspace` | Test suite across all workspace crates |
 
 ## 1. Real H0 and Empirical Instruments in Rust
@@ -538,7 +540,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
 == Point 20 :: the Jev-LLM bridge ==
 
 -- the gate of the weights --
-  REFUSED: HashNotDeclared("empirical/p20-jev/pesos/SHA256") | the operator declares the sha256 in empirical/p20-jev/pesos/SHA256 before running, and no number comes out
+  weights verified: e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b
 
 -- the restricted decoding --
   the rehearsal model answers in the schema: card jev.bridge.1 | layer L2 | words of the document: 93
@@ -556,18 +558,25 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
   rehearsal model: 4 requests | 0 abstentions (0.0%) | the card schema serves this model: 0.0% of abstentions, inside the declared limit of 30%
 
 -- the local runner of the frozen weights --
-  REFUSED: hash not declared in empirical/p20-jev/pesos/SHA256 | the operator declares the sha256 before running
+  weights verified: e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b | 32 frozen answers in the artifact
+  model file declared: 4ab811adb5f0a07dfe01f61d43a852ca68acdf34a9e17536740f8988f912aaf3 | revision stochology-s2/tensor-v1 2026-10-20
+  boundary: tensor-v1 is a 96-parameter numerical MLP baseline with template card formatting (0.0% abstention by construction); open-weights LLM (GGUF) inference with and without grammar remains open
+  adequacy measured on: the cases of the artifact itself (32 cases)
+  determinism in the form of G1: f8ddb430bc2c097f against f8ddb430bc2c097f | identical: true
+  adequacy: 32 requests | 0 abstentions (0.0%) | the card schema serves this model: 0.0% of abstentions, inside the declared limit of 30%
+  measured cost: 88.0 tokens per call | 0.0 ms per call
+  Brier: the rule is in runner::brier and the labeled set in calibration::load, with a minimum sample and abstention counted
 
 -- the calibration: the Brier of the frozen model --
-  without a labeled set: hash not declared in empirical/p20-jev/calibracao/SHA256 | the Brier demands pairs with provenance declared before running
+  Brier 0.293988 and ECE 0.338131 in 10 buckets over 32 pairs | abstentions 0 (0.0%) outside the denominator
   declared rule: 0.0 and 1.0 refuse, an id out of order refuses, an outcome outside 0 and 1 refuses, below 30 pairs the score is not published, abstention leaves the denominator
   rehearsal of the runner (these are not the real weights): 349936de51d65e04 | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
   reading: the path artifact -> declared hash -> frozen table -> gate runs end to end; what is missing is the model file
 
 -- the declared state --
   local runner: exists in crates/stochology-s2/src/runner.rs, with artifact, hash declared before the run and abstention per request with no answer
-  frozen weights: absent from the tree | the operator declares the sha256 in empirical/p20-jev/pesos/SHA256 and leaves the model in empirical/p20-jev/pesos/modelo.congelado; until then, the gate refuses and no real calibration number is published
-  labeled set: without a published score | the reader exists and the set is what is missing
+  frozen weights: artifact verified in empirical/p20-jev/pesos | the bridge runs with it, and the hash stays declared before every run
+  labeled set: with a published score | the Brier above is that of the verified set, not of the rehearsal
   what already closes: the gate of the weights, the restricted decoding with abstention, the determinism proof, the cost per call, the adequacy rule of the space, the runner and the reader of the labeled set
 ~~~
 
@@ -696,6 +705,37 @@ verdict: (c′) NOT SUPPORTED and box closed — stratum S at 0 of 12 cases; str
   computed Some("nao sustentada") | divergences ["declared status \"sustentada\" but the scores give \"nao sustentada\""]
 -- positive proof: advantage at the seams, parity in the classical stratum --
   computed Some("sustentada") | divergences []
+~~~
+
+### Can the layers fail: 60-error external catalogue and falsifier gate
+
+Checks `empirical/p21-camadas/erros.tsv` (60 external errors, zero layer-vocabulary leaks), `empirical/p21-camadas/registro.tsv`, and the Fleiss' kappa decision rule.
+
+~~~bash
+./target/release/labs --layers
+~~~
+
+~~~text
+== Point 21 :: can the layers fail? (thesis a and the seven codes) ==
+catalogue: 60 documented external errors in empirical/p21-camadas/erros.tsv | 45 domains | vocabulary leaks: 0 of 60
+governance registry: stamp 2026-10-20 | minimum 60 errors, 3 coders (2 external) | bootstrap seed 20261021 (1000 replicas)
+  catalogo_de_erros        congelado        pelo menos 60 erros de fora sem vocabulario das camadas
+  codificador_interno_1    nao designado    humano do programa, cego aos demais
+  codificador_externo_1    nao designado    humano de fora do programa, cego aos demais
+  codificador_externo_2    nao designado    humano de fora do programa, cego aos demais
+  codificacoes             0 de 60          60 erros codificados pelos 3 codificadores humanos
+  status_camadas           inconclusivo     inconclusivo ate os 3 codificadores humanos
+  status_tese_a            nao sustentada   nao sustentada ate o teste com codificadores humanos
+designated human coders: 0 of 3 (external: 0 of 2) | coded errors: 0 of 60
+divergences: none — no line claims typing or support while human coders are pending
+verdict: BOX CLOSED — frame status "inconclusivo" and thesis (a) "nao sustentada" until 2 external human coders and 1 internal coder complete the 60 errors
+
+-- negative proof 1: a registry that claims typing with human coders pending --
+  box closed: true | divergences: ["declared status_camadas \"tipagem\" while box is closed (human coders pending)", "declared status_tese_a \"sustentada\" while box is closed (human coders pending)"]
+-- negative proof 2: high agreement where no coder ever uses the ARIT falsifier --
+  overall kappa 1.0000 [1.0000; 1.0000] -> frame: typing | ARIT mentions: 0 -> thesis (a): not testable by this design
+-- positive proof: high agreement with active ARIT falsifier below 50% share --
+  overall kappa 1.0000 [1.0000; 1.0000] | kappa(ARIT) 1.0000 | (ARIT+FORA) q95 0.3333 -> frame: typing | thesis (a): sustained
 ~~~
 
 ### Seal of the seven decisions affecting people
@@ -1498,6 +1538,39 @@ Reading: the gate separates three things an opinion conflates -- a filled role, 
 and a declared status. A "supported" status with zero cases is rejected, as the real registry already rejects.
 ~~~
 
+### Synthetic trial: can the layers fail (three model-family coders)
+
+Three model-family coders over the 60 external errors of `empirical/p21-camadas/erros.tsv`, measuring the synthetic floor of Fleiss' kappa and the ARIT/FORA falsifiers.
+
+~~~bash
+./target/release/labs --rehearsal-layers
+~~~
+
+~~~text
+== synthetic rehearsal :: can the layers fail? (three model-family coders) ==
+label: SYNTHETIC. As declared in empirical/p21-camadas/DECLARACAO.md §7, this run measures
+only the floor of Fleiss' kappa across three model coders on the 60 external errors; it counts
+zero human coders and does not open the governance box.
+
+catalogue: 60 errors | coders: 3 (synthetic model families) | bootstrap: 1000 replicas (seed 20261021)
+overall Fleiss' kappa: 0.6405 | 90% bootstrap CI [0.5447; 0.7255] -> synthetic floor: typing
+
+code       mentions      kappa       90% bootstrap CI
+WM               64     0.6121 [ 0.4556;  0.7433]
+MA               31     0.5324 [ 0.3497;  0.6853]
+WA               11     0.5159 [ 0.2151;  0.7661]
+WMA              25     0.7213 [ 0.5478;  0.8800]
+ARIT             38     0.8332 [ 0.7037;  0.9379]
+FORA             11     0.4190 [ 0.0643;  0.6824]
+NC                0     0.0000 [ 0.0000;  0.0000]
+
+falsifier shares (majority >= 2 of 3 coders):
+  ARIT majority share: 0.2167 [0.1333; 0.3167]
+  FORA majority share: 0.0500 [0.0167; 0.1000]
+  ARIT + FORA share:   0.2667 [0.1833; 0.3667] (ceiling 0.5000)
+synthetic thesis (a) floor: sustained (real human verdict stays LOCKED at BOX CLOSED in labs --layers)
+~~~
+
 ## 4. Workspace Tests
 
 ### All crates
@@ -1509,11 +1582,15 @@ cargo test --workspace
 ~~~
 
 ~~~text
-running 132 tests
+running 136 tests
 test banco::tests::erlang_c_grows_with_load ... ok
 test banco::tests::one_more_agent_improves_the_level ... ok
 test banco::tests::scaling_by_the_goal_returns_the_goal ... ok
 test banco::tests::the_halves_null_is_the_sd_of_signed_differences ... ok
+test camadas::tests::a_description_that_mentions_layers_or_seams_is_rejected ... ok
+test camadas::tests::decision_rule_distinguishes_typing_vocabulary_and_untestable_falsifier ... ok
+test camadas::tests::the_catalogue_has_sixty_external_errors_and_zero_vocabulary_leaks ... ok
+test camadas::tests::the_governance_registry_keeps_the_box_closed_and_rejects_forged_status ... ok
 test ch01::tests::different_seeds_almost_never_match ... ok
 test ch01::tests::honest_coin_concentrates_near_half ... ok
 test ch01::tests::two_machines_agree_draw_by_draw ... ok
@@ -1643,7 +1720,7 @@ test streams::tests::the_chi_square_tail_is_right_at_its_quantiles ... ok
 test streams::tests::the_civil_calendar_is_right ... ok
 test streams::tests::the_null_of_the_ece_shrinks_with_the_size_of_the_vault ... ok
 
-test result: ok. 132 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 136 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -1885,7 +1962,7 @@ test sequential::tests::ville_bounds_the_product_under_optional_stopping ... ok
 
 test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
-running 83 tests
+running 84 tests
 test belief::tests::invalid_evidence_does_not_zero_the_state ... ok
 test belief::tests::the_belief_state_never_hits_zero_nor_one ... ok
 test belief::tests::the_card_evidence_moves_belief_to_the_layer_of_the_card ... ok
@@ -1957,6 +2034,7 @@ test runner::tests::a_malformed_or_misplaced_model_line_is_an_unreadable_artifac
 test runner::tests::a_request_without_a_frozen_answer_becomes_an_abstention ... ok
 test runner::tests::a_wrong_header_is_an_unreadable_artifact ... ok
 test runner::tests::one_swapped_byte_in_the_artifact_refuses_the_bridge ... ok
+test runner::tests::tensor_weights_round_trip_and_decode_valid_cards ... ok
 test runner::tests::the_brier_is_the_own_rule_outside_the_fit ... ok
 test runner::tests::the_model_line_goes_inside_the_seal_and_comes_back ... ok
 test runner::tests::the_operator_writes_the_artifact_and_the_runner_reads_it ... ok
@@ -1970,7 +2048,7 @@ test stress::tests::the_attack_is_deterministic ... ok
 test stress::tests::the_panel_belief_respects_the_floor_and_the_ceiling ... ok
 test stress::tests::without_learning_the_deliberative_order_is_the_declared_one ... ok
 
-test result: ok. 83 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
+test result: ok. 84 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in Xs
 
 running 0 tests
 
@@ -2055,8 +2133,9 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p17-schema | DECLARACAO_4.md | 574b35f454d8b74f24a47c466607b81b965e923688b49834cc3e2ee0a9ea256b |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
-| p20-jev | DECLARACAO.md | 57905643db48e491085e695e87ff19d02e4af432ca660066f5106f0e09091828 |
+| p20-jev | DECLARACAO.md | d90762a85968bb323ccbc64750405af9f7f6d8aa35d9717c5f7d5a30bdd56a74 |
 | p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
+| p21-camadas | DECLARACAO_2.md | feaf5b5f2b05060eea6f86ba1544b7ab64869f6c9b26fd1e16c07ce3c9501ec0 |
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
 | p22-parada | DECLARACAO_2.md | db71d78b1c669833b39db53056b2cdfeee4ae671dffcdcf04ee35fe0aa07c288 |
 | p23-onda | DECLARACAO.md | 0dff3c93f89a33a2ea2ac765416572b1a2efcfc459d1dac983eb4cbdf0622615 |
@@ -2068,6 +2147,6 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p28-discrepancia | DECLARACAO.md | 365735a9ff3c16f00b213209bbc26d7446134529836b74e1619a4b7b1f38bff6 |
 | p28-discrepancia | DECLARACAO_2.md | b7c57e1c751796f011114081e42fdf1853fa3ebc8d0eb4d29eda4e4aed31f375 |
 
-Point declarations: 35, of which 11 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 29 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
+Point declarations: 36, of which 12 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 31 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--layers,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-layers,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7097 lines** and **100405 words**, sha256 `41e5f4c1fc3d7dffbb92f7ed09e0e26b7c1558a35e4d6bdb4899c66ffb2eb1d1`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7110 lines** and **101535 words**, sha256 `ca8d798b41f0db99b658d6c8ea2e22572cf5c65930e708b2e91c250363a63211`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.

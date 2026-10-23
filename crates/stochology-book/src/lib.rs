@@ -4,6 +4,7 @@
 //! and can be reproduced by the command ~labs --chapter N~.
 
 pub mod banco;
+pub mod camadas;
 pub mod ch01;
 pub mod ch02;
 pub mod ch03;

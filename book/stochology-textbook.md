@@ -192,10 +192,10 @@ people, 10*. "A 95% confidence interval" becomes *in each 100 repetitions of the
 contain the real value*. The number is the same; the second form already shows how many people stand on each
 side of the decision.
 
-**Where the name comes from.** *Stókhos* is the Greek word for the target an archer aims at, and also for a
-well-aimed guess. In 1713, eight years after his death, Jacob Bernoulli's *Ars Conjectandi* was published: the art
+**Where the name comes from.** *Stókhos* ($\sigma\tau\acute{o}\chi\omicron\varsigma$) is the classical Greek word for the narrow target an archer aims at, and also for a
+well-aimed conjecture under uncertainty; joined with *lógos*, it names the reasoned study of aiming when the mark is hidden. The Greek root separates it cleanly from near-homophones and false friends: *eschatology* (from *éskhatos*, the theology of last things, or coprology), *stomatology* (oral pathology, from *stóma*), *tocology* (obstetrics, from *tókos*), and commercial stock or inventory management. In 1713, eight years after his death, Jacob Bernoulli's *Ars Conjectandi* was published: the art
 of conjecturing, which he called *stochastice*. Over time "stochastic" came to mean only "random", and it lost the
-interesting part: **aiming well at a target you cannot see**.
+interesting part: **aiming well at a target you cannot see**. Placed in the taxonomic tradition of Ideonomy, which maps the sciences of forecasting and decision, the discipline traces the passage from deterministic inventory formulas (such as constant-demand economic order quantities) and simplified technical indicators (the stochastic oscillator $\%K$ and $\%D$, or geometric Brownian motion $dS_t = \mu S_t\,dt + \sigma S_t\,dW_t$) toward models built for stochastic volatility (Heston), discontinuous jumps (Merton), heavy tails, and abrupt regime shifts.
 
 **Science and art.** Part of judgement under uncertainty is formal: keeping beliefs coherent, updating them with
 evidence, measuring a margin of error on the right unit, checking calibration, pricing the error. Part of it is
@@ -831,6 +831,8 @@ observation of $k$ steps ago weighs $\lambda^k$, and the model remembers, in eff
 recent observations. With $\lambda = 0.99$, that is about 100. The model gives up the precision of a long
 memory in exchange for following a moving target. The choice of $\lambda$ is itself a bet on how fast the world
 changes, and it must be declared like any prior.
+
+When the watch is sequential, the live-clock detector $C_t = \max(0,\; C_{t-1} + (x_t - \mu_0 - k))$ uses a floor at zero so that a calm stretch never accumulates illusory credit that would mask a later shift. Yet a purely locational $C_t$ stays blind to explosions in variance ($\sigma^2$) when the mean $\mu_0$ does not move, and in real time a single extreme realization cannot distinguish a structural regime break at $\tau$ (a Christmas turkey) from the first large draw of a stationary Pareto law with infinite variance ($\alpha \le 2$).
 
 ### Step 3 — Hands on
 
@@ -2089,6 +2091,8 @@ experiment whose true causal structure was known and declared beforehand, ICP re
 in a physical chamber, $\hat S = \{red, green, blue\}$, and left out light sensors strongly
 correlated with them, because they were children of the LEDs.
 
+The loop closes here. ICP finds causes that stay invariant across the environments it has seen; it says nothing about the environments its own use will create. When the agent acts on the model, the world can change the law itself; a set that was invariant stops being so, and the intersection can come out empty. That is Goodhart's law in its strongest form, and Lucas' critique applied to the method rather than to a policy: a decision rule that is optimal against the world it will alter stops being optimal the moment it is used. The cost of perpetual abstention is not free, and it must be weighed against the cost of keeping a rule that no longer holds.
+
 ---
 
 ### Step 3 — Hands on
@@ -2318,7 +2322,7 @@ losing one.
 **Epistemic uncertainty is an argument for staking less.** Take the even-odds bet with chance 0.6 and estimate the
 chance by the frequency of 25 rounds. Full Kelly on the estimate, $2\hat p - 1$, has a negative growth rate under the
 true chance whenever $\hat p$ reaches 18 of 25, which happens in 15% of the estimates (the binomial count is exact).
-Half Kelly keeps 75% of the growth of full Kelly with a quarter of the variance of the stake.
+Half Kelly keeps 75% of the growth of full Kelly with a quarter of the variance of the stake. More generally, when the probabilities $(p, q)$ and the payoffs $(a, b)$ in $f^* = (p b - q a)/(a b)$ are estimated with sampling noise under epistemic ignorance or continuous heavy tails, plugging point estimates without a fractional Kelly discount and non-parametric tail bounds pushes the decision-maker past the $2f^*$ boundary into overbetting, where the time growth rate $g_{\mathrm{time}} = \mathbb{E}[\ln(r_t)]$ turns negative.
 
 **Laplace smoothing.** The simplest estimator of a probability is the observed frequency
 $k/n$. It has a fatal defect in rare events. With zero losses in 250 weeks, it says that the
@@ -2576,7 +2580,11 @@ often than necessary, and the group with fewer cases is missed more often. The e
 
 **The threshold and the value of information.** If protecting costs $C$ and not protecting costs $L$ when the event
 occurs, one protects when $p > C/L$. A piece of information is worth as much as it can move the probability to
-the other side of that threshold. The bits it carries do not enter that account. The value of knowing the state of the
+the other side of that threshold. The bits it carries do not enter that account.
+
+The rule $p > C/L$ (or $p_A^* = c_{\mathrm{I}} / (c_{\mathrm{I}} + c_{\mathrm{II}})$) hides two premises worth stating. It assumes that protecting removes the whole loss; a measure that works only in part, or that causes collateral harm on its own (iatrogenia), does not. Writing the efficacy of the intervention as $\eta \in (0, 1]$, a number above zero and at most one, moves the threshold to $p > C/(\eta L)$: an intervention that removes only part of the harm asks for a probability that much higher, and any collateral damage adds to $c_{\mathrm{I}}$. It also assumes that the loss is a fact and not a choice. The catastrophic cost $c_{II}$ lands on someone, and a rule whose costs are fixed only by the agent who decides invites the same fraud as a tuned model, moved from the specification to the price list. An honest contract therefore has to audit who set the cost, not only whether the arithmetic is right; a rule that recomputes the arithmetic and records who wrote it has not yet done that.
+
+The value of knowing the state of the
 world before acting, the EVPI, is the ceiling of the value of any information:
 
 $$\mathrm{EVPI} = \mathbb{E}_\theta\big[\max_a U(a,\theta)\big] - \max_a \mathbb{E}_\theta\big[U(a,\theta)\big]$$
@@ -3255,7 +3263,7 @@ the inverse of the size of the worst daily fall, and in the training set it is w
 **Kelly.** The leverage that maximises the time rate is $L^* = \arg\max_L g_L$. With the uncertainty about the
 parameters of the series carried into a posterior, the 90% interval goes from **1.26 to 3.44**, with median
 **2.35**; the empirical Kelly of the series is 2.14. Leveraging 3 times is inside the interval, but at its upper
-end, and Chapter 10 showed what epistemic uncertainty says about the upper end: stake less.
+end, and Chapter 10 showed what epistemic uncertainty says about the upper end: stake less. Under parametric uncertainty and continuous heavy tails, plugging point estimates into $f^* = (p b - q a)/(a b)$ without a fractional Kelly discount or non-parametric tail bounds pushes the bettor past $2f^*$ into the overbetting zone where $g_{\mathrm{time}} = \mathbb{E}[\ln(r_t)]$ is negative.
 
 **The severe test.** The claim world states that wealth grows 3 times the annual arithmetic sum, without drag. In it,
 the fraction of the 20-year cohorts that end above the starting point has mean **0.9286** (with the 1% quantile at
@@ -3538,6 +3546,8 @@ claims grows 4.6% per year, with a p-value of $2 \times 10^{-6}$. Laplace, there
 estimate, not a lower bound: with a uniform prior and a world that drifts upwards, the true rate is probably higher.
 After 36 clean months, 1 in 38 per month is the least one can defend, never zero.
 
+A detector that watches only the location of a series, the mean, is blind to a change in its spread, the variance; a stream can explode in volatility while its average stays put. The mirror difficulty is that a single extreme reading is ambiguous. It can be the first draw of a stationary law with a heavy tail, or the first sign of a broken world; no method reads which one from one observation alone. A rule that treats every extreme as a break resets on noise, and a rule that treats every break as a tail reacts too late. The two errors trade against each other, and the price of each is a decision.
+
 **How much a clean window is worth.** Here the account stops being about the frequency and becomes about the evidence.
 Compare two hypotheses: "the risk is negligible" (1 month hit per century, $p = 1/1200$) and "the risk is the one of the
 tail of the training set" ($p \approx 1/23$ per month). The probability of seeing 36 clean months under each hypothesis:
@@ -3771,7 +3781,7 @@ $$\mathcal{G} = (V,\; E_{\mathrm{tree}},\; E_{\mathrm{graph}},\; H,\; \Phi)$$
 
 **Every claim becomes executable code.** Each node carries a one-line definition and a pointer to the artifact
 that executes it with a fixed seed. Whoever asserts delivers the code that runs the assertion, and a claim that
-nobody else can run cannot be checked by anybody else.
+nobody else can run cannot be checked by anybody else. Evaluating the structural invariants as a strict boolean product $\Phi(e) = \prod \Phi_j$ creates a sharp cliff: a single zero halts the pipeline, so in critical operations a human-supervised graceful degradation protocol is needed rather than silent paralysis.
 
 **The five mandatory fields of a node.** A node without any of them is refused on writing.
 
@@ -4135,7 +4145,7 @@ C_i(X) = \mathrm{safeguard}_i(X) \wedge \mathrm{anchor}_i(X).$$
 
 The $\bigwedge$ is the logical "and". One single row that fails is enough for the assignment to go back. The
 condition reads no seed and no judgement: the same card always gets the same sixteen bits, and it **fails** when a
-safeguard was declared absent or left without its anchor, which is what makes it auditable. The panel is a
+safeguard was declared absent or left without its anchor, which is what makes it auditable. Because the boolean conjunction across $\Phi_1$–$\Phi_5$ and $A_1$–$A_8$ acts as a strict cliff, halting abruptly in a critical operation can itself inflict a catastrophic omission ($c_{\mathrm{II}}$), so a formal fallback and graceful degradation under human supervision are what the block needs. The panel is a
 checklist. It answers "was the safeguard declared, with the field that anchors it?", not "does the safeguard hold
 under attack?". The second question belongs to tests that run the attack, such as the tampering of the trail in
 the gates of Chapter 17.
@@ -4546,6 +4556,8 @@ is a finding withheld, and is refused. The **decision rule** writes the inequali
 $p = 0.05$, so the act must be not to insure, as Chapter 11 found, and a card that writes "protect" beside those numbers
 is refused, because its action departs from its own reasoning. The three are optional, and they check what the card
 declares about the exchanges, not the exchanges: a finding that was never logged is still invisible.
+
+A gate that fails a card on the smallest slip checks by conjunction: the panel approves only when each of its agents approves, and when the decision rule $p_A^* = c_{\mathrm{I}} / (c_{\mathrm{I}} + c_{\mathrm{II}})$ (adjusted for intervention efficacy $\eta \in (0, 1]$ and collateral iatrogenia) has its catastrophic loss $c_{\mathrm{II}}$ audited from outside rather than fixed unilaterally by the agent. A strict conjunction $\Phi(e) = \prod \Phi_j$ is a cliff. In an operation that cannot stop, a machine that halts on one bit and offers no fallback converts a guardrail into a paralysis, and paralysis is itself a critical omission of the second kind. A gate that stops on the smallest slip therefore needs, alongside the stop, a degraded but explicit mode run by a person who assumes the risk, with the stop as the default and the degradation as a declared, sealed path rather than a silent override; without that ramp the guardrail and the paralysis are the same object.
 
 **The physics of noise, in detail.** The fourth field asks for three classifications of the noise.
 
@@ -5102,6 +5114,7 @@ guarantee that all the causes appear, and it says nothing about the size of the 
 3. **The rows are not independent.** 16 instants per volunteer in the cardiac trial, up to 403 students per school
    in STAR, 225 thousand flights in 364 days. Treating dependent rows as independent narrows the margin. The correction
    was the Wald clustered by volunteer or by school and the permutation of whole blocks.
+4. **The intervention triggers a performative loop.** In social systems (Lucas and Goodhart), when the agent acts using the invariant subset, the world reacts by altering the structural law itself, which can empty the invariant set ($\hat{S} = \emptyset$) and requires weighing the cost of perpetual abstention against the cost of maintaining the status quo.
 
 **The code failure that a reading found.** In round 2, before any execution, a reading of the code found an
 error in the invariance test. The degrees of freedom were counted by the number of **columns** of the design matrix in
@@ -5589,7 +5602,7 @@ stayed on in 95% of the checks of the 2013 development, because with a window of
 0.02 from one day to the next. A permanent alarm warns nothing. The correction held the only real
 deviation that appeared, in the third quarter of 2017, when the raw model marked $+0.028$ and the corrected one,
 $+0.001$. But the declared stress did not discriminate, because the daily readjustment absorbs the drift alone at the level of the
-quarter. The raw model also passed. That is stress, not proof.
+quarter. The raw model also passed. That is stress, not proof. Likewise, a sequential detector $C_t = \max(0,\; C_{t-1} + (x_t - \mu_0 - k))$ avoids accumulating illusory credit during calm periods through its floor at zero, yet a purely locational $C_t$ stays blind to explosions in variance ($\sigma^2$) and cannot separate, in real time, a structural break at $\tau$ from the first extreme draw of a stationary power law with infinite variance ($\alpha \le 2$).
 
 **The inverted audit, and who pays** (from the record of the research; the rebuild of Step 3 audits only the two
 years of its vault). The question "who pays for the error?" was run inside out in the three prison streams. The **chosen** metric is the false positive rate of the marker,

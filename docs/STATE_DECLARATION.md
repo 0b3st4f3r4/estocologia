@@ -122,7 +122,7 @@ In `docs/RUST_RESULTS.md` §5, generated: **20 point declarations**, of which 4 
 with both values side by side), **16 foundational empirical points**, **21 instruments** (plus 5 modifier flags) in `labs`, **21 chapters**, and
 **8 crates**. Each row of the manifest carries the `sha256` of the declaration file.
 
-The assembled textbook enters the same manifest with its identifying metrics: **7 097 lines**, **100 405 words**, and
+The assembled textbook enters the same manifest with its identifying metrics: **7 110 lines**, **101 535 words**, and
 the `sha256` of the file. The state of 2026-10-17 had a defect that this paragraph closes: the earlier
 `scripts/book/build.py --check` assembled the book in memory and checked only the ramp without inspecting the file on
 disk — while the file on disk was **353 lines behind** `book/`, missing the 21 R-axis blocks and the
@@ -153,7 +153,7 @@ On 2026-10-17 the repository migrated to English: the nine crates, the four bina
 textbook, the empirical audit, the governance record, the paper, and the bibliography. No number moved:
 `cargo test --workspace` reports **373 passed, 0 failed**, the `gates` merkle root over the twelve registered cards is
 still `9716e28a87bec9cf691db6127e810430738eab58a083c303777a00814cdf3a81`, and the negative proof still exits 1 with
-root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 097 lines and 100 405 words, and its 39 cited blocks are the literal
+root `802e84b6...`. The assembled book then had 5 619 lines; since the critical reading of 2026-10-19 and its follow-up it has 7 110 lines and 101 535 words, and its 39 cited blocks are the literal
 stdout of the English instruments. What moved by construction -- the two wave seals that hash translated text and the
 two `gates` report hashes -- and what stayed frozen in Portuguese because it is hashed or read on disk are declared in
 `docs/declarations/ENGLISH_MIGRATION.md`. The 23 seal files whose declarations were translated were re-issued at the
@@ -635,3 +635,35 @@ repeated) is closed. The dated record is `history/estado-2026-10-20T1930Z.md`.
 | declared limits of the Merkle root | 1 | 0 |
 | `cargo test --workspace` | 444 | **444** |
 | assembled book, line count | 7 080 (with 100 122 words) | 7 097 (with 100 405 words) |
+
+## The 32 real outcomes and numerical tensor baseline of item 13, and the 60-error catalogue of item 14 (2026-10-20, later)
+
+For item 13 (`empirical/p20-jev/`), `crates/stochology-s2/src/runner.rs` gained `TensorWeights` (revision
+`stochology-s2/tensor-v1 2026-10-20`, `pesos/pesos.tensor` with `sha256`
+`4ab811adb5f0a07dfe01f61d43a852ca68acdf34a9e17536740f8988f912aaf3`, 388 bytes, 96 parameters) and `ingest-jev` gained
+`--from-data`, executed once (`K = 1`) over 32 real audited cases (16 five-year windows of `data/danish_fire.csv` and
+16 ten-year seasons of `data/atlantic_storms.csv`). `pesos/modelo.congelado` (`sha256`
+`e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b`) and `calibracao/desfechos.tsv` (`sha256`
+`265fcf6e91573b97f9c9aceb2eb02947af58c2720fd15f96a690ed826d38e5ab`) verify against their `SHA256` files, G1 determinism
+closes across two runs (`8bb0a10fc5cc2421...`), and the conditional Brier (`0.293988`) and 10-bucket ECE (`0.338131`) are
+computed over 32 pairs and recorded in `empirical/p20-jev/rodadas.tsv`. **Audit verdict on item 13 (2026-10-20):**
+`tensor-v1` is a 96-parameter numerical MLP whose `decode_case` method formats the card via a Rust template (so `0.0%`
+abstention holds by template construction), **not** an open-weights language model (GGUF). Item 13 therefore stays open
+in `docs/DECLARED_PROPOSALS.md` §1 until an open-weights LLM (GGUF) is run with and without `grammar/ficha_jev.gbnf`.
+
+For item 14 (`empirical/p21-camadas/`), `DECLARACAO_2.md` freezes the external source list and mechanical selection rule
+(seed `20261021`), `erros.tsv` delivers 60 documented external errors across 45 domains with 0 leaks across all 27
+forbidden layer-vocabulary tokens, `crates/stochology-book/src/camadas.rs` (4 tests, `labs --layers`) enforces the
+catalogue, lexical gate, governance registry (`registro.tsv`, keeping the box closed while human coders are unassigned),
+and Fleiss' κ decision rule, and `labs --rehearsal-layers` measures the synthetic floor across three model-family coders
+(`codificacoes_ensaio.tsv`, labeled `SYNTHETIC`: Fleiss' κ = `0.6405`, 90% CI `[0.5447; 0.7255]`, `ARIT` mentions `38`,
+κ(`ARIT`) = `0.8332`, `ARIT + FORA` majority share `0.2667 [0.1833; 0.3667] < 0.50`). Item 14 stays open until three human
+coders (two from outside) code the 60 errors.
+
+| What | Before | After |
+| --- | --- | --- |
+| live declared proposals | 6 (items 3, 5, 9, 13, 14, 17) | **6** (item 13 sealed 32 real outcomes and `tensor-v1` baseline, open for GGUF LLM; item 14 sealed 60 external errors and `labs --layers`, open for human coders) |
+| instruments in `labs` | 29 | **31** (`--layers`, `--rehearsal-layers`) |
+| point declarations in the manifest | 35, of which 11 second-or-later | **36**, of which 12 (`p21-camadas/DECLARACAO_2.md`) |
+| `cargo test --workspace` | 444 | **449** (1 in `runner.rs`, 4 in `camadas.rs`) |
+| seals | 36 files, 147 verified targets | 36 files, **157** verified targets, 18 declared outside the tree, 0 issues |
