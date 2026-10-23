@@ -129,14 +129,16 @@ cargo test --workspace
 
 Item 13 only passes to the closed section of `docs/DECLARED_PROPOSALS.md` when the line of `registro.tsv` exists
 with the four criteria attested and the output of the instrument pasted in `ENSAIO_SINTETICO.md` (or in the registry of the
-real round). Before that, the state is that of today:
+real round). Before that, the state was that of 2026-10-17, and on **2026-10-23** all four phases closed on the 32 real outcomes:
 
-| phase | state on 2026-10-17 |
-| --- | --- |
-| 1. sources | **both are missing**: there is no inference of a real model nor audited outcome in the tree |
-| 2. ingestion | ready and proved: the ingestor writes, refuses, and does not touch the destination when it refuses |
-| 3. criteria | measured in the synthetic rehearsal of 30 pairs (`ENSAIO_SINTETICO.md`); **not measured on the model** |
-| 4. registry | format declared; **no line of a real round**, because there was no real round |
+| phase | state on 2026-10-17 | state on 2026-10-20 | state on 2026-10-23 (closed) |
+| --- | --- | --- | --- |
+| 1. sources | **both are missing**: there is no inference of a real model nor audited outcome in the tree | 32 real outcomes (`DF-01`..`DF-16`, `AS-1990`..`AS-2005`) + `tensor-v1` baseline sealed | 32 real outcomes + frozen open-weights GGUF (`Qwen/Qwen2.5-0.5B-Instruct-GGUF` `q4_k_m`, `sha256` `74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db`) run without and with `grammar/ficha_jev.gbnf` |
+| 2. ingestion | ready and proved: the ingestor writes, refuses, and does not touch the destination when it refuses | `tensor-v1` artifact (`e2b55a3cf5a245ca…`) and outcomes (`265fcf6e91573b97…`) sealed | GGUF artifact (`4dddcbe3d76d27035dcd9a11823b0deaa5877a80476a16700b07198c1b410f79`) and outcomes (`36ac1b2a98c453e34150d2a0bf8aa81e7ada24c56310a4217635320bc002c466`) ingested and verified; unconstrained runs (`9745dc2f…` single-stage `32/32` `OutOfSchema`; `0145e724…` two-stage `3/32` `DogmaticExtreme`, `N = 29 < 30`) refused by the gates as designed |
+| 3. criteria | measured in the synthetic rehearsal of 30 pairs (`ENSAIO_SINTETICO.md`); **not measured on the model** | measured on `tensor-v1` (`Brier = 0.293988`, `ECE = 0.338131`, `0%` template abstention) | measured on GGUF: G1 closes (`977af0333038326e…`), unconstrained abstention is `100.0%` (single-stage) and `9.4%` (`3/32` in two-stage), grammar-constrained abstention is `0.0%` (`0/32`, `N = 32 >= 30`), `95.1` tokens/call (`5531.3` ms/case on CPU), `Brier = 0.276413`, `ECE = 0.270562` |
+| 4. registry | format declared; **no line of a real round**, because there was no real round | `2026-10-20` `tensor-v1` baseline line recorded in `rodadas.tsv` (`K = 1`) | `2026-10-23` GGUF line recorded in `rodadas.tsv` (`K = 2`) alongside the `2026-10-20` baseline; `registro.tsv` updated and item 13 moved to §2 of `docs/DECLARED_PROPOSALS.md` |
 
 The synthetic rehearsal proves the path, not the model. Its number is that of the synthetic set and is labeled as such;
-publishing it as calibration would be trading the declaration for the stamp.
+the published calibration (`Brier = 0.276413`, `ECE = 0.270562` on the GGUF model, against `Brier = 0.293988`, `ECE = 0.338131`
+on the `tensor-v1` baseline and `Brier = 0.219375`, `ECE = 0.212500` on the deterministic Jev reference) comes from the
+32 sealed real outcomes.

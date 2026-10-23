@@ -578,7 +578,7 @@ pub fn measure() -> Measure {
     if let Ok(crate::calibration::Calibration::Score { n, brier, ece, .. }) =
         crate::calibration::load(
             crate::calibration::DEFAULT_DIR,
-            0,
+            m.abstentions,
             crate::calibration::MIN_SAMPLE,
         )
     {

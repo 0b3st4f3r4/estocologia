@@ -4,10 +4,10 @@
 
 | file | SHA-256 | what it is |
 | --- | --- | --- |
-| `empirical/p20-jev/registro.tsv` | `b97ef5032c93479dc20ae28112089809788ab5cce40e230c912fba41bf0c78c7` (historical: `27596bdf…`, `b777a213…`, `909c1ad7…`, `92c0d1b0…`) | the state of the bridge, item by item, in machine form |
+| `empirical/p20-jev/registro.tsv` | `a66e911cbd39604e8ae4cbc701b4fe048c3b48d65427ecdfa543e17384017400` (historical: `27596bdf…`, `b777a213…`, `909c1ad7…`, `92c0d1b0…`, `b97ef503…`) | the state of the bridge, item by item, in machine form |
 | `DECLARACAO.md` (this one) | — | the five declarations; its own hash comes out in `DECLARACAO.sha256` |
-| `README.md` | `daaf0fc853924680e09cf65a1835d2fa5f35d06cb60684adaba746c3b09639ef` (historical: `e4c3fe9f…`, `c18ddc5e…`, `c6b2798e…`) | the result in one page |
-| `DECLARACAO.sha256` | — | the seven hashes of the folder and of the grammar, in `sha256sum` form |
+| `README.md` | `536db46f924be3866e111c6c374b75c641295ade32f3e9c215637d6ba431b090` (historical: `e4c3fe9f…`, `c18ddc5e…`, `c6b2798e…`, `daaf0fc8…`) | the result in one page |
+| `DECLARACAO.sha256` | — | the thirteen hashes of the folder and of the grammar, in `sha256sum` form |
 
 ## Declaration 1 — what the item asks and what the tree has
 
@@ -95,6 +95,30 @@ numerical MLP whose `decode_case` method formats the card via a Rust template, *
 its `0.0%` abstention rate holds by template construction rather than measuring unconstrained LLM output. The 32 real outcomes
 and the tensor baseline are sealed in this folder (13 files), while item 13 remains open in `docs/DECLARED_PROPOSALS.md` §1
 until an open-weights LLM (GGUF) is run with and without `grammar/ficha_jev.gbnf`.
+
+**Note of 2026-10-23: open-weights LLM (GGUF) run with and without `grammar/ficha_jev.gbnf` closes item 13.** The frozen
+open-weights model `Qwen/Qwen2.5-0.5B-Instruct-GGUF` (`q4_k_m`, `sha256`
+`74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db`, 469 MB) was executed locally via `llama.cpp`
+(`llama-completion` `b11838`, `temperature = 0`, `seed = 2026`, `--single-turn`) across three regimes over the 32 real
+cases (`DF-01`..`DF-16` and `AS-1990`..`AS-2005`):
+(i) **single-stage without grammar** (`artifact sha256` `9745dc2f7644160e95b2aaae92b2d9003a505e6c61889a3a582298f47f4eac1b`):
+G1 closes (`1/1` identical repetition, `5156.3` ms/case on CPU), and **32 of 32 outputs (`100.0% > 30.0%`)** are refused
+with `OutOfSchema` (conversational preamble and omitted mandatory fields), leaving `0` valid pairs;
+(ii) **two-stage without grammar** (`artifact sha256` `0145e724b59a5a0607ec2f8e0b70b635f69f157dec1a1b67beb53def751b1335`):
+G1 closes (`1/1` identical repetition, `5625.0` ms/case on CPU) and hypothesis-space adequacy passes with **3 of 32
+abstentions (`9.4% <= 30.0%`)**, all three caused by `DogmaticExtreme("margin 0")` in stage 1 (`0.0000` on `DF-04`, `DF-06`,
+and `DF-10`), leaving **29 valid pairs** and triggering `InsufficientSample` (`N = 29 < 30`);
+(iii) **two-stage with `grammar/ficha_jev.gbnf`** (`pesos/modelo.congelado` `sha256`
+`4dddcbe3d76d27035dcd9a11823b0deaa5877a80476a16700b07198c1b410f79`, `calibracao/desfechos.tsv` `sha256`
+`36ac1b2a98c453e34150d2a0bf8aa81e7ada24c56310a4217635320bc002c466`): excluding `0.0` and `1.0` by syntax converts the
+three boundary cases to `0.0008` (`DF-04`, `DF-06`) and `0.0004` (`DF-10`), yielding **0 of 32 abstentions (`0.0%`)**,
+**32 of 32 valid cards (`N = 32 >= 30`)**, G1 determinism (`977af0333038326e92154652e4812edd9a0342eb89060baf61fc304146a697a4`
+across both passes), `95.1` tokens/call (`5531.3` ms/case on CPU, `0.0` ms/call in frozen replay), **Brier `0.276413`**,
+and **10-bucket ECE `0.270562`** (`K = 2` in `rodadas.tsv`, alongside the preserved `2026-10-20` `tensor-v1` baseline of
+Brier `0.293988` and ECE `0.338131`, and compared against the deterministic Jev reference of Brier `0.219375` and ECE
+`0.212500`). Item 13 moves from §1 to §2 of `docs/DECLARED_PROPOSALS.md`, and the 13 seals in `DECLARACAO.sha256` are
+updated (`DECLARACAO.md` historical hash `d90762a8…`, `FECHAMENTO.md` historical hash `46f103ff…`, `rodadas.tsv` historical
+hash `8685c22f…`).
 
 ## Verification
 

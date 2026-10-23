@@ -116,8 +116,85 @@ unidade_independente = dia"""
 
 
 # Portuguese subcommand and runner spellings accepted as aliases of the canonical English ones.
-COMMAND_ALIASES = {"exemplo": "example", "conferir-casos": "check-cases", "inferir": "infer"}
+COMMAND_ALIASES = {
+    "exemplo": "example",
+    "conferir-casos": "check-cases",
+    "inferir": "infer",
+    "casos-reais": "real-cases",
+}
 RUNNER_ALIASES = {"arquivo": "file"}
+
+
+def write_real_cases(data_dir: Path, output: Path) -> None:
+    """Build the 32 real audited cases from data/danish_fire.csv (16 windows) and data/atlantic_storms.csv (16 seasons)."""
+    fire_path = data_dir / "danish_fire.csv"
+    fire_losses: list[tuple[str, float]] = []
+    for line in fire_path.read_text(encoding="utf-8").splitlines()[1:]:
+        l = line.strip()
+        if not l or "," not in l:
+            continue
+        dt, val = l.split(",", 1)
+        fire_losses.append((dt.strip(), float(val.strip())))
+    if len(fire_losses) < 16 * 135:
+        raise SystemExit(f"{fire_path}: expected at least {16 * 135} rows, found {len(fire_losses)}")
+
+    storm_path = data_dir / "atlantic_storms.csv"
+    storm_years: dict[int, list[tuple[float, float]]] = {}
+    for line in storm_path.read_text(encoding="utf-8").splitlines()[1:]:
+        fields = line.split(",")
+        if len(fields) < 12:
+            continue
+        try:
+            year = int(fields[2].strip())
+        except ValueError:
+            continue
+        if not (1990 <= year <= 2005):
+            continue
+        wind = float(fields[10].strip() or "0")
+        pressure = float(fields[11].strip() or "1013")
+        storm_years.setdefault(year, []).append((wind, pressure))
+    if len(storm_years) != 16:
+        raise SystemExit(f"{storm_path}: expected 16 seasons in 1990..2005, found {len(storm_years)}")
+
+    lines = ["\t".join(CASE_HEADER)]
+    for w in range(16):
+        start = w * 135
+        split = start + 100
+        end = start + 135
+        base = fire_losses[start:split]
+        eval_w = fire_losses[split:end]
+        mean_loss = sum(x for _, x in base) / 100.0
+        tail_5m = sum(1 for _, x in base if x > 5.0)
+        max_loss = int(round(max(x for _, x in base)))
+        cluster = sum(1 for i in range(99) if base[i][1] > 3.0 and base[i + 1][1] > 3.0)
+        observed = 1 if any(x > 9.0 for _, x in eval_w) else 0
+        case_id = f"DF-{w + 1:02d}"
+        biome = f"Danish fire window {case_id} ({base[0][0]} to {eval_w[-1][0]}): does the next 35-claim subwindow exceed 9.0M DKK?"
+        source = f"data/danish_fire.csv#rows-{start + 2}-{end + 1}"
+        lines.append(
+            f"{case_id}\t{biome}\t{mean_loss:.1f}\t{tail_5m}\t{max_loss}\t{cluster}\t{observed}\t{source}"
+        )
+
+    for year in sorted(storm_years):
+        records = storm_years[year]
+        mid = max(len(records) // 2, 1)
+        base = records[:mid]
+        eval_s = records[mid:]
+        mean_wind = sum(w for w, _ in base) / len(base)
+        max_wind = int(round(max(w for w, _ in base)))
+        min_press = int(round(min(p for _, p in base)))
+        ts_count = sum(1 for w, _ in base if w >= 50.0)
+        observed = 1 if any(w >= 105.0 for w, _ in eval_s) else 0
+        case_id = f"AS-{year}"
+        biome = f"Atlantic storm season {year} ({len(records)} observations): does the second half reach 105 kt?"
+        source = f"data/atlantic_storms.csv#season-{year}"
+        lines.append(
+            f"{case_id}\t{biome}\t{mean_wind:.1f}\t{ts_count}\t{max_wind}\t{1013 - min_press}\t{observed}\t{source}"
+        )
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"-> {output} written with 32 audited real cases (16 Danish fire windows + 16 Atlantic storm seasons).")
 
 
 def build_prompt(biome: str, temp: float, humidity: int, wind: int, dry_days: int) -> str:
@@ -186,19 +263,59 @@ def escape_newlines(text: str) -> str:
     return text.replace("\r", "").replace("\n", "\\n")
 
 
-def validate_sheet(text: str) -> float:
+def validate_sheet(text: str, strict: bool = False) -> float:
     """Validate the schema before serializing and return the declared probability."""
     fields: dict[str, str] = {}
     lines = text.replace("\\n", "\n").splitlines()
-    # A small model sometimes opens with a sentence before the document. The parser starts at the first canonical
-    # field and ignores whatever comes before; whatever comes after is also ignored when it lacks the field = value form.
-    if any(l.strip().startswith("versao =") for l in lines):
-        lines = lines[next(i for i, l in enumerate(lines) if l.strip().startswith("versao =")):]
-    for line in lines:
-        if "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        fields[key.strip()] = value.strip()
+    if strict:
+        for line in lines:
+            s = line.strip()
+            if not s or s.startswith("#"):
+                continue
+            if "=" not in s:
+                raise ValueError(f"line without '=': {s[:80]!r}")
+            key, value = s.split("=", 1)
+            fields[key.strip()] = value.strip()
+        if fields.get("versao") not in ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5"):
+            raise ValueError(f"invalid or missing versao: {fields.get('versao')!r}")
+        if fields.get("camada") not in ("L1", "L2", "L3"):
+            raise ValueError(f"invalid camada: {fields.get('camada')!r}")
+        if fields.get("incerteza") not in ("aleatoria", "epistemica", "knightiana"):
+            raise ValueError(f"invalid incerteza: {fields.get('incerteza')!r}")
+        if fields.get("versao") != "1.0" and fields.get("resolucao") not in (
+            "R0-agregada",
+            "R1-dia",
+            "R2-hora",
+            "R3-subpergunta",
+        ):
+            raise ValueError(f"invalid resolucao: {fields.get('resolucao')!r}")
+        if "semente" in fields:
+            try:
+                int(fields["semente"])
+            except ValueError:
+                raise ValueError(f"invalid semente: {fields['semente']!r}") from None
+        for bfield in (
+            "escopo_ecologico",
+            "teste_de_propriedade",
+            "trata_ausentes",
+            "deriva_declarada",
+            "patologias_cobertas",
+            "trilha_integra",
+            "subgrupos_auditados",
+            "priori_elicitada",
+        ):
+            if bfield in fields and fields[bfield] not in ("true", "false"):
+                raise ValueError(f"invalid boolean in {bfield}: {fields[bfield]!r}")
+    else:
+        # A small model sometimes opens with a sentence before the document. The parser starts at the first canonical
+        # field and ignores whatever comes before; whatever comes after is also ignored when it lacks the field = value form.
+        if any(l.strip().startswith("versao =") for l in lines):
+            lines = lines[next(i for i, l in enumerate(lines) if l.strip().startswith("versao =")):]
+        for line in lines:
+            if "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            fields[key.strip()] = value.strip()
     missing = [f for f in REQUIRED_FIELDS if f not in fields]
     if missing:
         raise ValueError(f"response outside the schema: missing {missing}")
@@ -235,13 +352,23 @@ def read_cases(path: Path) -> list[dict[str, str]]:
     return cases
 
 
+PROB_4D_GRAMMAR = 'root ::= "0." ([1-9][0-9][0-9][0-9] | "0"[1-9][0-9][0-9] | "00"[1-9][0-9] | "000"[1-9])'
+
+
 def runner_llama_cli(
-    prompt: str, model: str, binary: str, seed: int, max_tokens: int, grammar: str = ""
+    prompt: str,
+    model: str,
+    binary: str,
+    seed: int,
+    max_tokens: int,
+    grammar_path: str = "",
+    grammar_inline: str = "",
 ) -> str:
-    """llama.cpp subprocess: temperature 0, fixed seed, no prompt echo."""
+    """llama.cpp subprocess: temperature 0, fixed seed, single turn, no prompt echo."""
     command = [
         binary,
         "-m", model,
+        "--single-turn",
         "-p", prompt,
         "-n", str(max_tokens),
         "--temp", "0",
@@ -249,12 +376,17 @@ def runner_llama_cli(
         "--no-display-prompt",
         "--simple-io",
     ]
-    if grammar:
-        command += ["--grammar-file", grammar]
-    result = subprocess.run(command, capture_output=True, text=True, timeout=600)
+    if grammar_path:
+        command += ["--grammar-file", grammar_path]
+    elif grammar_inline:
+        command += ["--grammar", grammar_inline]
+    result = subprocess.run(command, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=600)
     if result.returncode != 0:
         raise RuntimeError(f"{binary} exited with {result.returncode}: {result.stderr.strip()[:400]}")
-    return result.stdout.strip()
+    out = result.stdout.strip()
+    if out.endswith("[end of text]"):
+        out = out[: -len("[end of text]")].rstrip()
+    return out
 
 
 def runner_vllm(
@@ -413,6 +545,14 @@ def main() -> int:
     p_ex.add_argument("--output", "--saida", required=True, dest="output")
     p_ex.add_argument("--n", type=int, default=32)
 
+    p_rc = sub.add_parser(
+        "real-cases",
+        aliases=["casos-reais"],
+        help="writes the 32 audited real cases from data/danish_fire.csv and data/atlantic_storms.csv",
+    )
+    p_rc.add_argument("--data-dir", default="data", dest="data_dir")
+    p_rc.add_argument("--output", "--saida", required=True, dest="output")
+
     p_cf = sub.add_parser(
         "check-cases", aliases=["conferir-casos"], help="validates the catalog without calling any model"
     )
@@ -461,6 +601,14 @@ def main() -> int:
         help="GBNF file that constrains the output",
     )
     p_in.add_argument(
+        "--allow-abstentions", "--permitir-abstencoes", action="store_true", dest="allow_abstentions",
+        help="keep out-of-schema responses in the inference table as abstentions instead of aborting",
+    )
+    p_in.add_argument(
+        "--canonical-requests", "--pedidos-canonicos", action="store_true", dest="canonical_requests",
+        help="use bridge::request(bioma) as the request key in the inference table",
+    )
+    p_in.add_argument(
         "--answers", "--respostas", default="", dest="answers",
         help="caso_id<TAB>answer file, for the file runner",
     )
@@ -475,6 +623,10 @@ def main() -> int:
 
     if args.command == "example":
         write_example(Path(args.output), args.n)
+        return 0
+
+    if args.command == "real-cases":
+        write_real_cases(Path(args.data_dir), Path(args.output))
         return 0
 
     cases = read_cases(Path(args.cases))
@@ -496,15 +648,20 @@ def main() -> int:
 
     provenance = model_provenance(args)
 
-    grammar = ""
+    grammar_path = ""
+    grammar_text = ""
     if args.grammar:
-        grammar = Path(args.grammar).read_text(encoding="utf-8")
-        print(f"  grammar: {args.grammar} ({len(grammar)} bytes) — form is no longer measured, it is guaranteed")
+        grammar_path = args.grammar
+        grammar_text = Path(args.grammar).read_text(encoding="utf-8")
+        print(f"  grammar: {args.grammar} ({len(grammar_text)} bytes) — form is no longer measured, it is guaranteed")
 
     inference_lines: list[str] = []
     outcome_lines: list[str] = [
         "\t".join(["caso_id", "probabilidade_declarada", "desfecho_observado", "fonte_desfecho"])
     ]
+    abstentions = 0
+    first_prompt = ""
+    first_response = ""
     for index, case in enumerate(cases, start=1):
         prompt = build_prompt(
             case["bioma"],
@@ -525,7 +682,10 @@ def main() -> int:
                 int(case["dias_sem_chuva"]),
             )
             if args.runner in ("llama-cli",):
-                raw = runner_llama_cli(number_prompt, args.model, args.binary, args.seed, 32, "")
+                stage1_grammar = PROB_4D_GRAMMAR if grammar_path else ""
+                raw = runner_llama_cli(
+                    number_prompt, args.model, args.binary, args.seed, 16, grammar_inline=stage1_grammar
+                )
             elif args.runner == "vllm":
                 raw = runner_vllm(number_prompt, args.url, args.model, args.seed, 32, "")
             elif args.runner == "api":
@@ -540,7 +700,10 @@ def main() -> int:
             try:
                 margin = extract_number(raw)
             except ValueError as err:
-                raise SystemExit(f"{case['caso_id']}: {err}") from None
+                if args.allow_abstentions:
+                    margin = 0.0
+                else:
+                    raise SystemExit(f"{case['caso_id']}: {err}") from None
             prompt = build_document_prompt(
                 case["bioma"],
                 float(case["temp_c"]),
@@ -551,9 +714,9 @@ def main() -> int:
                 index,
             )
             if args.runner == "llama-cli":
-                response = runner_llama_cli(prompt, args.model, args.binary, args.seed, args.max_tokens, grammar)
+                response = runner_llama_cli(prompt, args.model, args.binary, args.seed, args.max_tokens, grammar_path)
             elif args.runner == "vllm":
-                response = runner_vllm(prompt, args.url, args.model, args.seed, args.max_tokens, grammar)
+                response = runner_vllm(prompt, args.url, args.model, args.seed, args.max_tokens, grammar_text)
             else:
                 response = runner_api(
                     prompt,
@@ -562,7 +725,7 @@ def main() -> int:
                     os.environ.get(args.key_env, ""),
                     args.seed,
                     args.max_tokens,
-                    grammar=grammar,
+                    grammar=grammar_text,
                 )
         elif args.runner == "demo":
             response = runner_demo(case, index)
@@ -571,9 +734,9 @@ def main() -> int:
                 raise SystemExit(f"case {case['caso_id']} has no answer in the collected file")
             response = collected[case["caso_id"]]
         elif args.runner == "llama-cli":
-            response = runner_llama_cli(prompt, args.model, args.binary, args.seed, args.max_tokens)
+            response = runner_llama_cli(prompt, args.model, args.binary, args.seed, args.max_tokens, grammar_path)
         elif args.runner == "vllm":
-            response = runner_vllm(prompt, args.url, args.model, args.seed, args.max_tokens)
+            response = runner_vllm(prompt, args.url, args.model, args.seed, args.max_tokens, grammar_text)
         else:
             key = os.environ.get(args.key_env, "")
             if not key:
@@ -583,17 +746,36 @@ def main() -> int:
                 )
                 return 1
             response = runner_api(
-                prompt, args.api_url, args.model, key, args.seed, args.max_tokens
+                prompt, args.api_url, args.model, key, args.seed, args.max_tokens, grammar=grammar_text
             )
 
+        if index == 1:
+            first_prompt = prompt
+            first_response = response
+
+        request_key = (
+            f"answer in the canonical card schema, without free text: {case['bioma']}"
+            if args.canonical_requests
+            else prompt
+        )
+        raw_response = response if response.strip() else "outside the schema: empty model output"
         try:
-            prob = validate_sheet(response)
+            prob = validate_sheet(raw_response, strict=args.allow_abstentions)
         except ValueError as err:
+            if args.allow_abstentions:
+                abstentions += 1
+                inference_lines.append(f"{escape_newlines(request_key)}\t{escape_newlines(raw_response)}")
+                continue
             raise SystemExit(f"{case['caso_id']}: {err}") from None
 
-        inference_lines.append(f"{escape_newlines(prompt)}\t{escape_newlines(response)}")
+        inference_lines.append(f"{escape_newlines(request_key)}\t{escape_newlines(raw_response)}")
         outcome_lines.append(
             f"{case['caso_id']}\t{prob:.4f}\t{case['desfecho_observado']}\t{case['fonte']}"
+        )
+
+    if args.allow_abstentions:
+        print(
+            f"  adequacy check: {len(cases)} requests, {abstentions} abstentions ({abstentions * 100.0 / max(len(cases), 1):.1f}%), {len(outcome_lines) - 1} valid cards"
         )
 
     if args.repeat > 1:
@@ -601,33 +783,25 @@ def main() -> int:
         if args.runner in ("demo", "file"):
             print(f"  determinism: runner {args.runner} is deterministic by construction, nothing to repeat")
         else:
-            case = cases[0]
-            prompt = build_prompt(
-                case["bioma"],
-                float(case["temp_c"]),
-                int(case["umid_rel"]),
-                int(case["vento_kmh"]),
-                int(case["dias_sem_chuva"]),
-            )
             equal = 0
-            first = None
-            for _ in range(args.repeat):
+            for _ in range(args.repeat - 1):
                 if args.runner == "llama-cli":
-                    r = runner_llama_cli(prompt, args.model, args.binary, args.seed, args.max_tokens)
+                    r = runner_llama_cli(
+                        first_prompt, args.model, args.binary, args.seed, args.max_tokens, grammar_path
+                    )
                 elif args.runner == "vllm":
-                    r = runner_vllm(prompt, args.url, args.model, args.seed, args.max_tokens)
+                    r = runner_vllm(first_prompt, args.url, args.model, args.seed, args.max_tokens, grammar_text)
                 else:
                     r = runner_api(
-                        prompt,
+                        first_prompt,
                         args.api_url,
                         args.model,
                         os.environ.get(args.key_env, ""),
                         args.seed,
                         args.max_tokens,
+                        grammar=grammar_text,
                     )
-                if first is None:
-                    first = r
-                elif r == first:
+                if r == first_response:
                     equal += 1
             print(
                 f"  determinism: {equal} of {args.repeat - 1} repetitions identical to the first"

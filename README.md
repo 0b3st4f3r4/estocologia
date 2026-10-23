@@ -61,7 +61,7 @@ real-world data.
 
 | Path | Contents |
 |---|---|
-| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 121 lines and 101 838 words assembled from `book/` |
+| `book/stochology-textbook.md` | The book in **21 chapters and 5 parts**, three tiers per chapter, with laboratory outputs cited directly in the text. It is the human-reader artifact, and it is **generated**: 7 129 lines and 102 147 words assembled from `book/` |
 | `book/` | The book source, one file per chapter, assembled and verified by `scripts/book/build.py`, alongside the two book verifiers and the results generator in `scripts/book/` |
 | `crates/` | The Rust workspace, **eight crates**: `-core` (layers, cards, invariants Phi1 to Phi5, safeguard panel A1 to A8, orchestrator M, System 1, funnel, SHA-256 audit trail, and the file-backed contract with its migration chain), `-hypergraph` (typed hypergraph and the five lenses), `-methods` (invariant causal prediction, CUSUM drift, subgroup fairness, and the e-process ledger for gates attempted in rounds), `-horizons` (the horizons H0 to H3), `-s2` (deliberative System 2), `-gates` (binary `gates`), `-book` (book laboratories, binary `labs`), and `-wasm` (WebAssembly playground); the wave engine left on 2026-10-19 (`docs/declarations/REMOVED_WAVE.md`) |
 | `docs/EMPIRICAL_REGISTRY.md` | The research numbers, with the Rust instrument that reproduces each one and the declared divergence markers |
@@ -71,7 +71,7 @@ real-world data.
 | `governance/` | Risk opinions and the audit of who pays for the error |
 | `AGENTS.md` | The governance, engineering, and orchestration contract: the four prohibitions, the invariants, the safeguard panel, the cycle, and the **mandatory verification of §V** |
 | `docs/PLAN.md` | Master plan: epistemology, pedagogy, architecture, safeguard panel A1–A8, and governance |
-| `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **six live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), the Jev-LLM bridge (13, with 32 real outcomes and the `tensor-v1` numerical MLP baseline sealed on 2026-10-20; open-weights LLM GGUF remains open), whether the layers can fail (14, with its 60-error external catalogue and `labs --layers` sealed on 2026-10-20; human coders remain open), and an audit from outside (17); item 15 (the H2 gate under an e-process) closed on 2026-10-19 and item 16 (the book as its own source) the same day by the provenance ledger. The closed items are in §2, alongside their proofs |
+| `docs/DECLARED_PROPOSALS.md` | The inventory of what is declared and not yet enforced or measured: **five live items** — SHELF (3), the voice of those who pay for the error (5), the bridge thesis at scale (9), whether the layers can fail (14, with its 60-error external catalogue and `labs --layers` sealed on 2026-10-20; human coders remain open), and an audit from outside (17); item 15 (the H2 gate under an e-process) closed on 2026-10-19, item 16 (the book as its own source) closed the same day by the provenance ledger, and item 13 (the Jev-LLM bridge) closed on 2026-10-23 with the frozen open-weights GGUF model `Qwen/Qwen2.5-0.5B-Instruct-GGUF` `q4_k_m` run without and with `grammar/ficha_jev.gbnf` over the 32 real outcomes. The closed items are in §2, alongside their proofs |
 | `docs/OUTSIDE_AUDIT.md` | Why an audit by the authors is not enough, measured on 2026-10-18, and the protocol for one from outside: public errata, blind reimplementation, red team |
 | `docs/STATE_DECLARATION.md` | **The state of the tree, not an edition.** There are no numbered editions or versions, before or after publication: there is a live state recording what it measured, what it rejected against itself, what it could not do, and how it is reproduced. Its seal is `docs/STATE_DECLARATION.sha256`. The corrections of 2026-10-17 live in `history/` as dated records with before-and-after hashes |
 | `references/` | Verification of the bibliographic references |
@@ -92,7 +92,7 @@ Measurement of this tree on **2026-10-20**, each row with the command that produ
 | Instruments | **31** in `labs` (one, `--seed-spread`, takes minutes and is recorded in `docs/SEED_SPREAD.md` rather than run by the suite) (plus 5 modifier flags), all exiting with code 0 | `labs --all`, `--bank`, `--queue`, `--s1`, `--s2`, `--resolution`, `--genetics`, `--streams`, `--eprocess`, `--mc-error`, `--propagate`, `--passk`, `--multiverse`, `--oracles`, `--stacking`, `--discrepancy`, `--h3`, `--second-opinion`, `--bridge`, `--layers`, `--listening`, `--schema`, `--jev` and the others |
 | Gates | **7 ok**, Merkle root `0a9636fac5eb1c5e…` (domain separation since 2026-10-20; `9716e28a87bec9cf…` by the legacy rule, printed beside it) and identical second run | `gates --horizon all --reproduction` |
 | Negative proof | **1 gate failed**, as declared, with the board at worst score 2 against floor 6 | `gates --horizon h3 --defect h3.voos23` |
-| Assembled book | **7 121 lines**, **101 838 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
+| Assembled book | **7 129 lines**, **102 147 words**, 21 chapters, 5 parts | `scripts/book/build.py --check` |
 | Cited blocks | **39**, none divergent (48 counted the R-axis lines before the book was rewritten as content only) | `scripts/book/check_labs.py` |
 | Seals | **36 files**, **157 verified targets**, 18 lines declared outside the tree, 0 issues | `scripts/check_seals.py` |
 
@@ -136,12 +136,15 @@ and the results registry, compares them against what `montar()` measures, and ex
 
 ## What Remains Open
 
-The open items are not of the same nature. Items 3, 5, 9, 14, and 17 depend on **people outside the program** and cannot be closed with
-more code: what is missing is consent, listening, blind judgment, independent human coding, and outside review. Item 13 (the Jev-LLM
-bridge) depends on **artifact and code**: on **2026-10-20** its 32 real audited outcomes (`empirical/p20-jev/calibracao/desfechos.tsv`)
-and a 96-parameter numerical tensor baseline (`empirical/p20-jev/pesos/pesos.tensor` and `pesos/modelo.congelado`, Brier `0.293988`,
-ECE `0.338131`) were sealed, while an **open-weights language model (GGUF)** run with and without `grammar/ficha_jev.gbnf` remains
-open (`tensor-v1` formats the card by template, so its `0.0%` abstention holds by construction and is not over-labeled as an LLM).
+All five remaining open items (**3, 5, 9, 14, and 17**) are of the same nature: they depend on **people outside the program** and cannot be
+closed with more code — what is missing is consent, listening, blind judgment, independent human coding, and outside review. Item 13 (the
+Jev-LLM bridge), which depended on **artifact and code**, closed on **2026-10-23**: after sealing the 32 real audited outcomes
+(`empirical/p20-jev/calibracao/desfechos.tsv`) and the 96-parameter numerical tensor baseline (`pesos/pesos.tensor`, Brier `0.293988`,
+ECE `0.338131`, `K = 1`) on 2026-10-20, the frozen open-weights language model `Qwen/Qwen2.5-0.5B-Instruct-GGUF` (`q4_k_m`, `sha256`
+`74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db`) was run locally via `llama.cpp` (`llama-completion` `b11838`,
+`temperature = 0`, `seed = 2026`) both without and with `grammar/ficha_jev.gbnf` over all 32 real cases (`32/32` `OutOfSchema` abstentions
+in single-stage without grammar; `3/32` `DogmaticExtreme` abstentions in two-stage without grammar, leaving `29 < 30` pairs; and `0/32`
+abstentions, `N = 32`, Brier `0.276413`, and ECE `0.270562` in two-stage with `grammar/ficha_jev.gbnf`, `K = 2` in `rodadas.tsv`).
 Item 15, desk work, closed on 2026-10-19 with a declaration sealed before the run and `labs --eprocess`;
 item 16 closed the same day: the previous book no longer certifies its own numbers, and the 29 that no instrument,
 code or record carries have a checked row in `book/provenance.tsv`. Item 18, from the research on models of the world, of agents
@@ -155,7 +158,6 @@ program's own agents, so they are refinements, not independent judgment.
 | 3. SHELF elicitation | **people outside the program** | the other two participants per domain and the external control; the first specialist's track is closed across five domains | no date |
 | 5. The voice of those who pay for the error | **people outside the program** | listening sessions with affected groups: **0 of 7** heard, minimum coverage of 2 | **2026-12-15** |
 | 9. The bridge thesis at scale | **people outside the program** | external case selector, two human analysts, and a blind human judge: **0 of 12** cases; for thesis (c′), 0 of 12 in each of the seam and classical strata (`registro_c_linha.tsv`, enforced by `labs --bridge`) | **2027-01-14** |
-| 13. The Jev-LLM bridge | **artifact and code** | frozen open-weights LLM (GGUF) run with and without `grammar/ficha_jev.gbnf` over the 32 real outcomes sealed in `calibracao/desfechos.tsv` (`pesos.tensor` is a 96-parameter numerical MLP baseline with template formatting, Brier `0.293988`, ECE `0.338131`) | no date |
 | 14. Can the layers fail? | **people outside the program** | three human coders, two from outside, over the 60 documented external errors of `empirical/p21-camadas/erros.tsv` (`labs --layers`, with the three-model synthetic floor in `labs --rehearsal-layers`) | no date |
 | 17. An audit from outside | **people outside the program** | readers who are not the authors, following `docs/OUTSIDE_AUDIT.md` | no date |
 

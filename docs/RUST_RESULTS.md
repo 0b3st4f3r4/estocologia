@@ -540,7 +540,7 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
 == Point 20 :: the Jev-LLM bridge ==
 
 -- the gate of the weights --
-  weights verified: e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b
+  weights verified: 4dddcbe3d76d27035dcd9a11823b0deaa5877a80476a16700b07198c1b410f79
 
 -- the restricted decoding --
   the rehearsal model answers in the schema: card jev.bridge.1 | layer L2 | words of the document: 93
@@ -558,17 +558,16 @@ Weight gate, schema-constrained decoding with declared abstention, G1 determinis
   rehearsal model: 4 requests | 0 abstentions (0.0%) | the card schema serves this model: 0.0% of abstentions, inside the declared limit of 30%
 
 -- the local runner of the frozen weights --
-  weights verified: e2b55a3cf5a245caa03bf5007a2ffddea1882e34496fbdbb5f09fd02953ec20b | 32 frozen answers in the artifact
-  model file declared: 4ab811adb5f0a07dfe01f61d43a852ca68acdf34a9e17536740f8988f912aaf3 | revision stochology-s2/tensor-v1 2026-10-20
-  boundary: tensor-v1 is a 96-parameter numerical MLP baseline with template card formatting (0.0% abstention by construction); open-weights LLM (GGUF) inference with and without grammar remains open
+  weights verified: 4dddcbe3d76d27035dcd9a11823b0deaa5877a80476a16700b07198c1b410f79 | 32 frozen answers in the artifact
+  model file declared: 74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db | revision Qwen/Qwen2.5-0.5B-Instruct-GGUF q4_k_m 2026-10-23
   adequacy measured on: the cases of the artifact itself (32 cases)
-  determinism in the form of G1: f8ddb430bc2c097f against f8ddb430bc2c097f | identical: true
+  determinism in the form of G1: 977af0333038326e against 977af0333038326e | identical: true
   adequacy: 32 requests | 0 abstentions (0.0%) | the card schema serves this model: 0.0% of abstentions, inside the declared limit of 30%
-  measured cost: 88.0 tokens per call | 0.0 ms per call
+  measured cost: 95.1 tokens per call | 0.0 ms per call
   Brier: the rule is in runner::brier and the labeled set in calibration::load, with a minimum sample and abstention counted
 
 -- the calibration: the Brier of the frozen model --
-  Brier 0.293988 and ECE 0.338131 in 10 buckets over 32 pairs | abstentions 0 (0.0%) outside the denominator
+  Brier 0.276413 and ECE 0.270562 in 10 buckets over 32 pairs | abstentions 0 (0.0%) outside the denominator
   declared rule: 0.0 and 1.0 refuse, an id out of order refuses, an outcome outside 0 and 1 refuses, below 30 pairs the score is not published, abstention leaves the denominator
   rehearsal of the runner (these are not the real weights): 349936de51d65e04 | 4 answers | G1 identical: true | abstentions 0.0% | 88.0 tokens per call | 0.0 ms per call
   reading: the path artifact -> declared hash -> frozen table -> gate runs end to end; what is missing is the model file
@@ -2133,7 +2132,7 @@ Every empirical point declaration with its file hash. The full chain is verified
 | p17-schema | DECLARACAO_4.md | 574b35f454d8b74f24a47c466607b81b965e923688b49834cc3e2ee0a9ea256b |
 | p18-eixo-r | DECLARACAO.md | aa6f52d52ab39cc9a5373b8f4c81e2327b8ab9b1b1d7d34ad08ea4821f2acc4d |
 | p19-segunda-opiniao | DECLARACAO.md | 65b15402a12d96c866a471cc75154b9fda8ec753649b903bc984e059e9c60453 |
-| p20-jev | DECLARACAO.md | d90762a85968bb323ccbc64750405af9f7f6d8aa35d9717c5f7d5a30bdd56a74 |
+| p20-jev | DECLARACAO.md | c60c74ff149ea17cea3a45bd4732ab16b749cb6e13f9c1eefc8e8d3aae5ab2e5 |
 | p21-camadas | DECLARACAO.md | 92d6539ca4fe163b38796ab669cc8972edf6896d0d04bcd5a6d5a57469f8f7a5 |
 | p21-camadas | DECLARACAO_2.md | feaf5b5f2b05060eea6f86ba1544b7ab64869f6c9b26fd1e16c07ce3c9501ec0 |
 | p22-parada | DECLARACAO.md | 7e2b0295279be3fba1b5722d914fdb92194d6732c5c905ff75a57e65f8fa843b |
@@ -2149,4 +2148,4 @@ Every empirical point declaration with its file hash. The full chain is verified
 
 Point declarations: 36, of which 12 are declaration 2 or later (declared rectification with both values) | empirical points: 24 | `labs` instruments: 31 (--all,--bank,--bridge,--chapter,--discrepancy,--elicitation,--eprocess,--genetics,--h3,--jev,--layers,--listening,--mc-error,--multiverse,--oracles,--passk,--pretest,--propagate,--queue,--rehearsal-bridge,--rehearsal-layers,--rehearsal-listening,--rehearsal-shelf,--resolution,--s1,--s2,--schema,--second-opinion,--seed-spread,--stacking,--streams; plus 5 modifier flags: --answer-key,--answers,--measure,--scale,--threshold) | chapters: 21 | crates: 8
 
-Assembled book: `book/stochology-textbook.md` with **7121 lines** and **101838 words**, sha256 `fdb802b5c2a63d748abb1065366db5e367a9051100adeab194815133246d68e4`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
+Assembled book: `book/stochology-textbook.md` with **7129 lines** and **102147 words**, sha256 `11e44dc1e41e8e492b3ead3aaccd3919f011dc30a6ac9eaffe9b3acffbb30ff2`. The file on disk must match what `scripts/book/build.py` assembles, verified character by character by `python3 scripts/book/build.py --check`.
