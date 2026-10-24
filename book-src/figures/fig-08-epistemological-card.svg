@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420" fill="none" role="img" aria-labelledby="title-fig-08-card">
+  <title id="title-fig-08-card">Structural Anatomy of the EpistemologicalCard and its Adversarial Mathematical Audit</title>
+  <defs>
+    <marker id="c-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+    </marker>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1098" height="418" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Outer Card Container -->
+  <rect x="20" y="18" width="690" height="384" rx="14" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2.4"/>
+  <text x="44" y="48" fill="var(--sky)" class="mono" font-size="12.5" font-weight="800" letter-spacing="0.06em">EPISTEMOLOGICAL CARD · contract_version: "1.0"</text>
+  <text x="44" y="70" fill="var(--muted)" class="mono" font-size="11.5">id: "card-..."  |  layer: L1/L2/L3  |  uncertainty: aleatory/...</text>
+  <line x1="20" y1="84" x2="710" y2="84" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Section 1 -->
+  <rect x="40" y="96" width="650" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>
+  <text x="58" y="117" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800">1. decision_maker_question</text>
+  <text x="58" y="137" fill="var(--muted)" font-size="11.5">Who decides? Concrete action &amp; Resolution R_data ≥ R_decision (Φ₅)</text>
+
+  <!-- Section 2 -->
+  <rect x="40" y="156" width="650" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>
+  <text x="58" y="177" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800">2. epistemological_header</text>
+  <text x="58" y="197" fill="var(--muted)" font-size="11.5">Process, Jensen Δ_J, Moulton-Campbell n_eff (Φ₂), Rubin, Pearl Rung</text>
+
+  <!-- Section 3 -->
+  <rect x="40" y="216" width="650" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>
+  <text x="58" y="237" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800">3. uncertainty_budget_and_authorship</text>
+  <text x="58" y="257" fill="var(--muted)" font-size="11.5">4 Variance Shares = 1.0, Info-Gap α̂ + Wald Floor, Cross-Authorship</text>
+
+  <!-- Section 4 -->
+  <rect x="40" y="276" width="650" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>
+  <text x="58" y="297" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800">4. data_and_audit_contract</text>
+  <text x="58" y="317" fill="var(--muted)" font-size="11.5">64-Hex SHA-256, seed = 2026 Null (Φ₁), K ≥ 1, e-process, CORP PAV</text>
+
+  <!-- Section 5 -->
+  <rect x="40" y="336" width="650" height="50" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>
+  <text x="58" y="357" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800">5. decision_rule_and_scope</text>
+  <text x="58" y="377" fill="var(--muted)" font-size="11.5">Cromwell p, p* = C/(ηL), Act, Chouldechova Audit &amp; Exit Clause (Φ₄)</text>
+
+  <!-- Arrows to Auditor -->
+  <line x1="710" y1="121" x2="772" y2="174" stroke="var(--sky)" stroke-width="2" marker-end="url(#c-arrow)"/>
+  <line x1="710" y1="181" x2="772" y2="192" stroke="var(--sky)" stroke-width="2" marker-end="url(#c-arrow)"/>
+  <line x1="710" y1="241" x2="772" y2="210" stroke="var(--sky)" stroke-width="2" marker-end="url(#c-arrow)"/>
+  <line x1="710" y1="301" x2="772" y2="228" stroke="var(--sky)" stroke-width="2" marker-end="url(#c-arrow)"/>
+  <line x1="710" y1="361" x2="772" y2="246" stroke="var(--sky)" stroke-width="2" marker-end="url(#c-arrow)"/>
+
+  <!-- Right Auditor Box -->
+  <rect x="780" y="120" width="296" height="184" rx="12" fill="var(--emerald-bg)" stroke="var(--emerald)" stroke-width="2.4"/>
+  <text x="928" y="152" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="800">ADVERSARIAL GATEKEEPER</text>
+  <text x="928" y="180" text-anchor="middle" fill="var(--ink)" class="mono" font-size="13.5" font-weight="800">Card::audit()</text>
+  <text x="928" y="208" text-anchor="middle" fill="var(--muted)" font-size="11.5">• Recomputes Δ_J &amp; n_eff</text>
+  <text x="928" y="230" text-anchor="middle" fill="var(--muted)" font-size="11.5">• Verifies CORP Identity</text>
+  <text x="928" y="252" text-anchor="middle" fill="var(--muted)" font-size="11.5">• Checks CSV SHA-256</text>
+  <text x="928" y="280" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="800">Gates G1–G5 Enforced</text>
+</svg>

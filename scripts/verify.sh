@@ -44,4 +44,4 @@ if [ -n "$(git tag --list)" ]; then
     exit 1
 fi
 
-echo ">>> FULL VERIFICATION APPROVED (STOCHOLOGY PROTOCOL v1.0) <<<"
+echo ">>> FULL VERIFICATION APPROVED (STOCHOLOGY PROTOCOL) <<<"

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="132" viewBox="0 0 660 132" fill="none" role="img" aria-labelledby="stochology-logo-title">
+  <title id="stochology-logo-title">Stochology — Auditable Epistemological Machine (Protocol)</title>
+  <defs>
+    <linearGradient id="logo-ring" x1="20" y1="18" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="logo-tail" x1="64" y1="38" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.04"/>
+    </linearGradient>
+    <radialGradient id="logo-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        color-scheme: light dark;
+        --logo-ink: #0f172a;
+        --logo-sub: #0284c7;
+        --logo-meta: #475569;
+        --logo-frame: #cbd5e1;
+        --logo-ticks: #64748b;
+        --logo-node-bg: #f8fafc;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+          --logo-ink: #f8fafc;
+          --logo-sub: #38bdf8;
+          --logo-meta: #94a3b8;
+          --logo-frame: #1e293b;
+          --logo-ticks: #64748b;
+          --logo-node-bg: #090e1a;
+        }
+      }
+      @supports (color: light-dark(white, black)) {
+        :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+          --logo-ink: light-dark(#0f172a, #f8fafc);
+          --logo-sub: light-dark(#0284c7, #38bdf8);
+          --logo-meta: light-dark(#475569, #94a3b8);
+          --logo-frame: light-dark(#cbd5e1, #1e293b);
+          --logo-ticks: #64748b;
+          --logo-node-bg: light-dark(#f8fafc, #090e1a);
+        }
+      }
+    </style>
+  </defs>
+
+  <!-- Emblem Mark -->
+  <g>
+    <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="var(--logo-frame)" stroke-width="2"/>
+    <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#logo-ring)" stroke-opacity="0.38" stroke-width="1.2"/>
+    <circle cx="64" cy="66" r="46" fill="url(#logo-glow)"/>
+
+    <!-- 8 Gate Calibration Ticks on Outer Compass Ring (G1-G8) -->
+    <g stroke="var(--logo-ticks)" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
+      <line x1="64" y1="13" x2="64" y2="17"/>
+      <line x1="101" y1="29" x2="98" y2="32"/>
+      <line x1="115" y1="66" x2="111" y2="66"/>
+      <line x1="99" y1="101" x2="96" y2="98"/>
+      <line x1="64" y1="115" x2="64" y2="111"/>
+      <line x1="29" y1="101" x2="32" y2="98"/>
+      <line x1="13" y1="66" x2="17" y2="66"/>
+      <line x1="27" y1="29" x2="30" y2="32"/>
+    </g>
+
+    <!-- Exact 120-deg tangent-aligned cyclic bridges -->
+    <path d="M 23.43 76.87 A 42 42 0 0 1 52.99 25.47" stroke="#34d399" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M 49.02 30.60 L 53.84 25.25 L 46.80 23.75" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <path d="M 74.87 25.43 A 42 42 0 0 1 104.61 76.73" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M 102.15 70.73 L 104.37 77.58 L 109.19 72.23" stroke="#38bdf8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <path d="M 93.70 95.70 A 42 42 0 0 1 34.41 95.80" stroke="#a78bfa" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M 40.83 96.67 L 33.79 95.18 L 36.01 102.02" stroke="#a78bfa" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <polygon points="64,24 100.37,87 27.63,87" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.55"/>
+
+    <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84 L 96 86 L 31 86 Z" fill="url(#logo-tail)"/>
+    <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84" stroke="var(--logo-ink)" stroke-width="2.2" stroke-linecap="round"/>
+
+    <line x1="72" y1="39" x2="72" y2="86" stroke="#fbbf24" stroke-width="2.2" stroke-dasharray="4 3" stroke-linecap="round"/>
+    <circle cx="72" cy="72" r="3.6" fill="#fbbf24" stroke="var(--logo-node-bg)" stroke-width="1.4"/>
+
+    <circle cx="64" cy="24" r="7.5" fill="var(--logo-node-bg)" stroke="#38bdf8" stroke-width="3"/>
+    <circle cx="64" cy="24" r="3" fill="#38bdf8"/>
+    <circle cx="27.63" cy="87" r="7.5" fill="var(--logo-node-bg)" stroke="#34d399" stroke-width="3"/>
+    <circle cx="27.63" cy="87" r="3" fill="#34d399"/>
+    <circle cx="100.37" cy="87" r="7.5" fill="var(--logo-node-bg)" stroke="#a78bfa" stroke-width="3"/>
+    <circle cx="100.37" cy="87" r="3" fill="#a78bfa"/>
+  </g>
+
+  <!-- Wordmark & Epistemological Subtitle -->
+  <g transform="translate(148, 0)">
+    <text x="0" y="62" fill="var(--logo-ink)" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="800" letter-spacing="2.5">STOCHOLOGY</text>
+    <text x="2" y="90" fill="var(--logo-sub)" font-family="ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace" font-size="13.2" font-weight="700" letter-spacing="1.5">AUDITABLE EPISTEMOLOGICAL MACHINE · PROTOCOL</text>
+    <line x1="2" y1="103" x2="452" y2="103" stroke="url(#logo-ring)" stroke-width="1.5" stroke-opacity="0.65"/>
+    <text x="2" y="119" fill="var(--logo-meta)" font-family="ui-monospace, 'Cascadia Code', monospace" font-size="11.5" font-weight="600" letter-spacing="0.8">L₁ → L₂ → L₃ → L₁  |  Φ₁–Φ₅  |  G1–G8  |  SEED = 2026</text>
+  </g>
+</svg>

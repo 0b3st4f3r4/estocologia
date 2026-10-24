@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="310" viewBox="0 0 1120 310" fill="none" role="img" aria-labelledby="title-fig-03-dags">
+  <title id="title-fig-03-dags">Comparison of Confounder (Common Cause) versus Berkson Collider (Common Effect)</title>
+  <defs>
+    <marker id="dag-arrow-sky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+    </marker>
+    <marker id="dag-arrow-rose" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--rose)"/>
+    </marker>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1118" height="308" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Left Card: 1. CONFOUNDER -->
+  <rect x="24" y="18" width="520" height="274" rx="12" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="284" y="48" text-anchor="middle" fill="var(--sky)" class="mono" font-size="12" font-weight="800" letter-spacing="0.04em">1. CONFOUNDER (COMMON CAUSE: X ← C → Y)</text>
+
+  <circle cx="284" cy="100" r="25" fill="var(--surface)" stroke="var(--sky)" stroke-width="2.6"/>
+  <text x="284" y="106" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">C</text>
+
+  <circle cx="170" cy="188" r="25" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.2"/>
+  <text x="170" y="194" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">X</text>
+
+  <circle cx="398" cy="188" r="25" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.2"/>
+  <text x="398" y="194" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">Y</text>
+
+  <line x1="263" y1="117" x2="195" y2="167" stroke="var(--sky)" stroke-width="2.6" marker-end="url(#dag-arrow-sky)"/>
+  <line x1="305" y1="117" x2="373" y2="167" stroke="var(--sky)" stroke-width="2.6" marker-end="url(#dag-arrow-sky)"/>
+
+  <text x="284" y="244" text-anchor="middle" fill="var(--ink)" font-size="12.5" font-weight="750">MUST condition on C to block back-door path</text>
+  <text x="284" y="266" text-anchor="middle" fill="var(--muted)" font-size="11.5">Unconditioned X and Y share spurious common cause C</text>
+
+  <!-- Right Card: 2. BERKSON COLLIDER -->
+  <rect x="576" y="18" width="520" height="274" rx="12" fill="var(--elevated)" stroke="var(--rose)" stroke-width="2"/>
+  <text x="836" y="48" text-anchor="middle" fill="var(--rose)" class="mono" font-size="12" font-weight="800" letter-spacing="0.04em">2. BERKSON COLLIDER (COMMON EFFECT: X → B ← Y)</text>
+
+  <circle cx="722" cy="100" r="25" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.2"/>
+  <text x="722" y="106" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">X</text>
+
+  <circle cx="950" cy="100" r="25" fill="var(--surface)" stroke="var(--muted)" stroke-width="2.2"/>
+  <text x="950" y="106" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">Y</text>
+
+  <circle cx="836" cy="188" r="25" fill="var(--surface)" stroke="var(--rose)" stroke-width="2.6"/>
+  <text x="836" y="194" text-anchor="middle" fill="var(--ink)" font-size="16" font-weight="800">B</text>
+
+  <line x1="743" y1="117" x2="811" y2="167" stroke="var(--rose)" stroke-width="2.6" marker-end="url(#dag-arrow-rose)"/>
+  <line x1="929" y1="117" x2="861" y2="167" stroke="var(--rose)" stroke-width="2.6" marker-end="url(#dag-arrow-rose)"/>
+
+  <line x1="752" y1="100" x2="920" y2="100" stroke="var(--rose)" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <text x="836" y="88" text-anchor="middle" fill="var(--rose)" class="mono" font-size="11" font-weight="700">spurious link if B conditioned</text>
+
+  <text x="836" y="244" text-anchor="middle" fill="var(--rose)" font-size="12.5" font-weight="750">NEVER condition on B! (Banned by Filter 2)</text>
+  <text x="836" y="266" text-anchor="middle" fill="var(--muted)" font-size="11.5">Conditioning on common effect B opens Berkson bias</text>
+</svg>

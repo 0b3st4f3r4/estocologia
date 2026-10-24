@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="380" viewBox="0 0 1160 380" fill="none" role="img" aria-labelledby="title-fig-02-stirling">
+  <title id="title-fig-02-stirling">The 2x2 Stirling Diagnostic Matrix of Uncertainty</title>
+  <defs>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1158" height="378" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Column Headers: Knowledge of Probabilities -->
+  <text x="658" y="24" text-anchor="middle" fill="var(--ink)" class="mono" font-size="12.5" font-weight="800" letter-spacing="0.06em">KNOWLEDGE OF PROBABILITIES</text>
+  <text x="414" y="48" text-anchor="middle" fill="var(--sky)" font-size="13" font-weight="700">Solid / Agreed Laws</text>
+  <text x="904" y="48" text-anchor="middle" fill="var(--violet)" font-size="13" font-weight="700">Fragile / Unknowable Odds</text>
+
+  <!-- Row Headers: Knowledge of Outcomes -->
+  <text x="88" y="118" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="800">Outcomes</text>
+  <text x="88" y="138" text-anchor="middle" fill="var(--sky)" font-size="12.5" font-weight="700">Well-Defined</text>
+  <text x="88" y="156" text-anchor="middle" fill="var(--muted)" font-size="11.5">&amp; Agreed</text>
+
+  <text x="88" y="270" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="800">Outcomes</text>
+  <text x="88" y="290" text-anchor="middle" fill="var(--amber)" font-size="12.5" font-weight="700">Open, Contested</text>
+  <text x="88" y="308" text-anchor="middle" fill="var(--muted)" font-size="11.5">or Unlisted</text>
+
+  <!-- Cell 1: RISK (Top Left) -->
+  <rect x="176" y="66" width="476" height="136" rx="12" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2.2"/>
+  <text x="200" y="96" fill="var(--sky)" class="mono" font-size="11.5" font-weight="700">QUADRANT 1 · ALEATORY + PARAMETRIC</text>
+  <text x="200" y="124" fill="var(--ink)" font-size="17" font-weight="800">1. RISK</text>
+  <text x="200" y="152" fill="var(--muted)" font-size="12">Known states and stable governing laws.</text>
+  <text x="200" y="176" fill="var(--muted)" font-size="12">Remedy: Kelly caps, Laplace succession, SBC.</text>
+
+  <!-- Cell 2: UNCERTAINTY (Top Right) -->
+  <rect x="668" y="66" width="472" height="136" rx="12" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2.2"/>
+  <text x="692" y="96" fill="var(--violet)" class="mono" font-size="11.5" font-weight="700">QUADRANT 2 · EPISTEMIC SPECIFICATION</text>
+  <text x="692" y="124" fill="var(--ink)" font-size="17" font-weight="800">2. UNCERTAINTY</text>
+  <text x="692" y="152" fill="var(--muted)" font-size="12">Known states, contested odds or model form.</text>
+  <text x="692" y="176" fill="var(--muted)" font-size="12">Remedy: Kennedy-O'Hagan GP δ(x) &amp; ICP.</text>
+
+  <!-- Cell 3: AMBIGUITY (Bottom Left) -->
+  <rect x="176" y="220" width="476" height="136" rx="12" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2.2"/>
+  <text x="200" y="250" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="700">QUADRANT 3 · VALUATION &amp; SCOPE</text>
+  <text x="200" y="278" fill="var(--ink)" font-size="17" font-weight="800">3. AMBIGUITY</text>
+  <text x="200" y="306" fill="var(--muted)" font-size="12">Disagreement over harm or who bears error cost.</text>
+  <text x="200" y="330" fill="var(--muted)" font-size="12">Remedy: p* = C/(ηL) &amp; Chouldechova audit (Φ₄).</text>
+
+  <!-- Cell 4: IGNORANCE (Bottom Right) -->
+  <rect x="668" y="220" width="472" height="136" rx="12" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2.2"/>
+  <text x="692" y="250" fill="var(--amber)" class="mono" font-size="11.5" font-weight="700">QUADRANT 4 · DEEP KNIGHTIAN REGIME</text>
+  <text x="692" y="278" fill="var(--ink)" font-size="17" font-weight="800">4. IGNORANCE</text>
+  <text x="692" y="306" fill="var(--muted)" font-size="12">Unlisted states &amp; Russell's Christmas Turkey.</text>
+  <text x="692" y="330" fill="var(--muted)" font-size="12">Remedy: Info-Gap α̂ + Global Wald Floor + Exit.</text>
+</svg>

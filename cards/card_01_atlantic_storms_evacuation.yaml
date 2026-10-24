@@ -1,5 +1,4 @@
 id: "atlantic_storms_coastal_evacuation"
-contract_version: "1.0"
 layer: "L2"
 uncertainty: "epistemic_specification"
 

@@ -1,4 +1,4 @@
-//! Structured Epistemological Card (`EpistemologicalCard`, `contract_version: "1.0"`, §2.3),
+//! Structured Epistemological Card (`EpistemologicalCard`, §2.3),
 //! zero-dependency YAML parser/serializer, and algorithmic validator (`audit()`) enforcing
 //! the 4 Prohibitions and the 5 Boundary Invariants ($\Phi_1$ to $\Phi_5$).
 
@@ -7,9 +7,6 @@ use crate::layers::{respects_cromwell, Layer, UncertaintyClass};
 use crate::rng::DEFAULT_SEED;
 use crate::sha256::is_valid_sha256_hex;
 use std::collections::BTreeMap;
-
-/// Canonical version of the Stochology Epistemological Contract.
-pub const CONTRACT_VERSION: &str = "1.0";
 
 /// Missingness mechanism classification according to Donald Rubin (Invariant $\Phi_3$).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -179,11 +176,10 @@ pub struct DecisionRuleAndScope {
     pub exit_clause: String,
 }
 
-/// Complete Epistemological Card (`contract_version: "1.0"`).
+/// Complete Epistemological Card.
 #[derive(Debug, Clone, PartialEq)]
 pub struct EpistemologicalCard {
     pub id: String,
-    pub contract_version: String,
     pub layer: Layer,
     pub uncertainty: UncertaintyClass,
     pub decision_maker_question: DecisionMakerQuestion,
@@ -227,11 +223,10 @@ impl EpistemologicalCard {
         crate::sha256::sha256_hex(self.compute_preregistration_payload().as_bytes())
     }
 
-    /// Returns a canonical, empirically grounded v1.0 Epistemological Card (`data/atlantic_storms.csv`).
+    /// Returns a canonical, empirically grounded Epistemological Card (`data/atlantic_storms.csv`).
     pub fn canonical_example() -> Self {
         let mut card = Self {
             id: "atlantic_storms_coastal_evacuation".into(),
-            contract_version: CONTRACT_VERSION.into(),
             layer: Layer::ModelL2,
             uncertainty: UncertaintyClass::EpistemicSpecification,
             decision_maker_question: DecisionMakerQuestion {
@@ -334,17 +329,6 @@ impl EpistemologicalCard {
     /// Audits the Epistemological Card against the 4 Prohibitions and the 5 Boundary Invariants ($\Phi_1$–$\Phi_5$).
     pub fn audit(&self) -> Result<(), Vec<ContractViolation>> {
         let mut v = Vec::new();
-
-        // Contract Version
-        if self.contract_version.trim() != CONTRACT_VERSION {
-            v.push(ContractViolation {
-                gate_code: "CONTRACT_VERSION",
-                description: format!(
-                    "contract_version '{}' differs from canonical version '{}'",
-                    self.contract_version, CONTRACT_VERSION
-                ),
-            });
-        }
 
         // Step 2 & Prohibition 1: 3-part decision-maker question
         let q = &self.decision_maker_question;
@@ -849,7 +833,7 @@ impl EpistemologicalCard {
         }
     }
 
-    /// Serializes the Epistemological Card into the structured YAML format of Contract v1.0 (§2.3).
+    /// Serializes the Epistemological Card into the structured YAML format (§2.3).
     pub fn to_yaml(&self) -> String {
         let unused_yaml = if self.data_and_audit_contract.findings.unused.is_empty() {
             "      []".to_string()
@@ -865,7 +849,6 @@ impl EpistemologicalCard {
 
         format!(
             r#"id: "{id}"
-contract_version: "{version}"
 layer: "{layer}"
 uncertainty: "{uncertainty}"
 
@@ -951,7 +934,6 @@ decision_rule_and_scope:
   exit_clause: "{exit_clause}"
 "#,
             id = escape_yaml_str(&self.id),
-            version = escape_yaml_str(&self.contract_version),
             layer = self.layer.code(),
             uncertainty = self.uncertainty.code(),
             who_decides = escape_yaml_str(&self.decision_maker_question.who_decides),
@@ -1152,7 +1134,7 @@ decision_rule_and_scope:
         )
     }
 
-    /// Parses an Epistemological Card from the YAML template of Contract v1.0.
+    /// Parses an Epistemological Card from the YAML template.
     pub fn from_yaml(yaml: &str) -> Result<Self, String> {
         let mut map: BTreeMap<String, String> = BTreeMap::new();
         let mut stack: Vec<(usize, String)> = Vec::new();
@@ -1238,7 +1220,6 @@ decision_rule_and_scope:
 
         Ok(Self {
             id: req("id")?,
-            contract_version: req("contract_version")?,
             layer,
             uncertainty,
             decision_maker_question: DecisionMakerQuestion {
@@ -1577,7 +1558,6 @@ mod tests {
         let parsed = EpistemologicalCard::from_yaml(&yaml).expect("YAML parse must succeed");
         assert_eq!(parsed.audit(), Ok(()));
         assert_eq!(parsed, c);
-        assert_eq!(parsed.contract_version, "1.0");
     }
 
     #[test]
@@ -1643,7 +1623,6 @@ mod tests {
     #[test]
     fn trojan_horse_card_is_rejected_across_all_defective_gates() {
         let trojan_yaml = r#"id: "trojan_horse_adversarial_bypass"
-contract_version: "1.0"
 layer: "L2"
 uncertainty: "epistemic_specification"
 

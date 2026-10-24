@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="410" viewBox="0 0 1120 410" fill="none" role="img" aria-labelledby="title-fig-00-traditions">
+  <title id="title-fig-00-traditions">The Three Intellectual Traditions Joined in the Stochology Protocol</title>
+  <defs>
+    <marker id="arr-sky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+    </marker>
+    <marker id="arr-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--violet)"/>
+    </marker>
+    <marker id="arr-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--emerald)"/>
+    </marker>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1118" height="408" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Tradition 1 (Top) -->
+  <rect x="240" y="18" width="640" height="104" rx="12" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2.2"/>
+  <text x="560" y="50" text-anchor="middle" fill="var(--sky)" class="mono" font-size="11.5" font-weight="700" letter-spacing="0.06em">TRADITION 1 · EPISTEMOLOGY OF SCIENCE</text>
+  <text x="560" y="78" text-anchor="middle" fill="var(--ink)" font-size="15.5" font-weight="800">Philosophy of Induction &amp; Severe Refutation</text>
+  <text x="560" y="103" text-anchor="middle" fill="var(--muted)" font-size="12.5">Hume · Peirce · Popper · Duhem-Quine · Lakatos · Mayo</text>
+
+  <!-- Arrow 1 -> Center -->
+  <line x1="560" y1="122" x2="560" y2="150" stroke="var(--sky)" stroke-width="2.6" marker-end="url(#arr-sky)"/>
+
+  <!-- Central Stochology Protocol Hub -->
+  <rect x="230" y="158" width="660" height="102" rx="14" fill="var(--surface)" stroke="var(--border)" stroke-width="2"/>
+  <text x="560" y="188" text-anchor="middle" fill="var(--ink)" class="mono" font-size="13" font-weight="800" letter-spacing="0.08em">STOCHOLOGY PROTOCOL · CLOSED LOOP</text>
+
+  <rect x="265" y="202" width="170" height="42" rx="8" fill="var(--sky-bg)" stroke="var(--sky)" stroke-width="1.6"/>
+  <text x="350" y="228" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="750">World (L₁)</text>
+
+  <text x="455" y="228" text-anchor="middle" fill="var(--muted)" font-size="15" font-weight="700">↔</text>
+
+  <rect x="475" y="202" width="170" height="42" rx="8" fill="var(--violet-bg)" stroke="var(--violet)" stroke-width="1.6"/>
+  <text x="560" y="228" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="750">Model (L₂)</text>
+
+  <text x="665" y="228" text-anchor="middle" fill="var(--muted)" font-size="15" font-weight="700">↔</text>
+
+  <rect x="685" y="202" width="170" height="42" rx="8" fill="var(--emerald-bg)" stroke="var(--emerald)" stroke-width="1.6"/>
+  <text x="770" y="228" text-anchor="middle" fill="var(--ink)" font-size="13" font-weight="750">Agent (L₃)</text>
+
+  <!-- Tradition 2 (Bottom Left) -->
+  <rect x="24" y="290" width="524" height="100" rx="12" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2.2"/>
+  <text x="286" y="320" text-anchor="middle" fill="var(--violet)" class="mono" font-size="11.5" font-weight="700" letter-spacing="0.06em">TRADITION 2 · CALCULUS OF PLAUSIBILITY</text>
+  <text x="286" y="348" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">Probability Theory &amp; Statistical Inference</text>
+  <text x="286" y="373" text-anchor="middle" fill="var(--muted)" font-size="12">Bernoulli · Bayes · Laplace · Ramsey · Neyman · Manski</text>
+
+  <!-- Tradition 3 (Bottom Right) -->
+  <rect x="572" y="290" width="524" height="100" rx="12" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2.2"/>
+  <text x="834" y="320" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="700" letter-spacing="0.06em">TRADITION 3 · DYNAMICS &amp; ERGODICITY</text>
+  <text x="834" y="348" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">Stochastic Processes &amp; Non-Equilibrium Time</text>
+  <text x="834" y="373" text-anchor="middle" fill="var(--muted)" font-size="12">Markov · Langevin · Itô · Kelly · Prigogine · Peters</text>
+
+  <!-- Arrows 2 & 3 -> Center -->
+  <path d="M 340 290 L 400 264" stroke="var(--violet)" stroke-width="2.6" marker-end="url(#arr-violet)"/>
+  <path d="M 780 290 L 720 264" stroke="var(--emerald)" stroke-width="2.6" marker-end="url(#arr-emerald)"/>
+</svg>

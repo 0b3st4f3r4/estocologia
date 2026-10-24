@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="420" viewBox="0 0 1060 420" fill="none" role="img" aria-labelledby="title-fig-12-crates">
+  <title id="title-fig-12-crates">Five-Crate Rust Workspace Dependency Architecture</title>
+  <defs>
+    <marker id="cr-sky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+    </marker>
+    <marker id="cr-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--violet)"/>
+    </marker>
+    <marker id="cr-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--emerald)"/>
+    </marker>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1058" height="418" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Top Crate: stochology-cli -->
+  <rect x="270" y="16" width="520" height="86" rx="12" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2.4"/>
+  <text x="530" y="45" text-anchor="middle" fill="var(--ink)" class="mono" font-size="16" font-weight="800">stochology-cli</text>
+  <text x="530" y="68" text-anchor="middle" fill="var(--amber)" class="mono" font-size="11.5" font-weight="700">Binaries: labs (7 Labs) &amp; gates (8 Gates G1–G8)</text>
+  <text x="530" y="88" text-anchor="middle" fill="var(--muted)" font-size="11.5">Empirical CSV loaders &amp; SHA-256 verification</text>
+
+  <!-- Arrows from CLI to Middle Crates -->
+  <line x1="380" y1="102" x2="188" y2="134" stroke="var(--sky)" stroke-width="2.2" marker-end="url(#cr-sky)"/>
+  <line x1="530" y1="102" x2="530" y2="134" stroke="var(--violet)" stroke-width="2.2" marker-end="url(#cr-violet)"/>
+  <line x1="680" y1="102" x2="872" y2="134" stroke="var(--emerald)" stroke-width="2.2" marker-end="url(#cr-emerald)"/>
+
+  <!-- Middle Left: stochology-lenses -->
+  <rect x="24" y="140" width="320" height="128" rx="12" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2.2"/>
+  <text x="184" y="168" text-anchor="middle" fill="var(--ink)" class="mono" font-size="14.5" font-weight="800">stochology-lenses</text>
+  <text x="184" y="191" text-anchor="middle" fill="var(--sky)" class="mono" font-size="11" font-weight="700">5 Transversal Lenses + Machine</text>
+  <text x="184" y="213" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">information · time · tail</text>
+  <text x="184" y="233" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">invariance · decision (CORP)</text>
+  <text x="184" y="253" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">machine (P1–P5) · relational</text>
+
+  <!-- Middle Center: stochology-siga -->
+  <rect x="370" y="140" width="320" height="128" rx="12" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2.2"/>
+  <text x="530" y="168" text-anchor="middle" fill="var(--ink)" class="mono" font-size="14.5" font-weight="800">stochology-siga</text>
+  <text x="530" y="191" text-anchor="middle" fill="var(--violet)" class="mono" font-size="11" font-weight="700">Funnel &amp; Operational Roadmap</text>
+  <text x="530" y="213" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">funnel (4 Eliminatory Filters)</text>
+  <text x="530" y="233" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">roadmap (8-Step SIGA, SHELF,</text>
+  <text x="530" y="253" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">SBC, e-process, Gigerenzer)</text>
+
+  <!-- Middle Right: stochology-governance -->
+  <rect x="716" y="140" width="320" height="128" rx="12" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2.2"/>
+  <text x="876" y="168" text-anchor="middle" fill="var(--ink)" class="mono" font-size="14.5" font-weight="800">stochology-governance</text>
+  <text x="876" y="191" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="11" font-weight="700">Production Audit &amp; Drift</text>
+  <text x="876" y="213" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">clock (Bitemporal + Canary)</text>
+  <text x="876" y="233" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">vault (Single-Opening SHA-256)</text>
+  <text x="876" y="253" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">drift (CORP, ExTRA, 4 Shift)</text>
+
+  <!-- Arrows to Core -->
+  <line x1="188" y1="268" x2="365" y2="300" stroke="var(--sky)" stroke-width="2.2" marker-end="url(#cr-sky)"/>
+  <line x1="530" y1="268" x2="530" y2="300" stroke="var(--violet)" stroke-width="2.2" marker-end="url(#cr-violet)"/>
+  <line x1="872" y1="268" x2="695" y2="300" stroke="var(--emerald)" stroke-width="2.2" marker-end="url(#cr-emerald)"/>
+
+  <!-- Bottom Foundation: stochology-core -->
+  <rect x="40" y="306" width="980" height="94" rx="12" fill="var(--surface)" stroke="var(--sky)" stroke-width="2.5"/>
+  <text x="530" y="336" text-anchor="middle" fill="var(--ink)" class="mono" font-size="16" font-weight="800">stochology-core (Zero External Dependencies)</text>
+  <text x="530" y="360" text-anchor="middle" fill="var(--sky)" class="mono" font-size="11.5" font-weight="700">layers (L₁–L₃, Meng, Manski, Δ_J, CRPS, RRM) · uncertainty (GP, Info-Gap + Wald)</text>
+  <text x="530" y="383" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11.5">invariants (Φ₁–Φ₅, Moulton, Chouldechova) · card (YAML &amp; audit) · rng (SplitMix64) · sha256</text>
+</svg>

@@ -1,4 +1,4 @@
-//! Binary `labs` — Executes the 7 methodological and empirical laboratories of the Stochology Protocol v1.0
+//! Binary `labs` — Executes the 7 methodological and empirical laboratories of the Stochology Protocol
 //! over all 13 real datasets (`data/*.csv`) and the 3 canonical Epistemological Cards (`cards/*.yaml`).
 
 use std::env;
@@ -23,7 +23,7 @@ use stochology_lenses::{
     amplitude_constrained_mi_bound, fano_error_floor, hidden_confounding_threshold_lambda_star,
     run_icp, run_nonlinear_icp_nile, AlmostPerfectMachine, AuthenticModelForm, CausalEnvironment,
     CorpPavDecomposition, DpiMarkovChain, ExactCoinCalibrationBenchmark, HillTailDiagnostic,
-    MixingTimeAudit, SdpiHierarchy, TimeKellyDiagnostic,
+    MixingTimeAudit, RelationalComplexSystemsSynthesis, SdpiHierarchy, TimeKellyDiagnostic,
 };
 
 /// Lab 1: Dynamics of the Three Ontological Layers ($L_1 \to L_2 \to L_3 \to L_1$), Meng, Manski, Jensen, and Performativity.
@@ -291,6 +291,23 @@ fn lab_lenses(root: &Path) {
         machine.atomic_effective_dimension,
         machine.width_w,
         machine.all_p1_to_p5_approved
+    );
+
+    // 7. Relational Ontology & Complex Systems (Sunyata/RQM, Prigogine/Autopoiesis, Schelling 1971, Daisyworld 1983, Ontological Stack)
+    let rel_syn = RelationalComplexSystemsSynthesis::evaluate_canonical(DEFAULT_SEED);
+    println!(
+        "  [Relational Ontology & Complex Systems] MI_rel={:.4} vs MI_iso={:.4} nats | Prigogine dS={:+.2} (turnover={:.1}%, closure={:.1}%) | Schelling(tau=0.125->{:.1}% vs tau=0.375->{:.1}%) | Daisyworld(MAE={:.2}C vs dead={:.2}C, dT/dL={:+.2}) | verified={}",
+        rel_syn.relational_figuration.relational_mutual_information_nats,
+        rel_syn.relational_figuration.isolated_svabhava_mutual_information_nats,
+        rel_syn.dissipative_autopoiesis.net_open_entropy_change_ds,
+        rel_syn.dissipative_autopoiesis.material_turnover_fraction * 100.0,
+        rel_syn.dissipative_autopoiesis.autopoietic_pattern_fidelity * 100.0,
+        rel_syn.schelling_emergence.integrated_similarity_at_low_tau * 100.0,
+        rel_syn.schelling_emergence.emergent_segregation_at_mild_tau * 100.0,
+        rel_syn.daisyworld_homeostasis.homeostatic_mean_abs_error_c,
+        rel_syn.daisyworld_homeostasis.lifeless_mean_abs_error_c,
+        rel_syn.daisyworld_homeostasis.coexistence_feedback_slope_dt_dl,
+        rel_syn.all_six_axes_verified
     );
 }
 

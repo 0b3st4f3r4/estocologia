@@ -19,9 +19,10 @@ use stochology_governance::{
 use stochology_lenses::decision::{CorpPavDecomposition, ExactCoinCalibrationBenchmark};
 use stochology_lenses::information::{DpiMarkovChain, SdpiHierarchy};
 use stochology_lenses::machine::{AlmostPerfectMachine, AuthenticModelForm};
+use stochology_lenses::relational::RelationalComplexSystemsSynthesis;
 
 fn run_positive_gates(root: &Path) -> Result<(), String> {
-    println!("=== EPISTEMOLOGICAL GATES G1-G8 (STOCHOLOGY PROTOCOL v1.0) ===");
+    println!("=== EPISTEMOLOGICAL GATES G1-G8 (STOCHOLOGY PROTOCOL) ===");
 
     // G1-G5: Load the 3 YAML card files directly from disk (`cards/*.yaml`), verify SHA-256 pre-registration
     // and dataset hashes, recompute all empirical quantities from `data/*.csv`, and run the 8-Step SIGA Roadmap.
@@ -36,7 +37,7 @@ fn run_positive_gates(root: &Path) -> Result<(), String> {
         }
     }
     println!(
-        "  [G1-G5] YAML Cards v1.0 ({}/{} from disk, verified against CSVs): Phi1 Simulability, Phi2 Moulton-Campbell/Exceedance, Phi3 Null/Missingness, Phi4 Chouldechova/Exit, Phi5 Resolution -> APPROVED",
+        "  [G1-G5] YAML Cards ({}/{} from disk, verified against CSVs): Phi1 Simulability, Phi2 Moulton-Campbell/Exceedance, Phi3 Null/Missingness, Phi4 Chouldechova/Exit, Phi5 Resolution -> APPROVED",
         cards.len(),
         cards.len()
     );
@@ -162,7 +163,11 @@ fn run_positive_gates(root: &Path) -> Result<(), String> {
     if !coin_bench.separates_decision_from_probability_calibration {
         return Err("G8 failed Exact Coin Calibration vs. Decision benchmark".into());
     }
-    println!("  [G8] Almost-Perfect Machine M=(T,Phi,theta) (P1-P5), Authentic Form (delta(x) + S*), Nonlinear NILE/IRM, and Coin Benchmark -> APPROVED");
+    let rel_syn = RelationalComplexSystemsSynthesis::evaluate_canonical(DEFAULT_SEED);
+    if !rel_syn.all_six_axes_verified {
+        return Err("G8 failed Relational Ontology & Complex Systems 6-axis verification".into());
+    }
+    println!("  [G8] Almost-Perfect Machine M=(T,Phi,theta) (P1-P5), Authentic Form (delta(x) + S*), Nonlinear NILE/IRM, Coin Benchmark, and Relational/Complex Systems (Schelling & Daisyworld) -> APPROVED");
     Ok(())
 }
 

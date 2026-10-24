@@ -1,4 +1,4 @@
-//! `stochology-core` — Core mathematical and epistemological primitives of the Stochology Protocol v1.0.
+//! `stochology-core` — Core mathematical and epistemological primitives of the Stochology Protocol.
 
 pub mod card;
 pub mod invariants;
@@ -12,7 +12,7 @@ pub use card::{
     DecisionMakerQuestion, DecisionRuleAndScope, DominantEvent, EpistemologicalCard,
     EpistemologicalHeader, FieldAuthorship, FindingsRegistry, InfoGapRobustness,
     MissingnessMechanism, MurphyCorpDecomposition, NoisePhysics, UncertaintyBudgetAndAuthorship,
-    UnitAndMargin, VarianceBudget, CONTRACT_VERSION,
+    UnitAndMargin, VarianceBudget,
 };
 pub use invariants::{
     verify_resolution_phi5, ChouldechovaAudit, ExceedanceDesignEffect, OperationalWeightingGap,

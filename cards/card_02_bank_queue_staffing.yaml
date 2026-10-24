@@ -1,5 +1,4 @@
 id: "daily_bank_queue_shift_staffing"
-contract_version: "1.0"
 layer: "L1"
 uncertainty: "aleatory"
 

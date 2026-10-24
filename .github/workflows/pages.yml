@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
   pull_request:
-    paths: ["web/**", "cards/**", ".github/workflows/pages.yml"]
+    paths: ["book-src/**", "book.toml", "mathjax.js", "theme/**", "cards/**", "docs/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    name: Audit Protocol & Stage Web Artifact
+    name: Audit Protocol & Build mdBook
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
@@ -28,25 +28,27 @@ jobs:
       - name: Mandatory verification (AGENTS.md §V)
         run: ./scripts/verify.sh
 
-      - name: Verify web/ bundle and stage cards
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: '0.5.3'
+
+      - name: Build the book
+        run: mdbook build
+
+      - name: Verify staged artifact
         run: |
-          test -f web/index.html
-          test -f web/styles.css
-          test -f web/app.js
-          test -f web/favicon.svg
-          test -f web/logo.svg
-          test -f web/.nojekyll
-          grep -qx "obestafera.com" web/CNAME
-          mkdir -p web/cards
-          cp cards/*.yaml web/cards/
+          test -f book/index.html
+          test -f book/toc.html
+          grep -qx "obestafera.com" book/CNAME
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload GitHub Pages artifact (web/)
+      - name: Upload GitHub Pages artifact (book/)
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./web
+          path: ./book
 
   deploy:
     name: Publish to obestafera.com

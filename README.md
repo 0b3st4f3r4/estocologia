@@ -1,6 +1,10 @@
-# Stochology — Auditable Epistemological Machine (Protocol v1.0)
+<img src="theme/favicon.svg" style="max-height: 300px" />
 
-Pure-Rust implementation (**zero external dependencies**) of the **Stochology Protocol: Enriched Methodological Architecture for Judgment and Decision-Making under Uncertainty (`contract_version: "1.0"`)**.
+<br />
+
+# Stochology — Auditable Epistemological Machine (Protocol)
+
+Pure-Rust implementation (**zero external dependencies**) of the **Stochology Protocol: Enriched Methodological Architecture for Judgment and Decision-Making under Uncertainty**.
 
 The repository unifies within a single verifiable apparatus:
 1. **Structural Diagnosis of the Three Ontological Layers ($L_1 \to L_2 \to L_3 \to L_1$):** Meng's Identity ($\rho_{R,Y}$), Manski's bounds under MNAR missingness, Jensen's Gap $\Delta_J = \mathbb{E}[f(X)] - f(\mathbb{E}[X])$, $\mathrm{CRPS}$ evaluation, and **Performative Prediction** ($\theta_{\mathrm{SL}}, \theta_{\mathrm{PS}}, \theta_{\mathrm{PO}}$ of Stackelberg and contraction radius $\frac{\varepsilon \beta}{\gamma} < 1$).
@@ -12,7 +16,7 @@ The repository unifies within a single verifiable apparatus:
    - **Structure and Invariance:** Pearl's Causal Ladder, Invariant Causal Prediction (ICP), environment OLS invariance penalty, nonlinear NILE/IRM over orthonormal Hermite basis (`run_nonlinear_icp_nile`), 2nd-order worst-case loss, and hidden confounding threshold $\Lambda^*$.
    - **Decision and Calibration:** Cost-loss rule $p^* = \frac{C}{\eta L}$, $\mathrm{EVPI}$, quantile score, isotonic **CORP-Murphy** decomposition via the *Pool-Adjacent-Violators* (PAV) algorithm, and exact fair-coin calibration vs. decision benchmark (`ExactCoinCalibrationBenchmark`).
    - **Almost-Perfect Machine & First-Class Authentic Model Form (`machine.rs`):** $(\varepsilon, \delta)$-Almost-Perfect Machine $M = (T, \Phi, \theta)$ (`P1`–`P5`: Barron rate $C_f^2 / W$, DPI $\delta$-sufficiency, Fano/minimax optimality, Telgarsky $2^D$ linear regions, and Gram $d_{\mathrm{eff}}$) and `AuthenticModelForm` ($\delta(x) + \hat{S}^*$, named discarded atoms, 6 numerical identities, and 5-part criterion $A(\text{model})$).
-4. **Structured Communication Contract (`contract_version: "1.0"`):** The 4 Prohibitions, the 5 Boundary Invariants ($\Phi_1$–$\Phi_5$), **Moulton-Campbell** unequal-cluster correction ($\tilde{m} = \bar{m}(1 + \mathrm{CV}^2)$), quantile exceedance design effect ($\rho_I(p)$ and $n_{\mathrm{eff}}(p)$), and **Chouldechova's** algebraic impossibility audit.
+4. **Structured Communication Contract:** The 4 Prohibitions, the 5 Boundary Invariants ($\Phi_1$–$\Phi_5$), **Moulton-Campbell** unequal-cluster correction ($\tilde{m} = \bar{m}(1 + \mathrm{CV}^2)$), quantile exceedance design effect ($\rho_I(p)$ and $n_{\mathrm{eff}}(p)$), and **Chouldechova's** algebraic impossibility audit.
 5. **4-Filter Eliminatory Funnel and 8-Step SIGA Roadmap:** Executed end-to-end over the Epistemological Cards in [`cards/`](cards/) with sequential evidence processes (*e-processes*) and executive memoranda in integer natural frequencies.
 6. **Bitemporal Governance, Single-Opening Vault, and 4 Regimes of Drift:** Bitemporal Clock ($t_{\text{disp}} \ge t_{\text{ev}}$), canary column, SHA-256 Temporal Vault, Murphy-CORP circuit breaker, *Covariate Drift* adaptation (*ExTRA-WCP-T* + Lei & Candès bound), and *Label Shift* adaptation via the 4 canonical estimators (**BBSE**, **MLLS/SLD**, **DFM**, and **OTTER**).
 7. **Transversal Real-Data Synthesis (`labs --real-data`, Lab 7):** End-to-end empirical audit across all **13 real datasets (`data/*.csv`)** — including the out-of-time (`nyc_flights_2013_h1.csv`, `nyc_flights_2023_h1.csv`) and out-of-domain (`houston_flights_2011.csv`) flight reserves — and the **3 canonical Epistemological Cards (`cards/*.yaml`)**.
@@ -23,10 +27,10 @@ The repository unifies within a single verifiable apparatus:
 
 ```text
 .
-├── AGENTS.md                                      # Binding governance and verification contract (v1.0)
+├── AGENTS.md                                      # Binding governance and verification contract
 ├── docs/
-│   └── PROTOCOL.md                                # Full Protocol v1.0 specification and Rust mapping
-├── cards/                                         # Canonical Epistemological Cards (contract_version: "1.0")
+│   └── PROTOCOL.md                                # Full Protocol specification and Rust mapping
+├── cards/                                         # Canonical Epistemological Cards
 │   ├── card_01_atlantic_storms_evacuation.yaml
 │   ├── card_02_bank_queue_staffing.yaml
 │   └── card_03_nyc_flights_holding.yaml
@@ -37,7 +41,10 @@ The repository unifies within a single verifiable apparatus:
 │   ├── stochology-siga/                           # 4-Filter Eliminatory Funnel and 8-Step SIGA Roadmap
 │   ├── stochology-governance/                     # Bitemporal Clock, Single-Opening Vault, and Drift (ExTRA-WCP-T, BBSE, MLLS, DFM, OTTER)
 │   └── stochology-cli/                            # CLI binaries `labs` and `gates`
-├── web/                                           # Interactive static site published at https://obestafera.com (GitHub Pages CI)
+├── book.toml                                      # mdBook configuration
+├── book-src/                                      # The interactive textbook, authored in Markdown (mdBook)
+├── theme/                                         # mdBook favicon/theme overrides
+├── mathjax.js                                     # MathJax 3 bootstrap for $...$ / $$...$$ rendering
 └── scripts/
     └── verify.sh                                  # Complete positive and negative verification suite
 ```

@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Production Governance (v1.0): Bitemporal Clock (t_disp >= t_ev), Canary Column, Single-Opening Temporal Vault, Murphy-CORP Circuit Breaker, ExTRA-WCP-T + Lei & Candes, and Label Shift (BBSE, MLLS/SLD, DFM, OTTER)"
+description = "Production Governance: Bitemporal Clock (t_disp >= t_ev), Canary Column, Single-Opening Temporal Vault, Murphy-CORP Circuit Breaker, ExTRA-WCP-T + Lei & Candes, and Label Shift (BBSE, MLLS/SLD, DFM, OTTER)"
 
 [dependencies]
 stochology-core = { path = "../stochology-core" }

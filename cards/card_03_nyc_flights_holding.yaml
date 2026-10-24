@@ -1,5 +1,4 @@
 id: "nyc_flights_departure_bank_holding"
-contract_version: "1.0"
 layer: "L3"
 uncertainty: "knightian"
 

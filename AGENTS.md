@@ -1,15 +1,15 @@
-# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology Protocol v1.0)
+# AGENTS.md — Governance, Engineering, and Orchestration Contract (Stochology Protocol)
 
-Binding contract for any agent or contributor operating in this repository. The system implemented here is an **auditable epistemological machine**: claim, generating process, executable null model, and severe test in the same place, with a fixed seed (`seed = 2026`), a structured Epistemological Card (`contract_version: "1.0"`), and algorithmic gates capable of rejecting a flawed claim. The final reader of the output is **human** — decision-maker, student, instructor, or auditor.
+Binding contract for any agent or contributor operating in this repository. The system implemented here is an **auditable epistemological machine**: claim, generating process, executable null model, and severe test in the same place, with a fixed seed (`seed = 2026`), a structured Epistemological Card, and algorithmic gates capable of rejecting a flawed claim. The final reader of the output is **human** — decision-maker, student, instructor, or auditor.
 
-This repository implements the **Stochology Protocol v1.0** in **pure Rust (zero external dependencies)**:
+This repository implements the **Stochology Protocol** in **pure Rust (zero external dependencies)**:
 - Full specification and architectural mapping: [`docs/PROTOCOL.md`](docs/PROTOCOL.md)
 
 ---
 
 ## I. Golden Rules — The Four Prohibitions
 
-1. **Ban on unstructured free natural language between agents (`PROHIBITION_1`).** All communication between agents or modules transits exclusively through structured **Epistemological Cards** (`EpistemologicalCard`, in `crates/stochology-core/src/card.rs`, `contract_version: "1.0"`), serialized in YAML (`cards/*.yaml`) and validated by `EpistemologicalCard::audit()`.
+1. **Ban on unstructured free natural language between agents (`PROHIBITION_1`).** All communication between agents or modules transits exclusively through structured **Epistemological Cards** (`EpistemologicalCard`, in `crates/stochology-core/src/card.rs`), serialized in YAML (`cards/*.yaml`) and validated by `EpistemologicalCard::audit()`.
 2. **Ban on the lone mean (`PROHIBITION_2`).** Whenever the loss/payoff function is nonlinear, dynamics are multiplicative, or the tail is heavy, reporting only the mean is forbidden: one must report the evaluation at the mean $f(\mathbb{E}[X])$, the simulated expectation $\mathbb{E}[f(X)]$, Jensen's Gap $\Delta_J = \mathbb{E}[f(X)] - f(\mathbb{E}[X])$, the median, tail quantiles ($q_{05}, q_{95}$), and the *Continuous Ranked Probability Score* ($\mathrm{CRPS}$, in `crates/stochology-core/src/layers.rs`).
 3. **Ban on confusing learning with performativity (`PROHIBITION_3`).** Small predictive error does not prove that a model is true. On Bridge $L_3 \to L_1$, one must distinguish **Performative Stability** ($\theta_{\mathrm{PS}}$) from **Performative Optimality** ($\theta_{\mathrm{PO}}$, Stackelberg equilibrium), measure Wasserstein-1 sensitivity ($\varepsilon$), and audit the strict contraction condition of Repeated Risk Minimization ($\frac{\varepsilon \beta}{\gamma} < 1$, in `PerformativeSystem`).
 4. **Ban on dogmatic extremes and omitted attempts (`PROHIBITION_4`).** No probability may be $0\%$ or $100\%$ (Cromwell's Rule: $p \in [\varepsilon_{\text{floor}}, 1 - \varepsilon_{\text{floor}}]$); every forecast is evaluated out-of-sample via the isotonic **CORP-Murphy** decomposition using *Pool-Adjacent-Violators* ($\mathrm{BS} = \mathrm{REL}_{\mathrm{CORP}} - \mathrm{RES}_{\mathrm{CORP}} + \mathrm{UNC}_0$, in `crates/stochology-lenses/src/decision.rs`); and the counter of attempted specifications $K \ge 1$ plus the evidence process (*e-process* $E_t$) and discarded findings must be declared and validated.
@@ -96,12 +96,12 @@ git tag --list                                                  # Must be empty
 
 ---
 
-## VI. Project Status (Protocol v1.0)
+## VI. Project Status (Protocol)
 
 | Layer | Location | Status |
 | --- | --- | --- |
-| Protocol Specification | `docs/PROTOCOL.md` | Consolidated v1.0 specification and code mapping |
+| Protocol Specification | `docs/PROTOCOL.md` | Consolidated specification and code mapping |
 | Rust Apparatus | `crates/stochology-core`, `crates/stochology-lenses`, `crates/stochology-siga`, `crates/stochology-governance`, `crates/stochology-cli` | 5 pure-Rust crates (zero external dependencies), 2021 edition |
-| Epistemological Cards | `cards/card_01_atlantic_storms_evacuation.yaml`, `cards/card_02_bank_queue_staffing.yaml`, `cards/card_03_nyc_flights_holding.yaml` | 3 canonical cards (`contract_version: "1.0"`) anchored to `data/*.csv` and audited in `gates` and `labs --siga` |
+| Epistemological Cards | `cards/card_01_atlantic_storms_evacuation.yaml`, `cards/card_02_bank_queue_staffing.yaml`, `cards/card_03_nyc_flights_holding.yaml` | 3 canonical cards anchored to `data/*.csv` and audited in `gates` and `labs --siga` |
 | Empirical Datasets | `data/*.csv` (`danish_fire.csv`, `bank_calls.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `djia_1885_2023.csv`, `atlantic_storms.csv`, `toronto_arrests.csv`, `nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `vic_elec.csv`; plus sealed out-of-time/out-of-domain reserves `nyc_flights_2013_h1.csv`, `nyc_flights_2023_h1.csv`, `houston_flights_2011.csv`) | Preserved and exercised by the laboratories |
 | Verification | `scripts/verify.sh` | Complete positive and negative test suite |

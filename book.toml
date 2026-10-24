@@ -1,0 +1,28 @@
+[book]
+title = "Stochology Protocol — Course Textbook (2026)"
+authors = ["Silvano Neto"]
+language = "en"
+src = "book-src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+cname = "obestafera.com"
+site-url = "https://obestafera.com/"
+git-repository-url = "https://github.com/0b3st4f3r4/stochology"
+edit-url-template = "https://github.com/0b3st4f3r4/stochology/edit/main/{path}"
+default-theme = "light"
+preferred-dark-theme = "navy"
+additional-css = ["theme/book.css"]
+additional-js = ["mathjax.js"]
+
+[output.html.search]
+limit-results = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+
+[output.html.fold]
+enable = true
+level = 2

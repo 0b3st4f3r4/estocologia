@@ -2,7 +2,7 @@
 
 All contributions must comply with the governance and verification contract defined in [`AGENTS.md`](AGENTS.md) and [`docs/PROTOCOL.md`](docs/PROTOCOL.md).
 
-## 1. Epistemological Contract (`contract_version: "1.0"`)
+## 1. Epistemological Contract
 
 - Every inter-module or inter-agent claim must be represented as a structured [`EpistemologicalCard`](crates/stochology-core/src/card.rs) (`cards/*.yaml`) and pass `EpistemologicalCard::audit()`.
 - Zero external crate dependencies are permitted across the 5 workspace crates (`stochology-core`, `stochology-lenses`, `stochology-siga`, `stochology-governance`, `stochology-cli`).

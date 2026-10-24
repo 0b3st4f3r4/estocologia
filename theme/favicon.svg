@@ -1,10 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <defs>
-    <linearGradient id="bg-shield" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="55%" stop-color="#090e1a"/>
-      <stop offset="100%" stop-color="#050811"/>
-    </linearGradient>
     <linearGradient id="ring-grad" x1="20" y1="18" x2="108" y2="110" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="50%" stop-color="#a78bfa"/>
@@ -18,21 +13,37 @@
       <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.24"/>
       <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
     </radialGradient>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fav-ink: #0f172a;
+        --fav-frame: #cbd5e1;
+        --fav-node-bg: #f8fafc;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fav-ink: #f8fafc;
+          --fav-frame: #1e293b;
+          --fav-node-bg: #090e1a;
+        }
+      }
+    </style>
   </defs>
 
   <!-- Outer Epistemological Vault Squircle -->
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg-shield)" stroke="#1e293b" stroke-width="2"/>
-  <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#ring-grad)" stroke-opacity="0.28" stroke-width="1.2"/>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="var(--fav-frame)" stroke-width="2"/>
+  <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#ring-grad)" stroke-opacity="0.38" stroke-width="1.2"/>
 
   <!-- Subtle Radial Field -->
   <circle cx="64" cy="66" r="46" fill="url(#core-glow)"/>
 
-  <!-- 7 Gate Calibration Ticks on Outer Compass Ring (G1-G7) -->
-  <g stroke="#475569" stroke-width="1.6" stroke-linecap="round" opacity="0.75">
+  <!-- 8 Gate Calibration Ticks on Outer Compass Ring (G1-G8) -->
+  <g stroke="#64748b" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
     <line x1="64" y1="13" x2="64" y2="17"/>
     <line x1="101" y1="29" x2="98" y2="32"/>
     <line x1="115" y1="66" x2="111" y2="66"/>
     <line x1="99" y1="101" x2="96" y2="98"/>
+    <line x1="64" y1="115" x2="64" y2="111"/>
     <line x1="29" y1="101" x2="32" y2="98"/>
     <line x1="13" y1="66" x2="17" y2="66"/>
     <line x1="27" y1="29" x2="30" y2="32"/>
@@ -56,22 +67,22 @@
 
   <!-- Heavy-Tailed Stochastic Density Curve inside the Triad -->
   <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84 L 96 86 L 31 86 Z" fill="url(#tail-fill)"/>
-  <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84" stroke="#e2e8f0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M 31 85 C 40 85, 45 46, 54 46 C 63 46, 68 74, 96 84" stroke="var(--fav-ink)" stroke-width="2.2" stroke-linecap="round"/>
 
   <!-- Critical Economic & Jensen Threshold Axis (p* = C / eta*L) -->
   <line x1="72" y1="39" x2="72" y2="86" stroke="#fbbf24" stroke-width="2.2" stroke-dasharray="4 3" stroke-linecap="round"/>
-  <circle cx="72" cy="72" r="3.6" fill="#fbbf24" stroke="#090e1a" stroke-width="1.4"/>
+  <circle cx="72" cy="72" r="3.6" fill="#fbbf24" stroke="var(--fav-node-bg)" stroke-width="1.4"/>
 
   <!-- Ontological Layer Nodes (Exact 120-deg on R=42: L2 Top, L1 Bottom-Left, L3 Bottom-Right) -->
   <!-- L2: Model (Top Apex, -90 deg) -->
-  <circle cx="64" cy="24" r="7.5" fill="#090e1a" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="64" cy="24" r="7.5" fill="var(--fav-node-bg)" stroke="#38bdf8" stroke-width="3"/>
   <circle cx="64" cy="24" r="3" fill="#38bdf8"/>
 
   <!-- L1: World (Bottom-Left Apex, +150 deg) -->
-  <circle cx="27.63" cy="87" r="7.5" fill="#090e1a" stroke="#34d399" stroke-width="3"/>
+  <circle cx="27.63" cy="87" r="7.5" fill="var(--fav-node-bg)" stroke="#34d399" stroke-width="3"/>
   <circle cx="27.63" cy="87" r="3" fill="#34d399"/>
 
   <!-- L3: Agent (Bottom-Right Apex, +30 deg) -->
-  <circle cx="100.37" cy="87" r="7.5" fill="#090e1a" stroke="#a78bfa" stroke-width="3"/>
+  <circle cx="100.37" cy="87" r="7.5" fill="var(--fav-node-bg)" stroke="#a78bfa" stroke-width="3"/>
   <circle cx="100.37" cy="87" r="3" fill="#a78bfa"/>
 </svg>

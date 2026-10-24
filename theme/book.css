@@ -1,0 +1,916 @@
+/* ==========================================================================
+   Stochology Protocol — Course Textbook (mdBook Custom Theme)
+   Auditable Epistemological Machine · obestafera.com
+   ========================================================================== */
+
+:root {
+  /* Layout & Typographic Scale */
+  --sidebar-target-width: 310px;
+  --content-max-width: 960px;
+  --page-padding: 24px;
+  --menu-bar-height: 54px;
+  --font-sans: "Inter", "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono-font: "JetBrains Mono", "Source Code Pro", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  --code-font-size: 0.86em;
+
+  /* Raw Light Mode Tokens */
+  --stoch-canvas-light: #f8fafc;
+  --stoch-surface-light: #ffffff;
+  --stoch-elevated-light: #f1f5f9;
+  --stoch-fg-light: #0f172a;
+  --stoch-fg-muted-light: #475569;
+  --stoch-border-light: #cbd5e1;
+  --stoch-border-subtle-light: #e2e8f0;
+  --stoch-accent-light: #0284c7;
+  --stoch-accent-2-light: #6d28d9;
+  --stoch-code-bg-light: #eef2f6;
+  --stoch-code-border-light: #cbd5e1;
+  --stoch-shadow-light: 0 4px 18px -4px rgba(15, 23, 42, 0.06);
+  --stoch-scroll-thumb-light: #94a3b8;
+  --stoch-scroll-track-light: #f1f5f9;
+
+  /* Raw Dark Mode Tokens */
+  --stoch-canvas-dark: #070b14;
+  --stoch-surface-dark: #0f1626;
+  --stoch-elevated-dark: #162036;
+  --stoch-fg-dark: #e2e8f0;
+  --stoch-fg-muted-dark: #94a3b8;
+  --stoch-border-dark: #1e2d4a;
+  --stoch-border-subtle-dark: #152036;
+  --stoch-accent-dark: #38bdf8;
+  --stoch-accent-2-dark: #a78bfa;
+  --stoch-code-bg-dark: #131c31;
+  --stoch-code-border-dark: #233554;
+  --stoch-shadow-dark: 0 10px 28px -6px rgba(0, 0, 0, 0.45);
+  --stoch-scroll-thumb-dark: #475569;
+  --stoch-scroll-track-dark: #0b1120;
+
+  /* Default (Light) Adaptive Tokens */
+  --surface-bg: var(--stoch-surface-light);
+  --elevated-bg: var(--stoch-elevated-light);
+  --fg-muted: var(--stoch-fg-muted-light);
+  --border-subtle: var(--stoch-border-subtle-light);
+  --brand-accent: var(--stoch-accent-light);
+  --brand-accent-secondary: var(--stoch-accent-2-light);
+  --inline-code-bg: var(--stoch-code-bg-light);
+  --inline-code-border: var(--stoch-code-border-light);
+  --shadow-card: var(--stoch-shadow-light);
+  --scrollbar-thumb: var(--stoch-scroll-thumb-light);
+  --scrollbar-track: var(--stoch-scroll-track-light);
+  --logo-ink: #0f172a;
+  --logo-sub: #0284c7;
+  --logo-meta: #475569;
+  --logo-frame: #cbd5e1;
+  --logo-ticks: #64748b;
+  --logo-node-bg: #f8fafc;
+  --diag-sky: #0284c7;
+  --diag-sky-soft: #e0f2fe;
+  --diag-violet: #6d28d9;
+  --diag-violet-soft: #ede9fe;
+  --diag-emerald: #047857;
+  --diag-emerald-soft: #d1fae5;
+  --diag-amber: #b45309;
+  --diag-amber-soft: #fef3c7;
+  --diag-rose: #be123c;
+  --diag-rose-soft: #ffe4e6;
+  --canvas: var(--surface-bg);
+  --ink: var(--stoch-fg-light);
+  --muted: var(--fg-muted);
+  --surface: var(--surface-bg);
+  --elevated: var(--elevated-bg);
+  --border: var(--stoch-border-light);
+  --sky: var(--diag-sky);
+  --sky-bg: var(--diag-sky-soft);
+  --violet: var(--diag-violet);
+  --violet-bg: var(--diag-violet-soft);
+  --emerald: var(--diag-emerald);
+  --emerald-bg: var(--diag-emerald-soft);
+  --amber: var(--diag-amber);
+  --amber-bg: var(--diag-amber-soft);
+  --rose: var(--diag-rose);
+  --rose-bg: var(--diag-rose-soft);
+
+  /* Fallback for browsers without light-dark() support */
+  @media (prefers-color-scheme: dark) {
+    --surface-bg: var(--stoch-surface-dark);
+    --elevated-bg: var(--stoch-elevated-dark);
+    --fg-muted: var(--stoch-fg-muted-dark);
+    --border-subtle: var(--stoch-border-subtle-dark);
+    --brand-accent: var(--stoch-accent-dark);
+    --brand-accent-secondary: var(--stoch-accent-2-dark);
+    --inline-code-bg: var(--stoch-code-bg-dark);
+    --inline-code-border: var(--stoch-code-border-dark);
+    --shadow-card: var(--stoch-shadow-dark);
+    --scrollbar-thumb: var(--stoch-scroll-thumb-dark);
+    --scrollbar-track: var(--stoch-scroll-track-dark);
+    --logo-ink: #f8fafc;
+    --logo-sub: #38bdf8;
+    --logo-meta: #94a3b8;
+    --logo-frame: #1e293b;
+    --logo-ticks: #64748b;
+    --logo-node-bg: #090e1a;
+    --diag-sky: #38bdf8;
+    --diag-sky-soft: #0c2644;
+    --diag-violet: #a78bfa;
+    --diag-violet-soft: #221842;
+    --diag-emerald: #34d399;
+    --diag-emerald-soft: #092e26;
+    --diag-amber: #fbbf24;
+    --diag-amber-soft: #362407;
+    --diag-rose: #fb7185;
+    --diag-rose-soft: #3b101d;
+    --canvas: var(--stoch-surface-dark);
+    --ink: var(--stoch-fg-dark);
+    --muted: var(--stoch-fg-muted-dark);
+    --surface: var(--stoch-surface-dark);
+    --elevated: var(--stoch-elevated-dark);
+    --border: var(--stoch-border-dark);
+    --sky: #38bdf8;
+    --sky-bg: #0c2644;
+    --violet: #a78bfa;
+    --violet-bg: #221842;
+    --emerald: #34d399;
+    --emerald-bg: #092e26;
+    --amber: #fbbf24;
+    --amber-bg: #362407;
+    --rose: #fb7185;
+    --rose-bg: #3b101d;
+  }
+
+  /* Automatic adaptation via light-dark() following computed color-scheme */
+  @supports (color: light-dark(white, black)) {
+    --surface-bg: light-dark(var(--stoch-surface-light), var(--stoch-surface-dark));
+    --elevated-bg: light-dark(var(--stoch-elevated-light), var(--stoch-elevated-dark));
+    --fg-muted: light-dark(var(--stoch-fg-muted-light), var(--stoch-fg-muted-dark));
+    --border-subtle: light-dark(var(--stoch-border-subtle-light), var(--stoch-border-subtle-dark));
+    --brand-accent: light-dark(var(--stoch-accent-light), var(--stoch-accent-dark));
+    --brand-accent-secondary: light-dark(var(--stoch-accent-2-light), var(--stoch-accent-2-dark));
+    --inline-code-bg: light-dark(var(--stoch-code-bg-light), var(--stoch-code-bg-dark));
+    --inline-code-border: light-dark(var(--stoch-code-border-light), var(--stoch-code-border-dark));
+    --shadow-card: light-dark(var(--stoch-shadow-light), var(--stoch-shadow-dark));
+    --scrollbar-thumb: light-dark(var(--stoch-scroll-thumb-light), var(--stoch-scroll-thumb-dark));
+    --scrollbar-track: light-dark(var(--stoch-scroll-track-light), var(--stoch-scroll-track-dark));
+    --logo-ink: light-dark(#0f172a, #f8fafc);
+    --logo-sub: light-dark(#0284c7, #38bdf8);
+    --logo-meta: light-dark(#475569, #94a3b8);
+    --logo-frame: light-dark(#cbd5e1, #1e293b);
+    --logo-ticks: #64748b;
+    --logo-node-bg: light-dark(#f8fafc, #090e1a);
+    --diag-sky: light-dark(#0284c7, #38bdf8);
+    --diag-sky-soft: light-dark(#e0f2fe, #0c2644);
+    --diag-violet: light-dark(#6d28d9, #a78bfa);
+    --diag-violet-soft: light-dark(#ede9fe, #221842);
+    --diag-emerald: light-dark(#047857, #34d399);
+    --diag-emerald-soft: light-dark(#d1fae5, #092e26);
+    --diag-amber: light-dark(#b45309, #fbbf24);
+    --diag-amber-soft: light-dark(#fef3c7, #362407);
+    --diag-rose: light-dark(#be123c, #fb7185);
+    --diag-rose-soft: light-dark(#ffe4e6, #3b101d);
+    --canvas: light-dark(var(--stoch-surface-light), var(--stoch-surface-dark));
+    --ink: light-dark(var(--stoch-fg-light), var(--stoch-fg-dark));
+    --muted: light-dark(var(--stoch-fg-muted-light), var(--stoch-fg-muted-dark));
+    --surface: light-dark(var(--stoch-surface-light), var(--stoch-surface-dark));
+    --elevated: light-dark(var(--stoch-elevated-light), var(--stoch-elevated-dark));
+    --border: light-dark(var(--stoch-border-light), var(--stoch-border-dark));
+    --sky: light-dark(#0284c7, #38bdf8);
+    --sky-bg: light-dark(#e0f2fe, #0c2644);
+    --violet: light-dark(#6d28d9, #a78bfa);
+    --violet-bg: light-dark(#ede9fe, #221842);
+    --emerald: light-dark(#047857, #34d399);
+    --emerald-bg: light-dark(#d1fae5, #092e26);
+    --amber: light-dark(#b45309, #fbbf24);
+    --amber-bg: light-dark(#fef3c7, #362407);
+    --rose: light-dark(#be123c, #fb7185);
+    --rose-bg: light-dark(#ffe4e6, #3b101d);
+  }
+
+  color-scheme: var(--color-scheme, light dark);
+  accent-color: var(--brand-accent);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Legacy scrollbar fallback for older WebKit/Blink engines */
+@supports not (scrollbar-color: auto) {
+  body::-webkit-scrollbar,
+  .sidebar-scrollbox::-webkit-scrollbar,
+  .table-wrapper::-webkit-scrollbar,
+  pre code::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  body::-webkit-scrollbar-thumb,
+  .sidebar-scrollbox::-webkit-scrollbar-thumb,
+  .table-wrapper::-webkit-scrollbar-thumb,
+  pre code::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 5px;
+  }
+  body::-webkit-scrollbar-track,
+  .sidebar-scrollbox::-webkit-scrollbar-track,
+  .table-wrapper::-webkit-scrollbar-track,
+  pre code::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+}
+
+/* ==========================================================================
+   Refined mdBook Theme Palettes (Light, Rust, Navy, Coal, Ayu)
+   ========================================================================== */
+
+.light,
+html:not(.js) {
+  --color-scheme: light;
+  --bg: #f8fafc;
+  --fg: #0f172a;
+  --logo-ink: #0f172a;
+  --logo-sub: #0284c7;
+  --logo-meta: #475569;
+  --logo-frame: #cbd5e1;
+  --logo-ticks: #64748b;
+  --logo-node-bg: #f8fafc;
+  --sidebar-bg: #f1f5f9;
+  --sidebar-fg: #1e293b;
+  --sidebar-non-existant: #94a3b8;
+  --sidebar-active: #0284c7;
+  --sidebar-spacer: #cbd5e1;
+  --scrollbar: #94a3b8;
+  --icons: #475569;
+  --icons-hover: #0f172a;
+  --links: #0369a1;
+  --inline-code-color: #0f172a;
+  --theme-popup-bg: #ffffff;
+  --theme-popup-border: #cbd5e1;
+  --theme-hover: #e2e8f0;
+  --quote-bg: #f1f5f9;
+  --quote-border: #0284c7;
+  --table-border-color: #cbd5e1;
+  --table-header-bg: #e2e8f0;
+  --table-alternate-bg: #f8fafc;
+  --searchbar-border-color: #cbd5e1;
+  --searchbar-bg: #ffffff;
+  --searchbar-fg: #0f172a;
+  --searchbar-shadow-color: rgba(2, 132, 199, 0.25);
+  --searchresults-header-fg: #475569;
+  --searchresults-border-color: #cbd5e1;
+  --searchresults-li-bg: #e0f2fe;
+  --search-mark-bg: #bae6fd;
+}
+
+.rust {
+  --color-scheme: light;
+  --bg: #f6f3ec;
+  --fg: #1c1917;
+  --logo-ink: #1c1917;
+  --logo-sub: #b45309;
+  --logo-meta: #57534e;
+  --logo-frame: #d6cbb5;
+  --logo-ticks: #78716c;
+  --logo-node-bg: #fcfaf5;
+  --surface-bg: #fcfaf5;
+  --elevated-bg: #efeae0;
+  --fg-muted: #57534e;
+  --border-subtle: #e7e0d2;
+  --brand-accent: #b45309;
+  --inline-code-bg: #ebe4d5;
+  --inline-code-border: #d6cbb5;
+  --sidebar-bg: #292320;
+  --sidebar-fg: #e7e5e4;
+  --sidebar-non-existant: #78716c;
+  --sidebar-active: #f59e0b;
+  --sidebar-spacer: #443b37;
+  --icons: #57534e;
+  --icons-hover: #1c1917;
+  --links: #9a3412;
+  --inline-code-color: #292524;
+  --theme-popup-bg: #fcfaf5;
+  --theme-popup-border: #d6cbb5;
+  --theme-hover: #ebe4d5;
+  --quote-bg: #efeae0;
+  --quote-border: #b45309;
+  --table-border-color: #d6cbb5;
+  --table-header-bg: #e7e0d0;
+  --table-alternate-bg: #f9f6f0;
+}
+
+.navy {
+  --color-scheme: dark;
+  --bg: #070b14;
+  --fg: #e2e8f0;
+  --logo-ink: #f8fafc;
+  --logo-sub: #38bdf8;
+  --logo-meta: #94a3b8;
+  --logo-frame: #1e293b;
+  --logo-ticks: #64748b;
+  --logo-node-bg: #090e1a;
+  --sidebar-bg: #0b1120;
+  --sidebar-fg: #cbd5e1;
+  --sidebar-non-existant: #475569;
+  --sidebar-active: #38bdf8;
+  --sidebar-spacer: #1e2d4a;
+  --scrollbar: #475569;
+  --icons: #94a3b8;
+  --icons-hover: #f8fafc;
+  --links: #38bdf8;
+  --inline-code-color: #e2e8f0;
+  --theme-popup-bg: #0f1626;
+  --theme-popup-border: #1e2d4a;
+  --theme-hover: #162036;
+  --quote-bg: #0f1626;
+  --quote-border: #38bdf8;
+  --table-border-color: #1e2d4a;
+  --table-header-bg: #162036;
+  --table-alternate-bg: #0b1120;
+  --searchbar-border-color: #1e2d4a;
+  --searchbar-bg: #0f1626;
+  --searchbar-fg: #f8fafc;
+  --searchbar-shadow-color: rgba(56, 189, 248, 0.3);
+  --searchresults-header-fg: #94a3b8;
+  --searchresults-border-color: #1e2d4a;
+  --searchresults-li-bg: #162036;
+  --search-mark-bg: rgba(56, 189, 248, 0.32);
+}
+
+.coal {
+  --color-scheme: dark;
+  --bg: #090d16;
+  --fg: #e5e7eb;
+  --logo-ink: #f9fafb;
+  --logo-sub: #38bdf8;
+  --logo-meta: #9ca3af;
+  --logo-frame: #1f2937;
+  --logo-ticks: #6b7280;
+  --logo-node-bg: #090d16;
+  --surface-bg: #111827;
+  --elevated-bg: #1f2937;
+  --sidebar-bg: #0d131f;
+  --sidebar-fg: #d1d5db;
+  --sidebar-active: #34d399;
+  --sidebar-spacer: #1f2937;
+  --icons: #9ca3af;
+  --icons-hover: #f9fafb;
+  --links: #38bdf8;
+  --inline-code-color: #e5e7eb;
+  --inline-code-bg: #1f2937;
+  --inline-code-border: #374151;
+  --theme-popup-bg: #111827;
+  --theme-popup-border: #374151;
+  --theme-hover: #1f2937;
+  --quote-bg: #111827;
+  --quote-border: #34d399;
+  --table-border-color: #1f2937;
+  --table-header-bg: #1f2937;
+  --table-alternate-bg: #0d131f;
+  --searchbar-border-color: #374151;
+  --searchbar-bg: #111827;
+  --searchbar-fg: #f9fafb;
+}
+
+.ayu {
+  --color-scheme: dark;
+  --bg: #0b0e14;
+  --fg: #e6e1cf;
+  --logo-ink: #e6e1cf;
+  --logo-sub: #39bae6;
+  --logo-meta: #8a9199;
+  --logo-frame: #1f2430;
+  --logo-ticks: #6c7380;
+  --logo-node-bg: #0b0e14;
+  --surface-bg: #11151c;
+  --elevated-bg: #191f2a;
+  --sidebar-bg: #0f131a;
+  --sidebar-fg: #bfbdb6;
+  --sidebar-active: #fbbf24;
+  --sidebar-spacer: #1f2430;
+  --icons: #8a9199;
+  --icons-hover: #e6e1cf;
+  --links: #39bae6;
+  --inline-code-color: #ffb454;
+  --inline-code-bg: #161b24;
+  --inline-code-border: #252d3d;
+  --theme-popup-bg: #11151c;
+  --theme-popup-border: #252d3d;
+  --theme-hover: #191f2a;
+  --quote-bg: #11151c;
+  --quote-border: #fbbf24;
+  --table-border-color: #1f2430;
+  --table-header-bg: #191f2a;
+  --table-alternate-bg: #0f131a;
+  --searchbar-border-color: #252d3d;
+  --searchbar-bg: #11151c;
+  --searchbar-fg: #e6e1cf;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.js) {
+    --color-scheme: dark;
+    --bg: #070b14;
+    --fg: #e2e8f0;
+    --sidebar-bg: #0b1120;
+    --sidebar-fg: #cbd5e1;
+    --sidebar-active: #38bdf8;
+    --links: #38bdf8;
+    --table-border-color: #1e2d4a;
+    --table-header-bg: #162036;
+    --table-alternate-bg: #0b1120;
+  }
+}
+
+/* ==========================================================================
+   Typography & Reading Rhythm
+   ========================================================================== */
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.7;
+  text-align: start;
+}
+
+::selection {
+  background-color: rgba(56, 189, 248, 0.24);
+}
+
+.content {
+  padding-block-start: 1.2rem;
+  padding-block-end: 6rem;
+}
+
+/* Balanced wrapping on short headings without visible box backgrounds */
+main :is(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  font-weight: 750;
+  color: var(--fg);
+}
+
+main h1 {
+  font-size: clamp(2.4rem, 1.9rem + 1.2vw, 3.2rem);
+  margin-block-start: 1.4rem;
+  margin-block-end: 1.8rem;
+  padding-block-end: 1.2rem;
+  border-block-end: 2px solid var(--table-border-color);
+}
+
+main h2 {
+  font-size: clamp(1.85rem, 1.55rem + 0.65vw, 2.25rem);
+  margin-block-start: 3.4rem;
+  margin-block-end: 1.2rem;
+  padding-block-end: 0.55rem;
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+main h3 {
+  font-size: clamp(1.55rem, 1.4rem + 0.35vw, 1.8rem);
+  margin-block-start: 2.4rem;
+  margin-block-end: 0.8rem;
+}
+
+/* Cap prose measure to <= 78ch while allowing tables & code full container width */
+main :where(p, ul, ol, blockquote) {
+  max-inline-size: None;
+  text-align: justify;
+  line-height: 1.72;
+}
+
+/* Prevent orphaned words at the end of paragraphs and list items */
+main :where(p, li, blockquote) {
+  text-wrap: pretty;
+}
+
+main li:not(:last-child) {
+  margin-block-end: 0.55rem;
+}
+
+main a:not(.header) {
+  font-weight: 500;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+main a:not(.header):hover {
+  color: var(--sidebar-active);
+}
+
+/* Preface Hero Emblem Lockup & Chapter Architectural SVG Figures */
+main p:has(> img[src$=".svg"]) {
+  max-inline-size: 100%;
+}
+
+main img[src$="logo.svg"],
+.stoch-logo-figure {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 560px;
+  block-size: auto;
+  margin-block: 1.6rem 2.4rem;
+  padding: 1.4rem 1.8rem;
+  background-color: var(--surface-bg);
+  border: 1px solid var(--table-border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+main img[src*="figures/"][src$=".svg"] {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  block-size: auto;
+  margin-block: 1.8rem 2.2rem;
+  padding: 1rem 1.2rem;
+  background-color: var(--surface-bg);
+  border: 1px solid var(--table-border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+.stoch-figure > img[src*="figures/"][src$=".svg"] {
+  margin-block: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* ==========================================================================
+   Inline Code, Code Blocks & YAML Epistemological Cards
+   ========================================================================== */
+
+:not(pre) > code {
+  background-color: var(--inline-code-bg);
+  color: var(--inline-code-color);
+  border: 1px solid var(--inline-code-border);
+  border-radius: 5px;
+  padding-block: 0.12em;
+  padding-inline: 0.42em;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+pre {
+  margin-block: 1.8rem;
+}
+
+pre > code {
+  padding: 1.4rem 1.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--table-border-color);
+  box-shadow: var(--shadow-card);
+  line-height: 1.55;
+  font-size: 1.38rem;
+}
+
+/* ==========================================================================
+   Mathematical Equations (MathJax 3 CHTML)
+   ========================================================================== */
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  margin-block: 2rem !important;
+  padding: 1.3rem 1.8rem;
+  background-color: var(--surface-bg);
+  border: 1px solid var(--table-border-color);
+  border-inline-start: 3px solid var(--sidebar-active);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+}
+
+mjx-container[jax="CHTML"]:not([display="true"]) {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  vertical-align: baseline;
+}
+
+/* ==========================================================================
+   Responsive Protocol Data Tables
+   ========================================================================== */
+
+.table-wrapper {
+  margin-block: 2.2rem;
+  overflow: auto;
+  max-inline-size: 100%;
+  container-type: inline-size;
+  border-radius: 10px;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--surface-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.table-wrapper:focus-visible {
+  outline: 2px solid var(--sidebar-active);
+  outline-offset: 2px;
+}
+
+table {
+  inline-size: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1.45rem;
+  line-height: 1.55;
+}
+
+table thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  background-color: var(--table-header-bg);
+}
+
+table thead tr {
+  border: none;
+}
+
+table thead th {
+  padding: 1.1rem 1.4rem;
+  text-align: start;
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background-color: var(--table-header-bg);
+  border-block-end: 2px solid var(--table-border-color);
+  border-inline: none;
+}
+
+table tbody td,
+table tbody th {
+  padding: 1.15rem 1.4rem;
+  vertical-align: top;
+  border: none;
+}
+
+table tbody tr:not(:last-child) :is(td, th) {
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+table tbody tr:nth-child(2n) {
+  background-color: var(--table-alternate-bg);
+}
+
+table tbody tr:hover {
+  background-color: var(--elevated-bg);
+}
+
+@container (width < 540px) {
+  table {
+    font-size: 1.35rem;
+  }
+  table :is(th, td) {
+    padding: 0.85rem 1rem;
+  }
+}
+
+/* ==========================================================================
+   Blockquotes & Callouts
+   ========================================================================== */
+
+blockquote {
+  margin-block: 2rem;
+  padding: 1.2rem 1.8rem;
+  background-color: var(--quote-bg);
+  border-block: none;
+  border-inline-start: 4px solid var(--quote-border);
+  border-radius: 0 8px 8px 0;
+}
+
+/* ==========================================================================
+   Chrome: Sticky Header, Sidebar & Navigation
+   ========================================================================== */
+
+#mdbook-menu-bar {
+  background-color: var(--bg);
+  border-block-end: 1px solid var(--table-border-color);
+  backdrop-filter: blur(10px);
+}
+
+.menu-title {
+  font-weight: 700;
+  font-size: 1.65rem;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.sidebar {
+  border-inline-end: 1px solid var(--table-border-color);
+}
+
+.sidebar .sidebar-scrollbox {
+  padding: 1.4rem 1.2rem;
+}
+
+.chapter {
+  line-height: 1.9;
+}
+
+.chapter li.part-title {
+  font-size: 1.12rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-block-start: 1.8rem;
+  margin-block-end: 0.45rem;
+  padding-inline-start: 0.8rem;
+}
+
+.chapter li.chapter-item {
+  margin-block-start: 0.25rem;
+}
+
+.chapter-link-wrapper {
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.chapter-link-wrapper:hover {
+  background-color: var(--theme-hover);
+}
+
+.chapter li a {
+  display: block;
+  flex: 1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 450;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.chapter li a.active {
+  font-weight: 650;
+  background-color: var(--theme-hover);
+  border-inline-start: 3px solid var(--sidebar-active);
+  padding-inline-start: calc(0.8rem - 3px);
+}
+
+#mdbook-searchbar {
+  border-radius: 8px;
+  padding: 1.1rem 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* ==========================================================================
+   Page-Styled Figures, Inline SVGs, Stirling Matrix & Mermaid Diagrams
+   ========================================================================== */
+
+.stoch-figure {
+  margin-block: 2.2rem;
+  margin-inline: 0;
+  padding: 1.8rem 2rem;
+  background-color: var(--surface-bg);
+  border: 1px solid var(--table-border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  max-inline-size: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.stoch-figure > svg {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  block-size: auto;
+  margin-inline: auto;
+  font-family: var(--font-sans);
+}
+
+.stoch-figure figcaption {
+  margin-block-start: 1.4rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--border-subtle);
+  font-size: 1.32rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  max-inline-size: 100%;
+}
+
+.stoch-figure figcaption strong {
+  color: var(--fg);
+}
+
+.stoch-mermaid-figure .mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-block-size: 4rem;
+  overflow-x: auto;
+}
+
+.stoch-mermaid-figure .mermaid svg {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+/* 2x2 Stirling Matrix Diagnostic Grid (Chapter 2) */
+.stoch-matrix-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-block-end: 1.2rem;
+  padding-block-end: 0.8rem;
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.stoch-matrix-title {
+  font-size: 1.45rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+
+.stoch-matrix-subtitle {
+  font-family: var(--mono-font);
+  font-size: 1.18rem;
+  color: var(--fg-muted);
+}
+
+.stoch-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.stoch-matrix-card {
+  padding: 1.4rem 1.6rem;
+  border-radius: 10px;
+  background-color: var(--elevated-bg);
+  border: 1px solid var(--table-border-color);
+  border-inline-start-width: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.stoch-matrix-card[data-quadrant="risk"] {
+  border-inline-start-color: var(--diag-sky);
+}
+
+.stoch-matrix-card[data-quadrant="uncertainty"] {
+  border-inline-start-color: var(--diag-violet);
+}
+
+.stoch-matrix-card[data-quadrant="ambiguity"] {
+  border-inline-start-color: var(--diag-emerald);
+}
+
+.stoch-matrix-card[data-quadrant="ignorance"] {
+  border-inline-start-color: var(--diag-amber);
+}
+
+.stoch-matrix-axes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--mono-font);
+  font-size: 1.12rem;
+  color: var(--fg-muted);
+}
+
+.stoch-matrix-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background-color: var(--surface-bg);
+  border: 1px solid var(--table-border-color);
+  font-weight: 600;
+}
+
+.stoch-matrix-card h5 {
+  margin: 0.2rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 750;
+  color: var(--fg);
+}
+
+.stoch-matrix-card p {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  max-inline-size: none;
+}
+
+@media (forced-colors: active) {
+  .stoch-figure,
+  .stoch-matrix-card,
+  .table-wrapper {
+    border: 1px solid CanvasText;
+  }
+}
+
+

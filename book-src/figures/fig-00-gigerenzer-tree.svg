@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="410" viewBox="0 0 1080 410" fill="none" role="img" aria-labelledby="title-fig-00-gigerenzer">
+  <title id="title-fig-00-gigerenzer">Gigerenzer Natural-Frequency Tree: 10,000 Patients Screened</title>
+  <defs>
+    <marker id="g-sky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+    </marker>
+    <marker id="g-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--amber)"/>
+    </marker>
+    <marker id="g-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--emerald)"/>
+    </marker>
+  <style>
+    :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+      color-scheme: light dark;
+      --canvas: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --surface: #ffffff;
+      --elevated: #f1f5f9;
+      --border: #cbd5e1;
+      --sky: #0284c7;
+      --sky-bg: #e0f2fe;
+      --violet: #6d28d9;
+      --violet-bg: #ede9fe;
+      --emerald: #047857;
+      --emerald-bg: #d1fae5;
+      --amber: #b45309;
+      --amber-bg: #fef3c7;
+      --rose: #be123c;
+      --rose-bg: #ffe4e6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: #0b1120;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --surface: #0f1626;
+        --elevated: #162036;
+        --border: #1e2d4a;
+        --sky: #38bdf8;
+        --sky-bg: #0c2644;
+        --violet: #a78bfa;
+        --violet-bg: #221842;
+        --emerald: #34d399;
+        --emerald-bg: #092e26;
+        --amber: #fbbf24;
+        --amber-bg: #362407;
+        --rose: #fb7185;
+        --rose-bg: #3b101d;
+      }
+    }
+    @supports (color: light-dark(white, black)) {
+      :root:not(.light):not(.rust):not(.navy):not(.coal):not(.ayu) {
+        --canvas: light-dark(#f8fafc, #0b1120);
+        --ink: light-dark(#0f172a, #f8fafc);
+        --muted: light-dark(#475569, #94a3b8);
+        --surface: light-dark(#ffffff, #0f1626);
+        --elevated: light-dark(#f1f5f9, #162036);
+        --border: light-dark(#cbd5e1, #1e2d4a);
+        --sky: light-dark(#0284c7, #38bdf8);
+        --sky-bg: light-dark(#e0f2fe, #0c2644);
+        --violet: light-dark(#6d28d9, #a78bfa);
+        --violet-bg: light-dark(#ede9fe, #221842);
+        --emerald: light-dark(#047857, #34d399);
+        --emerald-bg: light-dark(#d1fae5, #092e26);
+        --amber: light-dark(#b45309, #fbbf24);
+        --amber-bg: light-dark(#fef3c7, #362407);
+        --rose: light-dark(#be123c, #fb7185);
+        --rose-bg: light-dark(#ffe4e6, #3b101d);
+      }
+    }
+    text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }
+  </style>
+  </defs>
+
+  <!-- Canvas Backdrop -->
+  <rect x="1" y="1" width="1078" height="408" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+
+  <!-- Root Cohort -->
+  <rect x="330" y="18" width="420" height="68" rx="10" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2.2"/>
+  <text x="540" y="48" text-anchor="middle" fill="var(--ink)" font-size="15.5" font-weight="800">10,000 Patients Screened</text>
+  <text x="540" y="70" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11.5">Representative Clinical Cohort (L₁)</text>
+
+  <!-- Branches from Root -->
+  <line x1="450" y1="86" x2="285" y2="124" stroke="var(--amber)" stroke-width="2.2" marker-end="url(#g-amber)"/>
+  <line x1="630" y1="86" x2="795" y2="124" stroke="var(--emerald)" stroke-width="2.2" marker-end="url(#g-emerald)"/>
+
+  <!-- Level 1: Disease vs Healthy -->
+  <rect x="105" y="128" width="340" height="68" rx="10" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="275" y="157" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">100 With Disease</text>
+  <text x="275" y="179" text-anchor="middle" fill="var(--amber)" class="mono" font-size="11.5" font-weight="700">Prevalence = 1.0%</text>
+
+  <rect x="635" y="128" width="340" height="68" rx="10" fill="var(--emerald-bg)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="805" y="157" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">9,900 Healthy</text>
+  <text x="805" y="179" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="700">Complement = 99.0%</text>
+
+  <!-- Branches to Leaves -->
+  <line x1="215" y1="196" x2="145" y2="232" stroke="var(--amber)" stroke-width="2" marker-end="url(#g-amber)"/>
+  <line x1="335" y1="196" x2="405" y2="232" stroke="var(--amber)" stroke-width="2" marker-end="url(#g-amber)"/>
+  <line x1="745" y1="196" x2="675" y2="232" stroke="var(--emerald)" stroke-width="2" marker-end="url(#g-emerald)"/>
+  <line x1="865" y1="196" x2="935" y2="232" stroke="var(--emerald)" stroke-width="2" marker-end="url(#g-emerald)"/>
+
+  <!-- Leaf 1: 90 True Positive -->
+  <rect x="20" y="236" width="244" height="72" rx="10" fill="var(--surface)" stroke="var(--amber)" stroke-width="2.2"/>
+  <text x="142" y="267" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">90 Test (+)</text>
+  <text x="142" y="290" text-anchor="middle" fill="var(--amber)" class="mono" font-size="11.5" font-weight="700">True Alarms (Sens 90%)</text>
+
+  <!-- Leaf 2: 10 False Negative -->
+  <rect x="284" y="236" width="244" height="72" rx="10" fill="var(--elevated)" stroke="var(--border)" stroke-width="1.6"/>
+  <text x="406" y="267" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">10 Test (-)</text>
+  <text x="406" y="290" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11.5">Missed Cases (10%)</text>
+
+  <!-- Leaf 3: 891 False Positive -->
+  <rect x="552" y="236" width="244" height="72" rx="10" fill="var(--surface)" stroke="var(--rose)" stroke-width="2.2"/>
+  <text x="674" y="267" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">891 Test (+)</text>
+  <text x="674" y="290" text-anchor="middle" fill="var(--rose)" class="mono" font-size="11.5" font-weight="700">False Alarms (FPR 9%)</text>
+
+  <!-- Leaf 4: 9009 True Negative -->
+  <rect x="816" y="236" width="244" height="72" rx="10" fill="var(--elevated)" stroke="var(--border)" stroke-width="1.6"/>
+  <text x="938" y="267" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="700">9,009 Test (-)</text>
+  <text x="938" y="290" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11.5">Clear (Spec 91%)</text>
+
+  <!-- Convergence on Positive Alarms -->
+  <path d="M 142 308 C 142 338, 250 350, 310 354" stroke="var(--sky)" stroke-width="2.2" marker-end="url(#g-sky)"/>
+  <path d="M 674 308 C 674 334, 620 344, 585 348" stroke="var(--sky)" stroke-width="2.2" marker-end="url(#g-sky)"/>
+
+  <rect x="190" y="326" width="700" height="64" rx="10" fill="var(--sky-bg)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="540" y="354" text-anchor="middle" fill="var(--ink)" font-size="13.5" font-weight="800">Total Positive Alarms: 90 + 891 = 981 Patients</text>
+  <text x="540" y="376" text-anchor="middle" fill="var(--sky)" class="mono" font-size="12" font-weight="700">Posterior P(Disease | +) = 90 / 981 ≈ 9.17% (about 1 in 11)</text>
+</svg>
