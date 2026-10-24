@@ -43,9 +43,15 @@ fn run_positive_gates(root: &Path) -> Result<(), String> {
     );
 
     // G6: Prohibitions 1-4, Performative Prediction, Info-Gap + Sniedovich, SDPI + 3-Step DPI Chain, and CORP-PAV on real data
-    let sys = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.5).diagnose();
-    if !sys.rrm_converges || sys.risk_at_po >= sys.risk_at_ps {
-        return Err("G6 failed performative verification".into());
+    let perf_model = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.5);
+    let sys = perf_model.diagnose();
+    let perfgd = perf_model.perfgd_trajectory(0.0, 0.5, 60);
+    let theta_perfgd = *perfgd.last().unwrap_or(&0.0);
+    if !sys.rrm_converges
+        || sys.risk_at_po >= sys.risk_at_ps
+        || (theta_perfgd - sys.theta_po).abs() > 1e-5
+    {
+        return Err("G6 failed performative / PerfGD Stackelberg verification".into());
     }
     let ig = InfoGapOption {
         id: "robust",

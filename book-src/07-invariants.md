@@ -22,6 +22,47 @@ Ask $100$ people in an auditorium to toss a fair coin $20$ times each and write 
 
 To prevent these errors from ever entering production, the Stochology Protocol enforces **Five Boundary Invariants ($\Phi\_1$ to $\Phi\_5$)** as a strict boolean product $\Phi = \prod\_{j=1}^5 \Phi\_j$: if even one invariant fails, the gate drops to $0$ and blocks the claim.
 
+<figure class="stoch-figure">
+  <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="230" viewBox="0 0 1140 230" fill="none" role="img" aria-labelledby="title-fig-07-invariants">
+  <title id="title-fig-07-invariants">The Five Boundary Invariants (Phi_1 to Phi_5) as a Multiplicative Gate Product</title>
+  <defs>
+  <style>text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; } .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }</style>
+  </defs>
+  <rect x="1" y="1" width="1138" height="228" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+  <rect x="16" y="24" width="206" height="182" rx="11" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="119" y="54" text-anchor="middle" fill="var(--sky)" class="mono" font-size="12" font-weight="800">INVARIANT Φ₁</text>
+  <text x="119" y="82" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">Simulability</text>
+  <text x="119" y="114" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">seed = 2026</text>
+  <text x="119" y="138" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">SplitMix64 RNG</text>
+  <text x="119" y="162" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Generative Null H₀</text>
+  <rect x="240" y="24" width="206" height="182" rx="11" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2"/>
+  <text x="343" y="54" text-anchor="middle" fill="var(--violet)" class="mono" font-size="12" font-weight="800">INVARIANT Φ₂</text>
+  <text x="343" y="82" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">Independent Unit</text>
+  <text x="343" y="114" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">m̃ = m̄(1 + CV²)</text>
+  <text x="343" y="138" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Exceedance ρ_I(p)</text>
+  <text x="343" y="162" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">n_eff(p) = n / DEFF</text>
+  <rect x="464" y="24" width="212" height="182" rx="11" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="570" y="54" text-anchor="middle" fill="var(--emerald)" class="mono" font-size="12" font-weight="800">INVARIANT Φ₃</text>
+  <text x="570" y="82" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">Severe Test &amp; Seal</text>
+  <text x="570" y="114" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Rubin · Meng · Manski</text>
+  <text x="570" y="138" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Pearl Rung 1 / 2 / 3</text>
+  <text x="570" y="162" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">SHA-256 Pre-Reg Seal</text>
+  <rect x="694" y="24" width="206" height="182" rx="11" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="797" y="54" text-anchor="middle" fill="var(--amber)" class="mono" font-size="12" font-weight="800">INVARIANT Φ₄</text>
+  <text x="797" y="82" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">Fairness &amp; Exit</text>
+  <text x="797" y="114" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">p* = C / (η L)</text>
+  <text x="797" y="138" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Chouldechova + KMR</text>
+  <text x="797" y="162" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">Numeric Exit Clause</text>
+  <rect x="918" y="24" width="206" height="182" rx="11" fill="var(--elevated)" stroke="var(--rose)" stroke-width="2"/>
+  <text x="1021" y="54" text-anchor="middle" fill="var(--rose)" class="mono" font-size="12" font-weight="800">INVARIANT Φ₅</text>
+  <text x="1021" y="82" text-anchor="middle" fill="var(--ink)" font-size="14.5" font-weight="800">Resolution Match</text>
+  <text x="1021" y="114" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">R_data ≥ R_decision</text>
+  <text x="1021" y="138" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">No R₀ annual/monthly</text>
+  <text x="1021" y="162" text-anchor="middle" fill="var(--muted)" class="mono" font-size="11">for shift/daily acts</text>
+  </svg>
+  <figcaption><strong>Figure 7.1 — The Five Boundary Invariants (Φ = Φ₁ · Φ₂ · Φ₃ · Φ₄ · Φ₅)</strong></figcaption>
+</figure>
+
 ---
 
 ## Step 2 — Foundations and Mathematical Formalization
@@ -75,6 +116,7 @@ Inside cluster $j$, any two observations share a common cluster shock, inducing 
    - At the $90\text{th}$ percentile ($p = 0.90$), the tail-exceedance ICC is **$\rho\_I(0.90) = 0.1623$**.
    - The resulting design effect is **$\mathrm{DEFF}(0.90) = 1 + (169 - 1) \times 0.1623 = 28.26$**.
    - Consequently, the true effective sample size for tail staffing decisions is not $27\text{,}716$, but **$n\_{\mathrm{eff}}(0.90) = \frac{27\text{,}716}{28.26} = 980.7$**! Any confidence interval computed on $n = 27\text{,}716$ is more than five times too narrow (`--defect moulton`).
+   - Furthermore, `ExceedanceDesignEffect::profile_across_quantiles` profiles $n\_{\mathrm{eff}}(p)$ across multiple quantiles simultaneously ($p \in \lbrace 0.50, 0.90, 0.99 \rbrace$), revealing on `bank_calls.csv` how effective sample size collapses from the median ($n\_{\mathrm{eff}}(0.50) = 9\text{,}239$) into the surge tail ($n\_{\mathrm{eff}}(0.90) = 981$, $n\_{\mathrm{eff}}(0.99) = 1\text{,}308$).
 
 #### The Operational Weighting Gap (The Inspection Paradox)
 
@@ -142,6 +184,8 @@ $$\frac{\mathrm{FPR}\_A}{\mathrm{FPR}\_B} = \frac{p\_A / (1 - p\_A)}{p\_B / (1 -
 The ratio of false positive rates is locked algebraically to the **ratio of prior base-rate odds**!
 In `toronto_arrests.csv` ($n = 5\text{,}226$ police arrest records), two demographic strata exhibit empirical base rates $p\_A = 0.3926$ and $p\_B = 0.1119$. If a classifier equalizes $\mathrm{PPV} = 0.65$ and $\mathrm{FNR} = 0.25$ across both groups, Chouldechova's identity forces $\mathrm{FPR}\_A = 0.2610$ versus $\mathrm{FPR}\_B = 0.0509$—meaning innocent members of Group A suffer false alarms at **$5.13\times$ the rate of Group B**!
 
+Complementing Chouldechova's binary threshold identity, **Jon Kleinberg, Sendhil Mullainathan, and Manish Raghavan (2017)** proved a **continuous risk-score impossibility theorem** (`ChouldechovaAudit::kmr_continuous_impossibility_gap`): for any perfectly calibrated continuous risk score $S \in (0, 1)$ ($\mathbb{E}[Y \mid S = s, G = g] = s$), the Law of Iterated Expectations locks the mean score of group $g$ to $\mathbb{E}[S \mid G = g] = p\_g$, and if a non-perfect score additionally equalizes average score among negative cases ($\mathbb{E}[S \mid Y = 0, G = g]$) and positive cases ($\mathbb{E}[S \mid Y = 1, G = g]$), the Bernoulli variance ceiling $p\_g(1 - p\_g)$ forces an irreducible variance gap (`KMR_var_gap = 0.0960` on `toronto_arrests.csv`) whenever $p\_A \neq p\_B$ and $p\_A + p\_B \neq 1$.
+
 Because no algorithm can repeal Bayes' theorem, Invariant $\Phi\_4$ requires every Epistemological Card to:
 1. Audit Chouldechova's identity explicitly and declare **`who_pays_for_error`** (naming the human or institutional bearer of False Positives and False Negatives);
 2. Declare an explicit **`scope_statement`** (where the model is forbidden from being applied);
@@ -177,8 +221,8 @@ cargo run --release --bin labs -- --invariants
 ~~~text
 === LAB 4: INVARIANTS PHI1-PHI5, MOULTON-CAMPBELL, EXCEEDANCE, AND CHOULDECHOVA ===
   [Benchmarks Phi2] n=25028 -> m_bar=59.59, m_tilde=119.05, rho_I(0.90)=0.155, n_eff=1297.0 (naive Kish=2482.6) | n=500 -> n_eff=86.0 | var_amp=69.0x
-  [Real Data: bank_calls.csv] n=27716, clusters=164, m_bar=169.00, m_tilde=169.00, rho_I(0.90)=0.1623, DEFF=28.26, n_eff(0.90)=980.7
-  [Phi4: Chouldechova on toronto_arrests.csv] p_A=0.3926 vs p_B=0.1119 -> equalizing PPV=0.65 & FNR=0.25 forces FPR_A=0.2610 vs FPR_B=0.0509 (ratio=5.13x)
+  [Real Data: bank_calls.csv] n=27716, clusters=164, m_bar=169.00, m_tilde=169.00, rho_I(0.90)=0.1623, DEFF=28.26, n_eff(0.90)=980.7 (profile q50/q90/q99 n_eff=["9239", "981", "1308"])
+  [Phi4: Chouldechova on toronto_arrests.csv] p_A=0.3926 vs p_B=0.1119 -> equalizing PPV=0.65 & FNR=0.25 forces FPR_A=0.2610 vs FPR_B=0.0509 (ratio=5.13x, KMR_var_gap=0.0960)
 ~~~
 
 Notice how the three negative defect proofs verify the teeth of these invariants:
@@ -194,6 +238,25 @@ Notice how the three negative defect proofs verify the teeth of these invariants
 2. **(Calculation — Chouldechova's Trilemma $\Phi\_4$)** In a medical triage algorithm, Group A has disease prevalence $p\_A = 0.25$ and Group B has prevalence $p\_B = 0.05$. If the triage score is calibrated so that $\mathrm{PPV}\_A = \mathrm{PPV}\_B = 0.50$ and $\mathrm{FNR}\_A = \mathrm{FNR}\_B = 0.20$, compute $\mathrm{FPR}\_A$, $\mathrm{FPR}\_B$, and the ratio $\mathrm{FPR}\_A / \mathrm{FPR}\_B$.
 3. **(Concept — Severity and Error Types $\Phi\_3$)** An analyst runs a noisy pilot study ($n = 20$) and finds that a new teaching method raises test scores by $+35\%$ ($p = 0.048$). When the ministry of education rolls the method out to $50\text{,}000$ students, the true effect turns out to be $+2\%$. Which of the five error types (`Type I`, `Type II`, `Type III`, `Type S`, `Type M`) did the pilot study commit, and why did conditioning on $p < 0.05$ in a small noisy sample guarantee it?
 4. **(Concept — Question Resolution $\Phi\_5$)** Why can an electric utility whose annual generation exceeds annual demand by $+25\%$ still suffer rolling blackouts on a hot August afternoon? Which invariant blocks using annual totals to plan peaking turbine capacity?
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Moulton-Campbell Calculation ($\Phi\_2$):**
+   - *(a)* $\tilde{m} = \bar{m}(1 + \mathrm{CV}^2) = 200 \times (1 + 1.0^2) = 400$.
+   - *(b)* Naive Kish design effect: $\mathrm{DEFF}\_{\text{Kish}} = 1 + (200 - 1)\times 0.10 = 20.9$.
+     Moulton-Campbell design effect: $\mathrm{DEFF}\_{\text{MC}} = 1 + (400 - 1)\times 0.10 = 40.9$.
+     True effective sample size: $n\_{\mathrm{eff}}(0.90) = \frac{10\text{,}000}{40.9} \approx 244.5$ (more than $40\times$ smaller than $n = 10\text{,}000$!).
+2. **Chouldechova's Trilemma Calculation ($\Phi\_4$):**
+   - $\mathrm{FPR}\_A = \frac{0.25}{0.75} \times \frac{1 - 0.50}{0.50} \times (1 - 0.20) = \frac{1}{3} \times 1.0 \times 0.80 \approx 0.2667$ ($26.67\%$).
+   - $\mathrm{FPR}\_B = \frac{0.05}{0.95} \times \frac{1 - 0.50}{0.50} \times (1 - 0.20) = \frac{1}{19} \times 1.0 \times 0.80 \approx 0.0421$ ($4.21\%$).
+   - Ratio: $\frac{\mathrm{FPR}\_A}{\mathrm{FPR}\_B} = \frac{1/3}{1/19} = \frac{19}{3} \approx 6.33\times$.
+3. **Severity and Error Types ($\Phi\_3$):**
+   The pilot study committed a **Type M (Magnitude / Exaggeration) Error** (Gelman & Carlin, 2014). When true power is low and standard error $\mathrm{SE}$ is large (say, $\mathrm{SE} = 16\%$ while true effect is $+2\%$), the only random draws that can cross $|\hat{\beta}| > 1.96\,\mathrm{SE} \approx 31.4\%$ are extreme upward noise fluctuations ($> 15\times$ the true effect!).
+4. **Question Resolution ($\Phi\_5$):**
+   Electricity cannot be trivially stored across seasons at grid scale; supply must match demand at **sub-hourly / 5-minute resolution** (`vic_elec.csv`). Annual totals ($R\_0$) smooth out peak air-conditioning surges. **Invariant $\Phi\_5$ (`verify_resolution_phi5`)** blocks answering a sub-hourly operational dispatch decision with annual aggregates.
+
+</details>
 
 ### Chapter Summary
 

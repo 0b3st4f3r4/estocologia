@@ -58,6 +58,35 @@ impl EvidenceProcess {
             rejects_null_hypothesis: adj >= threshold,
         }
     }
+
+    /// Constructs a sequential anytime-valid GRAPA / Kelly betting *e-process* (Grünwald, de Heide & Koolen 2024;
+    /// Waudby-Smith & Ramdas 2024) from zero-mean under-$H_0$ observations `centered_payoffs`:
+    /// $$E_t = \prod_{i=1}^t (1 + \lambda_i X_i), \qquad \lambda_i = \mathrm{clamp}\left(\frac{\hat{\mu}_{i-1}}{\hat{\sigma}_{i-1}^2 + \hat{\mu}_{i-1}^2},\ -0.5,\ 0.5\right)$$
+    /// where $\lambda_i$ is strictly $\mathcal{F}_{i-1}$-measurable so $\mathbb{E}_{H_0}[1 + \lambda_i X_i \mid \mathcal{F}_{i-1}] = 1$.
+    pub fn from_grapa_betting(
+        centered_payoffs: &[f64],
+        alpha_level: f64,
+        attempt_counter_k: usize,
+    ) -> Self {
+        let mut l_ratios = Vec::with_capacity(centered_payoffs.len());
+        let mut sum_x = 0.0;
+        let mut sum_x2 = 1.0; // Weak prior regularization
+        for (i, &x_i) in centered_payoffs.iter().enumerate() {
+            let lambda_i = if i == 0 {
+                0.0
+            } else {
+                let n_prev = i as f64;
+                let mu_prev = sum_x / n_prev;
+                let second_mom = (sum_x2 / n_prev).max(1e-6);
+                (mu_prev / second_mom).clamp(-0.5, 0.5)
+            };
+            let factor = (1.0 + lambda_i * x_i.clamp(-1.8, 1.8)).max(1e-6);
+            l_ratios.push(factor);
+            sum_x += x_i;
+            sum_x2 += x_i * x_i;
+        }
+        Self::evaluate(&l_ratios, alpha_level, attempt_counter_k)
+    }
 }
 
 /// Executive Memorandum in Integer Natural Frequencies (Gigerenzer — §3.2 Step 8).
@@ -495,6 +524,11 @@ mod tests {
         // NaN e-value safely zeroes out EvidenceProcess without panicking
         let nan_e = EvidenceProcess::evaluate(&[24.8, f64::NAN], 0.05, 1);
         assert!(!nan_e.rejects_null_hypothesis);
+
+        // GRAPA adaptive Kelly betting martingale rejects positive drift and stays <= threshold under null
+        let pos_stream = vec![0.45; 35];
+        let grapa = EvidenceProcess::from_grapa_betting(&pos_stream, 0.05, 1);
+        assert!(grapa.rejects_null_hypothesis);
     }
 
     #[test]

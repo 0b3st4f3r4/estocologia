@@ -109,6 +109,46 @@ pub fn is_valid_sha256_hex(s: &str) -> bool {
             .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
 }
 
+/// Computes the 32-byte RFC 2104 HMAC-SHA256 keyed message authentication code:
+/// $$\mathrm{HMAC}(K, m) = \mathrm{SHA256}\Big((K' \oplus \mathrm{opad}) \;\|\; \mathrm{SHA256}\big((K' \oplus \mathrm{ipad}) \;\|\; m\big)\Big)$$
+pub fn hmac_sha256_bytes(key: &[u8], message: &[u8]) -> [u8; 32] {
+    let mut k_block = [0u8; 64];
+    if key.len() > 64 {
+        let hashed_key = sha256_bytes(key);
+        k_block[..32].copy_from_slice(&hashed_key);
+    } else {
+        k_block[..key.len()].copy_from_slice(key);
+    }
+
+    let mut ipad = [0x36u8; 64];
+    let mut opad = [0x5cu8; 64];
+    for i in 0..64 {
+        ipad[i] ^= k_block[i];
+        opad[i] ^= k_block[i];
+    }
+
+    let mut inner_input = Vec::with_capacity(64 + message.len());
+    inner_input.extend_from_slice(&ipad);
+    inner_input.extend_from_slice(message);
+    let inner_hash = sha256_bytes(&inner_input);
+
+    let mut outer_input = [0u8; 96];
+    outer_input[..64].copy_from_slice(&opad);
+    outer_input[64..].copy_from_slice(&inner_hash);
+    sha256_bytes(&outer_input)
+}
+
+/// Computes the 64-character lowercase hexadecimal RFC 2104 HMAC-SHA256 tag of `message` under `key`.
+pub fn hmac_sha256_hex(key: &[u8], message: &[u8]) -> String {
+    let bytes = hmac_sha256_bytes(key, message);
+    let mut s = String::with_capacity(64);
+    for b in bytes {
+        use std::fmt::Write;
+        let _ = write!(&mut s, "{b:02x}");
+    }
+    s
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -136,5 +176,15 @@ mod tests {
         assert!(!is_valid_sha256_hex(
             "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
         ));
+    }
+
+    #[test]
+    fn rfc_4231_hmac_sha256_test_vector_2_jefe() {
+        // RFC 4231 Test Case 2: Key = "Jefe", Data = "what do ya want for nothing?"
+        let mac = hmac_sha256_hex(b"Jefe", b"what do ya want for nothing?");
+        assert_eq!(
+            mac,
+            "5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843"
+        );
     }
 }

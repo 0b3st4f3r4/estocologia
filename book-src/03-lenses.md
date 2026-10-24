@@ -61,6 +61,14 @@ $$H\_2(P\_e) + P\_e \ln(|\mathcal{W}| - 1) \ge H(W \mid Z) = H(W) - I(W; Z)$$
 
 where $H\_2(p) = -p\ln p - (1-p)\ln(1-p)$ is binary entropy. In plain words: **if your features $Z$ do not carry enough nats of mutual information $I(W; Z)$ to cover the entropy $H(W)$ of the target, no deep neural network can push error below Fano's floor $P\_e^{\min}$.**
 
+#### Blahut-Arimoto Exact Channel Capacity (`blahut_arimoto_capacity`)
+
+While $I(W; X)$ measures the mutual information for a *fixed* input prior $P\_W$, what is the absolute maximum information rate that a noisy physical channel $W(x \mid w)$ can transmit under *any* possible input distribution? In 1972, **Richard Blahut** and **Suguru Arimoto** independently derived an alternating convex-optimization algorithm that converges monotonically to Shannon's **Channel Capacity**:
+
+$$C(W) \triangleq \max\_{P\_W \in \Delta\_{|\mathcal{W}|}} I(P\_W, W)$$
+
+By alternating between the variational posterior $Q^{(t)}(w \mid x) \propto P\_W^{(t)}(w) W(x \mid w)$ and the tilted prior update $P\_W^{(t+1)}(w) \propto P\_W^{(t)}(w) \exp\bigl(\sum\_x W(x \mid w)\ln\frac{W(x \mid w)}{\sum\_{w'} P\_W^{(t)}(w')W(x \mid w')}\bigr)$, `blahut_arimoto_capacity` (together with Laplace-smoothed contingency estimation in `estimate_empirical_channel`) computes the exact capacity $C(W)$ and capacity-achieving input prior $P\_W^{\ast}$ in nats.
+
 ---
 
 ### 3.2 Lens 2 — Time and Survival (`stochology_lenses::time`)
@@ -95,6 +103,14 @@ Notice two crucial boundaries of Kelly's curve:
 
 Finally, Lens 2 audits how long a stochastic simulation or Markov chain takes to explore its state space via the **Log-Sobolev Inequality (LSI)** constant $\alpha\_{\mathrm{LSI}} = -\frac{1}{2}\ln \eta\_{\mathrm{KL}}$, Penalizing the mixing time whenever heavy-tailed mass $H\_R$ traps the sampler in local modes.
 
+#### Continuous-Return Empirical Kelly vs. the Gaussian Merton Ratio (`empirical_kelly_optimal_fraction`)
+
+In continuous-time Gaussian finance, Robert Merton (1969) approximated the optimal leverage fraction by maximizing the second-order Taylor expansion $g(f) \approx f\hat{\mu} - \frac{1}{2}f^2\hat{\sigma}^2$, which yields the **Merton Ratio** $f\_{\text{Merton}} = \frac{\hat{\mu}}{\hat{\sigma}^2}$. However, real empirical returns $r\_1, \dots, r\_n$ exhibit severe skewness and excess kurtosis (on `djia_1885_2023.csv`, excess kurtosis is $17.8$ and the Jarque-Bera statistic is $\mathrm{JB} = 502\text{,}551$, computed online via `OnlineMoments`). Because the logarithmic utility $\ln(1 + f r\_t)$ diverges to $-\infty$ as $1 + f r\_{\min} \to 0^+$, `empirical_kelly_optimal_fraction` solves the exact concave optimization problem via damped Newton-Raphson:
+
+$$f\_{\text{emp}}^{\ast} = \arg\max\_{0 \le f < f\_{\max}} \frac{1}{n}\sum\_{t=1}^n \ln(1 + f r\_t)$$
+
+Whenever negative tail jumps exist, $f\_{\text{emp}}^{\ast} < f\_{\text{Merton}}$ (`2.08 < 2.12` on DJIA), protecting the agent against Gaussian over-leverage.
+
 ---
 
 ### 3.3 Lens 3 — Scale and Tail (`stochology_lenses::tail`)
@@ -122,6 +138,15 @@ How do we estimate $\alpha$ from empirical data without parametric wishful think
 $$\hat{\alpha}\_{k,n} = \left(\frac{1}{k}\sum\_{i=1}^k \ln\frac{X\_{(n-i+1)}}{X\_{(n-k)}}\right)^{-1}, \qquad \mathrm{SE}(\hat{\alpha}\_{k,n}) \approx \frac{\hat{\alpha}\_{k,n}}{\sqrt{k}}$$
 
 Applied to the $n = 2\text{,}167$ industrial fire insurance losses of Copenhagen Re (`danish_fire.csv`), Hill's estimator yields **$\hat{\alpha}\_{\mathrm{Hill}} = 1.6009 \pm 0.1601$**, placing fire claims squarely inside the **`FiniteMeanInfiniteVariance` ($1 < \alpha \le 2$)** regime, with $99\text{th}$ percentile $q\_{99} = 26.04\text{M DKK}$ and an effective tail sample size of only `tail_n_eff` $= 13.9$.
+
+#### Dekkers-Einmahl-de Haan Moment Estimator, Peaks-Over-Threshold GPD, and Expected Shortfall ($\mathrm{ES}\_{0.99}$)
+
+To cross-check Hill's Pareto estimator across all three Extreme Value Theory (EVT) domains of attraction ($\xi > 0$ Fréchet, $\xi = 0$ Gumbel, and $\xi < 0$ Weibull, where $\xi = 1/\alpha$), `crates/stochology-lenses/src/tail.rs` implements three complementary EVT diagnostics:
+
+1. **Dekkers-Einmahl-de Haan (1989) Moment Estimator (`dedh_moment_tail_index`):** Using the first two log-spacing moments $M\_n^{(j)} = \frac{1}{k}\sum\_{i=1}^k \bigl(\ln X\_{(n-i+1)} - \ln X\_{(n-k)}\bigr)^j$ ($j \in \lbrace 1, 2 \rbrace$), the DEdH generalized extreme-value shape estimator is:
+   $$\hat{\xi}\_{\mathrm{DEdH}} = M\_n^{(1)} + 1 - \frac{1}{2}\left(1 - \frac{(M\_n^{(1)})^2}{M\_n^{(2)}}\right)^{-1} \in \mathbb{R}$$
+2. **Pickands-Balkema-de Haan Peaks-Over-Threshold GPD (`gpd_pot_fit`):** By the Pickands-Balkema-de Haan Theorem (1974/1975), excesses $Y = X - u \mid X > u$ above a high threshold $u$ converge to a **Generalized Pareto Distribution** $G\_{\xi, \beta}(y) = 1 - (1 + \xi y / \beta)^{-1/\xi}$, calibrated via Hosking-Wallis probability-weighted moments (L-moments).
+3. **Coherent Expected Shortfall ($\mathrm{ES}\_{0.99}$, `expected_shortfall_99`):** Unlike Value-at-Risk ($q\_{99}$), which ignores the severity of losses beyond the $99\text{th}$ percentile and violates Artzner et al.'s (1999) subadditivity axiom, **Expected Shortfall** $\mathrm{ES}\_{0.99} = \mathbb{E}[X \mid X \ge q\_{0.99}]$ is a coherent spectral risk measure. On `danish_fire.csv`, while $q\_{99} = 26.04\text{M DKK}$, the tail expectation jumps more than twofold to **$\mathrm{ES}\_{0.99} = 58.59\text{M DKK}$** (and $\mathrm{ES}\_{0.99}^{\mathrm{POT}} = 58.88\text{M DKK}$)!
 
 ---
 
@@ -203,6 +228,10 @@ $$\Phi(z) = \left[  z ,\quad \frac{z^2 - 1}{\sqrt{2}} ,\quad \frac{z^3 - 3z}{\sq
 
 and auditing the **Invariant Risk Minimization (IRM / NILE)** risk-gradient penalty $\sum\_{e \in \mathcal{E}} \lVert \nabla\_{w \mid w=1.0} R^e(w \cdot \Phi) \rVert^2$ alongside Paul Rosenbaum's hidden-confounding sensitivity threshold $\Lambda^{\ast}$ (the minimum odds ratio an unobserved confounder would need to overturn the conclusion).
 
+In addition, `crates/stochology-lenses/src/invariance.rs` provides two classic econometric invariance and sensitivity audits:
+- **Gregory Chow's (1960) Structural Break $F$-Statistic (`chow_invariance_f_stat`):** Tests $H\_{0, S}: \beta^{(e)} = \beta^{\text{pooled}}$ across $E$ environments via $F\_S = \frac{(\mathrm{RSS}\_{\text{pooled}} - \sum\_{e=1}^E \mathrm{RSS}\_e) / ((E - 1)p)}{\sum\_{e=1}^E \mathrm{RSS}\_e / (N\_{\text{total}} - E p)}$. For the true causal parent $X\_0$, $F\_{\lbrace 0 \rbrace} = 0.18$ (invariant), whereas for the spurious proxy $X\_1$, $F\_{\lbrace 1 \rbrace} = 23\text{,}437.0$ (structural breakdown!).
+- **Cinelli & Hazlett (2020) Omitted-Variable Bias Robustness Value (`cinelli_hazlett_robustness_value`):** Computes the exact partial-$R^2$ strength $RV\_q = \frac{1}{2}\bigl(\sqrt{f\_q^4 + 4 f\_q^2} - f\_q^2\bigr)$ (where $f\_q = q\cdot |t| / \sqrt{\mathrm{df}}$) that an unobserved confounder $U$ would need with *both* treatment $X$ and outcome $Y$ to reduce the estimated effect by fraction $q$.
+
 ---
 
 ### 3.5 Lens 5 — Decision and Calibration (`stochology_lenses::decision`)
@@ -256,6 +285,9 @@ $$\mathrm{BS} = \underbrace{\frac{1}{n}\sum\_{i=1}^n (p\_{(i)} - \hat{\pi}\_i)^2
 Remember the fundamental operational asymmetry of this equation:
 - **$\mathrm{REL}\_{\mathrm{CORP}}$ (Miscalibration) can be repaired post-hoc** by monotone recalibration (such as PAV isotonic mapping or Platt scaling).
 - **$\mathrm{RES}\_{\mathrm{CORP}}$ (Resolution) cannot be created post-hoc by any monotone rescaling**—because any strictly increasing map $p \mapsto g(p)$ produces the *exact same* PAV isotonic blocks $\hat{\pi}\_i$! To increase $\mathrm{RES}\_{\mathrm{CORP}}$, you must go back to $L\_1$ and collect better causal predictors.
+- **Richardson's (2000) Relative Economic Value (`CostLossRule::relative_economic_value`) and Good's (1952) Logarithmic Score (`logarithmic_score`):** Alongside the Brier decomposition, Lens 5 evaluates the normalized economic value of a forecast system relative to climatology and a perfect oracle at threshold $p^{\ast} = \frac{C}{\eta L}$:
+  $$V(p^{\ast}) = \frac{\mathbb{E}[\text{Cost}\_{\text{climatology}}] - \mathbb{E}[\text{Cost}\_{\text{forecast}}]}{\mathbb{E}[\text{Cost}\_{\text{climatology}}] - \mathbb{E}[\text{Cost}\_{\text{oracle}}]} \in (-\infty, 1]$$
+  as well as I. J. Good's local strictly proper **Logarithmic (Ignorance) Score** $\mathrm{LogS}(p, y) = -\frac{1}{n}\sum\_{i=1}^n \bigl[y\_i \ln \tilde{p}\_i + (1 - y\_i)\ln(1 - \tilde{p}\_i)\bigr]$ safeguarded by Cromwell's floor $\tilde{p}\_i \in [\varepsilon\_{\text{floor}}, 1 - \varepsilon\_{\text{floor}}]$.
 
 ---
 
@@ -269,19 +301,21 @@ cargo run --release --bin labs -- --lenses
 
 ~~~text
 === LAB 3: THE FIVE TRANSVERSAL LENSES (SDPI/DPI, TIME/KELLY, HILL, ICP, CORP-PAV) ===
-  [Lens 1: Information] SDPI: eta_chi2=0.4900 <= eta_KL=0.4900 <= eta_TV=0.7000 (valid=true) | DPI W->X->Y->Z: 0.3681 >= 0.1662 >= 0.0576 (monotonic=true) | I_amp=0.5185 | Fano P_e >= 0.1156
-  [Lens 2: Time] DJIA (37930 trading days): g_ensemble=0.0612 vs g_time_Ito=0.0468 (drain=0.0145) | Kelly f*=0.8600 | Mixing steps=13
-  [Lens 3: Tail] Danish Fire (n=2167): Hill alpha_k=1.6009 (+/- 0.1601), regime=FiniteMeanInfiniteVariance, median=1.778, MAD=0.574, q99=26.04, tail_n_eff=13.9 | VicElec (n=52608): q99=6981.5 MW
-  [Lens 4: Invariance] ICP S*=[0], env_OLS_penalty=["0.0001", "15.8059"], Storms_nonlinear_NILE_IRM=["0.0011", "0.1072"], Lambda*=4.752 | AuthenticForm(S*=[0], discarded='atom_1_regime_shifted_lat_proxy', A=true)
-  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n=20778): BS=0.26906 = REL(0.21135) - RES(0.13102) + UNC0(0.18873) [id_err=1.53e-14] | FairCoin(p0=0.50): agree@0.30=100%, REL_over=0.1104 vs REL_cal=0.0005, regret@0.70=+18.20
+  [Lens 1: Information] SDPI: eta_chi2=0.4900 <= eta_KL=0.4900 <= eta_TV=0.7000 (valid=true, C_BA=0.2704 nats) | DPI W->X->Y->Z: 0.3681 >= 0.1662 >= 0.0576 (monotonic=true) | I_amp=0.5185 | Fano P_e >= 0.1156
+  [Lens 2: Time] DJIA (37930 trading days, kurtosis=17.8, JB=502551): g_ensemble=0.0612 vs g_time_Ito=0.0468 (drain=0.0145) | Kelly f*=0.8600 (emp_DJIA=2.08 vs Merton=2.12) | Mixing steps=13
+  [Lens 3: Tail] Danish Fire (n=2167): Hill alpha_k=1.6009 (+/- 0.1601, DEdH_xi=0.538, GPD_xi=0.483), regime=FiniteMeanInfiniteVariance, median=1.778, MAD=0.574, q99=26.04, ES99=58.59 (POT=58.88), tail_n_eff=13.9 | VicElec (n=52608): q99=6981.5 MW
+  [Lens 4: Invariance] ICP S*=[0], env_OLS_penalty=["0.0001", "15.8059"] (ChowF=[0.18, 23437.0]), Storms_nonlinear_NILE_IRM=["0.0011", "0.1072"], Lambda*=4.752 (RV=0.511) | AuthenticForm(S*=[0], discarded='atom_1_regime_shifted_lat_proxy', A=true)
+  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n=20778): BS=0.26906 = REL(0.21135) - RES(0.13102) + UNC0(0.18873) [id_err=1.53e-14, LogS_PAV=0.1849, REV_PAV=0.719] | FairCoin(p0=0.50): agree@0.30=100%, REL_over=0.1104 vs REL_cal=0.0005, regret@0.70=+18.20
+  [Almost-Perfect Machine M=(T,Phi,theta)] sup_err=0.0234 (Barron C_f=5.60), DPI_gap=0.0297 nats, regions=64 (ratio=5.3x), d_eff=8.00/8, P1..P5=true
+  [Relational Ontology & Complex Systems] MI_rel=0.3681 vs MI_iso=0.0003 nats | Prigogine dS=-0.55 (turnover=100.0%, closure=100.0%) | Schelling(tau=0.125->50.2% vs tau=0.375->82.4%) | Daisyworld(MAE=1.52C vs dead=9.57C, dT/dL=-11.93) | verified=true
 ~~~
 
 Look at what each lens reveals:
-1. **Lens 1 (Information):** Across the 3-step Markov chain $W \to X \to Y \to Z$, mutual information decays monotonically ($0.3681 \ge 0.1662 \ge 0.0576\text{ nats}$), the SDPI contraction constants obey $\eta\_{\chi^2}(0.4900) \le \eta\_{\mathrm{KL}}(0.4900) \le \eta\_{\mathrm{TV}}(0.7000)$, and Fano's inequality forces at least $11.56\%$ classification error.
-2. **Lens 2 (Time):** Over $37\text{,}930$ trading sessions of the Dow Jones (`djia_1885_2023.csv`), Itô's variance drain reduces the ensemble growth rate of $6.12\%$ down to a time-average growth rate of $4.68\%$, with optimal Kelly fraction $f^{\ast} = 0.8600$.
-3. **Lens 3 (Tail):** On `danish_fire.csv` ($n = 2\text{,}167$), the Hill estimator finds $\hat{\alpha} = 1.6009 \pm 0.1601$ (`FiniteMeanInfiniteVariance`), warning that variance-based Gaussian formulas are invalid.
-4. **Lens 4 (Invariance):** Across shifting regimes, ICP isolates the true causal parent $\hat{S}^{\ast} = [0]$ with tiny invariance penalty ($0.0001$ linear; $0.0011$ nonlinear NILE/IRM on `atlantic_storms.csv`) while exposing the spurious proxy (`15.8059` linear; `0.1072` nonlinear).
-5. **Lens 5 (Decision):** On $n = 20\text{,}778$ NOAA Atlantic storm records, the PAV isotonic decomposition splits $\mathrm{BS} = 0.26906$ into $\mathrm{REL}\_{\mathrm{CORP}} = 0.21135$, $\mathrm{RES}\_{\mathrm{CORP}} = 0.13102$, and $\mathrm{UNC}\_0 = 0.18873$ with an identity closure error of $1.53 \times 10^{-14}$. Meanwhile, the `FairCoin` benchmark proves that an overconfident forecaster (`REL = 0.1104`) who agrees $100\%$ of the time with a calibrated forecaster (`REL = 0.0005`) at threshold $p^{\ast}\_A = 0.30$ inflicts $+18.20$ units of excess regret the moment the decision threshold moves to $p^{\ast}\_B = 0.70$!
+1. **Lens 1 (Information):** Across the 3-step Markov chain $W \to X \to Y \to Z$, mutual information decays monotonically ($0.3681 \ge 0.1662 \ge 0.0576\text{ nats}$), the SDPI contraction constants obey $\eta\_{\chi^2}(0.4900) \le \eta\_{\mathrm{KL}}(0.4900) \le \eta\_{\mathrm{TV}}(0.7000)$ with Blahut-Arimoto channel capacity $C\_{\mathrm{BA}} = 0.2704\text{ nats}$, and Fano's inequality forces at least $11.56\%$ classification error.
+2. **Lens 2 (Time):** Over $37\text{,}930$ trading sessions of the Dow Jones (`djia_1885_2023.csv`, excess kurtosis $17.8$, Jarque-Bera $\mathrm{JB} = 502\text{,}551$), Itô's variance drain reduces the ensemble growth rate of $6.12\%$ down to a time-average growth rate of $4.68\%$, while exact continuous empirical Kelly leverage ($2.08$) is strictly more conservative than the Gaussian Merton ratio ($2.12$).
+3. **Lens 3 (Tail):** On `danish_fire.csv` ($n = 2\text{,}167$), the Hill estimator finds $\hat{\alpha} = 1.6009 \pm 0.1601$ (`FiniteMeanInfiniteVariance`), corroborated by Dekkers-Einmahl-de Haan $\hat{\xi}\_{\mathrm{DEdH}} = 0.538$ and Peaks-Over-Threshold GPD $\hat{\xi}\_{\mathrm{GPD}} = 0.483$, with $99\%$ Expected Shortfall $\mathrm{ES}\_{0.99} = 58.59\text{M DKK}$ (`POT = 58.88M`).
+4. **Lens 4 (Invariance):** Across shifting regimes, ICP isolates the true causal parent $\hat{S}^{\ast} = [0]$ with tiny invariance penalty ($0.0001$ linear, Chow $F = 0.18$; $0.0011$ nonlinear NILE/IRM on `atlantic_storms.csv`) while exposing the spurious proxy ($15.8059$ linear, Chow $F = 23\text{,}437.0$; $0.1072$ nonlinear), with Rosenbaum sensitivity $\Lambda^{\ast} = 4.752$ and Cinelli-Hazlett Robustness Value $RV = 0.511$.
+5. **Lens 5 (Decision):** On $n = 20\text{,}778$ NOAA Atlantic storm records, the PAV isotonic decomposition splits $\mathrm{BS} = 0.26906$ into $\mathrm{REL}\_{\mathrm{CORP}} = 0.21135$, $\mathrm{RES}\_{\mathrm{CORP}} = 0.13102$, and $\mathrm{UNC}\_0 = 0.18873$ with an identity closure error of $1.53 \times 10^{-14}$, PAV-calibrated Logarithmic Score $\mathrm{LogS} = 0.1849$, and Relative Economic Value $\mathrm{REV}\_{\mathrm{PAV}} = 0.719$ ($71.9\%$ of an infallible oracle's economic gain). Meanwhile, the `FairCoin` benchmark proves that an overconfident forecaster (`REL = 0.1104`) who agrees $100\%$ of the time with a calibrated forecaster (`REL = 0.0005`) at threshold $p^{\ast}\_A = 0.30$ inflicts $+18.20$ units of excess regret the moment the decision threshold moves to $p^{\ast}\_B = 0.70$!
 
 ### Exercises
 
@@ -291,6 +325,23 @@ Look at what each lens reveals:
 2. **(Concept — Confounder vs. Collider)** A tech company notices that among employees it hired, programming test scores ($X$) and interview charisma scores ($Y$) are *negatively* correlated. Given that a candidate is hired ($B = 1$) only if the sum of $X + Y$ exceeds a high cutoff, draw the causal graph connecting $X$, $Y$, and $B$, and explain why conditioning on hired employees created the negative correlation.
 3. **(Calculation — Cost-Loss Threshold)** Protecting a power substation against a geomagnetic storm costs $C = USD 45\text{,}000$. An unmitigated transformer failure costs $L = USD 1\text{,}000\text{,}000$, and protective switching prevents $\eta = 0.90$ of the damage. Compute $p^{\ast}$. Should the operator protect if the calibrated probability is $p = 0.065$?
 4. **(Concept — CORP-Murphy Asymmetry)** Why is it impossible to increase $\mathrm{RES}\_{\mathrm{CORP}}$ by applying a strictly increasing function $p\_i \mapsto g(p\_i)$ to your model's predicted probabilities?
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Non-Ergodicity and Itô's Drain:**
+   - *(a)* Unleveraged time-growth rate: $g\_{\text{time}} = 0.12 - \frac{1}{2}(0.30)^2 = 0.12 - 0.045 = +0.075$ ($+7.5\%$ per year).
+   - *(b)* At $3\times$ leverage, $g\_{\text{ensemble}} = 3 \times 0.12 = +0.36$ ($+36\%$), but volatility triples to $\sigma\_3 = 0.90$, quadrupling the variance drain by $3^2 = 9\times$:
+     $$g\_{\text{time}}(3) = 0.36 - \frac{1}{2}(0.90)^2 = 0.36 - 0.405 = -0.045\ (-4.5\%\text{ per year!})$$
+     Because $f = 3$ exceeds twice the Merton-Kelly optimum ($f^{\ast} = \mu/\sigma^2 = 0.12/0.09 = 1.333$, so $2f^{\ast} = 2.667$), the variance drag $\frac{1}{2}f^2\sigma^2$ overwhelms the linear drift $f\mu$.
+2. **Confounder vs. Berkson Collider:**
+   - Causal graph: $X \to B \leftarrow Y$, where $B = \mathbb{I}\lbrace X + Y \ge \tau \rbrace$ is a **common effect (Berkson collider)**. Conditioning on $B = 1$ (being hired) means any hired employee with a low programming score $X$ *must* have had a very high charisma score $Y$ to clear the bar $X + Y \ge \tau$, inducing a spurious negative correlation between $X$ and $Y$.
+3. **Cost-Loss Threshold:**
+   $$p^{\ast} = \frac{C}{\eta L} = \frac{45\text{,}000}{0.90 \times 1\text{,}000\text{,}000} = \frac{45\text{,}000}{900\text{,}000} = 0.050\ (5.0\%)$$
+   Since $p = 0.065 > p^{\ast} = 0.050$, the operator **must `protect`** (expected cost of protecting is $45\text{,}000 + 0.065 \times 100\text{,}000 = USD 51\text{,}500$, versus $0.065 \times 1\text{,}000\text{,}000 = USD 65\text{,}000$ without protection).
+4. **CORP-Murphy Asymmetry:** The Pool-Adjacent-Violators (PAV) algorithm depends only on the **rank order** of the forecasts $p\_{(1)} \le \dots \le p\_{(n)}$ and the realized outcomes $y\_{(1)}, \dots, y\_{(n)}$. Any strictly increasing transformation $g(p)$ preserves the exact sorting order of $p\_i$, producing the exact same isotonic conditional event frequencies $\hat{\pi}\_i$ and therefore leaving $\mathrm{RES}\_{\mathrm{CORP}} = \frac{1}{n}\sum (\hat{\pi}\_i - \bar{y})^2$ completely unchanged.
+
+</details>
 
 ### Chapter Summary
 

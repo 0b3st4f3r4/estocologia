@@ -6,12 +6,22 @@ use stochology_cli::{
     verify_card_against_empirical_data,
 };
 use stochology_core::card::EpistemologicalCard;
-use stochology_core::rng::SplitMix64;
+use stochology_core::layers::{ManskiBounds, PerformativeSystem};
+use stochology_core::rng::{OnlineMoments, SplitMix64};
+use stochology_core::sha256::hmac_sha256_hex;
+use stochology_core::uncertainty::KennedyOHaganDiscrepancy;
 use stochology_governance::clock::{query_with_bitemporal_clock, BitemporalRecord};
-use stochology_governance::drift::MurphyCorpCircuitBreaker;
-use stochology_governance::vault::{TemporalVault, VaultState};
+use stochology_governance::drift::{AdaptiveConformalInference, MurphyCorpCircuitBreaker};
+use stochology_governance::vault::{TemporalVault, VaultError, VaultState};
 use stochology_lenses::decision::CorpPavDecomposition;
-use stochology_lenses::information::{DpiMarkovChain, SdpiHierarchy};
+use stochology_lenses::information::{blahut_arimoto_capacity, DpiMarkovChain, SdpiHierarchy};
+use stochology_lenses::invariance::{
+    chow_invariance_f_stat, cinelli_hazlett_robustness_value, CausalEnvironment,
+};
+use stochology_lenses::tail::{dedh_moment_tail_index, gpd_pot_fit};
+use stochology_lenses::time::empirical_kelly_optimal_fraction;
+use stochology_siga::funnel::fit_shelf_beta_prior;
+use stochology_siga::roadmap::EvidenceProcess;
 
 fn workspace_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -265,4 +275,88 @@ fn cli_binaries_handle_help_and_defects_correctly() {
         .output()
         .expect("run labs --invalid-lab");
     assert_eq!(labs_unknown.status.code(), Some(2));
+}
+
+#[test]
+fn cross_crate_enriched_epistemological_primitives_end_to_end() {
+    let mut rng = SplitMix64::new(2026);
+    let mut moments = OnlineMoments::new();
+    let mut student_samples = Vec::with_capacity(600);
+    for _ in 0..600 {
+        let x = rng.student_t(3.5);
+        moments.push(x);
+        student_samples.push(x.abs() + 1.0);
+    }
+    assert!(moments.excess_kurtosis() > 0.5);
+    assert!(moments.jarque_bera_stat() > 15.0);
+
+    let tag = hmac_sha256_hex(b"Jefe", b"what do ya want for nothing?");
+    assert_eq!(
+        tag,
+        "5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843"
+    );
+
+    let (lo, hi, q) =
+        ManskiBounds::lee_trimming_bounds(&[2.0, 3.0, 4.0, 5.0, 6.0], 5, &[1.0, 2.0, 3.0, 4.0], 5);
+    assert!((q - 0.20).abs() < 1e-12 && lo <= hi);
+
+    let perf = PerformativeSystem::new(1.0, 0.20, 0.50, 1.0, 1.50);
+    let perfgd = perf.perfgd_trajectory(0.0, 0.5, 40);
+    let theta_po = perf.diagnose().theta_po;
+    assert!((perfgd.last().copied().unwrap() - theta_po).abs() < 1e-4);
+
+    let (koh, lml, _, _) = KennedyOHaganDiscrepancy::calibrate_empirical_bayes(
+        &[0.0, 1.0, 2.0, 3.0],
+        &[0.10, 0.25, 0.20, 0.05],
+        0.02,
+        5.0,
+        &[0.5, 1.5, 3.0],
+        &[0.1, 0.3, 1.0],
+    );
+    assert!(lml.is_finite() && koh.theta_anchored_with_gp.is_finite());
+
+    let bsc = vec![vec![0.85, 0.15], vec![0.15, 0.85]];
+    let (cap, _) = blahut_arimoto_capacity(&bsc, 50, 1e-10);
+    assert!((cap - 0.2704).abs() < 1e-3);
+
+    let returns = [0.08, 0.07, 0.06, 0.09, -0.32, 0.07, 0.08, 0.06];
+    let (f_emp, g_emp, f_merton) = empirical_kelly_optimal_fraction(&returns);
+    assert!(f_emp > 0.0 && f_emp < f_merton && g_emp > 0.0);
+
+    let xi_dedh = dedh_moment_tail_index(&student_samples, 40);
+    let (xi_gpd, sigma_gpd, es99_gpd) = gpd_pot_fit(&student_samples, 0.85);
+    assert!(xi_dedh.is_finite() && xi_gpd.is_finite() && sigma_gpd > 0.0 && es99_gpd > 1.0);
+
+    let env1 = CausalEnvironment {
+        name: "E1".to_string(),
+        x: vec![vec![1.0], vec![2.0], vec![3.0], vec![4.0]],
+        y: vec![2.0, 4.1, 5.9, 8.0],
+    };
+    let env2 = CausalEnvironment {
+        name: "E2".to_string(),
+        x: vec![vec![1.0], vec![2.0], vec![3.0], vec![4.0]],
+        y: vec![2.1, 3.9, 6.0, 8.1],
+    };
+    assert!(chow_invariance_f_stat(&[env1, env2], &[0]) < 1.0);
+    let rv = cinelli_hazlett_robustness_value(4.5, 100, 1.0);
+    assert!(rv > 0.30 && rv < 1.0);
+
+    let (alpha_b, beta_b, rmse_b) = fit_shelf_beta_prior(0.02, 0.05, 0.10);
+    assert!(alpha_b > 0.2 && beta_b > alpha_b && rmse_b < 0.05);
+
+    let grapa = EvidenceProcess::from_grapa_betting(&[0.4; 25], 0.05, 1);
+    assert!(grapa.rejects_null_hypothesis);
+
+    let mut vault = TemporalVault::seal("LOCK-TAMPER-TEST", vec![0.0, 1.0]);
+    vault.sha256_seal =
+        "0000000000000000000000000000000000000000000000000000000000000000".to_string();
+    assert_eq!(
+        vault.open_once(&[0.1, 0.9], 0.25),
+        Err(VaultError::SealTampered)
+    );
+
+    let cal: Vec<f64> = (0..100).map(|i| i as f64 / 50.0).collect();
+    let stream: Vec<f64> = (0..100).map(|i| 1.40 + (i % 20) as f64 * 0.025).collect();
+    let aci = AdaptiveConformalInference::evaluate_stream(&cal, &stream, 0.10, 0.02);
+    assert!(aci.empirical_coverage_aci > aci.empirical_coverage_static);
 }

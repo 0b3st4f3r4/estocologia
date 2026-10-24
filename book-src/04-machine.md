@@ -184,12 +184,12 @@ cargo run --release --bin gates -- --defect machine
 
 ~~~text
   [Almost-Perfect Machine M=(T,Phi,theta)] sup_err=0.0234 (Barron C_f=5.60), DPI_gap=0.0297 nats, regions=64 (ratio=5.3x), d_eff=8.00/8, P1..P5=true
-  [Lens 4: Invariance] ICP S*=[0], env_OLS_penalty=["0.0001", "15.8059"], Storms_nonlinear_NILE_IRM=["0.0011", "0.1072"], Lambda*=4.752 | AuthenticForm(S*=[0], discarded='atom_1_regime_shifted_lat_proxy', A=true)
+  [Lens 4: Invariance] ICP S*=[0], env_OLS_penalty=["0.0001", "15.8059"] (ChowF=[0.18, 23437.0]), Storms_nonlinear_NILE_IRM=["0.0011", "0.1072"], Lambda*=4.752 (RV=0.511) | AuthenticForm(S*=[0], discarded='atom_1_regime_shifted_lat_proxy', A=true)
 ~~~
 
 Notice how the numbers tie the theory together:
 - The 8-atom orthonormal Hermite-Fourier dictionary achieves uniform supremum error $0.0234$ under Barron norm $C\_f = 5.60$ (`P1`), loses only $\Delta\_{\mathrm{DPI}} = 0.0297\text{ nats}$ in representation compression (`P2`), matches the minimax noise floor (`P3`), generates $2^6 = 64$ linear regions ($5.3\times$ shallow efficiency, `P4`), and attains perfect Gram effective dimension $d\_{\mathrm{eff}} = 8.00 / 8$ (`P5`).
-- On `atlantic_storms.csv`, `AuthenticModelForm` retains only the invariant thermodynamic core $\hat{S}^{\ast} = [0]$ (`Storms_nonlinear_NILE_IRM = 0.0011`) and explicitly quarantines and logs the non-invariant proxy `atom_1_regime_shifted_lat_proxy` (`0.1072`). When `--defect machine` injects a spurious non-invariant atom into $\hat{S}^{\ast}$ or breaks Gram orthogonality, Gate `G8` immediately halts execution with exit code `1`.
+- On `atlantic_storms.csv`, `AuthenticModelForm` retains only the invariant thermodynamic core $\hat{S}^{\ast} = [0]$ (`Storms_nonlinear_NILE_IRM = 0.0011`, Chow $F = 0.18$) and explicitly quarantines and logs the non-invariant proxy `atom_1_regime_shifted_lat_proxy` (`0.1072`, Chow $F = 23\text{,}437.0$). When `--defect machine` injects a spurious non-invariant atom into $\hat{S}^{\ast}$ or breaks Gram orthogonality, Gate `G8` immediately halts execution with exit code `1`.
 
 ### Exercises
 
@@ -199,6 +199,23 @@ Notice how the numbers tie the theory together:
 2. **(Calculation — Gram Effective Dimension)** Suppose a $W = 4$ feature dictionary has Gram matrix eigenvalues $\lambda = (3.7, 0.1, 0.1, 0.1)$. Compute $\mathrm{tr} G$, $\lVert G \rVert\_F^2 = \sum \lambda\_j^2$, and the effective dimension $d\_{\mathrm{eff}} = \frac{(\mathrm{tr} G)^2}{\lVert G \rVert\_F^2}$. Does this dictionary pass Property `P5` ($d\_{\mathrm{eff}} \ge 0.80 W = 3.20$)? Why or why not?
 3. **(Calculation — Telgarsky Regions)** How many affine linear regions $2^D$ does a sawtooth network of depth $D = 8$ generate, and what is its efficiency ratio $2^D / (2D)$ compared to a shallow network?
 4. **(Laboratory — Defect Proof)** Run `cargo run --release --bin gates -- --defect machine` and inspect why Gate `G8` rejects a machine whose discarded atoms are hidden or whose Gram matrix is rank-deficient.
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Clever Hans vs. Authentic Form:**
+   - *(a)* Phone battery percentage is a non-causal proxy ($X\_{\text{proxy}}$) rather than a direct causal parent of loan repayment ($Y$). Once applicants intervene ($\mathrm{do}(\text{Battery} = 100\%)$), the conditional distribution $P^e(Y \mid \text{Battery})$ shifts across environments $e \in \mathcal{E}$ (Goodhart/Lucas performative breakdown).
+   - *(b)* `AuthenticModelForm` rejects the battery atom during multi-environment ICP/NILE testing, excludes it from $\hat{S}^{\ast}$, and logs it by name in `discarded_atoms` (`DiscardedAtomRecord`) with its invariance penalty ratio.
+2. **Gram Effective Dimension Calculation:**
+   - $\mathrm{tr} G = 3.7 + 0.1 + 0.1 + 0.1 = 4.0$.
+   - $\lVert G \rVert\_F^2 = 3.7^2 + 0.1^2 + 0.1^2 + 0.1^2 = 13.69 + 0.03 = 13.72$.
+   - $d\_{\mathrm{eff}} = \frac{4.0^2}{13.72} = \frac{16.0}{13.72} \approx 1.166 < 3.20$.
+   - It **fails Property `P5`** because almost all variance is concentrated along a single collinear direction ($\lambda\_1 = 3.7$).
+3. **Telgarsky Regions Calculation:**
+   At depth $D = 8$, $N\_{\text{regions}} = 2^8 = 256$ affine linear pieces using $2D = 16$ elementary parameters, giving an efficiency ratio of $\frac{256}{16} = 16.0\times \ge 4.0$.
+4. **Machine Defect Proof:** Running `cargo run --release --bin gates -- --defect machine` triggers `[G8 BLOCKED]` when `P1`–`P5` or `AuthenticModelForm` fails and exits with code `1`.
+
+</details>
 
 ### Chapter Summary
 

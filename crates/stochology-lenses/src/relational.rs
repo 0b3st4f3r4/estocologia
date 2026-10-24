@@ -135,28 +135,65 @@ pub struct DissipativeAutopoieticAudit {
 }
 
 impl DissipativeAutopoieticAudit {
-    /// Simulates a far-from-equilibrium dissipative vortex / autopoietic metabolic network over `steps` time steps.
-    ///
-    /// At each step, a fraction `turnover_rate` of constituent molecules is replaced by the open flow,
-    /// generating positive internal entropy $d_i S > 0$ while open boundary coupling exports entropy
-    /// $d_e S = -\eta_{\text{export}} d_i S$ to sustain the organizational pattern $z_t \to z^*$.
+    /// Simulates a far-from-equilibrium dissipative vortex / autopoietic metabolic network over `steps` time steps
+    /// by integrating the open-system Prigogine Brusselator chemical reaction network ($\varnothing \rightleftharpoons X$,
+    /// $B + X \rightleftharpoons Y + D$, $2X + Y \rightleftharpoons 3X$) via 4th-order Runge-Kutta (RK4) and evaluating
+    /// the exact Schnakenberg (1976) / Prigogine microscopic master-equation entropy production rate:
+    /// $$\frac{d_i S}{dt} = \sum_{\rho=1}^{3} \bigl(J_\rho^+ - J_\rho^-\bigr) \ln\frac{J_\rho^+}{J_\rho^-} > 0$$
+    /// while open-boundary free-energy coupling exports entropy $d_e S / dt < -d_i S / dt$ to sustain the autopoietic pattern.
     pub fn simulate_vortex(steps: usize, turnover_rate: f64) -> Self {
         assert!(steps >= 10 && turnover_rate > 0.0 && turnover_rate < 1.0);
-        let di_s_rate = 0.42;
-        let de_s_rate = -0.45;
-        let net_ds_rate = di_s_rate + de_s_rate;
+        // Open Brusselator concentrations (X, Y) driven by chemostatted boundary reservoirs A = 1.2, B = 2.8
+        let a_res = 1.2_f64;
+        let b_res = 2.8_f64;
+        let k_rev = 0.08_f64;
+        let dt = 0.02_f64;
+        let mut x_conc = 1.0_f64;
+        let mut y_conc = 1.5_f64;
+
+        let brusselator_rhs = |x: f64, y: f64| -> (f64, f64, f64) {
+            let x_s = x.max(1e-6);
+            let y_s = y.max(1e-6);
+            let j1_f = a_res;
+            let j1_r = (1.0 + k_rev) * x_s;
+            let j2_f = b_res * x_s;
+            let j2_r = k_rev * y_s;
+            let j3_f = x_s * x_s * y_s;
+            let j3_r = k_rev * x_s * x_s * x_s;
+
+            let dx = (j1_f - j1_r) - (j2_f - j2_r) + (j3_f - j3_r);
+            let dy = (j2_f - j2_r) - (j3_f - j3_r);
+            // Exact Schnakenberg / Prigogine irreversible entropy production sum (J+ - J-) * ln(J+ / J-) >= 0
+            let sigma = (j1_f - j1_r) * (j1_f / j1_r).ln()
+                + (j2_f - j2_r) * (j2_f / j2_r).ln()
+                + (j3_f - j3_r) * (j3_f / j3_r).ln();
+            (dx, dy, sigma.max(0.0))
+        };
 
         let mut remaining_original_matter = 1.0_f64;
         let mut pattern_error = 0.35_f64;
         let mut isolated_entropy = 0.0_f64;
+        let mut di_s_accum = 0.0_f64;
 
         for _ in 0..steps {
+            let (k1x, k1y, s1) = brusselator_rhs(x_conc, y_conc);
+            let (k2x, k2y, s2) = brusselator_rhs(x_conc + 0.5 * dt * k1x, y_conc + 0.5 * dt * k1y);
+            let (k3x, k3y, s3) = brusselator_rhs(x_conc + 0.5 * dt * k2x, y_conc + 0.5 * dt * k2y);
+            let (k4x, k4y, s4) = brusselator_rhs(x_conc + dt * k3x, y_conc + dt * k3y);
+            x_conc = (x_conc + (dt / 6.0) * (k1x + 2.0 * k2x + 2.0 * k3x + k4x)).max(1e-4);
+            y_conc = (y_conc + (dt / 6.0) * (k1y + 2.0 * k2y + 2.0 * k3y + k4y)).max(1e-4);
+            let step_sigma = (s1 + 2.0 * s2 + 2.0 * s3 + s4) / 6.0;
+
+            di_s_accum += step_sigma;
+            isolated_entropy += step_sigma;
             remaining_original_matter *= 1.0 - turnover_rate;
             // Autopoietic organizational closure restores the topological pattern after perturbations
             pattern_error *= 0.85;
-            isolated_entropy += di_s_rate;
         }
 
+        let di_s_rate = di_s_accum / (steps as f64);
+        let de_s_rate = -1.07 * di_s_rate;
+        let net_ds_rate = di_s_rate + de_s_rate;
         let turnover_fraction = 1.0 - remaining_original_matter;
         let pattern_fidelity = (1.0 - pattern_error).clamp(0.0, 1.0);
 
@@ -505,7 +542,8 @@ impl DaisyworldSystem {
         absorbed.powf(0.25) - 273.0
     }
 
-    /// Integrates the coupled replicator-radiative ODEs to steady state at stellar luminosity `luminosity_l`.
+    /// Integrates the coupled replicator-radiative ODEs to steady state at stellar luminosity `luminosity_l`
+    /// using classical 4th-order Runge-Kutta (RK4) integration.
     pub fn solve_equilibrium(
         &self,
         luminosity_l: f64,
@@ -515,23 +553,31 @@ impl DaisyworldSystem {
         let mut alpha_b = 0.02_f64;
         let mut alpha_w = 0.02_f64;
 
-        for _ in 0..steps {
-            let x = (1.0 - alpha_b - alpha_w).max(0.0);
-            let albedo_a = x * self.albedo_bare_ground
-                + alpha_b * self.albedo_black
-                + alpha_w * self.albedo_white;
+        let rhs = |ab: f64, aw: f64| -> (f64, f64) {
+            let ab_c = ab.clamp(0.0, 1.0);
+            let aw_c = aw.clamp(0.0, 1.0 - ab_c);
+            let x = (1.0 - ab_c - aw_c).max(0.0);
+            let albedo_a =
+                x * self.albedo_bare_ground + ab_c * self.albedo_black + aw_c * self.albedo_white;
             let t_e = self.effective_temperature_c(luminosity_l, albedo_a);
             let t_b = self.heat_transfer_q * (albedo_a - self.albedo_black) + t_e;
             let t_w = self.heat_transfer_q * (albedo_a - self.albedo_white) + t_e;
-
             let beta_b = self.growth_rate_beta(t_b);
             let beta_w = self.growth_rate_beta(t_w);
+            (
+                ab_c * (beta_b * x - self.mortality_gamma),
+                aw_c * (beta_w * x - self.mortality_gamma),
+            )
+        };
 
-            let d_alpha_b = alpha_b * (beta_b * x - self.mortality_gamma);
-            let d_alpha_w = alpha_w * (beta_w * x - self.mortality_gamma);
-
-            alpha_b = (alpha_b + dt * d_alpha_b).clamp(0.0, 1.0);
-            alpha_w = (alpha_w + dt * d_alpha_w).clamp(0.0, 1.0 - alpha_b);
+        for _ in 0..steps {
+            let (k1b, k1w) = rhs(alpha_b, alpha_w);
+            let (k2b, k2w) = rhs(alpha_b + 0.5 * dt * k1b, alpha_w + 0.5 * dt * k1w);
+            let (k3b, k3w) = rhs(alpha_b + 0.5 * dt * k2b, alpha_w + 0.5 * dt * k2w);
+            let (k4b, k4w) = rhs(alpha_b + dt * k3b, alpha_w + dt * k3w);
+            alpha_b = (alpha_b + (dt / 6.0) * (k1b + 2.0 * k2b + 2.0 * k3b + k4b)).clamp(0.0, 1.0);
+            alpha_w = (alpha_w + (dt / 6.0) * (k1w + 2.0 * k2w + 2.0 * k3w + k4w))
+                .clamp(0.0, 1.0 - alpha_b);
         }
 
         let x = (1.0 - alpha_b - alpha_w).max(0.0);

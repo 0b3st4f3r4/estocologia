@@ -60,6 +60,86 @@ pub fn hill_estimator(xs: &[f64], k: usize) -> f64 {
     }
 }
 
+/// Dekkers, Einmahl & de Haan (1989) moment estimator $\hat{\xi}_{\mathrm{DEdH}} \in \mathbb{R}$ for the extreme-value
+/// shape parameter $\xi = 1/\alpha$, valid across all three generalized extreme value domains
+/// ($\xi > 0$ Fréchet heavy-tailed, $\xi = 0$ Gumbel exponential-tailed, $\xi < 0$ Weibull bounded-tailed):
+/// $$\hat{\xi}_{\mathrm{DEdH}} = M_{k,n}^{(1)} + 1 - \frac{1}{2}\left(1 - \frac{\bigl(M_{k,n}^{(1)}\bigr)^2}{M_{k,n}^{(2)}}\right)^{-1}, \qquad M_{k,n}^{(r)} = \frac{1}{k}\sum_{i=1}^k \left(\ln \frac{X_{(n-i+1)}}{X_{(n-k)}}\right)^r$$
+pub fn dedh_moment_tail_index(xs: &[f64], k: usize) -> f64 {
+    let mut pos: Vec<f64> = xs
+        .iter()
+        .copied()
+        .filter(|&x| x.is_finite() && x > 0.0)
+        .collect();
+    pos.sort_by(|a, b| a.total_cmp(b));
+    let n = pos.len();
+    assert!(k >= 2 && k < n, "DEdH moment estimator requires 2 <= k < n");
+    let threshold = pos[n - k - 1].max(1e-15);
+    let mut m1 = 0.0;
+    let mut m2 = 0.0;
+    for &x in &pos[(n - k)..] {
+        let l = (x / threshold).ln();
+        m1 += l;
+        m2 += l * l;
+    }
+    m1 /= k as f64;
+    m2 /= k as f64;
+    let ratio = (m1 * m1) / m2.max(1e-15);
+    let denom = (1.0 - ratio).max(1e-12);
+    m1 + 1.0 - 0.5 / denom
+}
+
+/// Generalized Pareto Distribution (GPD) Peaks-Over-Threshold (POT) Pickands-Balkema-de Haan fit
+/// above threshold `threshold_u` via Hosking-Wallis (1987) Probability-Weighted Moments (PWM).
+/// Returns `(xi_gpd, beta_gpd, pot_expected_shortfall_99)`.
+pub fn gpd_pot_fit(xs: &[f64], threshold_u: f64) -> (f64, f64, f64) {
+    let mut pos: Vec<f64> = xs.iter().copied().filter(|&x| x.is_finite()).collect();
+    pos.sort_by(|a, b| a.total_cmp(b));
+    let n = pos.len();
+    let mut excesses: Vec<f64> = pos
+        .iter()
+        .copied()
+        .filter(|&x| x > threshold_u)
+        .map(|x| x - threshold_u)
+        .collect();
+    assert!(
+        excesses.len() >= 4,
+        "GPD POT fit requires at least 4 exceedances above threshold_u"
+    );
+    excesses.sort_by(|a, b| a.total_cmp(b));
+    let k = excesses.len() as f64;
+    let alpha_0: f64 = excesses.iter().sum::<f64>() / k;
+    let mut alpha_1 = 0.0;
+    for (idx, &y) in excesses.iter().enumerate() {
+        let w = 1.0 - ((idx as f64) + 0.35) / k;
+        alpha_1 += w * y;
+    }
+    alpha_1 /= k;
+    let denom = (alpha_0 - 2.0 * alpha_1).max(1e-12);
+    let xi = (2.0 - alpha_0 / denom).clamp(-0.49, 0.95);
+    let beta = ((2.0 * alpha_0 * alpha_1) / denom).max(1e-12);
+
+    // POT 99% VaR and Expected Shortfall ES_0.99 = (VaR_0.99 + beta - xi * u) / (1 - xi)
+    let p_tail = 0.01_f64;
+    let zeta_u = (k / (n as f64)).max(p_tail);
+    let var_99 = if xi.abs() > 1e-6 {
+        threshold_u + (beta / xi) * ((zeta_u / p_tail).powf(xi) - 1.0)
+    } else {
+        threshold_u + beta * (zeta_u / p_tail).ln()
+    };
+    let es_99 = (var_99 + beta - xi * threshold_u) / (1.0 - xi).max(0.05);
+    (xi, beta, es_99)
+}
+
+/// Empirical Expected Shortfall (Conditional Value-at-Risk, $\mathrm{ES}_{0.99} = \mathbb{E}[X \mid X \ge q_{0.99}]$).
+pub fn expected_shortfall_99(xs: &[f64]) -> f64 {
+    let mut clean: Vec<f64> = xs.iter().copied().filter(|&x| x.is_finite()).collect();
+    assert!(!clean.is_empty());
+    clean.sort_by(|a, b| a.total_cmp(b));
+    let q99 = quantile_sorted(&clean, 0.99);
+    let tail: Vec<f64> = clean.into_iter().filter(|&x| x >= q99).collect();
+    stochology_core::mean(&tail)
+}
+
 impl HillTailDiagnostic {
     /// Audits the tail behavior of `xs` using `k_opt` (or automatic Clauset-Shalizi-Newman
     /// Kolmogorov-Smirnov distance minimization over $k \in [\max(10, n/100), \min(n/5, 250)]$,
@@ -166,5 +246,11 @@ mod tests {
         assert!((diag_auto.alpha_hill - true_alpha).abs() < 0.20);
         assert!((40..=250).contains(&diag_auto.order_statistics_k));
         assert_eq!(hill_estimator(&[5.0; 20], 5), f64::INFINITY);
+
+        let xi_dedh = dedh_moment_tail_index(&samples, 200);
+        assert!((xi_dedh - (1.0 / true_alpha)).abs() < 0.20);
+        let (xi_gpd, beta_gpd, es_pot) = gpd_pot_fit(&samples, diag.threshold_x_nk);
+        assert!(xi_gpd > 0.2 && beta_gpd > 0.0 && es_pot > diag.quantile_99);
+        assert!(expected_shortfall_99(&samples) > diag.quantile_99);
     }
 }

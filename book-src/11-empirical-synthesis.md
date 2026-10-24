@@ -17,6 +17,47 @@ A methodology that works only on clean synthetic toy examples is an academic exe
 
 Every single byte of these 13 CSV files is cryptographically locked in `data/SHA256SUMS` and verified at runtime before any calculation begins. Let us walk through each of the six empirical case studies in detail.
 
+<figure class="stoch-figure">
+  <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="310" viewBox="0 0 1140 310" fill="none" role="img" aria-labelledby="title-fig-11-synthesis">
+  <title id="title-fig-11-synthesis">Synoptic Map of the 13 Real Empirical Datasets and 3 Canonical Cards Across 6 Domains (Lab 7)</title>
+  <defs>
+  <style>text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; } .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }</style>
+  </defs>
+  <rect x="1" y="1" width="1138" height="308" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+  <rect x="20" y="22" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="38" y="48" fill="var(--sky)" class="mono" font-size="11" font-weight="800">1. LABOR POLICY (2 CSVs)</text>
+  <text x="38" y="74" fill="var(--ink)" font-size="14.5" font-weight="800">nsw_experimental + cps_obs</text>
+  <text x="38" y="98" fill="var(--muted)" class="mono" font-size="11">Meng ρ_R,Y = +0.1334 → n_eff = 2,843</text>
+  <text x="38" y="120" fill="var(--muted)" class="mono" font-size="11">Manski [5463, 13835] · Lee [839, 2007]</text>
+  <rect x="394" y="22" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2"/>
+  <text x="412" y="48" fill="var(--violet)" class="mono" font-size="11" font-weight="800">2. BANKING QUEUES (1 CSV → card_02)</text>
+  <text x="412" y="74" fill="var(--ink)" font-size="14.5" font-weight="800">bank_calls.csv (n = 27,716)</text>
+  <text x="412" y="98" fill="var(--muted)" class="mono" font-size="11">Δ_J = +9.03e6 · DEFF(0.90) = 28.26</text>
+  <text x="412" y="120" fill="var(--muted)" class="mono" font-size="11">n_eff = 980.7 · p = 0.099 &gt; p* → protect</text>
+  <rect x="768" y="22" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="786" y="48" fill="var(--emerald)" class="mono" font-size="11" font-weight="800">3. FINANCIAL MARKETS (1 CSV)</text>
+  <text x="786" y="74" fill="var(--ink)" font-size="14.5" font-weight="800">djia_1885_2023.csv (37,930 d)</text>
+  <text x="786" y="98" fill="var(--muted)" class="mono" font-size="11">g_ens = 6.12% vs. g_time = 4.68%</text>
+  <text x="786" y="120" fill="var(--muted)" class="mono" font-size="11">Kurtosis = 17.8 · f_emp = 2.08 &lt; 2.12</text>
+  <rect x="20" y="166" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="38" y="192" fill="var(--amber)" class="mono" font-size="11" font-weight="800">4. EXTREME TAILS (2 CSVs)</text>
+  <text x="38" y="218" fill="var(--ink)" font-size="14.5" font-weight="800">danish_fire + vic_elec.csv</text>
+  <text x="38" y="242" fill="var(--muted)" class="mono" font-size="11">Fire α̂ = 1.6009 (Infinite Variance)</text>
+  <text x="38" y="264" fill="var(--muted)" class="mono" font-size="11">q99 = 26.04M · ES99 = 58.59M DKK</text>
+  <rect x="394" y="166" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="412" y="192" fill="var(--sky)" class="mono" font-size="11" font-weight="800">5. STORMS &amp; FAIRNESS (2 CSVs → card_01)</text>
+  <text x="412" y="218" fill="var(--ink)" font-size="14.5" font-weight="800">atlantic_storms + toronto_arrests</text>
+  <text x="412" y="242" fill="var(--muted)" class="mono" font-size="11">S* = [0] · CORP id_err = 1.53e-14</text>
+  <text x="412" y="264" fill="var(--muted)" class="mono" font-size="11">Chouldechova FPR_A/FPR_B = 5.13x</text>
+  <rect x="768" y="166" width="352" height="122" rx="11" fill="var(--elevated)" stroke="var(--rose)" stroke-width="2"/>
+  <text x="786" y="192" fill="var(--rose)" class="mono" font-size="11" font-weight="800">6. AVIATION DRIFT (5 CSVs → card_03)</text>
+  <text x="786" y="218" fill="var(--ink)" font-size="14.5" font-weight="800">nyc_flights 13/23 + H1 + houston</text>
+  <text x="786" y="242" fill="var(--muted)" class="mono" font-size="11">Lei-Candès ≥ 0.802 / 0.828 / 0.693</text>
+  <text x="786" y="264" fill="var(--muted)" class="mono" font-size="11">H1 Vault = OpenedApproved (BS=0.1783)</text>
+  </svg>
+  <figcaption><strong>Figure 11.1 — Synoptic Map of All 13 Real Empirical Datasets &amp; 3 Canonical Cards in Laboratory 7</strong></figcaption>
+</figure>
+
 ---
 
 ## Step 2 — Case-by-Case Empirical Walkthrough
@@ -117,3 +158,17 @@ cargo run --release --bin labs -- --real-data
 
 1. **(Cross-Domain Comparison — $n$ vs. $n\_{\mathrm{eff}}$)** Compare the nominal sample size $n$ and the effective sample size $n\_{\mathrm{eff}}$ across three datasets in Lab 7: `cps_observational.csv` ($n = 15\text{,}992 \to n\_{\mathrm{eff}} = 2\text{,}842.7$), `bank_calls.csv` ($n = 27\text{,}716 \to n\_{\mathrm{eff}} = 980.7$), and `nyc_flights_2013.csv` ($n = 138\text{,}375 \to n\_{\mathrm{eff}} = 1\text{,}364$). Explain which mechanism reduced $n$ in `cps_observational.csv` (Bridge $L\_1 \to L\_2$) versus which mechanism reduced $n$ in `bank_calls.csv` and `nyc_flights_2013.csv` ($\Phi\_2$).
 2. **(Comparison of Actions Across Cards)** Why does `card_01` (Atlantic hurricanes, $p = 0.09800$) conclude `do_not_protect`, whereas `card_03` (NYC flight holding, with the exact same event probability $p = 0.09800$!) concludes `protect`? What does this prove about separating probability estimation ($L\_2$) from cost-loss valuation ($L\_3$)?
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Cross-Domain Comparison ($n$ vs. $n\_{\mathrm{eff}}$):**
+   - In **`cps_observational.csv`**, $n = 15\text{,}992$ shrinks to $n\_{\mathrm{eff}} = 2\text{,}842.7$ due to **unadjusted selection bias ($\rho\_{R,Y} = +0.1334$)** on Bridge $L\_1 \to L\_2$ (Xiao-Li Meng's Fundamental Identity).
+   - In **`bank_calls.csv`** ($n = 27\text{,}716 \to n\_{\mathrm{eff}}(0.90) = 980.7$, $\mathrm{DEFF} = 28.26$) and **`nyc_flights_2013.csv`** ($n = 138\text{,}375 \to n\_{\mathrm{eff}} = 1\text{,}364$), the reduction is caused by **within-cluster tail dependence ($\rho\_I(p) > 0$, Invariant $\Phi\_2$)** across calendar days and synoptic weather waves (Moulton-Campbell design effect).
+2. **Comparison of Actions Across Cards (`card_01` vs. `card_03`):**
+   Both cards have the exact same calibrated event probability $p = 0.09800$ ($9.8\%$) in Layer $L\_2$. However, in Layer $L\_3$:
+   - For **`card_01`** (coastal evacuation), $C = USD 12\text{,}000, L = USD 125\text{,}000, \eta = 0.80 \implies p^{\ast} = \frac{12\text{,}000}{100\text{,}000} = 0.12000$ ($12.0\%$). Since $p = 0.09800 \le p^{\ast} = 0.12000$, the optimal action is **`do_not_protect`**.
+   - For **`card_03`** (holding connecting aircraft), $C = USD 720, L = USD 15\text{,}000, \eta = 0.80 \implies p^{\ast} = \frac{720}{12\text{,}000} = 0.06000$ ($6.0\%$). Since $p = 0.09800 > p^{\ast} = 0.06000$, the optimal action is **`protect`**.
+   This proves that **the exact same probability forecast in $L\_2$ rationally triggers opposite actions in $L\_3$ depending on the asymmetric cost-loss ratio $p^{\ast} = \frac{C}{\eta L}$.**
+
+</details>

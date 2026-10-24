@@ -503,17 +503,18 @@ main p:has(> img[src$=".svg"]) {
 }
 
 main img[src$="logo.svg"],
-.stoch-logo-figure {
+.stoch-logo-figure,
+.stoch-figure.stoch-logo-figure {
   display: block;
   inline-size: 100%;
   max-inline-size: 560px;
   block-size: auto;
   margin-block: 1.6rem 2.4rem;
-  padding: 1.4rem 1.8rem;
-  background-color: var(--surface-bg);
-  border: 1px solid var(--table-border-color);
-  border-radius: 14px;
-  box-shadow: var(--shadow-card);
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   box-sizing: border-box;
 }
 
@@ -906,7 +907,7 @@ blockquote {
 }
 
 @media (forced-colors: active) {
-  .stoch-figure,
+  .stoch-figure:not(.stoch-logo-figure),
   .stoch-matrix-card,
   .table-wrapper {
     border: 1px solid CanvasText;

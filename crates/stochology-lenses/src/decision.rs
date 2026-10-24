@@ -64,6 +64,61 @@ impl CostLossRule {
         };
         unit_evpi * volume_units.max(0.0)
     }
+
+    /// Computes Richardson's (2000) Relative Economic Value $V(p^*) \in (-\infty, 1]$ of a probabilistic
+    /// forecast series `forecasts_p` against binary outcomes `outcomes_y`:
+    /// $$V(p^*) = \frac{E_{\text{climatology}} - E_{\text{forecast}}}{E_{\text{climatology}} - E_{\text{perfect}}}$$
+    /// where $V = 1$ is a perfect oracle and $V = 0$ is naive climatological base-rate action.
+    pub fn relative_economic_value(&self, forecasts_p: &[f64], outcomes_y: &[f64]) -> f64 {
+        assert_eq!(forecasts_p.len(), outcomes_y.len());
+        assert!(!forecasts_p.is_empty());
+        let n = forecasts_p.len() as f64;
+        let pi_bar = outcomes_y.iter().sum::<f64>() / n;
+        let residual_loss = (1.0 - self.efficacy_eta) * self.event_loss_l;
+
+        // Expected expense per unit under perfect oracle: protect iff y_i == 1 (when C < eta * L)
+        let e_perfect = pi_bar * (self.protection_cost_c + residual_loss).min(self.event_loss_l);
+        // Expected expense per unit under climatology: protect always if pi_bar > p* else never
+        let e_clim = if pi_bar > self.critical_threshold_p_star {
+            self.protection_cost_c + pi_bar * residual_loss
+        } else {
+            pi_bar * self.event_loss_l
+        };
+
+        let mut e_forecast = 0.0;
+        for (&p, &y) in forecasts_p.iter().zip(outcomes_y.iter()) {
+            if p > self.critical_threshold_p_star {
+                e_forecast += self.protection_cost_c + y * residual_loss;
+            } else {
+                e_forecast += y * self.event_loss_l;
+            }
+        }
+        e_forecast /= n;
+
+        let denom = e_clim - e_perfect;
+        if denom.abs() < 1e-12 {
+            0.0
+        } else {
+            (e_clim - e_forecast) / denom
+        }
+    }
+}
+
+/// Strictly proper Logarithmic (Ignorance) Score with Cromwell floor $\varepsilon_{\text{floor}} \in (0, 0.5)$:
+/// $$\mathrm{LogS}(p, y) = -\frac{1}{n}\sum_{i=1}^n \Bigl[y_i \ln \tilde{p}_i + (1 - y_i)\ln(1 - \tilde{p}_i)\Bigr], \qquad \tilde{p}_i = \mathrm{clamp}(p_i, \varepsilon_{\text{floor}}, 1 - \varepsilon_{\text{floor}})$$
+pub fn logarithmic_score(forecasts_p: &[f64], outcomes_y: &[f64], epsilon_floor: f64) -> f64 {
+    assert_eq!(forecasts_p.len(), outcomes_y.len());
+    assert!(!forecasts_p.is_empty());
+    let n = forecasts_p.len() as f64;
+    forecasts_p
+        .iter()
+        .zip(outcomes_y.iter())
+        .map(|(&p, &y)| {
+            let pc = stochology_core::apply_cromwell_floor(p, epsilon_floor);
+            -(y * pc.ln() + (1.0 - y) * (1.0 - pc).ln())
+        })
+        .sum::<f64>()
+        / n
 }
 
 /// Strictly proper Quantile Score (pinball loss) at level $\alpha \in (0, 1)$ (§1.3.5):
@@ -335,5 +390,11 @@ mod tests {
                 < 1e-12
         );
         assert!(bench.shifted_threshold_excess_regret_per_unit > 15.0);
+
+        let rule_b = CostLossRule::new(70.0, 100.0, 1.0);
+        let rev_cal = rule_b.relative_economic_value(&[0.2, 0.8, 0.1, 0.9], &[0.0, 1.0, 0.0, 1.0]);
+        assert!((rev_cal - 1.0).abs() < 1e-12);
+        let logs = logarithmic_score(&[0.1, 0.9], &[0.0, 1.0], 0.001);
+        assert!(logs > 0.0 && logs < 0.2);
     }
 }

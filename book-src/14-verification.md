@@ -39,6 +39,49 @@ scripts/verify.sh
 
 ## 14.3 The Eight Epistemological Gates (`G1` to `G8`)
 
+<figure class="stoch-figure">
+  <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="260" viewBox="0 0 1140 260" fill="none" role="img" aria-labelledby="title-fig-14-gates">
+  <title id="title-fig-14-gates">The Eight Epistemological Gates (G1 to G8) and Ten Negative Defect Proofs</title>
+  <defs>
+  <style>text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; } .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }</style>
+  </defs>
+  <rect x="1" y="1" width="1138" height="258" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+  <rect x="18" y="20" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="34" y="46" fill="var(--sky)" class="mono" font-size="11.5" font-weight="800">G1 · SIMULABILITY (Φ₁)</text>
+  <text x="34" y="70" fill="var(--ink)" font-size="13.5" font-weight="750">seed=2026 &amp; 13 CSV SHA-256</text>
+  <text x="34" y="94" fill="var(--muted)" class="mono" font-size="11">SplitMix64 + Null Model H₀</text>
+  <rect x="298" y="20" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2"/>
+  <text x="314" y="46" fill="var(--violet)" class="mono" font-size="11.5" font-weight="800">G2 · INDEPENDENT UNIT (Φ₂)</text>
+  <text x="314" y="70" fill="var(--ink)" font-size="13.5" font-weight="750">Moulton m̃ &amp; Exceedance n_eff</text>
+  <text x="314" y="94" fill="var(--rose)" class="mono" font-size="11">--defect moulton → exit 1</text>
+  <rect x="578" y="20" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="594" y="46" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="800">G3 · SEVERE TEST &amp; SEAL (Φ₃)</text>
+  <text x="594" y="70" fill="var(--ink)" font-size="13.5" font-weight="750">Rubin · Meng · Manski · Lee</text>
+  <text x="594" y="94" fill="var(--muted)" class="mono" font-size="11">64-Hex SHA-256 Pre-Reg Seal</text>
+  <rect x="858" y="20" width="264" height="100" rx="10" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="874" y="46" fill="var(--amber)" class="mono" font-size="11.5" font-weight="800">G4 · FAIRNESS &amp; EXIT (Φ₄)</text>
+  <text x="874" y="70" fill="var(--ink)" font-size="13.5" font-weight="750">p* = C/(ηL) · Chouldechova</text>
+  <text x="874" y="94" fill="var(--rose)" class="mono" font-size="11">--defect chouldechova → exit 1</text>
+  <rect x="18" y="138" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--rose)" stroke-width="2"/>
+  <text x="34" y="164" fill="var(--rose)" class="mono" font-size="11.5" font-weight="800">G5 · RESOLUTION (Φ₅)</text>
+  <text x="34" y="188" fill="var(--ink)" font-size="13.5" font-weight="750">R_data ≥ R_decision Match</text>
+  <text x="34" y="212" fill="var(--rose)" class="mono" font-size="11">--defect phi5 → exit 1</text>
+  <rect x="298" y="138" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="314" y="164" fill="var(--sky)" class="mono" font-size="11.5" font-weight="800">G6 · PROHIBITIONS 1–4 &amp; WALD</text>
+  <text x="314" y="188" fill="var(--ink)" font-size="13.5" font-weight="750">Cromwell · RRM · Wald · CORP</text>
+  <text x="314" y="212" fill="var(--rose)" class="mono" font-size="10.5">cromwell/performativity/sniedovich</text>
+  <rect x="578" y="138" width="262" height="100" rx="10" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2"/>
+  <text x="594" y="164" fill="var(--violet)" class="mono" font-size="11.5" font-weight="800">G7 · CLOCK, VAULT &amp; DRIFT</text>
+  <text x="594" y="188" fill="var(--ink)" font-size="13.5" font-weight="750">Canary · HMAC Vault · Breaker</text>
+  <text x="594" y="212" fill="var(--rose)" class="mono" font-size="10.5">clock / vault / concept_drift</text>
+  <rect x="858" y="138" width="264" height="100" rx="10" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="874" y="164" fill="var(--emerald)" class="mono" font-size="11.5" font-weight="800">G8 · MACHINE &amp; AUTHENTIC FORM</text>
+  <text x="874" y="188" fill="var(--ink)" font-size="13.5" font-weight="750">P1–P5 · δ(x)+S* · 6 IDs · 6 Axes</text>
+  <text x="874" y="212" fill="var(--rose)" class="mono" font-size="11">--defect machine → exit 1</text>
+  </svg>
+  <figcaption><strong>Figure 14.1 — The Eight Epistemological Gates (G1–G8) and Ten Negative Defect Proofs</strong></figcaption>
+</figure>
+
 When you run `cargo run --release --bin gates`, the binary executes eight sequential gates:
 
 | Gate | Name | What It Audits at Runtime |

@@ -1,5 +1,3 @@
-# Preface: The Invisible Target and the Foundations of Stochology
-
 <figure class="stoch-figure stoch-logo-figure">
   <svg xmlns="http://www.w3.org/2000/svg" width="660" height="132" viewBox="0 0 660 132" fill="none" role="img" aria-labelledby="stochology-logo-title">
   <title id="stochology-logo-title">Stochology — Auditable Epistemological Machine (Protocol)</title>
@@ -19,19 +17,7 @@
   </radialGradient>
   </defs>
   <g>
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="var(--logo-frame)" stroke-width="2"/>
-  <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#logo-ring)" stroke-opacity="0.38" stroke-width="1.2"/>
   <circle cx="64" cy="66" r="46" fill="url(#logo-glow)"/>
-  <g stroke="var(--logo-ticks)" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
-  <line x1="64" y1="13" x2="64" y2="17"/>
-  <line x1="101" y1="29" x2="98" y2="32"/>
-  <line x1="115" y1="66" x2="111" y2="66"/>
-  <line x1="99" y1="101" x2="96" y2="98"/>
-  <line x1="64" y1="115" x2="64" y2="111"/>
-  <line x1="29" y1="101" x2="32" y2="98"/>
-  <line x1="13" y1="66" x2="17" y2="66"/>
-  <line x1="27" y1="29" x2="30" y2="32"/>
-  </g>
   <path d="M 23.43 76.87 A 42 42 0 0 1 52.99 25.47" stroke="#34d399" stroke-width="3.2" stroke-linecap="round"/>
   <path d="M 49.02 30.60 L 53.84 25.25 L 46.80 23.75" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M 74.87 25.43 A 42 42 0 0 1 104.61 76.73" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>
@@ -58,6 +44,8 @@
   </g>
 </svg>
 </figure>
+
+# Preface: The Invisible Target and the Foundations of Stochology
 
 > **Learning Objectives.** By the end of this opening chapter, you will be able to explain what Stochology studies and where its name originates; trace the three intellectual traditions it unifies; distinguish progressive scientific repairs from degenerative excuses; translate confusing percentages into natural-frequency trees and Bayesian odds; and explain why reproducible pseudo-random seeds (`seed = 2026`) are the floor—but not the ceiling—of scientific verification.
 

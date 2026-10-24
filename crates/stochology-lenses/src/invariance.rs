@@ -385,6 +385,63 @@ pub fn hidden_confounding_threshold_lambda_star(
     }
 }
 
+/// Formal Chow (1960) structural stability $F$-statistic across environments $e \in \mathcal{E}$ for predictor subset `subset`:
+/// $$F_{\text{Chow}}(S) = \frac{(\mathrm{RSS}_{\text{pooled}} - \sum_{e=1}^{|\mathcal{E}|} \mathrm{RSS}_e) / \bigl((|\mathcal{E}| - 1) d\bigr)}{\bigl(\sum_{e=1}^{|\mathcal{E}|} \mathrm{RSS}_e\bigr) / (N - |\mathcal{E}| d)}$$
+/// where $d = |S| + 1$. Near-$1.0$ (or small) values indicate structural invariance across environments; large values reject invariance.
+pub fn chow_invariance_f_stat(environments: &[CausalEnvironment], subset: &[usize]) -> f64 {
+    assert!(environments.len() >= 2);
+    let mut pooled_x = Vec::new();
+    let mut pooled_y = Vec::new();
+    for env in environments {
+        for (row, &yi) in env.x.iter().zip(env.y.iter()) {
+            pooled_x.push(subset.iter().map(|&idx| row[idx]).collect::<Vec<f64>>());
+            pooled_y.push(yi);
+        }
+    }
+    let coeffs_pool = fit_ols_multi(&pooled_x, &pooled_y);
+    let rss_pool: f64 = pooled_x
+        .iter()
+        .zip(pooled_y.iter())
+        .map(|(r, &y)| (y - eval_basis_model(&coeffs_pool, r)).powi(2))
+        .sum();
+
+    let mut rss_env_sum = 0.0;
+    for env in environments {
+        let env_x: Vec<Vec<f64>> = env
+            .x
+            .iter()
+            .map(|r| subset.iter().map(|&idx| r[idx]).collect())
+            .collect();
+        let coeffs_e = fit_ols_multi(&env_x, &env.y);
+        rss_env_sum += env_x
+            .iter()
+            .zip(env.y.iter())
+            .map(|(r, &y)| (y - eval_basis_model(&coeffs_e, r)).powi(2))
+            .sum::<f64>();
+    }
+    let k_env = environments.len() as f64;
+    let d = (subset.len() + 1) as f64;
+    let n_tot = pooled_y.len() as f64;
+    let df1 = ((k_env - 1.0) * d).max(1.0);
+    let df2 = (n_tot - k_env * d).max(1.0);
+    (((rss_pool - rss_env_sum).max(0.0) / df1) / (rss_env_sum.max(1e-12) / df2)).max(0.0)
+}
+
+/// Cinelli & Hazlett (2020, *JRSS-B*) Omitted Variable Bias Robustness Value $RV_q \in [0, 1)$:
+/// Computes the minimum partial $R^2$ that an unobserved confounder $U$ would need to share simultaneously
+/// with both the treatment/cause $X$ and the outcome $Y$ to reduce the estimated effect by a fraction $q \in (0, 1]$:
+/// $$RV_q = \frac{1}{2}\left(\sqrt{f_q^4 + 4 f_q^2} - f_q^2\right), \qquad f_q = q \cdot \frac{|t|}{\sqrt{\mathrm{df}}}$$
+pub fn cinelli_hazlett_robustness_value(
+    t_statistic: f64,
+    degrees_of_freedom: usize,
+    q_fraction: f64,
+) -> f64 {
+    assert!(degrees_of_freedom >= 1 && q_fraction > 0.0 && q_fraction <= 1.0);
+    let f_q = q_fraction * t_statistic.abs() / (degrees_of_freedom as f64).sqrt();
+    let f2 = f_q * f_q;
+    0.5 * ((f2 * f2 + 4.0 * f2).sqrt() - f2)
+}
+
 /// Output of Nonlinear Invariant Causal Prediction and Nonlinear NILE/IRM over representation $\Phi(X)$.
 #[derive(Debug, Clone, PartialEq)]
 pub struct NonlinearIcpNileResult {
@@ -648,6 +705,12 @@ mod tests {
         let res = run_icp(&envs, 0.12);
         assert_eq!(res.accepted_causal_predictors, vec![0]);
         assert!(res.env_ols_invariance_penalties[0] < res.env_ols_invariance_penalties[1] * 0.05);
+
+        let f_true = chow_invariance_f_stat(&envs, &[0]);
+        let f_spurious = chow_invariance_f_stat(&envs, &[1]);
+        assert!(f_true < 3.0 && f_spurious > 50.0);
+        let rv = cinelli_hazlett_robustness_value(12.0, 890, 1.0);
+        assert!(rv > 0.25 && rv < 1.0);
     }
 
     #[test]

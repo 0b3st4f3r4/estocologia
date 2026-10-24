@@ -30,24 +30,8 @@
     </style>
   </defs>
 
-  <!-- Outer Epistemological Vault Squircle -->
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="var(--fav-frame)" stroke-width="2"/>
-  <rect x="9" y="9" width="110" height="110" rx="23" stroke="url(#ring-grad)" stroke-opacity="0.38" stroke-width="1.2"/>
-
   <!-- Subtle Radial Field -->
   <circle cx="64" cy="66" r="46" fill="url(#core-glow)"/>
-
-  <!-- 8 Gate Calibration Ticks on Outer Compass Ring (G1-G8) -->
-  <g stroke="#64748b" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
-    <line x1="64" y1="13" x2="64" y2="17"/>
-    <line x1="101" y1="29" x2="98" y2="32"/>
-    <line x1="115" y1="66" x2="111" y2="66"/>
-    <line x1="99" y1="101" x2="96" y2="98"/>
-    <line x1="64" y1="115" x2="64" y2="111"/>
-    <line x1="29" y1="101" x2="32" y2="98"/>
-    <line x1="13" y1="66" x2="17" y2="66"/>
-    <line x1="27" y1="29" x2="30" y2="32"/>
-  </g>
 
   <!-- Directed Cyclic Bridges (Exact C=(64,66), R=42, 120-deg symmetric tangent-aligned arrowheads) -->
   <!-- Bridge L1 (bottom-left) -> L2 (top) -->

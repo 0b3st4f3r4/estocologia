@@ -124,6 +124,53 @@ pub fn simulate_absorbing_trajectories(
     (ens_mean, traj_med, p_ruin)
 }
 
+/// Solves for the exact empirical Kelly optimal leverage fraction $f_{\text{Kelly}}^\star = \arg\max_{f \ge 0} \frac{1}{n}\sum_{t=1}^n \ln(1 + f R_t)$
+/// on a continuous return series `returns` via damped Newton-Raphson optimization, and compares it against
+/// the continuous-time Gaussian Merton approximation $f_{\text{Merton}} = \hat{\mu} / \hat{\sigma}^2$.
+/// Returns `(f_kelly_empirical, max_time_log_growth, f_gaussian_merton)`.
+pub fn empirical_kelly_optimal_fraction(returns: &[f64]) -> (f64, f64, f64) {
+    assert!(
+        returns.len() >= 2,
+        "requires at least 2 return observations"
+    );
+    let n = returns.len() as f64;
+    let mu = stochology_core::mean(returns);
+    let var = stochology_core::sample_variance(returns).max(1e-12);
+    let f_merton = (mu / var).max(0.0);
+    if mu <= 0.0 {
+        return (0.0, 0.0, 0.0);
+    }
+
+    let min_r = returns.iter().copied().fold(0.0_f64, f64::min);
+    let f_max = if min_r < -1e-9 { 0.98 / (-min_r) } else { 10.0 };
+
+    let mut f = f_merton.min(0.8 * f_max);
+    for _ in 0..50 {
+        let mut g1 = 0.0;
+        let mut g2 = 0.0;
+        for &r in returns {
+            let denom = (1.0 + f * r).max(1e-9);
+            let ratio = r / denom;
+            g1 += ratio;
+            g2 -= ratio * ratio;
+        }
+        g1 /= n;
+        g2 /= n;
+        if g1.abs() < 1e-12 || g2.abs() < 1e-15 {
+            break;
+        }
+        let step = g1 / (-g2);
+        f = (f + step).clamp(0.0, f_max);
+    }
+
+    let g_opt: f64 = returns
+        .iter()
+        .map(|&r| (1.0 + f * r).max(1e-12).ln())
+        .sum::<f64>()
+        / n;
+    (f, g_opt, f_merton)
+}
+
 /// Mixing-Time Audit for Langevin / MCMC sampling under Heavy-Tailed Posterior Profiles (§1.3.2):
 /// $$d_{\mathrm{TV}}(\mu_t, \pi) \le \sqrt{\frac{1}{2} D_{\mathrm{KL}}(\mu_0 \| \pi)\, \eta_{\mathrm{KL}}^t} + H_R$$
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -216,5 +263,9 @@ mod tests {
         assert!(heavier_tail.mixing_steps > fast.mixing_steps);
         assert!(slow.mixing_steps > fast.mixing_steps * 5);
         assert_eq!(unreachable.mixing_steps, usize::MAX);
+
+        let returns = [0.08, 0.07, 0.06, 0.09, -0.32, 0.07, 0.08, 0.06];
+        let (f_emp, g_emp, f_merton) = empirical_kelly_optimal_fraction(&returns);
+        assert!(f_emp > 0.0 && f_emp < f_merton && g_emp > 0.0);
     }
 }

@@ -137,6 +137,15 @@ impl ExceedanceDesignEffect {
         let sizes = vec![50; 10];
         Self::from_cluster_sizes(&sizes, 0.90, 0.098_2)
     }
+
+    /// Profiles Moulton-Campbell exceedance design effect $\mathrm{DEFF}_{\text{exceedance}}(p)$ and $n_{\mathrm{eff}}(p)$
+    /// across a grid of quantile levels $p \in \text{quantile\_levels}$ (e.g. $[0.50, 0.90, 0.95, 0.99]$).
+    pub fn profile_across_quantiles(clusters: &[Vec<f64>], quantile_levels: &[f64]) -> Vec<Self> {
+        quantile_levels
+            .iter()
+            .map(|&p| Self::from_clustered_observations(clusters, p))
+            .collect()
+    }
 }
 
 /// Operational Weighting Gap and Variance Inflation Factor (Invariant $\Phi_2$ — §2.2):
@@ -322,6 +331,27 @@ impl ChouldechovaAudit {
             fpr_ratio_under_equal_ppv_and_fnr: odds_a / odds_b.max(1e-15),
             simultaneous_equality_impossible: (p_a - p_b).abs() > 1e-6,
         }
+    }
+
+    /// Kleinberg, Mullainathan & Raghavan (KMR 2017) continuous risk-score impossibility identity:
+    /// For any calibrated risk score $S \in [0, 1]$ ($\mathbb{E}[Y \mid S = s, G = g] = s$), the total Score Variance
+    /// satisfies $\mathrm{Var}(S \mid G = g) = \mu_g(1 - \mu_g)\big(1 - \text{BrierRatio}_g\big)$.
+    /// If a calibrated risk score also satisfies Balance for the Negative Class ($\mathbb{E}[S \mid Y=0, A] = \mathbb{E}[S \mid Y=0, B]$)
+    /// and Balance for the Positive Class ($\mathbb{E}[S \mid Y=1, A] = \mathbb{E}[S \mid Y=1, B]$), then either $\mu_A = \mu_B$
+    /// or the classifier is deterministic ($\mathrm{Var}(S) = \mu(1 - \mu)$).
+    /// Returns `(expected_score_neg_gap, expected_score_pos_gap, calibration_variance_gap)`.
+    pub fn kmr_continuous_impossibility_gap(&self) -> (f64, f64, f64) {
+        let neg_score_a = self.fpr_a * self.ppv_a;
+        let neg_score_b = self.fpr_b * self.ppv_b;
+        let pos_score_a = (1.0 - self.fnr_a) * self.ppv_a;
+        let pos_score_b = (1.0 - self.fnr_b) * self.ppv_b;
+        let base_var_a = self.prevalence_a * (1.0 - self.prevalence_a);
+        let base_var_b = self.prevalence_b * (1.0 - self.prevalence_b);
+        (
+            (neg_score_a - neg_score_b).abs(),
+            (pos_score_a - pos_score_b).abs(),
+            (base_var_a - base_var_b).abs(),
+        )
     }
 }
 

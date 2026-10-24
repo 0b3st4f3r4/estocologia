@@ -117,7 +117,7 @@ To prevent adaptive overfitting on holdout data, `TemporalVault` wraps out-of-ti
   <figcaption><strong>Figure 10.1 — State Machine of the Single-Opening Temporal Vault</strong></figcaption>
 </figure>
 
-1. **Cryptographic Pre-Registration Seal:** A vault can be constructed only with a valid 64-character lowercase hexadecimal SHA-256 hash sealing the model weights, feature pipeline, and acceptance threshold *before* the vault is touched.
+1. **Cryptographic Pre-Registration Seal and Keyed `HMAC-SHA256` Authentication:** A vault can be constructed only with a valid 64-character lowercase hexadecimal SHA-256 hash sealing the model weights, feature pipeline, and acceptance threshold *before* the vault is touched, paired with an **RFC 2104 Keyed `HMAC-SHA256` authentication tag** (`hmac_sha256_hex` in `crates/stochology-core/src/sha256.rs`). On `open_once()`, `TemporalVault` recomputes the SHA-256 digest of the stored outcomes and pre-registration ID, immediately returning `Err(VaultError::SealTampered)` if a single bit was mutated after sealing.
 2. **Immutable Single-Opening Lock (`opened_count: 0 -> 1`):** Calling `open_once()` increments `opened_count` from `0` to `1`. Any subsequent attempt to call `open_once()` on the same vault is immediately blocked (`--defect vault`).
 3. **Automatic Epistemological Downgrade on Failure:** If the model's out-of-time Brier score or calibration error violates the pre-registered threshold upon opening, the study is **automatically and permanently downgraded** to `ExploratoryHypothesisGenerating`. The team may use what they learned to formulate a *new* hypothesis, but that new hypothesis must be tested on a **brand-new, untouched future vault**!
 
@@ -168,6 +168,10 @@ In `fit_covariate_drift_extra_wcp` (`crates/stochology-governance/src/drift.rs`)
 3. **Lei & Candès (2021) Finite-Sample Coverage Floor:** Even when the density ratio $\hat{w}(x)$ is estimated imperfectly, Lei and Candès proved that actual target coverage under $Q$ satisfies the exact lower bound:
    $$P\_{Q}\bigl(Y\_{n+1} \in \widehat{C}(X\_{n+1})\bigr) \ge 1 - \alpha - d\_{\mathrm{TV}}(P\_X, Q\_X)$$
    where $d\_{\mathrm{TV}}(P\_X, Q\_X) = \frac{1}{2}\int |dP\_X - dQ\_X|$ is the Total Variation distance between source and target covariates.
+4. **Gibbs & Candès (2021) Online Adaptive Conformal Inference (`AdaptiveConformalInference`):** What if the operational data stream is completely non-exchangeable—undergoing continuous, unmodeled time-series regime shifts where no static density ratio $w(x)$ suffices? In `AdaptiveConformalInference::evaluate_stream`, the effective miscoverage quantile level $\alpha\_t$ is updated online after each observed nonconformity score $S\_t$ via step size $\gamma > 0$:
+   $$\alpha\_{t+1} = \mathrm{clamp}\Bigl(\alpha\_t + \gamma\bigl(\alpha - \mathrm{err}\_t\bigr),\ 0.001,\ 0.999\Bigr), \qquad \mathrm{err}\_t = \mathbb{I}\bigl\lbrace S\_t > \hat{Q}\_{1-\alpha\_t}(\mathcal{C}\_{\text{cal}})\bigr\rbrace$$
+   By a telescoping-sum identity, **Isaac Gibbs and Emmanuel Candès (2021)** proved that long-run empirical miscoverage converges to $\alpha$ for *any* arbitrary sequence of observations without exchangeability:
+   $$\left|\frac{1}{T}\sum\_{t=1}^T \mathrm{err}\_t - \alpha\right| \le \frac{1}{\gamma T}$$
 
 ---
 
@@ -201,13 +205,13 @@ cargo run --release --bin labs -- --governance
 ~~~text
 === LAB 6: PRODUCTION GOVERNANCE: BITEMPORAL CLOCK, VAULT, AND 4 DRIFT REGIMES ===
   [Bitemporal Clock + Canary] enabled: MI_canary=0.0000, alarm=false | disabled (mutation): MI_canary=0.6931, alarm=true
-  [Single-Opening Temporal Vault] sha256_seal=b451a7f0..8524795a, Brier=0.0044, state=OpenedApproved
-  [Covariate Drift: NYC Flights 2013->2023] beta_tilt=-0.1562, Z_P=0.9946, ExTRA_WCP_T_threshold=0.8178, Lei_Candes_bound >= 0.802
-  [Label Shift 4 Estimators (fit on 2013, TPR=0.620, FPR=0.249)] BBSE=0.0341 (sigma_min=0.094), MLLS/SLD=0.1161, DFM=0.0717 (Delta_min=0.6), OTTER=0.0700 (kappa=2.73) | Concept Drift Breaker=ConceptDriftCircuitBreaker (tripped=true)
+  [Single-Opening Temporal Vault] sha256_seal=b451a7f0..8524795a, HMAC_tag=36cb9aff..ab71228a, Brier=0.0044, state=OpenedApproved
+  [Covariate Drift: NYC Flights 2013->2023] beta_tilt=-0.1562, Z_P=0.9946, ExTRA_WCP_T_threshold=0.8178, Lei_Candes_bound >= 0.802 | Online_ACI_cov=0.891 (vs static=0.882)
+  [Label Shift 4 Estimators (fit on 2013, TPR=0.620, FPR=0.249)] BBSE=0.0341 (sigma_min=0.094), MLLS/SLD=0.1161, DFM=0.0717 (Delta_min=0.6), OTTER=0.0691 (kappa=2.73) | Concept Drift Breaker=ConceptDriftCircuitBreaker (tripped=true)
 ~~~
 
 And in Laboratory 7 (`labs --real-data`), the out-of-time H1 flight vaults (`nyc_flights_2013_h1.csv` $\to$ `nyc_flights_2023_h1.csv`) and the out-of-domain Houston reserve (`houston_flights_2011.csv`) verify:
-- NYC $2013 \to 2023$ Lei & Candès bound $\ge 0.802$;
+- NYC $2013 \to 2023$ Lei & Candès bound $\ge 0.802$ (and online Gibbs-Candès ACI tracks $89.1\%$ target $90\%$ coverage vs. $88.2\%$ static);
 - H1 out-of-time reserve $2013 \to 2023$ Lei & Candès bound $\ge 0.828$;
 - NYC $\to$ Houston out-of-domain reserve Lei & Candès bound $\ge 0.693$;
 - H1 Temporal Vault returns `OpenedApproved` ($\mathrm{BS} = 0.1783$).
@@ -218,6 +222,21 @@ And in Laboratory 7 (`labs --real-data`), the out-of-time H1 flight vaults (`nyc
 2. **(Calculation — BBSE Label Shift)** Suppose a binary classifier trained in 2023 has true positive rate $\mathrm{TPR} = P(\hat{Y}=1 \mid Y=1) = 0.80$ and false positive rate $\mathrm{FPR} = P(\hat{Y}=1 \mid Y=0) = 0.10$. In 2026, without any new ground-truth labels, you observe that the classifier predicts $\hat{Y} = 1$ on $\mu\_1 = Q(\hat{Y}=1) = 0.31$ ($31\%$) of incoming cases. Using the total probability identity $\mu\_1 = \mathrm{TPR}\cdot q\_Y + \mathrm{FPR}\cdot (1 - q\_Y)$, solve for the new target prevalence $\hat{q}\_Y$.
 3. **(Calculation — Lei & Candès Coverage Floor)** If you construct a nominal $90\%$ conformal prediction interval ($\alpha = 0.10$) and the Total Variation distance between source and target covariate distributions is $d\_{\mathrm{TV}}(P\_X, Q\_X) = 0.072$, what is the guaranteed finite-sample coverage floor $1 - \alpha - d\_{\mathrm{TV}}$?
 4. **(Laboratory — Governance Defect Proofs)** Run `cargo run --release --bin gates -- --defect clock`, `--defect vault`, and `--defect concept_drift` and verify that all three exit with code `1`.
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Bitemporal Asymmetry:**
+   On `current_date` ($\tau$), a chargeback on a transaction that occurred $10$ days ago ($t\_{\text{ev}} = \tau - 10$) but is disputed $35$ days in the future ($t\_{\text{disp}} = \tau + 35$) was not known at time $\tau$. Filtering only by `transaction_date <= current_date` ($t\_{\text{ev}} \le \tau$) leaks future disputes. The valid bitemporal query requires **both** $t\_{\text{ev}} \le \tau$ and **`chargeback_reported_date <= current_date` ($t\_{\text{disp}} \le \tau$)**.
+2. **BBSE Label Shift Calculation:**
+   $$\mu\_1 = \mathrm{TPR}\cdot \hat{q}\_Y + \mathrm{FPR}\cdot(1 - \hat{q}\_Y) \implies 0.31 = 0.80\hat{q}\_Y + 0.10(1 - \hat{q}\_Y) = 0.10 + 0.70\hat{q}\_Y$$
+   $$\implies \hat{q}\_Y = \frac{0.31 - 0.10}{0.80 - 0.10} = \frac{0.21}{0.70} = 0.300\ (30.0\%)$$
+3. **Lei & Candès Coverage Floor:**
+   $$1 - \alpha - d\_{\mathrm{TV}}(P\_X, Q\_X) = 1.0 - 0.10 - 0.072 = 0.828\ (82.8\%)$$
+4. **Governance Defect Proofs:**
+   Running `gates -- --defect clock`, `--defect vault`, and `--defect concept_drift` triggers `[G7 BLOCKED]` in each case and exits with code `1`.
+
+</details>
 
 ### Chapter Summary
 

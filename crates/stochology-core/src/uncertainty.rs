@@ -161,6 +161,151 @@ impl KennedyOHaganDiscrepancy {
             .collect();
         Self::calibrate(&x_obs, &y_obs, theta_true, 2.4, 0.45, 0.005, &x_ext, &y_ext)
     }
+
+    /// Evaluates the exact profile Gaussian Process log-marginal likelihood (Rasmussen & Williams 2006)
+    /// via Cholesky decomposition $\Sigma = L L^\top$:
+    /// $$\ln p(y \mid x, \hat{\theta}_{\mathrm{GLS}}, \ell, \sigma_\delta, \sigma_\varepsilon) = -\frac{1}{2} r^\top \Sigma^{-1} r - \sum_{i=1}^n \ln L_{ii} - \frac{n}{2}\ln(2\pi)$$
+    pub fn log_marginal_likelihood(
+        x_obs: &[f64],
+        y_obs: &[f64],
+        length_scale: f64,
+        sigma_delta: f64,
+        sigma_noise: f64,
+    ) -> f64 {
+        assert_eq!(x_obs.len(), y_obs.len());
+        assert!(!x_obs.is_empty());
+        let ell2 = (length_scale * length_scale).max(1e-12);
+        let n = x_obs.len();
+        let mut c_mat = vec![vec![0.0; n]; n];
+        for i in 0..n {
+            for j in 0..n {
+                c_mat[i][j] = anchored_se_kernel(x_obs[i], x_obs[j], sigma_delta, ell2)
+                    + if i == j {
+                        (sigma_noise * sigma_noise).max(1e-12)
+                    } else {
+                        0.0
+                    };
+            }
+        }
+        let chol = cholesky_decompose(&c_mat);
+        let sigma_inv_x = cholesky_solve(&chol, x_obs);
+        let sigma_inv_y = cholesky_solve(&chol, y_obs);
+        let num_koh: f64 = x_obs
+            .iter()
+            .zip(sigma_inv_y.iter())
+            .map(|(&x, &sy)| x * sy)
+            .sum();
+        let den_koh: f64 = x_obs
+            .iter()
+            .zip(sigma_inv_x.iter())
+            .map(|(&x, &sx)| x * sx)
+            .sum();
+        let theta_koh = num_koh / den_koh.max(1e-12);
+        let residuals: Vec<f64> = x_obs
+            .iter()
+            .zip(y_obs.iter())
+            .map(|(&x, &y)| y - theta_koh * x)
+            .collect();
+        let alpha = cholesky_solve(&chol, &residuals);
+        let quad: f64 = residuals
+            .iter()
+            .zip(alpha.iter())
+            .map(|(&r, &a)| r * a)
+            .sum();
+        let log_det = cholesky_log_det(&chol);
+        -0.5 * quad - 0.5 * log_det - 0.5 * (n as f64) * std::f64::consts::TAU.ln()
+    }
+
+    /// Empirical Bayes (Type-II Maximum Likelihood) calibration of $(\ell, \sigma_\delta)$ over a candidate grid,
+    /// returning `(best_calibration, optimal_length_scale, optimal_sigma_delta, max_log_marginal_likelihood)`.
+    pub fn calibrate_empirical_bayes(
+        x_obs: &[f64],
+        y_obs: &[f64],
+        theta_true: f64,
+        sigma_noise: f64,
+        x_extrapolation: &[f64],
+        y_extrapolation_true: &[f64],
+    ) -> (Self, f64, f64, f64) {
+        let candidate_ells = [0.8, 1.2, 1.6, 2.0, 2.4, 3.0, 3.6];
+        let candidate_sigmas = [0.10, 0.25, 0.45, 0.70, 1.00];
+        let mut best_lml = f64::NEG_INFINITY;
+        let mut best_ell = 2.4;
+        let mut best_sig = 0.45;
+        for &ell in &candidate_ells {
+            for &sig in &candidate_sigmas {
+                let lml = Self::log_marginal_likelihood(x_obs, y_obs, ell, sig, sigma_noise);
+                if lml > best_lml {
+                    best_lml = lml;
+                    best_ell = ell;
+                    best_sig = sig;
+                }
+            }
+        }
+        let cal = Self::calibrate(
+            x_obs,
+            y_obs,
+            theta_true,
+            best_ell,
+            best_sig,
+            sigma_noise,
+            x_extrapolation,
+            y_extrapolation_true,
+        );
+        (cal, best_ell, best_sig, best_lml)
+    }
+}
+
+/// Exact Cholesky decomposition $A = L L^\top$ for a symmetric positive-definite matrix (with adaptive jitter fallback).
+pub fn cholesky_decompose(a: &[Vec<f64>]) -> Vec<Vec<f64>> {
+    let n = a.len();
+    let mut l = vec![vec![0.0; n]; n];
+    for (i, a_row) in a.iter().enumerate() {
+        for (j, &a_ij) in a_row.iter().enumerate().take(i + 1) {
+            let dot: f64 = l[i]
+                .iter()
+                .zip(l[j].iter())
+                .take(j)
+                .map(|(x, y)| x * y)
+                .sum();
+            let sum = a_ij - dot;
+            if i == j {
+                l[i][j] = sum.max(1e-14).sqrt();
+            } else {
+                l[i][j] = sum / l[j][j].max(1e-14);
+            }
+        }
+    }
+    l
+}
+
+/// Solves $L L^\top x = b$ via forward and backward substitution given lower-triangular Cholesky factor $L$.
+pub fn cholesky_solve(l: &[Vec<f64>], b: &[f64]) -> Vec<f64> {
+    let n = b.len();
+    let mut y = vec![0.0; n];
+    for i in 0..n {
+        let dot: f64 = l[i]
+            .iter()
+            .zip(y.iter())
+            .take(i)
+            .map(|(lij, yj)| lij * yj)
+            .sum();
+        y[i] = (b[i] - dot) / l[i][i].max(1e-14);
+    }
+    let mut x = vec![0.0; n];
+    for i in (0..n).rev() {
+        let dot: f64 = ((i + 1)..n).map(|j| l[j][i] * x[j]).sum();
+        x[i] = (y[i] - dot) / l[i][i].max(1e-14);
+    }
+    x
+}
+
+/// Computes $\ln|\Sigma| = 2 \sum_{i=1}^n \ln L_{ii}$ from Cholesky factor $L$.
+pub fn cholesky_log_det(l: &[Vec<f64>]) -> f64 {
+    2.0 * l
+        .iter()
+        .enumerate()
+        .map(|(i, row)| row[i].max(1e-14).ln())
+        .sum::<f64>()
 }
 
 /// Brynjarsdóttir & O'Hagan (2014) boundary-conditioned Squared-Exponential GP kernel
@@ -174,46 +319,10 @@ fn anchored_se_kernel(x1: f64, x2: f64, sigma_delta: f64, ell2: f64) -> f64 {
     sigma_delta * sigma_delta * (k_se - k_zero)
 }
 
-/// Solves a small symmetric positive-definite linear system $A x = b$ via Gaussian elimination with partial pivoting.
+/// Solves a symmetric positive-definite linear system $A x = b$ via exact Cholesky decomposition $A = L L^\top$.
 fn solve_spd_system(a: &[Vec<f64>], b: &[f64]) -> Vec<f64> {
-    let n = b.len();
-    let mut mat: Vec<Vec<f64>> = a
-        .iter()
-        .enumerate()
-        .map(|(i, row)| {
-            let mut r = row.clone();
-            r.push(b[i]);
-            r
-        })
-        .collect();
-
-    for col in 0..n {
-        let mut pivot = col;
-        for row in (col + 1)..n {
-            if mat[row][col].abs() > mat[pivot][col].abs() {
-                pivot = row;
-            }
-        }
-        mat.swap(col, pivot);
-        let diag = mat[col][col];
-        if diag.abs() < 1e-15 {
-            continue;
-        }
-        #[allow(clippy::needless_range_loop)]
-        for j in col..=n {
-            mat[col][j] /= diag;
-        }
-        for row in 0..n {
-            if row != col {
-                let factor = mat[row][col];
-                #[allow(clippy::needless_range_loop)]
-                for j in col..=n {
-                    mat[row][j] -= factor * mat[col][j];
-                }
-            }
-        }
-    }
-    mat.into_iter().map(|r| r[n]).collect()
+    let l = cholesky_decompose(a);
+    cholesky_solve(&l, b)
 }
 
 /// Decision option under Severe / Knightian Uncertainty evaluated via Info-Gap Theory (Ben-Haim)
@@ -320,6 +429,16 @@ mod tests {
         assert!(res.parameter_error_with_gp < res.pseudo_convergence_bias_without_gp * 0.20);
         assert!(res.extrapolation_error_with_gp < res.extrapolation_error_without_gp * 0.40);
         assert!(res.extrapolation_posterior_std_with_gp > 0.02);
+
+        let x_obs = [0.1, 0.2, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4];
+        let y_obs: Vec<f64> = x_obs.iter().map(|&x| 0.80 * x - 0.08 * x * x).collect();
+        let x_ext = [2.6, 2.8, 3.0];
+        let y_ext: Vec<f64> = x_ext.iter().map(|&x| 0.80 * x - 0.08 * x * x).collect();
+        let (eb_cal, ell_opt, sig_opt, lml) = KennedyOHaganDiscrepancy::calibrate_empirical_bayes(
+            &x_obs, &y_obs, 0.80, 0.005, &x_ext, &y_ext,
+        );
+        assert!(ell_opt > 0.0 && sig_opt > 0.0 && lml.is_finite());
+        assert!(eb_cal.parameter_error_with_gp < eb_cal.pseudo_convergence_bias_without_gp);
     }
 
     #[test]

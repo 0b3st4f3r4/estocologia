@@ -192,6 +192,20 @@ cargo run --release --bin gates
 2. **(Calculation — Auditing CORP-Murphy Closure)** A card declares `total_score_brier_or_crps: 0.03210`, `miscalibration_REL_MCB: 0.00578`, `resolution_RES_DSC: 0.06183`, and `base_uncertainty_UNC0: 0.08815` (the exact numbers from `card_01_atlantic_storms_evacuation.yaml`). Check whether $\mathrm{REL}\_{\mathrm{CORP}} - \mathrm{RES}\_{\mathrm{CORP}} + \mathrm{UNC}\_0$ equals $\mathrm{BS}$.
 3. **(Concept — Adversarial Cross-Authorship)** Why does `field_authorship` require `null_model`, `decision_rule`, and `adversarial_reviewer` to be distinct agents? What cognitive and institutional bias on Layer $L\_3$ does this rule prevent?
 
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Auditing a Card by Hand:**
+   - *(a)* $\frac{C}{\eta L} = \frac{15\text{,}000}{0.75 \times 250\text{,}000} = \frac{15\text{,}000}{187\text{,}500} = 0.08000 = p^{\ast}$ (matches `critical_threshold_p_star`).
+   - *(b)* `EpistemologicalCard::audit()` **rejects** the card because $p = 0.06500 \le p^{\ast} = 0.08000$, which requires `declared_act: "do_not_protect"`, not `"protect"`.
+2. **Auditing CORP-Murphy Closure:**
+   $$\mathrm{REL}\_{\mathrm{CORP}} - \mathrm{RES}\_{\mathrm{CORP}} + \mathrm{UNC}\_0 = 0.00578 - 0.06183 + 0.08815 = 0.03210 = \mathrm{BS}$$
+   The identity closes with zero discrepancy ($0.00000 \le 10^{-4}$).
+3. **Adversarial Cross-Authorship:**
+   Requiring `null_model != decision_rule` and `decision_rule != adversarial_reviewer` prevents confirmation bias and strategic self-licensing on Layer $L\_3$: the agent who built the decision rule has an incentive to design a weak straw-man null model or overlook bridge defects, whereas an independent adversarial verifier is rewarded for breaking flawed claims.
+
+</details>
+
 ### Chapter Summary
 
 - The **Epistemological Card (`EpistemologicalCard`)** is the universal unit of communication in the Stochology Protocol (`contract_version: "1.0"`).

@@ -1,7 +1,7 @@
 //! Dynamics of the Three Ontological Layers ($L_1 \to L_2 \to L_3 \to L_1$),
 //! Bridge Mechanics, and Formal Performative Prediction (§1.1).
 
-use crate::rng::{mean, median, quantile, sample_std};
+use crate::rng::{mean, median, quantile, quantile_sorted, sample_std};
 
 /// Ontological Layer of the data- and decision-generating cycle ($L_1 \to L_2 \to L_3 \to L_1$).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -214,6 +214,82 @@ impl ManskiBounds {
             ambiguity_width: upper - lower,
         }
     }
+
+    /// Covariate-stratified Manski bounds across $S$ strata `(y_observed_s, n_total_s)`, tightening the unstratified
+    /// ambiguity interval whenever missingness or conditional means vary across observable strata $X = s$.
+    pub fn compute_stratified(strata: &[(&[f64], usize)], y_min: f64, y_max: f64) -> Self {
+        assert!(!strata.is_empty(), "requires at least 1 stratum");
+        let mut total_n = 0usize;
+        let mut total_obs = 0usize;
+        let mut sum_obs_y = 0.0;
+        let mut weighted_lower = 0.0;
+        let mut weighted_upper = 0.0;
+
+        for &(y_s, n_s) in strata {
+            assert!(!y_s.is_empty() && y_s.len() <= n_s);
+            let b_s = Self::compute(y_s, n_s, y_min, y_max);
+            let w_s = n_s as f64;
+            total_n += n_s;
+            total_obs += y_s.len();
+            sum_obs_y += y_s.iter().sum::<f64>();
+            weighted_lower += w_s * b_s.lower_bound;
+            weighted_upper += w_s * b_s.upper_bound;
+        }
+        let n_f = total_n as f64;
+        let p_obs = (total_obs as f64) / n_f;
+        let lower = weighted_lower / n_f;
+        let upper = weighted_upper / n_f;
+        Self {
+            observed_rate: p_obs,
+            missing_rate: 1.0 - p_obs,
+            observed_mean: sum_obs_y / (total_obs as f64),
+            lower_bound: lower,
+            upper_bound: upper,
+            ambiguity_width: upper - lower,
+        }
+    }
+
+    /// David Lee (2009) Sharp Trimming Bounds for the treatment effect among always-responders ($R(1)=1, R(0)=1$)
+    /// under monotonic differential attrition ($R(1) \ge R(0)$ or $R(0) \ge R(1)$).
+    /// Returns `(lower_ate_bound, upper_ate_bound, trimming_fraction_q)`.
+    pub fn lee_trimming_bounds(
+        y_treated_obs: &[f64],
+        n_treated_total: usize,
+        y_control_obs: &[f64],
+        n_control_total: usize,
+    ) -> (f64, f64, f64) {
+        assert!(!y_treated_obs.is_empty() && y_treated_obs.len() <= n_treated_total);
+        assert!(!y_control_obs.is_empty() && y_control_obs.len() <= n_control_total);
+        let p1 = (y_treated_obs.len() as f64) / (n_treated_total as f64);
+        let p0 = (y_control_obs.len() as f64) / (n_control_total as f64);
+
+        if (p1 - p0).abs() < 1e-12 {
+            let diff = mean(y_treated_obs) - mean(y_control_obs);
+            return (diff, diff, 0.0);
+        }
+
+        if p1 > p0 {
+            let q = ((p1 - p0) / p1).clamp(0.0, 0.999);
+            let mut sorted = y_treated_obs.to_vec();
+            sorted.sort_by(|a, b| a.total_cmp(b));
+            let m = sorted.len();
+            let k_keep = (((1.0 - q) * (m as f64)).round() as usize).clamp(1, m);
+            let lower_mean = mean(&sorted[..k_keep]);
+            let upper_mean = mean(&sorted[m - k_keep..]);
+            let c_mean = mean(y_control_obs);
+            (lower_mean - c_mean, upper_mean - c_mean, q)
+        } else {
+            let q = ((p0 - p1) / p0).clamp(0.0, 0.999);
+            let mut sorted = y_control_obs.to_vec();
+            sorted.sort_by(|a, b| a.total_cmp(b));
+            let m = sorted.len();
+            let k_keep = (((1.0 - q) * (m as f64)).round() as usize).clamp(1, m);
+            let c_lower_mean = mean(&sorted[..k_keep]);
+            let c_upper_mean = mean(&sorted[m - k_keep..]);
+            let t_mean = mean(y_treated_obs);
+            (t_mean - c_upper_mean, t_mean - c_lower_mean, q)
+        }
+    }
 }
 
 /// Audit of Bridge $L_2 \to L_3$ (Misreading) and Prohibition 2 (Ban on the Lone Mean):
@@ -240,27 +316,14 @@ pub struct NonlinearSummary {
 
 impl NonlinearSummary {
     /// Evaluates a nonlinear loss/payoff function $f(X)$ and its local curvature $f''(\mathbb{E}[X])$ over sample `xs`,
-    /// computing leave-one-out out-of-sample $\mathrm{CRPS}$ across all observations $f(x_i)$.
+    /// computing exact leave-one-out out-of-sample $\mathrm{CRPS}$ in $O(n \log n)$ via order-statistic prefix sums.
     pub fn evaluate<F>(xs: &[f64], f: F, f_second_derivative_at_mean: f64) -> Self
     where
         F: Fn(f64) -> f64,
     {
         assert!(xs.len() >= 2, "NonlinearSummary requires at least 2 points");
         let fx: Vec<f64> = xs.iter().map(|&x| f(x)).collect();
-        // Leave-one-out out-of-sample CRPS: each observation y_i = f(x_i) is scored against F_{-i}
-        let n = fx.len();
-        let mut loo_crps_sum = 0.0;
-        let mut loo_buf = Vec::with_capacity(n - 1);
-        for (i, &obs_y) in fx.iter().enumerate() {
-            loo_buf.clear();
-            for (j, &val) in fx.iter().enumerate() {
-                if i != j {
-                    loo_buf.push(val);
-                }
-            }
-            loo_crps_sum += empirical_crps(&loo_buf, obs_y);
-        }
-        let crps = loo_crps_sum / (n as f64);
+        let crps = exact_loo_empirical_crps(&fx);
         Self::from_transformed(xs, &fx, f(mean(xs)), f_second_derivative_at_mean, crps)
     }
 
@@ -343,6 +406,55 @@ pub fn empirical_crps(forecast_samples: &[f64], observation_y: f64) -> f64 {
     }
     let e_xx = (2.0 * spread) / (n * n);
     term1 - 0.5 * e_xx
+}
+
+/// Exact $O(n \log n)$ leave-one-out average empirical $\mathrm{CRPS}$ across a sample `fx` of size $n \ge 2$:
+/// $$\overline{\mathrm{CRPS}}_{\mathrm{LOO}} = \frac{1}{n}\sum_{i=1}^n \mathrm{CRPS}(F_{-i}, x_i) = \frac{n + 1}{2(n - 1)^2} \cdot \mathbb{E}_{\hat{F}_n}|X - X'|$$
+fn exact_loo_empirical_crps(fx: &[f64]) -> f64 {
+    assert!(fx.len() >= 2);
+    let mut sorted = fx.to_vec();
+    sorted.sort_by(|a, b| a.total_cmp(b));
+    let n = sorted.len() as f64;
+    let m = n - 1.0;
+    // Let S = sum_{i < j} (sorted[j] - sorted[i]) = sum_{k=0}^{n-1} (2*k - n + 1) * sorted[k].
+    // For each observation i, sum_{j != i} |x_j - x_i| summed over all i equals 2 * S.
+    // And summing the pairwise spreads over all n leave-one-out subsets of size (n-1) counts each pair (n-2) times.
+    let mut pair_diff_sum = 0.0;
+    for (k, &x) in sorted.iter().enumerate() {
+        pair_diff_sum += ((2.0 * (k as f64)) - n + 1.0) * x;
+    }
+    let avg_term1 = (2.0 * pair_diff_sum) / (n * m);
+    let avg_half_spread = ((n - 2.0) * pair_diff_sum) / (n * m * m);
+    avg_term1 - avg_half_spread
+}
+
+/// Exact 1D empirical Wasserstein-1 (Earth Mover / Kantorovich-Rubinstein) distance
+/// $W_1(\hat{P}, \hat{Q}) = \int_0^1 |F_{\hat{P}}^{-1}(u) - F_{\hat{Q}}^{-1}(u)|\,du$ between two empirical samples.
+pub fn empirical_wasserstein_1(sample_p: &[f64], sample_q: &[f64]) -> f64 {
+    assert!(
+        !sample_p.is_empty() && !sample_q.is_empty(),
+        "empirical_wasserstein_1 requires non-empty samples"
+    );
+    let mut sp = sample_p.to_vec();
+    let mut sq = sample_q.to_vec();
+    sp.sort_by(|a, b| a.total_cmp(b));
+    sq.sort_by(|a, b| a.total_cmp(b));
+    if sp.len() == sq.len() {
+        let n = sp.len() as f64;
+        return sp
+            .iter()
+            .zip(sq.iter())
+            .map(|(&a, &b)| (a - b).abs())
+            .sum::<f64>()
+            / n;
+    }
+    let grid = (sp.len() + sq.len()).clamp(64, 512);
+    let mut acc = 0.0;
+    for k in 0..grid {
+        let u = ((k as f64) + 0.5) / (grid as f64);
+        acc += (quantile_sorted(&sp, u) - quantile_sorted(&sq, u)).abs();
+    }
+    acc / (grid as f64)
 }
 
 /// Formal Theory of Performative Prediction on Bridge $L_3 \to L_1$
@@ -494,6 +606,26 @@ impl PerformativeSystem {
         }
         history
     }
+
+    /// Performative Gradient Descent (`PerfGD`, Izzo, Ying & Zou 2021) using the total performative derivative
+    /// $$\nabla_\theta \mathrm{PR}(\theta) = \nabla_2 \mathrm{DPR}(\theta, \theta) + \nabla_1 \mathrm{DPR}(\theta, \theta) = -\gamma(1 - \varepsilon)\big(\mu - (1 - \varepsilon)\theta\big) - \alpha$$
+    /// which converges directly to the Stackelberg Performative Optimum $\theta_{\mathrm{PO}}$ rather than stopping at $\theta_{\mathrm{PS}}$.
+    pub fn perfgd_trajectory(&self, theta_0: f64, step_size_eta: f64, steps: usize) -> Vec<f64> {
+        assert!(step_size_eta > 0.0, "step_size_eta must be > 0");
+        let one_minus_eps = 1.0 - self.sensitivity_epsilon;
+        let mut theta = theta_0;
+        let mut traj = Vec::with_capacity(steps + 1);
+        traj.push(theta);
+        for _ in 0..steps {
+            let grad = -self.strong_convexity_gamma
+                * one_minus_eps
+                * (self.base_mean_mu - one_minus_eps * theta)
+                - self.incentive_alpha;
+            theta -= step_size_eta * grad;
+            traj.push(theta);
+        }
+        traj
+    }
 }
 
 #[cfg(test)]
@@ -558,5 +690,21 @@ mod tests {
         assert!((apply_cromwell_floor(0.0, 0.001) - 0.001).abs() < 1e-15);
         assert!((apply_cromwell_floor(1.0, 0.001) - 0.999).abs() < 1e-15);
         assert!(respects_cromwell(apply_cromwell_floor(0.0, 0.001), 0.001));
+    }
+
+    #[test]
+    fn lee_bounds_wasserstein_and_perfgd_converge_to_stackelberg_po() {
+        let sys = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.2);
+        let diag = sys.diagnose();
+        let perfgd = sys.perfgd_trajectory(0.0, 0.5, 60);
+        let theta_final = *perfgd.last().unwrap();
+        assert!((theta_final - diag.theta_po).abs() < 1e-6);
+
+        let w1 = empirical_wasserstein_1(&[1.0, 2.0, 3.0], &[2.5, 3.5, 4.5]);
+        assert!((w1 - 1.5).abs() < 1e-12);
+
+        let (lo, hi, q) =
+            ManskiBounds::lee_trimming_bounds(&[10.0, 12.0, 14.0, 16.0], 4, &[8.0, 9.0, 10.0], 4);
+        assert!(lo <= hi && q > 0.0);
     }
 }

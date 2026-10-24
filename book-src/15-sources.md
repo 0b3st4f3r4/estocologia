@@ -43,19 +43,28 @@ Their exact 64-character SHA-256 digests are recorded in [`data/SHA256SUMS`](../
 - **Rubin, Donald B. (1976).** "Inference and Missing Data." *Biometrika*, 63(3), 581–592. — Formalizes `MCAR`, `MAR`, and `MNAR`.
 - **Meng, Xiao-Li (2018).** "Statistical Paradises and Paradoxes in Big Data (I): Law of Large Populations, Big Data Paradox, and the 2016 US Presidential Election." *Annals of Applied Statistics*, 12(2), 685–726. — Derives Meng's Fundamental Identity ($\bar{Y}\_n - \bar{Y}\_N = \rho\_{R,Y}\sqrt{\frac{N-n}{n}}\sigma\_Y$).
 - **Manski, Charles F. (1990).** "Nonparametric Bounds on Treatment Effects." *American Economic Review*, 80(2), 319–323. — Establishes worst-case identification bounds under `MNAR`.
+- **Lee, David S. (2009).** "Training, Wages, and Sample Selection: Estimating Sharp Bounds on Treatment Effects." *Review of Economic Studies*, 76(3), 1071–1102. — Derives sharp quantile-trimming bounds under monotonic differential attrition (`ManskiBounds::lee_trimming_bounds`).
 - **Perdomo, Juan C., Tijana Zrnic, Celestine Mendler-Dünner & Moritz Hardt (2020).** "Performative Prediction." *Proceedings of the 37th International Conference on Machine Learning (ICML)*, PMLR 119:7599–7609. — Formalizes Performative Risk, Performative Stability ($\theta\_{\mathrm{PS}}$), Performative Optimality ($\theta\_{\mathrm{PO}}$), and RRM contraction.
+- **Izzo, Zachary, Lexing Ying & James Zou (2021).** "How to Learn when Data Reacts to Your Model: Performative Gradient Descent." *Proceedings of the 38th International Conference on Machine Learning (ICML)*, PMLR 139:4631–4640. — Introduces `PerfGD` converging to the Stackelberg optimum $\theta\_{\mathrm{PO}}$.
 - **Kennedy, Marc C. & Anthony O'Hagan (2001).** "Bayesian Calibration of Computer Models." *Journal of the Royal Statistical Society: Series B*, 63(3), 425–464. — Introduces Gaussian Process structural discrepancy $\delta(x) \sim \mathcal{GP}(m(x), k(x, x'))$.
+- **Brynjarsdóttir, Jenný & Anthony O'Hagan (2014).** "Learning About Physical Parameters: The Importance of Model Discrepancy." *Inverse Problems*, 30(11), 114007. — Demonstrates boundary-anchored GP kernels for physical parameter identifiability.
 - **Ben-Haim, Yakov (2006).** *Info-Gap Decision Theory: Decisions Under Severe Uncertainty* (2nd ed.). Academic Press.
 - **Sniedovich, Moshe (2012).** "Black Swans, New Nostradamuses, Voodoo Decision Theories, and the Science of Decision Making in the Face of Severe Uncertainty." *International Transactions in Operational Research*, 19(1–2), 253–281. — Proves the local nature of Info-Gap and the necessity of Wald's global Maximin safeguard across "No-Man's Land."
 
 ### III. The Five Transversal Lenses and the Almost-Perfect Machine
+- **Blahut, Richard E. (1972).** "Computation of Channel Capacity and Rate-Distortion Functions." *IEEE Transactions on Information Theory*, 18(4), 460–473; & **Arimoto, Suguru (1972).** "An Algorithm for Computing the Capacity of Arbitrary Discrete Memoryless Channels." *IEEE Transactions on Information Theory*, 18(1), 14–20.
 - **Raginsky, Maxim (2016).** "Strong Data Processing Inequalities and $\Phi$-Sobolev Inequalities for Discrete Channels." *IEEE Transactions on Information Theory*, 62(6), 3355–3389.
 - **Peters, Ole (2019).** "The Ergodicity Problem in Economics." *Nature Physics*, 15(12), 1216–1221.
 - **Kelly, John L. Jr. (1956).** "A New Interpretation of Information Rate." *Bell System Technical Journal*, 35(4), 917–926.
 - **Hill, Bruce M. (1975).** "A Simple General Approach to Inference About the Tail of a Distribution." *Annals of Statistics*, 3(5), 1163–1174.
+- **Dekkers, Arnold L. M., John H. J. Einmahl & Laurens de Haan (1989).** "A Moment Estimator for the Index of an Extreme-Value Distribution." *Annals of Statistics*, 17(4), 1833–1855.
+- **Pickands, James (1975).** "Statistical Inference Using Extreme Order Statistics." *Annals of Statistics*, 3(1), 119–131; & **Balkema, A. A. & Laurens de Haan (1974).** "Residual Life Time at Great Age." *Annals of Probability*, 2(5), 792–804.
 - **Embrechts, Paul, Claudia Klüppelberg & Thomas Mikosch (1997).** *Modelling Extremal Events for Insurance and Finance*. Berlin: Springer.
 - **Pearl, Judea (2009).** *Causality: Models, Reasoning, and Inference* (2nd ed.). Cambridge University Press.
 - **Peters, Jonas, Peter Bühlmann & Nicolai Meinshausen (2016).** "Causal Inference by Using Invariant Prediction: Identification and Confidence Intervals." *Journal of the Royal Statistical Society: Series B*, 78(5), 947–1012.
+- **Chow, Gregory C. (1960).** "Tests of Equality Between Sets of Coefficients in Two Linear Regressions." *Econometrica*, 28(3), 591–605.
+- **Cinelli, Carlos & Chad Hazlett (2020).** "Making Sense of Sensitivity: Extending Omitted Variable Bias." *Journal of the Royal Statistical Society: Series B*, 82(1), 39–67.
+- **Richardson, David S. (2000).** "Skill and Relative Economic Value of the ECMWF Ensemble Prediction System." *Quarterly Journal of the Royal Meteorological Society*, 126(563), 649–667.
 - **Dimitriadis, Timo, Tilmann Gneiting & Alexander I. Jordan (2021).** "Stable Reliability Diagrams for Probabilistic Classifiers." *Proceedings of the National Academy of Sciences (PNAS)*, 118(8), e2016191118. — Establishes the isotonic **CORP-Murphy** decomposition via Pool-Adjacent-Violators (PAV).
 - **Barron, Andrew R. (1993).** "Universal Approximation Bounds for Superpositions of a Sigmoidal Function." *IEEE Transactions on Information Theory*, 39(3), 930–945.
 - **Telgarsky, Matus (2016).** "Benefits of Depth in Neural Networks." *Proceedings of the 29th Conference on Learning Theory (COLT)*, PMLR 49:1517–1539.
@@ -64,15 +73,20 @@ Their exact 64-character SHA-256 digests are recorded in [`data/SHA256SUMS`](../
 - **Hurlbert, Stuart H. (1984).** "Pseudoreplication and the Design of Ecological Field Experiments." *Ecological Monographs*, 54(2), 187–211.
 - **Moulton, Brent R. (1986).** "Random Group Effects and the Precision of Regression Estimates." *Journal of Econometrics*, 32(3), 385–397.
 - **Chouldechova, Alexandra (2017).** "Fair Prediction with Disparate Impact: A Study of Bias in Recidivism Prediction Instruments." *Big Data*, 5(2), 153–163.
+- **Kleinberg, Jon, Sendhil Mullainathan & Manish Raghavan (2017).** "Inherent Trade-Offs in the Fair Determination of Risk Scores." *Proceedings of the 8th Innovations in Theoretical Computer Science Conference (ITCS)*, LIPIcs 67:43:1–43:23.
 - **Gigerenzer, Gerd & Ulrich Hoffrage (1995).** "How to Improve Bayesian Reasoning Without Instruction: Frequency Formats." *Psychological Review*, 102(4), 684–704.
 - **Talts, Sean, Michael Betancourt, Daniel Simpson, Aki Vehtari & Andrew Gelman (2018).** "Validating Bayesian Inference Algorithms with Simulation-Based Calibration." *arXiv:1804.06788*.
+- **Grünwald, Peter, Rianne de Heide & Wouter M. Koolen (2024).** "Safe Testing." *Journal of the Royal Statistical Society: Series B*, 86(5), 1091–1128; & **Waudby-Smith, Ian & Aaditya Ramdas (2024).** "Estimating Means of Bounded Random Variables by Betting." *JRSS: Series B*, 86(1), 1–27.
 - **Lei, Lihua & Emmanuel J. Candès (2021).** "Conformal Inference of Counterfactuals and Individual Treatment Effects." *Journal of the Royal Statistical Society: Series B*, 83(5), 911–938.
+- **Gibbs, Isaac & Emmanuel Candès (2021).** "Adaptive Conformal Inference Under Distribution Shift." *Advances in Neural Information Processing Systems (NeurIPS)*, 34, 1660–1672.
 - **Lipton, Zachary C., Yu-Xiang Wang & Alexander Smola (2018).** "Detecting and Correcting for Label Shift with Black Box Predictors." *Proceedings of ICML*, PMLR 80:3122–3130.
 
 ### V. Relational Ontology, Emergence, and Complex Systems
 - **Nāgārjuna (c. 150 CE / trans. Jay L. Garfield, 1995).** *The Fundamental Wisdom of the Middle Way: Nāgārjuna's Mūlamadhyamakakārikā*. Oxford University Press.
 - **Rovelli, Carlo (1996).** "Relational Quantum Mechanics." *International Journal of Theoretical Physics*, 35(8), 1637–1678.
 - **Ladyman, James & Don Ross (2007).** *Every Thing Must Go: Metaphysics Naturalized*. Oxford University Press.
+- **Prigogine, Ilya & René Lefever (1968).** "Symmetry Breaking Instabilities in Dissipative Systems. II." *Journal of Chemical Physics*, 48(4), 1695–1700.
+- **Schnakenberg, Jürgen (1976).** "Network Theory of Microscopic and Macroscopic Behavior of Master Equation Systems." *Reviews of Modern Physics*, 48(4), 571–585.
 - **Prigogine, Ilya & Isabelle Stengers (1984).** *Order Out of Chaos: Man's New Dialogue with Nature*. Bantam Books.
 - **Maturana, Humberto R. & Francisco J. Varela (1980).** *Autopoiesis and Cognition: The Realization of the Living*. D. Reidel.
 - **Anderson, Philip W. (1972).** "More Is Different." *Science*, 177(4047), 393–396.

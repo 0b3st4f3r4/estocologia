@@ -409,6 +409,98 @@ pub fn fano_error_floor(
     0.5 * (lo + hi)
 }
 
+/// Exact Blahut-Arimoto alternating minimization algorithm (Blahut 1972; Arimoto 1972)
+/// computing the Shannon channel capacity $C(W) = \max_{P_X} I(X; Y)$ (in nats) and the capacity-achieving
+/// input distribution $P_X^\star$ for a discrete memoryless channel `channel_w`.
+pub fn blahut_arimoto_capacity(
+    channel_w: &[Vec<f64>],
+    max_iters: usize,
+    tol: f64,
+) -> (f64, Vec<f64>) {
+    assert!(!channel_w.is_empty() && !channel_w[0].is_empty());
+    let nx = channel_w.len();
+    let ny = channel_w[0].len();
+    let mut p_x = vec![1.0 / (nx as f64); nx];
+    let mut c_vals = vec![0.0; nx];
+
+    for _ in 0..max_iters.max(1) {
+        let p_y = push_forward(&p_x, channel_w);
+        for i in 0..nx {
+            let mut d_kl = 0.0;
+            for j in 0..ny {
+                let w_ij = channel_w[i][j];
+                if w_ij > 1e-15 && p_y[j] > 1e-15 {
+                    d_kl += w_ij * (w_ij / p_y[j]).ln();
+                }
+            }
+            c_vals[i] = d_kl.exp();
+        }
+        let z: f64 = p_x
+            .iter()
+            .zip(c_vals.iter())
+            .map(|(&pi, &ci)| pi * ci)
+            .sum::<f64>()
+            .max(1e-15);
+        let max_c = c_vals.iter().copied().fold(0.0_f64, f64::max).max(1e-15);
+        let gap = (max_c / z).ln();
+        for (pi, &ci) in p_x.iter_mut().zip(c_vals.iter()) {
+            *pi = (*pi * ci) / z;
+        }
+        if gap.abs() <= tol.max(1e-14) {
+            break;
+        }
+    }
+    let cap = channel_mutual_information_nats(&p_x, channel_w);
+    (cap, p_x)
+}
+
+/// Estimates an empirical discrete memoryless channel $W(y_{\text{bin}} \mid x_{\text{bin}})$ and input marginal $P_X$
+/// from paired continuous observations `(x, y)` via empirical quantile discretization (`num_bins`) and Laplace smoothing (`laplace_alpha`).
+pub fn estimate_empirical_channel(
+    x: &[f64],
+    y: &[f64],
+    num_bins: usize,
+    laplace_alpha: f64,
+) -> (Vec<f64>, Vec<Vec<f64>>) {
+    assert_eq!(x.len(), y.len());
+    assert!(!x.is_empty() && num_bins >= 2);
+    let b = num_bins;
+    let alpha = laplace_alpha.max(1e-9);
+    let mut sx = x.to_vec();
+    let mut sy = y.to_vec();
+    sx.sort_by(|a, b_val| a.total_cmp(b_val));
+    sy.sort_by(|a, b_val| a.total_cmp(b_val));
+
+    let bin_of = |val: f64, sorted: &[f64]| -> usize {
+        let mut cut = 0usize;
+        for k in 1..b {
+            let q_k = stochology_core::quantile_sorted(sorted, (k as f64) / (b as f64));
+            if val > q_k {
+                cut = k;
+            }
+        }
+        cut.min(b - 1)
+    };
+
+    let mut counts = vec![vec![alpha; b]; b];
+    let mut row_totals = vec![alpha * (b as f64); b];
+    for (&xi, &yi) in x.iter().zip(y.iter()) {
+        let bi = bin_of(xi, &sx);
+        let bj = bin_of(yi, &sy);
+        counts[bi][bj] += 1.0;
+        row_totals[bi] += 1.0;
+    }
+
+    let grand_total: f64 = row_totals.iter().sum();
+    let p_x: Vec<f64> = row_totals.iter().map(|&r| r / grand_total).collect();
+    let w: Vec<Vec<f64>> = counts
+        .into_iter()
+        .zip(row_totals.iter())
+        .map(|(row, &tot)| row.into_iter().map(|c| c / tot).collect())
+        .collect();
+    (p_x, w)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -474,5 +566,10 @@ mod tests {
         assert!(dpi.dpi_satisfied);
         assert!(dpi.i_w_x_nats > dpi.i_w_y_nats && dpi.i_w_y_nats > dpi.i_w_z_nats);
         assert!(dpi.i_w_z_nats > 0.0);
+
+        let (cap_bsc, p_opt) = blahut_arimoto_capacity(&w_to_x, 200, 1e-12);
+        let expected_cap = std::f64::consts::LN_2 - binary_entropy_nats(0.10);
+        assert!((cap_bsc - expected_cap).abs() < 1e-10);
+        assert!((p_opt[0] - 0.5).abs() < 1e-9);
     }
 }

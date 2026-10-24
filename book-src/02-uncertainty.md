@@ -153,6 +153,14 @@ In `KennedyOHaganDiscrepancy` (`crates/stochology-core/src/uncertainty.rs`), the
 - The Gaussian Process $\delta(x)$ absorbs the nonlinear structural departure away from the anchor;
 - And out-of-domain predictions carry honest, widened uncertainty bands.
 
+#### Exact Cholesky Factorization and Empirical Bayes Type-II Maximum Likelihood
+
+How do we select the Gaussian Process hyperparameters—the correlation length-scale $\ell$ and the discrepancy amplitude $\sigma\_\delta$—without ad-hoc hand-tuning? In `crates/stochology-core/src/uncertainty.rs`, the covariance matrix $\Sigma = K\_\delta(X, X; \ell, \sigma\_\delta) + \sigma\_n^2 I$ is factorized via exact lower-triangular **Cholesky decomposition** $\Sigma = L L^\top$ (`cholesky_decompose`, `cholesky_solve`, `cholesky_log_det`). Given residual vector $r = y - \eta(X, \hat{\theta})$, `KennedyOHaganDiscrepancy::log_marginal_likelihood` evaluates the exact Gaussian Process **Log Marginal Likelihood (Type-II MLE)**:
+
+$$\ln p(y \mid X, \hat{\theta}, \ell, \sigma\_\delta) = \underbrace{-\frac{1}{2} r^\top (K\_\delta + \sigma\_n^2 I)^{-1} r}\_{\text{Data Fit}} \underbrace{- \sum\_{i=1}^n \ln L\_{ii}}\_{\text{Occam's Razor Complexity Penalty } (-\frac{1}{2}\ln|\Sigma|)} - \frac{n}{2}\ln(2\pi)$$
+
+Notice how the Cholesky log-determinant term $-\frac{1}{2}\ln|\Sigma| = -\sum\_{i=1}^n \ln L\_{ii}$ acts as an automatic **Bayesian Occam's Razor**, penalizing overly wiggly kernels ($\ell \to 0$) while the quadratic form $-\frac{1}{2}r^\top\Sigma^{-1}r$ penalizes underfitting (`KennedyOHaganDiscrepancy::calibrate_empirical_bayes`).
+
 ---
 
 ### 2.4 Knightian Uncertainty: Info-Gap Decision Theory and Sniedovich's Safeguard
@@ -262,14 +270,14 @@ cargo run --release --bin labs -- --uncertainty
 
 ~~~text
 === LAB 2: KENNEDY-O'HAGAN GP DISCREPANCY AND INFO-GAP + SNIEDOVICH ===
-  [Kennedy-O'Hagan GP] theta_true=0.800 | without_GP=0.6454 (bias=0.1546, extrap_err=0.2022) | with_GP=0.7865 (bias=0.0135, extrap_err=0.0324)
+  [Kennedy-O'Hagan GP] theta_true=0.800 | without_GP=0.6454 (bias=0.1546, extrap_err=0.2022) | with_GP=0.7865 (bias=0.0135, extrap_err=0.0324) | EmpBayes(ell*=3.60, sigma*=1.00, LML=+27.27)
   [Info-Gap + Sniedovich] fragile_nominal_turkey: alpha_hat=1.60, zero_ing=0.0, Wald=-450.0, approved=false | robust_satisficing_wald: alpha_hat=3.50, beta_hat=2.13, Wald=45.0, approved=true
 ~~~
 
 Walk through the two laboratory experiments:
 1. **In `[Kennedy-O'Hagan GP]`**, the true physical parameter is $\theta\_{\text{true}} = 0.800$, but the physical world includes a nonlinear structural discrepancy $\delta(x)$ absent from the bare model $\eta(x, \theta)$.
    - **Without the GP discrepancy**, ordinary least squares twists the physical parameter down to $\hat{\theta} = 0.6454$ (a parameter bias of $0.1546$) and suffers an out-of-domain extrapolation error of $0.2022$.
-   - **With the anchored Kennedy-O'Hagan GP $\delta(x) \sim \mathcal{GP}(0, k)$**, the estimator recovers $\hat{\theta} = 0.7865$ (cutting parameter bias more than $11$-fold to $0.0135$) and reduces extrapolation error more than $6$-fold to $0.0324$.
+   - **With the anchored Kennedy-O'Hagan GP $\delta(x) \sim \mathcal{GP}(0, k)$**, the estimator recovers $\hat{\theta} = 0.7865$ (cutting parameter bias more than $11$-fold to $0.0135$), reduces extrapolation error more than $6$-fold to $0.0324$, and selects Empirical Bayes hyperparameters $(\ell^{\ast} = 3.60,\ \sigma\_\delta^{\ast} = 1.00)$ maximizing the Cholesky log marginal likelihood ($\mathrm{LML} = +27.27$).
 2. **In `[Info-Gap + Sniedovich]`**, the `fragile_nominal_turkey` option boasts a positive local robustness horizon $\hat{\alpha} = 1.60$, yet collapses to $\text{Wald} = -450.0$ in No-Man's Land and is blocked (`approved = false`). The `robust_satisficing_wald` option achieves $\hat{\alpha} = 3.50$, opportuneness $\hat{\beta} = 2.13$, and a positive global Wald floor of $+45.0$, earning approval (`approved = true`).
 
 ### Exercises
@@ -284,6 +292,22 @@ Walk through the two laboratory experiments:
    - *(b)* What complication probability does Laplace's Rule of Succession assign?
 3. **(Concept — Kennedy-O'Hagan)** Explain in your own words why collecting $100\text{,}000$ additional observations *worsens* overconfidence when a mechanistic simulator $\eta(x, \theta)$ is calibrated without a structural discrepancy term $\delta(x)$.
 4. **(Laboratory — Sniedovich Negative Proof)** Run `cargo run --release --bin gates -- --defect sniedovich` and verify that deploying an option that violates the global Wald floor in No-Man's Land is blocked with exit code `1`.
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Uncertainty Typing:**
+   - *(a)* **Layer $L\_1$, `aleatory`:** Irreducible physical thermal noise $\mathbb{E}[\mathrm{Var}(Y \mid \theta)]$.
+   - *(b)* **Layer $L\_2$, `epistemic_parameter`:** Finite-sample uncertainty $\mathrm{Var}(\mathbb{E}[Y \mid \theta])$ about $\mu$ that shrinks as $n$ grows.
+   - *(c)* **Layer $L\_2$, `epistemic_specification`:** Structural discrepancy $\delta(t)$ between stationary M/M/1 and non-stationary $M\_t/M/c$ arrivals.
+   - *(d)* **Layer $L\_3$, `knightian`:** Unlisted or unquantifiable probability regime requiring Info-Gap $\hat{\alpha}$ plus a global Wald maximin floor.
+2. **Laplace's Rule of Succession:**
+   - *(a)* Naive plug-in complication rate: $\hat{p}\_{\text{naive}} = \frac{0}{18} = 0.00$. Banned by Prohibition 4 (Cromwell's Rule) because $0\%$ probability assigns infinite log-loss if a complication ever occurs and shuts down Bayesian updating.
+   - *(b)* Laplace's Rule of Succession: $\hat{p}\_{\text{Laplace}} = \frac{0 + 1}{18 + 2} = \frac{1}{20} = 0.050$ ($5.0\%$).
+3. **Kennedy-O'Hagan Pseudo-Convergence:** Without $\delta(x)$, ordinary least squares projects the true function $\eta(x, \theta\_{\text{true}}) + \delta(x)$ onto the misspecified parametric family $\eta(x, \theta)$. As $n \to 100\text{,}000$, the parameter standard error shrinks as $O(n^{-1/2}) \to 0$ around the biased pseudo-parameter $\theta^{\ast} \neq \theta\_{\text{true}}$, yielding vanishing nominal error bars around a structurally wrong curve.
+4. **Sniedovich Negative Proof:** Running `cargo run --release --bin gates -- --defect sniedovich` triggers `[G6 BLOCKED] Info-Gap option violates Sniedovich Global Wald Safeguard in No-Man's Land` and exits with code `1`.
+
+</details>
 
 ### Chapter Summary
 

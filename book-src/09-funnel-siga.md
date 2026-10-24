@@ -115,6 +115,8 @@ Filter 3 bins the SBC ranks across $B$ bins and computes Pearson's $\chi^2 = \su
 
 $$L\_{\text{phys}} < q\_{25} < q\_{50} < q\_{75} < U\_{\text{phys}}$$
 
+Once the elicited quartiles $(q\_{25}, q\_{50}, q\_{75})$ are verified, `fit_shelf_beta_prior` (`crates/stochology-siga/src/funnel.rs`) fits a continuous conjugate **$\mathrm{Beta}(\hat{\alpha}, \hat{\beta})$ prior** by minimizing the cumulative distribution RMSE $\sqrt{\frac{1}{3}\bigl[(I\_{q\_{25}}(\alpha, \beta) - 0.25)^2 + (I\_{q\_{50}}(\alpha, \beta) - 0.50)^2 + (I\_{q\_{75}}(\alpha, \beta) - 0.75)^2\bigr]}$, where the regularized incomplete Beta function $I\_x(\alpha, \beta)$ is evaluated to machine precision in pure Rust via **Lentz's (1976) continued-fraction algorithm** (`regularized_incomplete_beta`) and **Lanczos's $g=7$ log-Gamma approximation** (`ln_gamma_lanczos`).
+
 #### Filter 4 — Cryptographic Pre-Registration, Cross-Authorship, and Exit Clause
 
 Finally, Filter 4 verifies:
@@ -173,6 +175,14 @@ $$\frac{E\_t}{K} \ge \frac{1}{\alpha}$$
 
 At $\alpha = 0.05$, reaching $E\_t / K \ge 20$ means the data have multiplied initial skeptical capital at least twenty-fold after paying the full multiplicity tax $K$.
 
+#### Non-Parametric GRAPA / Kelly Betting Martingales (`EvidenceProcess::from_grapa_betting`)
+
+What if we want to construct an anytime-valid *e-process* from bounded zero-mean under-$H\_0$ payoff differences $X\_1, \dots, X\_t$ without assuming a parametric likelihood ratio $p\_1/p\_0$? Following **Peter Grünwald, Rianne de Heide, and Wouter Koolen (2024, *Safe Testing*)** and **Ian Waudby-Smith and Aaditya Ramdas (2024)**, `EvidenceProcess::from_grapa_betting` constructs a predictable **Growth-Rate Adaptive (`GRAPA` / Kelly) betting martingale**:
+
+$$E\_t = \prod\_{i=1}^t \bigl(1 + \lambda\_i X\_i\bigr), \qquad \lambda\_i = \mathrm{clamp}\left(\frac{\hat{\mu}\_{i-1}}{\hat{\sigma}\_{i-1}^2 + \hat{\mu}\_{i-1}^2},\ -0.5,\ 0.5\right)$$
+
+Because the predictable stake $\lambda\_i$ depends strictly on past observations $\mathcal{F}\_{i-1} = \sigma(X\_1, \dots, X\_{i-1})$, $\mathbb{E}\_{H\_0}[1 + \lambda\_i X\_i \mid \mathcal{F}\_{i-1}] = 1 + \lambda\_i \mathbb{E}\_{H\_0}[X\_i \mid \mathcal{F}\_{i-1}] = 1$, guaranteeing exact finite-sample Ville validity under arbitrary optional stopping while maximizing asymptotic log-capital growth under the alternative!
+
 ---
 
 ## Step 3 — Auditable Laboratory in Rust and Exercises
@@ -191,6 +201,7 @@ cargo run --release --bin labs -- --siga
     Out of every 1000 independent units, 99 experience the critical event (of which 99 trigger the alarm at threshold p*=0.08000 and 0 are missed), while 901 do not experience the event (of which 426 trigger a false alarm and 475 remain clear). Positive predictive frequency: 99 out of 525 alarms. Action: protect. Exit clause: Immediately suspend automated shift scheduling if REL_CORP > 0.020 or RES_CORP < 0.025 over a 10-business-day rolling window.
   [SIGA cards/card_03_nyc_flights_holding.yaml] dataset=data/nyc_flights_2013.csv, EVPI=135285.0, p_null=0.0050 (unclamped), chi2_SBC=3.00, E_30=32.8, steps_1_to_8=[true, true, true, true, true, true, true, true], approved=true
     Out of every 1000 independent units, 98 experience the critical event (of which 71 trigger the alarm at threshold p*=0.06000 and 27 are missed), while 902 do not experience the event (of which 277 trigger a false alarm and 625 remain clear). Positive predictive frequency: 71 out of 348 alarms. Action: protect. Exit clause: Immediately revert to conservative Wald Maximin ground-delay policy if REL_CORP > 0.012 or RES_CORP < 0.005 or RRM radius >= 0.85 over a 7-day window.
+  [SHELF Beta Fit & GRAPA Betting Martingale] SHELF(0.02,0.05,0.09)->Beta(alpha=1.05, beta=15.03, CDF_RMSE=0.0111) | GRAPA E_35=946.42 (rejects_H0=true)
 ~~~
 
 ### Exercises
@@ -201,6 +212,23 @@ cargo run --release --bin labs -- --siga
    - *(a)* Compute $E\_5 = \prod\_{i=1}^5 L\_i$ and the multiplicity-adjusted evidence $E\_5 / K$.
    - *(b)* By Ville's inequality, what is the upper bound on the probability that $E\_t / K$ could have reached this level under the null hypothesis?
 4. **(Calculation — Gigerenzer Tree)** Look at the natural-frequency memo for `card_03_nyc_flights_holding.yaml` above ($1\text{,}000$ units, $98$ events, $71$ true alarms, $277$ false alarms). Verify that $71 + 277 = 348$ total alarms and compute the Positive Predictive Value ($\mathrm{PPV} = 71 / 348$). Why is it still rational for the dispatcher to `protect` when $\mathrm{PPV} \approx 20.4\%$? *(Hint: compare $\mathrm{PPV}$ with $p^{\ast} = 0.06000 = 6.0\%$!)*
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Filter 1 Short-Circuiting:**
+   - Threshold: $p^{\ast} = \frac{2\text{,}000}{1.0 \times 10\text{,}000} = 0.20$. Since $p\_0 = 0.05 \le p^{\ast}$, default action without the model is `do_not_protect` (expected annual loss $= 5 \times 10\text{,}000 = USD 50\text{,}000$).
+   - An infallible oracle protects on the $5$ late shipments ($5 \times 2\text{,}000 = USD 10\text{,}000$), saving at most $\mathrm{EVPI}\_{\text{annual}} = 50\text{,}000 - 10\text{,}000 = USD 40\text{,}000$.
+   - Since $\mathrm{EVPI}\_{\text{annual}} = USD 40\text{,}000 \le C\_{\text{total}} = USD 80\text{,}000$, **Filter 1 immediately short-circuits and kills the project.**
+2. **Simulation-Based Calibration:**
+   In an exact posterior, $\tilde{\theta}$ should fall below the $10\text{th}$ percentile $10\%$ of the time ($100$ times) and above the $90\text{th}$ percentile $10\%$ of the time ($100$ times). Falling in the two $10\%$ tails $250 + 260 = 510$ times ($51\%$ vs. $20\%$) produces a **$\cup$-shaped rank histogram**, proving that the posterior intervals are **severely overconfident (too narrow)**.
+3. **Sequential *e-process* Calculation:**
+   - *(a)* $E\_5 = 2.5 \times 1.8 \times 2.0 \times 0.8 \times 5.0 = 36.0$. Multiplicity-adjusted evidence: $E\_5 / K = 36.0 / 2 = 18.0$.
+   - *(b)* By Ville's inequality, $P\_{H\_0}(\sup\_t E\_t / K \ge 18.0) \le \frac{1}{18.0} \approx 0.0556$ ($5.56\%$).
+4. **Gigerenzer Natural-Frequency Tree:**
+   $\mathrm{PPV} = \frac{71}{348} \approx 0.2040$ ($20.4\%$). Even though $79.6\%$ of alarms are false alarms, a missed connection costs $L = USD 15\text{,}000$ ($\eta = 0.80 \implies \eta L = USD 12\text{,}000$) whereas holding costs only $C = USD 720$, so $p^{\ast} = \frac{720}{12\text{,}000} = 6.0\%$. Whenever the conditional event probability given an alarm ($20.4\%$) exceeds $p^{\ast} = 6.0\%$, protecting saves money on average!
+
+</details>
 
 ### Chapter Summary
 

@@ -156,6 +156,17 @@ $$\bigl[  p\_{\text{obs}} \bar{Y}\_{\text{obs}} + (1 - p\_{\text{obs}}) Y\_{\min
 
 No matter how adversarial the missingness mechanism is, the population mean cannot escape this interval (`crates/stochology-core/src/layers.rs`, `ManskiBounds`). If a decision remains optimal at both endpoints of Manski's interval, the decision is immune to missing-data bias; if the optimal action flips between the lower and upper bound, the analyst must declare that the conclusion depends on an untestable assumption about the unseen records.
 
+#### Stratified `MAR` Bounds and David Lee's (2009) Sharp Trimming Bounds
+
+Can we tighten Manski's worst-case interval when additional structure is observed? The protocol provides two non-parametric refinements in `ManskiBounds`:
+
+1. **Covariate-Stratified Bounds (`ManskiBounds::compute_stratified`):** When the population is partitioned into $S$ observed covariate strata with population weights $w\_s \ge 0$ ($\sum\_{s=1}^S w\_s = 1$), stratum response rates $p\_{\text{obs}, s}$, and stratum-specific physical bounds $[Y\_{\min, s}, Y\_{\max, s}]$, aggregating the stratum bounds yields:
+   $$\mathbb{E}[Y] \in \left[\sum\_{s=1}^S w\_s\bigl(p\_{\text{obs}, s}\bar{Y}\_{\text{obs}, s} + (1 - p\_{\text{obs}, s})Y\_{\min, s}\bigr),\quad \sum\_{s=1}^S w\_s\bigl(p\_{\text{obs}, s}\bar{Y}\_{\text{obs}, s} + (1 - p\_{\text{obs}, s})Y\_{\max, s}\bigr)\right]$$
+   which is guaranteed to be at least as tight as the unstratified Manski interval whenever $Y\_{\min, s} \ge Y\_{\min}$ and $Y\_{\max, s} \le Y\_{\max}$.
+2. **David Lee's (2009) Sharp Trimming Bounds for Differential Attrition (`ManskiBounds::lee_trimming_bounds`):** In randomized experiments with attrition (where treatment affects who remains observed, $p\_1 = P(R(1)=1) > p\_0 = P(R(0)=1)$) under **monotonic selection** ($R\_i(1) \ge R\_i(0)$), an excess fraction $q = \frac{p\_1 - p\_0}{p\_1}$ of the observed treated group consists of units induced to remain observed by treatment. Without bounded support assumptions $[Y\_{\min}, Y\_{\max}]$, David Lee (2009) proved that the sharp non-parametric bounds for the average treatment effect among **always-responders** ($R(1)=1, R(0)=1$) are obtained by trimming the top $q$ or bottom $q$ quantiles of the observed treated distribution:
+   $$\Delta\_{\mathrm{Lee}} \in \Bigl[  \mathbb{E}\bigl[Y\_1 \mid R\_1 = 1,\ Y\_1 \le Q\_{1-q}(Y\_1)\bigr] - \mathbb{E}[Y\_0 \mid R\_0 = 1],\quad \mathbb{E}\bigl[Y\_1 \mid R\_1 = 1,\ Y\_1 \ge Q\_q(Y\_1)\bigr] - \mathbb{E}[Y\_0 \mid R\_0 = 1]  \Bigr]$$
+   Alongside Lee's bounds, `empirical_wasserstein_1` computes the exact 1D Kantorovich-Wasserstein $W\_1(P, Q) = \int\_0^1 |F\_P^{-1}(u) - F\_Q^{-1}(u)|\,du$ distance between the empirical outcome distributions.
+
 ---
 
 ### 1.3 Bridge $L\_2 \to L\_3$: Nonlinearity, Jensen's Gap, and $\mathrm{CRPS}$
@@ -206,6 +217,7 @@ where $X$ and $X'$ are independent draws from the predictive distribution $F$. N
 - The first term, $\mathbb{E}\_F|X - y|$, rewards the distribution for placing its mass close to the realized truth $y$ (*accuracy*).
 - The second term, $-\frac{1}{2}\mathbb{E}\_F|X - X'|$, rewards sharp, well-calibrated spread.
 - Most importantly, $\mathrm{CRPS}$ is a **strictly proper scoring rule**: a forecaster minimizes expected $\mathrm{CRPS}$ if and only if they report their true predictive distribution $F$, with zero incentive to hedge or exaggerate confidence.
+- **Exact $O(n \log n)$ Order-Statistic Computation (`exact_loo_empirical_crps`):** Naively evaluating leave-one-out empirical $\mathrm{CRPS}$ across $n$ observations requires $O(n^2)$ pairwise comparisons. By sorting the sample $x\_{(1)} \le x\_{(2)} \le \dots \le x\_{(n)}$ once in $O(n \log n)$ time and using prefix sums together with the L-moment order-statistic identity $\sum\_{1 \le i < j \le n} (x\_{(j)} - x\_{(i)}) = \sum\_{i=1}^n (2i - 1 - n)x\_{(i)}$, `NonlinearSummary::evaluate` computes the exact leave-one-out empirical $\mathrm{CRPS}$ in $O(n \log n)$ time.
 
 ---
 
@@ -274,6 +286,14 @@ $$\lVert\theta\_{t+1} - \theta\_{\mathrm{PS}}\rVert\_2 \le \left(\frac{\varepsil
 
 Thus, RRM converges **if and only if the contraction ratio satisfies $r\_{\mathrm{RRM}} \triangleq \frac{\varepsilon\beta}{\gamma} < 1$**. Whenever $\frac{\varepsilon\beta}{\gamma} \ge 1$, retraining the model on its own induced data causes violent self-reinforcing oscillations that destabilize the real world (`--defect performativity`).
 
+#### Escaping the Myopic Fixed Point: Performative Gradient Descent (`PerfGD`)
+
+How can an institution reach the true Stackelberg Performative Optimum $\theta\_{\mathrm{PO}}$ instead of getting trapped at the myopic retraining equilibrium $\theta\_{\mathrm{PS}}$? In 2021, **Zachary Izzo, Lexing Ying, and James Zou** introduced **Performative Gradient Descent (`PerfGD`)** (`PerformativeSystem::perfgd_trajectory`). Whereas standard retraining ignores how deploying $\theta$ shifts the distribution $\mathcal{D}(\theta)$, `PerfGD` updates $\theta\_t$ along the **total performative gradient**:
+
+$$\nabla\_\theta \mathrm{PR}(\theta\_t) = \underbrace{\nabla\_2 \mathrm{DPR}(\theta\_t, \theta\_t)}\_{\text{Standard Gradient (Myopic)}} + \underbrace{\nabla\_1 \mathrm{DPR}(\theta\_t, \theta\_t)}\_{\text{Performative Distribution Shift Gradient}}$$
+
+In our linear-quadratic system, $\nabla\_\theta \mathrm{PR}(\theta) = \gamma(1 - \varepsilon)\bigl[(1 - \varepsilon)\theta - \mu\bigr] - \alpha$, so stepping via $\theta\_{t+1} = \theta\_t - \eta\nabla\_\theta \mathrm{PR}(\theta\_t)$ converges directly to $\theta\_{\mathrm{PO}} = 2.03125$, achieving strictly lower Performative Risk than Repeated Risk Minimization ($\mathrm{PR}(\theta\_{\mathrm{PO}}) = -0.8203 < \mathrm{PR}(\theta\_{\mathrm{PS}}) = -0.8125$).
+
 ---
 
 ## Step 3 — Auditable Laboratory in Rust and Exercises
@@ -286,15 +306,15 @@ cargo run --release --bin labs -- --layers
 
 ~~~text
 === LAB 1: THREE ONTOLOGICAL LAYERS AND BRIDGE MECHANICS (L1 -> L2 -> L3 -> L1) ===
-  [Bridge L1->L2] Meng (CPS n=15992 vs NSW n=260): rho_R_Y=+0.1334, selection_err=+164.65, n_eff_Meng=2842.70 | Manski MNAR=[5463.2, 13835.3]
+  [Bridge L1->L2] Meng (CPS n=15992 vs NSW n=260): rho_R_Y=+0.1334, selection_err=+164.65, n_eff_Meng=2842.70 | Manski MNAR=[5463.2, 13835.3] | Lee(q=0.031)=[838.7, 2007.2], W1=1722.7
   [Bridge L2->L3] Jensen Gap (bank_calls, 164 days): f(E[X])=1066924927.55, E[f(X)]=1075958764.73, Delta_J=+9033837.19, median=1025216361.00, q05=830290416.50, q95=1481646385.00, OOS_CRPS=90551681.37
-  [Bridge L3->L1] Performative Prediction: theta_SL=1.5000, theta_PS=1.8750, theta_PO=2.0312, PR(PS)=-0.8125 vs PR(PO)=-0.8203, r_RRM=0.300 (converges=true), oscillation_violated=[1.0, 0.0, 1.0, 0.0, 1.0]
+  [Bridge L3->L1] Performative Prediction: theta_SL=1.5000, theta_PS=1.8750, theta_PO=2.0312 (PerfGD_30=2.0312), PR(PS)=-0.8125 vs PR(PO)=-0.8203, r_RRM=0.300 (converges=true), oscillation_violated=[1.0, 0.0, 1.0, 0.0, 1.0]
 ~~~
 
 Examine the three lines of output:
-1. **On Bridge $L\_1 \to L\_2$**, comparing the observational CPS sample ($n = 15\text{,}992$) against the randomized NSW benchmark reveals $\rho\_{R,Y} = +0.1334$, collapsing the effective sample size to $n\_{\mathrm{eff}} = 2\text{,}842.70$, while the assumption-free Manski `MNAR` bounds trap the true earnings within $[5\text{,}463.2,\ 13\text{,}835.3]$.
-2. **On Bridge $L\_2 \to L\_3$**, across the $164$ days of `bank_calls.csv`, the nonlinear congestion loss exhibits a positive Jensen's Gap of $\Delta\_J = +9\text{,}033\text{,}837.19$ above the naive plug-in mean evaluation $f(\mathbb{E}[X])$, and reports the full quantile profile ($q\_{05}$, median, $q\_{95}$) alongside the out-of-sample $\mathrm{CRPS} = 9.055 \times 10^7$.
-3. **On Bridge $L\_3 \to L\_1$**, with $\mu = 1.0, \varepsilon = 0.20, \alpha = 0.50, \gamma = 1.0, \beta = 1.50$, passive learning chooses $\theta\_{\mathrm{SL}} = 1.5000$, Repeated Risk Minimization converges ($r\_{\mathrm{RRM}} = \frac{0.20 \times 1.50}{1.0} = 0.300 < 1$) to $\theta\_{\mathrm{PS}} = 1.8750$ ($\mathrm{PR} = -0.8125$), whereas the Stackelberg leader achieves $\theta\_{\mathrm{PO}} = 2.0312$ with strictly lower Performative Risk ($\mathrm{PR} = -0.8203$). When the contraction condition is violated, RRM oscillates endlessly (`[1.0, 0.0, 1.0, 0.0, 1.0]`).
+1. **On Bridge $L\_1 \to L\_2$**, comparing the observational CPS sample ($n = 15\text{,}992$) against the randomized NSW benchmark reveals $\rho\_{R,Y} = +0.1334$, collapsing the effective sample size to $n\_{\mathrm{eff}} = 2\text{,}842.70$, while the assumption-free Manski `MNAR` bounds trap the true earnings within $[5\text{,}463.2,\ 13\text{,}835.3]$ and David Lee's (2009) trimming bounds under $q = 3.1\%$ differential attrition bound the always-responder treatment effect within $[838.7,\ 2\text{,}007.2]$ (`W1 = 1722.7`).
+2. **On Bridge $L\_2 \to L\_3$**, across the $164$ days of `bank_calls.csv`, the nonlinear congestion loss exhibits a positive Jensen's Gap of $\Delta\_J = +9\text{,}033\text{,}837.19$ above the naive plug-in mean evaluation $f(\mathbb{E}[X])$, and reports the full quantile profile ($q\_{05}$, median, $q\_{95}$) alongside the exact $O(n \log n)$ out-of-sample $\mathrm{CRPS} = 9.055 \times 10^7$.
+3. **On Bridge $L\_3 \to L\_1$**, with $\mu = 1.0, \varepsilon = 0.20, \alpha = 0.50, \gamma = 1.0, \beta = 1.50$, passive learning chooses $\theta\_{\mathrm{SL}} = 1.5000$, Repeated Risk Minimization converges ($r\_{\mathrm{RRM}} = \frac{0.20 \times 1.50}{1.0} = 0.300 < 1$) to $\theta\_{\mathrm{PS}} = 1.8750$ ($\mathrm{PR} = -0.8125$), whereas Performative Gradient Descent (`PerfGD_30 = 2.0312`) reaches the Stackelberg leader optimum $\theta\_{\mathrm{PO}} = 2.0312$ with strictly lower Performative Risk ($\mathrm{PR} = -0.8203$). When the contraction condition is violated, RRM oscillates endlessly (`[1.0, 0.0, 1.0, 0.0, 1.0]`).
 
 ### Exercises
 
@@ -305,6 +325,24 @@ Examine the three lines of output:
 2. **(Calculation — Meng's Identity)** Suppose a national health registry covers $n = 2\text{,}000\text{,}000$ self-enrolled citizens out of a population of $N = 10\text{,}000\text{,}000$, with outcome standard deviation $\sigma\_Y = 50$ and a tiny selection correlation $\rho\_{R,Y} = +0.04$. Using Meng's Identity, calculate the exact selection bias $\bar{Y}\_n - \bar{Y}\_N$. Why did a sample of two million people fail to make this error vanish?
 3. **(Calculation — Jensen's Gap)** A hospital emergency room has capacity $\mu = 20$ patients/hour and waiting time proportional to $W(\lambda) = \frac{\lambda}{\mu - \lambda}$. Compare $W(\mathbb{E}[\lambda])$ against $\mathbb{E}[W(\lambda)]$ when arrival rate $\lambda$ is $10$ patients/hour on half the shifts and $18$ patients/hour on the other half. What is $\Delta\_J$?
 4. **(Laboratory — Performativity Gate)** Run `cargo run --release --bin gates -- --defect performativity` and verify that the gate exits with code `1` when $\frac{\varepsilon\beta}{\gamma} \ge 1$.
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Bridge Diagnosis:**
+   - *(a)* **Bridge $L\_1 \to L\_2$ (`MNAR` Survivorship Filter):** Recording $R\_i = 1$ (returning to base) depends directly on the unseen outcome $Y\_i$ (engine survival).
+   - *(b)* **Bridge $L\_2 \to L\_3$ (Jensen's Inequality):** Crop yield $Y(r)$ is a concave function of rainfall $r$ ($Y''(r) < 0$), so $\mathbb{E}[Y(R)] < Y(\mathbb{E}[R])$.
+   - *(c)* **Bridge $L\_3 \to L\_1$ (Performativity):** Deploying routing policy $\theta$ deforms the physical traffic distribution from $\mathcal{D}$ to $\mathcal{D}(\theta)$.
+2. **Meng's Identity Calculation:**
+   $$\bar{Y}\_n - \bar{Y}\_N = \rho\_{R,Y} \sqrt{\frac{N - n}{n}} \sigma\_Y = 0.04 \times \sqrt{\frac{8\text{,}000\text{,}000}{2\text{,}000\text{,}000}} \times 50 = 0.04 \times 2 \times 50 = +4.00$$
+   Because $\sqrt{(N-n)/n} = \sqrt{(1-f)/f}$ depends only on the sampling fraction $f = n/N = 0.20$ and $\rho\_{R,Y} = +0.04$ does not decay as $1/\sqrt{N}$ under self-selection, the bias $+4.00$ remains even with $n = 2\text{,}000\text{,}000$.
+3. **Jensen's Gap Calculation:**
+   - Average arrival rate: $\mathbb{E}[\lambda] = \frac{10 + 18}{2} = 14\text{ patients/hour}$, so $W(\mathbb{E}[\lambda]) = \frac{14}{20 - 14} = \frac{14}{6} \approx 2.333$ units.
+   - True expected wait: $\mathbb{E}[W(\lambda)] = \frac{1}{2}W(10) + \frac{1}{2}W(18) = \frac{1}{2}\left(\frac{10}{10} + \frac{18}{2}\right) = \frac{1 + 9}{2} = 5.000$ units.
+   - Jensen's Gap: $\Delta\_J = 5.000 - 2.333 = +2.667$ units (the true wait is more than double the plug-in estimate!).
+4. **Performativity Gate:** Running `cargo run --release --bin gates -- --defect performativity` triggers `[G2 BLOCKED] PROHIBITION_3 violated: RRM contraction ratio >= 1` and exits with code `1`.
+
+</details>
 
 ### Chapter Summary
 

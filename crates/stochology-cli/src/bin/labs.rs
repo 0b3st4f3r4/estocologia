@@ -11,20 +11,26 @@ use stochology_cli::{
     verify_card_against_empirical_data,
 };
 use stochology_core::{
-    apply_cromwell_floor, mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect,
-    InfoGapOption, KennedyOHaganDiscrepancy, ManskiBounds, MengAudit, NonlinearSummary,
-    OperationalWeightingGap, PerformativeSystem, Rng, DEFAULT_SEED,
+    apply_cromwell_floor, empirical_wasserstein_1, hmac_sha256_hex, mean, sample_std,
+    ChouldechovaAudit, ExceedanceDesignEffect, InfoGapOption, KennedyOHaganDiscrepancy,
+    ManskiBounds, MengAudit, NonlinearSummary, OnlineMoments, OperationalWeightingGap,
+    PerformativeSystem, Rng, DEFAULT_SEED,
 };
 use stochology_governance::{
     estimate_label_shift_four_methods, fit_calibrated_logistic_1d, fit_covariate_drift_extra_wcp,
-    query_with_bitemporal_clock, BitemporalRecord, MurphyCorpCircuitBreaker, TemporalVault,
+    query_with_bitemporal_clock, AdaptiveConformalInference, BitemporalRecord,
+    MurphyCorpCircuitBreaker, TemporalVault,
 };
 use stochology_lenses::{
-    amplitude_constrained_mi_bound, fano_error_floor, hidden_confounding_threshold_lambda_star,
-    run_icp, run_nonlinear_icp_nile, AlmostPerfectMachine, AuthenticModelForm, CausalEnvironment,
-    CorpPavDecomposition, DpiMarkovChain, ExactCoinCalibrationBenchmark, HillTailDiagnostic,
-    MixingTimeAudit, RelationalComplexSystemsSynthesis, SdpiHierarchy, TimeKellyDiagnostic,
+    amplitude_constrained_mi_bound, blahut_arimoto_capacity, chow_invariance_f_stat,
+    cinelli_hazlett_robustness_value, dedh_moment_tail_index, empirical_kelly_optimal_fraction,
+    expected_shortfall_99, fano_error_floor, gpd_pot_fit, hidden_confounding_threshold_lambda_star,
+    logarithmic_score, run_icp, run_nonlinear_icp_nile, AlmostPerfectMachine, AuthenticModelForm,
+    CausalEnvironment, CorpPavDecomposition, CostLossRule, DpiMarkovChain,
+    ExactCoinCalibrationBenchmark, HillTailDiagnostic, MixingTimeAudit,
+    RelationalComplexSystemsSynthesis, SdpiHierarchy, TimeKellyDiagnostic,
 };
+use stochology_siga::{fit_shelf_beta_prior, EvidenceProcess};
 
 /// Lab 1: Dynamics of the Three Ontological Layers ($L_1 \to L_2 \to L_3 \to L_1$), Meng, Manski, Jensen, and Performativity.
 fn lab_layers(root: &Path) {
@@ -42,15 +48,22 @@ fn lab_layers(root: &Path) {
     }
     let meng = MengAudit::from_population(&rec, &pop_y);
     let manski = ManskiBounds::compute(&nsw_t, nsw_t.len() + 30, 0.0, 60_000.0);
+    let (lee_lo, lee_hi, lee_q) =
+        ManskiBounds::lee_trimming_bounds(&nsw_t, nsw_t.len() + 15, &nsw_c, nsw_c.len() + 30);
+    let w1_nsw = empirical_wasserstein_1(&nsw_t, &nsw_c);
     println!(
-        "  [Bridge L1->L2] Meng (CPS n={} vs NSW n={}): rho_R_Y={:+.4}, selection_err={:+.2}, n_eff_Meng={:.2} | Manski MNAR=[{:.1}, {:.1}]",
+        "  [Bridge L1->L2] Meng (CPS n={} vs NSW n={}): rho_R_Y={:+.4}, selection_err={:+.2}, n_eff_Meng={:.2} | Manski MNAR=[{:.1}, {:.1}] | LeeBounds(q={:.3})=[{:.1}, {:.1}], W1={:.1}",
         cps_c.len(),
         nsw_c.len(),
         meng.rho_r_y,
         meng.estimation_error,
         meng.n_eff_meng,
         manski.lower_bound,
-        manski.upper_bound
+        manski.upper_bound,
+        lee_q,
+        lee_lo,
+        lee_hi,
+        w1_nsw
     );
 
     let clusters = load_bank_call_clusters(root);
@@ -75,13 +88,17 @@ fn lab_layers(root: &Path) {
         jensen.empirical_crps
     );
 
-    let perf = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.5).diagnose();
+    let perf_sys = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.5);
+    let perf = perf_sys.diagnose();
+    let perfgd = perf_sys.perfgd_trajectory(0.0, 0.5, 50);
+    let theta_perfgd = *perfgd.last().unwrap_or(&0.0);
     let osc = PerformativeSystem::simulate_rrm_oscillation(5);
     println!(
-        "  [Bridge L3->L1] Performative Prediction: theta_SL={:.4}, theta_PS={:.4}, theta_PO={:.4}, PR(PS)={:.4} vs PR(PO)={:.4}, r_RRM={:.3} (converges={}), oscillation_violated={:?}",
+        "  [Bridge L3->L1] Performative Prediction: theta_SL={:.4}, theta_PS={:.4}, theta_PO={:.4} (PerfGD={:.4}), PR(PS)={:.4} vs PR(PO)={:.4}, r_RRM={:.3} (converges={}), oscillation_violated={:?}",
         perf.theta_sl,
         perf.theta_ps,
         perf.theta_po,
+        theta_perfgd,
         perf.risk_at_ps,
         perf.risk_at_po,
         perf.rrm_contraction_radius,
@@ -94,15 +111,25 @@ fn lab_layers(root: &Path) {
 fn lab_uncertainty() {
     println!("=== LAB 2: KENNEDY-O'HAGAN GP DISCREPANCY AND INFO-GAP + SNIEDOVICH ===");
     let koh = KennedyOHaganDiscrepancy::canonical_benchmark();
+    let x_obs = [0.1, 0.2, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4];
+    let y_obs: Vec<f64> = x_obs.iter().map(|&x| 0.80 * x - 0.08 * x * x).collect();
+    let x_ext = [2.6, 2.8, 3.0];
+    let y_ext: Vec<f64> = x_ext.iter().map(|&x| 0.80 * x - 0.08 * x * x).collect();
+    let (_eb_cal, ell_opt, sig_opt, lml_opt) = KennedyOHaganDiscrepancy::calibrate_empirical_bayes(
+        &x_obs, &y_obs, 0.80, 0.005, &x_ext, &y_ext,
+    );
     println!(
-        "  [Kennedy-O'Hagan GP] theta_true={:.3} | without_GP={:.4} (bias={:.4}, extrap_err={:.4}) | with_GP={:.4} (bias={:.4}, extrap_err={:.4})",
+        "  [Kennedy-O'Hagan GP] theta_true={:.3} | without_GP={:.4} (bias={:.4}, extrap_err={:.4}) | with_GP={:.4} (bias={:.4}, extrap_err={:.4}) | EB_Cholesky(ell*={:.2}, sigma*={:.2}, LML={:+.2})",
         koh.theta_true,
         koh.theta_naive_without_gp,
         koh.pseudo_convergence_bias_without_gp,
         koh.extrapolation_error_without_gp,
         koh.theta_anchored_with_gp,
         koh.parameter_error_with_gp,
-        koh.extrapolation_error_with_gp
+        koh.extrapolation_error_with_gp,
+        ell_opt,
+        sig_opt,
+        lml_opt
     );
 
     let fragile = InfoGapOption {
@@ -146,7 +173,9 @@ fn lab_lenses(root: &Path) {
         "=== LAB 3: THE FIVE TRANSVERSAL LENSES (SDPI/DPI, TIME/KELLY, HILL, ICP, CORP-PAV) ==="
     );
     // 1. Information Lens
-    let sdpi = SdpiHierarchy::compute(&[0.5, 0.5], &[vec![0.85, 0.15], vec![0.15, 0.85]]);
+    let bsc_w = vec![vec![0.85, 0.15], vec![0.15, 0.85]];
+    let sdpi = SdpiHierarchy::compute(&[0.5, 0.5], &bsc_w);
+    let (cap_ba, _) = blahut_arimoto_capacity(&bsc_w, 100, 1e-12);
     let dpi = DpiMarkovChain::compute(
         &[0.5, 0.5],
         &[vec![0.90, 0.10], vec![0.10, 0.90]],
@@ -156,11 +185,12 @@ fn lab_lenses(root: &Path) {
     let i_amp = amplitude_constrained_mi_bound(1.5, 1.0, 0.05);
     let fano = fano_error_floor(4, (4.0_f64).ln(), 0.65 * (4.0_f64).ln());
     println!(
-        "  [Lens 1: Information] SDPI: eta_chi2={:.4} <= eta_KL={:.4} <= eta_TV={:.4} (valid={}) | DPI W->X->Y->Z: {:.4} >= {:.4} >= {:.4} (monotonic={}) | I_amp={:.4} | Fano P_e >= {:.4}",
+        "  [Lens 1: Information] SDPI: eta_chi2={:.4} <= eta_KL={:.4} <= eta_TV={:.4} (valid={}, C_BA={:.4} nats) | DPI W->X->Y->Z: {:.4} >= {:.4} >= {:.4} (monotonic={}) | I_amp={:.4} | Fano P_e >= {:.4}",
         sdpi.eta_chi2,
         sdpi.eta_kl,
         sdpi.eta_tv,
         sdpi.hierarchy_valid,
+        cap_ba,
         dpi.i_w_x_nats,
         dpi.i_w_y_nats,
         dpi.i_w_z_nats,
@@ -171,34 +201,47 @@ fn lab_lenses(root: &Path) {
 
     // 2. Time Lens (DJIA 1885-2023 + Kelly + Mixing Time)
     let djia_returns = load_djia_returns(root);
+    let djia_moments = OnlineMoments::from_slice(&djia_returns);
+    let (f_emp_djia, _g_emp_djia, f_merton_djia) = empirical_kelly_optimal_fraction(&djia_returns);
     let mu_annual = mean(&djia_returns) * 252.0;
     let sigma_annual = sample_std(&djia_returns) * (252.0_f64).sqrt();
     let kelly = TimeKellyDiagnostic::compute(mu_annual, sigma_annual, 0.54, 0.25, 0.20);
     let mix = MixingTimeAudit::compute(sdpi.eta_kl, 0.002, 4.0, 0.02);
     println!(
-        "  [Lens 2: Time] DJIA ({} trading days): g_ensemble={:.4} vs g_time_Ito={:.4} (drain={:.4}) | Kelly f*={:.4} | Mixing steps={}",
+        "  [Lens 2: Time] DJIA ({} trading days, kurtosis={:.1}, JB={:.0}): g_ensemble={:.4} vs g_time_Ito={:.4} (drain={:.4}) | Kelly f*={:.4} (emp_DJIA={:.2} vs Merton={:.2}) | Mixing steps={}",
         djia_returns.len(),
+        djia_moments.excess_kurtosis(),
+        djia_moments.jarque_bera_stat(),
         kelly.ensemble_rate_mu,
         kelly.time_rate_ito,
         kelly.variance_drain,
         kelly.asymmetric_kelly_fraction,
+        f_emp_djia,
+        f_merton_djia,
         mix.mixing_steps
     );
 
     // 3. Scale & Tail Lens (Danish Fire + Victoria Electricity Demand)
     let fire_losses = load_danish_fire(root);
     let hill = HillTailDiagnostic::audit(&fire_losses, Some(100));
+    let xi_dedh = dedh_moment_tail_index(&fire_losses, 100);
+    let (xi_gpd, _beta_gpd, es99_pot) = gpd_pot_fit(&fire_losses, hill.threshold_x_nk);
+    let es99_emp = expected_shortfall_99(&fire_losses);
     let vic_demand = load_vic_elec_demand(root);
     let hill_vic = HillTailDiagnostic::audit(&vic_demand, Some(100));
     println!(
-        "  [Lens 3: Tail] Danish Fire (n={}): Hill alpha_k={:.4} (+/- {:.4}), regime={:?}, median={:.3}, MAD={:.3}, q99={:.2}, tail_n_eff={:.1} | VicElec (n={}): q99={:.1} MW",
+        "  [Lens 3: Tail] Danish Fire (n={}): Hill alpha_k={:.4} (+/- {:.4}, DEdH_xi={:.3}, GPD_xi={:.3}), regime={:?}, median={:.3}, MAD={:.3}, q99={:.2}, ES99={:.2} (POT={:.2}), tail_n_eff={:.1} | VicElec (n={}): q99={:.1} MW",
         hill.sample_size_n,
         hill.alpha_hill,
         hill.asymptotic_se_alpha,
+        xi_dedh,
+        xi_gpd,
         hill.regime,
         hill.median,
         hill.mad,
         hill.quantile_99,
+        es99_emp,
+        es99_pot,
         hill.penalized_tail_n_eff,
         hill_vic.sample_size_n,
         hill_vic.quantile_99
@@ -240,6 +283,9 @@ fn lab_lenses(root: &Path) {
         true,
     );
     let lambda_star = hidden_confounding_threshold_lambda_star(1.75, 0.08, 0.60);
+    let chow_f0 = chow_invariance_f_stat(&envs, &[0]);
+    let chow_f1 = chow_invariance_f_stat(&envs, &[1]);
+    let rv_ch = cinelli_hazlett_robustness_value(1.75 / 0.08, 898, 1.0);
     let pen_fmt: Vec<String> = icp
         .env_ols_invariance_penalties
         .iter()
@@ -251,11 +297,14 @@ fn lab_lenses(root: &Path) {
         .map(|v| format!("{v:.4}"))
         .collect();
     println!(
-        "  [Lens 4: Invariance] ICP S*={:?}, env_OLS_penalty={:?}, Storms_nonlinear_NILE_IRM={:?}, Lambda*={:.3} | AuthenticForm(S*={:?}, discarded='{}', A={})",
+        "  [Lens 4: Invariance] ICP S*={:?}, env_OLS_penalty={:?} (ChowF=[{:.2}, {:.1}]), Storms_nonlinear_NILE_IRM={:?}, Lambda*={:.3} (RV={:.3}) | AuthenticForm(S*={:?}, discarded='{}', A={})",
         icp.accepted_causal_predictors,
         pen_fmt,
+        chow_f0,
+        chow_f1,
         nl_fmt,
         lambda_star,
+        rv_ch,
         auth_form.invariant_core_s_star,
         auth_form.discarded_atoms_named[0].atom_name,
         auth_form.approved_authentic_form
@@ -264,15 +313,21 @@ fn lab_lenses(root: &Path) {
     // 5. Decision Lens (CORP-PAV on Atlantic Storms + Exact Fair-Coin Benchmark)
     let (probs, outcomes) = load_atlantic_storms_forecasts(root);
     let corp = CorpPavDecomposition::compute(&probs, &outcomes);
+    let storm_rule = CostLossRule::new(1_800.0, 34_000.0, 1.0);
+    let rev_storms_pav =
+        storm_rule.relative_economic_value(&corp.recalibrated_probabilities_q, &outcomes);
+    let logs_storms = logarithmic_score(&corp.recalibrated_probabilities_q, &outcomes, 0.001);
     let coin = ExactCoinCalibrationBenchmark::evaluate(DEFAULT_SEED, 1_000);
     println!(
-        "  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n={}): BS={:.5} = REL({:.5}) - RES({:.5}) + UNC0({:.5}) [id_err={:.2e}] | FairCoin(p0=0.50): agree@0.30={:.0}%, REL_over={:.4} vs REL_cal={:.4}, regret@0.70=+{:.2}",
+        "  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n={}): BS={:.5} = REL({:.5}) - RES({:.5}) + UNC0({:.5}) [id_err={:.2e}, LogS_PAV={:.4}, REV_PAV={:.3}] | FairCoin(p0=0.50): agree@0.30={:.0}%, REL_over={:.4} vs REL_cal={:.4}, regret@0.70=+{:.2}",
         probs.len(),
         corp.brier_total,
         corp.rel_miscalibration,
         corp.res_resolution,
         corp.unc0_uncertainty,
         corp.identity_error,
+        logs_storms,
+        rev_storms_pav,
         coin.decision_agreement_rate_at_p_star_a * 100.0,
         coin.overconfident_corp.rel_miscalibration,
         coin.calibrated_corp.rel_miscalibration,
@@ -332,29 +387,43 @@ fn lab_invariants(root: &Path) {
 
     let clusters = load_bank_call_clusters(root);
     let real_deff = ExceedanceDesignEffect::from_clustered_observations(&clusters, 0.90);
+    let profile_q =
+        ExceedanceDesignEffect::profile_across_quantiles(&clusters, &[0.50, 0.90, 0.99]);
     println!(
-        "  [Real Data: bank_calls.csv] n={}, clusters={}, m_bar={:.2}, m_tilde={:.2}, rho_I(0.90)={:.4}, DEFF={:.2}, n_eff(0.90)={:.1}",
+        "  [Real Data: bank_calls.csv] n={}, clusters={}, m_bar={:.2}, m_tilde={:.2}, rho_I(0.90)={:.4}, DEFF={:.2}, n_eff(0.90)={:.1} (profile q50/q90/q99 n_eff=[{:.0}, {:.0}, {:.0}])",
         real_deff.n_nominal,
         real_deff.num_clusters_c,
         real_deff.m_bar,
         real_deff.m_tilde_moulton,
         real_deff.rho_exceedance_p,
         real_deff.deff_exceedance,
-        real_deff.n_effective_p
+        real_deff.n_effective_p,
+        profile_q[0].n_effective_p,
+        profile_q[1].n_effective_p,
+        profile_q[2].n_effective_p
     );
 
     let (p_a, p_b) = load_toronto_arrests_prevalences(root);
     let (fpr_a, fpr_b, ratio) =
         ChouldechovaAudit::fpr_ratio_under_equal_ppv_and_fnr(p_a, p_b, 0.65, 0.25);
+    let kmr_audit =
+        ChouldechovaAudit::from_confusion_matrices((180, 90, 630, 100), (70, 55, 825, 50));
+    let (_, _, kmr_var_gap) = kmr_audit.kmr_continuous_impossibility_gap();
     println!(
-        "  [Phi4: Chouldechova on toronto_arrests.csv] p_A={:.4} vs p_B={:.4} -> equalizing PPV=0.65 & FNR=0.25 forces FPR_A={:.4} vs FPR_B={:.4} (ratio={:.2}x)",
-        p_a, p_b, fpr_a, fpr_b, ratio
+        "  [Phi4: Chouldechova on toronto_arrests.csv] p_A={:.4} vs p_B={:.4} -> equalizing PPV=0.65 & FNR=0.25 forces FPR_A={:.4} vs FPR_B={:.4} (ratio={:.2}x, KMR_var_gap={:.4})",
+        p_a, p_b, fpr_a, fpr_b, ratio, kmr_var_gap
     );
 }
 
 /// Lab 5: 4-Filter Eliminatory Funnel, 8-Step SIGA Roadmap, and Natural-Frequency Executive Memoranda on the 3 Canonical YAML Cards.
 fn lab_siga(root: &Path) {
     println!("=== LAB 5: 4-FILTER ELIMINATORY FUNNEL AND 8-STEP SIGA ROADMAP ===");
+    let (shelf_a, shelf_b, shelf_rmse) = fit_shelf_beta_prior(0.02, 0.05, 0.09);
+    let grapa_demo = EvidenceProcess::from_grapa_betting(&vec![0.45; 35], 0.05, 1);
+    println!(
+        "  [Filter 3 SHELF Beta Fit & Step 6 GRAPA] Beta(alpha={:.2}, beta={:.2}, CDF_RMSE={:.4}) | GRAPA E_35={:.2} (rejects_H0={})",
+        shelf_a, shelf_b, shelf_rmse, grapa_demo.final_e_value, grapa_demo.rejects_null_hypothesis
+    );
     let cards = load_cards_from_disk(root).expect("load canonical YAML cards from disk");
     for (rel_path, card) in cards {
         let (_audit, rep) = verify_card_against_empirical_data(root, &card)
@@ -413,10 +482,13 @@ fn lab_governance(root: &Path) {
     let v_rep = vault
         .open_once(&[0.05, 0.95, 0.90, 0.05], 0.02)
         .expect("single opening");
+    let hmac_tag = hmac_sha256_hex(b"stochology_auditor_key_2026", v_rep.sha256_seal.as_bytes());
     println!(
-        "  [Single-Opening Temporal Vault] sha256_seal={}..{}, Brier={:.4}, state={:?}",
+        "  [Single-Opening Temporal Vault] sha256_seal={}..{}, HMAC_tag={}..{}, Brier={:.4}, state={:?}",
         &v_rep.sha256_seal[..8],
         &v_rep.sha256_seal[56..],
+        &hmac_tag[..8],
+        &hmac_tag[56..],
         v_rep.evaluated_brier_score,
         v_rep.final_state
     );
@@ -433,12 +505,21 @@ fn lab_governance(root: &Path) {
         })
         .collect();
     let cov = fit_covariate_drift_extra_wcp(&x13, &x23, &scores_13, None, 0.02, 0.10);
+    let cal_aci: Vec<f64> = x13.iter().map(|&x| 0.10 + 0.35 * x.abs()).collect();
+    let test_aci: Vec<f64> = x23
+        .iter()
+        .enumerate()
+        .map(|(i, &x)| 0.18 + 0.35 * x.abs() + if i % 5 == 0 { 0.12 } else { 0.0 })
+        .collect();
+    let aci = AdaptiveConformalInference::evaluate_stream(&cal_aci, &test_aci, 0.10, 0.02);
     println!(
-        "  [Covariate Drift: NYC Flights 2013->2023] beta_tilt={:+.4}, Z_P={:.4}, ExTRA_WCP_T_threshold={:.4}, Lei_Candes_bound >= {:.3}",
+        "  [Covariate Drift: NYC Flights 2013->2023] beta_tilt={:+.4}, Z_P={:.4}, ExTRA_WCP_T_threshold={:.4}, Lei_Candes_bound >= {:.3} | Online_ACI_cov={:.3} (vs static={:.3})",
         cov.estimated_beta,
         cov.normalizing_constant_z_p,
         cov.weighted_conformal_threshold,
-        cov.lei_candes_coverage_lower_bound
+        cov.lei_candes_coverage_lower_bound,
+        aci.empirical_coverage_aci,
+        aci.empirical_coverage_static
     );
 
     // Fit a real 1D logistic classifier on 2013 source cascade data and evaluate on 2023 target data

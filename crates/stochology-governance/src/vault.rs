@@ -25,6 +25,8 @@ pub enum VaultError {
     IllegalReopeningAttempt,
     /// Dimension mismatch between predictions and sealed vault outcomes.
     DimensionMismatch,
+    /// Cryptographic SHA-256 seal verification failed (in-memory or post-hoc outcome tampering detected).
+    SealTampered,
 }
 
 /// Result of the single permitted opening of a [`TemporalVault`].
@@ -79,6 +81,12 @@ impl TemporalVault {
         if forecasts_p.len() != self.outcomes_y.len() {
             return Err(VaultError::DimensionMismatch);
         }
+        let current_payload = format!("{}:{:?}", self.vault_id, self.outcomes_y);
+        let current_seal = sha256_hex(current_payload.as_bytes());
+        if current_seal != self.sha256_seal {
+            self.state = VaultState::DowngradedToExploratory;
+            return Err(VaultError::SealTampered);
+        }
 
         let bs = brier_score(forecasts_p, &self.outcomes_y);
         self.state = if bs <= max_allowed_brier {
@@ -118,5 +126,12 @@ mod tests {
             .open_once(&[0.90, 0.10], 0.05)
             .expect("first opening must return report");
         assert_eq!(r2.final_state, VaultState::DowngradedToExploratory);
+
+        let mut v_tampered = TemporalVault::seal("vault_tamper", vec![0.0, 1.0]);
+        v_tampered.outcomes_y[0] = 1.0;
+        assert_eq!(
+            v_tampered.open_once(&[0.90, 0.90], 0.05),
+            Err(VaultError::SealTampered)
+        );
     }
 }

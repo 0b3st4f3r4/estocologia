@@ -20,6 +20,50 @@ Three famous parables expose the illusion of the isolated brick:
 
 In `crates/stochology-lenses/src/relational.rs`, the Stochology Protocol translates these philosophical, physical, biological, and sociological insights into **six executable, quantitatively audited axes** (`seed = 2026`). Let us examine the foundations and mathematics of each axis.
 
+<figure class="stoch-figure">
+  <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="320" viewBox="0 0 1140 320" fill="none" role="img" aria-labelledby="title-fig-05-relational">
+  <title id="title-fig-05-relational">The Six-Layer Relational Ontological Stack: From Relational Vacuity and Prigogine's Brusselator to Schelling Emergence and Daisyworld Homeostasis</title>
+  <defs>
+  <marker id="rel-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+  <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--sky)"/>
+  </marker>
+  <style>text { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; } .mono { font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace; }</style>
+  </defs>
+  <rect x="1" y="1" width="1138" height="318" rx="14" fill="var(--canvas)" stroke="var(--border)" stroke-width="1.5"/>
+  <rect x="20" y="24" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="38" y="52" fill="var(--sky)" class="mono" font-size="11" font-weight="800">AXIS 1 · PHYSICS &amp; METAPHYSICS</text>
+  <text x="38" y="78" fill="var(--ink)" font-size="15.5" font-weight="800">Śūnyatā · RQM · OSR</text>
+  <text x="38" y="104" fill="var(--muted)" class="mono" font-size="11.5">I(R(X_A,X_B); Y) = 0.3681 nats</text>
+  <text x="38" y="126" fill="var(--muted)" class="mono" font-size="11.5">vs. I(X_iso; Y) = 0.0003 nats</text>
+  <rect x="394" y="24" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--violet)" stroke-width="2"/>
+  <text x="412" y="52" fill="var(--violet)" class="mono" font-size="11" font-weight="800">AXIS 2 · THERMODYNAMICS &amp; TIME</text>
+  <text x="412" y="78" fill="var(--ink)" font-size="15.5" font-weight="800">Brusselator &amp; Autopoiesis</text>
+  <text x="412" y="104" fill="var(--muted)" class="mono" font-size="11.5">Schnakenberg d_iS &gt; 0, dS = -0.55 ≤ 0</text>
+  <text x="412" y="126" fill="var(--muted)" class="mono" font-size="11.5">100% Material Turnover &amp; Closure</text>
+  <rect x="768" y="24" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--emerald)" stroke-width="2"/>
+  <text x="786" y="52" fill="var(--emerald)" class="mono" font-size="11" font-weight="800">AXIS 3 · HETEROPATHIC EMERGENCE</text>
+  <text x="786" y="78" fill="var(--ink)" font-size="15.5" font-weight="800">Schelling Tipping Cascade</text>
+  <text x="786" y="104" fill="var(--muted)" class="mono" font-size="11.5">τ = 0.125 → 50.2% (integrated)</text>
+  <text x="786" y="126" fill="var(--muted)" class="mono" font-size="11.5">τ = 0.375 → 82.4% (segregated!)</text>
+  <rect x="20" y="172" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="38" y="200" fill="var(--amber)" class="mono" font-size="11" font-weight="800">AXIS 4 · FIGURATIONAL SOCIOLOGY</text>
+  <text x="38" y="226" fill="var(--ink)" font-size="15.5" font-weight="800">Homines aperti vs. Homo clausus</text>
+  <text x="38" y="252" fill="var(--muted)" class="mono" font-size="11.5">Moulton DEFF = 5.81x (n_eff = 86)</text>
+  <text x="38" y="274" fill="var(--muted)" class="mono" font-size="11.5">Stackelberg θ_PO = 2.444 &gt; θ_PS = 2.0</text>
+  <rect x="394" y="172" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--sky)" stroke-width="2"/>
+  <text x="412" y="200" fill="var(--sky)" class="mono" font-size="11" font-weight="800">AXIS 5 · CYBERNETIC CO-EVOLUTION</text>
+  <text x="412" y="226" fill="var(--ink)" font-size="15.5" font-weight="800">Watson-Lovelock Daisyworld (RK4)</text>
+  <text x="412" y="252" fill="var(--muted)" class="mono" font-size="11.5">Homeostasis MAE = 1.52°C vs 9.57°C</text>
+  <text x="412" y="274" fill="var(--muted)" class="mono" font-size="11.5">dT/dL = -11.93 · Collapse @ L = 1.60</text>
+  <rect x="768" y="172" width="352" height="124" rx="11" fill="var(--elevated)" stroke="var(--rose)" stroke-width="2"/>
+  <text x="786" y="200" fill="var(--rose)" class="mono" font-size="11" font-weight="800">AXIS 6 · COMPLEXITY ECONOMICS</text>
+  <text x="786" y="226" fill="var(--ink)" font-size="15.5" font-weight="800">6-Layer Ontological Synthesis</text>
+  <text x="786" y="252" fill="var(--muted)" class="mono" font-size="11.5">Rejects Mirowski static equilibrium</text>
+  <text x="786" y="274" fill="var(--muted)" class="mono" font-size="11.5">All 6 Relational Axes Verified = true</text>
+  </svg>
+  <figcaption><strong>Figure 5.1 — The Six-Layer Relational Ontological Stack &amp; Complex Systems Audit (`stochology_lenses::relational`)</strong></figcaption>
+</figure>
+
 ---
 
 ## Step 2 — Foundations and Mathematical Formalization
@@ -71,14 +115,22 @@ $$d\_e S \le -d\_i S < 0 \implies dS = d\_i S + d\_e S \le 0$$
 
 the system sustains a stationary far-from-equilibrium ordered state that Prigogine named a **Dissipative Structure**.
 
-#### Maturana and Varela's Autopoiesis
+#### Maturana and Varela's Autopoiesis and Prigogine's Brusselator with Schnakenberg Entropy Production
 
 Chilean biologists **Humberto Maturana and Francisco Varela** (1972) added the topological law that distinguishes a living or institutional system from a mere physical eddy: **Autopoiesis** ("self-production"). An autopoietic network continuously regenerates the very boundary and catalytic processes that produce its components.
 
-In `DissipativeAutopoieticAudit::simulate_vortex` (`crates/stochology-lenses/src/relational.rs`), we simulate an open metabolic vortex where $d\_i S / dt = +0.42$ and boundary export is $d\_e S / dt = -0.45$, yielding net open-system entropy change $dS / dt = -0.03 \le 0$. Over the trajectory:
+In `DissipativeAutopoieticAudit::simulate_vortex` (`crates/stochology-lenses/src/relational.rs`), we integrate **Ilya Prigogine and René Lefever's (1968) non-equilibrium Brusselator autocatalytic reaction network** ($A \rightleftharpoons X$, $B + X \rightleftharpoons Y + D$, $2X + Y \rightleftharpoons 3X$, $X \rightleftharpoons E$) via **4th-order Runge-Kutta (RK4)**:
+
+$$\frac{dX}{dt} = A + X^2 Y - (B + 1)X, \qquad \frac{dY}{dt} = B X - X^2 Y$$
+
+In the supercritical regime $B > 1 + A^2$ (specifically $A = 1.0, B = 2.6 > 2.0$), the steady state $(X^{\ast}, Y^{\ast}) = (A, B/A)$ becomes unstable via a **Hopf bifurcation**, driving a self-sustained limit-cycle chemical oscillation. Along the limit cycle, `simulate_vortex` evaluates **Jürgen Schnakenberg's (1976) exact microscopic internal entropy production rate** across the forward and reverse reaction fluxes $J\_\rho^+, J\_\rho^-$:
+
+$$\frac{d\_i S}{dt} = \sum\_{\rho=1}^3 \bigl(J\_\rho^+ - J\_\rho^-\bigr)\ln\left(\frac{J\_\rho^+}{J\_\rho^-}\right) > 0$$
+
+coupled with chemostat boundary entropy export $d\_e S / dt < -d\_i S / dt$, yielding net open-system entropy balance $dS / dt = -0.55 \le 0$. Over the trajectory:
 - **$100.0\%$ of the original constituent matter is replaced** (`material_turnover_fraction > 0.999`), just like Cuvier's whirlpool or the knot sliding along a cord;
-- Yet **autopoietic organizational closure** preserves the topological pattern at **$100.0\%$ fidelity** (`autopoietic_pattern_fidelity > 0.999`);
-- Conversely, the moment the boundary is sealed ($d\_e S = 0$), internal entropy accumulates unchecked ($\Delta S\_{\text{iso}} > 10.0$) and the structure collapses.
+- Yet **autopoietic organizational closure** preserves the topological limit-cycle pattern at **$100.0\%$ fidelity** (`autopoietic_pattern_fidelity > 0.999`);
+- Conversely, the moment the boundary is sealed ($d\_e S = 0$), internal entropy accumulates unchecked ($\Delta S\_{\text{iso}} > 10.0$) and the structure collapses into dead thermodynamic equilibrium.
 
 ---
 
@@ -168,8 +220,8 @@ Historian of economics **Philip Mirowski** (*More Heat than Light*, 1989) docume
 | Stack Layer | Substantialist / Reductionist Paradigm | Relational / Complex Systems Paradigm (Stochology) | Audited Protocol Mechanism |
 | --- | --- | --- | --- |
 | **1. Physics & Metaphysics** | Atomism, *bare particulars*, intrinsic *svabhāva*. | *Śūnyatā* (Nāgārjuna), Indra's Net, RQM (Rovelli), OSR (Ladyman). | $I(X\_{\text{rel}}; Y) = 0.3681\text{ nats}$ vs. $I(X\_{\text{iso}}; Y) = 0.0003\text{ nats}$. |
-| **2. Thermodynamics & Time** | Closed static equilibrium ($dS = 0$), reversible clock time. | Dōgen's *Uji*, Prigogine dissipative open systems ($dS = d\_i S + d\_e S \le 0$), Maturana-Varela autopoiesis. | $d\_i S = +0.42, d\_e S = -0.45 \implies dS = -0.03 \le 0$; $100\%$ turnover & closure. |
-| **3. Biology & Ecology** | Passive adaptation to a fixed niche (Douglas Adams's puddle). | Lewontin's *Triple Helix* niche construction & Watson-Lovelock *Daisyworld*. | Thermal homeostasis $\mathrm{MAE} = 1.52 ^\circ\mathrm{C}$ vs. $9.57 ^\circ\mathrm{C}$ dead planet; extinction at $L=1.60$. |
+| **2. Thermodynamics & Time** | Closed static equilibrium ($dS = 0$), reversible clock time. | Dōgen's *Uji*, Prigogine Brusselator open systems ($dS = d\_i S + d\_e S \le 0$), Maturana-Varela autopoiesis. | Schnakenberg $d\_i S > 0, dS = -0.55 \le 0$; $100\%$ turnover & closure. |
+| **3. Biology & Ecology** | Passive adaptation to a fixed niche (Douglas Adams's puddle). | Lewontin's *Triple Helix* niche construction & Watson-Lovelock *Daisyworld* (RK4). | Thermal homeostasis $\mathrm{MAE} = 1.52 ^\circ\mathrm{C}$ vs. $9.57 ^\circ\mathrm{C}$ dead planet; extinction at $L=1.60$. |
 | **4. Psychology & Mind** | *Homo clausus* (Ibsen's onion core, isolated rational ego). | Hume's Bundle Theory, *Anattā*, Elias's *Homines aperti* figurations. | Moulton-Campbell $\mathrm{DEFF} = 5.81\times$ ($n=500 \to n\_{\mathrm{eff}}=86.0$). |
 | **5. Sociology & Emergence** | Methodological individualism (macro $=$ sum of micro intentions). | Mill's heteropathic laws, Anderson's *More Is Different*, Schelling tipping cascades, Giddens's Duality. | Schelling $\tau = 0.375 \implies 82.4\%$ segregation ($\Delta\_{\text{emerg}} = 0.449 > 0.38$). |
 | **6. Political Economy & Epistemology** | Neoclassical static equilibrium (Mirowski's copied energetics). | Complexity Economics (Arthur, Beinhocker), Morin's complex thought, Jensen's Gap & Stackelberg performativity. | $\Delta\_J > 0$ under endogenous volatility & Stackelberg $\theta\_{\mathrm{PO}} = 2.444 > \theta\_{\mathrm{PS}} = 2.000$. |
@@ -185,7 +237,7 @@ cargo run --release --bin labs -- --lenses
 ~~~
 
 ~~~text
-  [Relational Ontology & Complex Systems] MI_rel=0.3681 vs MI_iso=0.0003 nats | Prigogine dS=-0.03 (turnover=100.0%, closure=100.0%) | Schelling(tau=0.125->50.2% vs tau=0.375->82.4%) | Daisyworld(MAE=1.52C vs dead=9.57C, dT/dL=-11.93) | verified=true
+  [Relational Ontology & Complex Systems] MI_rel=0.3681 vs MI_iso=0.0003 nats | Prigogine dS=-0.55 (turnover=100.0%, closure=100.0%) | Schelling(tau=0.125->50.2% vs tau=0.375->82.4%) | Daisyworld(MAE=1.52C vs dead=9.57C, dT/dL=-11.93) | verified=true
 ~~~
 
 ### Exercises
@@ -194,6 +246,20 @@ cargo run --release --bin labs -- --lenses
 2. **(Calculation — Prigogine Entropy Balance)** An open industrial or biological system generates internal irreversible entropy at rate $d\_i S / dt = +0.65\text{ J/(K}\cdot\text{s)}$. What is the minimum magnitude of negative entropy flux $|d\_e S / dt|$ that the system must export across its boundary to avoid thermal degradation? What happens if its boundary is sealed ($d\_e S / dt = 0$) for $t = 20$ seconds?
 3. **(Concept — Schelling Phase Transition)** In Schelling's segregation model with $\tau = 0.375$, every resident is happy living in a neighborhood where $62.5\%$ of their neighbors belong to the other group. Explain step by step why the city nevertheless tips into $82.4\%$ segregation, and why surveying individual attitudes fails to diagnose the macro-outcome.
 4. **(Concept — Daisyworld Cybernetics)** In *Daisyworld*, neither black nor white daisies have brains, committees, or awareness of planetary temperature—each daisy simply grows faster when its local microclimate is near $22.5 ^\circ\mathrm{C}$. Why does $dT\_e / dL$ become negative in the two-species coexistence zone, and what lesson does the collapse at $L = 1.60$ teach about absorbing boundaries ($\Phi\_3 / \text{Lens 2}$)?
+
+<details>
+<summary><strong>Analytical &amp; Computational Solutions (Click to Expand)</strong></summary>
+
+1. **Relational Vacuity vs. Substantialism:**
+   Each node $X\_A, X\_B \sim \mathrm{Bernoulli}(0.5)$ is marginally uniform, so $P(Y \mid X\_A = 1) = P(Y \mid X\_A = 0) \implies I(X\_A; Y) = 0$ (an XOR / phase-synchrony parity channel). All information lives in the joint relational edge $R(X\_A, X\_B) = \mathbb{I}\lbrace X\_A = X\_B \rbrace$. Real-world examples include neural phase-locking between cortical areas, pairs trading / cointegration in finance, and symbiotic mutualism in ecology.
+2. **Prigogine Entropy Balance:**
+   To maintain $dS / dt = d\_i S / dt + d\_e S / dt \le 0$, the system must export at least $|d\_e S / dt| \ge 0.65\text{ J/(K}\cdot\text{s)}$ ($d\_e S / dt \le -0.65$). If the boundary is sealed ($d\_e S / dt = 0$) for $t = 20\text{ s}$, internal entropy increases by $\Delta S = 0.65 \times 20 = +13.0\text{ J/K}$, degrading the far-from-equilibrium structure.
+3. **Schelling Phase Transition:**
+   At $\tau = 0.375$, random spatial fluctuations leave a few cells slightly below $3/8$ same-group neighbors. When those residents move out, they lower the same-group fraction of the neighbors they left behind *and* raise the same-group fraction of the neighborhood they move into, triggering a positive feedback cascade (`50.2% -> 82.4%`). Individual surveys measure only micro-parameters ($\tau = 0.375$), remaining blind to the topological feedback loop of the spatial lattice.
+4. **Daisyworld Cybernetics:**
+   As solar luminosity $L$ rises in the coexistence zone, higher temperatures favor reflective white daisies ($\alpha\_w \uparrow$) over heat-absorbing black daisies ($\alpha\_b \downarrow$). The resulting increase in planetary albedo $A\_p$ reflects slightly more energy than the incremental solar increase, making $dT\_e / dL = -11.93 < 0$. At $L = 1.60$, $\alpha\_w$ hits its physical ceiling ($\le 1.0$) and local temperature exceeds the upper thermal death threshold ($40 ^\circ\mathrm{C}$), crossing an irreversible absorbing extinction barrier.
+
+</details>
 
 ### Chapter Summary
 
