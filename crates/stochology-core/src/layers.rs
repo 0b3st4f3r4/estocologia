@@ -485,11 +485,12 @@ impl PerformativeSystem {
     /// Simulates a non-contracting performative classifier ($\frac{\varepsilon \beta}{\gamma} \ge 1$)
     /// that oscillates perpetually between extreme states $1, 0, 1, 0, \dots$.
     pub fn simulate_rrm_oscillation(steps: usize) -> Vec<f64> {
-        let mut state = 1.0;
+        let non_contracting = Self::new(1.0, -1.0, 0.0, 1.0, 1.0);
+        let mut theta = 1.0;
         let mut history = Vec::with_capacity(steps);
         for _ in 0..steps {
-            history.push(state);
-            state = 1.0 - state;
+            history.push(theta);
+            theta = non_contracting.rrm_update_step(theta).clamp(0.0, 1.0);
         }
         history
     }

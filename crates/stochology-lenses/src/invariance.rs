@@ -9,7 +9,7 @@
 //! - Second-order expansion of worst-case interventional loss $L_{\mathrm{wc}}(\theta) \approx L_0 + \nabla_\theta L^\top \theta + \frac{1}{2}\theta^\top H_\theta \theta$
 //!   and critical hidden confounding sensitivity threshold $\Lambda^*$.
 
-use stochology_core::{mean, sample_variance};
+use stochology_core::{mean, sample_std, sample_variance};
 
 /// Rung on Judea Pearl's Causal Ladder (§1.3.4).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -85,20 +85,22 @@ pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) ->
     // Wald / two-stage residual shift and slope divergence across environments e in E.
     let mut nile_scores = vec![0.0; p];
     for (j, score_slot) in nile_scores.iter_mut().enumerate() {
-        let mut pooled_xj = Vec::new();
+        let mut raw_pooled_xj = Vec::new();
         let mut pooled_y = Vec::new();
         for env in environments {
             for (row, &yi) in env.x.iter().zip(env.y.iter()) {
-                pooled_xj.push(row[j]);
+                raw_pooled_xj.push(row[j]);
                 pooled_y.push(yi);
             }
         }
+        let sd_xj = sample_std(&raw_pooled_xj).max(1e-12);
+        let pooled_xj: Vec<f64> = raw_pooled_xj.iter().map(|&x| x / sd_xj).collect();
         let (beta_pool, alpha_pool, _) = univariate_ols_fit(&pooled_xj, &pooled_y);
         let mut betas = Vec::with_capacity(environments.len());
         let mut res_sds = Vec::with_capacity(environments.len());
         let mut env_proj_penalty = 0.0;
         for env in environments {
-            let col_j: Vec<f64> = env.x.iter().map(|row| row[j]).collect();
+            let col_j: Vec<f64> = env.x.iter().map(|row| row[j] / sd_xj).collect();
             let (b, _, sd) = univariate_ols_fit(&col_j, &env.y);
             let mean_res_e: f64 = col_j
                 .iter()
@@ -120,7 +122,7 @@ pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) ->
     let mut invariant_subsets = Vec::new();
     let total_masks = 1usize << p;
 
-    for mask in 1..total_masks {
+    for mask in 0..total_masks {
         let subset: Vec<usize> = (0..p).filter(|&bit| (mask & (1 << bit)) != 0).collect();
         if is_subset_invariant(environments, &subset, invariance_tolerance) {
             invariant_subsets.push(subset);
@@ -166,18 +168,52 @@ fn univariate_ols_fit(x: &[f64], y: &[f64]) -> (f64, f64, f64) {
 
 fn is_subset_invariant(environments: &[CausalEnvironment], subset: &[usize], tol: f64) -> bool {
     // Pool all environments to fit the reference structural linear model on `subset`
-    let mut pooled_x = Vec::new();
+    let mut pooled_x_raw = Vec::new();
     let mut pooled_y = Vec::new();
     for env in environments {
         for (row, &yi) in env.x.iter().zip(env.y.iter()) {
             let sub_row: Vec<f64> = subset.iter().map(|&idx| row[idx]).collect();
-            pooled_x.push(sub_row);
+            pooled_x_raw.push(sub_row);
             pooled_y.push(yi);
         }
     }
+
+    let sigma_y = sample_std(&pooled_y).max(1e-12);
+    let mut sigma_x = Vec::with_capacity(subset.len());
+    for col in 0..subset.len() {
+        let col_vals: Vec<f64> = pooled_x_raw.iter().map(|r| r[col]).collect();
+        sigma_x.push(sample_std(&col_vals).max(1e-12));
+    }
+
+    let pooled_x: Vec<Vec<f64>> = pooled_x_raw
+        .iter()
+        .map(|r| {
+            r.iter()
+                .zip(sigma_x.iter())
+                .map(|(&v, &sx)| v / sx)
+                .collect()
+        })
+        .collect();
     let coeffs = fit_ols_multi(&pooled_x, &pooled_y);
 
-    // Check invariance across environments of: (1) environment-specific slopes, (2) residual mean, (3) residual SD
+    let pooled_residuals: Vec<f64> = pooled_x
+        .iter()
+        .zip(pooled_y.iter())
+        .map(|(r, &yi)| {
+            let pred: f64 = coeffs[0]
+                + r.iter()
+                    .zip(coeffs[1..].iter())
+                    .map(|(&xj, &bj)| xj * bj)
+                    .sum::<f64>();
+            yi - pred
+        })
+        .collect();
+    let sigma_res_pool = sample_std(&pooled_residuals).max(1e-12);
+
+    // Check scale-invariant stability across environments of:
+    // (1) environment-specific slopes normalized by sigma_Y / sigma_Xj,
+    // (2) residual mean normalized by pooled residual SD,
+    // (3) residual SD spread normalized by pooled residual SD.
     let mut env_means = Vec::with_capacity(environments.len());
     let mut env_sds = Vec::with_capacity(environments.len());
     let mut max_coeff_dev = 0.0_f64;
@@ -186,11 +222,17 @@ fn is_subset_invariant(environments: &[CausalEnvironment], subset: &[usize], tol
         let env_x: Vec<Vec<f64>> = env
             .x
             .iter()
-            .map(|r| subset.iter().map(|&idx| r[idx]).collect())
+            .map(|r| {
+                subset
+                    .iter()
+                    .zip(sigma_x.iter())
+                    .map(|(&idx, &sx)| r[idx] / sx)
+                    .collect()
+            })
             .collect();
         let env_coeffs = fit_ols_multi(&env_x, &env.y);
-        for (&c_pool, &c_env) in coeffs.iter().zip(env_coeffs.iter()) {
-            max_coeff_dev = max_coeff_dev.max((c_pool - c_env).abs());
+        for (&c_pool, &c_env) in coeffs[1..].iter().zip(env_coeffs[1..].iter()) {
+            max_coeff_dev = max_coeff_dev.max((c_pool - c_env).abs() / sigma_y);
         }
 
         let residuals: Vec<f64> = env_x
@@ -205,8 +247,8 @@ fn is_subset_invariant(environments: &[CausalEnvironment], subset: &[usize], tol
                 yi - pred
             })
             .collect();
-        env_means.push(mean(&residuals).abs());
-        env_sds.push(sample_variance(&residuals).sqrt());
+        env_means.push(0.5 * mean(&residuals).abs() / sigma_res_pool);
+        env_sds.push(0.5 * sample_std(&residuals) / sigma_res_pool);
     }
 
     let max_mean = env_means.into_iter().fold(0.0_f64, f64::max);
@@ -333,7 +375,12 @@ pub fn hidden_confounding_threshold_lambda_star(
     if conservative_lower <= null_threshold.abs() {
         1.0
     } else {
-        let ratio = conservative_lower / null_threshold.abs().max(1e-6);
+        let ratio = if null_threshold.abs() > 1e-4 {
+            (conservative_lower / null_threshold.abs()).max(1.0)
+        } else {
+            let d_std = conservative_lower / (4.0 * standard_error).max(1e-6);
+            (0.91 * d_std).exp().max(1.0)
+        };
         ratio + (ratio * (ratio - 1.0)).max(0.0).sqrt()
     }
 }
@@ -373,5 +420,104 @@ mod tests {
         let res = run_icp(&envs, 0.12);
         assert_eq!(res.accepted_causal_predictors, vec![0]);
         assert!(res.nile_scores_by_variable[0] < res.nile_scores_by_variable[1] * 0.05);
+    }
+
+    #[test]
+    fn icp_is_scale_invariant_and_returns_empty_set_under_null_environment_shift() {
+        let mut rng = Rng::new(2026);
+        let mut envs = Vec::new();
+        let mut envs_scaled = Vec::new();
+        let mut envs_y_scaled = Vec::new();
+        for (idx, (scale_x0, spurious_weight)) in [(1.0, 1.2), (2.2, -1.4), (0.7, 2.8)]
+            .into_iter()
+            .enumerate()
+        {
+            let mut x = Vec::with_capacity(300);
+            let mut x_scaled = Vec::with_capacity(300);
+            let mut y = Vec::with_capacity(300);
+            let mut y_scaled = Vec::with_capacity(300);
+            for _ in 0..300 {
+                let x0 = rng.normal(0.0, scale_x0);
+                let yi = 1.75 * x0 + rng.normal(0.0, 0.12);
+                let x1 = spurious_weight * yi + rng.normal(0.0, 0.35);
+                x.push(vec![x0, x1]);
+                x_scaled.push(vec![x0 * 100.0, x1]);
+                y.push(yi);
+                y_scaled.push(yi * 1000.0);
+            }
+            envs.push(CausalEnvironment {
+                name: format!("env_{idx}"),
+                x: x.clone(),
+                y: y.clone(),
+            });
+            envs_scaled.push(CausalEnvironment {
+                name: format!("env_scaled_{idx}"),
+                x: x_scaled,
+                y,
+            });
+            envs_y_scaled.push(CausalEnvironment {
+                name: format!("env_y_scaled_{idx}"),
+                x,
+                y: y_scaled,
+            });
+        }
+
+        let res_orig = run_icp(&envs, 0.12);
+        let res_scaled = run_icp(&envs_scaled, 0.12);
+        let res_y_scaled = run_icp(&envs_y_scaled, 0.12);
+        assert_eq!(res_orig.accepted_causal_predictors, vec![0]);
+        assert_eq!(
+            res_orig.accepted_causal_predictors,
+            res_scaled.accepted_causal_predictors
+        );
+        assert_eq!(
+            res_orig.accepted_causal_predictors,
+            res_y_scaled.accepted_causal_predictors
+        );
+        assert_eq!(res_orig.invariant_subsets, res_scaled.invariant_subsets);
+        assert_eq!(res_orig.invariant_subsets, res_y_scaled.invariant_subsets);
+        assert!(
+            (res_orig.nile_scores_by_variable[0] - res_scaled.nile_scores_by_variable[0]).abs()
+                < 1e-9
+        );
+
+        // Null environment shift: Y ~ N(0, 1) independent of environment and predictors
+        let mut null_envs = Vec::new();
+        for idx in 0..3 {
+            let mut x = Vec::with_capacity(400);
+            let mut y = Vec::with_capacity(400);
+            for _ in 0..400 {
+                x.push(vec![
+                    rng.normal(0.0, 1.0 + idx as f64),
+                    rng.normal(0.0, 1.0),
+                ]);
+                y.push(rng.normal(0.0, 1.0));
+            }
+            null_envs.push(CausalEnvironment {
+                name: format!("null_{idx}"),
+                x,
+                y,
+            });
+        }
+        let res_null = run_icp(&null_envs, 0.12);
+        assert!(
+            res_null.invariant_subsets.contains(&Vec::new()),
+            "intercept-only empty set must be invariant when Y does not shift"
+        );
+        assert!(
+            res_null.accepted_causal_predictors.is_empty(),
+            "intersection must be empty when empty set is invariant"
+        );
+    }
+
+    #[test]
+    fn lambda_star_remains_finite_and_sensible_at_zero_null_threshold() {
+        let lam_zero = hidden_confounding_threshold_lambda_star(1.75, 0.08, 0.0);
+        assert!(
+            lam_zero.is_finite() && lam_zero > 2.0 && lam_zero < 1_000.0,
+            "expected finite sensible E-value at null_threshold=0.0, got {lam_zero}"
+        );
+        let lam_nonzero = hidden_confounding_threshold_lambda_star(1.75, 0.08, 0.60);
+        assert!(lam_nonzero > 4.0 && lam_nonzero < 6.0);
     }
 }

@@ -147,15 +147,23 @@ pub fn fit_covariate_drift_extra_wcp(
         beta += grad / hess;
     }
 
-    let m_beta: Vec<f64> = x_source_p.iter().map(|&x| (beta * x).exp()).collect();
-    let z_p = stochology_core::mean(&m_beta);
-    let w_hat: Vec<f64> = m_beta.iter().map(|&m| m / z_p).collect();
-    let l_hat = beta * mean_q - z_p.ln() - 0.5 * lambda_reg * beta * beta;
+    let max_bx = x_source_p
+        .iter()
+        .map(|&x| beta * x)
+        .fold(f64::NEG_INFINITY, f64::max);
+    let exp_shifted: Vec<f64> = x_source_p
+        .iter()
+        .map(|&x| (beta * x - max_bx).exp())
+        .collect();
+    let mean_shifted = stochology_core::mean(&exp_shifted);
+    let z_p = mean_shifted * max_bx.exp();
+    let w_hat: Vec<f64> = exp_shifted.iter().map(|&e| e / mean_shifted).collect();
+    let l_hat = beta * mean_q - (max_bx + mean_shifted.ln()) - 0.5 * lambda_reg * beta * beta;
 
     // Total Variation distance d_TV(Q, Q_hat):
-    // Uses exact 0.5 * E_P[|w* - w_hat|] when oracle weights w* are provided; otherwise estimates
-    // d_TV(Q, Q_hat) between target sample Q and tilted source distribution Q_hat via Pinsker's bound
-    // on the tilted vs. target first two moments.
+    // Uses exact 0.5 * E_P[|w* - w_hat|] when oracle weights w* are provided; otherwise combines
+    // the Gaussian moment Pinsker estimate with a non-parametric empirical 10-decile-bin L1 Total
+    // Variation distance between target sample Q and tilted source distribution (x_source_p, w_hat).
     let d_tv = if let Some(w_star) = true_weights_optional {
         0.5 * w_star
             .iter()
@@ -186,7 +194,9 @@ pub fn fit_covariate_drift_extra_wcp(
         let kl_gauss = 0.5
             * ((var_q_hat / var_q).ln() + (var_q + (mean_q - mu_q_hat).powi(2)) / var_q_hat - 1.0)
                 .max(0.0);
-        (0.5 * kl_gauss).sqrt().clamp(0.0, 1.0)
+        let tv_gauss = (0.5 * kl_gauss).sqrt();
+        let tv_decile = empirical_decile_tv_distance(x_source_p, &w_hat, x_target_q);
+        tv_gauss.max(tv_decile).clamp(0.0, 1.0)
     };
 
     // Weighted quantile (ExTRA-WCP-T) of nonconformity scores with Lei-Candès TV-adjusted level (1 - alpha + d_TV)
@@ -196,7 +206,7 @@ pub fn fit_covariate_drift_extra_wcp(
         .zip(w_hat.iter().copied())
         .collect();
     pairs.sort_by(|a, b| a.0.total_cmp(&b.0));
-    let sum_weights: f64 = pairs.iter().map(|(_, w)| *w).sum();
+    let sum_weights: f64 = pairs.iter().map(|(_, w)| *w).sum::<f64>() + 1.0;
     let effective_quantile_level = (1.0 - alpha + d_tv).clamp(0.0, 1.0);
     let target_cum = effective_quantile_level * sum_weights;
     let mut cum = 0.0;
@@ -326,7 +336,7 @@ pub fn estimate_label_shift_four_methods(
     let q1_dfm = if diff_mu.abs() < 1e-12 {
         source_prior_p1.clamp(0.001, 0.999)
     } else {
-        (((target_feature_mean / effective_scale) - source_class0_feature_mean) / diff_mu)
+        ((target_feature_mean - source_class0_feature_mean) / (effective_scale * diff_mu))
             .clamp(0.001, 0.999)
     };
 
@@ -357,6 +367,48 @@ pub fn estimate_label_shift_four_methods(
     }
 }
 
+/// Non-parametric empirical quantile-bin $L_1$ Total Variation distance between the target sample
+/// `x_target_q` and the tilted source distribution `(x_source_p, w_hat)` across 10 pooled decile bins.
+fn empirical_decile_tv_distance(x_source_p: &[f64], w_hat: &[f64], x_target_q: &[f64]) -> f64 {
+    let mut pooled = Vec::with_capacity(x_source_p.len() + x_target_q.len());
+    pooled.extend_from_slice(x_source_p);
+    pooled.extend_from_slice(x_target_q);
+    pooled.sort_by(|a, b| a.total_cmp(b));
+    if pooled.is_empty() {
+        return 0.0;
+    }
+    let mut cuts = [0.0_f64; 9];
+    for (k, cut) in cuts.iter_mut().enumerate() {
+        *cut = stochology_core::quantile_sorted(&pooled, ((k + 1) as f64) * 0.10);
+    }
+    let bin_index = |x: f64| -> usize {
+        for (k, &c) in cuts.iter().enumerate() {
+            if x <= c {
+                return k;
+            }
+        }
+        9
+    };
+
+    let mut p_bins = [0.0_f64; 10];
+    let sum_w = w_hat.iter().sum::<f64>().max(1e-12);
+    for (&x, &w) in x_source_p.iter().zip(w_hat.iter()) {
+        p_bins[bin_index(x)] += w / sum_w;
+    }
+
+    let mut q_bins = [0.0_f64; 10];
+    let inv_m = 1.0 / (x_target_q.len().max(1) as f64);
+    for &x in x_target_q {
+        q_bins[bin_index(x)] += inv_m;
+    }
+
+    let raw_tv = 0.5 * (0..10).map(|b| (p_bins[b] - q_bins[b]).abs()).sum::<f64>();
+    let n = x_source_p.len().max(1) as f64;
+    let m = x_target_q.len().max(1) as f64;
+    let se_floor = 1.2 * (1.0 / n + 1.0 / m).sqrt();
+    (raw_tv - se_floor).max(0.25 * raw_tv)
+}
+
 /// Exact smallest singular value $\sigma_{\min}(A)$ of a $2 \times 2$ matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$.
 fn smallest_singular_value_2x2(a: f64, b: f64, c: f64, d: f64) -> f64 {
     let frob2 = a * a + b * b + c * c + d * d;
@@ -378,6 +430,10 @@ fn solve_otter_sinkhorn(
     let inv_n = 1.0 / (n as f64);
     let p1_s = source_prior_p1.clamp(1e-6, 1.0 - 1e-6);
     let p0_s = 1.0 - p1_s;
+    let mu_t = [
+        (1.0 - target_pred_pos_rate).clamp(1e-6, 1.0 - 1e-6),
+        target_pred_pos_rate.clamp(1e-6, 1.0 - 1e-6),
+    ];
 
     // Gibbs kernel K_{i,j} = exp(-C_{i,j} / eps_ot) with class-conditional likelihood weighting
     let mut k_mat = Vec::with_capacity(n);
@@ -389,7 +445,7 @@ fn solve_otter_sinkhorn(
         k_mat.push([k0.max(1e-12), k1.max(1e-12)]);
     }
 
-    // Evaluate Sinkhorn-Knopp optimal transport objective over candidate target marginals q = (1 - q1, q1)
+    // Evaluate Entropic Optimal Transport / Sinkhorn divergence objective over candidate target marginals q = (1 - q1, q1)
     let eval_sinkhorn = |q1: f64| -> f64 {
         let q = [1.0 - q1, q1];
         let mut u = vec![1.0; n];
@@ -404,19 +460,26 @@ fn solve_otter_sinkhorn(
                 v[j] = q[j] / col_sum.max(1e-15);
             }
         }
-        // Primal entropic transport cost <C, Pi> + marginal confusion consistency ||M q - mu_t||^2
-        let mut transport_cost = 0.0;
-        for (i, &p) in target_posteriors.iter().enumerate() {
-            let pc = p.clamp(1e-6, 1.0 - 1e-6);
-            let pi_0 = u[i] * k_mat[i][0] * v[0];
-            let pi_1 = u[i] * k_mat[i][1] * v[1];
-            transport_cost += pi_0 * (-(1.0 - pc).ln()) + pi_1 * (-pc.ln());
+
+        // Confusion-pushed target marginal M * q = [(1 - FPR)(1 - q1) + (1 - TPR)q1, FPR(1 - q1) + TPR * q1]
+        let mq = [
+            ((1.0 - source_fpr) * q[0] + (1.0 - source_tpr) * q[1]).clamp(1e-9, 1.0 - 1e-9),
+            (source_fpr * q[0] + source_tpr * q[1]).clamp(1e-9, 1.0 - 1e-9),
+        ];
+        let kl_confusion = mu_t[0] * (mu_t[0] / mq[0]).ln() + mu_t[1] * (mu_t[1] / mq[1]).ln();
+
+        // Sinkhorn dual KL consistency on k_mat between scaled coupling Pi = diag(u) K diag(v)
+        // and the unscaled Bayes reference coupling Pi^(0)_{i,j} = (1/n) * K_{i,j} q_j / (K_{i,0} q_0 + K_{i,1} q_1)
+        let mut kl_sinkhorn = 0.0;
+        for i in 0..n {
+            let ref_denom = (k_mat[i][0] * q[0] + k_mat[i][1] * q[1]).max(1e-15);
+            for j in 0..2 {
+                let pi_ij = (u[i] * k_mat[i][j] * v[j]).max(1e-15);
+                let pi0_ij = (inv_n * k_mat[i][j] * q[j] / ref_denom).max(1e-15);
+                kl_sinkhorn += pi_ij * (pi_ij / pi0_ij).ln();
+            }
         }
-        let induced_pos = q[1] * source_tpr + q[0] * source_fpr;
-        let moment_mismatch = (induced_pos - target_pred_pos_rate).powi(2);
-        // Sinkhorn dual discrepancy on v + moment alignment
-        let v_ratio_mismatch = ((v[1] - v[0]) * 0.05).powi(2);
-        moment_mismatch + 0.02 * transport_cost + v_ratio_mismatch
+        kl_confusion.max(0.0) + kl_sinkhorn.max(0.0)
     };
 
     let mut best_q1 = source_prior_p1.clamp(0.001, 0.999);
@@ -486,5 +549,27 @@ mod tests {
             m_bad.diagnosed_regime,
             DriftRegime::ConceptDriftCircuitBreaker
         );
+    }
+
+    #[test]
+    fn decile_tv_detects_bimodal_shift_with_matched_moments_and_dfm_is_translation_invariant() {
+        let mut rng = Rng::new(2026);
+        let x_p: Vec<f64> = (0..400).map(|_| rng.normal(0.0, 1.0)).collect();
+        // Symmetric bimodal target (+1 / -1) has mean ~ 0 and variance ~ 1, matching N(0, 1) first two moments
+        let x_q_bimodal: Vec<f64> = (0..400)
+            .map(|i| if i % 2 == 0 { -1.0 } else { 1.0 })
+            .collect();
+        let scores: Vec<f64> = x_p.iter().map(|&x| 0.2 + 0.1 * x.abs()).collect();
+        let res = fit_covariate_drift_extra_wcp(&x_p, &x_q_bimodal, &scores, None, 0.01, 0.10);
+        assert!(res.total_variation_distance_d_tv > 0.15);
+
+        // DFM translation invariance under alpha0 > 0: shifting all feature means by +500 leaves q1_dfm unchanged
+        let probs = [0.4857; 72];
+        let d1 =
+            estimate_label_shift_four_methods(0.10, 0.85, 0.10, &probs, 10.0, 30.0, 16.3, 0.10);
+        let d2 =
+            estimate_label_shift_four_methods(0.10, 0.85, 0.10, &probs, 510.0, 530.0, 516.3, 0.10);
+        assert!((d1.target_prior_dfm - d2.target_prior_dfm).abs() < 1e-12);
+        assert!((d1.target_prior_dfm - 0.35).abs() < 1e-9);
     }
 }

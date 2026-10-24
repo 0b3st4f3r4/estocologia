@@ -73,19 +73,52 @@ impl SdpiHierarchy {
         // Chi-square contraction = largest squared singular value of the centered divergence transition operator
         let eta_chi2 = compute_chi2_contraction(p_x, &p_y, channel_w);
 
-        // KL contraction: supremum of D_KL(PW || QW) / D_KL(P || Q) and sup_Q eta_chi2(Q, W)
-        // over 2-symbol mixtures (Anantharam et al. extremality) and full-support simplex perturbations.
+        // KL contraction: by Anantharam et al. (2013), eta_KL(W) = sup_Q eta_chi2(Q, W) is achieved
+        // on 2-symbol input distributions Q = p0 * delta_i + (1 - p0) * delta_k.
+        // For each pair i < k, we maximize the exact 2-symbol chi-square contraction closed form
+        // g_{ik}(p0) via golden-section search on [1e-9, 1 - 1e-9], and also verify binary mixture KL ratios.
+        let inv_phi = 0.5 * (5.0_f64.sqrt() - 1.0);
         let mut eta_kl = eta_chi2;
         for i in 0..nx {
             for k in (i + 1)..nx {
+                let eval_chi2_pair = |p0: f64| -> f64 {
+                    let p1 = 1.0 - p0;
+                    let mut sum = 0.0;
+                    for (&wij, &wkj) in channel_w[i].iter().zip(channel_w[k].iter()) {
+                        let denom = p0 * wij + p1 * wkj;
+                        if denom > 1e-15 {
+                            let diff = wij - wkj;
+                            sum += (diff * diff) / denom;
+                        }
+                    }
+                    (p0 * p1 * sum).clamp(0.0, 1.0)
+                };
+
+                let mut a = 1e-9_f64;
+                let mut b = 1.0 - 1e-9_f64;
+                let mut c = b - inv_phi * (b - a);
+                let mut d = a + inv_phi * (b - a);
+                let mut fc = eval_chi2_pair(c);
+                let mut fd = eval_chi2_pair(d);
+                for _ in 0..64 {
+                    if fc >= fd {
+                        b = d;
+                        d = c;
+                        fd = fc;
+                        c = b - inv_phi * (b - a);
+                        fc = eval_chi2_pair(c);
+                    } else {
+                        a = c;
+                        c = d;
+                        fc = fd;
+                        d = a + inv_phi * (b - a);
+                        fd = eval_chi2_pair(d);
+                    }
+                }
+                eta_kl = eta_kl.max(eval_chi2_pair(0.5 * (a + b)));
+
                 for step in 1..50 {
                     let p0 = (step as f64) / 50.0;
-                    let mut dist_q = vec![0.0; nx];
-                    dist_q[i] = p0;
-                    dist_q[k] = 1.0 - p0;
-                    let q_y = push_forward(&dist_q, channel_w);
-                    eta_kl = eta_kl.max(compute_chi2_contraction(&dist_q, &q_y, channel_w));
-
                     for q_step in 1..50 {
                         if step == q_step {
                             continue;
@@ -235,16 +268,21 @@ fn jacobi_largest_eigenvalue(a: &mut [Vec<f64>]) -> f64 {
 
 /// Mutual information upper bound for an amplitude-constrained input $|X| \le A$ over an additive channel
 /// $Y = X + N$ with noise tail probability $\epsilon = \mathbb{P}(|N - \mu_N| > \delta)$ (§1.3.1).
+/// Composes the Smith (1971) / McKellips (2004) peak-amplitude AWGN capacity upper bound with SDPI erasure/outage contraction.
 pub fn amplitude_constrained_mi_bound(
     amplitude_a: f64,
     noise_std_sigma: f64,
     tail_probability_epsilon: f64,
 ) -> f64 {
     assert!(amplitude_a > 0.0 && noise_std_sigma > 0.0);
-    let snr = (amplitude_a / noise_std_sigma).powi(2);
-    let awgn_cap = 0.5 * (1.0 + snr).ln();
+    let ratio = amplitude_a / noise_std_sigma;
+    let snr = ratio * ratio;
+    let variance_cap = 0.5 * (1.0 + snr).ln();
+    let mckellips_cap =
+        (1.0 + ratio * (2.0 / (std::f64::consts::PI * std::f64::consts::E)).sqrt()).ln();
+    let awgn_peak_cap = variance_cap.min(mckellips_cap);
     let contraction = (1.0 - tail_probability_epsilon.clamp(0.0, 1.0)).max(0.0);
-    awgn_cap * contraction
+    awgn_peak_cap * contraction
 }
 
 /// Binary Shannon entropy $H_2(p) = -p \ln p - (1 - p)\ln(1 - p)$ in nats.
@@ -322,5 +360,23 @@ mod tests {
         let i_wz = 0.5 * h_w;
         let p_e = fano_error_floor(4, h_w, i_wz);
         assert!(p_e > 0.15 && p_e < 0.75);
+    }
+
+    #[test]
+    fn mckellips_amplitude_bound_and_asymmetric_z_channel_golden_section() {
+        // Peak-amplitude McKellips bound is strictly tighter than unconstrained variance bound 0.5 * ln(1 + A^2/sigma^2)
+        let a = 2.0;
+        let sigma = 1.0;
+        let naive_var_cap = 0.5 * (1.0_f64 + (a / sigma) * (a / sigma)).ln();
+        let mck_bound = amplitude_constrained_mi_bound(a, sigma, 0.0);
+        assert!(mck_bound < naive_var_cap && mck_bound > 0.0);
+
+        // Asymmetric binary channel: W(0|0) = 0.9, W(0|1) = 0.2 (so a = 0.9, b = 0.2)
+        // Unique interior maximizer p0* = 4/7 (not on 1/50 grid), with exact
+        // sup_{p0} g(p0) = (sqrt(a*(1-b)) - sqrt(b*(1-a)))^2 = (sqrt(0.72) - sqrt(0.02))^2 = 0.50
+        let w_asym = vec![vec![0.9, 0.1], vec![0.2, 0.8]];
+        let h_asym = SdpiHierarchy::compute(&[0.5, 0.5], &w_asym);
+        assert!((h_asym.eta_kl - 0.50).abs() < 1e-12);
+        assert!(h_asym.hierarchy_valid);
     }
 }

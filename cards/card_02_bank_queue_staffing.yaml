@@ -15,9 +15,9 @@ epistemological_header:
     independent_unit: "call center operational day (cluster of 5-minute windows)"
     nominal_sample_size_n: 27716
     weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 169.00 * 1.000 = 169.00 (Moulton-Campbell, CV = 0.000)"
-    threshold_exceedance_icc: "rho_I(0.90) = 1.000 -> DEFF_exceedance = 169.00"
-    effective_sample_size_n_eff: 164
-    unit_margin_of_error: "+/- 5.4 percentage points over 164 effective operational days"
+    threshold_exceedance_icc: "rho_I(0.90) = 0.1623 -> DEFF_exceedance = 28.26"
+    effective_sample_size_n_eff: 981
+    unit_margin_of_error: "+/- 2.2 percentage points over 981 effective exceedance-adjusted windows (164 operational days)"
   noise_physics:
     stochastic_regime: "Kingman heavy-traffic queue amplification E[W] ~ rho / (1 - rho) with intraday burstiness (alpha_Hill = 2.15)"
     absorbing_states: "Queue abandonment cascade and SLA penalty breach above 30-minute wait barrier"

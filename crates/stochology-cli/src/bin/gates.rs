@@ -4,7 +4,7 @@
 use std::env;
 use std::fs;
 use std::path::Path;
-use stochology_cli::build_v1_card_suite;
+use stochology_cli::{build_v1_card_suite, exact_cluster_null_m_tilde_seed_2026};
 use stochology_core::{
     verify_resolution_phi5, ChouldechovaAudit, EpistemologicalCard, ExceedanceDesignEffect,
     InfoGapOption, PerformativeSystem,
@@ -14,13 +14,14 @@ use stochology_governance::{
 };
 use stochology_lenses::decision::CorpPavDecomposition;
 use stochology_lenses::information::SdpiHierarchy;
+use stochology_siga::run_full_siga_roadmap;
 
 fn run_positive_gates(root: &Path) -> Result<(), String> {
     println!("=== EPISTEMOLOGICAL GATES G1-G7 (STOCHOLOGY PROTOCOL v1.0) ===");
 
-    // Verify that the 3 YAML card files in cards/ exist, match the canonical suite byte-for-byte, and pass audit()
+    // Verify that the 3 YAML card files in cards/ exist, match the canonical suite byte-for-byte, pass audit(), and pass SIGA
     let suite = build_v1_card_suite();
-    for (rel_path, _, expected) in &suite {
+    for (rel_path, plan_text, expected) in &suite {
         let path = root.join(rel_path);
         let content = fs::read_to_string(&path)
             .map_err(|e| format!("Failed to read '{}': {e}", path.display()))?;
@@ -32,6 +33,14 @@ fn run_positive_gates(root: &Path) -> Result<(), String> {
         if parsed != *expected {
             return Err(format!(
                 "Card on disk '{rel_path}' diverges from canonical specification"
+            ));
+        }
+        let (null_samples, obs_stat, e_vals) = exact_cluster_null_m_tilde_seed_2026(&parsed);
+        let siga_rep = run_full_siga_roadmap(&parsed, plan_text, obs_stat, &null_samples, &e_vals);
+        if !siga_rep.approved_end_to_end {
+            return Err(format!(
+                "Card '{rel_path}' failed 8-Step SIGA Roadmap: {:?}",
+                siga_rep.steps_1_to_8_completed
             ));
         }
     }
@@ -102,10 +111,14 @@ fn run_negative_proof(defect: &str) -> ! {
             }
         }
         "phi5" => {
+            let mut c = EpistemologicalCard::canonical_example();
+            c.decision_maker_question.altered_action =
+                "Set a single annual aggregate average for the entire year".into();
             if !verify_resolution_phi5(
                 "operational day",
                 "Set a single annual aggregate average for the entire year",
-            ) {
+            ) && c.audit().is_err()
+            {
                 eprintln!(
                     "NEGATIVE PROOF [phi5] BLOCKED SUCCESSFULLY: coarse annual aggregate action against daily unit"
                 );
@@ -113,8 +126,15 @@ fn run_negative_proof(defect: &str) -> ! {
             }
         }
         "moulton" => {
+            let mut c = EpistemologicalCard::canonical_example();
+            c.epistemological_header
+                .unit_and_margin
+                .effective_sample_size_n_eff = c
+                .epistemological_header
+                .unit_and_margin
+                .nominal_sample_size_n;
             let b = ExceedanceDesignEffect::benchmark_calibration_25028();
-            if b.n_effective_p < (b.n_nominal as f64) * 0.10 {
+            if b.n_effective_p < (b.n_nominal as f64) * 0.10 && c.audit().is_err() {
                 eprintln!(
                     "NEGATIVE PROOF [moulton] BLOCKED SUCCESSFULLY: nominal pseudoreplication n={} reduced to n_eff={:.0}",
                     b.n_nominal, b.n_effective_p
@@ -123,8 +143,13 @@ fn run_negative_proof(defect: &str) -> ! {
             }
         }
         "performativity" => {
+            let mut c = EpistemologicalCard::canonical_example();
+            c.epistemological_header
+                .noise_physics
+                .bridge_l3_l1_performativity
+                .rrm_convergence_condition = "eps * beta / gamma = 0.20 * 6.0 / 1.0 = 1.20".into();
             let unstable = PerformativeSystem::new(1.0, -1.2, 0.5, 1.0, 1.0).diagnose();
-            if !unstable.rrm_converges {
+            if !unstable.rrm_converges && c.audit().is_err() {
                 eprintln!(
                     "NEGATIVE PROOF [performativity] BLOCKED SUCCESSFULLY: RRM radius {:.2} >= 1 diverges/oscillates",
                     unstable.rrm_contraction_radius
@@ -133,6 +158,12 @@ fn run_negative_proof(defect: &str) -> ! {
             }
         }
         "sniedovich" => {
+            let mut c = EpistemologicalCard::canonical_example();
+            c.uncertainty_budget_and_authorship
+                .info_gap_robustness
+                .global_maximin_safeguard =
+                "Wald global Maximin bound = -999 in No-Man's Land with irreversible collapse"
+                    .into();
             let turkey = InfoGapOption {
                 id: "christmas_turkey",
                 nominal_performance: 100.0,
@@ -142,7 +173,7 @@ fn run_negative_proof(defect: &str) -> ! {
                 reversible: false,
             }
             .evaluate(60.0, 120.0, 20.0);
-            if !turkey.approved_sniedovich {
+            if !turkey.approved_sniedovich && c.audit().is_err() {
                 eprintln!(
                     "NEGATIVE PROOF [sniedovich] BLOCKED SUCCESSFULLY: collapse in No-Man's Land (Wald={})",
                     turkey.wald_global_maximin_bound
@@ -195,9 +226,12 @@ fn run_negative_proof(defect: &str) -> ! {
             }
         }
         "chouldechova" => {
+            let mut c = EpistemologicalCard::canonical_example();
+            c.decision_rule_and_scope.who_pays_for_error =
+                "Chouldechova trilemma audit: equalizing PPV and FPR with FPR_A/FPR_B = 1.000 equally fair".into();
             let (_, _, ratio) =
                 ChouldechovaAudit::fpr_ratio_under_equal_ppv_and_fnr(0.30, 0.15, 0.70, 0.20);
-            if (ratio - 1.0).abs() > 1e-6 {
+            if (ratio - 1.0).abs() > 1e-6 && c.audit().is_err() {
                 eprintln!(
                     "NEGATIVE PROOF [chouldechova] BLOCKED SUCCESSFULLY: algebraic impossibility FPR_A/FPR_B = {ratio:.4} != 1"
                 );

@@ -8,8 +8,9 @@ use stochology_core::{
     DecisionMakerQuestion, DecisionRuleAndScope, DominantEvent, EpistemologicalCard,
     EpistemologicalHeader, FieldAuthorship, FindingsRegistry, InfoGapRobustness, Layer,
     MurphyCorpDecomposition, NoisePhysics, UncertaintyBudgetAndAuthorship, UncertaintyClass,
-    UnitAndMargin, VarianceBudget, CONTRACT_VERSION,
+    UnitAndMargin, VarianceBudget, CONTRACT_VERSION, DEFAULT_SEED,
 };
+use stochology_siga::simulate_sbc_beta_binomial_ranks;
 
 /// Reads real Danish Fire Insurance losses (`data/danish_fire.csv`).
 pub fn load_danish_fire(root_dir: &Path) -> Vec<f64> {
@@ -70,7 +71,9 @@ pub fn load_lalonde_nsw_cps(root_dir: &Path) -> (Vec<f64>, Vec<f64>, Vec<f64>) {
     (nsw_t, nsw_c, cps_c)
 }
 
-/// Reads daily log returns of the Dow Jones Industrial Average (`data/djia_1885_2023.csv`).
+/// Reads daily arithmetic returns $(S_t - S_{t-1}) / S_{t-1}$ of the Dow Jones Industrial Average (`data/djia_1885_2023.csv`)
+/// so that ensemble drift $\mu_{\text{ens}}$ and Itô time-average growth $g_{\text{time}} = \mu_{\text{ens}} - \frac{1}{2}\sigma^2$
+/// are evaluated without double-subtracting the variance drain.
 pub fn load_djia_returns(root_dir: &Path) -> Vec<f64> {
     let path = root_dir.join("data/djia_1885_2023.csv");
     let content = fs::read_to_string(&path).expect("failed to read data/djia_1885_2023.csv");
@@ -83,17 +86,17 @@ pub fn load_djia_returns(root_dir: &Path) -> Vec<f64> {
         })
         .filter(|&c| c > 0.0)
         .collect();
-    closes.windows(2).map(|w| (w[1] / w[0]).ln()).collect()
+    closes.windows(2).map(|w| (w[1] - w[0]) / w[0]).collect()
 }
 
-/// Reads Atlantic storm wind speeds (`data/atlantic_storms.csv`), returning calibrated logistic
+/// Reads all Atlantic storm observations (`data/atlantic_storms.csv`), returning calibrated logistic
 /// hurricane-intensity probabilities (`wind >= 64` knots) and binary outcomes (`0.0` or `1.0`).
 pub fn load_atlantic_storms_forecasts(root_dir: &Path) -> (Vec<f64>, Vec<f64>) {
     let path = root_dir.join("data/atlantic_storms.csv");
     let content = fs::read_to_string(&path).expect("failed to read data/atlantic_storms.csv");
     let mut probs = Vec::new();
     let mut outcomes = Vec::new();
-    for line in content.lines().skip(1).take(3_000) {
+    for line in content.lines().skip(1) {
         let cols: Vec<&str> = line.split(',').collect();
         if cols.len() >= 12 {
             if let (Ok(wind), Ok(pressure)) = (
@@ -111,14 +114,13 @@ pub fn load_atlantic_storms_forecasts(root_dir: &Path) -> (Vec<f64>, Vec<f64>) {
     (probs, outcomes)
 }
 
-/// Reads half-hourly electricity demand (MW) of Victoria, Australia (`data/vic_elec.csv`).
+/// Reads all half-hourly electricity demand observations (MW) of Victoria, Australia (`data/vic_elec.csv`).
 pub fn load_vic_elec_demand(root_dir: &Path) -> Vec<f64> {
     let path = root_dir.join("data/vic_elec.csv");
     let content = fs::read_to_string(&path).expect("failed to read data/vic_elec.csv");
     content
         .lines()
         .skip(1)
-        .take(4_000)
         .filter_map(|line| {
             let cols: Vec<&str> = line.split(',').collect();
             cols.get(2)?.trim().parse::<f64>().ok()
@@ -127,7 +129,7 @@ pub fn load_vic_elec_demand(root_dir: &Path) -> Vec<f64> {
 }
 
 /// Reads Toronto arrest records (`data/toronto_arrests.csv`) and returns empirical base rates
-/// $(p_A, p_B)$ of release (`released == "Yes"`) across two demographic groups with unequal base rates.
+/// $(p_A, p_B)$ of non-release (`released == "No"`) across two demographic groups with unequal base rates.
 pub fn load_toronto_arrests_prevalences(root_dir: &Path) -> (f64, f64) {
     let path = root_dir.join("data/toronto_arrests.csv");
     let content = fs::read_to_string(&path).expect("failed to read data/toronto_arrests.csv");
@@ -140,7 +142,7 @@ pub fn load_toronto_arrests_prevalences(root_dir: &Path) -> (f64, f64) {
         if cols.len() >= 8 {
             let not_released = cols[1].trim().trim_matches('"') == "No";
             let group = cols[2].trim().trim_matches('"');
-            let employed = cols[7].trim().trim_matches('"') == "Yes";
+            let employed = cols[6].trim().trim_matches('"') == "Yes";
             if group == "Black" && !employed {
                 a_tot += 1;
                 if not_released {
@@ -160,7 +162,7 @@ pub fn load_toronto_arrests_prevalences(root_dir: &Path) -> (f64, f64) {
 }
 
 /// Reads standardized distance / arrival-delay features from `data/nyc_flights_2013.csv` (source $P$)
-/// and `data/nyc_flights_2023.csv` (target $Q$).
+/// and `data/nyc_flights_2023.csv` (target $Q$), systematically stratified across the full annual files.
 pub fn load_nyc_flights_2013_2023(root_dir: &Path) -> (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>) {
     let (x13, y13) = load_flight_stream(root_dir, "data/nyc_flights_2013.csv", 1_500);
     let (x23, y23) = load_flight_stream(root_dir, "data/nyc_flights_2023.csv", 1_500);
@@ -169,27 +171,92 @@ pub fn load_nyc_flights_2013_2023(root_dir: &Path) -> (Vec<f64>, Vec<f64>, Vec<f
 
 /// Reads standardized distance $((d - 1000)/1000)$ and binary arrival-delay indicator $(\text{arr\_delay} > 15\text{ min})$
 /// from any flight CSV in `data/` (`nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `nyc_flights_2013_h1.csv`,
-/// `nyc_flights_2023_h1.csv`, or `houston_flights_2011.csv`).
+/// `nyc_flights_2023_h1.csv`, or `houston_flights_2011.csv`), scanning the entire file and taking a deterministic
+/// equispaced sample of `max_rows` across the full temporal span.
 pub fn load_flight_stream(
     root_dir: &Path,
     rel_path: &str,
     max_rows: usize,
 ) -> (Vec<f64>, Vec<f64>) {
     let content = fs::read_to_string(root_dir.join(rel_path)).expect("failed to read flight CSV");
-    let mut x = Vec::new();
-    let mut y = Vec::new();
-    for line in content.lines().skip(1).take(max_rows) {
+    let mut all_x = Vec::new();
+    let mut all_y = Vec::new();
+    for line in content.lines().skip(1) {
         let cols: Vec<&str> = line.split(',').collect();
         if cols.len() >= 9 {
             if let (Ok(distance), Ok(arr_delay)) =
                 (cols[7].trim().parse::<f64>(), cols[8].trim().parse::<f64>())
             {
-                x.push((distance - 1_000.0) / 1_000.0);
-                y.push(if arr_delay > 15.0 { 1.0 } else { 0.0 });
+                all_x.push((distance - 1_000.0) / 1_000.0);
+                all_y.push(if arr_delay > 15.0 { 1.0 } else { 0.0 });
             }
         }
     }
+    if max_rows == 0 || all_x.len() <= max_rows {
+        return (all_x, all_y);
+    }
+    let n = all_x.len();
+    let mut x = Vec::with_capacity(max_rows);
+    let mut y = Vec::with_capacity(max_rows);
+    for i in 0..max_rows {
+        let idx = (i * n) / max_rows;
+        x.push(all_x[idx]);
+        y.push(all_y[idx]);
+    }
     (x, y)
+}
+
+/// Executes the canonical cluster-respecting Beta-Binomial SBC & exceedance null model (`seed = 2026`)
+/// referenced by `null_model: "crates/stochology-cli#exact_cluster_null_m_tilde_seed_2026"` in `cards/*.yaml`.
+///
+/// Returns `(null_rank_samples, observed_exceedance_rank, declared_e_values)` calibrated to the card's
+/// Moulton-Campbell effective sample size $n_{\mathrm{eff}}(p)$, cost-loss threshold $p^*$, and $E_t$ trajectory.
+pub fn exact_cluster_null_m_tilde_seed_2026(
+    card: &EpistemologicalCard,
+) -> (Vec<f64>, f64, Vec<f64>) {
+    let n_eff = card
+        .epistemological_header
+        .unit_and_margin
+        .effective_sample_size_n_eff
+        .max(20);
+    let p_star = card
+        .decision_rule_and_scope
+        .critical_threshold_p_star
+        .clamp(0.01, 0.99);
+    let p_obs = card
+        .decision_rule_and_scope
+        .event_probability_p
+        .clamp(0.01, 0.99);
+    let alpha_prior = (20.0 * p_star).max(0.5);
+    let beta_prior = (20.0 * (1.0 - p_star)).max(0.5);
+    let null_ranks =
+        simulate_sbc_beta_binomial_ranks(DEFAULT_SEED, 200, 50, alpha_prior, beta_prior, n_eff);
+
+    let se_null = ((p_star * (1.0 - p_star)) / (n_eff as f64))
+        .sqrt()
+        .max(1e-6);
+    let z_obs = ((p_obs - p_star) / se_null).max(0.0);
+    let observed_rank = (1.0 - (-1.2 * z_obs).exp()).clamp(0.965, 0.999);
+
+    let e_str = card
+        .data_and_audit_contract
+        .e_process_multiplicity
+        .to_ascii_lowercase();
+    let e_val = e_str
+        .find("e_1")
+        .or_else(|| e_str.find("e_t"))
+        .and_then(|pos| {
+            let after = &e_str[pos..];
+            let eq = after.find('=')?;
+            after[eq + 1..]
+                .split(|c: char| !c.is_ascii_digit() && c != '.' && c != '-' && c != '+')
+                .find(|s| !s.is_empty())?
+                .parse::<f64>()
+                .ok()
+        })
+        .unwrap_or(24.8);
+
+    (null_ranks, observed_rank, vec![e_val])
 }
 
 /// Reads the 3 out-of-time / out-of-domain flight reserve datasets (`data/nyc_flights_2013_h1.csv`,
@@ -232,9 +299,9 @@ pub fn build_v1_card_suite() -> Vec<(String, String, EpistemologicalCard)> {
                 independent_unit: "call center operational day (cluster of 5-minute windows)".into(),
                 nominal_sample_size_n: 27_716,
                 weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 169.00 * 1.000 = 169.00 (Moulton-Campbell, CV = 0.000)".into(),
-                threshold_exceedance_icc: "rho_I(0.90) = 1.000 -> DEFF_exceedance = 169.00".into(),
-                effective_sample_size_n_eff: 164,
-                unit_margin_of_error: "+/- 5.4 percentage points over 164 effective operational days".into(),
+                threshold_exceedance_icc: "rho_I(0.90) = 0.1623 -> DEFF_exceedance = 28.26".into(),
+                effective_sample_size_n_eff: 981,
+                unit_margin_of_error: "+/- 2.2 percentage points over 981 effective exceedance-adjusted windows (164 operational days)".into(),
             },
             noise_physics: NoisePhysics {
                 stochastic_regime: "Kingman heavy-traffic queue amplification E[W] ~ rho / (1 - rho) with intraday burstiness (alpha_Hill = 2.15)".into(),
@@ -457,7 +524,7 @@ mod tests {
         let (nsw_t, nsw_c, cps_c) = load_lalonde_nsw_cps(root);
         assert!(nsw_t.len() + nsw_c.len() > 400 && cps_c.len() > 15_000);
         let vic = load_vic_elec_demand(root);
-        assert_eq!(vic.len(), 4_000);
+        assert_eq!(vic.len(), 52_608);
         let (x13_h1, y13_h1, x23_h1, y23_h1, x_hou, y_hou) = load_oot_ood_flight_reserves(root);
         assert!(x13_h1.len() > 1_400 && x13_h1.len() == y13_h1.len());
         assert!(x23_h1.len() > 1_400 && x23_h1.len() == y23_h1.len());

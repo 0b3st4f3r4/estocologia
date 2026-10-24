@@ -98,15 +98,19 @@ pub fn simulate_absorbing_trajectories(
     let mut ruined = 0usize;
     for _ in 0..trajectories {
         let mut w = 1.0;
-        for _ in 0..steps {
-            if w <= ruin_barrier_fraction {
-                w = ruin_barrier_fraction;
-                break;
-            }
-            if rng.bernoulli(p) {
-                w *= 1.0 + exposure_fraction * gain_b;
-            } else {
-                w *= (1.0 - exposure_fraction * loss_a).max(0.0);
+        if w <= ruin_barrier_fraction {
+            w = ruin_barrier_fraction;
+        } else {
+            for _ in 0..steps {
+                if rng.bernoulli(p) {
+                    w *= 1.0 + exposure_fraction * gain_b;
+                } else {
+                    w *= (1.0 - exposure_fraction * loss_a).max(0.0);
+                }
+                if w <= ruin_barrier_fraction {
+                    w = ruin_barrier_fraction;
+                    break;
+                }
             }
         }
         if w <= ruin_barrier_fraction {
@@ -194,6 +198,13 @@ mod tests {
             simulate_absorbing_trajectories(2026, 10, 0, 0.5, 0.5, 0.4, 0.25, 0.05),
             (1.0, 1.0, 0.0)
         );
+        // Trajectory ruined on the final step (steps = 1, p = 0.0 -> loss drops wealth below barrier)
+        // must be immediately clamped to ruin_barrier_fraction.
+        let (ens_ruin, med_ruin, p_ruin) =
+            simulate_absorbing_trajectories(2026, 1, 10, 0.0, 0.5, 0.98, 1.0, 0.05);
+        assert!((ens_ruin - 0.05).abs() < 1e-12);
+        assert!((med_ruin - 0.05).abs() < 1e-12);
+        assert!((p_ruin - 1.0).abs() < 1e-12);
     }
 
     #[test]

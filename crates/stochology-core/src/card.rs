@@ -317,12 +317,20 @@ impl EpistemologicalCard {
         // Step 2 & Prohibition 1: 3-part decision-maker question
         let q = &self.decision_maker_question;
         let dm_lower = q.who_decides.trim().to_ascii_lowercase();
-        if dm_lower.is_empty()
-            || dm_lower == "system"
-            || dm_lower == "team"
-            || dm_lower == "generic"
-            || dm_lower == "analyst"
-        {
+        let dm_tokens: Vec<&str> = dm_lower
+            .split(|c: char| !c.is_ascii_alphanumeric())
+            .filter(|t| !t.is_empty())
+            .collect();
+        let forbidden_dm_tokens = [
+            "system",
+            "team",
+            "generic",
+            "analyst",
+            "model",
+            "ai",
+            "algorithm",
+        ];
+        if dm_tokens.len() < 2 || dm_tokens.iter().any(|t| forbidden_dm_tokens.contains(t)) {
             v.push(ContractViolation {
                 gate_code: "STEP2_DECISION_MAKER",
                 description: "who_decides cannot be empty or generic".into(),
@@ -372,15 +380,20 @@ impl EpistemologicalCard {
             let crps = extract_number_after(&nl, "crps");
             match (f_ex, e_fx, delta_j, med, q05, q95, crps) {
                 (Some(f_ex), Some(e_fx), Some(dj), Some(med), Some(q05), Some(q95), Some(crps))
-                    if ((e_fx - f_ex) - dj).abs() <= 0.1
-                        && q05 <= med
-                        && med <= q95
-                        && q05 < q95
-                        && crps > 0.0 => {}
+                    if dj.abs() > 1e-6
+                        && ((e_fx - f_ex) - dj).abs() <= 0.5_f64.max(e_fx.abs() * 1e-3)
+                        && q05 < med
+                        && med < q95
+                        && q05 <= f_ex
+                        && f_ex <= q95
+                        && q05 <= e_fx
+                        && e_fx <= q95
+                        && 0.0 < crps
+                        && crps < (q95 - q05) => {}
                 _ => {
                     v.push(ContractViolation {
                         gate_code: "PROHIBITION_2_LONE_MEAN",
-                        description: "nonlinearity numeric values fail Jensen gap identity (Delta_J = E[f(X)] - f(E[X])), quantile ordering (q05 <= median <= q95), or CRPS > 0".into(),
+                        description: "nonlinearity numeric values fail non-zero Jensen gap identity (Delta_J = E[f(X)] - f(E[X])), strict quantile ordering (q05 < median < q95), or 0 < CRPS < (q95 - q05)".into(),
                     });
                 }
             }
@@ -445,48 +458,77 @@ impl EpistemologicalCard {
                 ),
             });
         }
-        if self.data_and_audit_contract.null_model.trim().is_empty() {
+        let nm_trimmed = self.data_and_audit_contract.null_model.trim();
+        let nm_lower = nm_trimmed.to_ascii_lowercase();
+        if nm_trimmed.is_empty()
+            || nm_lower == "none"
+            || nm_lower.starts_with("none ")
+            || (!nm_trimmed.contains('#') && !nm_trimmed.contains("::"))
+        {
             v.push(ContractViolation {
                 gate_code: "PHI1_PHI3_NULL_MODEL",
-                description: "executable null_model is mandatory".into(),
+                description: "executable null_model (containing '#' or '::') is mandatory".into(),
             });
         }
 
         // Invariant Φ2: Independent unit, Moulton-Campbell m_tilde, and exceedance n_eff(p)
         let um = &self.epistemological_header.unit_and_margin;
-        let u_lower = um.independent_unit.to_ascii_lowercase();
-        if u_lower.is_empty() || u_lower == "row" || u_lower == "transaction" {
+        let u_lower = um.independent_unit.trim().to_ascii_lowercase();
+        if u_lower.is_empty()
+            || ((u_lower.contains("row")
+                || u_lower.contains("transaction")
+                || u_lower.contains("transactional"))
+                && !u_lower.contains("cluster of"))
+        {
             v.push(ContractViolation {
                 gate_code: "PHI2_PSEUDOREPLICATION",
                 description: "independent_unit cannot be the correlated transactional row".into(),
             });
         }
+        let m_tilde_lower = um.weighted_cluster_mean_m_tilde.to_ascii_lowercase();
+        let icc_lower = um.threshold_exceedance_icc.to_ascii_lowercase();
+        let parsed_m_tilde = parse_m_tilde(&m_tilde_lower);
+        let parsed_rho_i = extract_number_after(&icc_lower, "rho_i(0.90) =")
+            .or_else(|| extract_number_after(&icc_lower, "rho_i"));
+
+        if (!um.weighted_cluster_mean_m_tilde.contains("CV") && !m_tilde_lower.contains("moulton"))
+            || m_tilde_lower.contains("ignored")
+            || !parsed_m_tilde.is_some_and(|m| m > 1.0)
+        {
+            v.push(ContractViolation {
+                gate_code: "PHI2_MOULTON_CAMPBELL",
+                description: "weighted_cluster_mean_m_tilde must declare valid Moulton-Campbell correction (m_tilde > 1)".into(),
+            });
+        }
+        if !um.threshold_exceedance_icc.contains("rho_I")
+            || icc_lower.contains("unadjusted")
+            || !parsed_rho_i.is_some_and(|r| r > 0.0 && r <= 1.0)
+        {
+            v.push(ContractViolation {
+                gate_code: "PHI2_EXCEEDANCE_ICC",
+                description: "threshold_exceedance_icc must declare valid rho_I(p) in (0, 1]"
+                    .into(),
+            });
+        }
+        let n_eff_coherent = match (parsed_m_tilde, parsed_rho_i) {
+            (Some(m_tilde), Some(rho_i)) if m_tilde > 1.0 && rho_i > 0.0 && rho_i <= 1.0 => {
+                let expected_deff = 1.0 + (m_tilde - 1.0).max(0.0) * rho_i;
+                let expected_n_eff = (um.nominal_sample_size_n as f64) / expected_deff;
+                ((um.effective_sample_size_n_eff as f64) - expected_n_eff).abs() <= 1.5
+            }
+            _ => false,
+        };
         if um.effective_sample_size_n_eff == 0
-            || um.effective_sample_size_n_eff > um.nominal_sample_size_n
+            || um.effective_sample_size_n_eff >= um.nominal_sample_size_n
+            || !n_eff_coherent
+            || !um.unit_margin_of_error.contains("+/-")
         {
             v.push(ContractViolation {
                 gate_code: "PHI2_N_EFF",
                 description: format!(
-                    "effective_sample_size_n_eff ({}) invalid relative to nominal n ({})",
+                    "effective_sample_size_n_eff ({}) invalid relative to nominal n ({}) and DEFF_exceedance, or unit_margin_of_error omits '+/-'",
                     um.effective_sample_size_n_eff, um.nominal_sample_size_n
                 ),
-            });
-        }
-        if !um.weighted_cluster_mean_m_tilde.contains("CV")
-            && !um
-                .weighted_cluster_mean_m_tilde
-                .to_ascii_lowercase()
-                .contains("moulton")
-        {
-            v.push(ContractViolation {
-                gate_code: "PHI2_MOULTON_CAMPBELL",
-                description: "weighted_cluster_mean_m_tilde must declare Moulton-Campbell correction (1 + CV^2)".into(),
-            });
-        }
-        if !um.threshold_exceedance_icc.contains("rho_I") {
-            v.push(ContractViolation {
-                gate_code: "PHI2_EXCEEDANCE_ICC",
-                description: "threshold_exceedance_icc must declare rho_I(p)".into(),
             });
         }
 
@@ -506,21 +548,35 @@ impl EpistemologicalCard {
                     .into(),
             });
         }
-        let rung = self
-            .epistemological_header
-            .causal_ladder
-            .pearl_rung
-            .as_str();
-        if !matches!(rung, "1-See" | "2-Act" | "3-Imagine") {
+        let cl = &self.epistemological_header.causal_ladder;
+        let rung = cl.pearl_rung.as_str();
+        let id_strat = cl.identification_strategy.to_ascii_lowercase();
+        let untest = cl.untestable_assumption.to_ascii_lowercase();
+        let rung_ok = if !q.altered_action.trim().is_empty() {
+            matches!(rung, "2-Act" | "3-Imagine")
+        } else {
+            matches!(rung, "1-See" | "2-Act" | "3-Imagine")
+        };
+        let mb_ok = id_strat.contains("markov blanket")
+            && !id_strat.contains("not mapped")
+            && !id_strat.contains("unmapped");
+        let collider_ok = (id_strat.contains("without collider")
+            || id_strat.contains("no collider")
+            || id_strat.contains("free of collider"))
+            && !id_strat.contains("conditioned on collider")
+            && !id_strat.contains("without collider audit");
+        let lambda_ok = untest.contains("lambda*");
+        if !rung_ok || !mb_ok || !collider_ok || !lambda_ok {
             v.push(ContractViolation {
                 gate_code: "PHI3_PEARL_LADDER",
-                description: "pearl_rung must be '1-See', '2-Act', or '3-Imagine'".into(),
+                description: "causal_ladder requires '2-Act' or '3-Imagine' for interventional decisions, mapped Markov blanket without collider, and Lambda* sensitivity bound".into(),
             });
         }
 
         // Variance budget and Info-Gap + Sniedovich safeguard
         let vb = &self.uncertainty_budget_and_authorship.variance_budget;
         let sum_var = vb.inputs + vb.parameters + vb.covariance;
+        let gp_lower = vb.structural_discrepancy_gp.to_ascii_lowercase();
         if !vb.inputs.is_finite()
             || !vb.parameters.is_finite()
             || !vb.covariance.is_finite()
@@ -528,10 +584,11 @@ impl EpistemologicalCard {
             || vb.parameters < 0.0
             || vb.covariance < 0.0
             || (sum_var - 1.0).abs() > 1e-6
+            || (!gp_lower.contains("gp") && !gp_lower.contains("gaussian process"))
         {
             v.push(ContractViolation {
                 gate_code: "VARIANCE_BUDGET",
-                description: format!("variance_budget sums to {sum_var:.4}, must be finite nonnegative and equal 1.0"),
+                description: format!("variance_budget sums to {sum_var:.4} (must equal 1.0) and structural_discrepancy_gp must declare a Gaussian Process (GP)"),
             });
         }
         let dom = &self.uncertainty_budget_and_authorship.dominant_event;
@@ -549,21 +606,27 @@ impl EpistemologicalCard {
                 ),
             });
         }
-        if !dom.cost_share.is_finite() || dom.cost_share <= 0.0 || dom.cost_share > 1.0 {
+        if !dom.cost_share.is_finite() || dom.cost_share < 0.50 || dom.cost_share > 1.0 {
             v.push(ContractViolation {
                 gate_code: "DOMINANT_EVENT_COST_SHARE",
-                description: "dominant_event.cost_share must be finite and in (0, 1]".into(),
+                description: "dominant_event.cost_share must be finite and in [0.50, 1.0]".into(),
             });
         }
         let ig = &self.uncertainty_budget_and_authorship.info_gap_robustness;
+        let alpha_hat_lower = ig.robustness_horizon_alpha_hat.to_ascii_lowercase();
+        let safeguard_lower = ig.global_maximin_safeguard.to_ascii_lowercase();
+        let alpha_hat_val = extract_number_after(&alpha_hat_lower, "alpha_hat");
         if ig.critical_requirement_rc.trim().is_empty()
-            || ig.robustness_horizon_alpha_hat.trim().is_empty()
-            || ig.global_maximin_safeguard.trim().is_empty()
+            || !alpha_hat_val.is_some_and(|a| a > 0.0)
+            || !safeguard_lower.contains("reversible")
+            || safeguard_lower.contains("irreversible")
+            || safeguard_lower.contains("no-man's land")
+            || safeguard_lower.contains("unbounded")
+            || safeguard_lower.contains("-999")
         {
             v.push(ContractViolation {
                 gate_code: "INFO_GAP_SNIEDOVICH",
-                description: "info_gap_robustness and global_maximin_safeguard are mandatory"
-                    .into(),
+                description: "info_gap_robustness requires alpha_hat > 0 and global_maximin_safeguard with reversible protocol outside No-Man's Land".into(),
             });
         }
 
@@ -613,7 +676,8 @@ impl EpistemologicalCard {
             v.push(ContractViolation {
                 gate_code: "PROHIBITION_4_E_PROCESS",
                 description:
-                    "e_process_multiplicity must declare finite E_t with E_t / K >= 1/alpha".into(),
+                    "e_process_multiplicity must declare finite E_t with E_t / K >= 1/alpha >= 20.0"
+                        .into(),
             });
         }
         let mc = &self.data_and_audit_contract.murphy_corp_decomposition;
@@ -624,14 +688,15 @@ impl EpistemologicalCard {
             || !mc.resolution_res_dsc.is_finite()
             || !mc.base_uncertainty_unc0.is_finite()
             || mc.miscalibration_rel_mcb < 0.0
-            || mc.resolution_res_dsc < 0.0
-            || mc.base_uncertainty_unc0 < 0.0
+            || mc.resolution_res_dsc <= 0.0
+            || mc.base_uncertainty_unc0 <= 0.0
+            || mc.miscalibration_rel_mcb >= mc.resolution_res_dsc
             || (mc.total_score_brier_or_crps - bs_reconstructed).abs() > 1e-4
         {
             v.push(ContractViolation {
                 gate_code: "LENS5_MURPHY_CORP",
                 description: format!(
-                    "Murphy-CORP identity BS = REL - RES + UNC0 fails: {} vs {}",
+                    "Murphy-CORP identity BS = REL - RES + UNC0 (with RES > REL >= 0) fails: {} vs {}",
                     mc.total_score_brier_or_crps, bs_reconstructed
                 ),
             });
@@ -689,17 +754,32 @@ impl EpistemologicalCard {
             }
         }
         let wp = dr.who_pays_for_error.to_ascii_lowercase();
-        if !wp.contains("chouldechova") && (!wp.contains("fpr") || !wp.contains("ppv")) {
+        let chouldechova_ratio = extract_number_after(&wp, "fpr_a/fpr_b");
+        if !wp.contains("chouldechova")
+            || !wp.contains("fpr")
+            || !wp.contains("ppv")
+            || wp.contains("not audited")
+            || wp.contains("equally fair")
+            || !chouldechova_ratio.is_some_and(|r| (r - 1.0).abs() > 1e-3)
+        {
             v.push(ContractViolation {
                 gate_code: "PHI4_CHOULDECHOVA",
                 description:
-                    "who_pays_for_error must audit Chouldechova's trilemma (FPR, FNR, PPV)".into(),
+                    "who_pays_for_error must algebraically audit Chouldechova's trilemma (FPR, PPV, and FPR_A/FPR_B != 1)".into(),
             });
         }
-        if dr.scope_statement.trim().is_empty() || dr.exit_clause.trim().is_empty() {
+        let scope_lower = dr.scope_statement.to_ascii_lowercase();
+        let has_scope_exclusion =
+            scope_lower.contains("does not apply") || scope_lower.contains("excluded");
+        let has_numeric_exit = dr.exit_clause.chars().any(|c| c.is_ascii_digit());
+        if dr.scope_statement.trim().is_empty()
+            || !has_scope_exclusion
+            || dr.exit_clause.trim().is_empty()
+            || !has_numeric_exit
+        {
             v.push(ContractViolation {
                 gate_code: "PHI4_SCOPE_AND_EXIT",
-                description: "scope_statement and numeric exit_clause are mandatory".into(),
+                description: "scope_statement (with explicit non-applicability boundary) and numeric exit_clause are mandatory".into(),
             });
         }
 
@@ -1032,7 +1112,21 @@ decision_rule_and_scope:
             }
             let indent = raw_line.len() - raw_line.trim_start().len();
             if let Some(rest) = trimmed.strip_prefix("- ") {
-                unused.push(unquote(rest));
+                while let Some(&(last_indent, _)) = stack.last() {
+                    if indent < last_indent {
+                        stack.pop();
+                    } else {
+                        break;
+                    }
+                }
+                let current_path = stack
+                    .iter()
+                    .map(|(_, s)| s.as_str())
+                    .collect::<Vec<_>>()
+                    .join(".");
+                if current_path == "data_and_audit_contract.findings.unused" {
+                    unused.push(unquote(rest));
+                }
                 continue;
             }
             while let Some(&(last_indent, _)) = stack.last() {
@@ -1045,8 +1139,10 @@ decision_rule_and_scope:
             if let Some((k, v)) = trimmed.split_once(':') {
                 let key = k.trim().to_string();
                 let val = v.trim();
-                if val.is_empty() || val == "[]" {
+                if val.is_empty() {
                     stack.push((indent, key));
+                } else if val == "[]" {
+                    // Explicit empty inline sequence
                 } else {
                     let mut full_path = stack
                         .iter()
@@ -1300,20 +1396,68 @@ fn unquote(s: &str) -> String {
 fn extract_number_after(text_lower: &str, marker_lower: &str) -> Option<f64> {
     let idx = text_lower.find(marker_lower)?;
     let rest = &text_lower[idx + marker_lower.len()..];
-    let after_eq = if let Some(eq_idx) = rest.find('=') {
-        &rest[eq_idx + 1..]
+    let mut clause_end = rest.find([',', ';']).unwrap_or(rest.len());
+    if let Some(arrow_idx) = rest.find("->") {
+        clause_end = clause_end.min(arrow_idx);
+    }
+    let clause = &rest[..clause_end];
+    let after_marker = if marker_lower.trim_end().ends_with('=') {
+        clause
+    } else if let Some(eq_idx) = clause.find('=') {
+        &clause[eq_idx + 1..]
     } else {
-        rest
+        clause
     };
-    let trimmed = after_eq.trim_start();
-    let end = trimmed
-        .find(|c: char| !(c.is_ascii_digit() || c == '.' || c == '+' || c == '-'))
-        .unwrap_or(trimmed.len());
-    if end == 0 {
+    let trimmed = after_marker.trim_start_matches([' ', '\t', ':']);
+    let bytes = trimmed.as_bytes();
+    let mut i = 0;
+    if i < bytes.len() && (bytes[i] == b'+' || bytes[i] == b'-') {
+        i += 1;
+    }
+    let mut has_digits = false;
+    while i < bytes.len() && bytes[i].is_ascii_digit() {
+        has_digits = true;
+        i += 1;
+    }
+    if i < bytes.len() && bytes[i] == b'.' {
+        i += 1;
+        while i < bytes.len() && bytes[i].is_ascii_digit() {
+            has_digits = true;
+            i += 1;
+        }
+    }
+    if !has_digits {
         return None;
     }
-    let val = trimmed[..end].parse::<f64>().ok()?;
+    if i < bytes.len() && (bytes[i] == b'e' || bytes[i] == b'E') {
+        let mut exp_i = i + 1;
+        if exp_i < bytes.len() && (bytes[exp_i] == b'+' || bytes[exp_i] == b'-') {
+            exp_i += 1;
+        }
+        let exp_digits_start = exp_i;
+        while exp_i < bytes.len() && bytes[exp_i].is_ascii_digit() {
+            exp_i += 1;
+        }
+        if exp_i > exp_digits_start {
+            i = exp_i;
+        }
+    }
+    let val = trimmed[..i].parse::<f64>().ok()?;
     val.is_finite().then_some(val)
+}
+
+fn parse_m_tilde(m_tilde_lower: &str) -> Option<f64> {
+    let prefix = if let Some(idx) = m_tilde_lower.find("(moulton") {
+        &m_tilde_lower[..idx]
+    } else {
+        m_tilde_lower
+    };
+    if let Some(last_eq) = prefix.rfind('=') {
+        if let Some(v) = extract_number_after(&prefix[last_eq..], "=") {
+            return Some(v);
+        }
+    }
+    extract_number_after(m_tilde_lower, "m_tilde")
 }
 
 fn parse_seed_from_env(seed_env: &str) -> Option<u64> {
@@ -1347,8 +1491,6 @@ fn validate_rrm_contraction_string(cond: &str, declared_eps: f64) -> bool {
             && beta >= gamma
             && ((eps * beta / gamma) - ratio).abs() <= 1e-2
             && (0.0..1.0).contains(&ratio)
-    } else if let Some(&ratio) = nums.last() {
-        (0.0..1.0).contains(&ratio)
     } else {
         false
     }
@@ -1365,7 +1507,7 @@ fn validate_e_process_string(e_str: &str, k: usize) -> bool {
     let threshold = extract_number_after(&lower, "1/alpha")
         .or_else(|| extract_number_after(&lower, "threshold"))
         .unwrap_or(20.0);
-    e_val > 0.0 && threshold > 1.0 && (e_val / (k as f64)) >= threshold
+    e_val > 0.0 && threshold >= 20.0 && (e_val / (k as f64)) >= threshold
 }
 
 #[cfg(test)]
@@ -1441,5 +1583,127 @@ mod tests {
 
         let nan_yaml = yaml.replace("inputs: 0.45", "inputs: NaN");
         assert!(EpistemologicalCard::from_yaml(&nan_yaml).is_err());
+    }
+
+    #[test]
+    fn trojan_horse_card_is_rejected_across_all_defective_gates() {
+        let trojan_yaml = r#"id: "trojan_horse_adversarial_bypass"
+contract_version: "1.0"
+layer: "L2"
+uncertainty: "epistemic_specification"
+
+decision_maker_question:
+  who_decides: "The System / Data Science Team"
+  altered_action: "Set a single annual staffing average across all shifts"
+  question: "Should we deploy the model?"
+
+epistemological_header:
+  generating_process: "None"
+  nonlinearity: "f(E[X])=100.0, E[f(X)]=100.0, Jensen gap Delta_J=0.0, median=10.0, q05=10.0, q95=10.001, CRPS=999999.0"
+  unit_and_margin:
+    independent_unit: "transactional row in a 5-minute window"
+    nominal_sample_size_n: 25028
+    weighted_cluster_mean_m_tilde: "m_tilde = 1.0 (Moulton-Campbell ignored, CV = 0)"
+    threshold_exceedance_icc: "rho_I(0.90) = 0.85 -> DEFF = 1.0 (unadjusted)"
+    effective_sample_size_n_eff: 25028
+    unit_margin_of_error: "0.0%"
+  noise_physics:
+    stochastic_regime: "Gaussian i.i.d."
+    absorbing_states: "None"
+    bridge_L3_L1_performativity:
+      agent_type: "performative"
+      wasserstein_sensitivity_epsilon: 0.99
+      rrm_convergence_condition: "eps * beta / gamma = 50.0 / 1.0 = 0.99 < 1 (oscillatory divergence masked as 3-number string)"
+      stability_optimality_divergence: "theta_PS = 0.0 vs theta_PO = 0.00001"
+  causal_ladder:
+    pearl_rung: "1-See"
+    identification_strategy: "Observational correlation conditioned on collider (hospitalized patients only); Markov blanket not mapped"
+    untestable_assumption: "None"
+
+uncertainty_budget_and_authorship:
+  variance_budget:
+    inputs: 1.00
+    parameters: 0.00
+    covariance: 0.00
+    structural_discrepancy_gp: "None (delta(x) = 0 assumed)"
+  dominant_event:
+    description: "Negligible noise event"
+    probability_p: 0.50
+    base_rate_floor_epsilon: 0.001
+    cost_share: 0.01
+  info_gap_robustness:
+    critical_requirement_rc: "None"
+    robustness_horizon_alpha_hat: "alpha_hat = 0.0 (fragile around nominal estimate)"
+    opportuneness_horizon_beta_hat: "beta_hat = 999.0"
+    global_maximin_safeguard: "No-Man's Land: Wald global Maximin bound = -999999.0 (unbounded ruin, irreversible action)"
+  field_authorship:
+    null_model: "Author A"
+    decision_rule: "Author A ( Decision )"
+    adversarial_reviewer: "Author A ( Reviewer )"
+
+data_and_audit_contract:
+  missingness_mechanism: "MNAR (70% missing; complete-case analysis used, Manski bounds ignored)"
+  seed_and_environment: "seed=2026"
+  null_model: "none (skipped)"
+  preregistration_hash: "0000000000000000000000000000000000000000000000000000000000000000"
+  attempt_counter_K: 50
+  e_process_multiplicity: "E_50 = 50.1 (threshold = 1.001)"
+  murphy_corp_decomposition:
+    total_score_brier_or_crps: 0.500
+    miscalibration_REL_MCB: 0.250
+    resolution_RES_DSC: 0.000
+    base_uncertainty_UNC0: 0.250
+  findings:
+    registered: 1
+    used: 1
+    unused:
+      []
+
+decision_rule_and_scope:
+  event_probability_p: 0.50
+  base_rate_floor_epsilon: 0.001
+  protection_cost_C: 10.0
+  event_loss_L: 100.0
+  mitigation_efficacy_eta: 1.0
+  critical_threshold_p_star: 0.10000
+  declared_act: "protect"
+  scope_statement: "Applies universally everywhere forever"
+  who_pays_for_error: "Chouldechova not audited; model assumed equally fair on PPV, FPR, and FNR simultaneously"
+  exit_clause: "We will review the model at management discretion when convenient"
+"#;
+
+        let card = EpistemologicalCard::from_yaml(trojan_yaml).expect("Trojan YAML must parse");
+        let violations = card
+            .audit()
+            .expect_err("Trojan Horse card must be rejected");
+        assert!(
+            violations.len() >= 10,
+            "Expected at least 10 gate violations, got {}: {violations:?}",
+            violations.len()
+        );
+        for expected_gate in [
+            "STEP2_DECISION_MAKER",
+            "PROHIBITION_2_LONE_MEAN",
+            "PROHIBITION_3_RRM_CONTRACTION",
+            "PHI1_PHI3_NULL_MODEL",
+            "PHI2_PSEUDOREPLICATION",
+            "PHI2_MOULTON_CAMPBELL",
+            "PHI2_EXCEEDANCE_ICC",
+            "PHI2_N_EFF",
+            "PHI3_PEARL_LADDER",
+            "VARIANCE_BUDGET",
+            "DOMINANT_EVENT_COST_SHARE",
+            "INFO_GAP_SNIEDOVICH",
+            "PROHIBITION_4_E_PROCESS",
+            "LENS5_MURPHY_CORP",
+            "PHI4_CHOULDECHOVA",
+            "PHI4_SCOPE_AND_EXIT",
+            "PHI5_RESOLUTION",
+        ] {
+            assert!(
+                violations.iter().any(|v| v.gate_code == expected_gate),
+                "Missing expected violation for gate '{expected_gate}' in {violations:?}"
+            );
+        }
     }
 }

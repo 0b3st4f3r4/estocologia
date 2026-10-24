@@ -162,7 +162,8 @@ pub fn evaluate_four_filter_funnel(c: &FunnelCandidate) -> FunnelResult {
         && c.author_null_model != c.author_decision_rule
         && c.author_adversarial_reviewer != c.author_null_model
         && c.author_adversarial_reviewer != c.author_decision_rule;
-    let exit_ok = !c.numeric_exit_clause.trim().is_empty();
+    let exit_ok = !c.numeric_exit_clause.trim().is_empty()
+        && c.numeric_exit_clause.chars().any(|ch| ch.is_ascii_digit());
     let f4_ok = seal_ok && authors_ok && exit_ok;
 
     if !f4_ok {
@@ -248,5 +249,10 @@ mod tests {
         c4.author_adversarial_reviewer = "inference".into();
         let r4 = evaluate_four_filter_funnel(&c4);
         assert_eq!(r4.pruned_at_filter, Some(4));
+
+        let mut c4_no_digit = valid_candidate();
+        c4_no_digit.numeric_exit_clause = "Suspend model when calibration degrades".into();
+        let r4_no_digit = evaluate_four_filter_funnel(&c4_no_digit);
+        assert_eq!(r4_no_digit.pruned_at_filter, Some(4));
     }
 }

@@ -61,7 +61,9 @@ pub fn hill_estimator(xs: &[f64], k: usize) -> f64 {
 }
 
 impl HillTailDiagnostic {
-    /// Audits the tail behavior of `xs` using `k_opt` (or default $k = \lfloor \sqrt{n} \rfloor$).
+    /// Audits the tail behavior of `xs` using `k_opt` (or automatic Clauset-Shalizi-Newman
+    /// Kolmogorov-Smirnov distance minimization over $k \in [\max(10, n/100), \min(n/5, 250)]$,
+    /// falling back to $\lfloor \sqrt{n} \rfloor$ if needed).
     pub fn audit(xs: &[f64], k_opt: Option<usize>) -> Self {
         let mut pos: Vec<f64> = xs
             .iter()
@@ -72,7 +74,34 @@ impl HillTailDiagnostic {
         let n = pos.len();
         assert!(n >= 10, "Hill audit requires at least 10 positive points");
         let k = k_opt
-            .unwrap_or_else(|| ((n as f64).sqrt().round() as usize).clamp(5, n / 2))
+            .unwrap_or_else(|| {
+                let fallback = ((n as f64).sqrt().floor() as usize).clamp(5, n / 2);
+                let k_min = 10.max(n / 100);
+                let k_max = (n / 5).min(250).min(n - 1);
+                if k_min > k_max {
+                    return fallback;
+                }
+                let mut best_k = fallback;
+                let mut best_ks = f64::INFINITY;
+                for cand_k in k_min..=k_max {
+                    let alpha_k = hill_estimator(&pos, cand_k);
+                    if !alpha_k.is_finite() || alpha_k <= 0.0 {
+                        continue;
+                    }
+                    let thresh = pos[n - cand_k - 1];
+                    let mut d_ks = 0.0_f64;
+                    for (idx, &x) in pos[(n - cand_k)..].iter().enumerate() {
+                        let emp_cdf = ((idx + 1) as f64) / (cand_k as f64);
+                        let theo_cdf = 1.0 - (x / thresh).powf(-alpha_k);
+                        d_ks = d_ks.max((emp_cdf - theo_cdf).abs());
+                    }
+                    if d_ks < best_ks {
+                        best_ks = d_ks;
+                        best_k = cand_k;
+                    }
+                }
+                best_k
+            })
             .clamp(2, n - 1);
 
         let threshold = pos[n - k - 1];
@@ -95,9 +124,10 @@ impl HillTailDiagnostic {
         let q90 = quantile_sorted(&pos, 0.90);
         let q99 = quantile_sorted(&pos, 0.99);
 
-        // Tail effective sample size at q99 scales with the number of exceedances penalized by 1/alpha
+        // Tail effective sample size at q99 grounded in Weissman (1978) / de Haan & Ferreira (2006)
+        // extreme quantile variance scaling relative to the finite-variance threshold alpha_0 = 2.0.
         let raw_exceedances = ((n as f64) * 0.01).max(1.0);
-        let penalized_n_eff = raw_exceedances * (alpha / 2.0).clamp(0.1, 1.0);
+        let penalized_n_eff = raw_exceedances * (alpha / 2.0).powi(2).clamp(0.1, 1.0);
 
         Self {
             sample_size_n: n,
@@ -129,6 +159,12 @@ mod tests {
         assert!((diag.alpha_hill - true_alpha).abs() < 0.20);
         assert_eq!(diag.regime, TailMomentRegime::FiniteMeanInfiniteVariance);
         assert!(diag.quantile_99 > diag.quantile_90 * 2.0);
+        let expected_n_eff = 40.0 * (diag.alpha_hill / 2.0).powi(2).clamp(0.1, 1.0);
+        assert!((diag.penalized_tail_n_eff - expected_n_eff).abs() < 1e-12);
+
+        let diag_auto = HillTailDiagnostic::audit(&samples, None);
+        assert!((diag_auto.alpha_hill - true_alpha).abs() < 0.20);
+        assert!((40..=250).contains(&diag_auto.order_statistics_k));
         assert_eq!(hill_estimator(&[5.0; 20], 5), f64::INFINITY);
     }
 }

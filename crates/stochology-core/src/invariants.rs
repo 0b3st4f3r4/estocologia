@@ -190,21 +190,39 @@ impl OperationalWeightingGap {
 
 /// Invariant $\Phi_5$: Question Resolution vs. Independent Unit compatibility check (§2.2).
 ///
-/// Forbids answering a high-resolution operational decision (daily, shift, hourly) with
-/// coarse annual or monthly aggregates ($R_0$).
+/// Forbids answering a high-resolution operational decision (daily, shift, hourly, 5-min) with
+/// coarse annual, monthly, or quarterly aggregates ($R_0$).
 pub fn verify_resolution_phi5(independent_unit: &str, altered_action: &str) -> bool {
-    let unit = independent_unit.to_ascii_lowercase();
-    let action = altered_action.to_ascii_lowercase();
+    let unit = independent_unit.trim().to_ascii_lowercase();
+    let action = altered_action.trim().to_ascii_lowercase();
+    if unit.is_empty() || action.is_empty() {
+        return false;
+    }
 
-    let fine_unit = unit.contains("day")
-        || unit.contains("daily")
+    let fine_unit = unit.contains("minute")
+        || unit.contains("5-min")
+        || unit.contains("hour")
         || unit.contains("shift")
-        || unit.contains("hour");
+        || unit.contains("day")
+        || unit.contains("daily");
 
-    let coarse_aggregate_action = (action.contains("annual")
+    let coarse_horizon = action.contains("annual")
         || action.contains("yearly")
-        || action.contains("monthly"))
-        && (action.contains("aggregate") || action.contains("average") || action.contains("mean"));
+        || action.contains("monthly")
+        || action.contains("quarterly")
+        || action.contains("decadal")
+        || action.contains("multi-year");
+
+    let coarse_aggregation = action.contains("aggregate")
+        || action.contains("average")
+        || action.contains("mean")
+        || action.contains("total")
+        || action.contains("rollup")
+        || action.contains("sum")
+        || action.contains("single");
+
+    let coarse_aggregate_action =
+        (coarse_horizon && coarse_aggregation) || action.contains("across all shifts");
 
     !(fine_unit && coarse_aggregate_action)
 }
@@ -233,15 +251,17 @@ pub struct ChouldechovaAudit {
 }
 
 impl ChouldechovaAudit {
-    /// Evaluates Chouldechova's exact identity for group prevalence $p \in (0, 1)$, $\mathrm{PPV} \in (0, 1]$, and $\mathrm{FNR} \in [0, 1)$.
+    /// Evaluates Chouldechova's exact identity for group prevalence $p \in (0, 1)$, $\mathrm{PPV} \in (0, 1)$, and $\mathrm{FNR} \in [0, 1)$.
     #[inline]
     pub fn chouldechova_fpr(prevalence_p: f64, ppv: f64, fnr: f64) -> f64 {
         if !prevalence_p.is_finite()
             || !ppv.is_finite()
             || !fnr.is_finite()
             || prevalence_p <= 0.0
+            || prevalence_p >= 1.0
+            || ppv <= 0.0
             || ppv >= 1.0
-            || fnr >= 1.0
+            || !(0.0..1.0).contains(&fnr)
         {
             return 0.0;
         }

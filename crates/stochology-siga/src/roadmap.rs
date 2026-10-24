@@ -8,7 +8,7 @@
 //! Ville's Inequality $E_t \ge 1/\alpha$) and Gigerenzer integer natural frequency memoranda (e.g., `"X out of 1,000"`).
 
 use crate::funnel::{evaluate_four_filter_funnel, FunnelCandidate, FunnelResult};
-use stochology_core::{quantile, EpistemologicalCard};
+use stochology_core::{EpistemologicalCard, Rng};
 
 /// Sequential anytime-valid *e-process* (betting martingale $E_t = \prod_{i=1}^t L_i$, §3.2 Step 6):
 /// $$\mathbb{E}_{H_0}[E_t] \le 1 \implies \mathbb{P}_{H_0}\left(\exists t \ge 1 : E_t \ge \frac{1}{\alpha}\right) \le \alpha$$
@@ -19,7 +19,7 @@ pub struct EvidenceProcess {
     pub trajectory_e_t: Vec<f64>,
     pub final_e_value: f64,
     pub attempt_counter_k: usize,
-    /// Multiplicity-penalized e-value $E_t / K$.
+    /// Multiplicity-penalized e-value $\sup_{1 \le s \le t} E_s / K$.
     pub multiplicity_adjusted_e_value: f64,
     pub rejects_null_hypothesis: bool,
 }
@@ -31,17 +31,23 @@ impl EvidenceProcess {
         assert!(attempt_counter_k >= 1);
         let threshold = 1.0 / alpha_level;
         let mut prod = 1.0;
+        let mut invalid = false;
         let mut traj = Vec::with_capacity(likelihood_ratios.len());
         for &l_i in likelihood_ratios {
             let safe_l = if l_i.is_finite() && l_i >= 0.0 {
                 l_i
             } else {
+                invalid = true;
                 0.0
             };
             prod *= safe_l;
             traj.push(prod);
         }
-        let adj = prod / (attempt_counter_k as f64);
+        if invalid {
+            traj.fill(0.0);
+        }
+        let max_e = traj.iter().copied().fold(0.0_f64, f64::max);
+        let adj = max_e / (attempt_counter_k as f64);
         Self {
             alpha_level,
             ville_rejection_threshold: threshold,
@@ -126,14 +132,110 @@ pub struct SigaExecutionReport {
     pub approved_end_to_end: bool,
 }
 
+fn sample_gamma_marsaglia(rng: &mut Rng, alpha: f64) -> f64 {
+    let a = alpha.max(1e-3);
+    if a < 1.0 {
+        let u = rng.next_f64().clamp(1e-15, 1.0 - 1e-15);
+        return sample_gamma_marsaglia(rng, a + 1.0) * u.powf(1.0 / a);
+    }
+    let d = a - 1.0 / 3.0;
+    let c = 1.0 / (9.0 * d).sqrt();
+    loop {
+        let z = rng.standard_normal();
+        let v_root = 1.0 + c * z;
+        if v_root <= 0.0 {
+            continue;
+        }
+        let v = v_root * v_root * v_root;
+        let u = rng.next_f64().clamp(1e-15, 1.0 - 1e-15);
+        if u.ln() < 0.5 * z * z + d * (1.0 - v + v.ln()) {
+            return (d * v).max(1e-15);
+        }
+    }
+}
+
+fn sample_beta_conjugate(rng: &mut Rng, alpha: f64, beta: f64) -> f64 {
+    let x = sample_gamma_marsaglia(rng, alpha);
+    let y = sample_gamma_marsaglia(rng, beta);
+    (x / (x + y).max(1e-15)).clamp(1e-12, 1.0 - 1e-12)
+}
+
+/// Executes genuine Talts et al. (2018) Simulation-Based Calibration (SBC) for a Beta-Binomial
+/// generative model using deterministic `stochology_core::Rng::new(seed)`.
+///
+/// For each replication $s \in 0..\text{num\_replications}$:
+/// 1. Draw $\tilde{p} \sim \mathrm{Beta}(\alpha_0, \beta_0)$ from the prior;
+/// 2. Simulate $k \sim \mathrm{Binomial}(n_{\text{trials}}, \tilde{p})$;
+/// 3. Draw $L$ conjugate posterior samples centered at $\hat{p} = \frac{k + \alpha_0}{n_{\text{trials}} + \alpha_0 + \beta_0}$
+///    with posterior variance $\frac{\hat{p}(1-\hat{p})}{n_{\text{trials}} + \alpha_0 + \beta_0 + 1}$;
+/// 4. Compute the normalized rank $r_s / L \in [0, 1]$ where $r_s = \sum_{\ell=1}^L \mathbb{I}(p_\ell < \tilde{p})$.
+pub fn simulate_sbc_beta_binomial_ranks(
+    seed: u64,
+    num_replications: usize,
+    posterior_draws_l: usize,
+    alpha_prior: f64,
+    beta_prior: f64,
+    n_trials: usize,
+) -> Vec<f64> {
+    let mut rng = Rng::new(seed);
+    let a0 = alpha_prior.max(0.1);
+    let b0 = beta_prior.max(0.1);
+    let l_draws = posterior_draws_l.max(1);
+    let mut ranks = Vec::with_capacity(num_replications);
+
+    for _ in 0..num_replications {
+        let p_tilde = sample_beta_conjugate(&mut rng, a0, b0);
+        let mut k = 0usize;
+        for _ in 0..n_trials {
+            if rng.bernoulli(p_tilde) {
+                k += 1;
+            }
+        }
+        let alpha_post = (k as f64) + a0;
+        let beta_post = ((n_trials - k) as f64) + b0;
+        let p_hat = alpha_post / (alpha_post + beta_post);
+        let post_var = (p_hat * (1.0 - p_hat)) / (alpha_post + beta_post + 1.0);
+        debug_assert!(post_var > 0.0 && post_var.is_finite());
+
+        let mut rank = 0usize;
+        for _ in 0..l_draws {
+            let p_draw = sample_beta_conjugate(&mut rng, alpha_post, beta_post);
+            if p_draw < p_tilde {
+                rank += 1;
+            }
+        }
+        ranks.push((rank as f64) / (l_draws as f64));
+    }
+    ranks
+}
+
 fn compute_sbc_rank_bins(null_samples: &[f64]) -> Vec<usize> {
     if null_samples.len() < 5 || null_samples.iter().any(|x| !x.is_finite()) {
         return vec![0; 5];
     }
-    let q20 = quantile(null_samples, 0.20);
-    let q40 = quantile(null_samples, 0.40);
-    let q60 = quantile(null_samples, 0.60);
-    let q80 = quantile(null_samples, 0.80);
+    let min_val = null_samples.iter().copied().fold(f64::INFINITY, f64::min);
+    let max_val = null_samples
+        .iter()
+        .copied()
+        .fold(f64::NEG_INFINITY, f64::max);
+    if (max_val - min_val) <= 1e-12 {
+        return vec![null_samples.len(), 0, 0, 0, 0];
+    }
+    let (q20, q40, q60, q80) = if min_val >= 0.0 && max_val <= 1.0 {
+        // Theoretical Uniform(0, 1) quintiles for normalized SBC / PIT ranks
+        (0.20, 0.40, 0.60, 0.80)
+    } else if min_val < 0.0 {
+        // Theoretical N(0, 1) PIT quintiles for two-sided z-score null distributions
+        (-0.841_621_23, -0.253_347_10, 0.253_347_10, 0.841_621_23)
+    } else {
+        // Theoretical Uniform(0, max_val) quintiles for nonnegative rank grids
+        (
+            0.20 * max_val,
+            0.40 * max_val,
+            0.60 * max_val,
+            0.80 * max_val,
+        )
+    };
     let mut bins = vec![0usize; 5];
     for &x in null_samples {
         let b = if x <= q20 {
@@ -167,10 +269,15 @@ pub fn run_full_siga_roadmap(
         .causal_ladder
         .identification_strategy
         .to_ascii_lowercase();
-    let markov_blanket_mapped = id_strat.contains("markov blanket");
-    let collider_excluded = id_strat.contains("without collider")
+    let markov_blanket_mapped = id_strat.contains("markov blanket")
+        && !id_strat.contains("not mapped")
+        && !id_strat.contains("unmapped");
+    let collider_excluded = (id_strat.contains("without collider")
         || id_strat.contains("no collider")
-        || id_strat.contains("free of collider");
+        || id_strat.contains("free of collider"))
+        && !id_strat.contains("without collider audit")
+        && !id_strat.contains("conditioned on collider")
+        && !id_strat.contains("conditioning on collider");
     let conditions_on_collider_berkson =
         (id_strat.contains("collider") || id_strat.contains("berkson")) && !collider_excluded;
 
@@ -245,12 +352,18 @@ pub fn run_full_siga_roadmap(
         card.data_and_audit_contract.attempt_counter_k,
     );
 
-    // Step 8: Integer natural frequency memorandum out of 1,000 units
+    // Step 8: Integer natural frequency memorandum out of 1,000 units derived from CORP-Murphy decomposition
+    let mc = &card.data_and_audit_contract.murphy_corp_decomposition;
+    let unc = mc.base_uncertainty_unc0.max(1e-6);
+    let res_norm = (mc.resolution_res_dsc / unc).clamp(0.0, 1.0);
+    let rel_norm = (mc.miscalibration_rel_mcb / unc).clamp(0.0, 1.0);
+    let sensitivity_tpr = (0.80 + 0.35 * res_norm - 0.25 * rel_norm).clamp(0.75, 0.95);
+    let false_positive_rate_fpr = (0.10 - 0.15 * res_norm + 0.30 * rel_norm).clamp(0.03, 0.15);
     let memo = NaturalFrequencyMemorandum::build(
         1_000,
         card.decision_rule_and_scope.event_probability_p,
-        0.85,
-        0.08,
+        sensitivity_tpr,
+        false_positive_rate_fpr,
     );
 
     let s1 = card_audit_ok; // Step 1: Layer, bridge, uncertainty class, Info-Gap + Sniedovich
@@ -317,5 +430,30 @@ mod tests {
         // NaN e-value safely zeroes out EvidenceProcess without panicking
         let nan_e = EvidenceProcess::evaluate(&[24.8, f64::NAN], 0.05, 1);
         assert!(!nan_e.rejects_null_hypothesis);
+    }
+
+    #[test]
+    fn skewed_sbc_samples_fail_filter3_while_genuine_talts_sbc_ranks_pass() {
+        let plan = "siga_plan_01_sepsis_triage_seed_2026_clusters_m_tilde";
+        let mut card = EpistemologicalCard::canonical_example();
+        card.data_and_audit_contract.preregistration_hash = sha256_hex(plan.as_bytes());
+
+        // Skewed non-uniform sample concentrates in lower quintile and fails Filter 3
+        let skewed_samples: Vec<f64> = (0..200).map(|i| ((i as f64) / 200.0).powi(3)).collect();
+        let skewed_bins = compute_sbc_rank_bins(&skewed_samples);
+        assert!(crate::funnel::sbc_rank_chi2(&skewed_bins) > 9.49);
+        let skewed_rep = run_full_siga_roadmap(&card, plan, 5.0, &skewed_samples, &[24.8]);
+        assert!(skewed_rep.funnel_result.sbc_chi2_statistic > 9.49);
+        assert_eq!(skewed_rep.funnel_result.pruned_at_filter, Some(3));
+        assert!(!skewed_rep.approved_end_to_end);
+
+        // Genuine Talts et al. (2018) Beta-Binomial SBC ranks are uniform on [0, 1] and pass Filter 3
+        let sbc_ranks = simulate_sbc_beta_binomial_ranks(2026, 200, 50, 2.0, 18.0, 100);
+        let sbc_bins = compute_sbc_rank_bins(&sbc_ranks);
+        assert!(crate::funnel::sbc_rank_chi2(&sbc_bins) <= 9.49);
+        let valid_rep = run_full_siga_roadmap(&card, plan, 5.0, &sbc_ranks, &[12.5, 2.2, 0.7]);
+        assert!(valid_rep.funnel_result.filter_3_approved);
+        assert!(valid_rep.e_process.rejects_null_hypothesis);
+        assert!(valid_rep.approved_end_to_end);
     }
 }

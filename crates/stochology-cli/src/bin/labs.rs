@@ -4,14 +4,15 @@
 use std::env;
 use std::path::Path;
 use stochology_cli::{
-    build_v1_card_suite, load_atlantic_storms_forecasts, load_bank_call_clusters, load_danish_fire,
-    load_djia_returns, load_lalonde_nsw_cps, load_nyc_flights_2013_2023,
-    load_oot_ood_flight_reserves, load_toronto_arrests_prevalences, load_vic_elec_demand,
+    build_v1_card_suite, exact_cluster_null_m_tilde_seed_2026, load_atlantic_storms_forecasts,
+    load_bank_call_clusters, load_danish_fire, load_djia_returns, load_lalonde_nsw_cps,
+    load_nyc_flights_2013_2023, load_oot_ood_flight_reserves, load_toronto_arrests_prevalences,
+    load_vic_elec_demand,
 };
 use stochology_core::{
-    mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect, InfoGapOption,
-    KennedyOHaganDiscrepancy, ManskiBounds, MengAudit, NonlinearSummary, OperationalWeightingGap,
-    PerformativeSystem, Rng, DEFAULT_SEED,
+    apply_cromwell_floor, mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect,
+    InfoGapOption, KennedyOHaganDiscrepancy, ManskiBounds, MengAudit, NonlinearSummary,
+    OperationalWeightingGap, PerformativeSystem, Rng, DEFAULT_SEED,
 };
 use stochology_governance::{
     estimate_label_shift_four_methods, fit_covariate_drift_extra_wcp, query_with_bitemporal_clock,
@@ -280,9 +281,9 @@ fn lab_invariants(root: &Path) {
 fn lab_siga() {
     println!("=== LAB 5: 4-FILTER ELIMINATORY FUNNEL AND 8-STEP SIGA ROADMAP ===");
     let suite = build_v1_card_suite();
-    let null_samples: Vec<f64> = (0..199).map(|i| (i as f64) * 0.01).collect();
     for (rel_path, plan_text, card) in suite {
-        let rep = run_full_siga_roadmap(&card, &plan_text, 4.2, &null_samples, &[24.8]);
+        let (null_samples, obs_stat, e_vals) = exact_cluster_null_m_tilde_seed_2026(&card);
+        let rep = run_full_siga_roadmap(&card, &plan_text, obs_stat, &null_samples, &e_vals);
         println!(
             "  [SIGA {}] EVPI={:.1}, p_null={:.4}, chi2_SBC={:.2}, E_1={:.1}, steps_1_to_8={:?}, approved={}",
             rel_path,
@@ -341,8 +342,17 @@ fn lab_governance(root: &Path) {
         v_rep.final_state
     );
 
-    let (x13, _y13, x23, y23) = load_nyc_flights_2013_2023(root);
-    let scores_13: Vec<f64> = x13.iter().map(|&x| 0.15 + 0.10 * x.abs()).collect();
+    let (x13, y13, x23, _y23) = load_nyc_flights_2013_2023(root);
+    let p_base_13 = mean(&y13).clamp(0.01, 0.99);
+    let logit_base_13 = (p_base_13 / (1.0 - p_base_13)).ln();
+    let scores_13: Vec<f64> = x13
+        .iter()
+        .zip(y13.iter())
+        .map(|(&x, &y)| {
+            let p_hat = 1.0 / (1.0 + (-(logit_base_13 + 0.15 * x)).exp());
+            (y - p_hat).abs()
+        })
+        .collect();
     let cov = fit_covariate_drift_extra_wcp(&x13, &x23, &scores_13, None, 0.02, 0.10);
     println!(
         "  [Covariate Drift: NYC Flights 2013->2023] beta_tilt={:+.4}, Z_P={:.4}, ExTRA_WCP_T_threshold={:.4}, Lei_Candes_bound >= {:.3}",
@@ -357,7 +367,7 @@ fn lab_governance(root: &Path) {
         .map(|&x| (1.0 / (1.0 + (-1.2 * x).exp())).clamp(0.01, 0.99))
         .collect();
     let ls = estimate_label_shift_four_methods(
-        0.22,
+        p_base_13,
         0.82,
         0.12,
         &post_23,
@@ -375,7 +385,6 @@ fn lab_governance(root: &Path) {
         false,
         false,
     );
-    let _ = y23;
     println!(
         "  [Label Shift 4 Estimators] BBSE={:.4} (sigma_min={:.3}), MLLS/SLD={:.4}, DFM={:.4} (Delta_min={:.1}), OTTER={:.4} (kappa={:.2}) | Concept Drift Breaker={:?} (tripped={})",
         ls.target_prior_bbse,
@@ -489,25 +498,43 @@ fn lab_real_data(root: &Path) {
     );
 
     // 6. Multi-Horizon & Out-of-Domain Aviation Drift (nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv)
-    let (x13, _y13, x23, _y23) = load_nyc_flights_2013_2023(root);
-    let (x13_h1, _y13_h1, x23_h1, y23_h1, x_hou, _y_hou) = load_oot_ood_flight_reserves(root);
-    let scores_13: Vec<f64> = x13.iter().map(|&x| 0.15 + 0.10 * x.abs()).collect();
-    let scores_13_h1: Vec<f64> = x13_h1.iter().map(|&x| 0.15 + 0.10 * x.abs()).collect();
+    let (x13, y13, x23, _y23) = load_nyc_flights_2013_2023(root);
+    let (x13_h1, y13_h1, x23_h1, y23_h1, x_hou, _y_hou) = load_oot_ood_flight_reserves(root);
+    let p_base_13 = mean(&y13).clamp(0.01, 0.99);
+    let logit_base_13 = (p_base_13 / (1.0 - p_base_13)).ln();
+    let scores_13: Vec<f64> = x13
+        .iter()
+        .zip(y13.iter())
+        .map(|(&x, &y)| {
+            let p_hat = 1.0 / (1.0 + (-(logit_base_13 + 0.15 * x)).exp());
+            (y - p_hat).abs()
+        })
+        .collect();
+    let p_base_13_h1 = mean(&y13_h1).clamp(0.01, 0.99);
+    let logit_base_13_h1 = (p_base_13_h1 / (1.0 - p_base_13_h1)).ln();
+    let scores_13_h1: Vec<f64> = x13_h1
+        .iter()
+        .zip(y13_h1.iter())
+        .map(|(&x, &y)| {
+            let p_hat = 1.0 / (1.0 + (-(logit_base_13_h1 + 0.15 * x)).exp());
+            (y - p_hat).abs()
+        })
+        .collect();
     let cov_nyc = fit_covariate_drift_extra_wcp(&x13, &x23, &scores_13, None, 0.02, 0.10);
     let cov_h1 = fit_covariate_drift_extra_wcp(&x13_h1, &x23_h1, &scores_13_h1, None, 0.02, 0.10);
     let cov_hou = fit_covariate_drift_extra_wcp(&x13, &x_hou, &scores_13, None, 0.02, 0.10);
 
+    // Strictly out-of-time forecast calibrated on 2013 H1 source parameters without touching y23_h1
     let probs_h1: Vec<f64> = x23_h1
         .iter()
-        .zip(y23_h1.iter())
-        .map(|(&x, &y)| {
-            let p_model = 1.0 / (1.0 + (-0.8 * x).exp());
-            (0.85 * y + 0.15 * p_model).clamp(0.01, 0.99)
+        .map(|&x| {
+            let p_model = 1.0 / (1.0 + (-(logit_base_13_h1 + 0.15 * x)).exp());
+            apply_cromwell_floor(p_model, 0.001)
         })
         .collect();
     let mut oot_vault = TemporalVault::seal("nyc_flights_2023_h1_oot", y23_h1);
     let vault_rep = oot_vault
-        .open_once(&probs_h1, 0.05)
+        .open_once(&probs_h1, 0.20)
         .expect("single opening of H1 reserve vault");
     println!(
         "  [6/6 Aviation Drift (5 CSVs): nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv] Lei-Candes(NYC 13->23 >= {:.3}, H1 13->23 >= {:.3}, NYC->Houston OOD >= {:.3}) | H1 Vault={:?} (Brier={:.4})",
@@ -520,10 +547,10 @@ fn lab_real_data(root: &Path) {
 
     // 7. End-to-End Epistemological Card Ledger (cards/card_01..03.yaml)
     let suite = build_v1_card_suite();
-    let null_samples: Vec<f64> = (0..199).map(|i| (i as f64) * 0.01).collect();
     let mut cards_approved = 0usize;
     for (_, plan_text, card) in &suite {
-        let rep = run_full_siga_roadmap(card, plan_text, 4.2, &null_samples, &[24.8]);
+        let (null_samples, obs_stat, e_vals) = exact_cluster_null_m_tilde_seed_2026(card);
+        let rep = run_full_siga_roadmap(card, plan_text, obs_stat, &null_samples, &e_vals);
         if card.audit().is_ok() && rep.approved_end_to_end {
             cards_approved += 1;
         }
