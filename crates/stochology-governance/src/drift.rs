@@ -161,9 +161,9 @@ pub fn fit_covariate_drift_extra_wcp(
     let l_hat = beta * mean_q - (max_bx + mean_shifted.ln()) - 0.5 * lambda_reg * beta * beta;
 
     // Total Variation distance d_TV(Q, Q_hat):
-    // Uses exact 0.5 * E_P[|w* - w_hat|] when oracle weights w* are provided; otherwise combines
-    // the Gaussian moment Pinsker estimate with a non-parametric empirical 10-decile-bin L1 Total
-    // Variation distance between target sample Q and tilted source distribution (x_source_p, w_hat).
+    // Uses exact 0.5 * E_P[|w* - w_hat|] when oracle weights w* are provided; otherwise uses the
+    // empirical 10-decile-bin L1 Total Variation distance (and Gaussian Pinsker bound) between
+    // target sample Q and tilted source distribution (x_source_p, w_hat).
     let d_tv = if let Some(w_star) = true_weights_optional {
         0.5 * w_star
             .iter()
@@ -299,7 +299,10 @@ pub fn estimate_label_shift_four_methods(
     let p_s_given_neg = (source_prior_p1 * (1.0 - source_tpr))
         / (source_prior_p1 * (1.0 - source_tpr) + (1.0 - source_prior_p1) * (1.0 - source_fpr))
             .max(1e-12);
-    let bayes_threshold = 0.5 * (p_s_given_pos + p_s_given_neg);
+    let bayes_threshold = source_prior_p1.clamp(
+        p_s_given_neg.min(p_s_given_pos),
+        p_s_given_pos.max(p_s_given_neg),
+    );
 
     let pred_pos_rate = target_calibrated_posteriors
         .iter()
@@ -340,7 +343,7 @@ pub fn estimate_label_shift_four_methods(
             .clamp(0.001, 0.999)
     };
 
-    // 4. OTTER (Entropic Optimal Transport Label Shift Estimation via Sinkhorn-Knopp scaling
+    // 4. Entropic Optimal Transport 1D Sinkhorn-Knopp Label Shift Estimator (OTTER grid search
     // on cost matrix C_{ij} = -ln P_theta(Y=j | X=x_i)):
     let q1_otter = solve_otter_sinkhorn(
         source_prior_p1,
@@ -402,11 +405,82 @@ fn empirical_decile_tv_distance(x_source_p: &[f64], w_hat: &[f64], x_target_q: &
         q_bins[bin_index(x)] += inv_m;
     }
 
-    let raw_tv = 0.5 * (0..10).map(|b| (p_bins[b] - q_bins[b]).abs()).sum::<f64>();
-    let n = x_source_p.len().max(1) as f64;
-    let m = x_target_q.len().max(1) as f64;
-    let se_floor = 1.2 * (1.0 / n + 1.0 / m).sqrt();
-    (raw_tv - se_floor).max(0.25 * raw_tv)
+    0.5 * (0..10).map(|b| (p_bins[b] - q_bins[b]).abs()).sum::<f64>()
+}
+
+/// Fits a calibrated 1D logistic classifier $P(Y=1 \mid X=x) = \sigma(\beta_0 + \beta_1 x)$ on `(x_source, y_source)`
+/// via Newton-Raphson (IRLS) and evaluates it on `x_target`.
+///
+/// Returns `(source_prior_p1, source_tpr, source_fpr, source_class0_mean, source_class1_mean, target_posteriors)`.
+pub fn fit_calibrated_logistic_1d(
+    x_source: &[f64],
+    y_source: &[f64],
+    x_target: &[f64],
+) -> (f64, f64, f64, f64, f64, Vec<f64>) {
+    assert!(!x_source.is_empty() && x_source.len() == y_source.len());
+    let n = x_source.len() as f64;
+    let p_base = (y_source.iter().sum::<f64>() / n).clamp(0.001, 0.999);
+    let mut b0 = (p_base / (1.0 - p_base)).ln();
+    let mut b1 = 0.0_f64;
+
+    for _ in 0..25 {
+        let mut g0 = 0.0;
+        let mut g1 = 0.0;
+        let mut h00 = 1e-4;
+        let mut h01 = 0.0;
+        let mut h11 = 1e-4;
+        for (&x, &y) in x_source.iter().zip(y_source.iter()) {
+            let z = (b0 + b1 * x).clamp(-20.0, 20.0);
+            let p = 1.0 / (1.0 + (-z).exp());
+            let w = (p * (1.0 - p)).max(1e-6);
+            let diff = y - p;
+            g0 += diff;
+            g1 += diff * x;
+            h00 += w;
+            h01 += w * x;
+            h11 += w * x * x;
+        }
+        let det = (h00 * h11 - h01 * h01).max(1e-9);
+        b0 += (h11 * g0 - h01 * g1) / det;
+        b1 += (-h01 * g0 + h00 * g1) / det;
+    }
+
+    let mut sum0 = 0.0;
+    let mut cnt0 = 0usize;
+    let mut sum1 = 0.0;
+    let mut cnt1 = 0usize;
+    let mut tp = 0usize;
+    let mut fp = 0usize;
+    for (&x, &y) in x_source.iter().zip(y_source.iter()) {
+        let p = 1.0 / (1.0 + (-(b0 + b1 * x).clamp(-20.0, 20.0)).exp());
+        let pred_pos = p >= p_base;
+        if y >= 0.5 {
+            sum1 += x;
+            cnt1 += 1;
+            if pred_pos {
+                tp += 1;
+            }
+        } else {
+            sum0 += x;
+            cnt0 += 1;
+            if pred_pos {
+                fp += 1;
+            }
+        }
+    }
+    let mu0 = sum0 / (cnt0.max(1) as f64);
+    let mu1 = sum1 / (cnt1.max(1) as f64);
+    let tpr = (tp as f64 / (cnt1.max(1) as f64)).clamp(0.05, 0.95);
+    let fpr = (fp as f64 / (cnt0.max(1) as f64)).clamp(0.01, (tpr - 0.02).max(0.02));
+    let target_posteriors: Vec<f64> = x_target
+        .iter()
+        .map(|&x| {
+            let p = 1.0 / (1.0 + (-(b0 + b1 * x).clamp(-20.0, 20.0)).exp());
+            p.clamp(0.001, 0.999)
+        })
+        .collect();
+
+    (p_base, tpr, fpr, mu0, mu1, target_posteriors)
 }
 
 /// Exact smallest singular value $\sigma_{\min}(A)$ of a $2 \times 2$ matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$.

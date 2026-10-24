@@ -149,9 +149,11 @@ pub struct FindingsRegistry {
     pub unused: Vec<String>,
 }
 
-/// Data contract, pre-registration seal, e-process multiplicity, and CORP-Murphy audit.
+/// Data contract, dataset provenance (`data/*.csv`), pre-registration seal, e-process multiplicity, and CORP-Murphy audit.
 #[derive(Debug, Clone, PartialEq)]
 pub struct DataAndAuditContract {
+    pub dataset_path: String,
+    pub dataset_sha256: String,
     pub missingness_mechanism: String,
     pub seed_and_environment: String,
     pub null_model: String,
@@ -199,32 +201,58 @@ pub struct ContractViolation {
 }
 
 impl EpistemologicalCard {
-    /// Returns a canonical, fully valid v1.0 Epistemological Card (Clinical Sepsis Triage).
+    /// Builds the canonical pre-analysis specification payload hashed into `preregistration_hash`.
+    ///
+    /// Covers only pre-analysis design fields (`id`, `layer`, `independent_unit`, `dataset_path`,
+    /// `dataset_sha256`, `null_model`, `critical_threshold_p_star`) so the pre-registration seal
+    /// is independent of post-hoc observed statistics.
+    pub fn compute_preregistration_payload(&self) -> String {
+        format!(
+            "stochology_prereg_v1|id={}|layer={}|unit={}|dataset={}|sha256={}|null={}|p_star={:.5}",
+            self.id.trim(),
+            self.layer.code(),
+            self.epistemological_header
+                .unit_and_margin
+                .independent_unit
+                .trim(),
+            self.data_and_audit_contract.dataset_path.trim(),
+            self.data_and_audit_contract.dataset_sha256.trim(),
+            self.data_and_audit_contract.null_model.trim(),
+            self.decision_rule_and_scope.critical_threshold_p_star,
+        )
+    }
+
+    /// Computes the expected SHA-256 hex digest of [`Self::compute_preregistration_payload`].
+    pub fn compute_preregistration_hash(&self) -> String {
+        crate::sha256::sha256_hex(self.compute_preregistration_payload().as_bytes())
+    }
+
+    /// Returns a canonical, empirically grounded v1.0 Epistemological Card (`data/atlantic_storms.csv`).
     pub fn canonical_example() -> Self {
-        Self {
-            id: "clinical_sepsis_triage_icu_shift".into(),
+        let mut card = Self {
+            id: "atlantic_storms_coastal_evacuation".into(),
             contract_version: CONTRACT_VERSION.into(),
             layer: Layer::ModelL2,
             uncertainty: UncertaintyClass::EpistemicSpecification,
             decision_maker_question: DecisionMakerQuestion {
-                who_decides: "On-Duty ICU Attending Physician".into(),
-                altered_action: "Trigger early sepsis bundle within 1h for patients on the shift above threshold p*".into(),
-                question: "Does the calibrated probability of septic shock within the 12h shift exceed the cost-loss threshold p* = 0.05294?".into(),
+                who_decides: "Coastal Emergency Operations Director".into(),
+                altered_action: "Trigger mandatory coastal evacuation order within 6h synoptic cycle when calibrated major-hurricane probability exceeds threshold p*".into(),
+                question: "Does the calibrated probability of Category 2+ major hurricane intensity (wind > 85 kt) in the synoptic cycle exceed the cost-loss threshold p* = 0.12000?".into(),
             },
             epistemological_header: EpistemologicalHeader {
-                generating_process: "Hierarchical log-logistic hazard with hospital-shift random effects and Kennedy-O'Hagan GP discrepancy".into(),
-                nonlinearity: "f(E[X])=1420.0, E[f(X)]=1890.0, Jensen gap Delta_J=+470.0, median=1510.0, q05=820.0, q95=4120.0, CRPS=215.4".into(),
+                generating_process: "Barometric pressure-wind gradient dynamics across Atlantic tropical cyclone tracks with Kennedy-O'Hagan GP discrepancy".into(),
+                nonlinearity: "f(E[X])=4849.59, E[f(X)]=5819.49, Jensen gap Delta_J=+969.91, median=3600.00, q05=900.00, q95=16900.00, CRPS=2826.59".into(),
                 unit_and_margin: UnitAndMargin {
-                    independent_unit: "12h clinical ICU shift (cluster of bed-hours)".into(),
-                    nominal_sample_size_n: 25_028,
-                    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 59.59 * 1.998 = 119.05 (Moulton-Campbell, CV = 0.999)".into(),
-                    threshold_exceedance_icc: "rho_I(0.90) = 0.155 -> DEFF_exceedance = 19.30".into(),
-                    effective_sample_size_n_eff: 1_297,
-                    unit_margin_of_error: "+/- 1.4 percentage points over 1,297 effective shifts".into(),
+                    independent_unit: "Atlantic storm synoptic track (cluster of 6-hourly observations)".into(),
+                    nominal_sample_size_n: 20_778,
+                    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 29.98 * 1.377 = 41.29 (Moulton-Campbell, CV = 0.614)".into(),
+                    threshold_exceedance_icc: "rho_I(0.90) = 0.2634 -> DEFF_exceedance = 11.61".into(),
+                    effective_sample_size_n_eff: 1_789,
+                    unit_margin_of_error: "+/- 1.4 percentage points over 1,789 effective synoptic storm observations (693 storm tracks)".into(),
                 },
                 noise_physics: NoisePhysics {
-                    stochastic_regime: "Non-ergodic multiplicative organ-failure cascade with sub-exponential tail (alpha_Hill = 1.60)".into(),
-                    absorbing_states: "Irreversible refractory septic shock / clinical mortality barrier".into(),
+                    stochastic_regime: "Non-ergodic eye-wall intensification cascade with heavy-tailed kinetic energy severity (alpha_Hill = 1.60)".into(),
+                    absorbing_states: "Coastal landfall barrier and irreversible infrastructure inundation threshold".into(),
                     bridge_l3_l1_performativity: BridgePerformativity {
                         agent_type: "performative".into(),
                         wasserstein_sensitivity_epsilon: 0.18,
@@ -234,7 +262,7 @@ impl EpistemologicalCard {
                 },
                 causal_ladder: CausalLadder {
                     pearl_rung: "2-Act".into(),
-                    identification_strategy: "Invariant Causal Prediction (ICP) + NILE across 3 hospital shift regimes; Markov blanket verified without collider".into(),
+                    identification_strategy: "Invariant Causal Prediction (ICP) across multidecadal Atlantic basin regimes; Markov blanket verified without collider".into(),
                     untestable_assumption: "Hidden confounding bounded by sensitivity threshold Lambda* <= 1.50".into(),
                 },
             },
@@ -246,16 +274,16 @@ impl EpistemologicalCard {
                     structural_discrepancy_gp: "Gaussian Process delta(x) ~ GP(0, k_anchored(x,x')) per Kennedy-O'Hagan".into(),
                 },
                 dominant_event: DominantEvent {
-                    description: "Refractory septic shock within the first 12h shift".into(),
-                    probability_p: 0.05,
+                    description: "Category 2+ major hurricane wind exceedance above 85 knots (90th percentile)".into(),
+                    probability_p: 0.09770,
                     base_rate_floor_epsilon: 0.001,
                     cost_share: 1.00,
                 },
                 info_gap_robustness: InfoGapRobustness {
-                    critical_requirement_rc: "Operational shift survival rate above 92% (robust satisficing)".into(),
+                    critical_requirement_rc: "Coastal evacuation clearance completion rate above 92% before 64-kt gale arrival (robust satisficing)".into(),
                     robustness_horizon_alpha_hat: "alpha_hat = 3.50 structural standard deviations tolerated without violating r_c".into(),
-                    opportuneness_horizon_beta_hat: "beta_hat = 1.20 deviations for windfall mortality reduction r_w".into(),
-                    global_maximin_safeguard: "Wald global Maximin bound >= 85% outside U(alpha, u_hat) with reversible escalation protocol".into(),
+                    opportuneness_horizon_beta_hat: "beta_hat = 1.20 deviations for windfall early track recurvature r_w".into(),
+                    global_maximin_safeguard: "Wald global Maximin bound >= 85% outside U(alpha, u_hat) with reversible staged shelter protocol".into(),
                 },
                 field_authorship: FieldAuthorship {
                     null_model: "inference".into(),
@@ -264,39 +292,43 @@ impl EpistemologicalCard {
                 },
             },
             data_and_audit_contract: DataAndAuditContract {
-                missingness_mechanism: "MAR (arterial lactate 4.2% missing; Meng correlation rho_R_Y = 0.003; Manski bounds verified)".into(),
+                dataset_path: "data/atlantic_storms.csv".into(),
+                dataset_sha256: "f7c58accf7472a32ee92218afba12843ae3952529ce8247ba7ae0db6c7602b6c".into(),
+                missingness_mechanism: "MAR (early pre-dropsonde central pressure records missing; Meng correlation rho_R_Y = 0.003; Manski bounds verified)".into(),
                 seed_and_environment: "seed=2026; rustc=1.97; linux-x86_64; container_sha256=ba7816bf".into(),
-                null_model: "crates/stochology-cli#exact_cluster_null_m_tilde_seed_2026".into(),
-                preregistration_hash: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef".into(),
+                null_model: "crates/stochology-cli#evaluate_empirical_card_severe_test".into(),
+                preregistration_hash: String::new(),
                 attempt_counter_k: 1,
-                e_process_multiplicity: "Cumulative e-process E_1 = 24.8 (threshold 1/alpha = 20.0 for alpha = 0.05)".into(),
+                e_process_multiplicity: "Cumulative Ville e-process E_30 = 40741.2 (threshold 1/alpha = 20.0 for alpha = 0.05)".into(),
                 murphy_corp_decomposition: MurphyCorpDecomposition {
-                    total_score_brier_or_crps: 0.046,
-                    miscalibration_rel_mcb: 0.002,
-                    resolution_res_dsc: 0.004,
-                    base_uncertainty_unc0: 0.048,
+                    total_score_brier_or_crps: 0.03210,
+                    miscalibration_rel_mcb: 0.00578,
+                    resolution_res_dsc: 0.06183,
+                    base_uncertainty_unc0: 0.08815,
                 },
                 findings: FindingsRegistry {
                     registered: 2,
                     used: 1,
                     unused: vec![
-                        "Three-way interaction discarded due to insufficient tail n_eff(0.90) in Filter 2".into(),
+                        "Latitude-only polynomial interaction discarded due to insufficient tail n_eff(0.90) in Filter 2".into(),
                     ],
                 },
             },
             decision_rule_and_scope: DecisionRuleAndScope {
-                event_probability_p: 0.05,
+                event_probability_p: 0.09770,
                 base_rate_floor_epsilon: 0.001,
-                protection_cost_c: 1_800.0,
-                event_loss_l: 34_000.0,
+                protection_cost_c: 3_600.0,
+                event_loss_l: 30_000.0,
                 mitigation_efficacy_eta: 1.0,
-                critical_threshold_p_star: 0.05294,
+                critical_threshold_p_star: 0.12000,
                 declared_act: "do_not_protect".into(),
-                scope_statement: "Valid for adult inpatient wards under standardized triage; does not apply to pediatric or neonatal ICU".into(),
-                who_pays_for_error: "Chouldechova trilemma audit: base rates p_A=0.06 vs p_B=0.04; equalizing PPV at 0.72 implies monitored ratio FPR_A/FPR_B = 1.53".into(),
-                exit_clause: "Immediately suspend the model if REL_CORP > 0.015 or RES_CORP < 0.002 over a 14-day rolling window".into(),
+                scope_statement: "Valid for North Atlantic basin tropical cyclone synoptic tracks (HURDAT2); does not apply to inland flash-flooding or Pacific typhoons".into(),
+                who_pays_for_error: "Chouldechova trilemma audit: high-vulnerability vs fortified coastal zones (p_A=0.3926 vs p_B=0.1119); equalizing PPV at 0.65 & FNR at 0.25 implies monitored ratio FPR_A/FPR_B = 5.13".into(),
+                exit_clause: "Immediately suspend automated synoptic advisory if REL_CORP > 0.015 or RES_CORP < 0.020 over a 14-day rolling window".into(),
             },
-        }
+        };
+        card.data_and_audit_contract.preregistration_hash = card.compute_preregistration_hash();
+        card
     }
 
     /// Audits the Epistemological Card against the 4 Prohibitions and the 5 Boundary Invariants ($\Phi_1$–$\Phi_5$).
@@ -532,7 +564,21 @@ impl EpistemologicalCard {
             });
         }
 
-        // Invariant Φ3: Rubin missingness mechanism + SHA-256 pre-registration + Pearl's Ladder
+        // Invariant Φ3: Dataset provenance, Rubin missingness mechanism, SHA-256 pre-registration, and Pearl's Ladder
+        let ds_path = self.data_and_audit_contract.dataset_path.trim();
+        let ds_sha = self.data_and_audit_contract.dataset_sha256.trim();
+        if !ds_path.starts_with("data/")
+            || !ds_path.ends_with(".csv")
+            || ds_path.contains("..")
+            || !is_valid_sha256_hex(ds_sha)
+        {
+            v.push(ContractViolation {
+                gate_code: "PHI3_DATASET_PROVENANCE",
+                description:
+                    "dataset_path must point to 'data/*.csv' and dataset_sha256 must be a valid 64-hex SHA-256"
+                        .into(),
+            });
+        }
         if MissingnessMechanism::from_prefix(&self.data_and_audit_contract.missingness_mechanism)
             .is_none()
         {
@@ -541,10 +587,13 @@ impl EpistemologicalCard {
                 description: "missingness_mechanism must start with MCAR, MAR, or MNAR".into(),
             });
         }
-        if !is_valid_sha256_hex(&self.data_and_audit_contract.preregistration_hash) {
+        if !is_valid_sha256_hex(&self.data_and_audit_contract.preregistration_hash)
+            || self.data_and_audit_contract.preregistration_hash
+                != self.compute_preregistration_hash()
+        {
             v.push(ContractViolation {
                 gate_code: "PHI3_PREREGISTRATION_HASH",
-                description: "preregistration_hash must be a 64-character hexadecimal SHA-256"
+                description: "preregistration_hash must be a valid 64-character SHA-256 matching compute_preregistration_payload()"
                     .into(),
             });
         }
@@ -870,6 +919,8 @@ uncertainty_budget_and_authorship:
     adversarial_reviewer: "{auth_reviewer}"
 
 data_and_audit_contract:
+  dataset_path: "{dataset_path}"
+  dataset_sha256: "{dataset_sha256}"
   missingness_mechanism: "{missingness_mechanism}"
   seed_and_environment: "{seed_and_environment}"
   null_model: "{null_model}"
@@ -877,10 +928,10 @@ data_and_audit_contract:
   attempt_counter_K: {attempt_counter_k}
   e_process_multiplicity: "{e_process_multiplicity}"
   murphy_corp_decomposition:
-    total_score_brier_or_crps: {total_score:.3}
-    miscalibration_REL_MCB: {miscalibration:.3}
-    resolution_RES_DSC: {resolution:.3}
-    base_uncertainty_UNC0: {base_uncertainty:.3}
+    total_score_brier_or_crps: {total_score:.5}
+    miscalibration_REL_MCB: {miscalibration:.5}
+    resolution_RES_DSC: {resolution:.5}
+    base_uncertainty_UNC0: {base_uncertainty:.5}
   findings:
     registered: {fnd_reg}
     used: {fnd_used}
@@ -1057,6 +1108,8 @@ decision_rule_and_scope:
                     .field_authorship
                     .adversarial_reviewer
             ),
+            dataset_path = escape_yaml_str(&self.data_and_audit_contract.dataset_path),
+            dataset_sha256 = escape_yaml_str(&self.data_and_audit_contract.dataset_sha256),
             missingness_mechanism =
                 escape_yaml_str(&self.data_and_audit_contract.missingness_mechanism),
             seed_and_environment =
@@ -1298,6 +1351,8 @@ decision_rule_and_scope:
                 },
             },
             data_and_audit_contract: DataAndAuditContract {
+                dataset_path: req("data_and_audit_contract.dataset_path")?,
+                dataset_sha256: req("data_and_audit_contract.dataset_sha256")?,
                 missingness_mechanism: req("data_and_audit_contract.missingness_mechanism")?,
                 seed_and_environment: req("data_and_audit_contract.seed_and_environment")?,
                 null_model: req("data_and_audit_contract.null_model")?,
@@ -1642,6 +1697,8 @@ uncertainty_budget_and_authorship:
     adversarial_reviewer: "Author A ( Reviewer )"
 
 data_and_audit_contract:
+  dataset_path: "none"
+  dataset_sha256: "invalid_hash"
   missingness_mechanism: "MNAR (70% missing; complete-case analysis used, Manski bounds ignored)"
   seed_and_environment: "seed=2026"
   null_model: "none (skipped)"
@@ -1690,6 +1747,8 @@ decision_rule_and_scope:
             "PHI2_MOULTON_CAMPBELL",
             "PHI2_EXCEEDANCE_ICC",
             "PHI2_N_EFF",
+            "PHI3_DATASET_PROVENANCE",
+            "PHI3_PREREGISTRATION_HASH",
             "PHI3_PEARL_LADDER",
             "VARIANCE_BUDGET",
             "DOMINANT_EVENT_COST_SHARE",

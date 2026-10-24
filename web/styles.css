@@ -1058,3 +1058,688 @@ table.data-table tbody th {
   border: 0;
 }
 
+/* ==========================================================================
+   Interactive Textbook Architecture (Stochology Course Reader v1.0)
+   ========================================================================== */
+
+/* 1. Top Decorative Scroll Progress Indicator (scroll-progress-indicator) */
+#reading-scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 60;
+  inline-size: 100%;
+  block-size: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent), var(--status-ok));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes grow-reading-progress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    #reading-scroll-progress {
+      animation: grow-reading-progress auto linear;
+      animation-timeline: scroll();
+    }
+  }
+}
+
+/* 2. Directional View Transitions for Chapter Navigation (directional-navigation-transitions) */
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-3%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(3%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-to-right {
+  to {
+    transform: translateX(3%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-3%);
+    opacity: 0;
+  }
+}
+
+::view-transition-group(root) {
+  animation: 0.26s ease-in-out both;
+}
+
+html:active-view-transition-type(forward)::view-transition-old(root) {
+  animation-name: slide-to-left;
+}
+
+html:active-view-transition-type(forward)::view-transition-new(root) {
+  animation-name: slide-from-right;
+}
+
+html:active-view-transition-type(backward)::view-transition-old(root) {
+  animation-name: slide-to-right;
+}
+
+html:active-view-transition-type(backward)::view-transition-new(root) {
+  animation-name: slide-from-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root) {
+    animation: none !important;
+  }
+}
+
+/* 3. CSS Custom Highlight API for Book Search (highlight-text-ranges) */
+::highlight(book-search) {
+  background-color: #fde047;
+  color: #0b1120;
+  text-decoration: underline wavy #b45309;
+}
+
+mark.search-fallback-mark {
+  background-color: #fde047;
+  color: #0b1120;
+  text-decoration: underline wavy #b45309;
+  padding-inline: 0.1rem;
+  border-radius: 2px;
+}
+
+/* 4. Custom Styled <progress> Bar for Course Completion (progress) */
+progress.course-progress {
+  appearance: none;
+  border: 0 solid;
+  overflow: clip;
+   display: block;
+  inline-size: 100%;
+  block-size: 0.55rem;
+  --progress-bar-radius: 1e5px;
+  border-radius: var(--progress-bar-radius);
+  background: var(--bg-elevated);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.14);
+  container-type: inline-size;
+  --progress-bar-indeterminate-size: 30%;
+  --progress-bar-indeterminate-animation-duration: 1.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  progress.course-progress {
+    --progress-bar-indeterminate-animation-duration: 10s;
+  }
+}
+
+progress.course-progress:dir(rtl) {
+  --progress-bar-indeterminate-animation: progress-bar-indeterminate var(--progress-bar-indeterminate-animation-duration) infinite linear reverse;
+}
+
+progress.course-progress:indeterminate {
+  --progress-bar-animation: var(
+    --progress-bar-indeterminate-animation,
+    progress-bar-indeterminate var(--progress-bar-indeterminate-animation-duration) infinite linear
+  );
+}
+
+progress.course-progress::-webkit-progress-bar {
+  background: transparent;
+}
+
+progress.course-progress::-webkit-progress-value {
+  background: var(--brand-primary);
+  border-radius: var(--progress-bar-radius);
+  transition: inline-size 0.3s;
+  animation: var(--progress-bar-animation, revert-rule);
+}
+
+progress.course-progress::-moz-progress-bar {
+  background: var(--brand-primary);
+  border-radius: var(--progress-bar-radius);
+  transition: inline-size 0.3s;
+  animation: var(--progress-bar-animation, revert-rule);
+}
+
+@keyframes progress-bar-indeterminate {
+  from,
+  to {
+    inline-size: var(--progress-bar-indeterminate-size);
+    margin-right: auto;
+  }
+  from {
+    translate: -100%;
+  }
+  to {
+    translate: 100cqi;
+  }
+}
+
+/* 5. Two-Column Interactive Textbook Shell */
+.book-shell {
+  display: grid;
+  grid-template-columns: 20rem minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  padding-block: 1.75rem 3.5rem;
+}
+
+.book-sidebar {
+  position: sticky;
+  inset-block-start: 4.5rem;
+  max-block-size: calc(100dvh - 5.25rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 1.1rem;
+}
+
+.sidebar-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-block-end: 0.45rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: safe center;
+}
+
+.progress-card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.progress-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: safe center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.book-search-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.book-search-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.book-search-input {
+  flex: 1;
+  min-inline-size: 0;
+  padding-block: 0.42rem;
+  padding-inline: 0.65rem;
+  font-size: 0.83rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.book-search-input:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 1px;
+}
+
+.search-results-meta {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.search-hit-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding-block: 0.12rem;
+  padding-inline: 0.45rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--status-warn-bg);
+  color: var(--status-warn);
+  border: 1px solid var(--status-warn);
+  cursor: pointer;
+}
+
+/* Sidebar Table of Contents */
+.book-toc {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.toc-btn {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: safe center;
+  gap: 0.6rem;
+  inline-size: 100%;
+  text-align: start;
+  padding-block: 0.55rem;
+  padding-inline: 0.65rem;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  line-height: 1.3;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.toc-btn:hover,
+.toc-btn:focus-visible {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.toc-btn[aria-current="page"] {
+  background-color: var(--bg-elevated);
+  border-color: var(--brand-primary);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.toc-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding-block: 0.12rem;
+  padding-inline: 0.4rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  color: var(--brand-primary);
+}
+
+.toc-btn[aria-current="page"] .toc-num {
+  background-color: var(--brand-primary);
+  color: var(--bg-canvas);
+  border-color: var(--brand-primary);
+}
+
+.toc-check {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.toc-check.done {
+  color: var(--status-ok);
+  font-weight: 800;
+}
+
+/* 6. Chapter Reader & Inner Container (search-hidden-content compliant)
+   IMPORTANT: Never style .book-chapter directly with padding/border/background/display
+   because it hosts hidden="until-found". Style .chapter-inner instead! */
+.book-reader {
+  min-inline-size: 0;
+}
+
+.chapter-inner {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.35rem, 3vw, 2.5rem);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: 2rem;
+}
+
+.chapter-banner {
+  border-block-end: 1px solid var(--border-subtle);
+  padding-block-end: 1.5rem;
+}
+
+.chapter-banner h1,
+.chapter-banner h2 {
+  font-size: clamp(1.65rem, 1.2rem + 1.8vw, 2.45rem);
+  letter-spacing: -0.025em;
+  margin-block-end: 0.75rem;
+}
+
+.chapter-lead {
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.12rem);
+  color: var(--text-secondary);
+  margin-block-end: 1.15rem;
+}
+
+/* Chapter Section Scrollspy Outline (scrollspy guide) */
+.chapter-outline-nav {
+  scroll-target-group: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  align-items: safe center;
+}
+
+.outline-label {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-inline-end: 0.25rem;
+}
+
+.chapter-outline-nav a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding-block: 0.2rem;
+  padding-inline: 0.55rem;
+  border-radius: var(--radius-sm);
+  border-block-end: 2px solid transparent;
+}
+
+.chapter-outline-nav a:hover,
+.chapter-outline-nav a:target-current,
+.chapter-outline-nav a[aria-current="true"] {
+  color: var(--brand-primary);
+  font-weight: 700;
+  background-color: var(--bg-surface);
+  border-block-end-color: var(--brand-primary);
+}
+
+/* 7. Pedagogical Callout Boxes (Definitions, Theorems, Prohibitions, Alerts) */
+.chapter-section {
+  display: grid;
+  gap: 1.1rem;
+  scroll-margin-block-start: 5.5rem;
+}
+
+.chapter-section h3 {
+  font-size: clamp(1.22rem, 1.08rem + 0.6vw, 1.48rem);
+  margin-block-end: 0.2rem;
+  padding-block-bottom: 0.35rem;
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.callout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.1rem;
+}
+
+.callout {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-inline-start-width: 4px;
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.callout-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: safe center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.callout p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.callout-def {
+  border-inline-start-color: var(--brand-primary);
+}
+.callout-def .callout-header {
+  color: var(--brand-primary);
+}
+
+.callout-thm {
+  border-inline-start-color: var(--brand-accent);
+}
+.callout-thm .callout-header {
+  color: var(--brand-accent);
+}
+
+.callout-prohibition {
+  border-inline-start-color: var(--status-err);
+  background-color: var(--status-err-bg);
+}
+.callout-prohibition .callout-header {
+  color: var(--status-err);
+}
+
+.callout-alert {
+  border-inline-start-color: var(--status-warn);
+  background-color: var(--status-warn-bg);
+}
+.callout-alert .callout-header {
+  color: var(--status-warn);
+}
+
+/* Syllabus Cards Grid in Preface (ch-0) */
+.syllabus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.1rem;
+}
+
+.syllabus-card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem;
+  display: grid;
+  gap: 0.65rem;
+  align-content: space-between;
+}
+
+.syllabus-card h4 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.syllabus-card p {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+/* 8. Interactive Epistemological Checkpoints (Quizzes) */
+.checkpoint-card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem;
+  display: grid;
+  gap: 1.15rem;
+}
+
+.checkpoint-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: safe center;
+  gap: 0.5rem;
+  border-block-end: 1px solid var(--border-subtle);
+  padding-block-end: 0.75rem;
+}
+
+.checkpoint-header h3 {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.15rem;
+}
+
+.quiz-question-block {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.quiz-prompt {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.quiz-option-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-elevated);
+}
+
+.quiz-option-label:hover {
+  border-color: var(--brand-primary);
+  color: var(--text-primary);
+}
+
+.quiz-option-label input[type="radio"] {
+  margin-block-start: 0.22rem;
+  flex-shrink: 0;
+}
+
+.quiz-feedback {
+  font-size: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.quiz-feedback.ok {
+  background-color: var(--status-ok-bg);
+  color: var(--status-ok);
+  border-color: var(--status-ok);
+}
+
+.quiz-feedback.err {
+  background-color: var(--status-err-bg);
+  color: var(--status-err);
+  border-color: var(--status-err);
+}
+
+/* 9. Chapter Footer Pager (Prev / Next Chapter) */
+.chapter-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  padding-block-start: 1.25rem;
+  border-block-start: 1px solid var(--border-subtle);
+}
+
+.pager-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-block: 0.75rem;
+  padding-inline: 1.1rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: start;
+  min-inline-size: 13rem;
+}
+
+.pager-btn.next {
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+.pager-btn:hover,
+.pager-btn:focus-visible {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+.pager-dir {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pager-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* Mobile Responsive Book Shell */
+.mobile-toc-toggle {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .book-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-toc-toggle {
+    display: inline-flex;
+  }
+
+  .book-sidebar {
+    position: static;
+    max-block-size: none;
+  }
+
+  .book-sidebar.mobile-collapsed {
+    display: none;
+  }
+}
+
+

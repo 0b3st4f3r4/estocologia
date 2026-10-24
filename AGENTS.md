@@ -26,18 +26,19 @@ This repository implements the **Stochology Protocol v1.0** in **pure Rust (zero
 | $\Phi_4$ — Scope, Fairness & Exit | Economic boundary $p^* = \frac{C}{\eta L}$, algebraic audit of Chouldechova's trilemma ($\mathrm{FPR}_A / \mathrm{FPR}_B$ under unequal base rates), and automatic numeric exit clause | `crates/stochology-core/src/invariants.rs` (`ChouldechovaAudit`) & `card.rs` |
 | $\Phi_5$ — Question Resolution | Ban on answering a daily/shift operational decision with coarse annual/monthly aggregates ($R_0$) | `crates/stochology-core/src/invariants.rs` (`verify_resolution_phi5`) |
 
-The `gates` binary enforces invariants $\Phi_1$–$\Phi_5$ and methodological locks across seven gates (`G1` to `G7`) and exits with code `0` (approved) or `1` (blocked).
+The `gates` binary enforces invariants $\Phi_1$–$\Phi_5$ and methodological locks across eight gates (`G1` to `G8`) and exits with code `0` (approved) or `1` (blocked).
 
 ---
 
-## III. The Five Transversal Lenses and Severe Uncertainty
+## III. The Five Transversal Lenses, Almost-Perfect Machine, and Severe Uncertainty
 
-The five transversal lenses reside in `crates/stochology-lenses`:
-1. **Information Lens (`information.rs`):** Data Processing Inequality (DPI), exact hierarchy of strong contraction constants ($\eta_{\chi^2}(W) = \rho_m^2 \le \eta_{\mathrm{KL}}(W) \le \eta_{\mathrm{TV}}(W)$), amplitude-constrained bound, and Fano's error floor.
+The five transversal lenses and the Almost-Perfect Machine reside in `crates/stochology-lenses`:
+1. **Information Lens (`information.rs`):** Data Processing Inequality (DPI, 3-step Markov chain `DpiMarkovChain`), exact hierarchy of strong contraction constants ($\eta_{\chi^2}(W) = \rho_m^2 \le \eta_{\mathrm{KL}}(W) \le \eta_{\mathrm{TV}}(W)$), amplitude-constrained bound, and Fano's error floor.
 2. **Time Lens (`time.rs`):** Itô variance drain ($g_{\text{time}} = \mu - \frac{1}{2}\sigma^2$), optimal Kelly fraction under asymmetric returns ($f^* = \frac{p}{a} - \frac{1-p}{b}$), absorbing ruin barriers, and Langevin/MCMC mixing time under Log-Sobolev Inequality.
 3. **Scale and Tail Lens (`tail.rs`):** Hill estimator ($\hat{\alpha}_{k,n}$), moment existence regime classification ($\alpha \le 1$, $1 < \alpha \le 2$, $\alpha > 2$), and quantiles with effective tail sample size.
-4. **Structure and Invariance Lens (`invariance.rs`):** Invariant Causal Prediction (ICP by intersection across environments $e \in \mathcal{E}$), *Nonlinear Invariant Risk Minimization* (NILE) penalty, 2nd-order worst-case loss, and critical hidden confounding threshold $\Lambda^*$.
-5. **Decision and Calibration Lens (`decision.rs`):** Cost-loss rule $p^* = \frac{C}{\eta L}$, Expected Value of Perfect Information ($\mathrm{EVPI}$), quantile score (pinball loss), and isotonic **CORP-Murphy** decomposition via the PAV algorithm.
+4. **Structure and Invariance Lens (`invariance.rs`):** Invariant Causal Prediction (ICP by intersection across environments $e \in \mathcal{E}$), environment OLS invariance penalty (`env_ols_invariance_penalties`), nonlinear ICP and NILE/IRM risk-gradient penalty over orthonormal Hermite basis (`run_nonlinear_icp_nile`), 2nd-order worst-case loss, and critical hidden confounding threshold $\Lambda^*$.
+5. **Decision and Calibration Lens (`decision.rs`):** Cost-loss rule $p^* = \frac{C}{\eta L}$, Expected Value of Perfect Information ($\mathrm{EVPI}$), quantile score (pinball loss), isotonic **CORP-Murphy** decomposition via the PAV algorithm, and exact fair-coin calibration vs. decision benchmark (`ExactCoinCalibrationBenchmark`).
+6. **Almost-Perfect Machine and Authentic Model Form (`machine.rs`):** $(\varepsilon, \delta)$-Almost-Perfect Machine $M = (T, \Phi, \theta)$ (`AlmostPerfectMachine`, auditing universal Barron density, DPI $\delta$-sufficiency, Fano/minimax rate optimality, Telgarsky depth-$D$ compositional efficiency $2^D$, and Gram effective dimension $d_{\mathrm{eff}} = \frac{(\mathrm{tr}\,G)^2}{\|G\|_F^2}$ across `P1`–`P5`); and First-Class Authentic Model Form (`AuthenticModelForm`, $\delta(x) + \hat{S}^*$, explicitly named discarded spurious atoms `DiscardedAtomRecord`, simultaneous closure of the 6 numerical identities `IdentityClosureAudit`, and the 5-part operational authenticity criterion $A(\text{model})$ `AuthenticityCriterionA`), enforced in Gate `G8` and `--defect machine`.
 
 Structural and severe uncertainty modeling resides in `crates/stochology-core/src/uncertainty.rs`:
 - **Kennedy-O'Hagan Structural Discrepancy (`KennedyOHaganDiscrepancy`):** Gaussian Process $\delta(x) \sim \mathcal{GP}(0, k(x, x'))$ with anchoring constraint to prevent parameter pseudo-convergence and extrapolation overconfidence.
@@ -79,7 +80,7 @@ cargo run --release --bin labs -- --invariants                  # Lab 4: Phi1-Ph
 cargo run --release --bin labs -- --siga                        # Lab 5: 4-Filter Funnel and SIGA Roadmap on the 3 YAML Cards
 cargo run --release --bin labs -- --governance                  # Lab 6: Bitemporal Clock, Vault, and 4 Regimes of Drift
 cargo run --release --bin labs -- --real-data                   # Lab 7: Transversal Synthesis across all 13 CSVs & 3 YAML Cards
-cargo run --release --bin gates                                 # The 7 Epistemological Gates (G1-G7): exits with 0
+cargo run --release --bin gates                                 # The 8 Epistemological Gates (G1-G8): exits with 0
 cargo run --release --bin gates -- --defect cromwell            # Negative proof (Cromwell's Rule): exits with 1
 cargo run --release --bin gates -- --defect phi5                # Negative proof (Phi5 Resolution): exits with 1
 cargo run --release --bin gates -- --defect moulton             # Negative proof (Moulton Pseudoreplication): exits with 1
@@ -89,6 +90,7 @@ cargo run --release --bin gates -- --defect clock               # Negative proof
 cargo run --release --bin gates -- --defect vault               # Negative proof (Vault Reopening): exits with 1
 cargo run --release --bin gates -- --defect concept_drift       # Negative proof (Concept Drift Circuit Breaker): exits with 1
 cargo run --release --bin gates -- --defect chouldechova        # Negative proof (Chouldechova Impossibility): exits with 1
+cargo run --release --bin gates -- --defect machine             # Negative proof (Almost-Perfect Machine & Authentic Form): exits with 1
 git tag --list                                                  # Must be empty
 ~~~
 
@@ -100,6 +102,6 @@ git tag --list                                                  # Must be empty
 | --- | --- | --- |
 | Protocol Specification | `docs/PROTOCOL.md` | Consolidated v1.0 specification and code mapping |
 | Rust Apparatus | `crates/stochology-core`, `crates/stochology-lenses`, `crates/stochology-siga`, `crates/stochology-governance`, `crates/stochology-cli` | 5 pure-Rust crates (zero external dependencies), 2021 edition |
-| Epistemological Cards | `cards/card_01_sepsis_triage.yaml`, `cards/card_02_bank_queue_staffing.yaml`, `cards/card_03_performative_credit_scoring.yaml` | 3 canonical cards (`contract_version: "1.0"`) audited in `gates` and `labs --siga` |
+| Epistemological Cards | `cards/card_01_atlantic_storms_evacuation.yaml`, `cards/card_02_bank_queue_staffing.yaml`, `cards/card_03_nyc_flights_holding.yaml` | 3 canonical cards (`contract_version: "1.0"`) anchored to `data/*.csv` and audited in `gates` and `labs --siga` |
 | Empirical Datasets | `data/*.csv` (`danish_fire.csv`, `bank_calls.csv`, `nsw_experimental.csv`, `cps_observational.csv`, `djia_1885_2023.csv`, `atlantic_storms.csv`, `toronto_arrests.csv`, `nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `vic_elec.csv`; plus sealed out-of-time/out-of-domain reserves `nyc_flights_2013_h1.csv`, `nyc_flights_2023_h1.csv`, `houston_flights_2011.csv`) | Preserved and exercised by the laboratories |
 | Verification | `scripts/verify.sh` | Complete positive and negative test suite |

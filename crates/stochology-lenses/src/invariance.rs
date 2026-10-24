@@ -1,11 +1,11 @@
 //! Lens 4 — Structure and Invariance: Pearl's Causal Ladder, Invariant Causal Prediction (ICP),
-//! NILE Estimator, and Hidden Confounding Threshold $\Lambda^*$ (§1.3.4).
+//! Environment-Projected OLS Invariance Penalty, and Hidden Confounding Threshold $\Lambda^*$ (§1.3.4).
 //!
 //! Implements:
 //! - The three rungs of Judea Pearl's Causal Ladder (`1-See`, `2-Act`, `3-Imagine`);
 //! - Invariant Causal Prediction (ICP) of Peters, Bühlmann & Meinshausen:
 //!   $$Y \perp E \mid X_S \implies \hat{S}^* = \bigcap_{S : \text{invariant}} S$$
-//! - NILE (*Nonlinear Invariant Risk Minimization* / instrumental invariance score, Christiansen et al.);
+//! - Environment-projected linear OLS slope and residual-variance invariance penalty across environments $e \in \mathcal{E}$;
 //! - Second-order expansion of worst-case interventional loss $L_{\mathrm{wc}}(\theta) \approx L_0 + \nabla_\theta L^\top \theta + \frac{1}{2}\theta^\top H_\theta \theta$
 //!   and critical hidden confounding sensitivity threshold $\Lambda^*$.
 
@@ -42,19 +42,19 @@ pub struct CausalEnvironment {
     pub y: Vec<f64>,
 }
 
-/// Output of Invariant Causal Prediction (ICP) and NILE across environments $e \in \mathcal{E}$.
+/// Output of Invariant Causal Prediction (ICP) and environment-projected OLS invariance penalty across environments $e \in \mathcal{E}$.
 #[derive(Debug, Clone, PartialEq)]
 pub struct IcpResult {
     /// Subsets $S \subseteq \{0, \dots, p-1\}$ whose slopes and residual distributions remain invariant across all environments.
     pub invariant_subsets: Vec<Vec<usize>>,
     /// Structural intersection accepted by ICP: $\hat{S}^* = \bigcap_{S : \text{invariant}} S$.
     pub accepted_causal_predictors: Vec<usize>,
-    /// NILE invariance penalty score per candidate variable.
-    pub nile_scores_by_variable: Vec<f64>,
+    /// Environment-projected linear OLS slope and residual-SD invariance penalty per candidate variable.
+    pub env_ols_invariance_penalties: Vec<f64>,
 }
 
 /// Executes Invariant Causal Prediction (ICP, Peters, Bühlmann & Meinshausen)
-/// coupled with the NILE instrumental invariance penalty (Christiansen et al.) across the provided environments.
+/// coupled with the environment-projected linear OLS invariance penalty across the provided environments.
 pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) -> IcpResult {
     assert!(
         environments.len() >= 2,
@@ -80,11 +80,11 @@ pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) ->
         );
     }
 
-    // NILE instrumental invariance penalty per variable j (Christiansen et al.):
-    // Fits the pooled structural candidate on variable j, then evaluates the environment-projected
-    // Wald / two-stage residual shift and slope divergence across environments e in E.
-    let mut nile_scores = vec![0.0; p];
-    for (j, score_slot) in nile_scores.iter_mut().enumerate() {
+    // Environment-projected linear OLS invariance penalty per variable j:
+    // Fits the pooled linear OLS candidate on variable j, then evaluates the environment-projected
+    // residual shift and slope/residual-SD variance across environments e in E.
+    let mut env_penalties = vec![0.0; p];
+    for (j, score_slot) in env_penalties.iter_mut().enumerate() {
         let mut raw_pooled_xj = Vec::new();
         let mut pooled_y = Vec::new();
         for env in environments {
@@ -142,7 +142,7 @@ pub fn run_icp(environments: &[CausalEnvironment], invariance_tolerance: f64) ->
     IcpResult {
         invariant_subsets,
         accepted_causal_predictors: accepted,
-        nile_scores_by_variable: nile_scores,
+        env_ols_invariance_penalties: env_penalties,
     }
 }
 
@@ -385,6 +385,234 @@ pub fn hidden_confounding_threshold_lambda_star(
     }
 }
 
+/// Output of Nonlinear Invariant Causal Prediction and Nonlinear NILE/IRM over representation $\Phi(X)$.
+#[derive(Debug, Clone, PartialEq)]
+pub struct NonlinearIcpNileResult {
+    /// Subsets $S \subseteq \{0, \dots, p-1\}$ whose nonlinear conditional expectations $\mathbb{E}_e[Y \mid \Phi(X_S)]$ and residual distributions are invariant across $e \in \mathcal{E}$.
+    pub invariant_subsets: Vec<Vec<usize>>,
+    /// Structural intersection accepted over $\Phi$: $\hat{S}^* = \bigcap_{S : \text{invariant}} S$.
+    pub accepted_causal_predictors: Vec<usize>,
+    /// Linear baseline (`env_ols_invariance_penalties`) preserved for direct comparison.
+    pub linear_ols_baseline_penalties: Vec<f64>,
+    /// True nonlinear NILE + IRM-v1 risk-gradient penalty over representation $\Phi(X_j)$ per candidate variable $j$.
+    pub nonlinear_nile_irm_penalties: Vec<f64>,
+    /// Maximum environment deviation of the accepted subset $\hat{S}^*$ on representation $\Phi$.
+    pub max_accepted_env_deviation: f64,
+}
+
+pub(crate) fn expand_nonlinear_basis_1d(z: f64) -> [f64; 3] {
+    let zc = z.clamp(-6.0, 6.0);
+    [
+        zc,
+        (zc * zc - 1.0) * std::f64::consts::FRAC_1_SQRT_2,
+        (zc * zc * zc - 3.0 * zc) / 6.0_f64.sqrt(),
+    ]
+}
+
+fn expand_nonlinear_subset_row(row: &[f64], subset: &[usize], sigma_x: &[f64]) -> Vec<f64> {
+    let mut phi = Vec::with_capacity(subset.len() * 3);
+    for (&idx, &sx) in subset.iter().zip(sigma_x.iter()) {
+        let z = row[idx] / sx;
+        phi.extend_from_slice(&expand_nonlinear_basis_1d(z));
+    }
+    phi
+}
+
+fn eval_basis_model(coeffs: &[f64], phi_row: &[f64]) -> f64 {
+    coeffs[0]
+        + phi_row
+            .iter()
+            .zip(coeffs[1..].iter())
+            .map(|(&p, &c)| p * c)
+            .sum::<f64>()
+}
+
+/// Executes Nonlinear Invariant Causal Prediction and computes the Nonlinear NILE + IRM-v1
+/// risk-gradient penalty over the 3-atom orthonormal Hermite basis
+/// $\Phi(z) = \bigl[z,\ \frac{z^2-1}{\sqrt{2}},\ \frac{z^3-3z}{\sqrt{6}}\bigr]$
+/// alongside the linear OLS baseline.
+pub fn run_nonlinear_icp_nile(
+    environments: &[CausalEnvironment],
+    invariance_tolerance: f64,
+) -> NonlinearIcpNileResult {
+    let linear_base = run_icp(environments, invariance_tolerance);
+    let p = environments[0].x[0].len();
+
+    let mut nonlinear_penalties = vec![0.0; p];
+    for (j, slot) in nonlinear_penalties.iter_mut().enumerate() {
+        let mut raw_pooled_xj = Vec::new();
+        let mut pooled_y = Vec::new();
+        for env in environments {
+            for (row, &yi) in env.x.iter().zip(env.y.iter()) {
+                raw_pooled_xj.push(row[j]);
+                pooled_y.push(yi);
+            }
+        }
+        let mean_xj = mean(&raw_pooled_xj);
+        let sd_xj = sample_std(&raw_pooled_xj).max(1e-12);
+        let mean_y = mean(&pooled_y);
+        let sigma_y = sample_std(&pooled_y).max(1e-12);
+        let pooled_phi: Vec<Vec<f64>> = raw_pooled_xj
+            .iter()
+            .map(|&x| expand_nonlinear_basis_1d((x - mean_xj) / sd_xj).to_vec())
+            .collect();
+        let pooled_y_norm: Vec<f64> = pooled_y.iter().map(|&y| (y - mean_y) / sigma_y).collect();
+        let theta_pool = fit_ols_multi(&pooled_phi, &pooled_y_norm);
+
+        let mut nile_func_shift = 0.0;
+        let mut irm_grad_penalty = 0.0;
+        let mut env_pooled_risks = Vec::with_capacity(environments.len());
+
+        for env in environments {
+            let env_phi: Vec<Vec<f64>> = env
+                .x
+                .iter()
+                .map(|r| expand_nonlinear_basis_1d((r[j] - mean_xj) / sd_xj).to_vec())
+                .collect();
+            let env_y_norm: Vec<f64> = env.y.iter().map(|&y| (y - mean_y) / sigma_y).collect();
+            let theta_env = fit_ols_multi(&env_phi, &env_y_norm);
+
+            let n_e = env_phi.len() as f64;
+            let mut func_diff_sq = 0.0;
+            let mut irm_grad_w1 = 0.0;
+            let mut risk_pool_e = 0.0;
+
+            for (phi_i, &yi) in env_phi.iter().zip(env_y_norm.iter()) {
+                let f_pool = eval_basis_model(&theta_pool, phi_i);
+                let f_env = eval_basis_model(&theta_env, phi_i);
+                let diff = f_env - f_pool;
+                func_diff_sq += diff * diff;
+                let err_pool = yi - f_pool;
+                irm_grad_w1 += -2.0 * err_pool * f_pool;
+                risk_pool_e += err_pool * err_pool;
+            }
+            nile_func_shift += func_diff_sq / n_e;
+            let g1 = irm_grad_w1 / n_e;
+            irm_grad_penalty += g1 * g1;
+            env_pooled_risks.push(risk_pool_e / n_e);
+        }
+
+        let k_env = environments.len() as f64;
+        *slot = (nile_func_shift / k_env)
+            + (irm_grad_penalty / k_env)
+            + sample_variance(&env_pooled_risks);
+    }
+
+    let mut invariant_subsets = Vec::new();
+    let total_masks = 1usize << p;
+    for mask in 0..total_masks {
+        let subset: Vec<usize> = (0..p).filter(|&bit| (mask & (1 << bit)) != 0).collect();
+        let (inv, _) = is_nonlinear_subset_invariant(environments, &subset, invariance_tolerance);
+        if inv {
+            invariant_subsets.push(subset);
+        }
+    }
+
+    let accepted = if invariant_subsets.is_empty() {
+        Vec::new()
+    } else {
+        let mut inter = invariant_subsets[0].clone();
+        for s in &invariant_subsets[1..] {
+            inter.retain(|item| s.contains(item));
+        }
+        inter
+    };
+
+    let max_accepted_env_deviation = if accepted.is_empty() {
+        1.0
+    } else {
+        let (_, dev) = is_nonlinear_subset_invariant(environments, &accepted, invariance_tolerance);
+        dev
+    };
+
+    NonlinearIcpNileResult {
+        invariant_subsets,
+        accepted_causal_predictors: accepted,
+        linear_ols_baseline_penalties: linear_base.env_ols_invariance_penalties,
+        nonlinear_nile_irm_penalties: nonlinear_penalties,
+        max_accepted_env_deviation,
+    }
+}
+
+fn is_nonlinear_subset_invariant(
+    environments: &[CausalEnvironment],
+    subset: &[usize],
+    tol: f64,
+) -> (bool, f64) {
+    let mut pooled_x_raw = Vec::new();
+    let mut pooled_y = Vec::new();
+    for env in environments {
+        for (row, &yi) in env.x.iter().zip(env.y.iter()) {
+            pooled_x_raw.push(row.clone());
+            pooled_y.push(yi);
+        }
+    }
+
+    let sigma_y = sample_std(&pooled_y).max(1e-12);
+    let mut sigma_x = Vec::with_capacity(subset.len());
+    for &idx in subset {
+        let col_vals: Vec<f64> = pooled_x_raw.iter().map(|r| r[idx]).collect();
+        sigma_x.push(sample_std(&col_vals).max(1e-12));
+    }
+
+    let pooled_phi: Vec<Vec<f64>> = pooled_x_raw
+        .iter()
+        .map(|r| expand_nonlinear_subset_row(r, subset, &sigma_x))
+        .collect();
+    let coeffs = fit_ols_multi(&pooled_phi, &pooled_y);
+
+    let pooled_residuals: Vec<f64> = pooled_phi
+        .iter()
+        .zip(pooled_y.iter())
+        .map(|(phi_r, &yi)| yi - eval_basis_model(&coeffs, phi_r))
+        .collect();
+    let sigma_res_pool = sample_std(&pooled_residuals).max(1e-12);
+
+    let mut env_means = Vec::with_capacity(environments.len());
+    let mut env_sds = Vec::with_capacity(environments.len());
+    let mut max_func_dev = 0.0_f64;
+
+    for env in environments {
+        let env_phi: Vec<Vec<f64>> = env
+            .x
+            .iter()
+            .map(|r| expand_nonlinear_subset_row(r, subset, &sigma_x))
+            .collect();
+        let env_coeffs = fit_ols_multi(&env_phi, &env.y);
+
+        let f_rms = (env_phi
+            .iter()
+            .map(|phi_r| {
+                let d = eval_basis_model(&coeffs, phi_r) - eval_basis_model(&env_coeffs, phi_r);
+                d * d
+            })
+            .sum::<f64>()
+            / (env_phi.len() as f64))
+            .sqrt()
+            / sigma_y;
+        max_func_dev = max_func_dev.max(f_rms);
+
+        let residuals: Vec<f64> = env_phi
+            .iter()
+            .zip(env.y.iter())
+            .map(|(phi_r, &yi)| yi - eval_basis_model(&coeffs, phi_r))
+            .collect();
+        env_means.push(0.5 * mean(&residuals).abs() / sigma_res_pool);
+        env_sds.push(0.5 * sample_std(&residuals) / sigma_res_pool);
+    }
+
+    let max_mean = env_means.into_iter().fold(0.0_f64, f64::max);
+    let min_sd = env_sds.iter().copied().fold(f64::INFINITY, f64::min);
+    let max_sd = env_sds.into_iter().fold(0.0_f64, f64::max);
+    let sd_spread = max_sd - min_sd;
+    let worst_dev = max_func_dev.max(max_mean).max(sd_spread);
+
+    (
+        max_func_dev <= tol && max_mean <= tol && sd_spread <= tol,
+        worst_dev,
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -419,7 +647,7 @@ mod tests {
 
         let res = run_icp(&envs, 0.12);
         assert_eq!(res.accepted_causal_predictors, vec![0]);
-        assert!(res.nile_scores_by_variable[0] < res.nile_scores_by_variable[1] * 0.05);
+        assert!(res.env_ols_invariance_penalties[0] < res.env_ols_invariance_penalties[1] * 0.05);
     }
 
     #[test]
@@ -477,7 +705,8 @@ mod tests {
         assert_eq!(res_orig.invariant_subsets, res_scaled.invariant_subsets);
         assert_eq!(res_orig.invariant_subsets, res_y_scaled.invariant_subsets);
         assert!(
-            (res_orig.nile_scores_by_variable[0] - res_scaled.nile_scores_by_variable[0]).abs()
+            (res_orig.env_ols_invariance_penalties[0] - res_scaled.env_ols_invariance_penalties[0])
+                .abs()
                 < 1e-9
         );
 
@@ -519,5 +748,45 @@ mod tests {
         );
         let lam_nonzero = hidden_confounding_threshold_lambda_star(1.75, 0.08, 0.60);
         assert!(lam_nonzero > 4.0 && lam_nonzero < 6.0);
+    }
+
+    #[test]
+    fn nonlinear_nile_irm_isolates_nonlinear_structural_cause_over_phi() {
+        // Strongly nonlinear structural causal model:
+        // X0 ~ N(0, scale_e), Y = 1.10 * X0 + 0.75 * (X0^2 - 1) - 0.15 * X0^3 + eps_Y, X1 = sp_e * Y + eps_1
+        // Notice E[X0 * (X0^2 - 1)] = 0 so a purely linear model suffers huge residual variance on the quadratic curvature!
+        let mut rng = Rng::new(2026);
+        let mut envs = Vec::new();
+        for (idx, (scale_x0, spurious_w)) in [(0.8, 1.3), (1.5, -1.5), (1.1, 2.4)]
+            .into_iter()
+            .enumerate()
+        {
+            let mut x = Vec::with_capacity(350);
+            let mut y = Vec::with_capacity(350);
+            for _ in 0..350 {
+                let x0 = rng.normal(0.0, scale_x0);
+                let yi =
+                    1.10 * x0 + 0.75 * (x0 * x0 - 1.0) - 0.15 * x0.powi(3) + rng.normal(0.0, 0.10);
+                let x1 = spurious_w * yi + rng.normal(0.0, 0.30);
+                x.push(vec![x0, x1]);
+                y.push(yi);
+            }
+            envs.push(CausalEnvironment {
+                name: format!("nonlin_env_{idx}"),
+                x,
+                y,
+            });
+        }
+
+        let nl = run_nonlinear_icp_nile(&envs, 0.15);
+        assert_eq!(nl.accepted_causal_predictors, vec![0]);
+        assert!(
+            nl.nonlinear_nile_irm_penalties[0] < nl.nonlinear_nile_irm_penalties[1] * 0.05,
+            "nonlinear NILE/IRM penalty on true cause X0 ({:.5}) must be < 5% of spurious child X1 ({:.5})",
+            nl.nonlinear_nile_irm_penalties[0],
+            nl.nonlinear_nile_irm_penalties[1]
+        );
+        // Nonlinear NILE penalty on X0 is also strictly smaller than the misspecified linear OLS penalty on X0
+        assert!(nl.nonlinear_nile_irm_penalties[0] < nl.linear_ols_baseline_penalties[0]);
     }
 }

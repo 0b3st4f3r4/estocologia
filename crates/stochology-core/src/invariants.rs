@@ -182,7 +182,7 @@ impl OperationalWeightingGap {
     /// Protocol benchmark (§2.2): ignoring intra-cluster correlation and cluster size variance
     /// understates sampling variance by a factor of $69\times$.
     pub fn variance_amplification_benchmark_69x() -> f64 {
-        let m_tilde = 139.0;
+        let m_tilde = 137.0;
         let rho = 0.50;
         1.0 + (m_tilde - 1.0) * rho
     }
@@ -342,7 +342,7 @@ mod tests {
         assert!((b2.n_effective_p - 86.0).abs() < 1.0);
 
         let amp = OperationalWeightingGap::variance_amplification_benchmark_69x();
-        assert!((amp - 70.0).abs() <= 1.5);
+        assert!((amp - 69.0).abs() < 1e-12);
     }
 
     #[test]

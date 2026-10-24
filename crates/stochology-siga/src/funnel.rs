@@ -1,10 +1,10 @@
 //! The 4 Eliminatory Filters (§3.1): Sequential Pruning Before Inference.
 //!
-//! - **Filter 1 (Decision & Resolution):** $\mathrm{EVPI} > C_{\text{total}}$ and Invariant $\Phi_5$.
-//! - **Filter 2 (Effective Sample Size & Causal Structure):** Moulton-Campbell $n_{\mathrm{eff}}(p) \ge n_{\min}$,
-//!   Markov Blanket identification, and strict ban on conditioning on colliders (Berkson's paradox).
+//! - **Filter 1 (Decision & Resolution):** $p^* = \frac{C}{\eta L} \in (0, 1)$, $\mathrm{EVPI} > C_{\text{total}}$, and Invariant $\Phi_5$.
+//! - **Filter 2 (Effective Sample Size & Causal Specification):** Moulton-Campbell $n_{\mathrm{eff}}(p) \ge n_{\min}$,
+//!   declarative Markov Blanket specification check, and ban on conditioning on colliders (Berkson's paradox).
 //! - **Filter 3 (Generative Physics & Prior Predictive Check):** Simulation-Based Calibration (SBC $\chi^2$
-//!   rank uniformity) and SHELF quartile prior elicitation.
+//!   rank uniformity) and declarative SHELF quartile domain coherence check.
 //! - **Filter 4 (Cryptographic Pre-Registration & Cross-Authorship):** SHA-256 seal, independent
 //!   cross-authorship (`null_model != decision_rule != adversarial_reviewer`), and numeric exit clause.
 
@@ -80,12 +80,41 @@ pub fn sbc_rank_chi2(rank_bins: &[usize]) -> f64 {
 
 /// Evaluates the 4 Eliminatory Filters in strict sequential order (Filter 1 -> 2 -> 3 -> 4).
 pub fn evaluate_four_filter_funnel(c: &FunnelCandidate) -> FunnelResult {
-    let rule = CostLossRule::new(c.protection_cost_c, c.event_loss_l, c.efficacy_eta);
-    let evpi = rule.calculate_evpi(c.prior_probability_p, c.decision_volume_units);
+    let params_valid = c.protection_cost_c.is_finite()
+        && c.protection_cost_c > 0.0
+        && c.event_loss_l.is_finite()
+        && c.event_loss_l > 0.0
+        && c.efficacy_eta.is_finite()
+        && c.efficacy_eta > 0.0
+        && c.efficacy_eta <= 1.0
+        && c.prior_probability_p.is_finite()
+        && c.prior_probability_p > 0.0
+        && c.prior_probability_p < 1.0
+        && c.decision_volume_units.is_finite()
+        && c.decision_volume_units > 0.0
+        && c.total_modeling_cost.is_finite()
+        && c.total_modeling_cost >= 0.0;
 
-    // Filter 1: Decision & Resolution (Phi5 + EVPI > C_total)
+    let denom = c.efficacy_eta * c.event_loss_l;
+    let raw_p_star = if params_valid && denom > 0.0 && denom.is_finite() {
+        c.protection_cost_c / denom
+    } else {
+        f64::NAN
+    };
+    let p_star_in_unit_interval = raw_p_star.is_finite() && raw_p_star > 0.0 && raw_p_star < 1.0;
+
+    let evpi = if params_valid && p_star_in_unit_interval {
+        let rule = CostLossRule::new(c.protection_cost_c, c.event_loss_l, c.efficacy_eta);
+        rule.calculate_evpi(c.prior_probability_p, c.decision_volume_units)
+    } else {
+        0.0
+    };
+
+    // Filter 1: Decision & Resolution (p* in (0, 1) + Phi5 + EVPI > C_total)
     let f1_ok = !c.who_decides.trim().is_empty()
         && !c.altered_action.trim().is_empty()
+        && params_valid
+        && p_star_in_unit_interval
         && verify_resolution_phi5(&c.independent_unit, &c.altered_action)
         && evpi > c.total_modeling_cost;
 
@@ -99,7 +128,7 @@ pub fn evaluate_four_filter_funnel(c: &FunnelCandidate) -> FunnelResult {
             filter_4_approved: false,
             pruned_at_filter: Some(1),
             pruning_reason: Some(
-                "Pruned at Filter 1: EVPI <= total_modeling_cost or Phi5 resolution violation"
+                "Pruned at Filter 1: p* outside (0, 1), EVPI <= total_modeling_cost, or Phi5 resolution violation"
                     .into(),
             ),
             approved_all_filters: false,
@@ -202,11 +231,12 @@ mod tests {
     use stochology_core::sha256_hex;
 
     fn valid_candidate() -> FunnelCandidate {
-        let plan = "siga_plan_sepsis_shift_seed_2026";
+        let plan = "siga_plan_coastal_evacuation_shift_seed_2026";
         FunnelCandidate {
-            who_decides: "ICU Attending Physician".into(),
-            altered_action: "Trigger sepsis bundle within 1h on the shift".into(),
-            independent_unit: "12h ICU shift".into(),
+            who_decides: "Coastal Emergency Operations Director".into(),
+            altered_action: "Trigger mandatory coastal evacuation order within 6h synoptic shift"
+                .into(),
+            independent_unit: "6h synoptic storm shift".into(),
             prior_probability_p: 0.05,
             protection_cost_c: 1_800.0,
             event_loss_l: 34_000.0,
@@ -254,5 +284,32 @@ mod tests {
         c4_no_digit.numeric_exit_clause = "Suspend model when calibration degrades".into();
         let r4_no_digit = evaluate_four_filter_funnel(&c4_no_digit);
         assert_eq!(r4_no_digit.pruned_at_filter, Some(4));
+
+        let mut c1_bad_pstar = valid_candidate();
+        c1_bad_pstar.protection_cost_c = 40_000.0; // C >= eta * L -> p* >= 1.0
+        let r1_bad_pstar = evaluate_four_filter_funnel(&c1_bad_pstar);
+        assert_eq!(r1_bad_pstar.pruned_at_filter, Some(1));
+
+        // Out-of-domain cost/loss/eta/NaN values short-circuit cleanly at Filter 1 without panicking
+        let mut c1_bad_eta = valid_candidate();
+        c1_bad_eta.efficacy_eta = 1.5;
+        assert_eq!(
+            evaluate_four_filter_funnel(&c1_bad_eta).pruned_at_filter,
+            Some(1)
+        );
+
+        let mut c1_nonpos_cost = valid_candidate();
+        c1_nonpos_cost.protection_cost_c = 0.0;
+        assert_eq!(
+            evaluate_four_filter_funnel(&c1_nonpos_cost).pruned_at_filter,
+            Some(1)
+        );
+
+        let mut c1_nan_loss = valid_candidate();
+        c1_nan_loss.event_loss_l = f64::NAN;
+        assert_eq!(
+            evaluate_four_filter_funnel(&c1_nan_loss).pruned_at_filter,
+            Some(1)
+        );
     }
 }

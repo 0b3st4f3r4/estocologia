@@ -61,7 +61,7 @@ impl EvidenceProcess {
 }
 
 /// Executive Memorandum in Integer Natural Frequencies (Gigerenzer — §3.2 Step 8).
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct NaturalFrequencyMemorandum {
     pub reference_cohort_size: usize,
     pub affected_with_event: usize,
@@ -70,6 +70,9 @@ pub struct NaturalFrequencyMemorandum {
     pub false_negatives: usize,
     pub false_positives: usize,
     pub true_negatives: usize,
+    pub critical_threshold_p_star: f64,
+    pub recommended_action: String,
+    pub exit_clause: String,
     pub formatted_summary: String,
 }
 
@@ -80,6 +83,28 @@ impl NaturalFrequencyMemorandum {
         base_rate_p: f64,
         sensitivity_tpr: f64,
         false_positive_rate_fpr: f64,
+    ) -> Self {
+        Self::build_with_decision(
+            reference_cohort_size,
+            base_rate_p,
+            sensitivity_tpr,
+            false_positive_rate_fpr,
+            0.05,
+            "protect",
+            "Suspend if REL_CORP exceeds threshold",
+        )
+    }
+
+    /// Builds an integer natural frequency tree including the economic threshold $p^*$,
+    /// recommended action (`protect` / `do_not_protect`), and numeric exit clause.
+    pub fn build_with_decision(
+        reference_cohort_size: usize,
+        base_rate_p: f64,
+        sensitivity_tpr: f64,
+        false_positive_rate_fpr: f64,
+        critical_threshold_p_star: f64,
+        recommended_action: &str,
+        exit_clause: &str,
     ) -> Self {
         let p_c = if base_rate_p.is_finite() {
             base_rate_p.clamp(0.0, 1.0)
@@ -104,7 +129,7 @@ impl NaturalFrequencyMemorandum {
         let tn = unaffected.saturating_sub(fp);
         let total_alarms = tp.saturating_add(fp).max(1);
         let summary = format!(
-            "Out of every {reference_cohort_size} independent units, {affected} experience the critical event (of which {tp} trigger the alarm and {fn_c} are missed), while {unaffected} do not experience the event (of which {fp} trigger a false alarm and {tn} remain clear). Positive predictive frequency: {tp} out of {total_alarms} alarms."
+            "Out of every {reference_cohort_size} independent units, {affected} experience the critical event (of which {tp} trigger the alarm at threshold p*={critical_threshold_p_star:.5} and {fn_c} are missed), while {unaffected} do not experience the event (of which {fp} trigger a false alarm and {tn} remain clear). Positive predictive frequency: {tp} out of {total_alarms} alarms. Action: {recommended_action}. Exit clause: {exit_clause}."
         );
         Self {
             reference_cohort_size,
@@ -114,6 +139,9 @@ impl NaturalFrequencyMemorandum {
             false_negatives: fn_c,
             false_positives: fp,
             true_negatives: tn,
+            critical_threshold_p_star,
+            recommended_action: recommended_action.to_string(),
+            exit_clause: exit_clause.to_string(),
             formatted_summary: summary,
         }
     }
@@ -168,7 +196,8 @@ fn sample_beta_conjugate(rng: &mut Rng, alpha: f64, beta: f64) -> f64 {
 /// 2. Simulate $k \sim \mathrm{Binomial}(n_{\text{trials}}, \tilde{p})$;
 /// 3. Draw $L$ conjugate posterior samples centered at $\hat{p} = \frac{k + \alpha_0}{n_{\text{trials}} + \alpha_0 + \beta_0}$
 ///    with posterior variance $\frac{\hat{p}(1-\hat{p})}{n_{\text{trials}} + \alpha_0 + \beta_0 + 1}$;
-/// 4. Compute the normalized rank $r_s / L \in [0, 1]$ where $r_s = \sum_{\ell=1}^L \mathbb{I}(p_\ell < \tilde{p})$.
+/// 4. Compute the continuity-corrected normalized Talts et al. (2018) rank $(r_s + 0.5) / (L + 1) \in (0, 1)$
+///    where $r_s = \sum_{\ell=1}^L \mathbb{I}(p_\ell < \tilde{p}) \in \{0, \dots, L\}$.
 pub fn simulate_sbc_beta_binomial_ranks(
     seed: u64,
     num_replications: usize,
@@ -204,7 +233,7 @@ pub fn simulate_sbc_beta_binomial_ranks(
                 rank += 1;
             }
         }
-        ranks.push((rank as f64) / (l_draws as f64));
+        ranks.push(((rank as f64) + 0.5) / ((l_draws + 1) as f64));
     }
     ranks
 }
@@ -262,6 +291,35 @@ pub fn run_full_siga_roadmap(
     null_distribution_samples: &[f64],
     e_values_sequence: &[f64],
 ) -> SigaExecutionReport {
+    let mc = &card.data_and_audit_contract.murphy_corp_decomposition;
+    let unc = mc.base_uncertainty_unc0.max(1e-6);
+    let res_norm = (mc.resolution_res_dsc / unc).clamp(0.0, 1.0);
+    let rel_norm = (mc.miscalibration_rel_mcb / unc).clamp(0.0, 1.0);
+    let tpr = (0.80 + 0.35 * res_norm - 0.25 * rel_norm).clamp(0.75, 0.95);
+    let fpr = (0.10 - 0.15 * res_norm + 0.30 * rel_norm).clamp(0.03, 0.15);
+    run_full_siga_roadmap_empirical(
+        card,
+        preregistered_plan_text,
+        null_distribution_samples,
+        observed_test_statistic,
+        null_distribution_samples,
+        e_values_sequence,
+        (tpr, fpr),
+    )
+}
+
+/// Executes the complete 4-Filter Funnel and 8-Step SIGA Roadmap with separate SBC calibration
+/// ranks (Filter 3), un-clamped cluster-null test distribution (Step 5), sequential Ville
+/// e-values (Step 6), and empirical confusion-matrix `(TPR, FPR)` at threshold $p^*$ (Step 8).
+pub fn run_full_siga_roadmap_empirical(
+    card: &EpistemologicalCard,
+    preregistered_plan_text: &str,
+    sbc_rank_samples: &[f64],
+    observed_test_statistic: f64,
+    null_distribution_samples: &[f64],
+    e_values_sequence: &[f64],
+    empirical_confusion_tpr_fpr: (f64, f64),
+) -> SigaExecutionReport {
     let card_audit_ok = card.audit().is_ok();
 
     let id_strat = card
@@ -281,7 +339,7 @@ pub fn run_full_siga_roadmap(
     let conditions_on_collider_berkson =
         (id_strat.contains("collider") || id_strat.contains("berkson")) && !collider_excluded;
 
-    let sbc_bins = compute_sbc_rank_bins(null_distribution_samples);
+    let sbc_bins = compute_sbc_rank_bins(sbc_rank_samples);
     let eps = card
         .decision_rule_and_scope
         .base_rate_floor_epsilon
@@ -338,7 +396,7 @@ pub fn run_full_siga_roadmap(
 
     let funnel = evaluate_four_filter_funnel(&candidate);
 
-    // Step 5: Exact empirical p-value against the cluster-respecting generative null model
+    // Step 5: Exact empirical p-value against the cluster-respecting generative null model (no clamp)
     let exceedances = null_distribution_samples
         .iter()
         .filter(|&&s| s >= observed_test_statistic)
@@ -352,18 +410,16 @@ pub fn run_full_siga_roadmap(
         card.data_and_audit_contract.attempt_counter_k,
     );
 
-    // Step 8: Integer natural frequency memorandum out of 1,000 units derived from CORP-Murphy decomposition
-    let mc = &card.data_and_audit_contract.murphy_corp_decomposition;
-    let unc = mc.base_uncertainty_unc0.max(1e-6);
-    let res_norm = (mc.resolution_res_dsc / unc).clamp(0.0, 1.0);
-    let rel_norm = (mc.miscalibration_rel_mcb / unc).clamp(0.0, 1.0);
-    let sensitivity_tpr = (0.80 + 0.35 * res_norm - 0.25 * rel_norm).clamp(0.75, 0.95);
-    let false_positive_rate_fpr = (0.10 - 0.15 * res_norm + 0.30 * rel_norm).clamp(0.03, 0.15);
-    let memo = NaturalFrequencyMemorandum::build(
+    // Step 8: Integer natural frequency memorandum out of 1,000 units from empirical confusion matrix at p*
+    let (sensitivity_tpr, false_positive_rate_fpr) = empirical_confusion_tpr_fpr;
+    let memo = NaturalFrequencyMemorandum::build_with_decision(
         1_000,
         card.decision_rule_and_scope.event_probability_p,
         sensitivity_tpr,
         false_positive_rate_fpr,
+        card.decision_rule_and_scope.critical_threshold_p_star,
+        &card.decision_rule_and_scope.declared_act,
+        &card.decision_rule_and_scope.exit_clause,
     );
 
     let s1 = card_audit_ok; // Step 1: Layer, bridge, uncertainty class, Info-Gap + Sniedovich
@@ -397,24 +453,32 @@ pub fn run_full_siga_roadmap(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use stochology_core::sha256_hex;
 
     #[test]
     fn eight_step_siga_roadmap_validates_end_to_end_and_prunes_defective_inputs() {
-        let plan = "siga_plan_01_sepsis_triage_seed_2026_clusters_m_tilde";
-        let mut card = EpistemologicalCard::canonical_example();
-        card.data_and_audit_contract.preregistration_hash = sha256_hex(plan.as_bytes());
+        let card = EpistemologicalCard::canonical_example();
+        let plan = card.compute_preregistration_payload();
         let null_samples: Vec<f64> = (0..200).map(|i| (i as f64) * 0.01).collect();
-        let report = run_full_siga_roadmap(&card, plan, 5.0, &null_samples, &[24.8]);
+        let report = run_full_siga_roadmap(&card, &plan, 5.0, &null_samples, &[24.8]);
         assert!(report.approved_end_to_end);
         assert_eq!(report.steps_1_to_8_completed, [true; 8]);
         assert!(report
             .natural_frequency_memo
             .formatted_summary
             .contains("1000"));
+        assert!(report
+            .natural_frequency_memo
+            .formatted_summary
+            .contains("p*=0.12000"));
+
+        // Un-clamped low observed test statistic fails Step 5 (null_p >= 0.05)
+        let weak_signal = run_full_siga_roadmap(&card, &plan, 0.50, &null_samples, &[24.8]);
+        assert!(weak_signal.null_p_value >= 0.05);
+        assert!(!weak_signal.steps_1_to_8_completed[4]);
+        assert!(!weak_signal.approved_end_to_end);
 
         // Degenerate null samples fail Filter 3 (SBC rank uniformity)
-        let bad_null = run_full_siga_roadmap(&card, plan, 5.0, &[1.0; 100], &[24.8]);
+        let bad_null = run_full_siga_roadmap(&card, &plan, 5.0, &[1.0; 100], &[24.8]);
         assert_eq!(bad_null.funnel_result.pruned_at_filter, Some(3));
 
         // Card conditioning on a Berkson collider fails Filter 2
@@ -424,7 +488,8 @@ mod tests {
             .causal_ladder
             .identification_strategy =
             "Markov blanket conditioned on hospital admission collider".into();
-        let bad_collider = run_full_siga_roadmap(&collider_card, plan, 5.0, &null_samples, &[24.8]);
+        let bad_collider =
+            run_full_siga_roadmap(&collider_card, &plan, 5.0, &null_samples, &[24.8]);
         assert_eq!(bad_collider.funnel_result.pruned_at_filter, Some(2));
 
         // NaN e-value safely zeroes out EvidenceProcess without panicking
@@ -434,15 +499,14 @@ mod tests {
 
     #[test]
     fn skewed_sbc_samples_fail_filter3_while_genuine_talts_sbc_ranks_pass() {
-        let plan = "siga_plan_01_sepsis_triage_seed_2026_clusters_m_tilde";
-        let mut card = EpistemologicalCard::canonical_example();
-        card.data_and_audit_contract.preregistration_hash = sha256_hex(plan.as_bytes());
+        let card = EpistemologicalCard::canonical_example();
+        let plan = card.compute_preregistration_payload();
 
         // Skewed non-uniform sample concentrates in lower quintile and fails Filter 3
         let skewed_samples: Vec<f64> = (0..200).map(|i| ((i as f64) / 200.0).powi(3)).collect();
         let skewed_bins = compute_sbc_rank_bins(&skewed_samples);
         assert!(crate::funnel::sbc_rank_chi2(&skewed_bins) > 9.49);
-        let skewed_rep = run_full_siga_roadmap(&card, plan, 5.0, &skewed_samples, &[24.8]);
+        let skewed_rep = run_full_siga_roadmap(&card, &plan, 5.0, &skewed_samples, &[24.8]);
         assert!(skewed_rep.funnel_result.sbc_chi2_statistic > 9.49);
         assert_eq!(skewed_rep.funnel_result.pruned_at_filter, Some(3));
         assert!(!skewed_rep.approved_end_to_end);
@@ -451,7 +515,7 @@ mod tests {
         let sbc_ranks = simulate_sbc_beta_binomial_ranks(2026, 200, 50, 2.0, 18.0, 100);
         let sbc_bins = compute_sbc_rank_bins(&sbc_ranks);
         assert!(crate::funnel::sbc_rank_chi2(&sbc_bins) <= 9.49);
-        let valid_rep = run_full_siga_roadmap(&card, plan, 5.0, &sbc_ranks, &[12.5, 2.2, 0.7]);
+        let valid_rep = run_full_siga_roadmap(&card, &plan, 5.0, &sbc_ranks, &[12.5, 2.2, 0.7]);
         assert!(valid_rep.funnel_result.filter_3_approved);
         assert!(valid_rep.e_process.rejects_null_hypothesis);
         assert!(valid_rep.approved_end_to_end);

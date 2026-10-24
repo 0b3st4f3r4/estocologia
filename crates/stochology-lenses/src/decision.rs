@@ -189,6 +189,108 @@ impl CorpPavDecomposition {
     }
 }
 
+/// Exact zero-cost benchmark proving that *Calibrated Decisions Are Not Calibrated Probabilities*
+/// (anchored to a known ground-truth fair coin $p_0 = 0.50$ with `seed = 2026`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExactCoinCalibrationBenchmark {
+    pub seed: u64,
+    pub sample_size_n: usize,
+    pub true_coin_probability: f64,
+    pub preregistration_sha256: String,
+    pub empirical_outcome_mean: f64,
+    pub calibrated_corp: CorpPavDecomposition,
+    pub overconfident_corp: CorpPavDecomposition,
+    /// Fraction of trials where both forecasters take the exact same binary action under $p^*_A = 0.30$.
+    pub decision_agreement_rate_at_p_star_a: f64,
+    /// Excess economic regret per unit suffered by the overconfident forecaster when the cost-loss threshold shifts to $p^*_B = 0.70$.
+    pub shifted_threshold_excess_regret_per_unit: f64,
+    /// True if: (1) decision agreement at $p^*_A$ is 100%, (2) overconfident $\mathrm{REL}_{\mathrm{CORP}} > 0.08 \gg \text{calibrated }\mathrm{REL}_{\mathrm{CORP}}$,
+    /// (3) $\mathrm{RES}_{\mathrm{CORP}}$ is invariant under strictly monotone distortion, and (4) shifted threshold excess regret $> 0$.
+    pub separates_decision_from_probability_calibration: bool,
+}
+
+impl ExactCoinCalibrationBenchmark {
+    /// Executes the exact fair-coin ($p_0 = 0.50$) calibration vs. decision audit (`seed = 2026`).
+    pub fn evaluate(seed: u64, sample_size_n: usize) -> Self {
+        let n = sample_size_n.max(100);
+        let payload = format!(
+            "exact_coin_calibration_v1|seed={seed}|p_true=0.50000|n={n}|p_star_a=0.30000|p_star_b=0.70000"
+        );
+        let prereg_sha = stochology_core::sha256_hex(payload.as_bytes());
+
+        let mut rng = stochology_core::Rng::new(seed);
+        let mut p_cal = Vec::with_capacity(n);
+        let mut p_over = Vec::with_capacity(n);
+        let mut y_out = Vec::with_capacity(n);
+
+        for i in 0..n {
+            // Centered symmetric signal around fair-coin base rate 0.50
+            let delta = if i.is_multiple_of(2) { -0.05 } else { 0.05 };
+            let p_true_i = 0.50 + delta;
+            let y = if rng.bernoulli(p_true_i) { 1.0 } else { 0.0 };
+            p_cal.push(p_true_i);
+            // Strictly monotone distortion perched in [0.80, 0.90]: identical ranking and identical action at p*_A = 0.30
+            p_over.push(0.85 + delta);
+            y_out.push(y);
+        }
+
+        let rule_a = CostLossRule::new(30.0, 100.0, 1.0); // p*_A = 0.30
+        let rule_b = CostLossRule::new(70.0, 100.0, 1.0); // p*_B = 0.70
+
+        let mut agree_a = 0usize;
+        let mut loss_cal_b = 0.0;
+        let mut loss_over_b = 0.0;
+
+        for i in 0..n {
+            let act_cal_a = rule_a.recommend_action(p_cal[i]);
+            let act_over_a = rule_a.recommend_action(p_over[i]);
+            if act_cal_a == act_over_a {
+                agree_a += 1;
+            }
+
+            let act_cal_b = rule_b.recommend_action(p_cal[i]);
+            let act_over_b = rule_b.recommend_action(p_over[i]);
+            loss_cal_b += if act_cal_b == "protect" {
+                rule_b.protection_cost_c
+            } else {
+                y_out[i] * rule_b.event_loss_l
+            };
+            loss_over_b += if act_over_b == "protect" {
+                rule_b.protection_cost_c
+            } else {
+                y_out[i] * rule_b.event_loss_l
+            };
+        }
+
+        let n_f = n as f64;
+        let agree_rate_a = (agree_a as f64) / n_f;
+        let excess_regret_b = (loss_over_b - loss_cal_b) / n_f;
+        let y_bar = y_out.iter().sum::<f64>() / n_f;
+
+        let cal_corp = CorpPavDecomposition::compute(&p_cal, &y_out);
+        let over_corp = CorpPavDecomposition::compute(&p_over, &y_out);
+
+        let separates = (agree_rate_a - 1.0).abs() < 1e-12
+            && over_corp.rel_miscalibration > 0.08
+            && cal_corp.rel_miscalibration < 0.01
+            && (cal_corp.res_resolution - over_corp.res_resolution).abs() < 1e-12
+            && excess_regret_b > 10.0;
+
+        Self {
+            seed,
+            sample_size_n: n,
+            true_coin_probability: 0.50,
+            preregistration_sha256: prereg_sha,
+            empirical_outcome_mean: y_bar,
+            calibrated_corp: cal_corp,
+            overconfident_corp: over_corp,
+            decision_agreement_rate_at_p_star_a: agree_rate_a,
+            shifted_threshold_excess_regret_per_unit: excess_regret_b,
+            separates_decision_from_probability_calibration: separates,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -219,5 +321,19 @@ mod tests {
             assert!((q - 0.4).abs() < 1e-12, "expected constant 0.4, got {q}");
         }
         assert!(corp.res_resolution < 1e-14);
+    }
+
+    #[test]
+    fn exact_coin_benchmark_proves_calibrated_decisions_are_not_calibrated_probabilities() {
+        let bench = ExactCoinCalibrationBenchmark::evaluate(2026, 1_000);
+        assert!(bench.separates_decision_from_probability_calibration);
+        assert_eq!(bench.decision_agreement_rate_at_p_star_a, 1.0);
+        assert!(bench.overconfident_corp.rel_miscalibration > 0.10);
+        assert!(bench.calibrated_corp.rel_miscalibration < 0.005);
+        assert!(
+            (bench.calibrated_corp.res_resolution - bench.overconfident_corp.res_resolution).abs()
+                < 1e-12
+        );
+        assert!(bench.shifted_threshold_excess_regret_per_unit > 15.0);
     }
 }

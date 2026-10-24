@@ -4,10 +4,11 @@
 use std::env;
 use std::path::Path;
 use stochology_cli::{
-    build_v1_card_suite, exact_cluster_null_m_tilde_seed_2026, load_atlantic_storms_forecasts,
-    load_bank_call_clusters, load_danish_fire, load_djia_returns, load_lalonde_nsw_cps,
-    load_nyc_flights_2013_2023, load_oot_ood_flight_reserves, load_toronto_arrests_prevalences,
-    load_vic_elec_demand,
+    load_atlantic_storms_decade_environments, load_atlantic_storms_forecasts,
+    load_bank_call_clusters, load_cards_from_disk, load_danish_fire, load_djia_returns,
+    load_lalonde_nsw_cps, load_nyc_flights_2013_2023, load_nyc_flights_cascade_2013_2023,
+    load_oot_ood_flight_reserves, load_toronto_arrests_prevalences, load_vic_elec_demand,
+    verify_card_against_empirical_data,
 };
 use stochology_core::{
     apply_cromwell_floor, mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect,
@@ -15,15 +16,15 @@ use stochology_core::{
     OperationalWeightingGap, PerformativeSystem, Rng, DEFAULT_SEED,
 };
 use stochology_governance::{
-    estimate_label_shift_four_methods, fit_covariate_drift_extra_wcp, query_with_bitemporal_clock,
-    BitemporalRecord, MurphyCorpCircuitBreaker, TemporalVault,
+    estimate_label_shift_four_methods, fit_calibrated_logistic_1d, fit_covariate_drift_extra_wcp,
+    query_with_bitemporal_clock, BitemporalRecord, MurphyCorpCircuitBreaker, TemporalVault,
 };
 use stochology_lenses::{
     amplitude_constrained_mi_bound, fano_error_floor, hidden_confounding_threshold_lambda_star,
-    run_icp, CausalEnvironment, CorpPavDecomposition, HillTailDiagnostic, MixingTimeAudit,
-    SdpiHierarchy, TimeKellyDiagnostic,
+    run_icp, run_nonlinear_icp_nile, AlmostPerfectMachine, AuthenticModelForm, CausalEnvironment,
+    CorpPavDecomposition, DpiMarkovChain, ExactCoinCalibrationBenchmark, HillTailDiagnostic,
+    MixingTimeAudit, SdpiHierarchy, TimeKellyDiagnostic,
 };
-use stochology_siga::run_full_siga_roadmap;
 
 /// Lab 1: Dynamics of the Three Ontological Layers ($L_1 \to L_2 \to L_3 \to L_1$), Meng, Manski, Jensen, and Performativity.
 fn lab_layers(root: &Path) {
@@ -142,15 +143,30 @@ fn lab_uncertainty() {
 /// Lab 3: The Five Transversal Lenses on Real Datasets.
 fn lab_lenses(root: &Path) {
     println!(
-        "=== LAB 3: THE FIVE TRANSVERSAL LENSES (SDPI, TIME/KELLY, HILL, ICP/NILE, CORP-PAV) ==="
+        "=== LAB 3: THE FIVE TRANSVERSAL LENSES (SDPI/DPI, TIME/KELLY, HILL, ICP, CORP-PAV) ==="
     );
     // 1. Information Lens
     let sdpi = SdpiHierarchy::compute(&[0.5, 0.5], &[vec![0.85, 0.15], vec![0.15, 0.85]]);
+    let dpi = DpiMarkovChain::compute(
+        &[0.5, 0.5],
+        &[vec![0.90, 0.10], vec![0.10, 0.90]],
+        &[vec![0.85, 0.15], vec![0.15, 0.85]],
+        &[vec![0.80, 0.20], vec![0.20, 0.80]],
+    );
     let i_amp = amplitude_constrained_mi_bound(1.5, 1.0, 0.05);
     let fano = fano_error_floor(4, (4.0_f64).ln(), 0.65 * (4.0_f64).ln());
     println!(
-        "  [Lens 1: Information] SDPI: eta_chi2={:.4} <= eta_KL={:.4} <= eta_TV={:.4} (valid={}) | I_amp_bound={:.4} | Fano P_e >= {:.4}",
-        sdpi.eta_chi2, sdpi.eta_kl, sdpi.eta_tv, sdpi.hierarchy_valid, i_amp, fano
+        "  [Lens 1: Information] SDPI: eta_chi2={:.4} <= eta_KL={:.4} <= eta_TV={:.4} (valid={}) | DPI W->X->Y->Z: {:.4} >= {:.4} >= {:.4} (monotonic={}) | I_amp={:.4} | Fano P_e >= {:.4}",
+        sdpi.eta_chi2,
+        sdpi.eta_kl,
+        sdpi.eta_tv,
+        sdpi.hierarchy_valid,
+        dpi.i_w_x_nats,
+        dpi.i_w_y_nats,
+        dpi.i_w_z_nats,
+        dpi.dpi_satisfied,
+        i_amp,
+        fano
     );
 
     // 2. Time Lens (DJIA 1885-2023 + Kelly + Mixing Time)
@@ -188,7 +204,7 @@ fn lab_lenses(root: &Path) {
         hill_vic.quantile_99
     );
 
-    // 4. Invariance Lens (ICP + NILE + Lambda*)
+    // 4. Invariance Lens (ICP + Linear OLS Penalty + Nonlinear NILE/IRM over Phi + Authentic Form)
     let mut rng = Rng::new(DEFAULT_SEED);
     let mut envs = Vec::new();
     for (idx, (sc, sp_w)) in [(1.0, 1.2), (2.2, -1.4), (0.7, 2.8)]
@@ -211,28 +227,70 @@ fn lab_lenses(root: &Path) {
         });
     }
     let icp = run_icp(&envs, 0.12);
+    let storm_envs = load_atlantic_storms_decade_environments(root);
+    let nl_icp = run_nonlinear_icp_nile(&storm_envs, 0.15);
+    let auth_form = AuthenticModelForm::audit_environments(
+        DEFAULT_SEED,
+        &storm_envs,
+        &[
+            "atom_0_barometric_pressure_drop".to_string(),
+            "atom_1_regime_shifted_lat_proxy".to_string(),
+        ],
+        0.15,
+        true,
+    );
     let lambda_star = hidden_confounding_threshold_lambda_star(1.75, 0.08, 0.60);
-    let nile_fmt: Vec<String> = icp
-        .nile_scores_by_variable
+    let pen_fmt: Vec<String> = icp
+        .env_ols_invariance_penalties
+        .iter()
+        .map(|v| format!("{v:.4}"))
+        .collect();
+    let nl_fmt: Vec<String> = nl_icp
+        .nonlinear_nile_irm_penalties
         .iter()
         .map(|v| format!("{v:.4}"))
         .collect();
     println!(
-        "  [Lens 4: Invariance] ICP S*={:?}, NILE={:?}, hidden confounding threshold Lambda*={:.3}",
-        icp.accepted_causal_predictors, nile_fmt, lambda_star
+        "  [Lens 4: Invariance] ICP S*={:?}, env_OLS_penalty={:?}, Storms_nonlinear_NILE_IRM={:?}, Lambda*={:.3} | AuthenticForm(S*={:?}, discarded='{}', A={})",
+        icp.accepted_causal_predictors,
+        pen_fmt,
+        nl_fmt,
+        lambda_star,
+        auth_form.invariant_core_s_star,
+        auth_form.discarded_atoms_named[0].atom_name,
+        auth_form.approved_authentic_form
     );
 
-    // 5. Decision Lens (CORP-PAV on Atlantic Storms)
+    // 5. Decision Lens (CORP-PAV on Atlantic Storms + Exact Fair-Coin Benchmark)
     let (probs, outcomes) = load_atlantic_storms_forecasts(root);
     let corp = CorpPavDecomposition::compute(&probs, &outcomes);
+    let coin = ExactCoinCalibrationBenchmark::evaluate(DEFAULT_SEED, 1_000);
     println!(
-        "  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n={}): BS={:.5} = REL({:.5}) - RES({:.5}) + UNC0({:.5}) [id_err={:.2e}]",
+        "  [Lens 5: Decision] CORP-PAV (Atlantic Storms, n={}): BS={:.5} = REL({:.5}) - RES({:.5}) + UNC0({:.5}) [id_err={:.2e}] | FairCoin(p0=0.50): agree@0.30={:.0}%, REL_over={:.4} vs REL_cal={:.4}, regret@0.70=+{:.2}",
         probs.len(),
         corp.brier_total,
         corp.rel_miscalibration,
         corp.res_resolution,
         corp.unc0_uncertainty,
-        corp.identity_error
+        corp.identity_error,
+        coin.decision_agreement_rate_at_p_star_a * 100.0,
+        coin.overconfident_corp.rel_miscalibration,
+        coin.calibrated_corp.rel_miscalibration,
+        coin.shifted_threshold_excess_regret_per_unit
+    );
+
+    // 6. Almost-Perfect Machine M = (T, Phi, theta) (P1-P5)
+    let machine = AlmostPerfectMachine::evaluate_canonical(DEFAULT_SEED);
+    println!(
+        "  [Almost-Perfect Machine M=(T,Phi,theta)] sup_err={:.4} (Barron C_f={:.2}), DPI_gap={:.4} nats, regions={} (ratio={:.1}x), d_eff={:.2}/{}, P1..P5={}",
+        machine.sup_error_epsilon,
+        machine.barron_norm_c_f,
+        machine.dpi_gap_delta_nats,
+        machine.composed_linear_regions,
+        machine.region_to_parameter_ratio,
+        machine.atomic_effective_dimension,
+        machine.width_w,
+        machine.all_p1_to_p5_approved
     );
 }
 
@@ -277,16 +335,17 @@ fn lab_invariants(root: &Path) {
     );
 }
 
-/// Lab 5: 4-Filter Eliminatory Funnel and 8-Step SIGA Roadmap on the 3 Canonical YAML Cards.
-fn lab_siga() {
+/// Lab 5: 4-Filter Eliminatory Funnel, 8-Step SIGA Roadmap, and Natural-Frequency Executive Memoranda on the 3 Canonical YAML Cards.
+fn lab_siga(root: &Path) {
     println!("=== LAB 5: 4-FILTER ELIMINATORY FUNNEL AND 8-STEP SIGA ROADMAP ===");
-    let suite = build_v1_card_suite();
-    for (rel_path, plan_text, card) in suite {
-        let (null_samples, obs_stat, e_vals) = exact_cluster_null_m_tilde_seed_2026(&card);
-        let rep = run_full_siga_roadmap(&card, &plan_text, obs_stat, &null_samples, &e_vals);
+    let cards = load_cards_from_disk(root).expect("load canonical YAML cards from disk");
+    for (rel_path, card) in cards {
+        let (_audit, rep) = verify_card_against_empirical_data(root, &card)
+            .expect("verify card against empirical dataset");
         println!(
-            "  [SIGA {}] EVPI={:.1}, p_null={:.4}, chi2_SBC={:.2}, E_1={:.1}, steps_1_to_8={:?}, approved={}",
+            "  [SIGA {}] dataset={}, EVPI={:.1}, p_null={:.4} (unclamped), chi2_SBC={:.2}, E_30={:.1}, steps_1_to_8={:?}, approved={}",
             rel_path,
+            card.data_and_audit_contract.dataset_path,
             rep.funnel_result.calculated_evpi,
             rep.null_p_value,
             rep.funnel_result.sbc_chi2_statistic,
@@ -294,6 +353,9 @@ fn lab_siga() {
             rep.steps_1_to_8_completed,
             rep.approved_end_to_end
         );
+        for line in rep.natural_frequency_memo.formatted_summary.lines() {
+            println!("    {line}");
+        }
     }
 }
 
@@ -362,18 +424,18 @@ fn lab_governance(root: &Path) {
         cov.lei_candes_coverage_lower_bound
     );
 
-    let post_23: Vec<f64> = x23
-        .iter()
-        .map(|&x| (1.0 / (1.0 + (-1.2 * x).exp())).clamp(0.01, 0.99))
-        .collect();
+    // Fit a real 1D logistic classifier on 2013 source cascade data and evaluate on 2023 target data
+    let (cx13, cy13, cx23, _cy23) = load_nyc_flights_cascade_2013_2023(root);
+    let (p_source_13, tpr_s, fpr_s, mu_0_s, mu_1_s, post_target) =
+        fit_calibrated_logistic_1d(&cx13, &cy13, &cx23);
     let ls = estimate_label_shift_four_methods(
-        p_base_13,
-        0.82,
-        0.12,
-        &post_23,
-        -0.30,
-        1.10,
-        mean(&x23),
+        p_source_13,
+        tpr_s,
+        fpr_s,
+        &post_target,
+        mu_0_s,
+        mu_1_s,
+        mean(&cx23),
         0.02,
     );
     let cb = MurphyCorpCircuitBreaker::monitor(
@@ -386,7 +448,9 @@ fn lab_governance(root: &Path) {
         false,
     );
     println!(
-        "  [Label Shift 4 Estimators] BBSE={:.4} (sigma_min={:.3}), MLLS/SLD={:.4}, DFM={:.4} (Delta_min={:.1}), OTTER={:.4} (kappa={:.2}) | Concept Drift Breaker={:?} (tripped={})",
+        "  [Label Shift 4 Estimators (fit on 2013, TPR={:.3}, FPR={:.3})] BBSE={:.4} (sigma_min={:.3}), MLLS/SLD={:.4}, DFM={:.4} (Delta_min={:.1}), OTTER={:.4} (kappa={:.2}) | Concept Drift Breaker={:?} (tripped={})",
+        tpr_s,
+        fpr_s,
         ls.target_prior_bbse,
         ls.confusion_matrix_sigma_min,
         ls.target_prior_mlls_sld,
@@ -447,14 +511,14 @@ fn lab_real_data(root: &Path) {
         deff.n_effective_p
     );
 
-    // 3. Long-Horizon Financial Non-Ergodicity & Performativity (djia_1885_2023.csv + card_03_performative_credit_scoring.yaml)
+    // 3. Long-Horizon Financial Non-Ergodicity & Performativity (djia_1885_2023.csv)
     let djia = load_djia_returns(root);
     let mu_ann = mean(&djia) * 252.0;
     let sig_ann = sample_std(&djia) * (252.0_f64).sqrt();
     let kelly = TimeKellyDiagnostic::compute(mu_ann, sig_ann, 0.54, 0.25, 0.20);
     let perf = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.2).diagnose();
     println!(
-        "  [3/6 Finance: djia_1885_2023.csv -> card_03] Lens 2 & Bridge L3->L1: days={}, g_ens={:.4} -> g_time={:.4} (drain={:.4}), Kelly f*={:.4}, theta_PS={:.4} vs theta_PO={:.4} (r={:.2})",
+        "  [3/6 Finance: djia_1885_2023.csv] Lens 2 & Bridge L3->L1: days={}, g_ens={:.4} -> g_time={:.4} (drain={:.4}), Kelly f*={:.4}, theta_PS={:.4} vs theta_PO={:.4} (r={:.2})",
         djia.len(),
         kelly.ensemble_rate_mu,
         kelly.time_rate_ito,
@@ -482,7 +546,7 @@ fn lab_real_data(root: &Path) {
         hill_vic.quantile_99
     );
 
-    // 5. Isotonic Calibration & Algebraic Fairness (atlantic_storms.csv + toronto_arrests.csv + card_01_sepsis_triage.yaml)
+    // 5. Isotonic Calibration & Algebraic Fairness (atlantic_storms.csv + toronto_arrests.csv + card_01_atlantic_storms_evacuation.yaml)
     let (storm_p, storm_y) = load_atlantic_storms_forecasts(root);
     let corp = CorpPavDecomposition::compute(&storm_p, &storm_y);
     let (p_a, p_b) = load_toronto_arrests_prevalences(root);
@@ -497,7 +561,7 @@ fn lab_real_data(root: &Path) {
         fpr_ratio
     );
 
-    // 6. Multi-Horizon & Out-of-Domain Aviation Drift (nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv)
+    // 6. Multi-Horizon & Out-of-Domain Aviation Drift (nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv -> card_03)
     let (x13, y13, x23, _y23) = load_nyc_flights_2013_2023(root);
     let (x13_h1, y13_h1, x23_h1, y23_h1, x_hou, _y_hou) = load_oot_ood_flight_reserves(root);
     let p_base_13 = mean(&y13).clamp(0.01, 0.99);
@@ -537,7 +601,7 @@ fn lab_real_data(root: &Path) {
         .open_once(&probs_h1, 0.20)
         .expect("single opening of H1 reserve vault");
     println!(
-        "  [6/6 Aviation Drift (5 CSVs): nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv] Lei-Candes(NYC 13->23 >= {:.3}, H1 13->23 >= {:.3}, NYC->Houston OOD >= {:.3}) | H1 Vault={:?} (Brier={:.4})",
+        "  [6/6 Aviation Drift (5 CSVs): nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv -> card_03] Lei-Candes(NYC 13->23 >= {:.3}, H1 13->23 >= {:.3}, NYC->Houston OOD >= {:.3}) | H1 Vault={:?} (Brier={:.4})",
         cov_nyc.lei_candes_coverage_lower_bound,
         cov_h1.lei_candes_coverage_lower_bound,
         cov_hou.lei_candes_coverage_lower_bound,
@@ -546,19 +610,19 @@ fn lab_real_data(root: &Path) {
     );
 
     // 7. End-to-End Epistemological Card Ledger (cards/card_01..03.yaml)
-    let suite = build_v1_card_suite();
+    let cards = load_cards_from_disk(root).expect("load canonical YAML cards from disk");
     let mut cards_approved = 0usize;
-    for (_, plan_text, card) in &suite {
-        let (null_samples, obs_stat, e_vals) = exact_cluster_null_m_tilde_seed_2026(card);
-        let rep = run_full_siga_roadmap(card, plan_text, obs_stat, &null_samples, &e_vals);
-        if card.audit().is_ok() && rep.approved_end_to_end {
-            cards_approved += 1;
+    for (_, card) in &cards {
+        if let Ok((_, rep)) = verify_card_against_empirical_data(root, card) {
+            if rep.approved_end_to_end {
+                cards_approved += 1;
+            }
         }
     }
     println!(
-        "  [Synthesis Ledger] 13/13 real CSV datasets audited | {}/{} canonical YAML cards approved (G1-G7 & SIGA)",
+        "  [Synthesis Ledger] 13/13 real CSV datasets audited | {}/{} canonical YAML cards approved (G1-G8 & SIGA)",
         cards_approved,
-        suite.len()
+        cards.len()
     );
 }
 
@@ -583,19 +647,19 @@ fn main() {
 
     match mode {
         "--help" | "-h" => print_usage(),
-        "--layers" | "--bridges" => lab_layers(root),
+        "--layers" => lab_layers(root),
         "--uncertainty" => lab_uncertainty(),
         "--lenses" => lab_lenses(root),
-        "--invariants" | "--exceedance" => lab_invariants(root),
-        "--siga" => lab_siga(),
-        "--governance" | "--production" => lab_governance(root),
-        "--real-data" | "--synthesis" => lab_real_data(root),
+        "--invariants" => lab_invariants(root),
+        "--siga" => lab_siga(root),
+        "--governance" => lab_governance(root),
+        "--real-data" => lab_real_data(root),
         "--all" => {
             lab_layers(root);
             lab_uncertainty();
             lab_lenses(root);
             lab_invariants(root);
-            lab_siga();
+            lab_siga(root);
             lab_governance(root);
             lab_real_data(root);
         }

@@ -1,0 +1,86 @@
+id: "nyc_flights_departure_bank_holding"
+contract_version: "1.0"
+layer: "L3"
+uncertainty: "knightian"
+
+decision_maker_question:
+  who_decides: "Metro Airspace Traffic Management Coordinator"
+  altered_action: "Activate ground-delay holding and Stackelberg slot metering theta_PO with Wald Maximin buffer in the daily departure cycle"
+  question: "Does the probability of severe arrival-delay cascade (> 41 min, 90th percentile) in the daily NYC departure bank exceed the cost-loss threshold p* = 0.06000?"
+
+epistemological_header:
+  generating_process: "Performative departure-bank queueing cascade with strategic carrier schedule padding and convective weather shocks"
+  nonlinearity: "f(E[X])=130.52, E[f(X)]=257.70, Jensen gap Delta_J=+127.18, median=55.59, q05=9.92, q95=1535.08, CRPS=520.10"
+  unit_and_margin:
+    independent_unit: "daily NYC metro departure bank (cluster of scheduled flights)"
+    nominal_sample_size_n: 138375
+    weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 904.41 * 1.013 = 916.10 (Moulton-Campbell, CV = 0.114)"
+    threshold_exceedance_icc: "rho_I(0.90) = 0.1097 -> DEFF_exceedance = 101.43"
+    effective_sample_size_n_eff: 1364
+    unit_margin_of_error: "+/- 1.6 percentage points over 1,364 effective departure windows (153 operational days)"
+  noise_physics:
+    stochastic_regime: "Non-ergodic multiplicative delay propagation cycle with heavy-tailed turnaround severity (alpha_Hill = 1.60) and Ito variance drain"
+    absorbing_states: "Crew duty-time timeout barrier and terminal tarmac gridlock cascade"
+    bridge_L3_L1_performativity:
+      agent_type: "performative"
+      wasserstein_sensitivity_epsilon: 0.20
+      rrm_convergence_condition: "eps * beta / gamma = 0.20 * 1.20 / 1.00 = 0.24 < 1 (strict contraction)"
+      stability_optimality_divergence: "theta_PS = 1.8750 vs Stackelberg theta_PO = 2.0313 (audited)"
+  causal_ladder:
+    pearl_rung: "3-Imagine"
+    identification_strategy: "Counterfactual structural invariance (ICP) across EWR, JFK, and LGA departure banks; Markov blanket verified without collider"
+    untestable_assumption: "Strategic carrier block-time gaming remains convex within Wasserstein ball epsilon <= 0.20 (Lambda* <= 1.60)"
+
+uncertainty_budget_and_authorship:
+  variance_budget:
+    inputs: 0.40
+    parameters: 0.30
+    covariance: 0.30
+    structural_discrepancy_gp: "Gaussian Process delta(x) ~ GP(0, k_anchored(x,x')) over airspace capacity discrepancy per Kennedy-O'Hagan"
+  dominant_event:
+    description: "Severe arrival-delay cascade exceeding 41 minutes (90th percentile) in the daily NYC departure bank"
+    probability_p: 0.0981
+    base_rate_floor_epsilon: 0.001
+    cost_share: 0.95
+  info_gap_robustness:
+    critical_requirement_rc: "Daily on-time recovery and crew-legality completion rate above 88.5% under stress (robust satisficing)"
+    robustness_horizon_alpha_hat: "alpha_hat = 2.80 structural Wasserstein-1 deviations tolerated without violating r_c"
+    opportuneness_horizon_beta_hat: "beta_hat = 1.10 deviations for windfall tailwind slot recovery r_w"
+    global_maximin_safeguard: "Wald global Maximin slot-clearance floor >= 80.0% outside U(alpha, u_hat) with reversible ground-delay throttling"
+  field_authorship:
+    null_model: "airspace_queue_econometrics_unit"
+    decision_rule: "network_dispatch_committee"
+    adversarial_reviewer: "independent_aviation_risk_governance"
+
+data_and_audit_contract:
+  dataset_path: "data/nyc_flights_2013.csv"
+  dataset_sha256: "651ae28c4b9abb668eb420f23d512272ff539c060e1eb2b2741188717a8d3634"
+  missingness_mechanism: "MNAR (cancelled flights before departure lack arrival delay; Meng correlation rho_R_Y = 0.1334; Manski bounds verified)"
+  seed_and_environment: "seed=2026; rustc=1.97; linux-x86_64; container_sha256=ba7816bf"
+  null_model: "crates/stochology-cli#evaluate_empirical_card_severe_test"
+  preregistration_hash: "31d1bcd62a8cfd5752af6f61acc26995f6717624abe7dcda6c2f4a374ddfa4a6"
+  attempt_counter_K: 1
+  e_process_multiplicity: "Cumulative Ville e-process E_30 = 32.8 (threshold 1/alpha = 20.0 for alpha = 0.05)"
+  murphy_corp_decomposition:
+    total_score_brier_or_crps: 0.07343
+    miscalibration_REL_MCB: 0.00110
+    resolution_RES_DSC: 0.01615
+    base_uncertainty_UNC0: 0.08848
+  findings:
+    registered: 2
+    used: 1
+    unused:
+      - "Unadjusted raw carrier tail-number indicator discarded due to performative schedule gaming sensitivity eps > 0.65 in Filter 2"
+
+decision_rule_and_scope:
+  event_probability_p: 0.0981
+  base_rate_floor_epsilon: 0.001
+  protection_cost_C: 1500.0
+  event_loss_L: 25000.0
+  mitigation_efficacy_eta: 1.0
+  critical_threshold_p_star: 0.06000
+  declared_act: "protect"
+  scope_statement: "Valid for EWR, JFK, and LGA commercial departure banks; does not apply to general aviation or international overflights"
+  who_pays_for_error: "Chouldechova trilemma audit: unequal group base rates (p_A=0.3926 vs p_B=0.1119); equalizing PPV at 0.65 & FNR at 0.25 implies monitored ratio FPR_A/FPR_B = 5.13"
+  exit_clause: "Immediately revert to conservative Wald Maximin ground-delay policy if REL_CORP > 0.012 or RES_CORP < 0.005 or RRM radius >= 0.85 over a 7-day window"
+

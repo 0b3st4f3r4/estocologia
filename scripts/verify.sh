@@ -25,7 +25,7 @@ cargo run --release --bin labs -- --real-data
 echo ">>> [5/6] Running epistemological gates (gates) and negative proofs..."
 cargo run --release --bin gates
 
-for defect in cromwell phi5 moulton performativity sniedovich clock vault concept_drift chouldechova; do
+for defect in cromwell phi5 moulton performativity sniedovich clock vault concept_drift chouldechova machine; do
     set +e
     cargo run --release --bin gates -- --defect "$defect" >/dev/null 2>&1
     rc=$?

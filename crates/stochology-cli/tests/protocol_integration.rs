@@ -1,16 +1,17 @@
-use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-use stochology_cli::build_v1_card_suite;
+use stochology_cli::{
+    compute_unclamped_cluster_permutation_null, load_cards_from_disk,
+    verify_card_against_empirical_data,
+};
 use stochology_core::card::EpistemologicalCard;
 use stochology_core::rng::SplitMix64;
 use stochology_governance::clock::{query_with_bitemporal_clock, BitemporalRecord};
 use stochology_governance::drift::MurphyCorpCircuitBreaker;
 use stochology_governance::vault::{TemporalVault, VaultState};
 use stochology_lenses::decision::CorpPavDecomposition;
-use stochology_lenses::information::SdpiHierarchy;
-use stochology_siga::roadmap::run_full_siga_roadmap;
+use stochology_lenses::information::{DpiMarkovChain, SdpiHierarchy};
 
 fn workspace_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -21,33 +22,75 @@ fn workspace_root() -> PathBuf {
 }
 
 #[test]
-fn yaml_cards_on_disk_roundtrip_and_pass_siga_roadmap() {
+fn yaml_cards_on_disk_roundtrip_and_pass_empirical_siga_roadmap() {
     let root = workspace_root();
-    let suite = build_v1_card_suite();
-    assert_eq!(suite.len(), 3);
+    let cards = load_cards_from_disk(&root).expect("load canonical YAML cards from disk");
+    assert_eq!(cards.len(), 3);
 
-    let mut rng = SplitMix64::new(2026);
-    let null_samples: Vec<f64> = (0..256).map(|_| rng.standard_normal()).collect();
+    for (rel_path, card) in &cards {
+        let roundtrip = EpistemologicalCard::from_yaml(&card.to_yaml())
+            .unwrap_or_else(|e| panic!("failed YAML roundtrip for {rel_path}: {e}"));
+        assert_eq!(&roundtrip, card, "YAML roundtrip mismatch for {rel_path}");
+        assert!(card.audit().is_ok(), "card.audit() failed for {rel_path}");
 
-    for (rel_path, prereg_text, expected_card) in &suite {
-        let full_path = root.join(rel_path);
-        let content = fs::read_to_string(&full_path)
-            .unwrap_or_else(|e| panic!("failed to read {}: {}", full_path.display(), e));
-        let parsed = EpistemologicalCard::from_yaml(&content)
-            .unwrap_or_else(|e| panic!("failed to parse {}: {}", full_path.display(), e));
-        assert_eq!(&parsed, expected_card);
-        assert!(parsed.audit().is_ok());
-
-        let report = run_full_siga_roadmap(
-            &parsed,
-            prereg_text,
-            3.5,
-            &null_samples,
-            &[1.8, 2.1, 2.5, 2.2, 1.9, 2.4],
+        let (_emp, report) = verify_card_against_empirical_data(&root, card)
+            .unwrap_or_else(|e| panic!("empirical verification failed for {rel_path}: {e}"));
+        assert!(
+            report.approved_end_to_end,
+            "SIGA roadmap failed for {rel_path}: {:?}",
+            report.steps_1_to_8_completed
         );
-        assert!(report.approved_end_to_end);
         assert!(report.funnel_result.approved_all_filters);
+        assert!(report.null_p_value <= 0.05);
+        assert!(
+            report
+                .natural_frequency_memo
+                .formatted_summary
+                .contains("threshold p*=")
+                && report
+                    .natural_frequency_memo
+                    .formatted_summary
+                    .contains("Exit clause:")
+        );
     }
+
+    // Tampering with declared empirical metrics must be rejected by verify_card_against_empirical_data
+    let mut tampered = cards[0].1.clone();
+    tampered.decision_rule_and_scope.event_probability_p = 0.25;
+    assert!(
+        verify_card_against_empirical_data(&root, &tampered).is_err(),
+        "tampered event_probability_p must be rejected against CSV"
+    );
+}
+
+#[test]
+fn unclamped_cluster_permutation_null_does_not_fabricate_significance_on_noise() {
+    let mut rng = SplitMix64::new(2026);
+    let mut cluster_forecasts = Vec::new();
+    let mut cluster_outcomes = Vec::new();
+    for _ in 0..50 {
+        let mut cf = Vec::with_capacity(10);
+        let mut co = Vec::with_capacity(10);
+        for _ in 0..10 {
+            cf.push(rng.next_f64());
+            co.push(if rng.next_f64() < 0.10 { 1.0 } else { 0.0 });
+        }
+        cluster_forecasts.push(cf);
+        cluster_outcomes.push(co);
+    }
+    let (obs_stat, null_samples) = compute_unclamped_cluster_permutation_null(
+        &cluster_forecasts,
+        &cluster_outcomes,
+        2026,
+        200,
+    );
+    assert_eq!(null_samples.len(), 200);
+    let extreme_count = null_samples.iter().filter(|&&v| v >= obs_stat).count();
+    let p_val = (extreme_count as f64 + 1.0) / (null_samples.len() as f64 + 1.0);
+    assert!(
+        p_val > 0.05,
+        "pure noise must not fabricate significance without clamp (obs={obs_stat:.4}, p={p_val:.4})"
+    );
 }
 
 #[test]
@@ -123,7 +166,7 @@ fn property_corp_murphy_identity_holds_across_seeds() {
 }
 
 #[test]
-fn property_sdpi_contraction_hierarchy_holds_across_seeds() {
+fn property_sdpi_and_dpi_contraction_hierarchy_holds_across_seeds() {
     for seed in 2026..2041 {
         let mut rng = SplitMix64::new(seed);
         let rows = 3;
@@ -146,6 +189,8 @@ fn property_sdpi_contraction_hierarchy_holds_across_seeds() {
             "SDPI hierarchy violated for seed {seed}: chi2={}, kl={}, tv={}",
             sdpi.eta_chi2, sdpi.eta_kl, sdpi.eta_tv
         );
+        let dpi = DpiMarkovChain::compute(&prior, &channel, &channel, &channel);
+        assert!(dpi.dpi_satisfied);
     }
 }
 
@@ -176,12 +221,36 @@ fn cli_binaries_handle_help_and_defects_correctly() {
         .expect("run gates --unknown-flag");
     assert_eq!(gates_unknown_flag.status.code(), Some(2));
 
-    let gates_cromwell = Command::new(gates_bin)
-        .args(["--defect", "cromwell"])
+    let gates_positive = Command::new(gates_bin)
         .current_dir(&root)
         .output()
-        .expect("run gates --defect cromwell");
-    assert_eq!(gates_cromwell.status.code(), Some(1));
+        .expect("run gates positive");
+    assert_eq!(gates_positive.status.code(), Some(0));
+
+    for defect in [
+        "cromwell",
+        "phi5",
+        "moulton",
+        "performativity",
+        "sniedovich",
+        "clock",
+        "vault",
+        "concept_drift",
+        "chouldechova",
+        "machine",
+    ] {
+        let out = Command::new(gates_bin)
+            .args(["--defect", defect])
+            .current_dir(&root)
+            .output()
+            .unwrap_or_else(|e| panic!("failed to run gates --defect {defect}: {e}"));
+        assert_eq!(
+            out.status.code(),
+            Some(1),
+            "expected exit code 1 for --defect {defect}, got {:?}",
+            out.status.code()
+        );
+    }
 
     let labs_help = Command::new(labs_bin)
         .arg("--help")

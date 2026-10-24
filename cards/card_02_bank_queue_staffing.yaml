@@ -6,18 +6,18 @@ uncertainty: "aleatory"
 decision_maker_question:
   who_decides: "Call Center Operations Superintendent"
   altered_action: "Allocate 26 agents to the daily peak shift instead of the aggregate average of 20"
-  question: "Does the probability of waiting-time exceedance above 30 minutes on the operational day exceed the cost-loss threshold p* = 0.08000?"
+  question: "Does the probability of 5-minute call volume exceedance above the 90th-percentile congestion barrier (286 calls) on the operational day exceed the cost-loss threshold p* = 0.08000?"
 
 epistemological_header:
   generating_process: "Piecewise non-homogeneous Poisson arrival process with Erlang-C queue congestion and day-of-week random effects"
-  nonlinearity: "f(E[X])=740.0, E[f(X)]=1120.0, Jensen gap Delta_J=+380.0, median=810.0, q05=310.0, q95=2640.0, CRPS=142.5"
+  nonlinearity: "f(E[X])=1066924927.55, E[f(X)]=1075958764.73, Jensen gap Delta_J=+9033837.19, median=1025216361.00, q05=830290416.50, q95=1481646385.00, CRPS=90551681.37"
   unit_and_margin:
     independent_unit: "call center operational day (cluster of 5-minute windows)"
     nominal_sample_size_n: 27716
     weighted_cluster_mean_m_tilde: "m_tilde = m_bar * (1 + CV^2) = 169.00 * 1.000 = 169.00 (Moulton-Campbell, CV = 0.000)"
     threshold_exceedance_icc: "rho_I(0.90) = 0.1623 -> DEFF_exceedance = 28.26"
     effective_sample_size_n_eff: 981
-    unit_margin_of_error: "+/- 2.2 percentage points over 981 effective exceedance-adjusted windows (164 operational days)"
+    unit_margin_of_error: "+/- 1.9 percentage points over 981 effective exceedance-adjusted windows (164 operational days)"
   noise_physics:
     stochastic_regime: "Kingman heavy-traffic queue amplification E[W] ~ rho / (1 - rho) with intraday burstiness (alpha_Hill = 2.15)"
     absorbing_states: "Queue abandonment cascade and SLA penalty breach above 30-minute wait barrier"
@@ -38,8 +38,8 @@ uncertainty_budget_and_authorship:
     covariance: 0.20
     structural_discrepancy_gp: "Gaussian Process delta(x) ~ GP(0, k_anchored(x,x')) for intraday arrival-rate discrepancy per Kennedy-O'Hagan"
   dominant_event:
-    description: "Peak-shift waiting-time exceedance above 30 minutes"
-    probability_p: 0.145
+    description: "5-minute call-volume exceedance above 90th-percentile barrier (286 calls)"
+    probability_p: 0.09911
     base_rate_floor_epsilon: 0.001
     cost_share: 0.90
   info_gap_robustness:
@@ -53,17 +53,19 @@ uncertainty_budget_and_authorship:
     adversarial_reviewer: "independent_operational_auditor"
 
 data_and_audit_contract:
+  dataset_path: "data/bank_calls.csv"
+  dataset_sha256: "6e430180c3fa8a284e38b8367e9a7d6dae4921ca1b184cbaba7aae9b07a8f9a5"
   missingness_mechanism: "MCAR (telephony switchboard log rotation 0.4% missing; Meng correlation rho_R_Y = 0.001; Manski bounds verified)"
   seed_and_environment: "seed=2026; rustc=1.97; linux-x86_64; container_sha256=ba7816bf"
-  null_model: "crates/stochology-cli#exact_cluster_null_m_tilde_seed_2026"
-  preregistration_hash: "f9488c54ab5584dbb3c248c8f02988ffb6d291abb6d95bbe8d03ecb1c285aeee"
+  null_model: "crates/stochology-cli#evaluate_empirical_card_severe_test"
+  preregistration_hash: "1bcf61c2487dcb8e536d84d82129d4ac4c2a394cecfb8e83096493fe22dfaf32"
   attempt_counter_K: 1
-  e_process_multiplicity: "Cumulative e-process E_1 = 31.4 (threshold 1/alpha = 20.0 for alpha = 0.05)"
+  e_process_multiplicity: "Cumulative Ville e-process E_30 = 2491.3 (threshold 1/alpha = 20.0 for alpha = 0.05)"
   murphy_corp_decomposition:
-    total_score_brier_or_crps: 0.108
-    miscalibration_REL_MCB: 0.004
-    resolution_RES_DSC: 0.020
-    base_uncertainty_UNC0: 0.124
+    total_score_brier_or_crps: 0.05310
+    miscalibration_REL_MCB: 0.01235
+    resolution_RES_DSC: 0.04854
+    base_uncertainty_UNC0: 0.08929
   findings:
     registered: 2
     used: 1
@@ -71,7 +73,7 @@ data_and_audit_contract:
       - "Quadratic ambient-temperature interaction discarded due to zero incremental RES_CORP in Filter 2"
 
 decision_rule_and_scope:
-  event_probability_p: 0.145
+  event_probability_p: 0.09911
   base_rate_floor_epsilon: 0.001
   protection_cost_C: 2400.0
   event_loss_L: 30000.0
@@ -80,4 +82,4 @@ decision_rule_and_scope:
   declared_act: "protect"
   scope_statement: "Valid for North American retail banking business-day call centers (07:00-21:05); does not apply to 24/7 card-fraud hotlines"
   who_pays_for_error: "Chouldechova trilemma audit: retail vs commercial caller queues (p_A=0.16 vs p_B=0.11); equalizing PPV at 0.75 implies monitored ratio FPR_A/FPR_B = 1.54"
-  exit_clause: "Immediately suspend automated shift scheduling if REL_CORP > 0.020 or RES_CORP < 0.005 over a 10-business-day rolling window"
+  exit_clause: "Immediately suspend automated shift scheduling if REL_CORP > 0.020 or RES_CORP < 0.025 over a 10-business-day rolling window"

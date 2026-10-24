@@ -10,6 +10,90 @@
 //! - Amplitude-constrained additive noise mutual information bound ($|X| \le A$, tail probability $\epsilon$);
 //! - Fano's Inequality lower bound on classification error $P_e = \mathbb{P}(\hat{W} \neq W)$.
 
+/// Three-step Markov chain Data Processing Inequality (DPI) diagnostic along $W \to X \to Y \to Z$ (§1.3.1):
+/// $$I(W; Z) \le I(W; Y) \le I(W; X)$$
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct DpiMarkovChain {
+    /// Mutual information $I(W; X)$ in nats.
+    pub i_w_x_nats: f64,
+    /// Mutual information $I(W; Y)$ in nats.
+    pub i_w_y_nats: f64,
+    /// Mutual information $I(W; Z)$ in nats.
+    pub i_w_z_nats: f64,
+    /// Confirms the Data Processing Inequality $I(W; Z) \le I(W; Y) \le I(W; X)$.
+    pub dpi_satisfied: bool,
+}
+
+impl DpiMarkovChain {
+    /// Evaluates the Data Processing Inequality along a discrete 3-step Markov chain $W \to X \to Y \to Z$
+    /// defined by prior `p_w` and row-stochastic transition matrices `w_to_x`, `x_to_y`, and `y_to_z`.
+    pub fn compute(
+        p_w: &[f64],
+        w_to_x: &[Vec<f64>],
+        x_to_y: &[Vec<f64>],
+        y_to_z: &[Vec<f64>],
+    ) -> Self {
+        let w_to_y = compose_channels(w_to_x, x_to_y);
+        let w_to_z = compose_channels(&w_to_y, y_to_z);
+        let i_w_x = channel_mutual_information_nats(p_w, w_to_x);
+        let i_w_y = channel_mutual_information_nats(p_w, &w_to_y);
+        let i_w_z = channel_mutual_information_nats(p_w, &w_to_z);
+        let dpi_ok = i_w_z <= i_w_y + 1e-12 && i_w_y <= i_w_x + 1e-12;
+        Self {
+            i_w_x_nats: i_w_x,
+            i_w_y_nats: i_w_y,
+            i_w_z_nats: i_w_z,
+            dpi_satisfied: dpi_ok,
+        }
+    }
+}
+
+fn compose_channels(a: &[Vec<f64>], b: &[Vec<f64>]) -> Vec<Vec<f64>> {
+    assert!(!a.is_empty() && !b.is_empty());
+    let rows_a = a.len();
+    let mid = a[0].len();
+    assert_eq!(
+        mid,
+        b.len(),
+        "channel dimensions must match for composition"
+    );
+    let cols_b = b[0].len();
+    let mut out = vec![vec![0.0; cols_b]; rows_a];
+    for (i, row_a) in a.iter().enumerate() {
+        for (k, &aik) in row_a.iter().enumerate() {
+            for (j, &bkj) in b[k].iter().enumerate() {
+                out[i][j] += aik * bkj;
+            }
+        }
+    }
+    out
+}
+
+fn channel_mutual_information_nats(p_in: &[f64], channel: &[Vec<f64>]) -> f64 {
+    assert!(!p_in.is_empty() && p_in.len() == channel.len());
+    let nx = p_in.len();
+    let ny = channel[0].len();
+    let mut p_out = vec![0.0; ny];
+    for i in 0..nx {
+        for (j, py_j) in p_out.iter_mut().enumerate() {
+            *py_j += p_in[i] * channel[i][j];
+        }
+    }
+    let mut mi = 0.0;
+    for i in 0..nx {
+        if p_in[i] <= 0.0 {
+            continue;
+        }
+        for (j, &py_j) in p_out.iter().enumerate() {
+            let w_ij = channel[i][j];
+            if w_ij > 0.0 && py_j > 0.0 {
+                mi += p_in[i] * w_ij * (w_ij / py_j).ln();
+            }
+        }
+    }
+    mi.max(0.0)
+}
+
 /// Exact hierarchy of Strong Data Processing Inequality (SDPI) contraction constants for a discrete channel $W(y \mid x)$.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct SdpiHierarchy {
@@ -378,5 +462,17 @@ mod tests {
         let h_asym = SdpiHierarchy::compute(&[0.5, 0.5], &w_asym);
         assert!((h_asym.eta_kl - 0.50).abs() < 1e-12);
         assert!(h_asym.hierarchy_valid);
+    }
+
+    #[test]
+    fn dpi_three_step_markov_chain_monotonically_contracts_mutual_information() {
+        let p_w = [0.5, 0.5];
+        let w_to_x = vec![vec![0.90, 0.10], vec![0.10, 0.90]];
+        let x_to_y = vec![vec![0.85, 0.15], vec![0.15, 0.85]];
+        let y_to_z = vec![vec![0.80, 0.20], vec![0.20, 0.80]];
+        let dpi = DpiMarkovChain::compute(&p_w, &w_to_x, &x_to_y, &y_to_z);
+        assert!(dpi.dpi_satisfied);
+        assert!(dpi.i_w_x_nats > dpi.i_w_y_nats && dpi.i_w_y_nats > dpi.i_w_z_nats);
+        assert!(dpi.i_w_z_nats > 0.0);
     }
 }
