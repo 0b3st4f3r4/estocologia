@@ -115,7 +115,22 @@ Evaluated in strict sequence with immediate short-circuiting on failure:
 
 ---
 
-## 5. Architectural Mapping to Rust Crates
+## 5. Module 7 & Lab 7 (`labs --real-data`): Transversal Real-Data Synthesis Across All 13 Empirical Datasets and 3 Canonical Cards
+
+Module 7 (`cargo run --release --bin labs -- --real-data`) consolidates end-to-end empirical verification across all **13 real datasets (`data/*.csv`)** and **3 canonical Epistemological Cards (`cards/*.yaml`)**:
+
+| Real Dataset (`data/*.csv`) | Empirical Domain & Sample ($n$) | Audited Bridge / Lens / Invariant | Applied Equation / Mechanism | Audited Empirical Benchmark (`labs --real-data`) |
+| --- | --- | --- | --- | --- |
+| **`nsw_experimental.csv`** vs. **`cps_observational.csv`** | LaLonde job training program: Experimental (NSW, $n=445$) vs. Observational (CPS, $n=15\,992$) | **Bridge $L_1 \to L_2$** & **Invariant $\Phi_3$** (`MengAudit`, `ManskiBounds` — Lab 1, Lab 4, Lab 7) | Meng's Identity $\bar{Y}_n - \bar{Y}_N = \rho_{R,Y} \sqrt{\frac{N-n}{n}} \sigma_Y$ & Manski MNAR bounds | Selection correlation $\rho_{R,Y} = +0.1334$ reduces $n = 15\,992$ to $n_{\mathrm{eff}} = 2842.70$; Manski bounds $[5463.2,\ 13835.3]$ |
+| **`bank_calls.csv`** ($\to$ `card_02`) | North American retail bank call-center 5-min arrival windows ($n = 27\,716$, $164$ days) | **Bridge $L_2 \to L_3$** (Prohibition 2) & **Invariants $\Phi_2, \Phi_5$** (`NonlinearSummary`, `ExceedanceDesignEffect` — Lab 1, Lab 4, Lab 5, Lab 7) | Jensen's Gap $\Delta_J = \mathbb{E}[f(X)] - f(\mathbb{E}[X])$, $\mathrm{CRPS}$, and Moulton-Campbell $n_{\mathrm{eff}}(p) = \frac{n}{1 + (\tilde{m}-1)\rho_I(p)}$ | $\Delta_J = +9.03 \times 10^6$, $\mathrm{OOS\_CRPS} = 9.06 \times 10^7$; at $p=0.90$, $\mathrm{DEFF} = 28.26 \implies n_{\mathrm{eff}}(0.90) = 980.7$; `card_02` act `protect` ($p = 0.145 > p^* = 0.08000$) |
+| **`djia_1885_2023.csv`** ($\to$ `card_03`) | Daily historical closes of the *Dow Jones Industrial Average* ($37\,930$ trading days, 1885–2023) | **Lens 2 — Time** & **Bridge $L_3 \to L_1$** (`TimeKellyDiagnostic`, `PerformativeSystem` — Lab 1, Lab 3, Lab 5, Lab 7) | Itô variance drain $g_{\text{time}} = \mu - \frac{1}{2}\sigma^2$, asymmetric Kelly $f^* = \frac{p}{a} - \frac{1-p}{b}$, and Stackelberg $\theta_{\mathrm{PO}}$ | $g_{\text{time}} = 0.0322 < g_{\text{ensemble}} = 0.0467$ (drain $= 0.0145$); Kelly $f^* = 0.8600$; LSI mixing $= 13$ steps; $\theta_{\mathrm{PS}} = 1.8750$ vs. $\theta_{\mathrm{PO}} = 2.0313$ ($r_{\mathrm{RRM}} = 0.24 < 1$) |
+| **`danish_fire.csv`** & **`vic_elec.csv`** | Copenhagen Re fire claims ($n = 2167$) & Victoria half-hourly electricity demand ($n = 4000$) | **Lens 3 — Scale and Tail** (`HillTailDiagnostic` — Lab 3, Lab 7) | Hill estimator $\hat{\alpha}_{k,n} = \left(\frac{1}{k}\sum_{i=1}^k \ln \frac{X_{(n-i+1)}}{X_{(n-k)}}\right)^{-1}$ & moment regime classification | `danish_fire.csv`: $\hat{\alpha}_{\mathrm{Hill}} = 1.6009 \pm 0.1601$, `FiniteMeanInfiniteVariance` ($1 < \alpha \le 2$), $q_{99} = 26.04\text{M DKK}$, `tail_n_eff` $= 17.3$; `vic_elec.csv`: $q_{99} = 7345.4\text{ MW}$ |
+| **`atlantic_storms.csv`** & **`toronto_arrests.csv`** ($\to$ `card_01`) | NOAA Atlantic storm tracks ($n = 3000$) & Toronto police arrest records ($n = 5226$) | **Lens 5 — Decision** (`CorpPavDecomposition`) & **Invariant $\Phi_4$** (`ChouldechovaAudit` — Lab 3, Lab 4, Lab 5, Lab 7) | Isotonic PAV decomposition $\mathrm{BS} = \mathrm{REL}_{\mathrm{CORP}} - \mathrm{RES}_{\mathrm{CORP}} + \mathrm{UNC}_0$ & Chouldechova's identity | `atlantic_storms.csv`: $\mathrm{BS} = 0.23802 = \mathrm{REL}(0.18018) - \mathrm{RES}(0.13911) + \mathrm{UNC}_0(0.19695)$ (err $= 1.75 \times 10^{-15}$); `toronto_arrests.csv`: $\mathrm{FPR}_A / \mathrm{FPR}_B = 3.42\times$ |
+| **`nyc_flights_2013.csv`**, **`nyc_flights_2023.csv`**, **`nyc_flights_2013_h1.csv`**, **`nyc_flights_2023_h1.csv`**, **`houston_flights_2011.csv`** | NYC flight operations (2013 vs. 2023 + H1 out-of-time reserves) & Houston out-of-domain flights (2011) | **Governance, Temporal Vault & Drift** (`fit_covariate_drift_extra_wcp`, `TemporalVault`, `estimate_label_shift_four_methods` — Lab 6, Lab 7) | Exponential tilt *ExTRA-WCP-T*, Lei & Candès bound $1 - \alpha - d_{\mathrm{TV}}(P_X, Q_X)$, SHA-256 single-opening vault, and 4 Label Shift estimators | Lei & Candès bounds: NYC $13 \to 23 \ge 0.889$, H1 OOT $13 \to 23 \ge 0.874$, NYC $\to$ Houston OOD $\ge 0.721$; H1 Vault `OpenedApproved` ($\mathrm{BS} = 0.0058$) |
+
+---
+
+## 6. Architectural Mapping to Rust Crates
 
 | Protocol Section | Concept / Equation | Rust Module & Symbol | Verification Command |
 | --- | --- | --- | --- |
@@ -127,4 +142,5 @@ Evaluated in strict sequence with immediate short-circuiting on failure:
 | §2.1–2.3 Contract v1.0 | $\Phi_1$–$\Phi_5$, Moulton-Campbell, Exceedance ICC, Chouldechova, and `EpistemologicalCard` | `stochology_core::{invariants, card}` & `cards/*.yaml` | `cargo run --release --bin labs -- --invariants` & `cargo run --release --bin gates` |
 | §3.1–3.2 Funnel & SIGA | 4 Eliminatory Filters, 8-Step SIGA Roadmap, *e-processes*, and Natural Frequencies | `stochology_siga::{funnel, roadmap}` | `cargo run --release --bin labs -- --siga` |
 | §4.1–4.2 Governance & Drift | Bitemporal Clock ($t_{\text{disp}}$), Canary, Single-Opening Vault, Murphy-CORP Breaker, ExTRA-WCP-T, and Label Shift (BBSE, MLLS/SLD, DFM, OTTER) | `stochology_governance::{clock, vault, drift}` | `cargo run --release --bin labs -- --governance` & `gates -- --defect clock` |
+| §5 Module 7 / Lab 7 | Transversal Real-Data Synthesis across all 13 `data/*.csv` datasets and 3 `cards/*.yaml` | `stochology_cli::{load_*, build_v1_card_suite}` & `labs --real-data` | `cargo run --release --bin labs -- --real-data` |
 

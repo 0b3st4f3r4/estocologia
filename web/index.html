@@ -137,7 +137,7 @@
               <span class="stat-label" data-i18n-pt="7 Portões + 9 Provas Negativas" data-i18n-en="7 Gates + 9 Negative Proofs">7 Portões + 9 Provas Negativas</span>
             </div>
             <div class="stat-box">
-              <span class="stat-value">6 Labs</span>
+              <span class="stat-value">7 Labs</span>
               <span class="stat-label" data-i18n-pt="13 Datasets Empíricos Reais" data-i18n-en="13 Real Empirical Datasets">13 Datasets Empíricos Reais</span>
             </div>
           </div>
@@ -156,12 +156,12 @@
 <span class="t-dim">&gt;&gt;&gt; [1/6] Checking formatting (cargo fmt --all --check)...</span>
 <span class="t-dim">&gt;&gt;&gt; [2/6] Checking strict lints (cargo clippy -D warnings)...</span>
 <span class="t-dim">&gt;&gt;&gt; [3/6] Running unit and integration tests (cargo test)...</span>
-<span class="t-dim">&gt;&gt;&gt; [4/6] Running 6 empirical laboratories (labs --all)...</span>
+<span class="t-dim">&gt;&gt;&gt; [4/6] Running 7 empirical laboratories (labs --all &amp; --real-data)...</span>
   [Bridge L1-&gt;L2] Meng: rho_R_Y=+0.1334, n_eff=2842.70 | Manski=[5463.2, 13835.3]
   [Bridge L2-&gt;L3] Jensen Gap (bank_calls): Delta_J=+9.03e6, OOS_CRPS=9.05e7
   [Bridge L3-&gt;L1] Performative: theta_PS=1.8750 vs Stackelberg theta_PO=2.0312 (r=0.300 &lt; 1)
   [Lens 3: Tail]  Danish Fire (n=2167): Hill alpha_k=1.6009, tail_n_eff=17.3
-  [Lens 5: CORP]  Atlantic Storms (n=3000): BS=0.23802 = REL - RES + UNC0 [err=1.75e-15]
+  [Lab 7: Synth]  13/13 real CSV datasets audited | 3/3 canonical YAML cards approved
 <span class="t-dim">&gt;&gt;&gt; [5/6] Running epistemological gates (G1-G7) &amp; 9 negative proofs...</span>
 <span class="t-ok">  [G1-G7] ALL 7 EPISTEMOLOGICAL GATES APPROVED (EXIT CODE 0)</span>
 <span class="t-ok">  [OK] 9/9 negative proofs blocked with exit code 1 (cromwell..chouldechova)</span>
@@ -787,11 +787,11 @@ decision_rule_and_scope:
           </table>
         </div>
 
-        <!-- Responsive Table 2: Architectural Mapping of the 5 Crates & 6 Labs -->
-        <div tabindex="0" role="region" aria-labelledby="crates-table-caption" class="table-wrapper">
+        <!-- Responsive Table 2: Architectural Mapping of the 5 Crates & 7 Labs -->
+        <div tabindex="0" role="region" aria-labelledby="crates-table-caption" class="table-wrapper" style="margin-block-end: 2rem;">
           <table class="data-table" style="--label-2: 'Módulos &amp; Símbolos Principais'; --label-3: 'Datasets &amp; Métricas Auditadas'; --label-4: 'Comando de Verificação';">
-            <caption id="crates-table-caption" data-i18n-pt="Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 6 Laboratórios Empíricos" data-i18n-en="Table 2 — Architectural Mapping of the 5 Rust Crates & 6 Empirical Laboratories">
-              Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 6 Laboratórios Empíricos
+            <caption id="crates-table-caption" data-i18n-pt="Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 7 Laboratórios Empíricos" data-i18n-en="Table 2 — Architectural Mapping of the 5 Rust Crates & 7 Empirical Laboratories">
+              Tabela 2 — Mapeamento Arquitetural das 5 Crates Rust e dos 7 Laboratórios Empíricos
             </caption>
             <thead>
               <tr>
@@ -827,10 +827,65 @@ decision_rule_and_scope:
                 <td><code>cargo run --release --bin labs -- --governance</code></td>
               </tr>
               <tr>
-                <th scope="row">stochology-cli<br><span class="badge ok">bins: labs &amp; gates</span></th>
-                <td><code>src/bin/labs.rs</code>, <code>src/bin/gates.rs</code>, <code>scripts/verify.sh</code></td>
-                <td>Executa os 6 laboratórios, audita os 7 portões positivos (<code>exit 0</code>) e bloqueia as 9 provas negativas (<code>exit 1</code>).</td>
-                <td><code>scripts/verify.sh</code></td>
+                <th scope="row">stochology-cli<br><span class="badge ok">Lab 7 &amp; bins: labs, gates</span></th>
+                <td><code>src/bin/labs.rs</code> (<code>--real-data</code>), <code>src/bin/gates.rs</code>, <code>scripts/verify.sh</code></td>
+                <td>Síntese transversal dos <code>13/13</code> datasets reais (incluindo reservas OOT/OOD <code>nyc_flights_*_h1.csv</code> e <code>houston_flights_2011.csv</code>), 7 portões positivos (<code>exit 0</code>) e 9 provas negativas (<code>exit 1</code>).</td>
+                <td><code>cargo run --release --bin labs -- --real-data</code><br><code>scripts/verify.sh</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Responsive Table 3: Lab 7 Transversal Synthesis of all 13 Real Datasets (data/*.csv) -->
+        <div tabindex="0" role="region" aria-labelledby="real-data-table-caption" class="table-wrapper">
+          <table class="data-table" style="--label-2: 'Domínio Empírico &amp; Amostra (n)'; --label-3: 'Ponte / Lente / Invariante'; --label-4: 'Resultado Auditado (labs --real-data)';">
+            <caption id="real-data-table-caption" data-i18n-pt="Tabela 3 — Módulo 7 / Lab 7 (labs --real-data): Síntese Transversal dos 13 Conjuntos de Dados Reais (data/*.csv)" data-i18n-en="Table 3 — Module 7 / Lab 7 (labs --real-data): Transversal Synthesis of All 13 Real Datasets (data/*.csv)">
+              Tabela 3 — Módulo 7 / Lab 7 (labs --real-data): Síntese Transversal dos 13 Conjuntos de Dados Reais (data/*.csv)
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n-pt="Dataset Real (data/*.csv)" data-i18n-en="Real Dataset (data/*.csv)">Dataset Real (data/*.csv)</th>
+                <th scope="col" data-i18n-pt="Domínio Empírico & Amostra (n)" data-i18n-en="Empirical Domain & Sample (n)">Domínio Empírico &amp; Amostra (n)</th>
+                <th scope="col" data-i18n-pt="Ponte / Lente / Invariante" data-i18n-en="Bridge / Lens / Invariant">Ponte / Lente / Invariante</th>
+                <th scope="col" data-i18n-pt="Resultado Auditado (labs --real-data)" data-i18n-en="Audited Benchmark (labs --real-data)">Resultado Auditado (labs --real-data)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">nsw_experimental.csv<br>cps_observational.csv</th>
+                <td data-i18n-pt="Programa profissional de LaLonde: Experimental (NSW, n=445) vs. Observacional (CPS, n=15.992)." data-i18n-en="LaLonde job training program: Experimental (NSW, n=445) vs. Observational (CPS, n=15,992).">Programa profissional de LaLonde: Experimental (NSW, <code>n=445</code>) vs. Observacional (CPS, <code>n=15.992</code>).</td>
+                <td>Ponte <code>L₁ → L₂</code> &amp; <code>Φ₃</code> (<code>MengAudit</code>, <code>ManskiBounds</code>)</td>
+                <td><code>ρ_{R,Y} = +0.1334</code> reduz <code>n = 15,992</code> para <code>n_eff = 2842.70</code>; Manski MNAR <code>[5463.2, 13835.3]</code></td>
+              </tr>
+              <tr>
+                <th scope="row">bank_calls.csv<br><span class="badge">→ card_02.yaml</span></th>
+                <td data-i18n-pt="Janelas de 5 min em call center bancário norte-americano (n=27.716, 164 dias operacionais)." data-i18n-en="5-min windows in North American retail bank call center (n=27,716, 164 operational days).">Janelas de 5 min em call center bancário norte-americano (<code>n=27.716</code>, <code>164</code> dias operacionais).</td>
+                <td>Ponte <code>L₂ → L₃</code> (Proibição 2) &amp; <code>Φ₂, Φ₅</code> (<code>ExceedanceDesignEffect</code>)</td>
+                <td><code>Δ_J = +9.03e6</code>, <code>OOS_CRPS = 9.06e7</code>; <code>DEFF(0.90) = 28.26 → n_eff = 980.7</code>; ato <code>protect</code> (<code>p=0.145 &gt; p*=0.08</code>)</td>
+              </tr>
+              <tr>
+                <th scope="row">djia_1885_2023.csv<br><span class="badge">→ card_03.yaml</span></th>
+                <td data-i18n-pt="Fechamentos diários do índice Dow Jones entre 1885 e 2023 (37.930 pregões)." data-i18n-en="Daily closes of the Dow Jones Industrial Average from 1885 to 2023 (37,930 trading days).">Fechamentos diários do índice Dow Jones entre 1885 e 2023 (<code>37.930</code> pregões).</td>
+                <td>Lente 2 (Tempo) &amp; Ponte <code>L₃ → L₁</code> (<code>TimeKellyDiagnostic</code>, <code>PerformativeSystem</code>)</td>
+                <td><code>g_time = 0.0322 &lt; g_ensemble = 0.0467</code> (dreno <code>0.0145</code>); Kelly <code>f* = 0.8600</code>; <code>θ_PS = 1.8750</code> vs. Stackelberg <code>θ_PO = 2.0313</code></td>
+              </tr>
+              <tr>
+                <th scope="row">danish_fire.csv<br>vic_elec.csv</th>
+                <td data-i18n-pt="Sinistros de incêndio Copenhagen Re (n=2.167) e demanda elétrica de Victoria (n=4.000)." data-i18n-en="Copenhagen Re fire losses (n=2,167) and Victoria half-hourly electricity demand (n=4,000).">Sinistros de incêndio Copenhagen Re (<code>n=2.167</code>) e demanda elétrica de Victoria (<code>n=4.000</code>).</td>
+                <td>Lente 3 — Escala e Cauda (<code>HillTailDiagnostic</code>)</td>
+                <td><code>danish_fire</code>: <code>α̂_Hill = 1.6009</code> (<code>FiniteMeanInfiniteVariance</code>), <code>q₉₉ = 26.04M DKK</code>, <code>tail_n_eff = 17.3</code>; <code>vic_elec</code>: <code>q₉₉ = 7345.4 MW</code></td>
+              </tr>
+              <tr>
+                <th scope="row">atlantic_storms.csv<br>toronto_arrests.csv<br><span class="badge">→ card_01.yaml</span></th>
+                <td data-i18n-pt="Tempestades no Atlântico NOAA (n=3.000) e detenções policiais em Toronto (n=5.226)." data-i18n-en="NOAA Atlantic storm tracks (n=3,000) and Toronto arrest records (n=5,226).">Tempestades no Atlântico NOAA (<code>n=3.000</code>) e detenções policiais em Toronto (<code>n=5.226</code>).</td>
+                <td>Lente 5 (<code>CorpPavDecomposition</code>) &amp; <code>Φ₄</code> (<code>ChouldechovaAudit</code>)</td>
+                <td>Storms: <code>BS = 0.23802 = REL(0.18018) − RES(0.13911) + UNC₀(0.19695)</code> (erro <code>1.75e-15</code>); Toronto: <code>FPR_A/FPR_B = 3.42x</code></td>
+              </tr>
+              <tr>
+                <th scope="row">nyc_flights_2013.csv<br>nyc_flights_2023.csv<br>nyc_flights_2013_h1.csv<br>nyc_flights_2023_h1.csv<br>houston_flights_2011.csv</th>
+                <td data-i18n-pt="5 bases de aviação: NYC 2013→2023, reservas seladas H1 (out-of-time) e Houston 2011 (out-of-domain)." data-i18n-en="5 aviation datasets: NYC 2013→2023, sealed H1 out-of-time reserves, and Houston 2011 out-of-domain.">5 bases de aviação: NYC 2013→2023, reservas seladas H1 (<em>out-of-time</em>) e Houston 2011 (<em>out-of-domain</em>).</td>
+                <td>Governança, Cofre SHA-256 &amp; Drift (<code>ExTRA-WCP-T</code>, <code>TemporalVault</code>)</td>
+                <td>Lei &amp; Candès: NYC 13→23 <code>≥ 0.889</code>, H1 13→23 <code>≥ 0.874</code>, NYC→Houston OOD <code>≥ 0.721</code>; Cofre H1 <code>OpenedApproved</code> (<code>BS = 0.0058</code>)</td>
               </tr>
             </tbody>
           </table>

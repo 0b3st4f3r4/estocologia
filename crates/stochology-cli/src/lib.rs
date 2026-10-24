@@ -162,26 +162,46 @@ pub fn load_toronto_arrests_prevalences(root_dir: &Path) -> (f64, f64) {
 /// Reads standardized distance / arrival-delay features from `data/nyc_flights_2013.csv` (source $P$)
 /// and `data/nyc_flights_2023.csv` (target $Q$).
 pub fn load_nyc_flights_2013_2023(root_dir: &Path) -> (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>) {
-    let parse_flights = |rel: &str| -> (Vec<f64>, Vec<f64>) {
-        let content = fs::read_to_string(root_dir.join(rel)).expect("failed to read NYC flights");
-        let mut x = Vec::new();
-        let mut y = Vec::new();
-        for line in content.lines().skip(1).take(1_500) {
-            let cols: Vec<&str> = line.split(',').collect();
-            if cols.len() >= 9 {
-                if let (Ok(distance), Ok(arr_delay)) =
-                    (cols[7].trim().parse::<f64>(), cols[8].trim().parse::<f64>())
-                {
-                    x.push((distance - 1_000.0) / 1_000.0);
-                    y.push(if arr_delay > 15.0 { 1.0 } else { 0.0 });
-                }
+    let (x13, y13) = load_flight_stream(root_dir, "data/nyc_flights_2013.csv", 1_500);
+    let (x23, y23) = load_flight_stream(root_dir, "data/nyc_flights_2023.csv", 1_500);
+    (x13, y13, x23, y23)
+}
+
+/// Reads standardized distance $((d - 1000)/1000)$ and binary arrival-delay indicator $(\text{arr\_delay} > 15\text{ min})$
+/// from any flight CSV in `data/` (`nyc_flights_2013.csv`, `nyc_flights_2023.csv`, `nyc_flights_2013_h1.csv`,
+/// `nyc_flights_2023_h1.csv`, or `houston_flights_2011.csv`).
+pub fn load_flight_stream(
+    root_dir: &Path,
+    rel_path: &str,
+    max_rows: usize,
+) -> (Vec<f64>, Vec<f64>) {
+    let content = fs::read_to_string(root_dir.join(rel_path)).expect("failed to read flight CSV");
+    let mut x = Vec::new();
+    let mut y = Vec::new();
+    for line in content.lines().skip(1).take(max_rows) {
+        let cols: Vec<&str> = line.split(',').collect();
+        if cols.len() >= 9 {
+            if let (Ok(distance), Ok(arr_delay)) =
+                (cols[7].trim().parse::<f64>(), cols[8].trim().parse::<f64>())
+            {
+                x.push((distance - 1_000.0) / 1_000.0);
+                y.push(if arr_delay > 15.0 { 1.0 } else { 0.0 });
             }
         }
-        (x, y)
-    };
-    let (x13, y13) = parse_flights("data/nyc_flights_2013.csv");
-    let (x23, y23) = parse_flights("data/nyc_flights_2023.csv");
-    (x13, y13, x23, y23)
+    }
+    (x, y)
+}
+
+/// Reads the 3 out-of-time / out-of-domain flight reserve datasets (`data/nyc_flights_2013_h1.csv`,
+/// `data/nyc_flights_2023_h1.csv`, and `data/houston_flights_2011.csv`).
+#[allow(clippy::type_complexity)]
+pub fn load_oot_ood_flight_reserves(
+    root_dir: &Path,
+) -> (Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>, Vec<f64>) {
+    let (x13_h1, y13_h1) = load_flight_stream(root_dir, "data/nyc_flights_2013_h1.csv", 1_500);
+    let (x23_h1, y23_h1) = load_flight_stream(root_dir, "data/nyc_flights_2023_h1.csv", 1_500);
+    let (x_hou, y_hou) = load_flight_stream(root_dir, "data/houston_flights_2011.csv", 1_500);
+    (x13_h1, y13_h1, x23_h1, y23_h1, x_hou, y_hou)
 }
 
 /// Builds the 3 canonical v1.0 Epistemological Cards (`cards/*.yaml`) along with their pre-registered plan strings.
@@ -438,5 +458,9 @@ mod tests {
         assert!(nsw_t.len() + nsw_c.len() > 400 && cps_c.len() > 15_000);
         let vic = load_vic_elec_demand(root);
         assert_eq!(vic.len(), 4_000);
+        let (x13_h1, y13_h1, x23_h1, y23_h1, x_hou, y_hou) = load_oot_ood_flight_reserves(root);
+        assert!(x13_h1.len() > 1_400 && x13_h1.len() == y13_h1.len());
+        assert!(x23_h1.len() > 1_400 && x23_h1.len() == y23_h1.len());
+        assert!(x_hou.len() > 1_400 && x_hou.len() == y_hou.len());
     }
 }

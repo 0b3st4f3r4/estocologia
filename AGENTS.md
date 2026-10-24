@@ -71,13 +71,14 @@ The script `scripts/verify.sh` enforces the following list without exception:
 cargo fmt --all --check                                         # rustfmt check
 cargo clippy --workspace --all-targets -- -D warnings           # zero warnings tolerated across all 5 crates
 cargo test --workspace                                          # all unit and integration tests
-cargo run --release --bin labs -- --all                         # all 6 methodological and empirical laboratories
+cargo run --release --bin labs -- --all                         # all 7 methodological and empirical laboratories
 cargo run --release --bin labs -- --layers                      # Lab 1: Meng, Manski, Jensen, and Performativity
 cargo run --release --bin labs -- --uncertainty                 # Lab 2: Kennedy-O'Hagan GP and Info-Gap + Sniedovich
 cargo run --release --bin labs -- --lenses                      # Lab 3: The Five Transversal Lenses on real data
 cargo run --release --bin labs -- --invariants                  # Lab 4: Phi1-Phi5, Moulton-Campbell, Exceedance, and Chouldechova
 cargo run --release --bin labs -- --siga                        # Lab 5: 4-Filter Funnel and SIGA Roadmap on the 3 YAML Cards
 cargo run --release --bin labs -- --governance                  # Lab 6: Bitemporal Clock, Vault, and 4 Regimes of Drift
+cargo run --release --bin labs -- --real-data                   # Lab 7: Transversal Synthesis across all 13 CSVs & 3 YAML Cards
 cargo run --release --bin gates                                 # The 7 Epistemological Gates (G1-G7): exits with 0
 cargo run --release --bin gates -- --defect cromwell            # Negative proof (Cromwell's Rule): exits with 1
 cargo run --release --bin gates -- --defect phi5                # Negative proof (Phi5 Resolution): exits with 1

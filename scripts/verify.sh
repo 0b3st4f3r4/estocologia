@@ -20,6 +20,7 @@ cargo run --release --bin labs -- --lenses
 cargo run --release --bin labs -- --invariants
 cargo run --release --bin labs -- --siga
 cargo run --release --bin labs -- --governance
+cargo run --release --bin labs -- --real-data
 
 echo ">>> [5/6] Running epistemological gates (gates) and negative proofs..."
 cargo run --release --bin gates

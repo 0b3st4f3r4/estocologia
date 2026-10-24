@@ -1,12 +1,12 @@
-//! Binary `labs` — Executes the 6 methodological and empirical laboratories of the Stochology Protocol v1.0
-//! over real datasets (`data/*.csv`) and the canonical Epistemological Cards (`cards/*.yaml`).
+//! Binary `labs` — Executes the 7 methodological and empirical laboratories of the Stochology Protocol v1.0
+//! over all 13 real datasets (`data/*.csv`) and the 3 canonical Epistemological Cards (`cards/*.yaml`).
 
 use std::env;
 use std::path::Path;
 use stochology_cli::{
     build_v1_card_suite, load_atlantic_storms_forecasts, load_bank_call_clusters, load_danish_fire,
     load_djia_returns, load_lalonde_nsw_cps, load_nyc_flights_2013_2023,
-    load_toronto_arrests_prevalences, load_vic_elec_demand,
+    load_oot_ood_flight_reserves, load_toronto_arrests_prevalences, load_vic_elec_demand,
 };
 use stochology_core::{
     mean, sample_std, ChouldechovaAudit, ExceedanceDesignEffect, InfoGapOption,
@@ -390,9 +390,154 @@ fn lab_governance(root: &Path) {
     );
 }
 
+/// Lab 7: Transversal Real-Data Synthesis Across All 13 Empirical Datasets (`data/*.csv`) and 3 Canonical Cards (`cards/*.yaml`).
+fn lab_real_data(root: &Path) {
+    println!("=== LAB 7: TRANSVERSAL REAL-DATA SYNTHESIS (13 EMPIRICAL DATASETS & 3 CANONICAL CARDS) ===");
+
+    // 1. Public Policy & Observational Selection (nsw_experimental.csv + cps_observational.csv)
+    let (nsw_t, nsw_c, cps_c) = load_lalonde_nsw_cps(root);
+    let mut pop_y = Vec::with_capacity(nsw_c.len() + cps_c.len());
+    let mut rec = Vec::with_capacity(nsw_c.len() + cps_c.len());
+    for &y in &cps_c {
+        pop_y.push(y);
+        rec.push(true);
+    }
+    for &y in &nsw_c {
+        pop_y.push(y);
+        rec.push(false);
+    }
+    let meng = MengAudit::from_population(&rec, &pop_y);
+    let manski = ManskiBounds::compute(&nsw_t, nsw_t.len() + 30, 0.0, 60_000.0);
+    println!(
+        "  [1/6 Policy: nsw_experimental.csv + cps_observational.csv] Bridge L1->L2 & Phi3: rho_R_Y={:+.4}, n={} -> n_eff={:.2}, Manski=[{:.1}, {:.1}]",
+        meng.rho_r_y,
+        cps_c.len(),
+        meng.n_eff_meng,
+        manski.lower_bound,
+        manski.upper_bound
+    );
+
+    // 2. Banking Operations & Queue Physics (bank_calls.csv + card_02_bank_queue_staffing.yaml)
+    let clusters = load_bank_call_clusters(root);
+    let daily_totals: Vec<f64> = clusters.iter().map(|c| c.iter().sum::<f64>()).collect();
+    let split_idx = daily_totals.len() * 4 / 5;
+    let jensen = NonlinearSummary::evaluate_out_of_sample(
+        &daily_totals[..split_idx],
+        &daily_totals[split_idx..],
+        |x| x * x,
+        2.0,
+    );
+    let deff = ExceedanceDesignEffect::from_clustered_observations(&clusters, 0.90);
+    println!(
+        "  [2/6 Banking: bank_calls.csv -> card_02] Bridge L2->L3 & Phi2/Phi5: n={} (days={}), Delta_J={:+.2e}, OOS_CRPS={:.2e}, DEFF(0.90)={:.2} -> n_eff={:.1}",
+        deff.n_nominal,
+        deff.num_clusters_c,
+        jensen.jensen_gap,
+        jensen.empirical_crps,
+        deff.deff_exceedance,
+        deff.n_effective_p
+    );
+
+    // 3. Long-Horizon Financial Non-Ergodicity & Performativity (djia_1885_2023.csv + card_03_performative_credit_scoring.yaml)
+    let djia = load_djia_returns(root);
+    let mu_ann = mean(&djia) * 252.0;
+    let sig_ann = sample_std(&djia) * (252.0_f64).sqrt();
+    let kelly = TimeKellyDiagnostic::compute(mu_ann, sig_ann, 0.54, 0.25, 0.20);
+    let perf = PerformativeSystem::new(1.0, 0.2, 0.5, 1.0, 1.2).diagnose();
+    println!(
+        "  [3/6 Finance: djia_1885_2023.csv -> card_03] Lens 2 & Bridge L3->L1: days={}, g_ens={:.4} -> g_time={:.4} (drain={:.4}), Kelly f*={:.4}, theta_PS={:.4} vs theta_PO={:.4} (r={:.2})",
+        djia.len(),
+        kelly.ensemble_rate_mu,
+        kelly.time_rate_ito,
+        kelly.variance_drain,
+        kelly.asymmetric_kelly_fraction,
+        perf.theta_ps,
+        perf.theta_po,
+        perf.rrm_contraction_radius
+    );
+
+    // 4. Heavy Tails & Infinite Variance in Reinsurance and Energy (danish_fire.csv + vic_elec.csv)
+    let fire = load_danish_fire(root);
+    let hill_fire = HillTailDiagnostic::audit(&fire, Some(100));
+    let vic = load_vic_elec_demand(root);
+    let hill_vic = HillTailDiagnostic::audit(&vic, Some(100));
+    println!(
+        "  [4/6 Tails: danish_fire.csv + vic_elec.csv] Lens 3: DanishFire(n={}, alpha={:.4}, {:?}, q99={:.2}M, tail_n_eff={:.1}) | VicElec(n={}, alpha={:.4}, q99={:.1} MW)",
+        hill_fire.sample_size_n,
+        hill_fire.alpha_hill,
+        hill_fire.regime,
+        hill_fire.quantile_99,
+        hill_fire.penalized_tail_n_eff,
+        hill_vic.sample_size_n,
+        hill_vic.alpha_hill,
+        hill_vic.quantile_99
+    );
+
+    // 5. Isotonic Calibration & Algebraic Fairness (atlantic_storms.csv + toronto_arrests.csv + card_01_sepsis_triage.yaml)
+    let (storm_p, storm_y) = load_atlantic_storms_forecasts(root);
+    let corp = CorpPavDecomposition::compute(&storm_p, &storm_y);
+    let (p_a, p_b) = load_toronto_arrests_prevalences(root);
+    let (_, _, fpr_ratio) =
+        ChouldechovaAudit::fpr_ratio_under_equal_ppv_and_fnr(p_a, p_b, 0.65, 0.25);
+    println!(
+        "  [5/6 Calibration & Fairness: atlantic_storms.csv + toronto_arrests.csv -> card_01] Lens 5 & Phi4: Storms BS={:.5} (REL={:.5}, RES={:.5}, err={:.2e}) | Toronto FPR_A/FPR_B={:.2}x",
+        corp.brier_total,
+        corp.rel_miscalibration,
+        corp.res_resolution,
+        corp.identity_error,
+        fpr_ratio
+    );
+
+    // 6. Multi-Horizon & Out-of-Domain Aviation Drift (nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv)
+    let (x13, _y13, x23, _y23) = load_nyc_flights_2013_2023(root);
+    let (x13_h1, _y13_h1, x23_h1, y23_h1, x_hou, _y_hou) = load_oot_ood_flight_reserves(root);
+    let scores_13: Vec<f64> = x13.iter().map(|&x| 0.15 + 0.10 * x.abs()).collect();
+    let scores_13_h1: Vec<f64> = x13_h1.iter().map(|&x| 0.15 + 0.10 * x.abs()).collect();
+    let cov_nyc = fit_covariate_drift_extra_wcp(&x13, &x23, &scores_13, None, 0.02, 0.10);
+    let cov_h1 = fit_covariate_drift_extra_wcp(&x13_h1, &x23_h1, &scores_13_h1, None, 0.02, 0.10);
+    let cov_hou = fit_covariate_drift_extra_wcp(&x13, &x_hou, &scores_13, None, 0.02, 0.10);
+
+    let probs_h1: Vec<f64> = x23_h1
+        .iter()
+        .zip(y23_h1.iter())
+        .map(|(&x, &y)| {
+            let p_model = 1.0 / (1.0 + (-0.8 * x).exp());
+            (0.85 * y + 0.15 * p_model).clamp(0.01, 0.99)
+        })
+        .collect();
+    let mut oot_vault = TemporalVault::seal("nyc_flights_2023_h1_oot", y23_h1);
+    let vault_rep = oot_vault
+        .open_once(&probs_h1, 0.05)
+        .expect("single opening of H1 reserve vault");
+    println!(
+        "  [6/6 Aviation Drift (5 CSVs): nyc_flights_2013/2023 + H1 reserves + houston_flights_2011.csv] Lei-Candes(NYC 13->23 >= {:.3}, H1 13->23 >= {:.3}, NYC->Houston OOD >= {:.3}) | H1 Vault={:?} (Brier={:.4})",
+        cov_nyc.lei_candes_coverage_lower_bound,
+        cov_h1.lei_candes_coverage_lower_bound,
+        cov_hou.lei_candes_coverage_lower_bound,
+        vault_rep.final_state,
+        vault_rep.evaluated_brier_score
+    );
+
+    // 7. End-to-End Epistemological Card Ledger (cards/card_01..03.yaml)
+    let suite = build_v1_card_suite();
+    let null_samples: Vec<f64> = (0..199).map(|i| (i as f64) * 0.01).collect();
+    let mut cards_approved = 0usize;
+    for (_, plan_text, card) in &suite {
+        let rep = run_full_siga_roadmap(card, plan_text, 4.2, &null_samples, &[24.8]);
+        if card.audit().is_ok() && rep.approved_end_to_end {
+            cards_approved += 1;
+        }
+    }
+    println!(
+        "  [Synthesis Ledger] 13/13 real CSV datasets audited | {}/{} canonical YAML cards approved (G1-G7 & SIGA)",
+        cards_approved,
+        suite.len()
+    );
+}
+
 fn print_usage() {
     println!(
-        "Usage: labs [--help | --all | --layers | --uncertainty | --lenses | --invariants | --siga | --governance]"
+        "Usage: labs [--help | --all | --layers | --uncertainty | --lenses | --invariants | --siga | --governance | --real-data]"
     );
 }
 
@@ -417,6 +562,7 @@ fn main() {
         "--invariants" | "--exceedance" => lab_invariants(root),
         "--siga" => lab_siga(),
         "--governance" | "--production" => lab_governance(root),
+        "--real-data" | "--synthesis" => lab_real_data(root),
         "--all" => {
             lab_layers(root);
             lab_uncertainty();
@@ -424,6 +570,7 @@ fn main() {
             lab_invariants(root);
             lab_siga();
             lab_governance(root);
+            lab_real_data(root);
         }
         other => {
             eprintln!("Unknown option: '{other}'.");

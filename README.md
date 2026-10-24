@@ -14,6 +14,7 @@ The repository unifies within a single verifiable apparatus:
 4. **Structured Communication Contract (`contract_version: "1.0"`):** The 4 Prohibitions, the 5 Boundary Invariants ($\Phi_1$–$\Phi_5$), **Moulton-Campbell** unequal-cluster correction ($\tilde{m} = \bar{m}(1 + \mathrm{CV}^2)$), quantile exceedance design effect ($\rho_I(p)$ and $n_{\mathrm{eff}}(p)$), and **Chouldechova's** algebraic impossibility audit.
 5. **4-Filter Eliminatory Funnel and 8-Step SIGA Roadmap:** Executed end-to-end over the Epistemological Cards in [`cards/`](cards/) with sequential evidence processes (*e-processes*) and executive memoranda in integer natural frequencies.
 6. **Bitemporal Governance, Single-Opening Vault, and 4 Regimes of Drift:** Bitemporal Clock ($t_{\text{disp}} \ge t_{\text{ev}}$), canary column, SHA-256 Temporal Vault, Murphy-CORP circuit breaker, *Covariate Drift* adaptation (*ExTRA-WCP-T* + Lei & Candès bound), and *Label Shift* adaptation via the 4 canonical estimators (**BBSE**, **MLLS/SLD**, **DFM**, and **OTTER**).
+7. **Transversal Real-Data Synthesis (`labs --real-data`, Lab 7):** End-to-end empirical audit across all **13 real datasets (`data/*.csv`)** — including the out-of-time (`nyc_flights_2013_h1.csv`, `nyc_flights_2023_h1.csv`) and out-of-domain (`houston_flights_2011.csv`) flight reserves — and the **3 canonical Epistemological Cards (`cards/*.yaml`)**.
 
 ---
 
@@ -60,6 +61,7 @@ cargo run --release --bin labs -- --lenses        # Lab 3: The Five Transversal 
 cargo run --release --bin labs -- --invariants    # Lab 4: Phi1-Phi5, Moulton-Campbell, Exceedance, and Chouldechova
 cargo run --release --bin labs -- --siga          # Lab 5: 4-Filter Funnel and SIGA Roadmap on the 3 YAML Cards
 cargo run --release --bin labs -- --governance    # Lab 6: Bitemporal Clock, Vault, and 4 Regimes of Drift
+cargo run --release --bin labs -- --real-data     # Lab 7: Transversal Synthesis across all 13 real CSVs & 3 YAML Cards
 ```
 
 ### 3. Epistemological Gates and Negative Proofs (`gates`)
